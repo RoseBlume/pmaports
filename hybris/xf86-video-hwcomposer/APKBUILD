@@ -1,0 +1,72 @@
+pkgname=xf86-video-hwcomposer
+pkgver=1.0_git20180114
+pkgrel=0
+pkgdesc="X.Org driver for Android devices rendering through HWComposer API"
+url="https://github.com/NotKit/xf86-video-hwcomposer"
+arch="armhf aarch64"
+license="MIT"
+depends="drihybris glamor-hybris"
+makedepends="autoconf automake util-macros
+	xorg-server-dev libxi-dev fontsproto randrproto
+	videoproto renderproto xf86dgaproto glamor-hybris-dev libhybris-dev"
+_commit=58e53507d221a5ab39a79c2efd859c3b246c9629
+source="$pkgname-$_commit.tar.gz::https://github.com/NotKit/$pkgname/archive/$_commit.tar.gz
+    40-hwcomposer.conf"
+
+subpackages="$pkgname-doc"
+
+if [ "$CARCH" == "armhf" ]; then
+	_vers="7.1 7.1-caf 4.4"
+elif [ "$CARCH" == "aarch64" ]; then
+	_vers="7.1 7.1-caf"
+fi
+
+for _ver in $_vers; do
+	subpackages="$subpackages $pkgname-$_ver:_specific"
+done
+
+builddir="$srcdir/$pkgname-$_commit"
+_tmppkgdir="$srcdir/tmpinstall"
+
+build() {
+	cd "$builddir"
+	export LDFLAGS="$LDFLAGS -Wl,-z,lazy"
+	export CPPFLAGS="$CPPFLAGS -I/usr/include/android-7.1 -DMESA_EGL_NO_X11_HEADERS"
+
+	NOCONFIGURE=1 ./autogen.sh
+
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--enable-drihybris \
+		--enable-glamor-hybris
+
+	for _ver in $_vers; do
+		msg "building $pkgname-$_ver"
+
+		for _makefile in "Makefile src/Makefile"; do
+			sed -i -E "s~/usr/include/android-[^ ]+~/usr/include/android-$_ver~g" $_makefile
+		done
+
+		make clean
+		make
+		make DESTDIR="${_tmppkgdir}/$pkgname-$_ver" install
+	done
+}
+
+package() {
+	cd "$builddir"
+	install -Dm644 COPYING "$pkgdir"/usr/share/licenses/$pkgname/COPYING
+	install -Dm644 "$srcdir"/40-hwcomposer.conf \
+        "$pkgdir"/etc/X11/xorg.conf.d/40-hwcomposer.conf
+}
+
+_specific() {
+	_lib="xorg/modules/drivers/hwcomposer_drv.so"
+	install -Dm644 "${_tmppkgdir}/${subpkgname}/usr/lib/${_lib}" \
+			"${subpkgdir}/usr/lib/${_lib}"
+}
+
+sha512sums="458fc9ca173abad1e0b48a8c0f74bcec9925fe7b5f67228b0fb29ec5d22b7ccf496cdb42cf0adcfafc622ada9e44db71331fe16a9f5aa24d1b0c8ddf977418c4  xf86-video-hwcomposer-58e53507d221a5ab39a79c2efd859c3b246c9629.tar.gz
+df7e0630bf6b652f10cd43b14d767707a884021481a378c4013f868447928008f0b0dc8ca5a217b80fa4324a5d11705f7de5873100fb5c30e4f981f7d5939e81  40-hwcomposer.conf"
