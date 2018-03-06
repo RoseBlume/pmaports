@@ -9,14 +9,20 @@ arch="noarch"
 options="!check"
 depends="postmarketos-base linux-lg-bullhead mkbootimg mesa-dri-swrast libsparse msm-fb-refresher"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo fb.modes directfbrc"
 
 build() {
 	devicepkg_build $startdir $pkgname
 }
 
 package() {
+	install -Dm644 "$srcdir/fb.modes" \
+		"$pkgdir/etc/fb.modes"
+	install -Dm644 "$srcdir/directfbrc" \
+		"$pkgdir/etc/directfbrc"
+
 	devicepkg_package $startdir $pkgname
 }
-
-sha512sums="b0087bcd4d0f6167fc84413d54ce17cae56ff65a1ac0c89e2fd3da67bda2030b6b2370b307dea1eb5945e83da7172bd6c8f875031c8b979e54d46a27a86e1245  deviceinfo"
+sha512sums="b0087bcd4d0f6167fc84413d54ce17cae56ff65a1ac0c89e2fd3da67bda2030b6b2370b307dea1eb5945e83da7172bd6c8f875031c8b979e54d46a27a86e1245  deviceinfo
+fd3a1a3efa696596585ba222b68420c3db6c52c1be8816ea8eeb206251365ab3340ed2d37493a53a37dd8ab2d9fb383d9f5b002345d4e8858eb3b49f3890a95f  fb.modes
+eea461b4c2e46351e606039b0fd489c5cf5fc3af71cd09a8aa3f327930ab9c8381908c8079e2cf1d1aba81e70d24b1aaf5e39b32a83596a32ce0c93de04202e9  directfbrc"
