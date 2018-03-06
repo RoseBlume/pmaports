@@ -1,0 +1,40 @@
+diff --git a/include/core/posix/standard_stream.h b/include/core/posix/standard_stream.h
+index f50a9b7..4a67a80 100644
+--- a/include/core/posix/standard_stream.h
++++ b/include/core/posix/standard_stream.h
+@@ -23,6 +23,10 @@
+ 
+ #include <cstdint>
+ 
++#undef stdin
++#undef stdout
++#undef stderr
++
+ namespace core
+ {
+ namespace posix
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 063ece1..2a9dc15 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -45,6 +45,7 @@ target_link_libraries(
+ 
+   ${Boost_LIBRARIES}
+   ${CMAKE_THREAD_LIBS_INIT}
++  execinfo
+ )
+ 
+ # We compile with all symbols visible by default. For the shipping library, we strip
+diff --git a/src/core/posix/signal.cpp b/src/core/posix/signal.cpp
+index 9c80f21..ce8bbc1 100644
+--- a/src/core/posix/signal.cpp
++++ b/src/core/posix/signal.cpp
+@@ -151,7 +151,7 @@ public:
+             {
+                 auto result = ::read(scope.signal_fd, signal_info, sizeof(signal_info));
+ 
+-                for (uint i = 0; i < result / sizeof(signalfd_siginfo); i++)
++                for (unsigned int i = 0; i < result / sizeof(signalfd_siginfo); i++)
+                 {
+                     if (has(static_cast<core::posix::Signal>(signal_info[i].ssi_signo)))
+                     {

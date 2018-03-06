@@ -10,13 +10,16 @@ license="LGPL3"
 depends="dbus libxml2 boost properties-cpp"
 makedepends="boost-dev cmake libxml2-dev properties-cpp-dev dbus-dev linux-headers process-cpp-dev"
 install=""
-subpackages="$pkgname-dev $pkgname-doc"
+subpackages="$pkgname-dev"
 source="https://launchpad.net/ubuntu/+archive/primary/+files/dbus-cpp_5.0.0+16.10.20160809.orig.tar.gz"
 
 prepare() {
 	cd "$srcdir"
 	# Don't build tests
 	truncate -s 0 tests/CMakeLists.txt
+
+	# Remove -Werror
+	sed -i s/-Werror//g CMakeLists.txt
 }
 
 build() {
