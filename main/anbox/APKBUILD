@@ -1,32 +1,34 @@
 pkgname=anbox
-pkgver=0_git20180302
+pkgver=0_git20180304
 pkgrel=0
-_commit="7de9d551df9820253878eb2611be02261f7937dc"
+_commit="03f69c8685e8e05a8c296896431d0645da831092"
 pkgdesc="Android in a box"
 url="https://github.com/anbox/anbox"
 arch="all"
 license="GPLv3"
-depends="dbus-libs boost boost-filesystem boost-iostreams boost-program_options boost-system protobuf-c sdl2 sdl2_image glib mesa-gles mesa-egl"
+depends="dbus-libs boost boost-filesystem boost-iostreams boost-program_options boost-system protobuf-c sdl2 sdl2_image glib mesa-gles mesa-egl lxc-dev properties-cpp-dev libexecinfo-dev glm-dev"
 makedepends="cmake boost-dev sdl2-dev sdl2_image-dev libcap-dev protobuf-dev protobuf-c-dev glib-dev mesa-dev dbus-cpp-dev"
 install=""
 subpackages="$pkgname-dev $pkgname-doc"
 source="
+	$pkgname-${_commit}.tar.gz::https://github.com/anbox/anbox/archive/${_commit}.tar.gz
 	anbox.initd
 	anbox.confd
-	$pkgname-${_commit}.tar.gz::https://github.com/anbox/anbox/archive/${_commit}.tar.gz
+	disable-tests.patch
+	musl-fixes.patch
 "
 
 builddir="$srcdir"/$pkgname-${_commit}
 
 prepare() {
 	default_prepare
-	mkdir "$builddir"/build
-	cd "$builddir"/build
-	cmake ..
+
+	# Remove -Werror
+	sed -i s/-Werror//g CMakeLists.txt
 }
 
 build() {
-	cd "$builddir"/build
+	cmake .
 	make
 }
 
@@ -39,6 +41,8 @@ package() {
 		"$pkgdir"/etc/conf.d/$pkgname || return 1
 }
 
-sha512sums="512331fd6b4c5621c14b8bf07a94b2318dc33fea245de1e66d6385e1dc4cbfde7cb0d53507b46c85a11defe65a936cca40ace80df76130c7af2ef5999899892c  anbox.initd
+sha512sums="9b53d50482c87662bb8519e843894b650f3f1d8237227f99bb2b5ef027cd07cc279d632489a7d22eb6191c3741e2d7f3ffd041097344f189c09039f79efb70ef  anbox-03f69c8685e8e05a8c296896431d0645da831092.tar.gz
+512331fd6b4c5621c14b8bf07a94b2318dc33fea245de1e66d6385e1dc4cbfde7cb0d53507b46c85a11defe65a936cca40ace80df76130c7af2ef5999899892c  anbox.initd
 f11f0d192cd7823307c2ce4ddc7b3fff5190f72d3f65a5524b487021a95a222aca1fd36ab1eb58ed533e7acd555bfb70f0c8a13db20338ea31527f3151fd2bd7  anbox.confd
-cdb9970c1684cd66b4bdf7ff870aba304d6a604c2159e99f0fe81bcc9dd68cb50ec23b82c69a95db37da041502e38793922c8dd4ed3b6468dcf678c7c1743c46  anbox-7de9d551df9820253878eb2611be02261f7937dc.tar.gz"
+3351edbd50370f514e405f10584264b110cd3d5eff766185b23d4c7e885933f0378330df5222fbd4b5161ff81f292ea63b4940f4afb1c457a2511fe8b5110195  disable-tests.patch
+0d52587ded7b317d3f60892cb4930262c918d1c5d18b36c8104f2c3c6b65ba7f2812f523b8a927491947b1900e04255dadfe9285d21ff553a2510c0735f307ed  musl-fixes.patch"
