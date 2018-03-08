@@ -25,15 +25,17 @@ prepare() {
 
 	# Remove -Werror
 	sed -i s/-Werror//g CMakeLists.txt
+
+	mkdir "build" && cd "build"
 }
 
 build() {
-	cmake .
+	cmake ..
 	make
 }
 
 package() {
-	cd "$builddir"
+	cd "$builddir/build"
 
 	install -m755 -D "$srcdir"/$pkgname.initd \
 		"$pkgdir"/etc/init.d/$pkgname || return 1
