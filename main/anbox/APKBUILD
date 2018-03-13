@@ -9,42 +9,55 @@ license="GPLv3"
 depends="dbus-libs boost boost-filesystem boost-iostreams boost-program_options boost-system protobuf-c sdl2 sdl2_image glib mesa-gles mesa-egl lxc-dev properties-cpp-dev libexecinfo-dev glm-dev"
 makedepends="cmake boost-dev sdl2-dev sdl2_image-dev libcap-dev protobuf-dev protobuf-c-dev glib-dev mesa-dev dbus-cpp-dev"
 install=""
-subpackages="$pkgname-dev $pkgname-doc"
+subpackages=""
 source="
 	$pkgname-${_commit}.tar.gz::https://github.com/anbox/anbox/archive/${_commit}.tar.gz
 	anbox.initd
 	anbox.confd
 	disable-tests.patch
 	musl-fixes.patch
-"
-
-builddir="$srcdir"/$pkgname-${_commit}
+	"
+builddir="$srcdir/$pkgname-$_commit"
 
 prepare() {
+	cd "$builddir"
 	default_prepare
+	mkdir -p "$builddir/build"
 
 	# Remove -Werror
 	sed -i s/-Werror//g CMakeLists.txt
-
-	mkdir "build" && cd "build"
 }
 
 build() {
-	cmake ..
-	make
+	cd "$builddir/build"
+	if [ "$CBUILD" != "$CHOST" ]; then
+		CMAKE_CROSSOPTS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
+	fi
+	cmake \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+		-DCMAKE_C_FLAGS="$CFLAGS" \
+		${CMAKE_CROSSOPTS} ..
+
+	# Parallel building breaks it
+	make -j1
 }
 
 package() {
 	cd "$builddir/build"
+	make DESTDIR="$pkgdir" install
 
 	install -m755 -D "$srcdir"/$pkgname.initd \
-		"$pkgdir"/etc/init.d/$pkgname || return 1
+		"$pkgdir"/etc/init.d/$pkgname
 	install -m644 -D "$srcdir"/$pkgname.confd \
-		"$pkgdir"/etc/conf.d/$pkgname || return 1
+		"$pkgdir"/etc/conf.d/$pkgname
 }
 
 sha512sums="9b53d50482c87662bb8519e843894b650f3f1d8237227f99bb2b5ef027cd07cc279d632489a7d22eb6191c3741e2d7f3ffd041097344f189c09039f79efb70ef  anbox-03f69c8685e8e05a8c296896431d0645da831092.tar.gz
 512331fd6b4c5621c14b8bf07a94b2318dc33fea245de1e66d6385e1dc4cbfde7cb0d53507b46c85a11defe65a936cca40ace80df76130c7af2ef5999899892c  anbox.initd
 f11f0d192cd7823307c2ce4ddc7b3fff5190f72d3f65a5524b487021a95a222aca1fd36ab1eb58ed533e7acd555bfb70f0c8a13db20338ea31527f3151fd2bd7  anbox.confd
 3351edbd50370f514e405f10584264b110cd3d5eff766185b23d4c7e885933f0378330df5222fbd4b5161ff81f292ea63b4940f4afb1c457a2511fe8b5110195  disable-tests.patch
-0d52587ded7b317d3f60892cb4930262c918d1c5d18b36c8104f2c3c6b65ba7f2812f523b8a927491947b1900e04255dadfe9285d21ff553a2510c0735f307ed  musl-fixes.patch"
+bb4baccf8801b700fe105b7414f80bb95ed19023cd8552d3d57620d981a67efc29505b62d469d29773d4c27cc3bdc3674ca09dff6f0ae7141a1c26fd6ec20bc4  musl-fixes.patch"

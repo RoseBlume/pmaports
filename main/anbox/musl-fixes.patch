@@ -39,3 +39,13 @@ index 93b7e10..88a5e09 100644
    }
  }
 
+diff --git a/external/process-cpp-minimal/src/CMakeLists.txt b/external/process-cpp-minimal/src/CMakeLists.txt
+index dec4659..20c9053 100644
+--- a/external/process-cpp-minimal/src/CMakeLists.txt
++++ b/external/process-cpp-minimal/src/CMakeLists.txt
+@@ -46,4 +46,5 @@ target_link_libraries(
+ 
+   ${Boost_LIBRARIES}
+   ${CMAKE_THREAD_LIBS_INIT}
++  execinfo
+ )
