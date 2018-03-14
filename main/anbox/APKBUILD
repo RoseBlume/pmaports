@@ -54,6 +54,8 @@ package() {
 		"$pkgdir"/etc/init.d/$pkgname
 	install -m644 -D "$srcdir"/$pkgname.confd \
 		"$pkgdir"/etc/conf.d/$pkgname
+	install -m644 -D "$builddir"/kernel/99-anbox.rules \
+		"$pkgdir"/lib/udev/rules.d/99-anbox.rules
 }
 
 sha512sums="9b53d50482c87662bb8519e843894b650f3f1d8237227f99bb2b5ef027cd07cc279d632489a7d22eb6191c3741e2d7f3ffd041097344f189c09039f79efb70ef  anbox-03f69c8685e8e05a8c296896431d0645da831092.tar.gz

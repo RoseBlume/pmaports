@@ -168,7 +168,3 @@ dev() {
 	ln -sf /usr/src/linux-headers-${_abi_release} \
 		"$subpkgdir"/lib/modules/${_abi_release}/build
 }
-
-sha512sums="77e43a02d766c3d73b7e25c4aafb2e931d6b16e870510c22cef0cdb05c3acb7952b8908ebad12b10ef982c6efbe286364b1544586e715cf38390e483927904d8  linux-4.14.tar.xz
-2bd6a0264a249cf3d1119cc86c39c29114ed583472635788aceb9c0a59e306b50f030eb9f27fad98df35a9b7e1f8b42bae01b00bedaa1d21015bbd6ab656a615  config-teclast-x80pro.x86_64
-04415954c3c4d3044a6a3da979e59fb18f0eda3fd872a8036ac8947fbbadcd6041384a900973b917353de6e5c1a589eff1db63c029edcb78f38b07868a929f9d  patch-4.14.2.xz"
