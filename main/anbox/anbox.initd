@@ -1,13 +1,11 @@
 #!/sbin/openrc-run
 
-# Sample init.d file for alpine linux.
-
 name=
-command="/usr/sbin/$name"
+command="/usr/bin/$name"
 command_args="$sample_opts"
 command_background="yes"
 
-start_stop_daemon_args="--user $sample_user:$sample_group"
+start_stop_daemon_args="container-manager --daemon --data-path=/var/lib/anbox"
 pidfile="/run/$name.pid"
 
 depend() {

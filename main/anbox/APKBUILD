@@ -16,6 +16,8 @@ source="
 	anbox.confd
 	disable-tests.patch
 	musl-fixes.patch
+	anbox-launch.sh
+	anbox.desktop
 	"
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -56,10 +58,16 @@ package() {
 		"$pkgdir"/etc/conf.d/$pkgname
 	install -m644 -D "$builddir"/kernel/99-anbox.rules \
 		"$pkgdir"/lib/udev/rules.d/99-anbox.rules
+	install -m644 -D "$srcdir"/$pkgname-launch.sh \
+		"$pkgdir"/usr/bin/$pkgname-launch
+	install -m644 -D "$srcdir"/$pkgname.desktop \
+		"$pkgdir"/usr/share/applications/$pkgname.desktop
 }
 
 sha512sums="9b53d50482c87662bb8519e843894b650f3f1d8237227f99bb2b5ef027cd07cc279d632489a7d22eb6191c3741e2d7f3ffd041097344f189c09039f79efb70ef  anbox-03f69c8685e8e05a8c296896431d0645da831092.tar.gz
-512331fd6b4c5621c14b8bf07a94b2318dc33fea245de1e66d6385e1dc4cbfde7cb0d53507b46c85a11defe65a936cca40ace80df76130c7af2ef5999899892c  anbox.initd
-f11f0d192cd7823307c2ce4ddc7b3fff5190f72d3f65a5524b487021a95a222aca1fd36ab1eb58ed533e7acd555bfb70f0c8a13db20338ea31527f3151fd2bd7  anbox.confd
+c586f1bb7e3996a30a250317ad88cdc1f7dbc2bb75e740fa703662bde5e375151f11b5682e117e053e5ec95f48b8f5cda120cea709aa98a765814427513bda3c  anbox.initd
+6a3bc88142c5287ec54d481a4788eceb7772d9974af950b5286ce63a49d05d9d49fce5ba1d02b4b1c9893896fd4ba218fd4d39b8e640bdd61ad196b5d5c9a021  anbox.confd
 3351edbd50370f514e405f10584264b110cd3d5eff766185b23d4c7e885933f0378330df5222fbd4b5161ff81f292ea63b4940f4afb1c457a2511fe8b5110195  disable-tests.patch
-bb4baccf8801b700fe105b7414f80bb95ed19023cd8552d3d57620d981a67efc29505b62d469d29773d4c27cc3bdc3674ca09dff6f0ae7141a1c26fd6ec20bc4  musl-fixes.patch"
+bb4baccf8801b700fe105b7414f80bb95ed19023cd8552d3d57620d981a67efc29505b62d469d29773d4c27cc3bdc3674ca09dff6f0ae7141a1c26fd6ec20bc4  musl-fixes.patch
+93994207cd98792c747f80a807226c5fdf3e7cfc02490642c561330bcbf739ac7a65c1dd4634a1891d06d8624abb62bffc028fff7226fd1843a60ce630379893  anbox-launch.sh
+de4d71d13c180db348fe9c839cd08e3764b9363f7404ea739f78d2c30f0a10ade437ec3518eec895a4cf3a34af70a46d55a2836ac8ca1247a237071e505317fa  anbox.desktop"
