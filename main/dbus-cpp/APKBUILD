@@ -11,7 +11,9 @@ depends="dbus libxml2 boost properties-cpp"
 makedepends="boost-dev cmake libxml2-dev properties-cpp-dev dbus-dev linux-headers process-cpp-dev"
 install=""
 subpackages="$pkgname-dev"
-source="https://launchpad.net/ubuntu/+archive/primary/+files/dbus-cpp_5.0.0+16.10.20160809.orig.tar.gz"
+source="https://launchpad.net/ubuntu/+archive/primary/+files/dbus-cpp_5.0.0+16.10.20160809.orig.tar.gz
+	boost_io_context.patch"
+builddir="$srcdir"
 
 prepare() {
 	cd "$srcdir"
@@ -20,6 +22,8 @@ prepare() {
 
 	# Remove -Werror
 	sed -i s/-Werror//g CMakeLists.txt
+
+	default_prepare
 }
 
 build() {
@@ -40,4 +44,5 @@ package() {
 	make DESTDIR="$pkgdir/" install
 }
 
-sha512sums="80a571b5e46a03915a48563368284f9549ee763bac359631939739c4eaa44fe166f2deda860688f43a46846a4abe0341a53d39b9f0e637c8f4f86669e126af8d  dbus-cpp_5.0.0+16.10.20160809.orig.tar.gz"
+sha512sums="80a571b5e46a03915a48563368284f9549ee763bac359631939739c4eaa44fe166f2deda860688f43a46846a4abe0341a53d39b9f0e637c8f4f86669e126af8d  dbus-cpp_5.0.0+16.10.20160809.orig.tar.gz
+3c511e9f10380dd7a044d5e5314e833a2f97117149b6c36e0582b3bd97c33e4522d0b4c2171c48227079abdaa2141d435d094b1782c73e2bb56eeeedfc5a503c  boost_io_context.patch"
