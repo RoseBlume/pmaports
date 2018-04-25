@@ -6,8 +6,38 @@ pkgdesc="Android in a box"
 url="https://github.com/anbox/anbox"
 arch="all"
 license="GPLv3"
-depends="dbus-libs boost boost-filesystem boost-iostreams boost-program_options boost-system protobuf-c sdl2 sdl2_image glib mesa-gles mesa-egl lxc-dev properties-cpp-dev libexecinfo-dev glm-dev"
-makedepends="cmake boost-dev sdl2-dev sdl2_image-dev libcap-dev protobuf-dev protobuf-c-dev glib-dev mesa-dev dbus-cpp-dev"
+# FIXME: most of these depends should be detected automatically
+# by abuild (it detects libraries linked against as depends)
+# Also the -dev packages should be moved to makedepends?
+depends="
+	anbox-image
+	boost
+	boost-filesystem
+	boost-iostreams
+	boost-program_options
+	boost-system
+	dbus-libs
+	glib
+	glm-dev
+	lxc-dev
+	libexecinfo-dev
+	mesa-gles
+	mesa-egl
+	protobuf-c
+	properties-cpp-dev
+	sdl2
+	sdl2_image"
+makedepends="
+	boost-dev
+	cmake
+	dbus-cpp-dev
+	glib-dev
+	libcap-dev
+	mesa-dev
+	protobuf-dev
+	protobuf-c-dev
+	sdl2-dev
+	sdl2_image-dev"
 install=""
 subpackages=""
 source="

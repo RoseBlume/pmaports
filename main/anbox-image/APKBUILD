@@ -1,0 +1,31 @@
+pkgname=anbox-image
+pkgver=20170804
+pkgrel=0
+pkgdesc="Android image for running in Anbox"
+url="https://anbox.io"
+arch="x86_64 armhf aarch64"
+license="GPL-3.0-only"
+depends=""
+makedepends=""
+install=""
+subpackages=""
+source="
+	https://build.anbox.io/android-images/2017/06/12/android_1_armhf.img
+	https://build.anbox.io/android-images/2017/08/04/android_1_arm64.img
+	https://build.anbox.io/android-images/2017/07/13/android_3_amd64.img
+"
+builddir="$srcdir/"
+options="!check"
+
+package() {
+	[ "$CARCH" = "armhf" ] && suffix="armhf.img"
+	[ "$CARCH" = "aarch64" ] && suffix="arm64.img"
+	[ "$CARCH" = "x86_64" ] && suffix="amd64.img"
+
+	install -Dm644 "$srcdir"/*_$suffix \
+		"$pkgdir/var/lib/anbox/android.img"
+}
+
+sha512sums="29e8c735b6d2c8d90987d7da201cbdb2533bd5bda8696861d10f58b3caacc3f66e86ce93f00f163ccd9dbb8b731bf7c767bf19eb63b3beabc834afa447670485  android_1_armhf.img
+f3d717581c61d65721331d6a9c0141e91c57f631dacb6eb43c08fa41164899282e754e575cb2999cd45ea7c94c7f2700ef3e338a0b3ad25052e27da14fe00053  android_1_arm64.img
+5c391a7c1ef3b2d399e604479818271eebe3bf18f039fb2642637eedd7de1ab1fd0d0c561892fbecfe113607b3cb6316cea4676a6cdb26ccc28f86973e130e2f  android_3_amd64.img"
