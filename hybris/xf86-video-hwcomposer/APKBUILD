@@ -1,5 +1,5 @@
 pkgname=xf86-video-hwcomposer
-pkgver=1.0_git20180114
+pkgver=1.0_git20180526
 pkgrel=0
 pkgdesc="X.Org driver for Android devices rendering through HWComposer API"
 url="https://github.com/NotKit/xf86-video-hwcomposer"
@@ -8,10 +8,11 @@ license="MIT"
 depends="drihybris glamor-hybris"
 makedepends="autoconf automake util-macros
 	xorg-server-dev libxi-dev fontsproto randrproto
-	videoproto renderproto xf86dgaproto glamor-hybris-dev libhybris-dev"
-_commit=58e53507d221a5ab39a79c2efd859c3b246c9629
+	videoproto renderproto xf86dgaproto glamor-hybris-dev
+	libhybris-dev libhybris libhybris-7.1"
+_commit=60f7bfcecc31253ed71d3e86ed2fb408ddafc5d0
 source="$pkgname-$_commit.tar.gz::https://github.com/NotKit/$pkgname/archive/$_commit.tar.gz
-    40-hwcomposer.conf"
+	30-modules-hybris.conf"
 
 subpackages="$pkgname-doc"
 
@@ -58,8 +59,9 @@ build() {
 package() {
 	cd "$builddir"
 	install -Dm644 COPYING "$pkgdir"/usr/share/licenses/$pkgname/COPYING
-	install -Dm644 "$srcdir"/40-hwcomposer.conf \
-        "$pkgdir"/etc/X11/xorg.conf.d/40-hwcomposer.conf
+	install -Dm644 "$srcdir"/30-modules-hybris.conf \
+		"$pkgdir"/etc/X11/xorg.conf.d/30-modules-hybris.conf
+
 }
 
 _specific() {
@@ -68,5 +70,5 @@ _specific() {
 			"${subpkgdir}/usr/lib/${_lib}"
 }
 
-sha512sums="458fc9ca173abad1e0b48a8c0f74bcec9925fe7b5f67228b0fb29ec5d22b7ccf496cdb42cf0adcfafc622ada9e44db71331fe16a9f5aa24d1b0c8ddf977418c4  xf86-video-hwcomposer-58e53507d221a5ab39a79c2efd859c3b246c9629.tar.gz
-df7e0630bf6b652f10cd43b14d767707a884021481a378c4013f868447928008f0b0dc8ca5a217b80fa4324a5d11705f7de5873100fb5c30e4f981f7d5939e81  40-hwcomposer.conf"
+sha512sums="ee23a367291dd73f0e8c303844ee69252eed193dfe2e8da31b8c09317b0aca79b7700425e6347fbf00559517253301d4977ca1dc755952bbcef7251205040ad0  xf86-video-hwcomposer-60f7bfcecc31253ed71d3e86ed2fb408ddafc5d0.tar.gz
+e8f9f6ec337e88ec440c4bdc3f3441a8252031d1a4265a251b500a087a2c88336861c7e3f81972019f6a492324e94253726ce031fedad60ff582dd8db73efac6  30-modules-hybris.conf"

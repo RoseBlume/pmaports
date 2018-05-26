@@ -8,8 +8,9 @@ arch="all"
 license="MIT"
 subpackages="$pkgname-doc $pkgname-dev"
 depends=
-makedepends="xorg-server-dev libxi-dev fontsproto randrproto
-	videoproto renderproto drihybrisproto drihybris-dev libepoxy-dev"
+makedepends="xorg-server-dev util-macros libxi-dev fontsproto randrproto
+	videoproto renderproto drihybrisproto drihybris-dev libepoxy-dev
+	libhybris-dev"
 
 source="$pkgname-$_commit.tar.gz::https://github.com/NotKit/glamor-hybris/archive/$_commit.tar.gz"
 
