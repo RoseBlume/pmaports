@@ -7,10 +7,9 @@ url="https://github.com/NotKit/drihybris"
 arch="all"
 license="MIT"
 subpackages="$pkgname-doc $pkgname-dev"
-depends=
-makedepends="autoconf automake util-macros
+depends_dev="drihybrisproto"
+makedepends="autoconf automake libtool util-macros
 	xorg-server-dev libxi-dev drihybrisproto"
-
 source="$pkgname-$_commit.tar.gz::https://github.com/NotKit/drihybris/archive/$_commit.tar.gz"
 
 builddir="$srcdir"/$pkgname-$_commit

@@ -1,16 +1,4 @@
 #!/bin/sh
-
-if [ "`id -u user`" == "1000" ]; then
-	# Change default user uid from 1000 to 100000 to avoid conflicts.
-	# Beware that it ./pmbootstrap install creates user after installing
-	# packages, so it will work only when package is installed on live system
-
-	# usermod -u 100000 user doesn't work due to "user" user is being used
-	sed -i -e 's/^\(user:[^:]\):[0-9]*:[0-9]*:/\1:100000:100000:/' /etc/passwd
-	groupmod -g 100000 user
-	chown -R 100000:100000 /home/user
-fi
-
 groupadd -g 1000 aid_system
 groupadd -g 1003 aid_graphics
 groupadd -g 1004 aid_input

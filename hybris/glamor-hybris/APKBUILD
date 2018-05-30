@@ -8,7 +8,7 @@ arch="all"
 license="MIT"
 subpackages="$pkgname-doc $pkgname-dev"
 depends=
-makedepends="autoconf automake util-macros
+makedepends="autoconf automake util-macros libtool
 	xorg-server-dev libxi-dev fontsproto randrproto
 	videoproto renderproto drihybrisproto drihybris-dev libepoxy-dev
 	libhybris-dev"

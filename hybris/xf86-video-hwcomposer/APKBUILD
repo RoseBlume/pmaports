@@ -6,10 +6,10 @@ url="https://github.com/NotKit/xf86-video-hwcomposer"
 arch="armhf aarch64"
 license="MIT"
 depends="drihybris glamor-hybris"
-makedepends="autoconf automake util-macros
+makedepends="autoconf automake util-macros libtool
 	xorg-server-dev libxi-dev fontsproto randrproto
 	videoproto renderproto xf86dgaproto glamor-hybris-dev
-	libhybris-dev libhybris libhybris-7.1"
+	libhybris-dev libhybris libhybris-7.1 drihybris-dev"
 _commit=60f7bfcecc31253ed71d3e86ed2fb408ddafc5d0
 source="$pkgname-$_commit.tar.gz::https://github.com/NotKit/$pkgname/archive/$_commit.tar.gz
 	30-modules-hybris.conf"
@@ -61,7 +61,6 @@ package() {
 	install -Dm644 COPYING "$pkgdir"/usr/share/licenses/$pkgname/COPYING
 	install -Dm644 "$srcdir"/30-modules-hybris.conf \
 		"$pkgdir"/etc/X11/xorg.conf.d/30-modules-hybris.conf
-
 }
 
 _specific() {
