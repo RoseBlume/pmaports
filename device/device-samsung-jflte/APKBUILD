@@ -1,3 +1,4 @@
+# Reference: <https://postmarketos.org/devicepkg>
 pkgname="device-samsung-jflte"
 pkgdesc="Samsung Galaxy S4"
 pkgver=0.5
@@ -7,14 +8,16 @@ license="MIT"
 arch="noarch"
 options="!check"
 depends="postmarketos-base linux-samsung-jflte mkbootimg mesa-dri-swrast"
+makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo 90-android-sec_touchscreen.rules"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
 
 package() {
-	install -Dm644 "$srcdir"/deviceinfo \
-		"$pkgdir"/etc/deviceinfo
-	install -D -m644 "$srcdir"/90-android-sec_touchscreen.rules \
-		"$pkgdir"/etc/udev/rules.d/90-android-sec_touchscreen.rules
+	devicepkg_package $startdir $pkgname
 }
 
 nonfree_firmware() {
@@ -23,5 +26,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="2ccb9da9d69f30e62d69ecb89939da5ddd25625b9e8ecdd9a41fa7bc5dfbdda415043b2b6e98587936740300cdb17ada1e2255ce39e54b0281e8ea48739b4332  deviceinfo
-9dd220de9aa0ee4106686d43a4bac858c7b57ca8537488a54176ef13615195dab7945ca3f6896368186e99c7ed78748a2ad25458efe586dbc337190143d5184f  90-android-sec_touchscreen.rules"
+sha512sums="9d472a685d71cbd16a597939f54dc6b3fcd87efe6273c5e11461ce6c4ed7f7d48fdb67d81a477dab9ab6fdfb04360a0310448ef2eb079d0c4aee8801acebe402  deviceinfo"
