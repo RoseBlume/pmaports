@@ -11,13 +11,15 @@ depends="postmarketos-base linux-samsung-jflte mkbootimg mesa-dri-swrast
 	msm-fb-refresher"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo"
+source="deviceinfo fb.modes"
 
 build() {
 	devicepkg_build $startdir $pkgname
 }
 
 package() {
+	install -D -m644 "$srcdir"/fb.modes \
+		"$pkgdir"/etc/fb.modes
 	devicepkg_package $startdir $pkgname
 }
 
@@ -27,4 +29,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="026e718c1b788ce2959ddaf226e262c3790493f03b7263e7778022247bb23b7833b6e3bf4fbcfb17bac8c98e7b1cbe44c200b50d1a4383c7e43305cd31ee5f75  deviceinfo"
+sha512sums="026e718c1b788ce2959ddaf226e262c3790493f03b7263e7778022247bb23b7833b6e3bf4fbcfb17bac8c98e7b1cbe44c200b50d1a4383c7e43305cd31ee5f75  deviceinfo
+515cd3be1816bea9a1859a37f6568e3e82a9f8f16cbbc71ba13d60723f98eafbda9046ebb1ee7f4ae23dd2b2b2b18506f64516ca45ff71af18e7c163f12248bd  fb.modes"
