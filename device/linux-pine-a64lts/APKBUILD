@@ -1,0 +1,62 @@
+# Kernel config based on: arch/arm64/configs/sun50iw1p1smp_linux_defconfig
+# This is the longsleep kernel, also used in the PINE64 armbian image
+
+pkgname="linux-pine-a64lts"
+pkgver=3.10.105
+pkgrel=0
+pkgdesc="PINE A64-LTS kernel from longsleep"
+arch="aarch64"
+_carch="arm64"
+_flavor="pine-a64lts"
+url="https://kernel.org"
+license="GPL2"
+options="!strip !check !tracedeps"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev"
+HOSTCC="${CC:-gcc}"
+HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
+
+# Source
+_repository="linux-pine64"
+_commit="5ea364f6dbe35934868010f07f6abbc0a2d76120"
+_config="config-${_flavor}.${arch}"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/longsleep/${_repository}/archive/${_commit}.tar.gz
+	$_config
+	compiler-gcc6.h
+"
+builddir="$srcdir/${_repository}-${_commit}"
+
+prepare() {
+	default_prepare
+	downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	# kernel.release
+	install -D "$builddir/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	# zImage (find the right one)
+	cd "$builddir/arch/$_carch/boot"
+	_target="$pkgdir/boot/vmlinuz-$_flavor"
+	for _zimg in zImage-dtb Image.gz-dtb *zImage Image; do
+		[ -e "$_zimg" ] || continue
+		msg "zImage found: $_zimg"
+		install -Dm644 "$_zimg" "$_target"
+		break
+	done
+	if ! [ -e "$_target" ]; then
+		error "Could not find zImage in $PWD!"
+		return 1
+	fi
+}
+
+sha512sums="0bfd1da6e873cd809ee94a75eccb394af8abf6f51d187c03e5fb29e249be953240cf3cf87f3e409d77f3600223bfabb7efeb3052fa3e4a0c40eb85b1ddc3dfaf  linux-pine-a64lts-5ea364f6dbe35934868010f07f6abbc0a2d76120.tar.gz
+c3e5ad971d14cf93ef8355f85d7f053ef22c91a6b944cad3d14e230d61ff60fc80c88e06ba39fc234e0ee95411abe6c1c2a739a20da2de362610e1833e48dec1  config-pine-a64lts.aarch64
+d80980e9474c82ba0ef1a6903b434d8bd1b092c40367ba543e72d2c119301c8b2d05265740e4104ca1ac5d15f6c4aa49e8776cb44264a9a28dc551e0d1850dcc  compiler-gcc6.h"
