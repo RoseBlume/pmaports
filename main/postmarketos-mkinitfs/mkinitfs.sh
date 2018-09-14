@@ -225,6 +225,7 @@ create_uboot_files()
 	if [ -n "${deviceinfo_dtb}" ]; then
 		kernelfile="${kernelfile}-dtb"
 	fi
+
 	mkimage -A arm -O linux -T kernel -C none -a 80008000 -e 80008000 \
 		-n postmarketos -d $kernelfile "${outfile/initramfs-/uImage-}" || exit 1
 }
@@ -353,6 +354,7 @@ append_device_tree()
 	echo "==> kernel: appending device-tree ${deviceinfo_dtb}"
 	if [ -e "$dtb" ]; then
 		cat "$kernel" "$dtb" > "${kernel}-dtb"
+		cp "$dtb" "${outfile/initramfs-/dtb-}.dtb"
 	else
 		echo "NOTE: device tree does not exist, not appending it to the kernel."
 		echo "This is expected for downstream kernels."
