@@ -3,7 +3,7 @@ setenv bootargs init=/init.sh rw console=tty0 console=ttyS0,115200 no_console_su
 printenv
 
 echo Loading DTB
-load mmc ${mmc_bootdev}:1 ${fdt_addr_r} sun50iw1p1-pine64so.dtb
+load mmc ${mmc_bootdev}:1 ${fdt_addr_r} dtb-pine-a64lts.dtb
 
 echo Loading Initramfs
 load mmc ${mmc_bootdev}:1 ${ramdisk_addr_r} uInitrd-pine-a64lts

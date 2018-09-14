@@ -52,13 +52,22 @@ package() {
 		install -Dm644 "$_zimg" "$_target"
 		break
 	done
-	# TODO Replace with make dtbs_install
-	mkdir -p "$pkgdir/usr/share/dtb"
-	cp arch/arm64/boot/dts/sun50iw1p1-pine64so.dtb "$pkgdir/usr/share/dtb"
 	if ! [ -e "$_target" ]; then
 		error "Could not find zImage in $PWD!"
 		return 1
 	fi
+
+	cd "$builddir"
+
+	# There's no dtbs_install target in 3.10
+	mkdir -p "$pkgdir/usr/share/dtb"
+	cp arch/arm64/boot/dts/sun50iw1p1-pine64so.dtb "$pkgdir/usr/share/dtb"
+
+	make -j1 modules_install \
+		ARCH="$_carch" \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_DTBS_PATH="$pkgdir/usr/share/dtb"
+
 }
 
 sha512sums="0bfd1da6e873cd809ee94a75eccb394af8abf6f51d187c03e5fb29e249be953240cf3cf87f3e409d77f3600223bfabb7efeb3052fa3e4a0c40eb85b1ddc3dfaf  linux-pine-a64lts-5ea364f6dbe35934868010f07f6abbc0a2d76120.tar.gz
