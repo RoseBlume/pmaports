@@ -349,16 +349,16 @@ generate_splash_screens()
 append_device_tree()
 {
 	[ -n "${deviceinfo_dtb}" ] || return
-	dtb="/usr/share/dtb/${deviceinfo_dtb}.dtb"
+	dtb="/usr/share/dtb/allwinner/${deviceinfo_dtb}.dtb"
+	echo "DTB: $dtb"
 	kernel="${outfile/initramfs-/vmlinuz-}"
 	echo "==> kernel: appending device-tree ${deviceinfo_dtb}"
 	if [ -e "$dtb" ]; then
 		cat "$kernel" "$dtb" > "${kernel}-dtb"
 		cp "$dtb" "${outfile/initramfs-/dtb-}.dtb"
 	else
-		echo "NOTE: device tree does not exist, not appending it to the kernel."
-		echo "This is expected for downstream kernels."
-		cp "$kernel" "${kernel}-dtb"
+		echo "ERROR: device tree does not exist, not appending it to the kernel."
+		exit 1
 	fi
 }
 

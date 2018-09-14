@@ -7,7 +7,7 @@ url="https://postmarketos.org"
 license="MIT"
 arch="noarch"
 options="!check"
-depends="postmarketos-base linux-pine-a64lts mesa-dri-swrast u-boot-pine64 uboot-tools"
+depends="postmarketos-base linux-postmarketos-allwinner mesa-dri-swrast u-boot-pine64 uboot-tools"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
@@ -26,5 +26,5 @@ package() {
 
 }
 
-sha512sums="8891ab307e9e2272ae250c1d3b20900c44c433513ac2dd3abeb01de042e26844fea264f15024312c3447931643e828f9f2c8e06905e91a31e1bb38143f8135c0  deviceinfo
-cf75389c3b795014577b41dcd69ef29bbc38881a4f147a4e18e8652a5b8b0362ce60481cdc9129497af494937e8acc87c621ee5d484367ee22045b10197efe1b  uboot-script.cmd"
+sha512sums="e9b2e2b501e92f4431cd6ed2ee41c74b5b21b1f5e265c804b1a54e397428a68bcdde37e00c3a0a4fa8e7358b0e681d5e0d5f2eb58b14bf6cc87b4229518c9ea8  deviceinfo
+ef7d21144b8c33f80968a6a089dcc6b568abd54f66f30d21d5befc10e51217484440aa8edb1065cd871ffba7bc599f44502bb6d240ee01f59dc92706ec6eabfd  uboot-script.cmd"
