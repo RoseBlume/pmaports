@@ -7,7 +7,7 @@ pkgver=4.18
 pkgrel=0
 
 arch="aarch64"
-pkgdesc="Kernel close to mainline with extra patches for Qualcomm devices"
+pkgdesc="Kernel close to mainline with extra patches for Allwinner devices"
 url="https://kernel.org/"
 depends=""
 makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev libressl-dev file bison flex"
@@ -15,7 +15,7 @@ options="!strip !check !tracedeps"
 install=
 _commit="5318d34abd2ec63dab67b83b7f139b26ba8adf07"
 source="
-    linux-${_commit}.tar.gz::https://github.com/anarsoul/linux-2.6/archive/${_commit}.tar.gz
+	linux-${_commit}.tar.gz::https://github.com/anarsoul/linux-2.6/archive/${_commit}.tar.gz
 	config-${_flavor}.aarch64
 "
 

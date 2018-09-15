@@ -225,7 +225,6 @@ create_uboot_files()
 	if [ -n "${deviceinfo_dtb}" ]; then
 		kernelfile="${kernelfile}-dtb"
 	fi
-
 	mkimage -A arm -O linux -T kernel -C none -a 80008000 -e 80008000 \
 		-n postmarketos -d $kernelfile "${outfile/initramfs-/uImage-}" || exit 1
 }
@@ -350,7 +349,6 @@ append_device_tree()
 {
 	[ -n "${deviceinfo_dtb}" ] || return
 	dtb="/usr/share/dtb/${deviceinfo_dtb}.dtb"
-	echo "DTB: $dtb"
 	kernel="${outfile/initramfs-/vmlinuz-}"
 	echo "==> kernel: appending device-tree ${deviceinfo_dtb}"
 	if [ -e "$dtb" ]; then
