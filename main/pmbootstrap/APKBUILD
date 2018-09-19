@@ -1,7 +1,7 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=pmbootstrap
-pkgver=0.8.0
+pkgver=0.9
 pkgrel=0
 pkgdesc="Sophisticated chroot/build/flash tool to develop and install postmarketOS"
 url="https://gitlab.com/postmarketOS/pmbootstrap"
@@ -27,4 +27,4 @@ package() {
 	cd "$builddir"
 	python3 setup.py install --prefix=/usr --root="$pkgdir"
 }
-sha512sums="3a8b38e4907f7bf5bf7ba578fadb793e5b7212ec4a3455d9c43841f26a92172fb49c83b1c017599fec423bbf8ca25b80c7a1a5941945bde7c91d9f010b94d319  pmbootstrap-0.8.0.tar.gz"
+sha512sums="3303be2b2100c6b699082910b15d6735152429dd1788d7320fa8534cb012c2aa90085b9ed3003ce16bedbe94647a1377f929b21cda30d44c2bcc4b1dd97c4cae  pmbootstrap-0.9.tar.gz"
