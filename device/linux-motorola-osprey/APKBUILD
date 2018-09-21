@@ -1,13 +1,3 @@
-# APKBUILD based on linux-vanilla aport. Changes:
-# - add !check !tracedeps
-# - package: added dtbTool to generate dt.img
-# - do not create -dev subpackage (makes no sense without module support)
-#
-# Kernel config based on: arch/arm/configs/lineageos_mako_defconfig?
-# Changes:
-# - enable devtmpfs (needed for udev -> touch support in weston)
-# - disable ANDROID_PARANOID_NETWORK (removes network restrictions)
-
 _vendor=motorola
 _flavor=motorola-osprey
 _hash="ac87541051278c7ea7f494c0b689d08e4a5cdd4f"
@@ -113,8 +103,7 @@ package() {
 
         make -j1 modules_install \
                 ARCH="$_carch" \
-                INSTALL_MOD_PATH="$pkgdir" \
-                INSTALL_DTBS_PATH="$pkgdir/usr/share/dtb"
+                INSTALL_MOD_PATH="$pkgdir"
 }
 
 sha512sums="fbc2e1fa6ff33dd4c20bb063c655fe85ee20c194a9c19a5fadd3434b8ade4b95377848349ce9266d74ca34882446e1e257c0e1a3e35bd23ff05813918dc74750  linux-motorola-osprey-ac87541051278c7ea7f494c0b689d08e4a5cdd4f.tar.gz
