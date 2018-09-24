@@ -39,7 +39,7 @@ def get_changed_files():
     print("commit_upstream_master: " + commit_upstream_master)
 
     # Commit to diff against
-    if commit_head == commit_upstream_master: # we are master branch in upstream repo
+    if commit_head == commit_upstream_master:  # we are master branch in upstream repo
         commit = "HEAD~1"
     else:
         commit = run_git(["merge-base", "upsteam/master", "HEAD"])[:-1]
