@@ -64,7 +64,6 @@ aports-static-upstream:
 aports-build:
   stage: second
   before_script:
-    - ./testscript.sh
     - .gitlab-ci/install_pmbootstrap.sh git
   script:
     - su pmos -c ".gitlab-ci/build_changed_aports.py"
