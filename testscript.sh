@@ -1,5 +1,7 @@
 #!/bin/sh
 
+apk add git
+
 echo "----------"
 pwd
 echo "----------"
