@@ -42,7 +42,7 @@ def get_changed_files():
     if commit_head == commit_upstream_master:  # we are master branch in upstream repo
         commit = "HEAD~1"
     else:
-        commit = run_git(["merge-base", "upsteam/master", "HEAD"])[:-1]
+        commit = run_git(["merge-base", "upstream/master", "HEAD"])[:-1]
     print("comparing HEAD with: " + commit)
 
     # Changed files
