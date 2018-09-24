@@ -33,13 +33,16 @@ def get_changed_files():
         :returns: list of changed files
     """
     # Current branch
-    branch = run_git(["rev-parse", "--abbrev-ref", "HEAD"])[:-1]
-    print("branch: " + branch)
+    commit_head = run_git(["rev-parse", "HEAD"])[:-1]
+    commit_upstream_master = run_git(["rev-parse", "upstream/master"])[:-1]
+    print("commit_head: " + commit_head)
+    print("commit_upstream_master: " + commit_upstream_master)
 
     # Commit to diff against
-    commit = "HEAD~1"
-    if branch != "master":
-        commit = run_git(["merge-base", "master", "HEAD"])[:-1]
+    if commit_head == commit_upstream_master: # we are master branch in upstream repo
+        commit = "HEAD~1"
+    else:
+        commit = run_git(["merge-base", "upsteam/master", "HEAD"])[:-1]
     print("comparing HEAD with: " + commit)
 
     # Changed files
