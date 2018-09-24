@@ -80,7 +80,7 @@ def get_changed_packages():
 def check_build(packages):
     # Initialize build environment with less logging
     run_pmbootstrap(["build_init"])
-    run_pmbootstrap(["--details-to-stdout", "build", "--strict"] +
+    run_pmbootstrap(["--details-to-stdout", "build", "--strict", "--force"] +
                     list(packages))
 
 
