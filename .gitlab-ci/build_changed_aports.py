@@ -85,7 +85,7 @@ def check_build(packages):
 
 if __name__ == "__main__":
     # Add a remote pointing to postmarketOS/pmaports for later
-    print(run_git(["remote", "add", "upstream", "https://gitlab.com/postmarketOS/pmaports.git"]))
+    print(run_git(["remote", "add", "upstream", "https://gitlab.com/z3ntu/pmaports.git"]))
     print(run_git(["fetch", "upstream"]))
 
     packages = get_changed_packages()
