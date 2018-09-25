@@ -2,8 +2,6 @@
 
 # global settings
 image: alpine:3.8
-before_script:
-  - export PYTHONUNBUFFERED=1
 after_script:
   - .gitlab-ci/move_logs.sh $CI_PROJECT_DIR
 stages:
@@ -68,4 +66,4 @@ aports-build:
   before_script:
     - .gitlab-ci/install_pmbootstrap.sh git
   script:
-    - su pmos -c ".gitlab-ci/build_changed_aports.py"
+    - PYTHONUNBUFFERED=1 su pmos -c ".gitlab-ci/build_changed_aports.py"
