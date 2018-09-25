@@ -2,6 +2,8 @@
 
 # global settings
 image: alpine:3.8
+before_script:
+  - export PYTHONUNBUFFERED=1
 after_script:
   - .gitlab-ci/move_logs.sh $CI_PROJECT_DIR
 stages:
