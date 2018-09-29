@@ -1,7 +1,7 @@
 pkgname=libhybris
 pkgver=1.0_git20180212
 pkgrel=2
-arch="armhf aarch64"
+arch="x86 armhf aarch64"
 url="https://github.com/libhybris/libhybris"
 license="Apache"
 makedepends="autoconf automake libtool wayland-dev linux-headers bsd-compat-headers
@@ -21,6 +21,9 @@ subpackages="$pkgname-dev $pkgname-egl $pkgname-gles $pkgname-libwayland-egl:_wa
 if [ "$CARCH" == "aarch64" ]; then
 subpackages="$pkgname-dev $pkgname-egl $pkgname-gles $pkgname-libwayland-egl:_wayland
 	$pkgname-7.1:_specific $pkgname-7.1-caf:_specific"
+elif [ "$CARCH" == "x86" ]; then
+subpackages="$pkgname-dev $pkgname-egl $pkgname-gles $pkgname-libwayland-egl:_wayland
+	$pkgname-7.1:_specific $pkgname-4.4:_specific"
 fi
 
 options="!check !strip !tracedeps"
@@ -56,6 +59,10 @@ build() {
 		_vers="7.1 7.1-caf"
 		_ldpath="/usr/libexec/droid-hybris/system/lib64:/vendor/lib64:/system/lib64"
 		_arch="arm64"
+    elif [ "$CARCH" == "x86" ]; then
+        _vers="7.1 4.4"
+		_ldpath="/usr/libexec/droid-hybris/system/lib:/vendor/lib:/system/lib"
+		_arch="x86"
 	fi
 
 	for _headers_ver in $_vers; do
