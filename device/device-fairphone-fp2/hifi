@@ -4,14 +4,12 @@ SectionVerb {
 
 		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 1"
 		cset "name='SLIM RX1 MUX' AIF1_PB"
-		cset "name='SLIM RX2 MUX' AIF1_PB"
 	]
 
 	DisableSequence [
 		cdev "hw:msm8974taikomtp"
 
 		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 0"
-		cset "name='SLIM RX2 MUX' ZERO"
 	]
 
 	Value {
@@ -61,6 +59,7 @@ SectionDevice."Headphones" {
 		cdev "hw:msm8974taikomtp"
 
 		cset "name='SLIM_0_RX Channels' Two"
+		cset "name='SLIM RX2 MUX' AIF1_PB"
 		cset "name='RX1 MIX1 INP1' RX2"
 		cset "name='RX2 MIX1 INP1' RX1"
 		cset "name='CLASS_H_DSM MUX' DSM_HPHL_RX1"
@@ -74,6 +73,7 @@ SectionDevice."Headphones" {
 		cdev "hw:msm8974taikomtp"
 
 		cset "name='SLIM_0_RX Channels' One"
+		cset "name='SLIM RX2 MUX' ZERO"
 		cset "name='RX1 MIX1 INP1' ZERO"
 		cset "name='RX2 MIX1 INP1' ZERO"
 		cset "name='CLASS_H_DSM MUX' ZERO"
