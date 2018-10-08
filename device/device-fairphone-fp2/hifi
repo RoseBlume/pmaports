@@ -30,17 +30,29 @@ SectionDevice."Speaker" {
 	EnableSequence [
 		cdev "hw:msm8974taikomtp"
 
+		# We need to disable this while setting up the route, else the
+		# driver will hang if the stream is open.
+		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 0"
+
 		cset "name='SLIM_0_RX Channels' One"
 		cset "name='RX7 MIX1 INP1' RX1"
 		# default: 87
 		cset "name='RX7 Digital Volume' 70"
 		cset "name='SPK DRV Volume' 8"
+
+		# Route has been set up, re-enable the mixer.
+		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 1"
 	]
 
 	DisableSequence [
 		cdev "hw:msm8974taikomtp"
 
+		# See comment in EnableSequence
+		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 0"
+
 		cset "name='RX7 MIX1 INP1' ZERO"
+
+		# Re-enabled in EnableSequence
 	]
 
 	Value {
@@ -58,6 +70,10 @@ SectionDevice."Headphones" {
 	EnableSequence [
 		cdev "hw:msm8974taikomtp"
 
+		# We need to disable this while setting up the route, else the
+		# driver will hang if the stream is open.
+		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 0"
+
 		cset "name='SLIM_0_RX Channels' Two"
 		cset "name='SLIM RX2 MUX' AIF1_PB"
 		cset "name='RX1 MIX1 INP1' RX2"
@@ -67,10 +83,16 @@ SectionDevice."Headphones" {
 		# default: 84
 		cset "name='RX1 Digital Volume' 60"
 		cset "name='RX2 Digital Volume' 60"
+
+		# Route has been set up, re-enable the mixer.
+		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 1"
 	]
 
 	DisableSequence [
 		cdev "hw:msm8974taikomtp"
+
+		# See comment in EnableSequence
+		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 0"
 
 		cset "name='SLIM_0_RX Channels' One"
 		cset "name='SLIM RX2 MUX' ZERO"
@@ -78,6 +100,8 @@ SectionDevice."Headphones" {
 		cset "name='RX2 MIX1 INP1' ZERO"
 		cset "name='CLASS_H_DSM MUX' ZERO"
 		cset "name='HPHL DAC Switch' 0"
+
+		# Re-enabled in EnableSequence
 	]
 
 	Value {
