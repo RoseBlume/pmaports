@@ -1,0 +1,33 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+pkgname=nodm
+pkgver=0.13
+pkgrel=0
+pkgdesc="Automatic display manager"
+arch="all"
+url="https://github.com/spanezz/nodm"
+license="GPL-2.0"
+depends="xorg-server"
+makedepends="autoconf automake xorg-server-dev linux-pam-dev help2man"
+source="$pkgname-$pkgver.tar.gz::https://github.com/spanezz/nodm/archive/$pkgver.tar.gz
+	nodm.openrc"
+subpackages="$pkgname-doc"
+
+prepare() {
+	cd "$builddir"
+	NOCONFIGURE=1 ./autogen.sh	
+}
+
+build() {
+	cd "$builddir"
+	./configure --prefix=/usr
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+
+	mkdir -p "$pkgdir"/etc/init.d
+	cp "$srcdir"/nodm.openrc "$pkgdir"/etc/init.d/nodm
+}
+sha512sums="0ccbe529c6c94e3518f4bd904147841e9929578004a87ece85cc0f8695f6a15d36cefa1ccae13aae677c93f686116e45f1387c523709d7b7bb7d12831abd4bde  nodm-0.13.tar.gz
+7fa0c375a4663968765ce82a8a64ce66ead258a9a64d72d575b5621e3eb86251d1b9a5e0f0d634d645332a0aacef4d5ae94967b2fd0afe7057506e4d06c10fca  nodm.openrc"
