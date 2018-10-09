@@ -65,6 +65,7 @@ SectionDevice."Headphones" {
 
 	ConflictingDevice [
 		"Speaker"
+		"Earpiece"
 	]
 
 	EnableSequence [
@@ -106,5 +107,48 @@ SectionDevice."Headphones" {
 
 	Value {
 		PlaybackChannels "2"
+	}
+}
+
+SectionDevice."Earpiece" {
+	Comment "FP2 earpiece"
+
+	ConflictingDevice [
+		"Headphones"
+	]
+
+	EnableSequence [
+		cdev "hw:msm8974taikomtp"
+
+		# We need to disable this while setting up the route, else the
+		# driver will hang if the stream is open.
+		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 0"
+
+		cset "name='SLIM_0_RX Channels' One"
+		cset "name='RX1 MIX1 INP1' RX1"
+		# default: 84
+		cset "name='RX1 Digital Volume' 60"
+		cset "name='CLASS_H_DSM MUX' DSM_HPHL_RX1"
+		cset "name='DAC1 Switch' 1"
+
+		# Route has been set up, re-enable the mixer.
+		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 1"
+	]
+
+	DisableSequence [
+		cdev "hw:msm8974taikomtp"
+
+		# See comment in EnableSequence
+		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 0"
+
+		cset "name='RX1 MIX1 INP1' ZERO"
+		cset "name='CLASS_H_DSM MUX' ZERO"
+		cset "name='DAC1 Switch' 0"
+
+		# Re-enabled in EnableSequence
+	]
+
+	Value {
+		PlaybackChannels "1"
 	}
 }
