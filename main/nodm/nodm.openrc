@@ -1,5 +1,6 @@
 #!/sbin/openrc-run
 
+export NODM_USER="$(getent passwd 10000 | cut -d: -f1)"
 description="Automatic display manager"
 command="/usr/sbin/nodm"
 command_background="true"
