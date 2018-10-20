@@ -23,7 +23,7 @@ fi
 
 # Source
 _repository="kernel_phoenix_hdx-common"
-_commit="f73e4eec8717c6104eca954cf9c259d9d37c38a5"
+_commit="3f34cf34d2926b55ff4c36a070c8d60238c10c97"
 _config="config-${_flavor}.${arch}"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/ggow/${_repository}/archive/${_commit}.tar.gz
@@ -91,7 +91,7 @@ package() {
 		"$pkgdir/boot/dt.img"
 }
 
-sha512sums="7d9f9001c6fc11954922070e3ed18f7e2843d5cd45dbab0f86ab332d6c45ee0279dd2c9bf498d91c017322f8b56f7f7417f132201bf2104ea5826212d09224f7  linux-amazon-thor-f73e4eec8717c6104eca954cf9c259d9d37c38a5.tar.gz
+sha512sums="a06208259d130e1e7bb563c448fa18ca26bc67659e10a12e8d8337f08112da7ce748286721973e29d80ee8a60e94b7440147d00d3344841f8c85c76f15d2189b  linux-amazon-thor-3f34cf34d2926b55ff4c36a070c8d60238c10c97.tar.gz
 d682b04c30b7829d6e90b4ad3eb40201ff253dfdb1717742b6b6574b8d3c86abc95e6f7ee8e8ab097520b41e0240b06bdd75fc8be727ac481e656c4d23f8dd30  config-amazon-thor.armhf
 d80980e9474c82ba0ef1a6903b434d8bd1b092c40367ba543e72d2c119301c8b2d05265740e4104ca1ac5d15f6c4aa49e8776cb44264a9a28dc551e0d1850dcc  compiler-gcc6.h
 ddf6caae3f087f21fbfdc258da1c05731bc14c24fe25ce1383133140129d44c48dc427b52d93ed7395def9ad5bf4dab01cc2792581c8ec3e10278c014a64d240  00_fix_smd_private.patch
