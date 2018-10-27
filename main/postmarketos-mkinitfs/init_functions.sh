@@ -358,7 +358,7 @@ setup_framebuffer() {
 	echo "NOTE: Waiting 10 seconds for the framebuffer /dev/fb0."
 	echo "If your device does not have a framebuffer, disable this with:"
 	echo "no_framebuffer=true in <https://postmarketos.org/deviceinfo>"
-	for i in $(seq 1 100); do
+	for _ in $(seq 1 100); do
 		[ -e "/dev/fb0" ] && break
 		sleep 0.1
 	done
