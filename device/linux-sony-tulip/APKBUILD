@@ -1,0 +1,62 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname="linux-sony-tulip"
+pkgver=4.9.0
+pkgrel=0
+pkgdesc="Sony Xperia M4 Aqua kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="sony-tulip"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev"
+
+# Compiler: latest GCC from Alpine
+HOSTCC="${CC:-gcc}"
+HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
+
+# Source
+_repository="kernel_kanuti"
+_commit="72bf0fbedd5428c15b147d5f40d7e7a3513ccda5"
+_config="config-${_flavor}.${arch}"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/konradybcio/${_repository}/archive/${_commit}.tar.gz
+	$_config
+"
+builddir="$srcdir/${_repository}-${_commit}"
+
+prepare() {
+	default_prepare
+	downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	# kernel.release
+	install -D "$builddir/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	# zImage (find the right one)
+	cd "$builddir/arch/$_carch/boot"
+	_target="$pkgdir/boot/vmlinuz-$_flavor"
+	for _zimg in zImage-dtb Image.gz-dtb *zImage Image; do
+		[ -e "$_zimg" ] || continue
+		msg "zImage found: $_zimg"
+		install -Dm644 "$_zimg" "$_target"
+		break
+	done
+	if ! [ -e "$_target" ]; then
+		error "Could not find zImage in $PWD!"
+		return 1
+	fi
+}
+
+sha512sums="b4ed044b2858900f9e895fb1bc758c39d08ce328ed215a6858a315c477c08268ebf66ae229deca6c7bde7d6319ce5b175b417efeeb580926022fcdb7204abe15  linux-sony-tulip-72bf0fbedd5428c15b147d5f40d7e7a3513ccda5.tar.gz
+26bc4ddfc0020e2d91b73f013dbb32af3b97e73276137a9a605739f46859a8a5a611d88ad4d95fcb9d5b4e630461c5944c652086492d9849b119f32bbccf7fd4  config-sony-tulip.aarch64"
