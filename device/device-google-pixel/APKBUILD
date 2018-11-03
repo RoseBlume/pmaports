@@ -1,0 +1,23 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-google-pixel"
+pkgdesc="Google Pixel"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="noarch"
+options="!check"
+depends="postmarketos-base linux-google-pixel mkbootimg mesa-dri-swrast"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="0840b2bfbface69375da039da9d2485bd22ad43735b488b5218a6cafcd28d894d9b44fb076ac18c497ec2937af0dfdf3d2e0e702abf3631e0a122d4b7c22836f  deviceinfo"

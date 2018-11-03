@@ -1,0 +1,68 @@
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname="linux-google-pixel"
+pkgver=3.18.70
+pkgrel=0
+pkgdesc="Google Pixel kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="google-pixel"
+url="https://kernel.org"
+license="GPL2"
+options="!strip !check !tracedeps"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev"
+HOSTCC="${CC:-gcc}"
+HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
+
+# Source
+_repository="android_kernel_google_marlin"
+_commit="c54d6ca5fbdc54949205918f211cf7386fa251e8"
+_config="config-${_flavor}.${arch}"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/LineageOS/${_repository}/archive/${_commit}.tar.gz
+	$_config
+	01_revert_skip_initramfs.patch
+"
+builddir="$srcdir/${_repository}-${_commit}"
+
+prepare() {
+	default_prepare
+	downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
+}
+
+menuconfig() {
+	cd "$builddir"
+	make ARCH="$_carch" menuconfig
+	cp .config "$startdir"/$_config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	# kernel.release
+	install -D "$builddir/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	# zImage (find the right one)
+	cd "$builddir/arch/$_carch/boot"
+	_target="$pkgdir/boot/vmlinuz-$_flavor"
+	for _zimg in zImage-dtb Image.gz-dtb *zImage Image; do
+		[ -e "$_zimg" ] || continue
+		msg "zImage found: $_zimg"
+		install -Dm644 "$_zimg" "$_target"
+		break
+	done
+	if ! [ -e "$_target" ]; then
+		error "Could not find zImage in $PWD!"
+		return 1
+	fi
+}
+
+
+sha512sums="554545498cdee4a8ed5185e14239cb3238b4a0ee730303bfd7c85c2af4b29b2d50459cfe0955fd838a8b02d8dc408735051066206e779bd8bb75edb1fd0c5456  linux-google-pixel-c54d6ca5fbdc54949205918f211cf7386fa251e8.tar.gz
+5a7a80ea74f5cc073d596447bd190dde6589e4ab72f34956f5b20b1a83a1d417b128e06885a9e429c71ab9e67b84ee4dfbe068d2eb1429df81c805cfce00b34c  config-google-pixel.aarch64
+dafacc4a701f034372660dcbcb7a15be2b1a98140ffe8c949179d0892698b257c4cd3eaa77cd8ff2853df483e337413c5cf96f89d53e4ce3aa90d8ddecad79b6  01_revert_skip_initramfs.patch"
