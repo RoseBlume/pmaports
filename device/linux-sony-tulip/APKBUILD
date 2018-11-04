@@ -2,7 +2,7 @@
 # Kernel config based on: arch/arm64/configs/(CHANGEME!)
 
 pkgname="linux-sony-tulip"
-pkgver=4.9.0
+pkgver=3.10
 pkgrel=0
 pkgdesc="Sony Xperia M4 Aqua kernel fork"
 arch="aarch64"
@@ -11,18 +11,26 @@ _flavor="sony-tulip"
 url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps"
-makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev libressl libressl-dev"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev libressl libressl-dev gcc6"
 
 # Compiler: latest GCC from Alpine
-HOSTCC="${CC:-gcc}"
-HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
+#HOSTCC="${CC:-gcc}"
+#HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
+
+# Compiler: GCC 6 (doesn't boot when compiled with newer versions)
+if [ "${CC:0:5}" != "gcc6-" ]; then
+	CC="gcc6-$CC"
+	HOSTCC="gcc6-gcc"
+	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
+fi
+
 
 # Source
 _repository="kernel_kanuti"
-_commit="96b981bed5c6bb98a41cddbc84470faf6ea650c8"
+_commit="d8e51bc7dd6bde228f1d9a7ddcf664845c4f07fb"
 _config="config-${_flavor}.${arch}"
 source="
-	$pkgname-$_commit.tar.gz::https://github.com/konradybcio/${_repository}/archive/${_commit}.tar.gz
+	$pkgname-$_commit.tar.gz::https://github.com/bartcubbins/${_repository}/archive/${_commit}.tar.gz
 	$_config
 "
 builddir="$srcdir/${_repository}-${_commit}"
@@ -58,5 +66,5 @@ package() {
 	fi
 }
 
-sha512sums="6e8aa9ebef722fc5791cc2f50acceea8779a49f624f8dd6d5a00e686546975d1c15ca6c54c8b2cd8fb33ff0833ac6873f731493c3eb0a03440665651fbbe739c  linux-sony-tulip-96b981bed5c6bb98a41cddbc84470faf6ea650c8.tar.gz
-26bc4ddfc0020e2d91b73f013dbb32af3b97e73276137a9a605739f46859a8a5a611d88ad4d95fcb9d5b4e630461c5944c652086492d9849b119f32bbccf7fd4  config-sony-tulip.aarch64"
+sha512sums="7372b4fdfca2fef3c8ae48c9353a6d7ea658fc8412e2b288ee1097d902f5d9b81a0b76f3fc0e1bc74a015ec34e84c4942608f0e522d628b3deb288f4b177428c  linux-sony-tulip-d8e51bc7dd6bde228f1d9a7ddcf664845c4f07fb.tar.gz
+6a27de1d4501780f1bec90711cd069b4ef0611a9c66c78e2efab7409c20fba9b14e35a0f3ecddccfa914d2151b12edb4e3f9cd49ac8580e0ada681a7da34c3d8  config-sony-tulip.aarch64"
