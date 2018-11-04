@@ -19,7 +19,7 @@ HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
 
 # Source
 _repository="kernel_kanuti"
-_commit="72bf0fbedd5428c15b147d5f40d7e7a3513ccda5"
+_commit="96b981bed5c6bb98a41cddbc84470faf6ea650c8"
 _config="config-${_flavor}.${arch}"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/konradybcio/${_repository}/archive/${_commit}.tar.gz
@@ -58,5 +58,5 @@ package() {
 	fi
 }
 
-sha512sums="b4ed044b2858900f9e895fb1bc758c39d08ce328ed215a6858a315c477c08268ebf66ae229deca6c7bde7d6319ce5b175b417efeeb580926022fcdb7204abe15  linux-sony-tulip-72bf0fbedd5428c15b147d5f40d7e7a3513ccda5.tar.gz
+sha512sums="6e8aa9ebef722fc5791cc2f50acceea8779a49f624f8dd6d5a00e686546975d1c15ca6c54c8b2cd8fb33ff0833ac6873f731493c3eb0a03440665651fbbe739c  linux-sony-tulip-96b981bed5c6bb98a41cddbc84470faf6ea650c8.tar.gz
 26bc4ddfc0020e2d91b73f013dbb32af3b97e73276137a9a605739f46859a8a5a611d88ad4d95fcb9d5b4e630461c5944c652086492d9849b119f32bbccf7fd4  config-sony-tulip.aarch64"
