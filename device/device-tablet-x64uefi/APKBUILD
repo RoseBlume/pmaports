@@ -1,0 +1,38 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-tablet-x64uefi"
+pkgdesc="Various Tablet with atom CPU"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="noarch"
+options="!check"
+depends="postmarketos-base linux-postmarketos-stable mesa-dri-swrast gummiboot"
+makedepends="devicepkg-dev gummiboot"
+source="
+	deviceinfo
+	loader.conf
+	postmarketos.conf
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+
+	mkdir -p "$pkgdir"/boot/EFI/Boot
+	mkdir -p "$pkgdir"/boot/loader/entries
+
+	install -D -m644 "$srcdir"/loader.conf \
+		"$pkgdir"/boot/loader/loader.conf
+	install -D -m644 "$srcdir"/postmarketos.conf \
+		"$pkgdir"/boot/loader/entries/postmarketos.conf
+	install -D -m644 /usr/lib/gummiboot/gummibootx64.efi \
+		"$pkgdir"/boot/EFI/Boot/bootx64.efi
+}
+
+sha512sums="292b862be83561fe02460395a9e74f07c11ecbd91aada2abe1e1e1840dd2d2aa5a74dda36b1d474d2374656ef4b6a520c76c50ad0285e24f1e09e56daef727d3  deviceinfo
+838a0a66d5513fb8f6d1a8d20743f25f24298e35a942b2a71e7f0b4aaaf35bd22a3ec245e993f1551fe60ce6e2eac7df1a4631d3e02ebc593965ce284002cffc  loader.conf
+29525a5eb87073fd1b0fe725082822b431c2952902f0da846ef85ef8b1d5b44c59418732180444078965faa56bd23f321116ebde3df19b9feb5c966c20555013  postmarketos.conf"
