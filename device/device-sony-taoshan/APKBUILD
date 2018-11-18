@@ -1,0 +1,43 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-sony-taoshan"
+pkgdesc="Sony Xperia L"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="noarch"
+options="!check"
+depends="postmarketos-base linux-sony-taoshan mkbootimg msm-fb-refresher mesa-dri-swrast gdb"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	screen_enlightener
+	fb.modes
+	40-boot-logo.files
+	50-screen-enlightener.files
+	initfs-hook.sh
+	logo.rle
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	install -Dm544 "$srcdir"/fb.modes "$pkgdir"/etc/fb.modes
+	install -Dm444 "$srcdir"/screen_enlightener "$pkgdir"/usr/sbin/screen_enlightener
+	install -Dm444 "$srcdir"/40-boot-logo.files  "$pkgdir"/etc/postmarketos-mkinitfs/files/40-boot-logo.files
+	install -Dm444 "$srcdir"/50-screen-enlightener.files "$pkgdir"/etc/postmarketos-mkinitfs/files/50-screen-enlightener.files
+	install -Dm644 "$srcdir"/initfs-hook.sh "$pkgdir"/etc/postmarketos-mkinitfs/hooks/00-${pkgname}.sh
+	install -Dm444 "$srcdir"/logo.rle "$pkgdir"/
+}
+
+
+sha512sums="19b5740953c2732e35906982d8f3358c57181e3906f3dab6d92c063aa416bf1b12854a9fe50cc374ae1bc2f06304c8aa9a15b28e587e4b42e44d4432e4d82c80  deviceinfo
+ff228e2e77f94d4fb4e7c8eb6d34dba44cfbfe157f33df2e4445e488029ff46cf2efe9f6cb006a8b8465da2381570e8e153491919033e047143f37881d840203  screen_enlightener
+72b830759c11c1d15387bff6cd9556ddac6aafa168f86ed3d3cb461f67f1492ff0b779b4c4141b6ce62a3ae02e8073bda6e19cfcf73b18b11aac99dbec8099f4  fb.modes
+153f8549244ed2c053aee3f2560df241f7c133f24032d889a2fce112015773fc32d3d081a9e09755536232462a3668dc8798851f2f6a48a16f66cfdd85d317a4  40-boot-logo.files
+47e89398887654960489e5a5f870b93d71e534432589999a68a31713d913ee7dd26c0e3c2983102f815e1413a5189dc900384fefa724c2727a99bef5f04548b6  50-screen-enlightener.files
+0a1c08aa6c075f8d6c56f821555fcc871ede5bcae6cadb27b18a791a79a54e4411f52dcb2e4773e58744b962fc874784fe49085c356adb5f619b403d69deb69a  initfs-hook.sh
+925adbce08605900e26717e685cf6925eb5f1179f4e1af2ff2065cc39b20583c1a11cf9bd0a812cb901a52e9272ee7803d377d088ee932030e4baa6665b173d8  logo.rle"
