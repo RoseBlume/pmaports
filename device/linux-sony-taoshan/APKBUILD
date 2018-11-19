@@ -1,5 +1,5 @@
 # Reference: <https://postmarketos.org/vendorkernel>
-# Kernel config based on: booting = arch/arm/configs/msm8960_defconfig
+# Kernel config based on: arch/arm/configs/msm8960_defconfig
 
 pkgname="linux-sony-taoshan"
 pkgver=3.4.0
@@ -32,22 +32,17 @@ source="
 builddir="$srcdir/${_repository}-${_commit}"
 
 prepare() {
-	echo "dOm linux-sony-taoshan prepare"
 	default_prepare
 	downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
 }
 
 build() {
-	echo "dOm linux-sony-taoshan build"
 	unset LDFLAGS
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
 }
 
 package() {
-
-	echo "dOm linux-sony-taoshan package"
-
 	# kernel.release
 	install -D "$builddir/include/config/kernel.release" \
 		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"

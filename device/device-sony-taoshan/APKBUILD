@@ -7,7 +7,7 @@ url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
 options="!check !archcheck"
-depends="postmarketos-base linux-sony-taoshan mkbootimg msm-fb-refresher mesa-dri-swrast gdb"
+depends="postmarketos-base linux-sony-taoshan mkbootimg msm-fb-refresher mesa-dri-swrast"
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
@@ -40,4 +40,4 @@ b2797078a3c36de195d5498f2e932843403aa5217388129f238d2b94250083e206d71456aaa309bb
 153f8549244ed2c053aee3f2560df241f7c133f24032d889a2fce112015773fc32d3d081a9e09755536232462a3668dc8798851f2f6a48a16f66cfdd85d317a4  40-boot-logo.files
 47e89398887654960489e5a5f870b93d71e534432589999a68a31713d913ee7dd26c0e3c2983102f815e1413a5189dc900384fefa724c2727a99bef5f04548b6  50-screen-enlightener.files
 0a1c08aa6c075f8d6c56f821555fcc871ede5bcae6cadb27b18a791a79a54e4411f52dcb2e4773e58744b962fc874784fe49085c356adb5f619b403d69deb69a  initfs-hook.sh
-925adbce08605900e26717e685cf6925eb5f1179f4e1af2ff2065cc39b20583c1a11cf9bd0a812cb901a52e9272ee7803d377d088ee932030e4baa6665b173d8  logo.rle"
+2dde30d3f7450c9e0ce375580ed5ece68ced09cff81ef11c1700c6263db63d4bb1eeca6b2f01b226426525674384643a74c26bbfb6ad8e1b41a43d959b5d1817  logo.rle"
