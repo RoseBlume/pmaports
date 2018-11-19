@@ -11,7 +11,7 @@ depends="postmarketos-base linux-sony-taoshan mkbootimg msm-fb-refresher mesa-dr
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
-	screen_enlightener
+	sony-taoshan-screen-enlightener
 	fb.modes
 	40-boot-logo.files
 	50-screen-enlightener.files
@@ -26,7 +26,7 @@ build() {
 package() {
 	devicepkg_package $startdir $pkgname
 	install -Dm544 "$srcdir"/fb.modes "$pkgdir"/etc/fb.modes
-	install -Dm444 "$srcdir"/screen_enlightener "$pkgdir"/usr/sbin/screen_enlightener
+	install -Dm444 "$srcdir"/sony-taoshan-screen-enlightener "$pkgdir"/usr/sbin/sony-taoshan-screen-enlightener
 	install -Dm444 "$srcdir"/40-boot-logo.files  "$pkgdir"/etc/postmarketos-mkinitfs/files/40-boot-logo.files
 	install -Dm444 "$srcdir"/50-screen-enlightener.files "$pkgdir"/etc/postmarketos-mkinitfs/files/50-screen-enlightener.files
 	install -Dm644 "$srcdir"/initfs-hook.sh "$pkgdir"/etc/postmarketos-mkinitfs/hooks/00-${pkgname}.sh
@@ -35,9 +35,9 @@ package() {
 
 
 sha512sums="19b5740953c2732e35906982d8f3358c57181e3906f3dab6d92c063aa416bf1b12854a9fe50cc374ae1bc2f06304c8aa9a15b28e587e4b42e44d4432e4d82c80  deviceinfo
-b2797078a3c36de195d5498f2e932843403aa5217388129f238d2b94250083e206d71456aaa309bb34b7cbd7fa73c2b550571ea7ef208fbfa5d0bb8854dc305c  screen_enlightener
+fff18ea9ccdabd2d6290755d716cb5444f54ce350f3ddd6ae0f23b78539b64d92b9e81a804b290c4c89bca318cfaa5930658ca62dc60cb0ad60033d516ab6aed  sony-taoshan-screen-enlightener
 72b830759c11c1d15387bff6cd9556ddac6aafa168f86ed3d3cb461f67f1492ff0b779b4c4141b6ce62a3ae02e8073bda6e19cfcf73b18b11aac99dbec8099f4  fb.modes
 153f8549244ed2c053aee3f2560df241f7c133f24032d889a2fce112015773fc32d3d081a9e09755536232462a3668dc8798851f2f6a48a16f66cfdd85d317a4  40-boot-logo.files
-47e89398887654960489e5a5f870b93d71e534432589999a68a31713d913ee7dd26c0e3c2983102f815e1413a5189dc900384fefa724c2727a99bef5f04548b6  50-screen-enlightener.files
-0a1c08aa6c075f8d6c56f821555fcc871ede5bcae6cadb27b18a791a79a54e4411f52dcb2e4773e58744b962fc874784fe49085c356adb5f619b403d69deb69a  initfs-hook.sh
+c47c000a34d3d0129d7dc626cbcefa736e5ecb822a9e9b4af48ce1f5a1365a6c8b611995bc82d94f2b8bca546c2e17539757b6e2b26d3d5c0aae5c5515f647f1  50-screen-enlightener.files
+b540a85692feb0fb37f9f52f3b12b8cca6ad32469b7359464411b2d06ab896938466eef18e81fcc97a88f0aa1837cefd442389db14bc8d34c009b774c4915de4  initfs-hook.sh
 2dde30d3f7450c9e0ce375580ed5ece68ced09cff81ef11c1700c6263db63d4bb1eeca6b2f01b226426525674384643a74c26bbfb6ad8e1b41a43d959b5d1817  logo.rle"
