@@ -129,7 +129,7 @@ void print_cmap(struct fb_cmap* scr_cmap)
         printf("0x%04hX ", scr_cmap->green[i]);
     }
     printf("\n");
-    printf("\tblue   = ", scr_cmap->blue);
+    printf("\tblue   = ");
     for (int i = 0; i < scr_cmap->len; i++) {
         if (i > 0 && i % 8 == 0) {
             printf("\n\t\t ");
@@ -137,7 +137,7 @@ void print_cmap(struct fb_cmap* scr_cmap)
         printf("0x%04hX ", scr_cmap->blue[i]);
     }
     printf("\n");
-    printf("\ttransp = ", scr_cmap->transp);
+    printf("\ttransp = ");
     for (int i = 0; i < scr_cmap->len; i++) {
         if (i > 0 && i % 8 == 0) {
             printf("\n\t\t ");
