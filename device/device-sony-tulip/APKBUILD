@@ -7,7 +7,7 @@ url="https://postmarketos.org"
 license="MIT"
 arch="noarch"
 options="!check"
-depends="postmarketos-base linux-sony-tulip mkbootimg mesa-dri-swrast mesa-dri-freedreno linux-firmware firmware-adreno"
+depends="postmarketos-base linux-sony-tulip mkbootimg mesa-dri-swrast"
 makedepends="devicepkg-dev"
 source="deviceinfo"
 
