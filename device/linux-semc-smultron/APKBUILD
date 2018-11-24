@@ -2,7 +2,7 @@
 
 pkgname="linux-semc-smultron"
 pkgver=3.4.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Xperia mini kernel fork"
 arch="armhf"
 _carch="arm"
@@ -10,7 +10,7 @@ _flavor="semc-smultron"
 url="https://kernel.org"
 license="GPL2"
 options="!strip !check !tracedeps"
-makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev xz gcc6"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev xz gcc6 linux-firmware-ti-connectivity"
 
 # Compiler: this kernel was only tested with GCC6. Feel free to make a merge
 # request if you find out that it is booting working with newer GCCs as
@@ -43,12 +43,29 @@ build() {
 	unset LDFLAGS
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+
+	# the 'no-pic' flag is necessary to avoid the
+	# error 'Unknown symbol _GLOBAL_OFFSET_TABLE_ (err 0)' when loading the module
+	make ARCH="$_carch" CC="${CC:-gcc}" CFLAGS_MODULE="-fno-pic" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS" modules
 }
 
 package() {
 	# kernel.release
 	install -D "$builddir/include/config/kernel.release" \
 		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	# wifi firmware
+	install -Dm644 "/lib/firmware/ti-connectivity/wl1271-nvs.bin" \
+		"$pkgdir/lib/firmware/ti-connectivity/wl1271-nvs.bin"
+	install -Dm644 "/lib/firmware/ti-connectivity/wl127x-fw-4-sr.bin" \
+		"$pkgdir/lib/firmware/ti-connectivity/wl127x-fw-4-sr.bin"
+
+	# modules
+	cd "$builddir"
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1))-postmarketOS" \
+		INSTALL_MOD_PATH="$pkgdir" INSTALL_MOD_STRIP=1 modules_install
 
 	# zImage (find the right one)
 	cd "$builddir/arch/$_carch/boot"
