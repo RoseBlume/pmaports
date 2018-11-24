@@ -20,9 +20,8 @@ deviceinfo_dev_keyboard=""
 
 # Bootloader related
 deviceinfo_flash_method="fastboot" 
-deviceinfo_kernel_cmdline="console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 
-androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.park=3 
-androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 earlyprintk" 
+deviceinfo_kernel_cmdline="console=ttyHSL0,115200,n8
+msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 earlyprintk" 
 deviceinfo_generate_bootimg="true" 
 deviceinfo_bootimg_qcdt="false" 
 deviceinfo_flash_offset_base="0x81dfff00" 
