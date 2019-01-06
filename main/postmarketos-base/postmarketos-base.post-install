@@ -80,3 +80,6 @@ sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 if ! grep -q "makestep" /etc/chrony/chrony.conf; then
 	echo "makestep 1 -1" >> /etc/chrony/chrony.conf
 fi
+
+# Add user to the plugdev group to allow networkmanager control
+addgroup $(getent passwd 10000 | cut -d: -f1) plugdev
