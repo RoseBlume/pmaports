@@ -1,15 +1,16 @@
-pkgname=settings
+_pkgname=settings
+pkgname=settings-coreapps
 pkgver=2.3.0
 pkgrel=0
-pkgdesc="Settings is for setup CoreApps settings from CoreApps family. "
+pkgdesc="A settings manager for the CoreApps family. "
 arch="all"
 url="https://gitlab.com/cubocore"
-license="GPL-2.1"
+license="GPL-2"
 depends="libcprime-dev qt5-qtbase"
 depends_dev=""
 makedepends="$depends_dev qt5-qtbase-dev"
-source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
-builddir="$srcdir/$pkgname-v$pkgver"
+source="$_pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$_pkgname/-/archive/v$pkgver/$_pkgname-v$pkgver.tar.gz"
+builddir="$srcdir/$_pkgname-v$pkgver"
 
 build() {
 	cd "$builddir"

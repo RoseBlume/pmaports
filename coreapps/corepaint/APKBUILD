@@ -1,10 +1,10 @@
 pkgname=corepaint
 pkgver=2.3.0
 pkgrel=0
-pkgdesc="CorePaint is paint app from CoreApps family. "
+pkgdesc="A paint app from the CoreApps family. "
 arch="all"
 url="https://gitlab.com/cubocore"
-license="GPL-2.1"
+license="GPL-2"
 depends="libcprime-dev qt5-qtbase"
 depends_dev=""
 makedepends="$depends_dev qt5-qtbase-dev"
