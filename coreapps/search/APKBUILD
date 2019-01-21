@@ -1,0 +1,28 @@
+pkgname=search
+pkgver=2.3.0
+pkgrel=0
+pkgdesc="Search is file finder app from CoreApps family. "
+arch="all"
+url="https://gitlab.com/cubocore"
+license="LGPL-2.1"
+depends="libcprime-dev qt5-qtbase"
+depends_dev=""
+makedepends="$depends_dev qt5-qtbase-dev"
+source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-v$pkgver"
+
+build() {
+	cd "$builddir"
+	qmake-qt5
+	make
+}
+
+check() {
+	cd "$builddir"	
+}
+
+package() {
+	cd "$builddir"
+	INSTALL_ROOT="$pkgdir" make install
+}
+sha512sums="a95a6f6b00630e977c67bf98637a902cf5e81b80943db88a05431adbcba1bd46b69c90ae73ff6bdebc48ceb79b7b8c6752dfce2ae99d8a4673ba097caed6c474  search-2.3.0.tar.gz"
