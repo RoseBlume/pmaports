@@ -6,20 +6,16 @@ arch="all"
 url="https://gitlab.com/cubocore"
 license="LGPL-2.1"
 depends="qt5-qtbase"
-depends_dev=""
-makedepends="$depends_dev qt5-qtbase-dev"
+makedepends="qt5-qtbase-dev"
 source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-v$pkgver"
+options="!check"
 
 build() {
 	cd "$builddir"
 	qmake-qt5
 	make
-}
-
-check() {
-	cd "$builddir"	
 }
 
 package() {

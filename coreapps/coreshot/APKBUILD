@@ -5,10 +5,11 @@ pkgdesc="A screen capture utility from the CoreApps family."
 arch="all"
 url="https://gitlab.com/cubocore"
 license="GPL-2.0"
-depends="libcprime-dev qt5-qtbase qt5-qtx11extras-dev"
-makedepends="$depends_dev qt5-qtbase-dev"
+depends="libcprime qt5-qtbase qt5-qtx11extras-dev"
+makedepends="qt5-qtbase-dev"
 source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
 builddir="$srcdir/$pkgname-v$pkgver"
+options="!check"
 
 build() {
 	cd "$builddir"
@@ -16,9 +17,6 @@ build() {
 	make
 }
 
-check() {
-	cd "$builddir"	
-}
 
 package() {
 	cd "$builddir"
