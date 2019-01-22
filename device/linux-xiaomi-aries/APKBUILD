@@ -1,0 +1,74 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm/configs/cyanogen_aries_defconfig
+
+pkgname="linux-xiaomi-aries"
+pkgver=3.4.0
+pkgrel=0
+pkgdesc="Xiaomi Mi 2 kernel fork"
+arch="armhf"
+_carch="arm"
+_flavor="xiaomi-aries"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev"
+
+# Compiler: latest GCC from Alpine
+HOSTCC="${CC:-gcc}"
+HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
+
+# Source
+_repository="android_kernel_xiaomi_aries"
+_commit="e27b401ab22b932ae7030c5cf5ce6c6d97993eb7"
+_config="config-${_flavor}.${arch}"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/LineageOS/${_repository}/archive/${_commit}.tar.gz
+	$_config
+	gcc7-give-up-on-ilog2-const-optimizations.patch
+	gcc8-fix-put-user.patch
+	01_remove-perl-defined.patch
+	02_gpu-msm-fix-gcc5-compile.patch
+	03_fix-return-address.patch
+	04_fix-perf-trace-counters.patch
+"
+builddir="$srcdir/${_repository}-${_commit}"
+
+prepare() {
+	default_prepare
+	downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	# kernel.release
+	install -D "$builddir/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	# zImage (find the right one)
+	cd "$builddir/arch/$_carch/boot"
+	_target="$pkgdir/boot/vmlinuz-$_flavor"
+	for _zimg in zImage-dtb Image.gz-dtb *zImage Image; do
+		[ -e "$_zimg" ] || continue
+		msg "zImage found: $_zimg"
+		install -Dm644 "$_zimg" "$_target"
+		break
+	done
+	if ! [ -e "$_target" ]; then
+		error "Could not find zImage in $PWD!"
+		return 1
+	fi
+}
+
+sha512sums="d81b184b2a458c6751488a27fb54a5cb0e683179eca2645ad8bc5493f7681afb1e2e5762b7ffaf28d0043cd6513bcc263ee0ebad9da878a1a274fa8ba106737f  linux-xiaomi-aries-e27b401ab22b932ae7030c5cf5ce6c6d97993eb7.tar.gz
+8df0cd639f4d17d85e6fc3c220c4b6108875c9760a6a405620a4f69398e5ce559448018776edc59c104673907978bb9d6f88064e6cbdf7b88d4c11d9d053045f  config-xiaomi-aries.armhf
+77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+10031b6f8ab5310b490dd9949adfbf13f76a966ed2407615bc95cb7606f23cf2b42ba3b790c56b8ad76d4b03ebe1178c5f59839ea79022f628c2eefbf588a63a  01_remove-perl-defined.patch
+7be03a9e78b7ac330a54b1f00509caa0621a95c0c55901878ad757f9dd69cc05ba2c8b5ea987063ae1224f92c4d090d515fa5d369e7755181a4871b0d0f82881  02_gpu-msm-fix-gcc5-compile.patch
+7d5ca9d460030adf529466a8e8ef430337cbb998f78b1b5f37a2809fc745cdb16421dc314045ae411069d5af2ace7028f1139303ae4d6d583b6ae07ad931295e  03_fix-return-address.patch
+f85ced49ee2f2461adea68dac0a10452aa809a7d41d869092d94eb085344919a9a385dec0c48011f4601ca4f441700f7fe49075c7eca4fb2d66b01f7d413ccb7  04_fix-perf-trace-counters.patch"

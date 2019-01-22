@@ -1,0 +1,23 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-xiaomi-aries"
+pkgdesc="Xiaomi Mi 2"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armhf"
+options="!check !archcheck"
+depends="postmarketos-base linux-xiaomi-aries mkbootimg mesa-dri-swrast"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="bf9a4a165811dbdd16f8dcb27c174bf3358dc438f537d781038e405b3e92bc3e226810c25e3732e5df9f34fc77c194daf0de691955a8848306750320c0c2516f  deviceinfo"
