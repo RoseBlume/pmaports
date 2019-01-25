@@ -7,7 +7,7 @@ arch="all"
 url="https://gitlab.com/cubocore"
 license="GPL-2.0"
 depends="libcprime qt5-qtbase"
-makedepends="qt5-qtbase-dev"
+makedepends="qt5-qtbase-dev libcprime-dev"
 source="$_pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$_pkgname/-/archive/v$pkgver/$_pkgname-v$pkgver.tar.gz"
 builddir="$srcdir/$_pkgname-v$pkgver"
 
