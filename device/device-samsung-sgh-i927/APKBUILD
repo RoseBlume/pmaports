@@ -5,7 +5,7 @@ pkgver=0.1
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
-arch="armv7"
+arch="armhf"
 options="!check !archcheck"
 depends="postmarketos-base linux-samsung-sgh-i927 mkbootimg mesa-dri-swrast"
 makedepends="devicepkg-dev"
@@ -20,4 +20,4 @@ package() {
 }
 
 
-sha512sums="1a65b40f37198f85bfcb6d9d2cb673326692b5b51b5b9ef379ee41d3219ea25f5d2ae447f3e2153514acf82b30edc638db549ae800634331007e2109948b57ab  deviceinfo"
+sha512sums="24b97f7e9b95a1a62f17de2149d109a983dd4497bf4707d30b427f02bcc5af331e5e25aada241c07c5d492c120d141caf917069bfe06f91a4e165d55b0744d8c  deviceinfo"

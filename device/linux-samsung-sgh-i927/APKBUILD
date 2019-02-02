@@ -5,7 +5,7 @@ pkgname="linux-samsung-sgh-i927"
 pkgver=3.1.10
 pkgrel=0
 pkgdesc="Samsung Captivate Glide kernel fork"
-arch="armv7"
+arch="armhf"
 _carch="arm"
 _flavor="samsung-sgh-i927"
 url="https://kernel.org"
@@ -61,6 +61,6 @@ package() {
 }
 
 sha512sums="761fd368b83389ecbca0c332ecda196c08a996f4875df2ecf6edcb20b8b4051e20d983ffb5088334add2205f65478d9ab0c2b189123343b9d5a04b9e45a6607f  linux-samsung-sgh-i927-e235c7b6c816a3c0764e44351b7e047c8a073681.tar.gz
-486cd5ba4b3f6357679764042c8cac2d4ffdb4fee5635cd0b34d5753a0627718fea6789398494b1d097e0e2903c4907098ccc4dca34c16eeed485bc9fd0bd73d  config-samsung-sgh-i927.armv7
+fb6deb0311cb7802ece78dee1febace03ec5a13dabf660ee743e0b77efb21156adb9c53132297e7e0fde2b2c426a5f581e3782b1c5946eaeb27cb3776c371aa6  config-samsung-sgh-i927.armhf
 77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
 197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch"
