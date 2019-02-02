@@ -1,0 +1,23 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-samsung-sgh-i927"
+pkgdesc="Samsung Captivate Glide"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-sgh-i927 mkbootimg mesa-dri-swrast"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="1a65b40f37198f85bfcb6d9d2cb673326692b5b51b5b9ef379ee41d3219ea25f5d2ae447f3e2153514acf82b30edc638db549ae800634331007e2109948b57ab  deviceinfo"
