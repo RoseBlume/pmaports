@@ -1,0 +1,19 @@
+# Contributor: Luca Weiss <luca@z3ntu.xyz>
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
+pkgname=postmarketos-ui-unity8
+pkgver=1
+pkgrel=0
+pkgdesc="(Wayland) Unity8"
+url="https://wiki.postmarketos.org/wiki/Unity_8"
+arch="noarch"
+license="GPL-3.0-or-later"
+depends="unity8"
+install="$pkgname.post-install"
+source="start_unity8.sh"
+options="!check"
+
+package() {
+	install -D -m644 "$srcdir"/start_unity8.sh \
+		"$pkgdir"/etc/profile.d/start_unity8.sh
+}
+sha512sums="bc7a7f692e75044494d5c8aa7e376705be167bb4ec347aab221da706d664f85939f4c4af997746fc44f2ae7ffb89f0d5af1e40186b94ff1bfca89c21a1448168  start_unity8.sh"
