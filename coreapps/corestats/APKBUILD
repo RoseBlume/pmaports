@@ -1,0 +1,24 @@
+pkgname=corestats
+pkgver=2.4.0
+pkgrel=0
+pkgdesc="A system resource viewer from the CoreApps family."
+arch="all"
+url="https://gitlab.com/cubocore"
+license="GPL-2.0"
+depends="qt5-qtbase qt5-qtcharts libcprime libcsys qt5-qtsvg"
+makedepends="qt5-qtbase-dev libcprime-dev libcsys-dev qt5-qtcharts-dev"
+source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-v$pkgver"
+options="!check"
+
+build() {
+	cd "$builddir"
+	qmake-qt5
+	make
+}
+
+package() {
+	cd "$builddir"
+	INSTALL_ROOT="$pkgdir" make install
+}
+sha512sums="6ad2e15cfb13debc93327b0e1621eeae5913d9e8f51d70d57d1c4ddbce7e15024afa2b93c4a9a9d1df37cfd919466c1c1da403c3f0fa0e5a7cc133dab3d3fe45  corestats-2.4.0.tar.gz"

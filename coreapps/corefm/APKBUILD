@@ -1,12 +1,12 @@
-pkgname=corepad
+pkgname=corefm
 pkgver=2.4.0
 pkgrel=0
-pkgdesc="A document editor from the CoreApps family."
+pkgdesc="A lightweight file-manager from the CoreApps family."
 arch="all"
 url="https://gitlab.com/cubocore"
 license="GPL-2.0"
-depends="libcprime qt5-qtbase qt5-qtsvg"
-makedepends="qt5-qtbase-dev libcprime-dev"
+depends="libcprime libcsys qt5-qtbase qt5-qtmultimedia-dev qt5-qtsvg"
+makedepends="qt5-qtbase-dev libcprime-dev libcsys-dev"
 source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
 builddir="$srcdir/$pkgname-v$pkgver"
 options="!check"
@@ -21,4 +21,4 @@ package() {
 	cd "$builddir"
 	INSTALL_ROOT="$pkgdir" make install
 }
-sha512sums="a162b5b2a4862df74f214028b1d41c2e2324f33e21bf76ad703abc889052031446e82ae0c3c73fbb4e9d1da19c1df144268826dc5840df533bf54fd1c564cf84  corepad-2.4.0.tar.gz"
+sha512sums="9cd9357ace799ca602c3c6637d8dc73e906675a87b0a44855a2892656bf47798ebc708c508170ade7a1d4c83437bdfc428e4c1a0baa9af9c16ee5fd328ca10f5  corefm-2.4.0.tar.gz"
