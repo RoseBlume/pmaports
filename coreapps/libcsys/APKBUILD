@@ -1,10 +1,10 @@
 pkgname=libcsys
 pkgver=2.4.0
 pkgrel=0
-pkgdesc="Library for managing storage-drive and getting system resource information in real time."
+pkgdesc="Library for managing a hard drive and getting system resource information in real-time."
 arch="all"
 url="https://gitlab.com/cubocore"
-license="GPL-2.1"
+license="LGPL-2.1"
 depends="qt5-qtbase"
 makedepends="qt5-qtbase-dev"
 source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
