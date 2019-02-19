@@ -1,12 +1,12 @@
-pkgname=corepaint
+pkgname=coregarage
 pkgver=2.4.0
 pkgrel=0
-pkgdesc="A paint app from the CoreApps family."
+pkgdesc="A settings manager for the CoreApps family."
 arch="all"
 url="https://gitlab.com/cubocore"
 license="GPL-2.0"
-depends="libcprime qt5-qtsvg"
-makedepends="qt5-qtbase-dev libcprime-dev"
+depends="libcprime qt5-qtsvg libarchive-qt"
+makedepends="qt5-qtbase-dev libcprime-dev libarchive-qt-dev"
 source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
 builddir="$srcdir/$pkgname-v$pkgver"
 options="!check"
@@ -21,4 +21,4 @@ package() {
 	cd "$builddir"
 	INSTALL_ROOT="$pkgdir" make install
 }
-sha512sums="1c21098ef352eb3b726caaf660ebffa5f9a8cd7113401e8d3121f7150b29f88928c431e6ad632670726cc0ddbe60264069d69c68f7e1c7f8adf830f5e2057a02  corepaint-2.4.0.tar.gz"
+sha512sums="e744d5054d7e57347910589261bf9452b3001dc266f695d82a8669db589783e8fcb73be1b1ff3ae7e3c8484c9c88ff97587bcf201a26de887e6ca8e52b43d19b  coregarage-2.4.0.tar.gz"
