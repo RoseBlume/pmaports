@@ -8,6 +8,7 @@
 # - apply patches to compile
 # - enable devtmpfs (needed for udev -> touch support in weston)
 # - disable ANDROID_PARANOID_NETWORK (removes network restrictions)
+# - disable KINETO_GAN (caused problems when used with networkmanager, dhcpcd)
 
 _vendor=htc
 _flavor=htc-ace
