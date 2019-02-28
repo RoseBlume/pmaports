@@ -22,4 +22,4 @@ package() {
 	cd "$builddir"
 	INSTALL_ROOT="$pkgdir" make install
 }
-sha512sums="2e8362ac90fe45d9e132e4cda1f1f330ab8a813de0cb9b2d3e9629cd88bb0e6c8a8a4d8e7016db3ccf28bf8b191d8abcb546dee80b0442270f1483317d8fc860  libarchive-qt-1.0.2.tar.gz"
+sha512sums="3d06beff6f23ec16dfcd3b18e5ade63f22568b7466a539750d916e73be24dac6e4d9551865eea960d2c2745639bd68ae6906d13a3066cc02c8056da44be9f6a2  libarchive-qt-1.0.2.tar.gz"
