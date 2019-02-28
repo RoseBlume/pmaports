@@ -22,4 +22,10 @@ package() {
 	cd "$builddir"
 	INSTALL_ROOT="$pkgdir" make install
 }
+
+dev() {
+	default_dev
+	depends="$depends libarchive-dev"
+}
+
 sha512sums="3d06beff6f23ec16dfcd3b18e5ade63f22568b7466a539750d916e73be24dac6e4d9551865eea960d2c2745639bd68ae6906d13a3066cc02c8056da44be9f6a2  libarchive-qt-1.0.2.tar.gz"
