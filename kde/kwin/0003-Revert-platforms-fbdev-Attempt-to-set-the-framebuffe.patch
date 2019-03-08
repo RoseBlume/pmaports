@@ -1,0 +1,81 @@
+From b48457500829da07c2cc65ccfb5858ec73e64d5c Mon Sep 17 00:00:00 2001
+From: Federico Amedeo Izzo <federico.izzo42@gmail.com>
+Date: Fri, 8 Mar 2019 13:26:31 +0100
+Subject: [PATCH] Revert "[platforms/fbdev] Attempt to set the framebuffer
+ color layout on the framebuffer device"
+
+This reverts commit 304528e80b935efea05e2d5e3030266e0eddc44c.
+---
+ plugins/platforms/fbdev/fb_backend.cpp | 28 +++-----------------------
+ plugins/platforms/fbdev/fb_backend.h   |  2 +-
+ 2 files changed, 4 insertions(+), 26 deletions(-)
+
+diff --git a/plugins/platforms/fbdev/fb_backend.cpp b/plugins/platforms/fbdev/fb_backend.cpp
+index 871c66199..d5c9b5c29 100644
+--- a/plugins/platforms/fbdev/fb_backend.cpp
++++ b/plugins/platforms/fbdev/fb_backend.cpp
+@@ -98,8 +98,8 @@ void FramebufferBackend::openFrameBuffer()
+         return;
+     }
+     m_fd = fd;
+-    if (!handleScreenInfo()) {
+-        qCWarning(KWIN_FB) << "failed to handle framebuffer information";
++    if (!queryScreenInfo()) {
++        qCWarning(KWIN_FB) << "failed to query framebuffer information";
+         emit initFailed();
+         return;
+     }
+@@ -112,7 +112,7 @@ void FramebufferBackend::openFrameBuffer()
+     emit screensQueried();
+ }
+ 
+-bool FramebufferBackend::handleScreenInfo()
++bool FramebufferBackend::queryScreenInfo()
+ {
+     if (m_fd < 0) {
+         return false;
+@@ -125,28 +125,6 @@ bool FramebufferBackend::handleScreenInfo()
+     if (ioctl(m_fd, FBIOGET_FSCREENINFO, &fixinfo) < 0 || ioctl(m_fd, FBIOGET_VSCREENINFO, &varinfo) < 0) {
+         return false;
+     }
+-
+-    // correct the color info, and try to turn on screens, assuming this is a non-primary framebuffer device
+-    varinfo.grayscale = 0;
+-    varinfo.transp.offset = 24;
+-    varinfo.transp.length = 8;
+-    varinfo.transp.msb_right = 0;
+-    varinfo.red.offset = 16;
+-    varinfo.red.length = 8;
+-    varinfo.red.msb_right = 0;
+-    varinfo.green.offset = 8;
+-    varinfo.green.length = 8;
+-    varinfo.green.msb_right = 0;
+-    varinfo.blue.offset = 0;
+-    varinfo.blue.length = 8;
+-    varinfo.blue.msb_right = 0;
+-    ioctl(m_fd, FBIOPUT_VSCREENINFO, &varinfo);
+-
+-    // Probe the device for new screen information.
+-    if (ioctl(m_fd, FBIOGET_VSCREENINFO, &varinfo) < 0) {
+-        return false;
+-    }
+-
+     m_resolution = QSize(varinfo.xres, varinfo.yres);
+     m_physicalSize = QSize(varinfo.width, varinfo.height);
+     m_id = QByteArray(fixinfo.id);
+diff --git a/plugins/platforms/fbdev/fb_backend.h b/plugins/platforms/fbdev/fb_backend.h
+index 0fc952704..2ffca0eb9 100644
+--- a/plugins/platforms/fbdev/fb_backend.h
++++ b/plugins/platforms/fbdev/fb_backend.h
+@@ -84,7 +84,7 @@ public:
+ 
+ private:
+     void openFrameBuffer();
+-    bool handleScreenInfo();
++    bool queryScreenInfo();
+     void initImageFormat();
+     QSize m_resolution;
+     QSize m_physicalSize;
+-- 
+2.21.0
+
