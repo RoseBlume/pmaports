@@ -22,4 +22,4 @@ package() {
 	cd "$builddir"
 	INSTALL_ROOT="$pkgdir" make install
 }
-sha512sums="1049ae5802fa0bd4e40a7d25f3a6014475ebfec429d7ad6e6635a1a22c7ce44d6aafdf43d63a85dd94461788b3a44fe208d090d634ae5919a88784e6fd1520b0  libcprime-2.5.0.tar.gz"
+sha512sums="60c1c8a2be51d5055ce82b91d98b73813d248e1281fc64ebaded747a71d52ec685b3ce5697801bd5060272bdbf0a0d09f680b9c3b1127492fb2c09da569408c9  libcprime-2.5.0.tar.gz"
