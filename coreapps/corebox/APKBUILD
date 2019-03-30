@@ -1,0 +1,25 @@
+pkgname=corebox
+pkgver=2.5.0
+pkgrel=0
+pkgdesc="A simple x11 based panel from the CoreApps family."
+arch="all"
+url="https://gitlab.com/cubocore"
+license="GPL-2.0"
+depends="libcprime qt5-qtx11extras-dev"
+makedepends="qt5-qtbase-dev libcprime-dev qt5-qtx11extras-dev libxcomposite-dev libxrender-dev"
+source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-v$pkgver"
+options="!check"
+
+build() {
+	cd "$builddir"
+	qmake-qt5
+	make
+}
+
+
+package() {
+	cd "$builddir"
+	INSTALL_ROOT="$pkgdir" make install
+}
+sha512sums="7d49028c7786f20cc42e975c67840c73b7b5b5d8d97bffa184d40db8dae044b2a81508d378952846a0fe43b176823973649c4e82f344dda58e0056afd6c0bc73  corebox-2.5.0.tar.gz"
