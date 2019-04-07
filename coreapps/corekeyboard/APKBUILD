@@ -1,0 +1,25 @@
+pkgname=corekeyboard
+pkgver=2.5.0
+pkgrel=0
+pkgdesc="A x11 based virtual keyboard from the CoreApps family."
+arch="all"
+url="https://gitlab.com/cubocore"
+license="GPL-2.0"
+depends="qt5-qtx11extras-dev libxtst"
+makedepends="qt5-qtbase-dev qt5-qtx11extras-dev libxtst-dev"
+source="$pkgname-$pkgver.tar.gz::https://gitlab.com/cubocore/$pkgname/-/archive/v$pkgver/$pkgname-v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-v$pkgver"
+options="!check"
+
+build() {
+	cd "$builddir"
+	qmake-qt5
+	make
+}
+
+
+package() {
+	cd "$builddir"
+	INSTALL_ROOT="$pkgdir" make install
+}
+sha512sums="0591521eed48c4b8f4d98d0ac3264198c56f73066bf2d7a08be5c42ba80db4f5a6e92e44c45fa31afb4ab5b9dd80e197d0f63a32f628d77c8d175233ae5b58f3  corekeyboard-2.5.0.tar.gz"
