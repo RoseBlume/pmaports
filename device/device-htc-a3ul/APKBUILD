@@ -1,0 +1,23 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-htc-a3ul"
+pkgdesc="HTC Desire 610"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-htc-a3ul mkbootimg mesa-dri-swrast"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="1f9c28a9545ef1e4ec38be96e2aa58d3efbbb219072fd7ca12c9bc7706dd14bf51e227a653c89e0a2dcbfebcd54c1e03f753bf86a21ed40aaa5d8733301d0e7b  deviceinfo"

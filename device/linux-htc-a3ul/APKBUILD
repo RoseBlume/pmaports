@@ -1,0 +1,78 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm/configs/(CHANGEME!)
+
+pkgname="linux-htc-a3ul"
+pkgver=3.4.10
+pkgrel=0
+pkgdesc="HTC Desire 610 kernel fork"
+arch="armv7"
+_carch="arm"
+_flavor="htc-a3ul"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev dtbtool git gcc6 lz4"
+
+# Compiler: latest GCC from Alpine
+if [ "${CC:0:5}" != "gcc6-" ]; then
+	CC="gcc6-$CC"
+	HOSTCC="gcc6-gcc"
+	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
+fi
+
+# Source
+_repository="cm11_kernel_htc_msm8974a3ul"
+_commit="209e94bc8e0ca323404661fd1512c72f47728f06"
+_config="config-${_flavor}.${arch}"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/MiniBlu/${_repository}/archive/${_commit}.tar.gz
+	$_config
+	fixes-a3ul.patch
+	kernel-use-the-gnu89-standard-explicitly.patch
+	compiler-gcc6.h
+"
+builddir="$srcdir/${_repository}-${_commit}"
+
+prepare() {
+	default_prepare
+	downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
+}
+
+build() {
+unset LDFLAGS
+	make CONFIG_NO_ERROR_ON_MISMATCH=y CONFIG_DEBUG_SECTION_MISMATCH=y ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+
+	# Generate master DTB
+	dtbTool -s 2048 -p "scripts/dtc/" -o "arch/arm/boot/dt.img" "arch/arm/boot/"
+}
+
+package() {
+	# kernel.release
+	install -D "$builddir/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	# zImage (find the right one)
+	cd "$builddir/arch/$_carch/boot"
+	_target="$pkgdir/boot/vmlinuz-$_flavor"
+	for _zimg in zImage-dtb Image.gz-dtb *zImage Image; do
+		[ -e "$_zimg" ] || continue
+		msg "zImage found: $_zimg"
+		install -Dm644 "$_zimg" "$_target"
+		break
+	done
+	if ! [ -e "$_target" ]; then
+		error "Could not find zImage in $PWD!"
+		return 1
+	fi
+
+	# Master DTB (deviceinfo_bootimg_qcdt)
+	install -Dm644 "$builddir/arch/arm/boot/dt.img" \
+		"$pkgdir/boot/dt.img"
+}
+
+sha512sums="8882c09e7783c6eecc7dba090c636a4c8de5d0100d63e04f3e1db4ae371c806027b76db57bf570a0e8d7df35383619450129d8bea0b7d0b46d1ab32a6f473a26  linux-htc-a3ul-209e94bc8e0ca323404661fd1512c72f47728f06.tar.gz
+6c8b1b109b52dd15cc52f937fb7e16c52c3e8361726457d084a2b31b65b41519869ab81bdaa7fd13b1bc756bf2938854545b8b14793d64e135043dc4f4bc1f0b  config-htc-a3ul.armv7
+c577125b278eb6678e56fda618d1f1c53cae4beaf8b26d7da8554a188b254bb0f43e119c17c0461048756bca4ce2ae2b41d9d16c29292f7f7e2284a1682b8714  fixes-a3ul.patch
+ad0182a483791fc88e058838bc331b2f04a75ba291e763767babdb815efadfc3b4fda97e69e2e3f00a426cabea088e35297a92bd287592597d1e309be68ee92c  kernel-use-the-gnu89-standard-explicitly.patch
+d80980e9474c82ba0ef1a6903b434d8bd1b092c40367ba543e72d2c119301c8b2d05265740e4104ca1ac5d15f6c4aa49e8776cb44264a9a28dc551e0d1850dcc  compiler-gcc6.h"

@@ -1,0 +1,26 @@
+diff --git a/Makefile b/Makefile
+index 6f1c0b5b..0c11d690 100644
+--- a/Makefile
++++ b/Makefile
+@@ -194,8 +194,6 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
+ export KBUILD_BUILDHOST := $(SUBARCH)
+ ARCH		?= $(SUBARCH)
+ CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
+-ARCH		:= arm
+-CROSS_COMPILE	:= arm-eabi-4.7/bin/arm-eabi-
+ 
+ # Architecture as present in compile.h
+ UTS_MACHINE 	:= $(ARCH)
+diff --git a/kernel/timeconst.pl b/kernel/timeconst.pl
+index eb51d76e..848c6d09 100644
+--- a/kernel/timeconst.pl
++++ b/kernel/timeconst.pl
+@@ -370,7 +370,7 @@ if ($hz eq '--can') {
+ 	}
+ 
+ 	@val = @{$canned_values{$hz}};
+-	if (!defined(@val)) {
++	if (@val) {
+ 		@val = compute_values($hz);
+ 	}
+ 	output($hz, @val);
