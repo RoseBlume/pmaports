@@ -3,45 +3,38 @@
 
 pkgname="linux-zte-blade-af3"
 pkgver=3.10.17
-pkgrel=1
-pkgdesc="ZTE Blade AF3 kernel fork"
-arch="armhf"
+pkgrel=4
+pkgdesc="ZTE Blade AF3 kernel"
+arch="armv7"
 _carch="arm"
 _flavor="zte-blade-af3"
 url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps"
-makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev gcc6"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev"
 
-# Compiler: this kernel was only tested with GCC6. Feel free to make a merge
-# request if you find out that it is booting working with newer GCCs as
-# well. See <https://postmarketos.org/vendorkernel> for instructions.
-if [ "${CC:0:5}" != "gcc6-" ]; then
-	CC="gcc6-$CC"
-	HOSTCC="gcc6-gcc"
-	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
-fi
+# Compiler: latest GCC from Alpine
+HOSTCC="${CC:-gcc}"
+HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
 
 # Source
 _repository="android_kernel_zte_P731A20"
 _commit="a1b2e761517f0e2bed0dd5e1a94053d7c648614d"
-_config="sp7731gea-dt_defconfig"
+_config="config-${_flavor}.${arch}"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/blade-af3/${_repository}/archive/${_commit}.tar.gz
 	$_config
-	compiler-gcc6.h
+	gcc7-give-up-on-ilog2-const-optimizations.patch
+	gcc8-fix-put-user.patch
+	kernel-use-the-gnu89-standard-explicitly.patch
 	00_return_address.patch
 	fix_cross_compile.patch
+	dt.img
 "
 builddir="$srcdir/${_repository}-${_commit}"
 
 prepare() {
 	default_prepare
-	
-	# gcc6 support
-	cp -v "$srcdir/compiler-gcc6.h" "$builddir/include/linux/"
-	
-	
 	downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
 }
 
@@ -54,11 +47,15 @@ build() {
 
 	# Generate master DTB (deviceinfo_bootimg_qcdt)
 	#dtbTool -s 2048 -p "scripts/dtc/" -o "arch/arm/boot/dt.img" "arch/arm/boot/"
+	#dtbtool-lineage -s 2048 -p "scripts/dtc/" -o "arch/arm/boot/dt.img" "arch/arm/boot/"
 }
 
 package() {
 	install -Dm644 "$builddir/arch/$_carch/boot/zImage" \
 		"$pkgdir/boot/vmlinuz-$_flavor"
+		
+	install -Dm644 	"$srcdir/dt.img" \
+	"$pkgdir/boot/dt.img"
 	
 	
 	# kernel.release
@@ -68,11 +65,14 @@ package() {
 echo "--[ Installing modules ]--"
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1))-postmarketOS" \
-		INSTALL_MOD_PATH="$pkgdir" modules_install
+		INSTALL_MOD_PATH="$pkgdir" INSTALL_MOD_STRIP=1 modules_install
 }
 
 sha512sums="e29e9b242c235fe48278643a5ee4bb487c6a7cab09b23a16f796b945371da5505cdd3791b322837d29df4a401a91373f0a65c01794ad4576b2ab925487cdc64d  linux-zte-blade-af3-a1b2e761517f0e2bed0dd5e1a94053d7c648614d.tar.gz
-f766ff9cc4d15653e4f002433438d2cbaa1d2c437e4693759b0ad6088bea34cdbca797262868712a9c8e7e03d576eecd270a0fcd950581b552b9aed3d42a27dc  sp7731gea-dt_defconfig
-d80980e9474c82ba0ef1a6903b434d8bd1b092c40367ba543e72d2c119301c8b2d05265740e4104ca1ac5d15f6c4aa49e8776cb44264a9a28dc551e0d1850dcc  compiler-gcc6.h
+7ef122b480c47a869a50e471cefb9f476ada42d5924f7d74d27701c9dfec51ac1abfb0a0f061f07baaaebedbb4dccd451d12183d5d5564a54b2b04e653ebbb69  config-zte-blade-af3.armv7
+77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+ad0182a483791fc88e058838bc331b2f04a75ba291e763767babdb815efadfc3b4fda97e69e2e3f00a426cabea088e35297a92bd287592597d1e309be68ee92c  kernel-use-the-gnu89-standard-explicitly.patch
 c40eaa11547f5bc2b1ff965506bdfe3015ff16e4b5ad9ccb3b8134ceafd1d32407c4ef2b213e02e036ce1e9bdcbfe768dff7d4b054bec77705a176c1f783b6f5  00_return_address.patch
-2bedb0af8a23f5febc5f23a41c91174bffa5cb3b9af699fd61c86089a5bead77a08aca23daa62a3b7e93845e9cf86a1f5cc2a5fb4c4a56af09cf5befa2287d31  fix_cross_compile.patch"
+2bedb0af8a23f5febc5f23a41c91174bffa5cb3b9af699fd61c86089a5bead77a08aca23daa62a3b7e93845e9cf86a1f5cc2a5fb4c4a56af09cf5befa2287d31  fix_cross_compile.patch
+12ce0afc93ecf39e1454ecf28fdee5b0fbe4048995ceafda46eb40ad08f25b658c8874c4e0c914c01380097702c066d72a6be47a6ccda0beb5a16eec98c077e2  dt.img"
