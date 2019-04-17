@@ -1,9 +1,9 @@
 # Reference: <https://postmarketos.org/vendorkernel>
-# Kernel config based on: arch/arm/configs/(CHANGEME!)
+# Kernel config based on: arch/arm/configs/sp7731gea-dt_defconfig
 
 pkgname="linux-zte-blade-af3"
 pkgver=3.10.17
-pkgrel=4
+pkgrel=0
 pkgdesc="ZTE Blade AF3 kernel"
 arch="armv7"
 _carch="arm"
@@ -11,7 +11,7 @@ _flavor="zte-blade-af3"
 url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps"
-makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev dtbtool"
 
 # Compiler: latest GCC from Alpine
 HOSTCC="${CC:-gcc}"
@@ -29,7 +29,7 @@ source="
 	kernel-use-the-gnu89-standard-explicitly.patch
 	00_return_address.patch
 	fix_cross_compile.patch
-	dt.img
+	qcom,msm-id_fix.patch
 "
 builddir="$srcdir/${_repository}-${_commit}"
 
@@ -46,17 +46,16 @@ build() {
 		CFLAGS_MODULE=-fno-pic
 
 	# Generate master DTB (deviceinfo_bootimg_qcdt)
-	#dtbTool -s 2048 -p "scripts/dtc/" -o "arch/arm/boot/dt.img" "arch/arm/boot/"
-	#dtbtool-lineage -s 2048 -p "scripts/dtc/" -o "arch/arm/boot/dt.img" "arch/arm/boot/"
+	dtbTool -s 2048 -p "scripts/dtc/" -o "arch/arm/boot/dt.img" "arch/arm/boot/"
 }
 
 package() {
 	install -Dm644 "$builddir/arch/$_carch/boot/zImage" \
 		"$pkgdir/boot/vmlinuz-$_flavor"
-		
-	install -Dm644 	"$srcdir/dt.img" \
-	"$pkgdir/boot/dt.img"
-	
+
+	# Master DTB (deviceinfo_bootimg_qcdt)
+	install -Dm644 "$builddir/arch/arm/boot/dt.img" \
+		"$pkgdir/boot/dt.img"
 	
 	# kernel.release
 	install -D "$builddir/include/config/kernel.release" \
@@ -75,4 +74,4 @@ sha512sums="e29e9b242c235fe48278643a5ee4bb487c6a7cab09b23a16f796b945371da5505cdd
 ad0182a483791fc88e058838bc331b2f04a75ba291e763767babdb815efadfc3b4fda97e69e2e3f00a426cabea088e35297a92bd287592597d1e309be68ee92c  kernel-use-the-gnu89-standard-explicitly.patch
 c40eaa11547f5bc2b1ff965506bdfe3015ff16e4b5ad9ccb3b8134ceafd1d32407c4ef2b213e02e036ce1e9bdcbfe768dff7d4b054bec77705a176c1f783b6f5  00_return_address.patch
 2bedb0af8a23f5febc5f23a41c91174bffa5cb3b9af699fd61c86089a5bead77a08aca23daa62a3b7e93845e9cf86a1f5cc2a5fb4c4a56af09cf5befa2287d31  fix_cross_compile.patch
-12ce0afc93ecf39e1454ecf28fdee5b0fbe4048995ceafda46eb40ad08f25b658c8874c4e0c914c01380097702c066d72a6be47a6ccda0beb5a16eec98c077e2  dt.img"
+0b3ae537793ebd6d24dfca9ec81674fc14b2aece4592bf2700795382f059501285a3e673c02a7114e8239040d41e096b10b819173f14ef837346ed60b0f55574  qcom,msm-id_fix.patch"
