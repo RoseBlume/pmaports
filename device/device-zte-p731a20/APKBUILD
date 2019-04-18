@@ -1,5 +1,5 @@
 # Reference: <https://postmarketos.org/devicepkg>
-pkgname="device-zte-blade-af3"
+pkgname="device-zte-p731a20"
 pkgdesc="ZTE Blade AF3"
 pkgver=0.1
 pkgrel=0
@@ -7,7 +7,7 @@ url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
-depends="postmarketos-base linux-zte-blade-af3 mkbootimg mesa-dri-swrast"
+depends="postmarketos-base linux-zte-p731a20 mkbootimg mesa-dri-swrast"
 makedepends="devicepkg-dev"
 source="deviceinfo 
 initfs-hook.sh"
@@ -21,5 +21,5 @@ package() {
 }
 
 
-sha512sums="da0315e6b3b25e3d02f1855b719f7b387b9f13b0a7e7ba28a85fde4b2b3135a37c77097b503a3f01831f1caa8663106aae6b2c4471eb6a872b2cd5845823c32f  deviceinfo
+sha512sums="e12c82d91d3dc793f832a5c7d5b99d8c9fd70e28b28d6d8ad95b53f1c89197cbbb4d2ebf14ba76bb8fafc654e361e71ec63b21b2d953d8a7c85856cff24dc3ae  deviceinfo
 ea2901b1744bf489355e6447e74daa74bf57f9163c16c1c49c07b5e4c0d993065451f3e685f4651d57b3d0b76b6a67de1abcd778ddc1b3cd929d8eebdff37235  initfs-hook.sh"
