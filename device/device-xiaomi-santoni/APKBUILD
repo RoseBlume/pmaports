@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname="device-xiaomi-santoni"
 pkgdesc="Xiaomi Redmi 4X"
-pkgver=0.1
-pkgrel=6
+pkgver=1.0
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -48,8 +48,8 @@ package() {
 }
 
 nonfree_firmware() {
-	pkgdesc="Wi-Fi, ADSP Firmware"
-	depends="firmware-xiaomi-santoni"
+	pkgdesc="Support for Wi-Fi, Sound, Modem through proprietary blobs."
+	depends="firmware-xiaomi-santoni modem-qcom-msm-downstream-common"
 	mkdir "$subpkgdir"
 }
 
