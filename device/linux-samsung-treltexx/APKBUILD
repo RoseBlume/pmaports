@@ -1,0 +1,78 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm/configs/cm_exynos5433-trelte_defconfig
+
+pkgname="linux-samsung-treltexx"
+pkgver=3.10.9
+pkgrel=0
+pkgdesc="Samsung Galaxy Note 4 kernel fork"
+arch="armv7"
+_carch="arm"
+_flavor="samsung-treltexx"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev xz"
+
+# Compiler: latest GCC from Alpine
+HOSTCC="${CC:-gcc}"
+HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
+
+# Source
+_repository="android_kernel_samsung_trelte"
+_commit="14ee49add016402757a1f9473aee1d3b0f280148"
+_config="config-${_flavor}.${arch}"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/LineageOS/${_repository}/archive/${_commit}.tar.gz
+	$_config
+	fix-makefile.patch
+	gcc7-give-up-on-ilog2-const-optimizations.patch
+	gcc8-fix-put-user.patch
+	0007-usb_gadget-set-random-rndis-host-MAC-address-to-prev.patch
+	kernel-use-the-gnu89-standard-explicitly.patch
+	https://raw.githubusercontent.com/LineageOS/android_device_samsung_treltexx/32b24e2348aacce34e87a15944624db1c27397f8/dtb.img
+"
+builddir="$srcdir/${_repository}-${_commit}"
+
+prepare() {
+	default_prepare
+	downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	# kernel.release
+	install -D "$builddir/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	# zImage (find the right one)
+	cd "$builddir/arch/$_carch/boot"
+	_target="$pkgdir/boot/vmlinuz-$_flavor"
+	for _zimg in zImage-dtb Image.gz-dtb *zImage Image; do
+		[ -e "$_zimg" ] || continue
+		msg "zImage found: $_zimg"
+		install -Dm644 "$_zimg" "$_target"
+		break
+	done
+	if ! [ -e "$_target" ]; then
+		error "Could not find zImage in $PWD!"
+		return 1
+	fi
+
+	# Master DTB (deviceinfo_bootimg_qcdt)
+	install -Dm644 "$srcdir/dtb.img" \
+		"$pkgdir/boot/dt.img"
+}
+
+sha512sums="0e8f8fc9fad8a07213e61049ebade2b46566212944b53f127738ebc7a1dbdeea5221164df4f03d73b034f8eed015f590dd6827ed5d6bdf9a75e115c07de81dca  linux-samsung-treltexx-14ee49add016402757a1f9473aee1d3b0f280148.tar.gz
+ba782943218a07b62326d19c97c8b60e1acc470db5c433c511f139223685dfe3b36092103d7111dc59d0c8b2dd622a28c5b1b798fb80c4f2ce4ef5a5bfe81c0a  config-samsung-treltexx.armv7
+cdd54697ac3ffb9ec29a3cbee64211b6317fa304ebe0fe51e9d75456c27ff3f70fb7921788cf7ddd96d78775e170cd0db945b093b120c7eccb433f2e592bdf91  fix-makefile.patch
+77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+128825721a6b4afca494520f6f60c47e309e922fd2a8b97fd5dea5f56058fb447618b33a65778611ad52067f5f880af07f06e092c75640efbcac78320b4b6568  0007-usb_gadget-set-random-rndis-host-MAC-address-to-prev.patch
+5f501b90c0a77d7132f2a984e341f1f0efa60830765dfd36e4e47366a4788c8c2b4f337d21c0f50c23843e4b17c44bb620f1480c4f96dc147a7df17c0ed9e49b  kernel-use-the-gnu89-standard-explicitly.patch
+27f4b2a68c863fcb0e96782f803dd5a2bb9a30a83ee3fd495b177961b92c9d89146be5224e8d0ae5eebb2b7438d2bc2485b43fd1a99b2ed47fe39ddf8dc7bdaf  dtb.img"

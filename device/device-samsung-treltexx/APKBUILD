@@ -1,0 +1,34 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-samsung-treltexx"
+pkgdesc="Samsung Galaxy Note 4"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-treltexx mkbootimg mesa-dri-swrast msm-fb-refresher"
+makedepends="devicepkg-dev"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	# Disable v4l (video4linux), because without the camera firmware
+	# blobs this makes dev hang with the kernel this device uses (#1033)
+	mkdir -p "$pkgdir"/etc/udev/rules.d/
+	ln -s /dev/null "$pkgdir"/etc/udev/rules.d/60-persistent-v4l.rules
+}
+
+nonfree_firmware() {
+	pkgdesc="Wifi firmware"
+	depends="firmware-samsung-treltexx"
+	mkdir "$subpkgdir"
+}
+
+
+sha512sums="ab712b4eef74d480f9743b6e8c9944a4bb1055cdfca2bf3aefc28000d93b66a25c310026c813ba075b752b754fd7c7eb4f824c182a1ef88509c4885556aea161  deviceinfo"
