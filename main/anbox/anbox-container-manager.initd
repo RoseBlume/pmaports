@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+
+supervisor=supervise-daemon
+
+name="Anbox container manager"
+command=/usr/bin/anbox
+command_args="container-manager --daemon --privileged --data-path=/var/lib/anbox"
+command_background=true
+pidfile=/run/anbox-container-manager.pid
+
+depend() {
+        need net
+        after firewall
+}
