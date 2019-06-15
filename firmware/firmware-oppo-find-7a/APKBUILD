@@ -1,12 +1,13 @@
 pkgname=firmware-oppo-find-7a
 pkgver=0.1
-pkgrel=1
-pkgdesc="Firmware for Oppo Find 7a"
+pkgrel=2
+pkgdesc="Firmware for Oppo Find 7a and init script for copying firmware blobs from the android firmware partition"
 url="https://github.com/TheMuppets/proprietary_vendor_oppo"
 arch="armv7"
 license="proprietary"
 depends="wcnss-wlan"
 options="!check !strip !archcheck"
+install="$pkgname.post-install"
 
 # Sources
 _files1="a330_pfp.fw a330_pm4.fw venus.b00 venus.b01 venus.b02 venus.b03 venus.b04 venus.mbn venus.mdt"
@@ -32,6 +33,7 @@ done
 for _i in $_files3; do
 	source="$source $pkgname-$_i::$_url_wifi/$_i";
 done
+source="$source $pkgname.initd"
 
 package() {
 	for _i in $_files1; do
@@ -46,6 +48,7 @@ package() {
 		install -Dm644 "$srcdir/$pkgname-$_i" \
 			"$pkgdir/lib/firmware/wlan/prima/$_i"
 	done
+	install -Dm755 "$srcdir/$pkgname.initd" "$pkgdir/etc/init.d/$pkgname"
 }
 
 sha512sums="a642584990333d62ba6a985eeaddc6898c37a8e80aabb61121f93a90d5076861eb698422101e7b00706b7d3dfc00f9f358ea5e44a70fda7369931eb58b455931  firmware-oppo-find-7a-412fbe0922125a4d5ff884626c3274a15bd36dff-a330_pfp.fw
@@ -60,4 +63,5 @@ b4576ac810cc9ee902b0108904071cfbfea5cc9b51cf0bdd466a65b343abef49767f0800717297f2
 b3ee274b8de7b4a371be4c54c7fb948a96b117dfc844612afa69c807a831922203c2611a84a1710db630f2986e256d656cc3c1f257b17794b7ee3e5a6542f267  firmware-oppo-find-7a-9e8beafc3b56ae8643ec90f61025d5e8d98e5619-cpp_firmware_v1_2_0.fw
 fb92214f928143228c0683934342ceff11f19bec0581684e98e155262bed03f51c21a21881ec03316f917c127b607a2943efea4847b908f1c02864a1e507fb50  firmware-oppo-find-7a-WCNSS_cfg.dat
 491eac4852755999d6a768ee24467d0e0ebfd5daa9aa825db99e18231d555d3b3e9e5b459a91ad8c374d83ff47c8d958e1911e08184ea39713e2955ed5926bf7  firmware-oppo-find-7a-WCNSS_qcom_cfg.ini
-e3402202dbcbc51194c51065ab7fd655e35de418f5634d61dfbb1910c8804faee616b80d7f3f5e04bf23b9d37b8b91d1223283016eb9d2156b1664560952651e  firmware-oppo-find-7a-WCNSS_qcom_wlan_nv.bin"
+e3402202dbcbc51194c51065ab7fd655e35de418f5634d61dfbb1910c8804faee616b80d7f3f5e04bf23b9d37b8b91d1223283016eb9d2156b1664560952651e  firmware-oppo-find-7a-WCNSS_qcom_wlan_nv.bin
+ca0b14e71c7f1c912ef851d967c97dc545cdf6504f1d91ef1381cf3bd92794b1bcae667d225a57f5d43e52c2bc41d2eadf19d04ae84eb94d6a177ebbe09de888  firmware-oppo-find-7a.initd"
