@@ -1,0 +1,157 @@
+#!/sbin/openrc-run
+# (C) 2019 Tito Ragusa GPL3+
+# Copy all firmware blobs from the android
+# firmware partition unless the files are
+# already in /lib/firmware thus preserving
+# firmware blobs that have been updated.
+
+depend()
+{
+	after localmount
+}
+
+start()
+{
+	description="Copy firmware blobs from android partition."
+	BLKDEV="/dev/mmcblk0p1"
+	FWDIR="oppo"
+	LIST="adsp.b00 \
+	adsp.b01 \
+	adsp.b02 \
+	adsp.b03 \
+	adsp.b04 \
+	adsp.b05 \
+	adsp.b06 \
+	adsp.b07 \
+	adsp.b08 \
+	adsp.b09 \
+	adsp.b10 \
+	adsp.b11 \
+	adsp.b12 \
+	adsp.mdt \
+	cmnlib.b00 \
+	cmnlib.b01 \
+	cmnlib.b02 \
+	cmnlib.b03 \
+	cmnlib.mdt \
+	isdbtmm.b00 \
+	isdbtmm.b01 \
+	isdbtmm.b02 \
+	isdbtmm.b03 \
+	isdbtmm.mdt \
+	keymaste.b00 \
+	keymaste.b01 \
+	keymaste.b02 \
+	keymaste.b03 \
+	keymaste.mdt \
+	mba.b00 \
+	mba.mdt \
+	mc_v2.b00 \
+	mc_v2.b01 \
+	mc_v2.b02 \
+	mc_v2.b03 \
+	mc_v2.mdt \
+	modem.b00 \
+	modem.b01 \
+	modem.b02 \
+	modem.b03 \
+	modem.b06 \
+	modem.b08 \
+	modem.b09 \
+	modem.b11 \
+	modem.b12 \
+	modem.b13 \
+	modem.b14 \
+	modem.b15 \
+	modem.b16 \
+	modem.b17 \
+	modem.b18 \
+	modem.b19 \
+	modem.b22 \
+	modem.b23 \
+	modem.b24 \
+	modem.b25 \
+	modem.mdt \
+	playread.b00 \
+	playread.b01 \
+	playread.b02 \
+	playread.b03 \
+	playread.mdt \
+	tqs.b00 \
+	tqs.b01 \
+	tqs.b02 \
+	tqs.b03 \
+	tqs.mdt \
+	wcnss.b00 \
+	wcnss.b01 \
+	wcnss.b02 \
+	wcnss.b04 \
+	wcnss.b06 \
+	wcnss.b07 \
+	wcnss.b08 \
+	wcnss.b09 \
+	wcnss.mdt \
+	widevine.b00 \
+	widevine.b01 \
+	widevine.b02 \
+	widevine.b03 \
+	widevine.mdt"
+
+	local ret=0
+	ebegin "Mounting $BLKDEV"
+	if [ ! -d "/lib/firmware/$FWDIR" ] ; then
+		mkdir -p "/lib/firmware/$FWDIR";
+		ret=$(($ret+$?))
+	fi
+	mount "$BLKDEV" "/lib/firmware/$FWDIR"
+	ret=$(($ret+$?))
+	eend $? "Local filesystem $BLKDEV failed to mount"
+	ebegin "Copying firmware blobs to /lib/firmware"
+	for NAME in $LIST
+	do
+		if [ ! -e "/lib/firmware/$NAME" ] ; then 
+			cp  "/lib/firmware/$FWDIR/image/$NAME" "/lib/firmware/$NAME"
+			ret=$(($ret+$?))
+		fi
+	done
+	eend $? "Failed to copy firmware blobs to /lib/firmware"
+	ebegin "Unmounting $BLKDEV"
+	umount "/lib/firmware/$FWDIR"
+	ret=$(($ret+$?))
+	eend $? "Failed to unmount $BLKDEV"
+	#rmdir "/lib/firmware/$FWDIR"
+	ebegin "Fixing firmware blobs names"
+	if [ ! -e "/lib/firmware/keymaster.b00" ] ; then
+		if [ -e "/lib/firmware/keymaste.b00" ] ; then
+			ln -s "/lib/firmware/keymaste.b00" "/lib/firmware/keymaster.b00"
+			ret=$(($ret+$?))
+		fi
+	fi
+	if [ ! -e "/lib/firmware/keymaster.b01" ] ; then
+		if [ -e "/lib/firmware/keymaste.b01" ] ; then
+			ln -s "/lib/firmware/keymaste.b01" "/lib/firmware/keymaster.b01"
+			ret=$(($ret+$?))
+		fi
+	fi
+	if [ ! -e "/lib/firmware/keymaster.b02" ] ; then
+		if [ -e "/lib/firmware/keymaste.b02" ] ; then
+			ln -s "/lib/firmware/keymaste.b02" "/lib/firmware/keymaster.b02"
+			ret=$(($ret+$?))
+		fi
+	fi
+	if [ ! -e "/lib/firmware/keymaster.b03" ] ; then
+		if [ -e "/lib/firmware/keymaste.b03" ] ; then
+			ln -s "/lib/firmware/keymaste.b03" "/lib/firmware/keymaster.b03"
+			ret=$(($ret+$?))
+		fi
+	fi
+	if [ ! -e "/lib/firmware/keymaster.mdt" ] ; then
+		if [ -e "/lib/firmware/keymaste.mdt" ] ; then
+			ln -s "/lib/firmware/keymaste.mdt" "/lib/firmware/keymaster.mdt"
+			ret=$(($ret+$?))
+		fi
+	fi
+	eend $? "Failed to fixing firmware blobs names"
+
+	return $ret
+}
