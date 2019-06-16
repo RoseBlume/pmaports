@@ -121,33 +121,37 @@ start()
 	eend $? "Failed to unmount $BLKDEV"
 	#rmdir "/lib/firmware/$FWDIR"
 	ebegin "Fixing firmware blobs names"
-	if [ ! -e "/lib/firmware/keymaster.b00" ] ; then
+	if [ ! -d "/lib/firmware/keymaster" ] ; then
+		mkdir -p "/lib/firmware/keymaster";
+		ret=$(($ret+$?))
+	fi
+	if [ ! -e "/lib/firmware/keymaster/keymaster.b00" ] ; then
 		if [ -e "/lib/firmware/keymaste.b00" ] ; then
-			ln -s "/lib/firmware/keymaste.b00" "/lib/firmware/keymaster.b00"
+			ln -s "/lib/firmware/keymaste.b00" "/lib/firmware/keymaster/keymaster.b00"
 			ret=$(($ret+$?))
 		fi
 	fi
-	if [ ! -e "/lib/firmware/keymaster.b01" ] ; then
+	if [ ! -e "/lib/firmware/keymaster/keymaster.b01" ] ; then
 		if [ -e "/lib/firmware/keymaste.b01" ] ; then
-			ln -s "/lib/firmware/keymaste.b01" "/lib/firmware/keymaster.b01"
+			ln -s "/lib/firmware/keymaste.b01" "/lib/firmware/keymaster/keymaster.b01"
 			ret=$(($ret+$?))
 		fi
 	fi
-	if [ ! -e "/lib/firmware/keymaster.b02" ] ; then
+	if [ ! -e "/lib/firmware/keymaster/keymaster.b02" ] ; then
 		if [ -e "/lib/firmware/keymaste.b02" ] ; then
-			ln -s "/lib/firmware/keymaste.b02" "/lib/firmware/keymaster.b02"
+			ln -s "/lib/firmware/keymaste.b02" "/lib/firmware/keymaster/keymaster.b02"
 			ret=$(($ret+$?))
 		fi
 	fi
-	if [ ! -e "/lib/firmware/keymaster.b03" ] ; then
+	if [ ! -e "/lib/firmware/keymaster/keymaster.b03" ] ; then
 		if [ -e "/lib/firmware/keymaste.b03" ] ; then
-			ln -s "/lib/firmware/keymaste.b03" "/lib/firmware/keymaster.b03"
+			ln -s "/lib/firmware/keymaste.b03" "/lib/firmware/keymaster/keymaster.b03"
 			ret=$(($ret+$?))
 		fi
 	fi
-	if [ ! -e "/lib/firmware/keymaster.mdt" ] ; then
+	if [ ! -e "/lib/firmware/keymaster/keymaster.mdt" ] ; then
 		if [ -e "/lib/firmware/keymaste.mdt" ] ; then
-			ln -s "/lib/firmware/keymaste.mdt" "/lib/firmware/keymaster.mdt"
+			ln -s "/lib/firmware/keymaste.mdt" "/lib/firmware/keymaster/keymaster.mdt"
 			ret=$(($ret+$?))
 		fi
 	fi
