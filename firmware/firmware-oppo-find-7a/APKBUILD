@@ -5,7 +5,7 @@ pkgdesc="Firmware for Oppo Find 7a and init script for copying firmware blobs fr
 url="https://github.com/TheMuppets/proprietary_vendor_oppo"
 arch="armv7"
 license="proprietary"
-depends="wcnss-wlan"
+depends="wcnss-wlan adsp-audio"
 options="!check !strip !archcheck"
 install="$pkgname.post-install"
 
