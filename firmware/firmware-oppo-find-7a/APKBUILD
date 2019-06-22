@@ -107,13 +107,16 @@ keymaste.b02
 keymaste.b03
 keymaste.mdt"
 
+if [ ! -e /usr/bin/mcopy ] ; then
+    abuild-apk add mtools
+fi
 if [ ! -e  ColorOS_V2.1.5i_full.zip ] ; then
 	wget $_url_oppo -O ColorOS_V2.1.5i_full.zip
 fi
 if [ ! -e NON-HLOS.bin ] ; then
 	unzip -o ColorOS_V2.1.5i_full.zip NON-HLOS.bin
 fi
-build () {
+
 source=""
 for _i in $_files1; do
 	source="$source $pkgname-$_commit1-$_i::$_url1/$_i";
@@ -127,20 +130,12 @@ for _i in $_files3; do
 	source="$source $pkgname-$_i::$_url_wifi/$_i";
 done
 
-for _i in $_files4; do
+for _i in $_files4 $_files5; do
 	if [ ! -e  $pkgname-$_i ] ; then
 		mcopy -v -b -p -n -i NON-HLOS.bin ::image/$_i $pkgname-$_i
 	fi
 	source="$source $pkgname-$_i";
 done
-
-for _i in $_files5; do
-	if [ ! -e  $pkgname-$_i ] ; then
-		mcopy -v -b -p -n -i NON-HLOS.bin ::image/$_i $pkgname-$_i
-	fi
-	source="$source $pkgname-$_i";
-done
-}
 
 package() {
 	mkdir -pv "$pkgdir/lib/firmware/qcom"
@@ -158,15 +153,10 @@ package() {
 		install -Dm644 "$srcdir/$pkgname-$_i" "$pkgdir/lib/firmware/$_i"
 	done
 	mkdir -pv "$pkgdir/lib/firmware/keymaster"
-	echo "$srcdir/$pkgname-keymaste.b00 $pkgdir/lib/firmware/keymaster/keymaster.b00"
 	install -Dm644 "$srcdir/$pkgname-keymaste.b00" "$pkgdir/lib/firmware/keymaster/keymaster.b00"
-	echo "$srcdir/$pkgname-keymaste.b01 $pkgdir/lib/firmware/keymaster/keymaster.b01"
 	install -Dm644 "$srcdir/$pkgname-keymaste.b01" "$pkgdir/lib/firmware/keymaster/keymaster.b01"
-	echo "$srcdir/$pkgname-keymaste.b02 $pkgdir/lib/firmware/keymaster/keymaster.b02"
 	install -Dm644 "$srcdir/$pkgname-keymaste.b02" "$pkgdir/lib/firmware/keymaster/keymaster.b02"
-	echo "$srcdir/$pkgname-keymaste.b03 $pkgdir/lib/firmware/keymaster/keymaster.b03"
 	install -Dm644 "$srcdir/$pkgname-keymaste.b03" "$pkgdir/lib/firmware/keymaster/keymaster.b03"
-	echo "$srcdir/$pkgname-keymaste.mdt $pkgdir/lib/firmware/keymaster/keymaster.mdt"
 	install -Dm644 "$srcdir/$pkgname-keymaste.mdt" "$pkgdir/lib/firmware/keymaster/keymaster.mdt"
 }
 
