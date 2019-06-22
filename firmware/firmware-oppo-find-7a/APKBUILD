@@ -48,7 +48,14 @@ isdbtmm.b01
 isdbtmm.b02                                                                                                                                   
 isdbtmm.b03                                                                                                                                   
 isdbtmm.mdt                                                                                                                                   
-mba.b00                                                                                                                                      mba.mdt                                                                                                                                       mc_v2.b00                                                                                                                                     mc_v2.b01                                                                                                                                     mc_v2.b02                                                                                                                                     mc_v2.b03                                                                                                                                     mc_v2.mdt                                                                                                                                    modem.b00
+mba.b00
+mba.mdt
+mc_v2.b00
+mc_v2.b01
+mc_v2.b02
+mc_v2.b03
+mc_v2.mdt
+modem.b00
 modem.b01
 modem.b02
 modem.b03
@@ -106,6 +113,10 @@ fi
 if [ ! -e NON-HLOS.bin ] ; then
 	unzip -o ColorOS_V2.1.5i_full.zip NON-HLOS.bin
 fi
+
+build() {
+    return 0;
+}
 
 source=""
 for _i in $_files1; do
