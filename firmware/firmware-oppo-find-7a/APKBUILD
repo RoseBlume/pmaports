@@ -7,7 +7,6 @@ arch="armv7"
 license="proprietary"
 depends="wcnss-wlan adsp-audio"
 makedepends="mtools"
-checkdepends="mtools"
 options="!check !strip !archcheck"
 
 # Sources
@@ -114,7 +113,7 @@ fi
 if [ ! -e NON-HLOS.bin ] ; then
 	unzip -o ColorOS_V2.1.5i_full.zip NON-HLOS.bin
 fi
-
+build () {
 source=""
 for _i in $_files1; do
 	source="$source $pkgname-$_commit1-$_i::$_url1/$_i";
@@ -141,6 +140,7 @@ for _i in $_files5; do
 	fi
 	source="$source $pkgname-$_i";
 done
+}
 
 package() {
 	mkdir -pv "$pkgdir/lib/firmware/qcom"
