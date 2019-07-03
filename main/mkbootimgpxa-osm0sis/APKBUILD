@@ -1,0 +1,35 @@
+pkgname=mkbootimgpxa-osm0sis
+pkgver=2019.04.13
+pkgrel=0
+pkgdesc="Android bootimg tools (maintained fork of the C version, see #441)"
+url="https://github.com/osm0sis/pxa-mkbootimg"
+arch="all"
+license="APACHE2"
+depends=""
+provides="mkbootimgpxa=$pkgver unpackbootimgpxa=$pkgver"
+replaces="mkbootimgpxa"
+subpackages=""
+source="
+	$pkgname-$pkgver.tar.gz::https://github.com/osm0sis/pxa-mkbootimg/archive/$pkgver.tar.gz
+	patch.patch
+	"
+
+options="!check"
+builddir="$srcdir/pxa-mkbootimg-$pkgver"
+
+build() {
+	cd "$builddir"
+	make -j1
+}
+
+package() {
+	install -Dm755 "$builddir/pxa-mkbootimg" "${pkgdir}/usr/bin/mkbootimgpxa-osm0sis"
+	install -Dm755 "$builddir/pxa-unpackbootimg" "${pkgdir}/usr/bin/unpackbootimgpxa"
+	install -Dm755 "$builddir/pxa1088-dtbTool" "${pkgdir}/usr/bin/pxa1088-dtbTool"
+	install -Dm755 "$builddir/pxa1908-dtbTool" "${pkgdir}/usr/bin/pxa1908-dtbTool"
+	}
+
+
+
+sha512sums="4801cb851b4c504a4f4c352dadc42aaae08a19e41d18551e2b6426d08004d29d8173cb9b2d3e0c06cae636de8931ce9d5d492a37f6a091a5d78beabeed3516f4  mkbootimgpxa-osm0sis-2019.04.13.tar.gz
+72f2b91068d25a205e58b2c0898d357535d264c19023d128967cf9aecbf5cf986fe3b546a324ab0e83390e9e9cd0d692238beee25c39e76bf5dbdef8c44a9c95  patch.patch"

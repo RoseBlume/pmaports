@@ -239,7 +239,7 @@ create_uboot_files()
 create_bootimg()
 {
 	[ "${deviceinfo_generate_bootimg}" == "true" ] || return
-	require_package "mkbootimg-osm0sis" "mkbootimg" "generate_bootimg"
+	require_package "mkbootimg-osm0sis" "mkbootimg" "generate_bootimg"  "mkbootimgpxa" "mkbootimgpxa-osm0sis"
 
 	echo "==> initramfs: creating boot.img"
 	_base="${deviceinfo_flash_offset_base}"
@@ -269,6 +269,27 @@ create_bootimg()
 			exit 1
 		fi
 	fi
+    if [ "${deviceinfo_bootimg_pxa}" == "true" ]; then
+        _dt="--dt /boot/dt.img"
+		if ! [ -e "/boot/dt.img" ]; then
+			echo "ERROR: File not found: /boot/dt.img, but"
+			echo "'deviceinfo_bootimg_pxa' is set. Please verify that your"
+			echo "device is a QCDT device by analyzing the boot.img file"
+			echo "(e.g. 'pmbootstrap bootimg_analyze path/to/twrp.img')"
+			echo "and based on that, set the deviceinfo variable to false or"
+			echo "adjust your linux APKBUILD to properly generate the dt.img"
+			echo "file. See also: <https://postmarketos.org/deviceinfo>"
+			exit 1
+		fi
+	fi
+    if [ "${deviceinfo_bootimg_pxa}" == "true" ]; then
+		mkbootimgpxa-osm0sis\ 
+		--kernel "${kernelfile}"\
+		--ramdisk "$outfile"\
+		--dt /boot/dt.img \
+		--unknown "${deviceinfo_board_unknown}"\
+		-o "${outfile/initramfs-/boot.img-}" || exit 1
+    else
 	mkbootimg-osm0sis \
 		--kernel "${kernelfile}" \
 		--ramdisk "$outfile" \
@@ -281,6 +302,14 @@ create_bootimg()
 		--pagesize "${deviceinfo_flash_pagesize}" \
 		${_dt} \
 		-o "${outfile/initramfs-/boot.img-}" || exit 1
+    fi
+	if [ "${deviceinfo_bootimg_blobpack}" == "true" ]; then
+		echo "==> initramfs: creating blob"
+		blobpack "${outfile/initramfs-/blob-}" LNX \
+			"${outfile/initramfs-/boot.img-}" || exit 1
+	fi
+
+	
 	if [ "${deviceinfo_bootimg_blobpack}" == "true" ]; then
 		echo "==> initramfs: creating blob"
 		blobpack "${outfile/initramfs-/blob-}" LNX \
