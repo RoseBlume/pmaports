@@ -1,0 +1,23 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-samsung-degaswifi"
+pkgdesc="Samsung galaxy tab 4 7.0"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-degaswifi mkbootimgpxa-osm0sis mkbootimg mesa-dri-swrast"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="3605d7685306ab7bc76e7703b6eacbc5328eacc4904412be042dffdcf714f115ac070e38c3e5c83e1b2220b68b4ee44314f49bc04d4160de9b66916a1540d46a  deviceinfo"

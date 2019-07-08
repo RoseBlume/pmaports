@@ -1,0 +1,14 @@
+--- a/pxa1088-dtbtool.c	2019-07-04 13:25:11.791161290 +0300
++++ b/pxa1088-dtbtool.c	2019-07-04 15:18:11.487458924 +0300
+@@ -448,9 +448,9 @@
+ 
+     out_fd = open(output_file, O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
+     if (!(out_fd < 0)) {
+-        log_err("Cannot create '%s'\n", output_file);
++        log_err("Cannot create '%s'\n", output_file,out_fd);
+         rc = RC_ERROR;
+-        goto cleanup;
++       // goto cleanup;
+     }
+ 
+     /* Write header info */
