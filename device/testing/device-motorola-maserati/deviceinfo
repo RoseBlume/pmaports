@@ -6,19 +6,16 @@ deviceinfo_name="Motorola Droid 4"
 deviceinfo_manufacturer="Motorola"
 deviceinfo_codename="motorola-maserati"
 deviceinfo_year="2012"
-deviceinfo_dtb=""
-deviceinfo_modules_initfs=""
-deviceinfo_arch="armhf"
-deviceinfo_external_storage="true"
+deviceinfo_dtb="omap4-droid4-xt894"
+deviceinfo_modules_initfs="omap_wdt omapdrm panel_dsi_cm omapdss omapdss_base drm_kms_helper drm drm_panel_orientation_quirks musb_hdrc phy_cpcap_usb phy_omap_usb2 udc_core"
+deviceinfo_arch="armv7"
 
 # Device related
 deviceinfo_chassis="handset"
 deviceinfo_keyboard="true"
+deviceinfo_external_storage="true"
 deviceinfo_screen_width="540"
 deviceinfo_screen_height="960"
 
 # Bootloader related
 deviceinfo_flash_method="none"
-deviceinfo_safestrap_partition="/dev/mmcblk1p25"
-deviceinfo_data_partition="/dev/mmcblk1p24"
-deviceinfo_system_partition="/dev/mmcblk1p20"

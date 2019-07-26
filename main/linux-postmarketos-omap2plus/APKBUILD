@@ -1,0 +1,64 @@
+_flavor=postmarketos-omap2plus
+_config="config-$_flavor.$CARCH"
+pkgname=linux-$_flavor
+pkgver=5.8.5
+pkgrel=0
+case $pkgver in
+	*.*.*)	_kernver=${pkgver%.*};;
+	*.*) _kernver=$pkgver;;
+esac
+arch="armv7"
+pkgdesc="Linux for mainline omap2plus"
+url="https://kernel.org/"
+license="GPL-2.0-only"
+makedepends="devicepkg-dev perl sed  bash gmp-dev bc linux-headers elfutils-dev openssl-dev file bison flex xz"
+options="!strip !check !tracedeps pmb:cross-native"
+
+source="https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kernver.tar.xz"
+case $pkgver in
+	*.*.0)	source="$source";;
+	*.*.*)	source="$source
+	https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/patch-$pkgver.xz" ;;
+esac
+
+	source="$source
+	config-${_flavor}.armv7
+	"
+_carch=${CARCH}
+case "$_carch" in
+aarch64*) _carch="arm64" ;;
+arm*) _carch="arm" ;;
+ppc*) _carch="powerpc" ;;
+s390*) _carch="s390" ;;
+esac
+
+builddir="$srcdir/linux-$_kernver"
+
+prepare() {
+	default_prepare
+
+	REPLACE_GCCH=0 \
+		. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-${_flavor}" \
+		CFLAGS_MODULE=-fno-pic
+}
+
+package() {
+        downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
+
+        make -j1 modules_install dtbs_install \
+                ARCH="$_carch" \
+                INSTALL_MOD_STRIP=1 \
+                INSTALL_MOD_PATH="$pkgdir" \
+                INSTALL_DTBS_PATH="$pkgdir/usr/share/dtb"
+}
+
+
+sha512sums="45a53ecf351096ef6e98242cca4228b8da9b9139ecc6963695791ea6fb7a9484a4e1c19dcca7ce7cbfdfa49de0451b70973bb078f12bdae9cbaddbc3f8092556  linux-5.8.tar.xz
+cff4a03de4eddbe16792471a48ffdeaca0c5b40b593436c2afd6eb7f6f70db9550f00eee296a4f265af1d9e0f7a591bdede00ed5a97a4abc207e2e8e962abe95  patch-5.8.5.xz
+8351eeb0f9d7ef67f6bfc15937752d13a32b57d2c088f0b844c3f489e549bf5d208b7c14a56cf949fba12ef25ae87e13e76e0a993eecc8fa9d29b0de1a2f20b9  config-postmarketos-omap2plus.armv7"

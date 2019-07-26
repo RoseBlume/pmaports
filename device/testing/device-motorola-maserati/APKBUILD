@@ -1,15 +1,23 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-motorola-maserati
 pkgdesc="Motorola Motorola Droid 4"
-pkgver=0.1
-pkgrel=6
+pkgver=1
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
-arch="armhf"
+arch="armv7"
 options="!check !archcheck"
-depends="postmarketos-base linux-motorola-maserati"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+install="$pkgname.post-install"
+depends="postmarketos-base linux-postmarketos-omap2plus mesa-dri-gallium"
 makedepends="devicepkg-dev"
-source="deviceinfo 10-safestrap-maserati.sh"
+source="
+	deviceinfo
+	boot.cfg
+	initfs-hook.sh
+	hwdb.d/50-keyboard-modifiers.hwdb
+	hwdb.d/50-relative-touch.hwdb
+"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -18,9 +26,23 @@ build() {
 package() {
 	devicepkg_package $startdir $pkgname
 
-	mkdir -p "$pkgdir"/etc/postmarketos-mkinitfs/hooks/
-	install -Dm644 "$srcdir"/10-safestrap-maserati.sh \
-		"$pkgdir"/etc/postmarketos-mkinitfs/hooks/
+	install -Dm644 "$srcdir"/boot.cfg \
+		"$pkgdir"/boot/boot/boot.cfg
+	
+	install -Dm644 "$srcdir"/50-keyboard-modifiers.hwdb \
+		"$pkgdir"/etc/udev/hwdb.d/50-keyboard-modifieres.hwdb
+	install -Dm644 "$srcdir"/50-relative-touch.hwdb \
+		"$pkgdir"/etc/udev/hwdb.d/50-relative-touch.hwdb
 }
-sha512sums="9b9d3856fbb3b2cda4a87747cb35517c0c419829f969e27f6bc983fc012b2b2f07bb9865c980fa34b95701e42a15d234501bfd36da106a1d7e190f58f363d6bd  deviceinfo
-36e529d5ded647012bb46a3e03ea8916c5046bed628a4b72a0c057dd2de6410bd9a1d74fc01b862feff3a4cfe8b0b0df6bd69fdbb6e63406e97c1811be07f3b8  10-safestrap-maserati.sh"
+
+nonfree_firmware() {
+	pkgdesc="Wifi firmware"
+	depends="linux-firmware-ti-connectivity"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="7a7e4580fcbede6512f654d7428465dc736517808542f61b1e8c6a449cdfeb1ca3e5c6c1ca2d640f572e3f132a0aee8145c45e9e34bc98bdd379e2770ca749a4  deviceinfo
+fda477ce2ab920b805e5396c85100010f300319677888f5a4b6c5afc90a9946391635f505de1539621506d138d52dcb665e2ff62034e3c2a82235a80a54fc386  boot.cfg
+feb542b2e10dd95bf9a84c4ec911a3e033f48c938e47654a609cf5c4098ac61d143702fa41859448342ed88c6757c0faaf7b588d8c1990069d76a6295fc64cd1  initfs-hook.sh
+c5b23e57da9e89f51410ac46c7b082bf11e0135dc3ea58e18d20a98b46866fc0880597f872b28f527eff9e6eb47b629a6fd95d9fe2da86e2177284eec85451f6  50-keyboard-modifiers.hwdb
+1bf7c25281a522b7b012115f8194dcdea7306d4096d7571d3164982a6f7a79bd78a56e33421af524591a050990247e20d6a1b075d5e5d8920195f244ed201001  50-relative-touch.hwdb"
