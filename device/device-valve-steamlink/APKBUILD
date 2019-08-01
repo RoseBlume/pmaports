@@ -1,0 +1,43 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-valve-steamlink"
+pkgdesc="Valve SteamLink"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-valve-steamlink mesa-dri-swrast"
+makedepends="devicepkg-dev kexec-tools-static"
+source="
+	deviceinfo
+	factory_test.sh
+	kexec_load.ko
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	install -D -m755 "$srcdir"/factory_test.sh \
+		"$pkgdir"/boot/steamlink/factory_test/run.sh
+	install -D -m755 "$srcdir"/kexec_load.ko \
+		"$pkgdir"/boot/kexec_load.ko
+
+	# Package a minimum kexec system
+	install -D -m755 /usr/sbin/kexec \
+		"$pkgdir"/boot/kexec
+	install -D -m644 /lib/libc.musl-armv7.so.1 \
+		"$pkgdir"/boot/lib/libc.musl-armv7.so.1
+	install -D -m644 /usr/lib/liblzma.so.5 \
+		"$pkgdir"/boot/usr/lib/liblzma.so.5
+	install -D -m644 /lib/libz.so.1 \
+		"$pkgdir"/boot/lib/libz.so.1
+}
+
+
+sha512sums="176578a532d435c801aaeea5a01ff4a2be93faf4239792e46c35d63570fa9b4ff847a09d368056a0bc7345f8acdfc4115fc5e1f614c1fd51b7ea8e095543b549  deviceinfo
+1b74ed9ec2548151eda93ea22105e8f99b40cfa346b4e86877ca19d2be3b577976cacb3b908079778fdbfbc001400a94a6f0d20fc1b0f94f555886ed85e726ed  factory_test.sh
+ae836b2aac526e0c0e65e6ea160e799afeec451943b4bb8df78ab8f246456ca34b468dcdfa97393592a17717d8e81b2f4b93e291e07b89b178b8c59ed5c1a900  kexec_load.ko"
