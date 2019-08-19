@@ -7,13 +7,13 @@ pkgdesc="(Wayland) Unity8"
 url="https://wiki.postmarketos.org/wiki/Unity_8"
 arch="noarch"
 license="GPL-3.0-or-later"
-depends="unity8"
+depends="unity8 lightdm xorg-server"
 install="$pkgname.post-install"
-source="start_unity8.sh"
+source="60-lightdm-autologin.conf"
 options="!check"
 
 package() {
-	install -D -m644 "$srcdir"/start_unity8.sh \
-		"$pkgdir"/etc/profile.d/start_unity8.sh
+	install -Dm644 "$srcdir"/60-lightdm-autologin.conf \
+		"$pkgdir"/usr/share/lightdm/lightdm.conf.d/60-autologin.conf
 }
-sha512sums="bc7a7f692e75044494d5c8aa7e376705be167bb4ec347aab221da706d664f85939f4c4af997746fc44f2ae7ffb89f0d5af1e40186b94ff1bfca89c21a1448168  start_unity8.sh"
+sha512sums="f727782535b116f00966d48fbbfe7891fbc3f4662f5aca9646e8a7bdec312e7259d2930499cfc9e11b7a444f6729a4286d080ffc55e7d6a6a6f2ae5b0bd411a5  60-lightdm-autologin.conf"
