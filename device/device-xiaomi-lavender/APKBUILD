@@ -1,0 +1,25 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Contributor: Alexey Min <alexey.min@gmail.com>
+# Mantainer: Alexey Min <alexey.min@gmail.com>
+pkgname="device-xiaomi-lavender"
+pkgdesc="Xiaomi Redmi Note 7"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-xiaomi-lavender mkbootimg mesa-dri-swrast"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="336d457755392a17ea36f811112f76c805e99b08908ed43bfc4ee2d94572c77bb2a5256f78aa3dd1fa1dac6726d3db5fecc80770c09d4f19bb9e2148dca1c852  deviceinfo"

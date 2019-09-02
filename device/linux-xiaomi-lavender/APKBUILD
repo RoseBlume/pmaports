@@ -1,0 +1,76 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/lavender-perf_defconfig
+# Original defconfig was: arch/arm64/configs/sdm660-perf_defconfig
+# Contributor: Alexey Min <alexey.min@gmail.com>
+# Mantainer: Alexey Min <alexey.min@gmail.com>
+
+pkgname="linux-xiaomi-lavender"
+pkgver=4.4.156
+pkgrel=1
+pkgdesc="Xiaomi Redmi Note 7 kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="xiaomi-lavender"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev gcc4 gcc4-aarch64 python2 openssl-dev"
+
+if [ "${CC:0:5}" != "gcc4-" ]; then
+	CC="gcc4-$CC"
+	HOSTCC="gcc4-gcc"
+	CROSS_COMPILE="gcc4-$CROSS_COMPILE"
+fi
+
+# Source
+#_repository="android_kernel_xiaomi_lavender"
+_repository="android-kernel-xiaomi-sdm660"
+#_commit="f0ae55603106e1fa3e55c1ab197df79178755eb2"
+_commit="85394f2329c5ea81b69daa3c318a00163c10983f"
+_config="config-${_flavor}.${arch}"
+source="
+	$pkgname-$_commit.tar.bz2::https://gitlab.com/minlexx/${_repository}/-/archive/${_commit}/${_repository}-${_commit}.tar.bz2
+	$_config
+	0001-Use-relative-includes.patch
+	0002-Fix-TRACE_INCLUDE_PATH-paths.patch
+	0003-arch-arm64-Add-config-option-to-fix-bootloader-cmdli.patch
+"
+
+builddir="$srcdir/${_repository}-${_commit}"
+
+prepare() {
+	default_prepare
+	REPLACE_GCCH=0 downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	# kernel.release
+	install -D "$builddir/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	# zImage (find the right one)
+	cd "$builddir/arch/$_carch/boot"
+	_target="$pkgdir/boot/vmlinuz-$_flavor"
+	for _zimg in zImage-dtb Image.gz-dtb *zImage Image; do
+		[ -e "$_zimg" ] || continue
+		msg "zImage found: $_zimg"
+		install -Dm644 "$_zimg" "$_target"
+		break
+	done
+	if ! [ -e "$_target" ]; then
+		error "Could not find zImage in $PWD!"
+		return 1
+	fi
+}
+
+sha512sums="cdf29b288f58fdbeb094e572b63f12533fdf8693e53e1e99e3faaba19acb1e2a2bc47674e7549873a82d05f69fe9b7a37a229d13334d44ee24f6d5239a22b9d0  linux-xiaomi-lavender-85394f2329c5ea81b69daa3c318a00163c10983f.tar.bz2
+1eff5074b2147b8fa291e4f827fc826be30e55dd6ab844ab75e5e46470e31d5e2a6a3dc68ed9be189d2e4612fcbdba639fff9ae622b0eff4a651047ed93829d8  config-xiaomi-lavender.aarch64
+c7f856eb650b23ea6b6ab136fcb574f2db0fb549afb2ae9f2b5bd68073da5cba0568e23201fb5b97fe4114303a32b017a268204675514366e909595272c99974  0001-Use-relative-includes.patch
+10ef4cc81ea405a712e9ad658b3d199d515cc7fc66e3d1d2cffde0b49ba8947b7e8959832ecf7b91a62df624fb48b69c349a3b034850c76f5ae55cfb1d2037a8  0002-Fix-TRACE_INCLUDE_PATH-paths.patch
+177b8e0cce12c19d27af3d0ba53e6e0abc197a2273044f30c2dba2dc7e69acb1c7eeccbcdd155c3203e6982105fda0e3dcdd35f86f037264facbcb62f4b8597c  0003-arch-arm64-Add-config-option-to-fix-bootloader-cmdli.patch"
