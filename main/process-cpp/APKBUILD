@@ -1,0 +1,45 @@
+# Contributor Luca Weiss <luca@z3ntu.xyz>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=process-cpp
+pkgver=2.0.1_git20180409
+pkgrel=0
+_commit="2923b597f6fc5b49133be8c4f2ba3cbaacdb9540"
+pkgdesc="C++11 library for handling processes"
+url="https://launchpad.net/process-cpp"
+arch="x86_64"
+license="LGPL-3.0-only"
+makedepends="cmake-extras doxygen boost-dev properties-cpp-dev libexecinfo-dev musl-dev"
+checkdepends="gtest-dev gmock"
+subpackages="$pkgname-dev"
+source="https://github.com/lib-cpp/process-cpp/archive/$_commit.tar.gz
+	0001-Musl-libc-fixes.patch" # https://github.com/lib-cpp/process-cpp/pull/1
+builddir="$srcdir/$pkgname-$_commit"
+
+prepare() {
+	default_prepare
+
+	mkdir "$builddir"/build
+}
+
+build() {
+	cd "$builddir"/build
+	cmake "$builddir" \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DPROCESS_CPP_ENABLE_DOC_GENERATION=no
+	make
+}
+
+check() {
+	cd "$builddir"/build
+	make test
+}
+
+package() {
+	cd "$builddir"/build
+	DESTDIR="$pkgdir" make install
+}
+
+sha512sums="8787f9bbfb157c30c2a6ff072735344104f609ebae3385b41539fa7b24aa45eff5465ae8edf0479030ef7061256e7f1f7354621b172fa6ba196d59d275f2fad6  2923b597f6fc5b49133be8c4f2ba3cbaacdb9540.tar.gz
+97b2a54e52b8f6a1839cfcdc6fb401768d731bacbe6bc920b511777e72806d844cded9ad9222b570e46cdbf692def363128c4cb4e2e291fcd4f66c081ad0c5cd  0001-Musl-libc-fixes.patch"
