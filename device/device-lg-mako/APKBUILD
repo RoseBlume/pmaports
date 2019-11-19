@@ -1,6 +1,6 @@
 pkgname=device-lg-mako
 pkgver=2
-pkgrel=22
+pkgrel=23
 pkgdesc="Google Nexus 4"
 url="https://postmarketos.org"
 arch="armhf"
@@ -9,7 +9,7 @@ depends="postmarketos-base linux-lg-mako mkbootimg mesa-dri-swrast"
 makedepends=""
 install=""
 subpackages="$pkgname-weston"
-source="deviceinfo 90-android-touch-dev.rules profile.sh pointercal fb.modes weston.ini"
+source="deviceinfo 90-android-touch-dev.rules profile.sh pointercal fb.modes weston.ini wcnss-wlan"
 options="!check !archcheck"
 
 package() {
@@ -23,6 +23,9 @@ package() {
 		"$pkgdir"/etc/pointercal
 	install -Dm644 "$srcdir"/fb.modes \
 		"$pkgdir"/etc/fb.modes
+	install -Dm644 "srcdir"/wcnss-wlan \
+	    "$pkgdir"/etc/conf.d/wcnss-wlan
+
 
 	# Disable v4l (video4linux), because without the camera firmware
 	# blobs this makes dev hang with the kernel this device uses (#1033)
