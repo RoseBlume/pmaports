@@ -23,7 +23,7 @@ package() {
 		"$pkgdir"/etc/pointercal
 	install -Dm644 "$srcdir"/fb.modes \
 		"$pkgdir"/etc/fb.modes
-	install -Dm644 "srcdir"/wcnss-wlan \
+	install -Dm644 "$srcdir"/wcnss-wlan \
 	    "$pkgdir"/etc/conf.d/wcnss-wlan
 
 
