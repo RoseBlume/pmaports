@@ -1,0 +1,155 @@
+_flavor=postmarketos-qcom-git
+_config="config-${_flavor}.${CARCH}"
+
+pkgname=linux-${_flavor}
+pkgver=5.4.0
+pkgrel=0
+_repo="android_kernel_xiaomi_lavender"
+_commit="7b0e649c3511849d640c9351df7c1013984ba975"
+arch="armv7 aarch64"  # I don't know any x86 Qualcomm SoCs
+pkgdesc="QCOM group's fork of linux.git"
+url="https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/?h=for-next"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev openssl-dev file bison flex"
+options="!strip !check !tracedeps"
+source="
+	linux-${_commit}.tar.gz::https://github.com/minlexx/${_repo}/archive/${_commit}.tar.gz
+	config-${_flavor}.armv7
+	config-${_flavor}.aarch64
+	0001-arm64-dts-Add-basic-SDM-660-SoC-and-xiaomi-lavender-.patch
+"
+subpackages="$pkgname-dev"
+
+license="GPL2"
+_abi_release=$pkgver
+_carch=${CARCH}
+case "$_carch" in
+aarch64*) _carch="arm64" ;;
+arm*) _carch="arm" ;;
+esac
+
+HOSTCC="${CC:-gcc}"
+HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
+
+builddir="${srcdir}/${_repo}-${_commit}"
+
+prepare() {
+	local _patch_failed=
+	cd "${builddir}"
+	# first apply patches in specified order
+	for i in $source; do
+		case $i in
+		*.patch|*.patch::*)
+			_patch=${i%::*}
+			msg "Applying $_patch..."
+			if ! patch -s -p1 -N -i "$srcdir"/$_patch; then
+				echo $_patch >>failed
+				_patch_failed=1
+			fi
+			;;
+		esac
+	done
+
+	if ! [ -z "$_patch_failed" ]; then
+		error "The following patches failed:"
+		cat failed
+		return 1
+	fi
+
+	mkdir -p "$srcdir"/build
+	cp -v "$srcdir"/$_config "$srcdir"/build/.config
+	make -C "$builddir" O="$srcdir"/build ARCH="$_carch" HOSTCC="$HOSTCC" \
+		olddefconfig
+}
+
+build() {
+	cd "$srcdir"/build
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-${_flavor}" \
+		CFLAGS_MODULE=-fno-pic
+}
+
+package() {
+	cd "$srcdir/build/arch/${_carch}/boot"
+
+	if [ "$CARCH" == "aarch64" ]; then
+		install -Dm644 "$srcdir/build/arch/${_carch}/boot/Image" \
+			"$pkgdir/boot/vmlinuz-$_flavor"
+	else
+		install -Dm644 "$srcdir/build/arch/${_carch}/boot/"*zImage \
+			"$pkgdir/boot/vmlinuz-$_flavor"
+	fi
+
+	install -D "$srcdir/build/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	cd "$srcdir"/build
+
+	local _install
+	case "$CARCH" in
+	aarch64*|arm*)	_install="modules_install dtbs_install" ;;
+	*)		_install="modules_install" ;;
+	esac
+
+	make -j1 $_install \
+		ARCH="$_carch" \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_DTBS_PATH="$pkgdir/usr/share/dtb"
+}
+
+dev() {
+	# copy the only the parts that we really need for build 3rd party
+	# kernel modules and install those as /usr/src/linux-headers,
+	# similar to what ubuntu does
+	#
+	# this way you don't need to install the 300-400 kernel sources to
+	# build a tiny kernel module
+	#
+	pkgdesc="Headers and script for third party modules for postmarketos kernel"
+	depends="gmp-dev bash perl"
+	local dir="$subpkgdir"/usr/src/linux-headers-${_abi_release}
+
+	# first we import config, run prepare to set up for building
+	# external modules, and create the scripts
+	mkdir -p "$dir"
+	cp "$srcdir"/$_config "$dir"/.config
+	make -j1 -C "$builddir" O="$dir" ARCH="$_carch" HOSTCC="$HOSTCC" \
+		olddefconfig prepare modules_prepare scripts
+
+	# needed for 3rd party modules
+	# https://bugzilla.kernel.org/show_bug.cgi?id=11143
+	case "$CARCH" in
+	ppc*) (cd "$dir" && make arch/powerpc/lib/crtsavres.o);;
+	esac
+
+	# remove the stuff that points to real sources. we want 3rd party
+	# modules to believe this is the sources
+	rm "$dir"/Makefile "$dir"/source
+
+	# copy the needed stuff from real sources
+	#
+	# this is taken from ubuntu kernel build script
+	# http://kernel.ubuntu.com/git/ubuntu/ubuntu-zesty.git/tree/debian/rules.d/3-binary-indep.mk
+
+	cd "$builddir"
+	find . -path './include/*' -prune \
+		-o -path './scripts/*' -prune -o -type f \
+		\( -name 'Makefile*' -o -name 'Kconfig*' -o -name 'Kbuild*' -o \
+		   -name '*.sh' -o -name '*.pl' -o -name '*.lds' \) \
+		-print | cpio -pdm "$dir"
+	cp -a scripts include "$dir"
+	find $(find arch -name include -type d -print) -type f \
+		| cpio -pdm "$dir"
+
+	install -Dm644 "$srcdir"/build/Module.symvers \
+		"$dir"/Module.symvers
+
+	mkdir -p "$subpkgdir"/lib/modules/${_abi_release}
+	ln -sf /usr/src/linux-headers-${_abi_release} \
+		"$subpkgdir"/lib/modules/${_abi_release}/build
+}
+
+sha512sums="ede4e11d63d481d6a2faafb9beccac865c92c3cc556a4609ab38928e129b31b2a06759d2cce24b3b64622c5f26579aa2145fa6ba22ae4a6a0af84e8e6dbc513f  linux-7b0e649c3511849d640c9351df7c1013984ba975.tar.gz
+5e622cdf8e931bde115026e1b1ff09639268100642a48dedaa345836c032a00e144cb78a114bf4d4e3f9523bd137a6a3b2b2375defd0e7cbd00731c16e54ab54  config-postmarketos-qcom-git.armv7
+3c5d6ec7b90ff8c44d39640d4128b5fa74c6de27ad5706047816a87e8da078d440d1a59eeb4c2b3fca541d41cf3daa81ac4af44c4c83d177d298a7a1e60e51d9  config-postmarketos-qcom-git.aarch64
+52789405c515a30f6c40cc693584779908007167cd29cfbe5617135523ad3f19e5c65dbf5d3fa2df9e53999924da208204e8b00536980fcfe24426371e0097dc  0001-arm64-dts-Add-basic-SDM-660-SoC-and-xiaomi-lavender-.patch"

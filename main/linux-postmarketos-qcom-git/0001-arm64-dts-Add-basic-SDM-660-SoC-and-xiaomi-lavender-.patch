@@ -1,0 +1,315 @@
+From dbd7de7a2687291e4212e995e5c639c38f225bb6 Mon Sep 17 00:00:00 2001
+From: Alexey Min <alexey.min@gmail.com>
+Date: Wed, 4 Dec 2019 02:45:53 +0300
+Subject: [PATCH 2/2] arm64: dts: Add basic SDM 660 SoC and xiaomi-lavender
+ board DTS
+
+---
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../boot/dts/qcom/sdm660-xiaomi-lavender.dts  |  37 +++
+ arch/arm64/boot/dts/qcom/sdm660.dtsi          | 237 ++++++++++++++++++
+ 3 files changed, 275 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm660.dtsi
+
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 6498a1ec893f..95237a90e391 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -13,6 +13,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-asus-novago-tp370ql.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-hp-envy-x2.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-lenovo-miix-630.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-mtp.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sdm660-xiaomi-lavender.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r1.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r2.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r3.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts b/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts
+new file mode 100644
+index 000000000000..2382252786b7
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender.dts
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2019, The Linux Foundation. All rights reserved.
++ */
++
++/dts-v1/;
++
++#include "sdm660.dtsi"
++
++/ {
++	model = "Xiaomi Redmi Note 7";
++	compatible = "xiaomi,lavender", "qcom,sdm660-mtp", "qcom,sdm660", "qcom,mtp";
++	/* required for bootloader to select correct board */
++	qcom,msm-id = <0x13d 0x0>;
++	qcom,board-id = <0x20008 0>;
++	qcom,pmic-id = <0x0001001b 0x0101011a 0x0 0x0>,
++			<0x0001001b 0x0201011a 0x0 0x0>,
++			<0x0001001b 0x0102001a 0x0 0x0>;
++
++	aliases { };
++
++	chosen { };
++
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		ramoops@a0000000 {
++			compatible = "ramoops";
++			reg = <0x0 0xa0000000 0x0 0x00400000>;
++			console-size = <0x10000>;
++			record-size = <0x10000>;
++			ftrace-size = <0x10000>;
++			pmsg-size = <0x20000>;
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/qcom/sdm660.dtsi b/arch/arm64/boot/dts/qcom/sdm660.dtsi
+new file mode 100644
+index 000000000000..e67505db7526
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sdm660.dtsi
+@@ -0,0 +1,237 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2019, The Linux Foundation. All rights reserved.
++ */
++
++/ {
++	model = "Qualcomm Technologies, Inc. SDM 660";
++	compatible = "qcom,sdm660-mtp", "qcom,sdm660", "qcom,mtp";
++
++	interrupt-parent = <&intc>;
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	chosen { };
++
++	memory {
++		device_type = "memory";
++		reg = <0 0 0 0>; // bootloader will update
++	};
++
++	cpus {
++		#address-cells = <0x2>;
++		#size-cells = <0x0>;
++
++		CPU0: cpu@100 {
++			device_type = "cpu";
++			compatible = "arm,armv8";
++			reg = <0x0 0x100>;
++			enable-method = "psci";
++			efficiency = <0x666>;
++			next-level-cache = <&L2_1>;
++
++			L2_1: l2-cache {
++				compatible = "arm,arch-cache";
++				cache-level = <2>;
++			};
++
++			L1_I_100: l1-icache {
++				compatible = "arm,arch-cache";
++			};
++
++			L1_D_100: l1-dcache {
++				compatible = "arm,arch-cache";
++			};
++		};
++
++		CPU1: cpu@101 {
++			device_type = "cpu";
++			compatible = "arm,armv8";
++			reg = <0x0 0x101>;
++			enable-method = "psci";
++			efficiency = <0x666>;
++			next-level-cache = <&L2_1>;
++
++			L1_I_101: l1-icache {
++				compatible = "arm,arch-cache";
++			};
++
++			L1_D_101: l1-dcache {
++				compatible = "arm,arch-cache";
++			};
++		};
++
++		CPU2: cpu@102 {
++			device_type = "cpu";
++			compatible = "arm,armv8";
++			reg = <0x0 0x102>;
++			enable-method = "psci";
++			efficiency = <0x666>;
++			next-level-cache = <&L2_1>;
++
++			L1_I_102: l1-icache {
++				compatible = "arm,arch-cache";
++			};
++
++			L1_D_102: l1-dcache {
++				compatible = "arm,arch-cache";
++			};
++		};
++
++		CPU3: cpu@103 {
++			device_type = "cpu";
++			compatible = "arm,armv8";
++			reg = <0x0 0x103>;
++			enable-method = "psci";
++			efficiency = <0x666>;
++			next-level-cache = <&L2_1>;
++
++			L1_I_103: l1-icache {
++				compatible = "arm,arch-cache";
++			};
++
++			L1_D_103: l1-dcache {
++				compatible = "arm,arch-cache";
++			};
++		};
++
++		CPU4: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,armv8";
++			reg = <0x0 0x0>;
++			enable-method = "psci";
++			efficiency = <0x400>;
++			next-level-cache = <&L2_0>;
++
++			L2_0: l2-cache {
++				compatible = "arm,arch-cache";
++				cache-level = <2>;
++			};
++
++			L1_I_0: l1-icache {
++				compatible = "arm,arch-cache";
++			};
++
++			L1_D_0: l1-dcache {
++				compatible = "arm,arch-cache";
++			};
++		};
++
++		CPU5: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,armv8";
++			reg = <0x0 0x1>;
++			enable-method = "psci";
++			efficiency = <0x400>;
++			next-level-cache = <&L2_0>;
++
++			L1_I_1: l1-icache {
++				compatible = "arm,arch-cache";
++			};
++
++			L1_D_1: l1-dcache {
++				compatible = "arm,arch-cache";
++			};
++		};
++
++		CPU6: cpu@2 {
++			device_type = "cpu";
++			compatible = "arm,armv8";
++			reg = <0x0 0x2>;
++			enable-method = "psci";
++			efficiency = <0x400>;
++			next-level-cache = <&L2_0>;
++
++			L1_I_2: l1-icache {
++				compatible = "arm,arch-cache";
++			};
++
++			L1_D_2: l1-dcache {
++				compatible = "arm,arch-cache";
++			};
++		};
++
++		CPU7: cpu@3 {
++			device_type = "cpu";
++			compatible = "arm,armv8";
++			reg = <0x0 0x3>;
++			enable-method = "psci";
++			efficiency = <0x400>;
++			next-level-cache = <&L2_0>;
++
++			L1_I_3: l1-icache {
++				compatible = "arm,arch-cache";
++			};
++
++			L1_D_3: l1-dcache {
++				compatible = "arm,arch-cache";
++			};
++		};
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&CPU4>;
++				};
++
++				core1 {
++					cpu = <&CPU5>;
++				};
++
++				core2 {
++					cpu = <&CPU6>;
++				};
++
++				core3 {
++					cpu = <&CPU7>;
++				};
++			};
++
++			cluster1 {
++				core0 {
++					cpu = <&CPU0>;
++				};
++
++				core1 {
++					cpu = <&CPU1>;
++				};
++
++				core2 {
++					cpu = <&CPU2>;
++				};
++
++				core3 {
++					cpu = <&CPU3>;
++				};
++			};
++		};
++	};
++
++	soc: soc {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0 0 0xffffffff>;
++		compatible = "simple-bus";
++
++		intc: interrupt-controller@17a00000 {
++			compatible = "qcom,msm8996-gic-v3"; // enable quirk, otherwise phone reboots // compatible = "arm,gic-v3";
++			reg = <0x17a00000 0x10000>,
++			      <0x17b00000 0x100000>;
++			#interrupt-cells = <3>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++			interrupt-controller;
++			#redistributor-regions = <1>;
++			redistributor-stride = <0x0 0x20000>;
++			interrupts = <1 9 4>; // interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
++		};
++
++		gcc: clock-controller@100000 {
++			compatible = "qcom,gcc-sdm660";
++			#clock-cells = <1>;
++			#reset-cells = <1>;
++			#power-domain-cells = <1>;
++			reg = <0x100000 0x94000>;
++		};
++	};
++};
+-- 
+2.17.1
+
