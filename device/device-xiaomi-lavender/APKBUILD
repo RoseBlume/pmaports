@@ -3,14 +3,18 @@
 # Mantainer: Alexey Min <alexey.min@gmail.com>
 pkgname="device-xiaomi-lavender"
 pkgdesc="Xiaomi Redmi Note 7"
-pkgver=0.1
+pkgver=0.2
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base linux-xiaomi-lavender mkbootimg mesa-dri-swrast"
+depends="postmarketos-base mkbootimg "
 makedepends="devicepkg-dev"
+subpackages="
+	$pkgname-kernel-downstream:kernel_downstream
+	$pkgname-kernel-mainline:kernel_mainline
+"
 source="deviceinfo"
 
 build() {
@@ -21,5 +25,16 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
+kernel_downstream() {
+	pkgdesc="Only USB networking works (see device table for details)"
+	depends="linux-xiaomi-lavender mesa-dri-swrast msm-fb-refresher"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
 
-sha512sums="336d457755392a17ea36f811112f76c805e99b08908ed43bfc4ee2d94572c77bb2a5256f78aa3dd1fa1dac6726d3db5fecc80770c09d4f19bb9e2148dca1c852  deviceinfo"
+kernel_mainline() {
+	pkgdesc="For kernel development only (most features aren't working)"
+	depends="linux-postmarketos-qcom-git"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+sha512sums="23e035217e88dbc4633bb228c52070960c7cb837c9ce6325723637a415eb44e06e16d9e224553e67c60b715595c0686924900b6fbd56f708bc102369a920983e  deviceinfo"
