@@ -2,9 +2,9 @@
 # Contributor: Grant Miller <GrantM11235@gmail.com>
 # Maintainer:
 pkgname=anbox
-pkgver=0_git20190626
+pkgver=0_git20191116
 pkgrel=0
-_commit="33b0654b34e897923c682b9bbfa6c1ca280064a2"
+_commit="0a49ae08f76de7f886a3dbed4422711c2fa39d10"
 pkgdesc="Android in a box"
 url="https://github.com/anbox/anbox"
 arch="all"
@@ -83,7 +83,7 @@ package() {
 		"$pkgdir"/etc/conf.d/$pkgname
 	install -m644 -D "$srcdir"/99-anbox.rules \
 		"$pkgdir"/lib/udev/rules.d/99-anbox.rules
-	install -m644 -D "$srcdir"/$pkgname-launch.sh \
+	install -m755 -D "$srcdir"/$pkgname-launch.sh \
 		"$pkgdir"/usr/bin/$pkgname-launch
 	install -m644 -D "$srcdir"/$pkgname.desktop \
 		"$pkgdir"/usr/share/applications/$pkgname.desktop
@@ -91,7 +91,7 @@ package() {
 		"$pkgdir"/etc/modules-load.d/$pkgname.conf
 }
 
-sha512sums="cea653225311a6b0c478bba091739888023a213b89d789acf47a4ee891f70e012b472836ecdb6301e467c48ae7bdcbbe648b36f0f03b6a69fa838f020a66cbd0  anbox-33b0654b34e897923c682b9bbfa6c1ca280064a2.tar.gz
+sha512sums="f864ff93b796ce377966c03622e829e1be9bf6846ad7be8aafcd4b21a8185d31fad706157fa3281e04fa33cff02cff4cc616772640d760bdda193168e0116fa6  anbox-0a49ae08f76de7f886a3dbed4422711c2fa39d10.tar.gz
 59803d3468084b63c9a5e993fe0be1f9e8ee105e3a0724d406f065ae1c3be1ba2b4fe89bd33d4465739df407542f68871e787e2afc3d05a7055d5a6df9fa30cf  99-anbox.rules
 829dd8e14196c6ddb3d2913e6924f98415287fb706cd5e4fcc122df471117f81a8f77b732276c4ebf1979db756b26d083be706b39f69581fa3a16c37a6299f86  anbox-container-manager.initd
 6a3bc88142c5287ec54d481a4788eceb7772d9974af950b5286ce63a49d05d9d49fce5ba1d02b4b1c9893896fd4ba218fd4d39b8e640bdd61ad196b5d5c9a021  anbox.confd
