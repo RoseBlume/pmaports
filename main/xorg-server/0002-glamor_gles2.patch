@@ -1,0 +1,42 @@
+From dabc7d8bf2d964460286168b52899c42b3369f8d Mon Sep 17 00:00:00 2001
+From: Adam Jackson <ajax@redhat.com>
+Date: Wed, 30 Oct 2019 11:20:40 -0400
+Subject: [PATCH] xwayland: Fall back to GLES2 if we don't get at least GL 2.1
+ in glamor
+
+Some particularly unfortunate hardware (Intel gen3, mostly) will give
+you GLES2 but not GL 2.1. Fall back to GLES2 for such cases so you still
+get accelerated GLX.
+---
+ hw/xwayland/xwayland-glamor-gbm.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/hw/xwayland/xwayland-glamor-gbm.c b/hw/xwayland/xwayland-glamor-gbm.c
+index e3d35ce10..2df12aeaa 100644
+--- a/hw/xwayland/xwayland-glamor-gbm.c
++++ b/hw/xwayland/xwayland-glamor-gbm.c
+@@ -948,6 +948,21 @@ xwl_glamor_gbm_init_egl(struct xwl_screen *xwl_screen)
+             xwl_screen->egl_display, NULL, EGL_NO_CONTEXT, NULL);
+     }
+ 
++    /* glamor needs either big-GL 2.1 or GLES2 */
++    if (xwl_screen->egl_context && epoxy_gl_version() < 21) {
++        const EGLint gles_attribs[] = {
++            EGL_CONTEXT_CLIENT_VERSION,
++            2,
++            EGL_NONE,
++        };
++
++        eglDestroyContext(xwl_screen->egl_display, xwl_screen->egl_context);
++        eglBindAPI(EGL_OPENGL_ES_API);
++        xwl_screen->egl_context = eglCreateContext(xwl_screen->egl_display,
++                                                   NULL, EGL_NO_CONTEXT,
++                                                   gles_attribs);
++    }
++
+     if (xwl_screen->egl_context == EGL_NO_CONTEXT) {
+         ErrorF("Failed to create EGL context\n");
+         goto error;
+-- 
+2.24.1
+
