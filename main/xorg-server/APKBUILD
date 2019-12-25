@@ -1,0 +1,177 @@
+# Contributor: Łukasz Jendrysik <scadu@yandex.com>
+# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
+pkgname=xorg-server
+pkgver=1.20.6
+pkgrel=3
+pkgdesc="X.Org X servers"
+url="https://www.x.org/wiki"
+arch="all"
+license="MIT"
+options="suid"
+subpackages="$pkgname-dbg $pkgname-dev $pkgname-doc xvfb $pkgname-xephyr
+	$pkgname-xnest $pkgname-xwayland"
+# the modesetting driver is now shipped with xorg server
+replaces="xf86-video-modesetting"
+depends="
+	font-misc-misc
+	font-cursor-misc
+	xkeyboard-config
+	xkbcomp
+	xinit
+	"
+depends_dev="
+	libepoxy-dev
+	libxfont2-dev
+	mesa-dev
+	"
+makedepends="
+	$depends_dev
+	autoconf
+	automake
+	eudev-dev
+	libdrm-dev
+	libpciaccess-dev
+	openssl-dev
+	libtool
+	libx11-dev
+	libxdamage-dev
+	libxinerama-dev
+	libxkbfile-dev
+	libxkbui-dev
+	libxv-dev
+	libxxf86dga-dev
+	libxxf86misc-dev
+	perl
+	pixman-dev
+	util-macros
+	wayland-dev
+	wayland-protocols
+	xcb-util-dev
+	xcb-util-image-dev
+	xcb-util-keysyms-dev
+	xcb-util-renderutil-dev
+	xcb-util-wm-dev
+	xorgproto
+	xtrans
+	zlib-dev
+	"
+source="https://www.x.org/releases/individual/xserver/$pkgname-$pkgver.tar.bz2
+	autoconfig-nvidia.patch
+	autoconfig-sis.patch
+	0001-glamor_gles2.patch
+	0002-glamor_gles2.patch
+	0003-glamor_gles2.patch
+	"
+
+# secfixes:
+#   1.20.3-r0:
+#     - CVE-2018-14665
+#   1.19.5-r0:
+#     - CVE-2017-12176
+#     - CVE-2017-12177
+#     - CVE-2017-12178
+#     - CVE-2017-12179
+#     - CVE-2017-12180
+#     - CVE-2017-12181
+#     - CVE-2017-12182
+#     - CVE-2017-12183
+#     - CVE-2017-12184
+#     - CVE-2017-12185
+#     - CVE-2017-12186
+#     - CVE-2017-12187
+#     - CVE-2017-13721
+#     - CVE-2017-13723
+
+prepare() {
+	default_prepare
+	# Fix dbus config path
+	sed -i -e 's/\$(sysconfdir)/\/etc/' config/Makefile.*
+	sed -i -e 's/termio.h/termios.h/' hw/xfree86/os-support/xf86_OSlib.h
+}
+
+build() {
+	# xorg modules does not work with the -z now and it seems like we
+	# cannot pass over the linker flag to .so files. so we tweak the
+	# gcc specs.
+	export CFLAGS="$CFLAGS -D_GNU_SOURCE -D__gid_t=gid_t -D__uid_t=uid_t"
+	export LDFLAGS="$LDFLAGS -Wl,-z,lazy"
+	_fontroot="/usr/share/fonts"
+
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc/X11 \
+		--localstatedir=/var \
+		--with-fontrootdir=$_fontroot \
+		--with-default-font-path=${_fontroot}/misc,${_fontroot}/100dpi:unscaled,${_fontroot}/75dpi:unscaled,${_fontroot}/TTF,${_fontroot}/Type1 \
+		--with-xkb-path=/usr/share/X11/xkb \
+		--with-xkb-output=/var/lib/xkb \
+		--without-systemd-daemon \
+		--enable-composite \
+		--enable-config-udev \
+		--enable-dri \
+		--enable-dri2 \
+		--enable-dri3 \
+		--enable-glamor \
+		--enable-ipv6 \
+		--enable-kdrive \
+		--enable-xace \
+		--enable-xcsecurity \
+		--enable-xephyr \
+		--enable-xnest \
+		--enable-xorg \
+		--enable-xres \
+		--enable-xv \
+		--enable-xwayland \
+		--disable-config-hal \
+		--disable-dmx \
+		--disable-systemd-logind \
+		--with-os-vendor="${DISTRO_NAME:-Alpine Linux}"
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make -j1 DESTDIR="$pkgdir" install
+	chmod u+s "$pkgdir"/usr/bin/Xorg
+
+	# Don't conflict with xf86-input-evdev
+	rm -f "$pkgdir"/usr/share/X11/xorg.conf.d/10-evdev.conf
+
+	install -m755 -d "$pkgdir"/var/lib/xkb
+}
+
+xvfb() {
+	pkgdesc="Virtual Framebuffer 'fake' X server"
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/Xvfb "$subpkgdir"/usr/bin/
+}
+
+xephyr() {
+	pkgdesc="kdrive based X Server which targets a window on a host X Server as its framebuffer"
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/Xephyr "$subpkgdir"/usr/bin/
+}
+
+xnest() {
+	pkgdesc="A nested Xorg server"
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/Xnest "$subpkgdir"/usr/bin/
+}
+
+xwayland() {
+	pkgdesc="run X clients under wayland"
+	mkdir -p "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/bin/Xwayland "$subpkgdir"/usr/bin/
+}
+
+sha512sums="9aa0ba4aee92fe628f2b8c41e4fe0134dc86154bb8787f907884ef2fd970e18e68e72ea8a1beb706d11ecf155b2abc9731f1abadff251ed592f8cca3b1240dd6  xorg-server-1.20.6.tar.bz2
+016d10e59681d36be19aacc1505103bd340a5e81855e551997b42f8b54796be46fb2d91be8d1aa3bebb10d34e51258be9de1299c2e351b840450de38ff103df0  autoconfig-nvidia.patch
+30a78f4278edd535c45ee3f80933427cb029a13abaa4b041f816515fdd8f64f00b9c6aef50d4eba2aaf0d4f333e730399864fd97fa18891273601c77a6637200  autoconfig-sis.patch
+741acc58fdfeb72d82eb308b5c9c12f5d96f4dc10cd128097777c50fa3cdf1347b9b18dfa0bf60a9d3f73e65cc1b7379f692c4ed48b0deb5e89ea284130286ff  0001-glamor_gles2.patch
+e981a749c6eadc5b756a33d5249d18c6c348bfa7aef749f7d93d7ac3f6a87292c0b770ff6f1f47d031a3349d71b1ae5ecb3eeff29087c92513a2619c19ca20da  0002-glamor_gles2.patch
+8f9105728e6f9c281e0d65c75a8cdcbbca39f5510f5b21b318304251263755c0f47ef3fb123773981652025882467ff06013e062e644b202dac186eb89a318be  0003-glamor_gles2.patch"

@@ -1,0 +1,92 @@
+From a506b4ecb6c54fd0388e628520eec75ea3bcb27c Mon Sep 17 00:00:00 2001
+From: Olivier Fourdan <ofourdan@redhat.com>
+Date: Wed, 6 Nov 2019 15:37:22 +0100
+Subject: [PATCH] xwayland: make context current to check GL version
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+`glGetString(GL_VERSION)` will return NULL without a current context.
+
+Commit dabc7d8b (“xwayland: Fall back to GLES2 if we don't get at least
+GL 2.1 in glamor”) would check the context is created, but it is made
+current just after, so the call to `epoxy_gl_version()` would return 0,
+hence defeating the version check.
+
+Make the context current prior to call `epoxy_gl_version()`.
+
+Fixes: dabc7d8b - xwayland: Fall back to GLES2 if we don't get at least
+                  GL 2.1 in glamor
+Closes: https://gitlab.freedesktop.org/xorg/xserver/issues/932
+https://gitlab.freedesktop.org/xorg/xserver/merge_requests/324
+Signed-off-by: Olivier Fourdan <ofourdan@redhat.com>
+---
+ hw/xwayland/xwayland-glamor-gbm.c | 38 ++++++++++++++++++++++---------
+ 1 file changed, 27 insertions(+), 11 deletions(-)
+
+diff --git a/hw/xwayland/xwayland-glamor-gbm.c b/hw/xwayland/xwayland-glamor-gbm.c
+index 2df12aeaa..bfcf81dbc 100644
+--- a/hw/xwayland/xwayland-glamor-gbm.c
++++ b/hw/xwayland/xwayland-glamor-gbm.c
+@@ -948,31 +948,47 @@ xwl_glamor_gbm_init_egl(struct xwl_screen *xwl_screen)
+             xwl_screen->egl_display, NULL, EGL_NO_CONTEXT, NULL);
+     }
+ 
++    if (xwl_screen->egl_context == EGL_NO_CONTEXT) {
++        ErrorF("Failed to create EGL context with GL\n");
++        goto error;
++    }
++
++    if (!eglMakeCurrent(xwl_screen->egl_display,
++                        EGL_NO_SURFACE, EGL_NO_SURFACE,
++                        xwl_screen->egl_context)) {
++        ErrorF("Failed to make EGL context current with GL\n");
++        goto error;
++    }
++
+     /* glamor needs either big-GL 2.1 or GLES2 */
+-    if (xwl_screen->egl_context && epoxy_gl_version() < 21) {
++    if (epoxy_gl_version() < 21) {
+         const EGLint gles_attribs[] = {
+             EGL_CONTEXT_CLIENT_VERSION,
+             2,
+             EGL_NONE,
+         };
+ 
++        /* Recreate the context with GLES2 instead */
++        eglMakeCurrent(xwl_screen->egl_display,EGL_NO_SURFACE,
++                       EGL_NO_SURFACE, EGL_NO_CONTEXT);
+         eglDestroyContext(xwl_screen->egl_display, xwl_screen->egl_context);
++
+         eglBindAPI(EGL_OPENGL_ES_API);
+         xwl_screen->egl_context = eglCreateContext(xwl_screen->egl_display,
+                                                    NULL, EGL_NO_CONTEXT,
+                                                    gles_attribs);
+-    }
+ 
+-    if (xwl_screen->egl_context == EGL_NO_CONTEXT) {
+-        ErrorF("Failed to create EGL context\n");
+-        goto error;
+-    }
++        if (xwl_screen->egl_context == EGL_NO_CONTEXT) {
++            ErrorF("Failed to create EGL context with GLES2\n");
++            goto error;
++        }
+ 
+-    if (!eglMakeCurrent(xwl_screen->egl_display,
+-                        EGL_NO_SURFACE, EGL_NO_SURFACE,
+-                        xwl_screen->egl_context)) {
+-        ErrorF("Failed to make EGL context current\n");
+-        goto error;
++        if (!eglMakeCurrent(xwl_screen->egl_display,
++                            EGL_NO_SURFACE, EGL_NO_SURFACE,
++                            xwl_screen->egl_context)) {
++            ErrorF("Failed to make EGL context current with GLES2\n");
++            goto error;
++        }
+     }
+ 
+     renderer = glGetString(GL_RENDERER);
+-- 
+2.24.1
+
