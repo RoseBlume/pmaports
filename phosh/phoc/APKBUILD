@@ -1,7 +1,7 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=phoc
-pkgver=0.1.3
+pkgver=0.1.5
 pkgrel=0
 pkgdesc="wlroots based Phone compositor for the Phosh shell"
 arch="all"
@@ -12,15 +12,21 @@ source="$pkgname-$pkgver.tar.gz::https://source.puri.sm/Librem5/phoc/-/archive/v
 builddir="$srcdir/$pkgname-v$pkgver"
 
 build() {
-	meson . _build --prefix=/usr
-	ninja -C _build
+	meson \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--buildtype=release \
+		. output
+	ninja -C output
 }
 
 check() {
-	ninja -C _build test
+	ninja test -C output
 }
 
 package() {
-	DESTDIR="$pkgdir/" ninja -C _build install
+	DESTDIR="$pkgdir/" ninja install -C output
 }
-sha512sums="ea84e7c915cdfa5d1aa713f4cb77ef519a761cc179de3b834594b456c1470535b4c879b57b0dd203d0e0ccc92680316746955130a192ec8a39942c16ff373715  phoc-0.1.3.tar.gz"
+sha512sums="fdd940d30ea818698689669f3dc1fc0103e8e1bb6d9740d777aa16119f0693357e100730df736aebabdd1c674b98fd41ebe61ccd8f339113c3f879d4868be05a  phoc-0.1.5.tar.gz"
