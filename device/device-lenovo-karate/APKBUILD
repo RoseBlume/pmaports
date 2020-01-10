@@ -11,7 +11,6 @@ options="!check !archcheck"
 depends="postmarketos-base linux-lenovo-karate mkbootimg mdss-fb-init-hack mesa-dri-swrast"
 makedepends="devicepkg-dev"
 source="deviceinfo 90-android-touch-dev.rules"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -21,12 +20,6 @@ package() {
 	devicepkg_package $startdir $pkgname
 	install -Dm755 "$srcdir"/90-android-touch-dev.rules \
 		"$pkgdir"/etc/udev/rules.d/90-android-touch-dev.rules
-}
-
-nonfree_firmware() {
-	depends="firmware-lenovo-karate"
-	pkgdesc="Wifi firmware"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="36cbc80520fab81bb22c6ad1796c08b93872b981f82ac7998a3a27b8d45fe31339f2e97bd80ef81b7880f1e6fbf43e15337ac6bdf8f9f52a973e5bbc9ec0c52b  deviceinfo
