@@ -9,7 +9,7 @@
 # conflicts
 pkgname=mesa-git
 pkgver=0_git20191223
-pkgrel=0
+pkgrel=1
 _commit="c411d4896c625e6538bf3a6681892256f352868e"
 pkgdesc="(Git) Mesa DRI OpenGL library"
 url="https://www.mesa3d.org"
@@ -75,7 +75,6 @@ source="
 provides="mesa"
 replaces="mesa-dricore mesa"
 builddir="$srcdir/mesa-$_commit"
-pcprefix="mesa-git"
 
 if [ "$CARCH" = x86 ]; then
 	# Bug upstream that needs to be fixed
