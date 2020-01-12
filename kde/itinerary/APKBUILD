@@ -29,7 +29,7 @@ build() {
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
 		-DCMAKE_C_FLAGS="$CFLAGS" \
-		${CMAKE_CROSSOPTS}
+		$CMAKE_CROSSOPTS
 	make
 }
 
