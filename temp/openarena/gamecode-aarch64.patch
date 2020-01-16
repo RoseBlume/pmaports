@@ -1,0 +1,34 @@
+diff --git a/Makefile b/Makefile
+index b5e8f70..b9ebe92 100644
+--- a/Makefile
++++ b/Makefile
+@@ -5,7 +5,6 @@
+ #
+ 
+ COMPILE_PLATFORM=$(shell uname|sed -e s/_.*//|tr '[:upper:]' '[:lower:]'|sed -e 's/\//_/g')
+-
+ COMPILE_ARCH=$(shell uname -m | sed -e s/i.86/x86/ | sed -e 's/^arm.*/arm/')
+ 
+ ifeq ($(COMPILE_PLATFORM),sunos)
+@@ -302,9 +301,9 @@ endif
+ 
+ INSTALL=install
+ MKDIR=mkdir
+-
+ ifneq (,$(findstring "$(COMPILE_PLATFORM)", "linux" "gnu_kfreebsd" "kfreebsd-gnu" "gnu"))
+   TOOLS_CFLAGS += -DARCH_STRING=\"$(COMPILE_ARCH)\"
++  CFLAGS += -DARCH_STRING=\"$(COMPILE_ARCH)\"
+ endif
+ 
+ ifneq (,$(findstring "$(PLATFORM)", "linux" "gnu_kfreebsd" "kfreebsd-gnu" "gnu"))
+@@ -345,6 +344,10 @@ ifneq (,$(findstring "$(PLATFORM)", "linux" "gnu_kfreebsd" "kfreebsd-gnu" "gnu")
+     # -ffast-math will cause the client to die with SIGFPE on Alpha
+     OPTIMIZE = $(OPTIMIZEVM)
+   endif
++  ifeq ($ARCH),aarch64)
++    OPTIMIZE = -O2 -march=armv8-a+crc+crypto -mcpu=cortex-a72.cortex-a53
++    OPTIMIZEVM = -O2 -march=armv8-a+crc+crypto -mcpu=cortex-a72.cortex-a53
++  endif
+   endif
+   endif
+ 

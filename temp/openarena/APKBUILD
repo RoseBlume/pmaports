@@ -1,0 +1,82 @@
+# Contributor: Martijn Braam <martijn@brixit.nl>
+# Maintainer: Martijn Braam <martijn@brixit.nl>
+pkgname="openarena"
+pkgver="0.8.8"
+pkgrel=1
+pkgdesc="description"
+url="https://openarena.ws"
+arch="all !armhf"
+license="GPL-2.0"
+depends=""
+makedepends="sdl2-dev libvorbis-dev mesa-dev glu-dev"
+install=""
+_commit="4f3ad10d4614a54e74dbb3127a58da337507126c"
+_gc_commit="b7e01f40c433a602987be2a95fb13385e163a3c4"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/OpenArena/engine/archive/$_commit.tar.gz
+	$pkgname-$_gc_commit.tar.gz::https://github.com/OpenArena/gamecode/archive/$_gc_commit.tar.gz
+	$pkgname-data-$pkgver.zip::http://openarena.ws/request.php?4
+	engine-aarch64.patch
+	gamecode-aarch64.patch
+	openarena.sh
+	openarena.desktop
+	openarena.png
+"
+builddir="$srcdir/engine-$_commit"
+builddir_gc="$srcdir/gamecode-$_gc_commit"
+builddir_data="$srcdir/openarena-$pkgver"
+
+prepare() {
+	cd "$builddir"
+	patch -p1 -i "$srcdir"/engine-aarch64.patch || return 1
+
+	cd "$builddir_gc"
+	patch -p1 -i "$srcdir"/gamecode-aarch64.patch || return 1
+}
+
+build() {
+	# Build engine
+	cd "$builddir"
+	make USE_CODEC_XMP=0
+	
+	# Build gamecode
+	cd "$builddir_gc"
+	make 
+}
+
+package() {
+	_qarch=${CARCH}
+	case "$_qarch" in
+	armv7) _qarch="armv7l" ;;
+	esac
+
+	cd "$builddir"
+	mkdir -p "$pkgdir"/usr/share/games/openarena
+	
+	msg "Adding gamedata"
+	cp -rv "$builddir_data"/baseoa "$pkgdir"/usr/share/games/openarena/
+	chmod -R go+rX "$pkgdir"/usr/share/games/openarena/baseoa
+	
+	msg "Adding engine"
+	cp -rv "$builddir"/build/release-linux-$_qarch/* "$pkgdir"/usr/share/games/openarena/
+
+	msg "Adding gamecode"
+	cp -rv "$builddir_gc"/build/release-linux-$_qarch/* "$pkgdir"/usr/share/games/openarena/
+
+	msg "Adding launcher script"
+	install -D -m755 "$srcdir"/openarena.sh "$pkgdir"/usr/bin/openarena
+	install -D -m644 "$srcdir"/openarena.desktop \
+		"$pkgdir"/usr/share/applications/openarena.desktop
+	install -D -m644 "$srcdir"/openarena.png \
+		"$pkgdir"/usr/share/icons/hicolor/48x48/apps/openarena.png
+
+}
+
+sha512sums="e50c9267d1009152d2538c53e1a4d23d8766e4d8798613d93de91860c7181cddbc754a4d39ce4ff0d376773f5dcb146a49b08e7213e207b723d8023482479832  openarena-4f3ad10d4614a54e74dbb3127a58da337507126c.tar.gz
+3a50e099cc5a812ed88089c801793a9ae6cf7a6a200da016623bed4980a694d10d2870d472cbfeb36ca5426bf21b2078092791e1001206f6bd5c1a03de068704  openarena-b7e01f40c433a602987be2a95fb13385e163a3c4.tar.gz
+9fa4dabe8a3428dc3cbec97f3b4d20c04569c14cdd00b60e6391c6dd61e310f246ff5ec97e7549821b3d6f5f94b140eb5411a2ddd83dafcad66937b7f78ea8dd  openarena-data-0.8.8.zip
+2c074da36161509501d4fd5c8bd66d6c2e04803a12eff22ee235531314d355b97214bf83d3bb6095607467c66074f2366ac100af745e86ad7b457bec4dc5fa62  engine-aarch64.patch
+add8418293c016283f89eb8ca252b2b7a63b1efc5b1e2a5646e8b73eb92b9b7e0560e7d253704b98dc69c32bdcf521ca0d1a20069a43a08d97eff9c1dc1a6161  gamecode-aarch64.patch
+8ef38425d8feddbc4b8d90d4d77384b2827aab8c1ede7f31741aef344f4ef680f8e87ef4a3ae2c9a53266debdf3e52045c1f58c6ca7f62739ea95f6c2093c033  openarena.sh
+5acd934f451559ad68b76a4de4b132b9ead9542dd078df7c7489ce2b2774557d81c6405622e8090ced2ace5f05165af1ed5dee8674d3fef725cd633727c92538  openarena.desktop
+ef68f8eb6251c3424464702ff894a6b88b473a3f4c1512af613125f5e5a7124f268490a9f6042095ff5bb807817e1f302c80d21987a2ed178e680f993d70b6f1  openarena.png"
