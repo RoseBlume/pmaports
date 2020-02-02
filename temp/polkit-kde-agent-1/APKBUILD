@@ -1,0 +1,40 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=polkit-kde-agent-1
+pkgver=5.17.90
+pkgrel=0
+pkgdesc="Daemon providing a polkit authentication UI for KDE"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://www.kde.org/workspaces/plasmadesktop/"
+license="GPL-2.0-or-later"
+depends="polkit-elogind"
+makedepends="extra-cmake-modules qt5-qtbase-dev ki18n-dev kwindowsystem-dev kdbusaddons-dev kwidgetsaddons-dev kcoreaddons-dev kcrash-dev kiconthemes-dev polkit-qt-1-dev"
+source="https://download.kde.org/unstable/plasma/$pkgver/polkit-kde-agent-1-$pkgver.tar.xz"
+subpackages="$pkgname-lang"
+
+prepare() {
+	default_prepare
+
+	mkdir "$builddir"/build
+}
+
+build() {
+	cd "$builddir"/build
+	cmake "$builddir" \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	make
+}
+
+check() {
+	cd "$builddir"/build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	cd "$builddir"/build
+	DESTDIR="$pkgdir" make install
+}
+
+sha512sums="b3a4dfa34314bcac25d6bddf9335a91a502dd9fdae57477d80d28307539d7a6e91a4df8ea4fc94b0ed513eebfc73e96d0d26d606987bda407aca045e9d6ab1fb  polkit-kde-agent-1-5.17.90.tar.xz"

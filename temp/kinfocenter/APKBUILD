@@ -1,0 +1,39 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=kinfocenter
+pkgver=5.17.90
+pkgrel=0
+pkgdesc="A utility that provides information about a computer system"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://www.kde.org/applications/system/kinfocenter"
+license="(GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)"
+makedepends="extra-cmake-modules qt5-qtbase-dev kcompletion-dev kconfig-dev kconfigwidgets-dev kcoreaddons-dev kcrash-dev kdbusaddons-dev kdoctools-dev ki18n-dev kiconthemes-dev kcmutils-dev kio-dev kservice-dev solid-dev kwidgetsaddons-dev kwindowsystem-dev kxmlgui-dev kdeclarative-dev kpackage-dev solid-dev kwayland-dev glu-dev"
+source="https://download.kde.org/unstable/plasma/$pkgver/kinfocenter-$pkgver.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+prepare() {
+	default_prepare
+
+	mkdir "$builddir"/build
+}
+
+build() {
+	cd "$builddir"/build
+	cmake "$builddir" \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	make
+}
+
+check() {
+	cd "$builddir"/build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	cd "$builddir"/build
+	DESTDIR="$pkgdir" make install
+}
+
+sha512sums="f20934e3c043992c9e90354ba9656d005e20c1105d56fc5bdaa629af2339b351f1274cc26b059f5b7ae1bb03d1e377ed0263d5d9dc31689ad2159552b8c7a9cd  kinfocenter-5.17.90.tar.xz"
