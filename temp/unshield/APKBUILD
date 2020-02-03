@@ -1,0 +1,29 @@
+pkgname=unshield
+pkgver=1.4.3
+pkgrel=0
+pkgdesc="Extracts CAB files from InstallShield installers"
+arch="x86_64 aarch64"
+url="https://github.com/twogood/unshield"
+license="custom"
+depends="zlib openssl"
+makedepends="cmake zlib-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/twogood/unshield/archive/$pkgver.tar.gz"
+subpackages="
+	$pkgname-doc
+	"
+
+build() {
+	cd "$srcdir"/${pkgname}-${pkgver}
+	cmake \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		.
+	make
+}
+
+package() {
+	cd "$srcdir"/${pkgname}-${pkgver}
+	make DESTDIR="$pkgdir" install
+	install -D -m644 LICENSE "$pkgdir"/usr/share/licenses/unshield/LICENSE
+}
+sha512sums="2f058e0a28d0497e2afe231ded1b1bb16745401398eb1035e628d263351b10a1343c9664f3937b8912755db9dc5236a1b43e9bcba596affb7aa8b036f49382aa  unshield-1.4.3.tar.gz"
