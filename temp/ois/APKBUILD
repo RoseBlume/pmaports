@@ -1,0 +1,29 @@
+pkgname=ois
+pkgver=1.5
+pkgrel=0
+pkgdesc="Object Oriented Input System"
+arch="x86_64 aarch64"
+url="https://github.com/wgois/OIS"
+license="custom:zlib"
+makedepends="cmake gcc libxaw libx11-dev linux-headers"
+source=$pkgname_$pkgver.tar.gz::"https://github.com/wgois/OIS/archive/v${pkgver}.tar.gz"
+subpackages="
+	$pkgname-doc
+	"
+
+build() {
+	cd $srcdir/OIS-$pkgver
+
+	mkdir -p build && cd build
+	cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+	make
+}
+
+package() {
+	cd $srcdir/OIS-$pkgver/build
+
+	make DESTDIR="${pkgdir}" install
+
+	install -Dm644 ../LICENSE.md "${pkgdir}"/usr/share/licenses/$pkgname/LICENSE
+}
+sha512sums="5ab1dda7c25c1959ccbbb758ea3fda36bd62ad65f46e2c6b418317a5eb39e0bace52a44ae079dfb69fc58c90df54f8e50d589daae1100ec615325363c9d77513  1.5.tar.gz"
