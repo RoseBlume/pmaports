@@ -1,0 +1,48 @@
+pkgname=openmw
+pkgver=0.45.0
+pkgrel=0
+pkgdesc="Open-source engine reimplementation for the role-playing game Morrowind"
+arch='x86_64 aarch64'
+url="http://www.openmw.org"
+license="GPL3 MIT custom"
+depends="openal-soft openscenegraph bullet ffmpeg sdl2 unshield libxt qt5-qtbase mygui"
+makedepends="cmake boost doxygen ninja mesa-dev qt5-qtbase-dev ffmpeg-dev openscenegraph-dev boost-dev openal-soft-dev sdl2-dev mygui-dev bullet-dev libxt-dev"
+source="https://github.com/OpenMW/openmw/archive/openmw-${pkgver}.tar.gz"
+
+_cmake_opts=""
+case "$CARCH" in
+armhf|armv7|aarch64)
+	_cmake_opts="-DMYGUI_RENDERSYSTEM=0 \
+							 -DMYGUI_BUILD_DEMOS=OFF \
+							 -DMYGUI_BUILD_TOOLS=OFF \
+							 -DMYGUI_BUILD_PLUGINS=OFF \
+							 -DBUILD_LAUNCHER=NO \
+							 -DBUILD_OPENCS=NO
+							 "
+	;;
+esac
+
+
+prepare() {
+	mkdir build
+}
+
+build() {
+	cd build
+
+	cmake "../$pkgname-$pkgname-$pkgver" \
+		$_cmake_opts \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DDESIRED_QT_VERSION=5 \
+		-GNinja
+	ninja
+}
+
+package() {
+	cd $srcdir
+	DESTDIR="$pkgdir" ninja -C build install
+}
+
+# vim: ts=2 sw=2 et:
+sha512sums="b968426659457cf486f6756f7ab82cc4cb34a92923c433dd86f711e5d7097f75441ed17daa50d21f15f1847f5aed1f4c3a094a06cfd3f2e9b90aa182742c596f  openmw-0.45.0.tar.gz"
