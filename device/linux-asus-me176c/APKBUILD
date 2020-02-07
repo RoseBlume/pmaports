@@ -1,8 +1,7 @@
 # Maintainer: Minecrell <minecrell@minecrell.net>
 # Kernel config based on: https://github.com/me176c-dev/archlinux-me176c/blob/master/linux-me176c/config
 
-_flavor="asus-me176c"
-pkgname="linux-$_flavor"
+pkgname="linux-asus-me176c"
 pkgver=5.4.17
 pkgrel=0
 pkgdesc="Mainline kernel fork for ASUS MeMO Pad 7 (ME176C(X))"
@@ -18,16 +17,19 @@ makedepends="$depends_dev sed installkernel bc linux-headers openssl-dev diffuti
 HOSTCC="${CC:-gcc}"
 HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
 
+_flavor="asus-me176c"
+
 # Source
+_config="config-$_flavor.$arch"
 source="
 	$pkgname-$pkgver.tar.gz::$url/archive/$pkgver.tar.gz
-	config-$_flavor.$arch
+	$_config
 "
 builddir="$srcdir/linux-me176c-$pkgver"
 
 prepare() {
 	default_prepare
-	cp "$srcdir/config-$_flavor.$arch" .config
+	cp "$srcdir/$_config" .config
 }
 
 build() {
