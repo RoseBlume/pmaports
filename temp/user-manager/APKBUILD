@@ -1,0 +1,38 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=user-manager
+pkgver=5.17.90
+pkgrel=0
+pkgdesc="A simple system settings module to manage the users of your system"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url='https://www.kde.org/workspaces/plasmadesktop/'
+license="GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later"
+makedepends="extra-cmake-modules qt5-qtbase-dev kwidgetsaddons-dev kcoreaddons-dev ki18n-dev kconfig-dev kconfigwidgets-dev kcmutils-dev kio-dev kiconthemes-dev kauth-dev libpwquality-dev"
+source="https://download.kde.org/unstable/plasma/$pkgver/user-manager-$pkgver.tar.xz"
+subpackages="$pkgname-lang"
+
+prepare() {
+	default_prepare
+
+	mkdir "$builddir"/build
+}
+
+build() {
+	cd "$builddir"/build
+	cmake "$builddir" \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	make
+}
+
+check() {
+	cd "$builddir"/build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	cd "$builddir"/build
+	DESTDIR="$pkgdir" make install
+}
+sha512sums="c22259a978fa377a87770002463962dc18ae4dc61696671d75bde878280baa9da24f65f416714509fb4275a44d47b9b445e7e9cb59172aa546407f1b954b40dc  user-manager-5.17.90.tar.xz"
