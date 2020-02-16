@@ -2,7 +2,7 @@
 pkgname="device-asus-grouper"
 pkgdesc="Google Nexus 7 2012 (grouper/tilapia)"
 pkgver=2
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -35,5 +35,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="241db05f63f914f82f5c40062d174a4140f635e95ec9dd260b4866478f11e93c711679a2eccde42791d3c34b37befd8d0c89094e1133b0611607199185fb9173  deviceinfo
+sha512sums="2056e600ad155f6d3e6822d2f5cabd44f5eee32036ea66275f84a2b30d1a0d0d33dca7fd29a8744bce8cb44cadce3fcbcba09026b2e025c987938be5075b8eae  deviceinfo
 6ec993e278d2a73c72fb96f001716ded63543d99183847d22d172cd81ac410791c79370ecf391d0c24822c975d91b84dc1db296e1b28dbf66d5c227bff8d4011  rootston.ini"
