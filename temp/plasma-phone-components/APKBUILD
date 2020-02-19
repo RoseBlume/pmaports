@@ -1,9 +1,8 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Maintainer: Bart Ribbers <bribbers@disroot.org>
+# Forked from Alpine as we want to keep track of git master for now
 pkgname=plasma-phone-components
-pkgver=5.18.0_git20200212
+pkgver=5.18.0_git20200214
 pkgrel=0
-_commit="6c9b6acacef8ead17139a5dad254be426248cc80"
+_commit="d8aac56a4ddf620d21184657679a9fd7838d37f7"
 pkgdesc="Modules providing phone functionality for Plasma"
 arch="all !armhf"
 url="https://www.plasma-mobile.org/"
@@ -33,5 +32,5 @@ check() {
 package() {
 	DESTDIR="$pkgdir" make -C build install
 }
-sha512sums="916b4c7bd5e78ce4984decfbff30bf683ab6bc39729b35b2fc97b165d4d958733bc148a045786f7ff5b38d167127eca92469e5af886bdf85ad492b9b8aa9bfe6  plasma-phone-components-6c9b6acacef8ead17139a5dad254be426248cc80.tar.gz
+sha512sums="b31a79058644ab3bd7863fdc612c9080d69938f7bcab7d57b7473845a929011f2b828a954bc32de5597255f77d48ff8158caadf72dc3fb01aea93bbeacb80fce  plasma-phone-components-d8aac56a4ddf620d21184657679a9fd7838d37f7.tar.gz
 5853e72077c356f8347ea1c8503d5e301505acaa39ccf2fa105abe054a3063e735f5bcb2db1c1357f53032714599bfbf687fff2cbe21a1743930b946900ff7cf  set-postmarketos-wallpaper.patch"
