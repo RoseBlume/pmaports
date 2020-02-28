@@ -14,13 +14,11 @@
 # timeconst_fix.patch: Removed condition for deprecated feature in Perl (bug present in Linux 3.9 and under)
 # - disable ANDROID_PARANOID_NETWORK (removes network restrictions)
 
-
-_vendor=samsung
 _flavor=samsung-n7100
 _hash="5790cd7defee9cb6f9b392af4e3569e51230917a"
-_config="config-${_flavor}.armhf"
+_config="config-$_flavor.armhf"
 
-pkgname=linux-${_flavor}
+pkgname=linux-$_flavor
 pkgver=3.0.64
 case $pkgver in
 	*.*.*)  _kernver=${pkgver%.*};;
@@ -30,22 +28,19 @@ pkgrel=8
 arch="armhf"
 pkgdesc="Samsung Galaxy Note II (GSM) Kernel from ParanoidNote"
 url="https://github.com/bigbiff/android_kernel_samsung_smdk4412"
-depends=""
 makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev gcc6"
 options="!strip !check !tracedeps"
-install=
 source="
-	$pkgname-$_hash.tar.gz::https://github.com/bigbiff/android_kernel_samsung_smdk4412/archive/${_hash}.tar.gz
+	$pkgname-$_hash.tar.gz::https://github.com/bigbiff/android_kernel_samsung_smdk4412/archive/$_hash.tar.gz
 	$_config
 	compiler-gcc6.h
 	timeconst_fix.patch
 	fimc_lite.patch
 	extdsp_inline.patch
 "
-subpackages=""
 license="GPL2"
 
-_abi_release=${pkgver}
+_abi_release=$pkgver
 _carch="arm"
 
 # Compiler: this kernel was only tested with GCC6. Feel free to make a merge
@@ -57,7 +52,7 @@ if [ "${CC:0:5}" != "gcc6-" ]; then
 	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
 fi
 
-ksrcdir="$srcdir/android_kernel_samsung_smdk4412-${_hash}"
+ksrcdir="$srcdir/android_kernel_samsung_smdk4412-$_hash"
 
 prepare() {
 	local _patch_failed=

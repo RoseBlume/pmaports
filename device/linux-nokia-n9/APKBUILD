@@ -1,13 +1,13 @@
 _flavor=nokia-n9
-_config="config-${_flavor}.armhf"
+_config="config-$_flavor.armhf"
 
-pkgname=linux-${_flavor}
+pkgname=linux-$_flavor
 pkgver=4.17_rc4
 _pkgver=${pkgver/_/-}
 _kernver=${pkgver%_rc*}
 _mainver=${_kernver%.*}
 _patchlevel=${_kernver/$_mainver./}
-_basever=${_mainver}.$((_patchlevel-1))
+_basever=$_mainver.$((_patchlevel-1))
 case $pkgver in
 	*.*.*)  _kernver=${pkgver%.*};;
 	*.*) _kernver=$pkgver;;
@@ -16,7 +16,6 @@ pkgrel=0
 arch="armhf"
 pkgdesc="Nokia N9 kernel"
 url="https://kernel.org"
-depends=""
 makedepends="perl sed installkernel bash gmp-dev bc linux-headers openssl-dev flex bison"
 options="!strip !check !tracedeps"
 source="
@@ -36,15 +35,10 @@ source="
 	$_config
 	RM-696_Pyrenees_SMD_V1_6.raw
 "
-subpackages=""
 license="GPL2"
 
-_abi_release=${pkgver}
+_abi_release=$pkgver
 _carch="arm"
-
-# Compiler: latest GCC from Alpine
-HOSTCC="${CC:-gcc}"
-HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
 
 ksrcdir="$srcdir/linux-$_basever"
 
@@ -77,8 +71,8 @@ prepare() {
 	cp "$srcdir/RM-696_Pyrenees_SMD_V1_6.raw" "$ksrcdir/firmware/maxtouch.cfg"
 
 	mkdir -p "$srcdir"/build
-	cp "$srcdir"/$_config "$srcdir"/build/.config || return 1
-	make -C "$ksrcdir" O="$srcdir"/build ARCH="$_carch" HOSTCC="$HOSTCC" \
+	cp "$srcdir"/$_config "$srcdir"/build/.config
+	make -C "$ksrcdir" O="$srcdir"/build ARCH="$_carch" \
 		olddefconfig
 }
 
@@ -86,9 +80,8 @@ build() {
 	cd "$srcdir"/build
 	unset LDFLAGS
 	make ARCH="$_carch" CC="${CC:-gcc}" \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-Alpine" \
-		|| return 1
-	cd ${ksrcdir}
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-Alpine"
+	cd $ksrcdir
 }
 
 package() {

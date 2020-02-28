@@ -4,12 +4,11 @@
 # - enable devtmpfs (needed for udev -> touch support in weston)
 # - disable ANDROID_PARANOID_NETWORK (removes network restrictions)
 
-_vendor=lg
 _flavor=lg-d285
 _hash="75a583b12772acf3a6e7422cf781ddd7a9e9a5c5"
 _config="config-lg-d285.armhf"
 
-pkgname=linux-${_flavor}
+pkgname=linux-$_flavor
 pkgver=3.4.0
 case $pkgver in
 	*.*.*)  _kernver=${pkgver%.*};;
@@ -19,22 +18,19 @@ pkgrel=7
 arch="armhf"
 pkgdesc="LineageOS kernel for LG L65"
 url="https://github.com/LineageOS/android_kernel_lge_msm8226"
-depends=""
 makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev gcc6"
 options="!strip !check !tracedeps"
-install=
 source="
-	$pkgname-$_hash.tar.gz::https://github.com/LineageOS/android_kernel_lge_msm8226/archive/${_hash}.tar.gz
-	${_config}
+	$pkgname-$_hash.tar.gz::https://github.com/LineageOS/android_kernel_lge_msm8226/archive/$_hash.tar.gz
+	$_config
 	compiler-gcc6.h
 	00_fix_return_address.patch
 	02_gpu-msm-fix-gcc5-compile.patch
 	03_mdss_fb_refresh_rate.patch
 "
-subpackages=""
 license="GPL2"
 
-_abi_release=${pkgver}
+_abi_release=$pkgver
 _carch="arm"
 
 # Compiler: this kernel was only tested with GCC6. Feel free to make a merge
@@ -46,7 +42,7 @@ if [ "${CC:0:5}" != "gcc6-" ]; then
 	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
 fi
 
-ksrcdir="$srcdir/android_kernel_lge_msm8226-${_hash}"
+ksrcdir="$srcdir/android_kernel_lge_msm8226-$_hash"
 
 prepare() {
 	local _patch_failed=
@@ -75,7 +71,7 @@ prepare() {
 	cp -v "$srcdir/compiler-gcc6.h" "$ksrcdir/include/linux/"
 
 	mkdir -p "$srcdir"/build
-	cp "$srcdir"/$_config "$srcdir"/build/.config || return 1
+	cp "$srcdir"/$_config "$srcdir"/build/.config
 	echo "--[ silentoldconfig ]--"
 	yes "" | make -C "$ksrcdir" O="$srcdir"/build ARCH="$_carch" HOSTCC="$HOSTCC" \
 		oldconfig
@@ -85,12 +81,11 @@ build() {
 	cd "$srcdir"/build
 	unset LDFLAGS
 	make ARCH="$_carch" CC="${CC:-gcc}" \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-Alpine" CONFIG_NO_ERROR_ON_MISMATCH=y \
-		|| return 1
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-Alpine" CONFIG_NO_ERROR_ON_MISMATCH=y
 	echo "--[ Build modules ]--"
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-Alpine" CONFIG_NO_ERROR_ON_MISMATCH=y \
-		modules || return 1
+		modules
 }
 
 package() {
@@ -105,8 +100,7 @@ package() {
 	echo "--[ Installing modules ]--"
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-Alpine" CONFIG_NO_ERROR_ON_MISMATCH=y \
-		INSTALL_MOD_PATH="$pkgdir" INSTALL_MOD_STRIP=1 modules_install \
-		|| return 1
+		INSTALL_MOD_PATH="$pkgdir" INSTALL_MOD_STRIP=1 modules_install
 }
 
 sha512sums="d201e20557edea08947f10be1465560d292522f07099e2f8927164766da57e4f8a2c3fcd3e3ed427e856a86afe4fb3a4233753e19d4b7cb96b8258c6355be9f0  linux-lg-d285-75a583b12772acf3a6e7422cf781ddd7a9e9a5c5.tar.gz

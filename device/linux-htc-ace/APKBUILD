@@ -11,12 +11,11 @@
 # - disable KINETO_GAN (caused problems when used with networkmanager, dhcpcd)
 # - patch framebuffer to report refresh rate of 60Hz
 
-_vendor=htc
 _flavor=htc-ace
-_config="config-${_flavor}.armv7"
+_config="config-$_flavor.armv7"
 _hash="887cd64b8361ac89ac56810460947a537112bdc9"
 
-pkgname=linux-${_flavor}
+pkgname=linux-$_flavor
 pkgver=3.0.101
 case $pkgver in
 	*.*.*)  _kernver=${pkgver%.*};;
@@ -26,21 +25,18 @@ pkgrel=14
 arch="armv7"
 pkgdesc="HTC Desire kernel from OpenDesireProject"
 url="https://github.com/OpenDesireProject/android_kernel_htc_msm7x30"
-depends=""
 makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev xz gcc6"
 options="!strip !check !tracedeps"
-install=
 source="
-	$pkgname-$_hash.tar.gz::https://github.com/OpenDesireProject/android_kernel_htc_msm7x30/archive/${_hash}.tar.gz
+	$pkgname-$_hash.tar.gz::https://github.com/OpenDesireProject/android_kernel_htc_msm7x30/archive/$_hash.tar.gz
 	$_config
 	compiler-gcc6.h
 	02_gpu-msm-fix-gcc5-compile.patch
 	03_msm-fb-pixclock.patch
 "
-subpackages=""
 license="GPL2"
 
-_abi_release=${pkgver}
+_abi_release=$pkgver
 _carch="arm"
 
 # Compiler: this kernel was only tested with GCC6. Feel free to make a merge
@@ -52,7 +48,7 @@ if [ "${CC:0:5}" != "gcc6-" ]; then
 	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
 fi
 
-ksrcdir="$srcdir/android_kernel_htc_msm7x30-${_hash}"
+ksrcdir="$srcdir/android_kernel_htc_msm7x30-$_hash"
 
 prepare() {
 	local _patch_failed=

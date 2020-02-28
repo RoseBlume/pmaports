@@ -23,12 +23,12 @@ fi
 # Source
 _repository="android_kernel_hisense_m470bsa"
 _commit="7af4a85198eb80cdb6964bd0550f6f5ea722274c"
-_config="config-${_flavor}.${arch}"
+_config="config-$_flavor.$arch"
 source="
-	$pkgname-$_commit.tar.gz::https://github.com/dolorespark/${_repository}/archive/${_commit}.tar.gz
+	$pkgname-$_commit.tar.gz::https://github.com/dolorespark/$_repository/archive/$_commit.tar.gz
 	$_config
 "
-builddir="$srcdir/${_repository}-${_commit}"
+builddir="$srcdir/$_repository-$_commit"
 
 prepare() {
 	default_prepare
@@ -41,7 +41,7 @@ build() {
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS" \
-    		CFLAGS_MODULE=-fno-pic modules
+		CFLAGS_MODULE=-fno-pic modules
 }
 
 package() {

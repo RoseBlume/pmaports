@@ -1,16 +1,13 @@
-_vendor=asus
 _flavor=asus-flo
-_config="config-${_flavor}.armhf"
-pkgname=linux-${_flavor}
+_config="config-$_flavor.armhf"
+pkgname=linux-$_flavor
 pkgver=4.11.12
 pkgrel=2
 arch="armhf"
 pkgdesc="Upstream stable kernel with patches for Nexus 7 2013 WIFI"
 url="https://git.linaro.org/people/john.stultz/flo.git/log/?h=flo-v4.11"
-depends=""
 makedepends="xz perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev"
 options="!strip !check !tracedeps"
-install=
 source="$pkgname-$pkgver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$pkgver.tar.xz
 	$_config
 	00_Collapse_usb_support_into_one_node.patch
@@ -27,14 +24,9 @@ source="$pkgname-$pkgver.tar.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgv
 	11_Configure_dma_operations_at_probe_time.patch
 	12_Handle_IOMMU_lookup_failure_with_deferred_probing_or_error.patch
 	"
-subpackages=""
 license="GPL2"
-_abi_release=${pkgver}
+_abi_release=$pkgver
 _carch="arm"
-
-# Compiler: latest GCC from Alpine
-HOSTCC="${CC:-gcc}"
-HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
 
 ksrcdir="$srcdir/linux-$pkgver"
 
@@ -62,7 +54,7 @@ prepare() {
 
 	mkdir -p "$srcdir"/build
 	cp "$srcdir"/$_config "$srcdir"/build/.config
-	make -C "$ksrcdir" O="$srcdir"/build ARCH="$_carch" HOSTCC="$HOSTCC" \
+	make -C "$ksrcdir" O="$srcdir"/build ARCH="$_carch" \
 	silentoldconfig
 }
 
