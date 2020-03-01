@@ -1,0 +1,25 @@
+# Contributor: Mr Heating <MrHeating@tutanota.com>
+# Maintainer: Mr Heating <MrHeating@tutanota.com>
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-lg-x150"
+pkgdesc="LG Bello II"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-lg-x150 mkbootimg mesa-dri-swrast"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="70b02515c754c79a21e8860340d9ea15d5bec303cf38e5f9136d303019bfa3460be2663568e31f8c983ce40f1d8e331a21806be268b9077410d743225475f5c5  deviceinfo"
