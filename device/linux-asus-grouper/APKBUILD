@@ -1,16 +1,16 @@
 # Maintainer: David Heidelberg <david@ixit.cz>
 _flavor=asus-grouper
-_commit="45a3363d0770af62325410c03535c51b73b0a38f"
+_commit="32f854918a09fea4fe0d4f3a806e50912ff78998"
 _config="config-$_flavor.armv7"
 
 pkgname=linux-asus-grouper
-pkgver=5.6.0_rc1
+pkgver=5.6.0_rc2
 pkgrel=0
 arch="armv7"
 pkgdesc="Nexus 7 grouper/tilapia (2012) mainline kernel"
 url="https://postmarketos.org"
-makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev
-	     devicepkg-dev bison flex openssl-dev xz"
+makedepends="perl sed installkernel bash gmp-dev bc elfutils-dev
+	     devicepkg-dev bison flex openssl-dev xz findutils"
 options="!strip !check !tracedeps"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/okias/linux/archive/$_commit.tar.gz
@@ -56,5 +56,5 @@ package() {
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/usr/share/dtb"
 }
-sha512sums="681bb00a75cdae677468ffd50463534fd5c03730c433f5243bfc245c50bd023d1b163dfd45ada53374b361ba9221e4cb4b76f26bddc3e04f0a0693266aa1ed6b  linux-asus-grouper-45a3363d0770af62325410c03535c51b73b0a38f.tar.gz
-d4fb13567df269c147a4a5d427fdf85999b37898765f7260a0e6c47d717fde3b24e3f743d2bf47ea9c67a4855bbd6a7b3e0cd388c13e0bd896835ae6be05a1bf  config-asus-grouper.armv7"
+sha512sums="a7b77947b0334be83cc70f53d01809e4226b93039a04a188e247889ff90cf4a8a763faacbb52259555ed636329c9764242989e6ccb10021df072569faa9c755c  linux-asus-grouper-32f854918a09fea4fe0d4f3a806e50912ff78998.tar.gz
+425cdfbfa16891e07987ba0d36498650cc4c290fb13052b1951da714a9cf5eb0beb1678461fa46ddb4f4f400b455210b105133db25710fb535a5bd9e7b652772  config-asus-grouper.armv7"
