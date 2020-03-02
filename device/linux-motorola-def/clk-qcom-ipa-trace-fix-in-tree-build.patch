@@ -1,0 +1,28 @@
+---
+ drivers/media/platform/msm/camera/cam_utils/cam_trace.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff a/drivers/platform/msm/ipa/ipa_clients/rndis_ipa_trace.h b/drivers/platform/msm/ipa/ipa_clients/rndis_ipa_trace.h
+--- a/drivers/platform/msm/ipa/ipa_clients/rndis_ipa_trace.h
++++ b/drivers/platform/msm/ipa/ipa_clients/rndis_ipa_trace.h
+@@ -89,1 +89,1 @@
+-#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_PATH ../../drivers/platform/msm/ipa/ipa_clients/
+--- a/drivers/platform/msm/ipa/ipa_v3/ipa_trace.h
++++ b/drivers/platform/msm/ipa/ipa_v3/ipa_trace.h
+@@ -89,1 +89,1 @@
+-#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_PATH ../../drivers/platform/msm/ipa/ipa_v3/
+--- a/drivers/gpu/msm/kgsl_trace.h
++++ b/drivers/gpu/msm/kgsl_trace.h
+@@ -89,1 +89,1 @@
+-#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_PATH ../../drivers/gpu/msm/
+--- a/drivers/gpu/msm/adreno_trace.h
++++ b/drivers/gpu/msm/adreno_trace.h
+@@ -20,1 +20,1 @@
+-#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_PATH ../../drivers/gpu/msm/
+--
+
+
