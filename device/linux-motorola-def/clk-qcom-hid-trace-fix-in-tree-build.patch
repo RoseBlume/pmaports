@@ -1,0 +1,12 @@
+---
+ drivers/hid/hid-trace.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff a/drivers/hid/hid-trace.h b/drivers/hid/hid-trace.h
+--- a/drivers/hid/hid-trace.h
++++ b/drivers/hid/hid-trace.h
+@@ -20,1 +20,1 @@
+-#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_PATH ../../drivers/hid/
+-- 
+
