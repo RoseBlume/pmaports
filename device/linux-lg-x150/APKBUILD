@@ -15,16 +15,12 @@ license="GPL-2.0-only"
 options="!strip !check !tracedeps"
 makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev xz"
 
-# Compiler: latest GCC from Alpine
-HOSTCC="${CC:-gcc}"
-HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
-
 # Source
-_repository="kernel-3.10"
+_repository="linux-kernel-3.10.54-for-lg-x150-v10n"
 _commit="b59438067cad69554870368c784b6d1b99976db1"
 _config="config-$_flavor.$arch"
 source="
-	LGX150_Lollipop_android_X150_8_10/LGX150_L_kernel.tar.gz
+	https://gitlab.com/exe-cute/$_repository
 	$_config
 	gcc7-give-up-on-ilog2-const-optimizations.patch
 	gcc8-fix-put-user.patch
@@ -48,7 +44,7 @@ package() {
 	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
 }
 
-sha512sums="b8162e8aea02bc066497f25d154b20fb9c3e45a26339c01155188a50dcd65decf5edbb98158aad23b5383f61f5345fbd989fe8b7a9180d576edf81d927311e1f  LGX150_L_kernel.tar.gz
+sha512sums="f10ea28753f3194c4650562f666f6dd856484c2fadfa8b59f3f0c23f9fadf611588dd91ef5c5d615ddfaa58fe0c90d32ba483b2b6db9cc2a453e84753e34b131  linux-kernel-3.10.54-for-lg-x150-v10n
 4c4adc337ecbb3a508116f9497985df784234d3361a9adb247ba21e0317a48e88e69350c8c40da88fafea8977203004c3f6efb79d6ae9be56f42abdec1442535  config-lg-x150.armv7
 77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
 197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
