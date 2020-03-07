@@ -3,7 +3,7 @@
 pkgname="device-samsung-gts210vewifi"
 pkgdesc="Galaxy Tab S2 9.7 WiFi (SM-T813)"
 pkgver=0.1
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -23,5 +23,5 @@ package() {
 
 }
 
-sha512sums="b376d8a405b917a6faa7ab0e8685ff17515a27c89f1d1197f96db40d0575761756b28abfdf53d44204a0b8003ab490258e28077b8f93f302fcb91eb0615e9d89  deviceinfo
+sha512sums="986c9245fcf66b06a8b603db089b1ffb7e2f10ab3dafc59479cb7e479517d5029507c5ecfd20de97aa76bb50ab234bae86e40c841b6786ac154ae119b0c7b40b  deviceinfo
 7ff1ca9e9afe4ffa62ed1ce54c9988d761c29af54c9a22f68b1b7d805a5ae280fcfc1833fb657bb1137de649c876a1d4f4592af6b323e883042e0f1aa3a554cc  90-sec_touchscreen.rules"

@@ -3,7 +3,7 @@
 pkgname="device-samsung-lt023g"
 pkgdesc="Galaxy Tab 3 7.0"
 pkgver=0.1
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="85ce346d409b678e1ae7f2363d4fa9af5b450d349d10dcb0e08f4b817069f22efada0500dd5c9c58dabcf8313cfb63aacad52dab82b1eea467221268ee309ec7  deviceinfo"
+sha512sums="5bfcd771c23a6f9ecc5eda42cee1aa18bec36ed6ec240d7f75d5af71a103dd669594c8f44dc49219c9133ca373035f1402dabc5c98902e38c3ebe115ab823260  deviceinfo"
