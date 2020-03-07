@@ -3,7 +3,7 @@
 pkgname="device-motorola-lux"
 pkgdesc="Motorola Moto X Play"
 pkgver=0.2
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,5 +20,5 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="f58d2ee1acfcd8188872f016595893e2492b75c55aadc0711cc28398ab6715769b43485eb8a293f6d1d024b0b743c9f34a18bd27a7e4f81511c993420c4105f3  deviceinfo
+sha512sums="c3418185ad5fadc07357ba5849954fd849d6a2651a049328b4808f73eddfd9ac5ceaa72a40e76be433170f1681fb252c6bdb749bd48f05345da5b498569ddff1  deviceinfo
 1777c382a73b6e45ee6b4f34b1fd996ad1bae42801dec6de6742f9bf6bf0a0fb5648a7b51ac5b79b7df6d026deca3d4b14a13fae02938e845ed564a9a741c171  initfs-hook.sh"

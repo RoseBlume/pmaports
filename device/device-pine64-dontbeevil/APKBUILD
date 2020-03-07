@@ -3,7 +3,7 @@
 pkgname="device-pine64-dontbeevil"
 pkgdesc="PINE64 PinePhone Don't be evil devkit"
 pkgver=0.1
-pkgrel=15
+pkgrel=16
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -71,7 +71,7 @@ kernel_longts() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="61eb184cee1cf79cda4fd5e4cedaa830b140e1445fd8a48867b2250961d6cbb5c9f0bc443b73a15663e5ddc015d51fbf92eab19e4153bf66473ff08f634cfefe  deviceinfo
+sha512sums="5b0033d632f5103ad9d3bc8ce74e02c78b88d5e5e66b964a4716c1e2f5455fcac4b0a19684629a20c0deeda1953f9cb229ca0d669f13db4d78679324388a95ad  deviceinfo
 eda61d8097896a618593e07bd03518236692b4c580182ce2e34c5e1040125e1004088475f1d484e7a4918d6f1d395a9ab121cfca202a887cdfaf9c0363dbb40b  uboot-script.cmd
 c4c57d1627dd451213e1ef20d89de9266cd4edcc2d33a69aa9a1f13e16d9f9742036b69dc149fd910d7213f7525c41eb79576d4457bc85cc96eba0d986382d27  weston.ini
 f86ef35730b89bcc8160c08db7a7fcd0970adf60c0b77af68bac397de49c0d1783e6b8db1762380c9bf874aff2d030c6f44ecb75c803d69e79ede11376409369  xorg.conf"

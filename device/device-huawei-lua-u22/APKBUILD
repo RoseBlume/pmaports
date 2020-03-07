@@ -3,7 +3,7 @@
 pkgname="device-huawei-lua-u22"
 pkgdesc="Huawei Y3 II 3G"
 pkgver=0.1
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -21,5 +21,5 @@ package() {
 }
 
 
-sha512sums="aca066f7128dd91035087dffc69a6fccf9a709c7f7ee92e99a8b6a18221c89c0a85240e189466b005d994f21ddff589fb8895698ddb6ab2febf62a5bb3d15a29  deviceinfo
+sha512sums="f03026d6c5818ed98728db8ff39fd97a66bad945699d1b83d3d1fab2f93863fe7d92c8ac3f1d8fe59d0573e1df10ae39ffdc449f769c0730fe8875ee2321d07b  deviceinfo
 e1f35a48cd76a84cb3a84e26ec223f41ba2adaaec9023880fba3d4f11eb39c69bb2b124bc412d7173d9e6d945a5a78c09384f3cc3b64eaede42248fd92397241  initfs-hook.sh"

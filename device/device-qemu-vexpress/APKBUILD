@@ -2,7 +2,7 @@
 # Contributor: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=device-qemu-vexpress
 pkgver=1
-pkgrel=25
+pkgrel=26
 pkgdesc="Simulated device in qemu with vexpress soc"
 url="https://postmarketos.org"
 arch="armv7"
@@ -21,4 +21,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="22a7fe527b9ea95f67ac92ba7f7acdbdefc260f8f24ee3bfdcf5aa9011c6ae2d7a477c699db125db7f8a4a47777d7b8752b4609fb65077683b7325fb60acc9c0  deviceinfo"
+sha512sums="64993ff6f0590b42a55b5399e8aa2756c92fc8f639a1abb009856a40661dff39ac26861b7839f1d0736aa6ac14208337981cd38d652966f4c416ed00d1f6dce1  deviceinfo"

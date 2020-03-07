@@ -3,7 +3,7 @@
 pkgname="device-samsung-i8200"
 pkgdesc="Samsung SIII mini Value Edition"
 pkgver=0.1
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -27,4 +27,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="173e215eda8efb601cfec1dbc9bfac66d0fa4827bbe09f86a1ef1d9efb58bc057e3ebd9b4c7ce702b9c9239fa4c0c02618ebe8fd7ef19b03567cd3a5864d00cb  deviceinfo"
+sha512sums="ac929b61deb44e92ab92444704a7cd113e4833a9b0fd60221575f9ddc9fb9eab2d91a582ba0c75f91819e42e495c5643eefcc85ec5806563d50ca5ce200bab25  deviceinfo"

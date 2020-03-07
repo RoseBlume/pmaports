@@ -3,7 +3,7 @@
 pkgname="device-tablet-x64uefi"
 pkgdesc="Various tablets with atom CPU"
 pkgver=0.1
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="MIT"
 arch="x86_64"
@@ -34,6 +34,6 @@ package() {
 		"$pkgdir"/boot/EFI/Boot/bootx64.efi
 }
 
-sha512sums="9e030883d317802e3875151699b219c71642b8202ba35f3fd049b92ddadb1489da2d5b692ca34bef1776c13e54df70bf71c84eb86d6c1561f56d08eb723ef652  deviceinfo
+sha512sums="b7e6e11f1e629aebc8edb95bcbcd2ed3a112642fb87cd34f460c54b0d47b7e222f3aa11acbfdb620873d9b9d57149be1562bcc4e27f2a866097710fb0347bda4  deviceinfo
 838a0a66d5513fb8f6d1a8d20743f25f24298e35a942b2a71e7f0b4aaaf35bd22a3ec245e993f1551fe60ce6e2eac7df1a4631d3e02ebc593965ce284002cffc  loader.conf
 8bf7002ca3ea51e018731e17154cfd1c9a8517a344c881d35e25979fb2ddbca7d48147c1d8f8cc407a65a8c8082dd9667eb6d0e1ddef060ff884b178be7af1e0  postmarketos.conf"

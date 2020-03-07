@@ -3,7 +3,7 @@
 pkgname="device-htc-primou"
 pkgdesc="HTC One V"
 pkgver=0.1
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -23,5 +23,5 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="a557326705902d6e1283f453d059c6b3ca2ed617134056c29f9f5922ef8de69b712beda7c4efc6556045f2577e52d222a87698c1347ce10e2928a08c86335b4e  deviceinfo
+sha512sums="8088389457403f491fb87fd7ebc9ab96701bf03abd72bd4f2c03f8ec4a9b77514115a2ffdb729dc633f1fcfde69fb96b4f6a455779b1590c0a6626e4a955f80c  deviceinfo
 c0d433af6f68716d507a7ad29743543e9cc1e450fc777e8de60527386b3c4b868cbcd6ae148357d0901189cfcb141227c7f7c66b0d1b998e4b1ac09ce505f8ee  initfs-hook.sh"

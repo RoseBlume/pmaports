@@ -3,7 +3,7 @@
 pkgname="device-purism-librem5dev"
 pkgdesc="Purism Librem 5 Devkit"
 pkgver=1.0
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -47,7 +47,7 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="d073e520a6732b9784d4a79e75dccdf4101f60708c429ca3ff1c12b4b2aaaf27aa2f5f1836c48be98fbc10a1a5fbfd888ba45f4651cca4774187a85f2a8b5a47  deviceinfo
+sha512sums="a62f2ebea4d0101f7726ab99c89f39cb035eaa5e1b3e9bf19fb8238c9024dbb24320b0e341a85fc72717ecb88390aaa9fc3f3097cf553109ba88fb342e43b811  deviceinfo
 e4bb06e337d3f23abb0328a8e564e905ef571cdbeeefe442cbbd7e715f5a5b656d00679c48161736b3254bcba1ab39a6c99402f67bbde9838c881b1adeb360ed  uboot-script.cmd
 9dc018f0de523cbfe5a49cbe831aa30e975a8dd34635197bb52582f072ac356ef2c02223fc794d970380091a69a83a74c3fbe34520190c8536e77f9ea98c7659  modprobe.d_rsi.conf
 5fdf45859f2bb154bcfe7c7341de4d5b239ef43d3f865e30456af073a8ee9d6682515c7e1dd52ddbe3969669d60689ba93c08ead32aadcfb164ff72a02b2e1a4  00-mesa.sh

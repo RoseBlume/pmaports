@@ -2,7 +2,7 @@
 # Contributor: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=device-qemu-aarch64
 pkgver=1
-pkgrel=18
+pkgrel=19
 pkgdesc="Simulated device in qemu with vexpress soc"
 url="https://postmarketos.org"
 arch="aarch64"
@@ -58,5 +58,5 @@ kernel_mainline() {
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
-sha512sums="b59e12e1db1e62cd49c76f46b74ef103bae11d41e300392cdb82e6745cbf60d8336cfb23ea007dcb7ae46e75786060eccf10459a214990cbc9c603e56d70eadb  deviceinfo
+sha512sums="0de0f2899ef8d38b8fc5806bd8d333747f892ed92035f69d3e071d9fc968da13c97885bc41753f7f1747fd0c72122768936d23b09f49271f3a864b038d907a2a  deviceinfo
 de794566118f1744d068a94e6a75b61d43f6749a4b0871a5270fa7a2048164d609c71fcffa61845c2a7dd4cb5fbeb72c0e4f8b73b382f36d6ff0bcc9b8a5ae25  weston.ini"

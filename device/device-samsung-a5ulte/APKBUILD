@@ -4,7 +4,7 @@
 pkgname="device-samsung-a5ulte"
 pkgdesc="Samsung Galaxy A5 (SM-A500FU)"
 pkgver=2
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -52,4 +52,4 @@ nonfree_firmware_modem() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="4428d30447eb60ac7e143b9e7cba67bd55b192cb884b42d13c896419885cb4ae81e4fc6e73c6fc46edd85ad1361b6db463d8705462c4c945d7b59d10c49104cc  deviceinfo"
+sha512sums="54f76a266182c9ba1b595c6f793f7d16da79eb1ce648286f84ab0c928a6725bc09460e3c47f3b1a1bf71772281c268a89aba462042ee9d6b7d408a8ca156e4d3  deviceinfo"

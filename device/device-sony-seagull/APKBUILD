@@ -3,7 +3,7 @@
 pkgname="device-sony-seagull"
 pkgdesc="Sony Xperia T3"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="c22770f4954707c2148119cc0eb7239d5f070ba5f89c94422f12e8ac5b8d47478dd8cf33045192bcd21ce58ad50a558a1dd3bd9fbdf5810f4ddcebb9e9904a23  deviceinfo"
+sha512sums="5c090fc21fbfec8ba6804912a268a1348c94adefbf4f50f57d6b3341ae3ceb9dc5c3f8f66a532d049e866c86237d201db80499e36c9194d56d42a039a8b74c1d  deviceinfo"

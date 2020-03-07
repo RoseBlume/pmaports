@@ -4,7 +4,7 @@
 pkgname="device-samsung-serranovelte"
 pkgdesc="Samsung Galaxy S4 Mini Value Edition"
 pkgver=2
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -52,4 +52,4 @@ nonfree_firmware_modem() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="b9f88c31795eee93cd3ef65eee485c01e71f6f444a624c99a94ce0f5ce439495a7a4e4714a317f981286c360becf026a9e8dc370e7f09a9d842ab73de5c9e54c  deviceinfo"
+sha512sums="cb84914dbe8772e7fe01295dd039f10e795e1c321bd0f928c2e98e353ae26c2960245b933ebe819e7f501a2f5858cc5ce644ac82a20999049e82268308067471  deviceinfo"

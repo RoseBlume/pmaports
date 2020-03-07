@@ -3,7 +3,7 @@
 pkgname="device-samsung-manta"
 pkgdesc="Google Nexus 10"
 pkgver=0.3
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="efa668051f7a1a95599c55cffe007be183124f8a8142cc4067f0ffb48d71e25aa5dc7fc98e00cd383fee1792852a75c0ddc39aae6cba138bd9c65914fd5a1f6a  deviceinfo"
+sha512sums="7c9813a5175f66caa1041cbb7b3e0f4a17255fb341938f1b701855594b8501eb4987ddc383025b6445ef180800edfdc30eee7ecd8c79af61edb06788e7a1cc05  deviceinfo"

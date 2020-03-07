@@ -3,7 +3,7 @@
 pkgname="device-gp-peak"
 pkgdesc="Geeksphone Peak"
 pkgver=0.1
-pkgrel=9
+pkgrel=10
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -27,6 +27,6 @@ package() {
 	install -Dm644 "$srcdir"/fb.modes "$pkgdir"/etc/fb.modes
 }
 
-sha512sums="a5e8dbf4f7a6045018ff0e41b952331488c10a599506a918af4cbf64a729aa828baf169413ed24968ccb874d815116fc2b196c0c745ddc81304a418f4ff02721  deviceinfo
+sha512sums="a2f5896bd95eef4e5f4f0026152f4e273efe54e980d8a936b5a651697c717e5afb6ba93a1b18b586683a513dbca360f3a3ebb5e672356de9b3cfb326a9c50f64  deviceinfo
 b77fc5191c07bf2b6a5bf5e702351f8de024a6f15d3726c88da1ab2e3d8185cbb468acbea533d07bf595855d53ab8bcd3a48fd9f35d55b78981f1ae23d44bbd8  device-gp-peak.start
 3a2c1c53ec67d40639920ace68ebf13ecff5966a8f94a603f625e01e5f403178c511c21c6de841837e256b714045e7c90cc0cb62537a9f0a536ad4b390f9c3c3  fb.modes"

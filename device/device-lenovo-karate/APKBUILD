@@ -3,7 +3,7 @@
 pkgname="device-lenovo-karate"
 pkgdesc="Lenovo K6 Power"
 pkgver=0.1
-pkgrel=10
+pkgrel=11
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -29,5 +29,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="36cbc80520fab81bb22c6ad1796c08b93872b981f82ac7998a3a27b8d45fe31339f2e97bd80ef81b7880f1e6fbf43e15337ac6bdf8f9f52a973e5bbc9ec0c52b  deviceinfo
+sha512sums="8ccd713aabaae0f635e25312063a882a7e43feaec5e048a37d20f350213247b0ca1ec9dad300ad4e2f16514f92504fad6f7437cde2d53bade97d26c0d441a809  deviceinfo
 25086c95c67c27151112efac1dcf7792589c990cc0a93ee910654445a3f9cc66c4a5ab656b3256224b39c49fe104540757cc36abf9de19f47c28c4fa82c4f552  90-android-touch-dev.rules"

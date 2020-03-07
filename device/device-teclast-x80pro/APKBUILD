@@ -5,7 +5,7 @@
 pkgname="device-teclast-x80pro"
 pkgdesc="Teclast X80Pro"
 pkgver=1.0
-pkgrel=7
+pkgrel=8
 url="https://postmarketos.org"
 license="MIT"
 arch="x86_64"
@@ -29,4 +29,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="9a1a0c13fb26c419f1020d150280e96323941a3473d30224d05bfac02affbe3ed58bc638af3c4c526fe74e210cbe6095565ff4aa73e1375d8c661aed87c3ccc9  deviceinfo"
+sha512sums="257603ffe2f1d5aec153fc4c004581489ff0544d7032e090f35fc0675459199f296e3e8a9a8db5e97637f06352b5e948c4bd8ef0269c73ec106974948a259f56  deviceinfo"

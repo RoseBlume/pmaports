@@ -3,7 +3,7 @@
 pkgname="device-samsung-gt510wifi"
 pkgdesc="Samsung Galaxy Tab A 9.7 WiFi (2015) (SM-T550)"
 pkgver=1
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -27,4 +27,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="3ebfa3b46208f4ffa93728ddc46e09fe7e84e8c961399595375bf716013687c5ebac8235c7c1a4fc166913e575878dd1df2e3bec9a9f480c34a4c5996acec294  deviceinfo"
+sha512sums="8bbc1b9259d1c00ddf872b887270983df998c62286186caa0ad2a68cde033f3d4d3a9cc4a8eac11188e90772b6568b72eb4ff954642310d993d5264b9bbf6d58  deviceinfo"

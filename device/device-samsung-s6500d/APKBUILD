@@ -3,7 +3,7 @@
 pkgname="device-samsung-s6500d"
 pkgdesc="Samsung Galaxy Mini 2"
 pkgver=0.1
-pkgrel=9
+pkgrel=10
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="f75236819f184414a4b9f4d5dd67d70e29936f2d120566598ca3cf2bd9996dbe1b33bc0191198ef617dbbbffcc12edae35d3a5eca90b172ea0b3b6c704074b76  deviceinfo"
+sha512sums="872c13d8ed36e8b2997555feeef069a4a76f58c0a3b3166f2197c461dcc2ec4d1985463fa669135d67569a0c319a2ba2eb0dd6a7f9a2ec2290ca096c01d41c97  deviceinfo"

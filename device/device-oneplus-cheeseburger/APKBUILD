@@ -4,7 +4,7 @@
 pkgname="device-oneplus-cheeseburger"
 pkgdesc="OnePlus 5"
 pkgver=0.1
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -21,4 +21,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="5716cd7f5e72211cd76cd6419d7f657237a6442c52a1d005f5c955c3bb0ba16a674714595fc8274a66bb49cdd5b8035368e9491c357290ba84d84aac48185068  deviceinfo"
+sha512sums="941566e5c9d3e270ee17050ca458ee960fe1b5bd107ac70515196c2f0d3446ce96677aa1c1e435b917a211c40dad76710ed6b50ebd27f695b614d22d3548b959  deviceinfo"

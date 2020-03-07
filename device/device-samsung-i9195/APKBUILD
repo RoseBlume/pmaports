@@ -3,7 +3,7 @@
 pkgname="device-samsung-i9195"
 pkgdesc="Samsung Galaxy S4 Mini"
 pkgver=0.3
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -28,4 +28,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="54a65189b13bab2f5dc85a243e1177b1cde5ed8a4354349f728f0a1178ecfac5deee61b79fed0434a36dcfadd1133c1c8e8892cc6e752d3ad9b52cfa505953a1  deviceinfo"
+sha512sums="1267ac66e3d0a56abdb6331f3dc18f309f43d71ebe3f9081988da139bfaa65a03b84c920e73006bc704152ef0ee641fa477b4f5a22c2ea99de22ec53abb2fdca  deviceinfo"

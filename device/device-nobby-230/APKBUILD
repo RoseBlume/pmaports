@@ -4,7 +4,7 @@
 pkgname="device-nobby-230"
 pkgdesc="Nobby 230"
 pkgver=0.1
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -29,6 +29,6 @@ package() {
 }
 
 
-sha512sums="a3e58864621ad657438b629c65cfc62ca8092d9f30a51ba8dcfb80ede6d50db64cfd22ff8492ddd172180ffd6e32304d4a2ec96a2050b54abd929430a16011d3  deviceinfo
+sha512sums="6eea75a9b4f66fdea7a02b52f2bd02dc7a0414132f7f6bbca41a866dbcae2d2f1f710ee342909d86eec1da77b87e5c2217c74263caa3516ac13caa7b009d339b  deviceinfo
 369df19f9bf7546236b81a33c00b6384e88e979c4711fead3749f8e60f4cd99f37b31baf1f00d05a821cb71ca2f440648e13083653f1a4ec0c178c7c1c415a58  asound.conf
 b2838f65401d506a8c64a022a12887e67c410f3e21279e1c6ec2b88c3b51a0ce4f31b9de6883c3ff786cbb000a7fe8a39342fe313a6425bd6f281e521c143492  initfs-hook.sh"

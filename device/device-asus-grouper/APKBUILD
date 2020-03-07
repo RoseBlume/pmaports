@@ -2,7 +2,7 @@
 pkgname="device-asus-grouper"
 pkgdesc="Google Nexus 7 2012 (grouper)"
 pkgver=2
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -35,5 +35,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="3655ffe5e76c76e5952ca131e4fadb440f1586b3c082346fb2083533ab6f5e062c634808b9e61c28be49cac51fe82904388c847b20470d3dffc52f5b0f94bb98  deviceinfo
+sha512sums="ec4cb0fd4e86d6fe9da5b7c88f14009505d4e9fccca1ecbc51528d3700f9075f13bec2abe74a08426cdaf31f512abb1c7669377a3e3437c55283fa829531724f  deviceinfo
 6ec993e278d2a73c72fb96f001716ded63543d99183847d22d172cd81ac410791c79370ecf391d0c24822c975d91b84dc1db296e1b28dbf66d5c227bff8d4011  rootston.ini"
