@@ -3,7 +3,7 @@
 pkgname="device-sharp-shl22"
 pkgdesc="SHARP SHL22"
 pkgver=0.1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -29,5 +29,5 @@ package() {
 }
 
 
-sha512sums="6af7cc576c4cc32b8027d33144a30cef475d86a4123fb1821e536d4cd40c8ef2a172cb01c073de8667edb8dae8d3fc12327d11879b0ebb2d368393888f27ec22  deviceinfo
+sha512sums="bc31366127f9423b3eb57eb8b18faa79d4850789c7d02c65c2bed8234e7990ffc9d42883b66da3c5c2069281b5f5d8c361e86ab0070da33990f7ad416409af73  deviceinfo
 c983fc8281167bed1de5eec3651d82ed0dea612a4267acc8edf34ac8b1f857a57d5d63c555a373749eef3119cbfc9f4d25a080c0291d5af847642b5f60fcb211  initfs-hook.sh"

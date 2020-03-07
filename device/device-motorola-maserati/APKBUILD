@@ -3,7 +3,7 @@
 pkgname="device-motorola-maserati"
 pkgdesc="Motorola Motorola Droid 4"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -23,5 +23,5 @@ package() {
 	install -Dm644 "$srcdir"/10-safestrap-maserati.sh \
 		"$pkgdir"/etc/postmarketos-mkinitfs/hooks/
 }
-sha512sums="36637331db23c9279b492a61d91114a8d3d509224f08b90e9f0ba651a87285313b052d504efef83cce383bbebe5c87e4478651197703263c8f630eb50f31d68a  deviceinfo
+sha512sums="344edb83307534817afabafc1409c8b8c443f7fd391289fb1dda31ff0f7a44625214499da2c1250548585e79764d8a5ace37c66d5786f4805e69e7fe4a630206  deviceinfo
 36e529d5ded647012bb46a3e03ea8916c5046bed628a4b72a0c057dd2de6410bd9a1d74fc01b862feff3a4cfe8b0b0df6bd69fdbb6e63406e97c1811be07f3b8  10-safestrap-maserati.sh"

@@ -3,7 +3,7 @@
 pkgname="device-samsung-kylepro"
 pkgdesc="Samsung Galaxy Trend Plus"
 pkgver=0.1
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -27,4 +27,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="30906ab8cca66dafff5e33adae4d94f6ca5a2abe9d7060c4b8de6bd240e2ae26ed59253d61776b40637cc802375360e4f2396876dbaf83769082db311f9b6597  deviceinfo"
+sha512sums="fc97bd29c5cdd436d70d115c4701bda6632778332fd844cc53fcb65214765c775a599e9f619e9a9ee8a9e92b114f788f439f57b01d18a39e49281e4d13ad8846  deviceinfo"

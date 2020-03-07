@@ -3,7 +3,7 @@
 pkgname="device-raspberry-pi0"
 pkgdesc="Raspberry Pi Zero"
 pkgver=0.1
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -26,7 +26,7 @@ package() {
 		"$pkgdir"/etc/udev/rules.d/95-vchiq-permissions.rules
 }
 
-sha512sums="fb8a1c8462a9236fee1dd6a12f90e10790aa3c08344860205ae0e4e41ce5c0355204faa6b299722328ee8dc9a02f582a0e16a67be4472fbed871a4b05cb1964f  deviceinfo
+sha512sums="b357b96d5037884a4153963ff3d5c47f10ca9061722dbe017c23046dd8ee71f90acfe6c4056445bd4df68aed669423b63a4933e4c7e6fffbbb13f51590585f84  deviceinfo
 8130aef9d8c128ef2dea4443a433cbea1e32e791e32336c4525e0bf8f531899a8e8c5ed9c2da251439fe25f2811f8886905922004221bb33a66587bd4ec174b7  config.txt
 f38e28c13ab50d90dfc06bfae2945aab93551f39ec3cb2a2b65cfeb14dbbf04eb8c80920491106789e9d8f2290fbdac2f5e9adab24fa5f478568df3a638dc8e4  usercfg.txt
 8ddb659a189ad2b2b2f0fa78043e4cbefcfd6c81fd35f5cc10fc8c7b77b5a0bfb8f02b4db4d5df51fbe0529b883eb572d465f44efa1a2d41231852657791b218  cmdline.txt

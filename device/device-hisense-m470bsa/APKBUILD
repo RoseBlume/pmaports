@@ -3,7 +3,7 @@
 pkgname="device-hisense-m470bsa"
 pkgdesc="Hisense Sero 7 Pro"
 pkgver=0.1
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -32,6 +32,6 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="b2435c033f88394c6702ce126a237d12e89e8368cfb001f26135f992f7b96726b005b039cd5a1eb0aedab59cdbcdb91aadc842aff8486a4e5d694d6d80a2289e  deviceinfo
+sha512sums="5d6f845b1ff3df182e5b4a194330384a3943349c599259fb6519afc8d730465e1c696d4f6b0d7304c2e92f9e661eef0728dc2f939b7737d8a6cb2efc71c311cb  deviceinfo
 6a53747e22b530dcd52ca523017edf422b36bcd6616d7b0df0ba23f50de0f91dff63913ec6aab5051eebc131879c235cfb724aacefc90a10b94a1790985144ec  modules-load.conf
 8fcb7330a660995bb1aabf3fd2f3a3536fed79e9369bda115874151e84651839c59d134ac3ca0919eff0770ac51c934b252e7d544a26c076614f7f1d10bfd016  pointercal"

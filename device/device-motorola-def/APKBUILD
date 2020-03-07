@@ -4,7 +4,7 @@
 pkgname="device-motorola-def"
 pkgdesc="Motorola Moto One Hyper"
 pkgver=0.1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -35,5 +35,5 @@ nonfree_firmware() {
 }
 
 
-sha512sums="7a799a5439fd448c58f8bdeb3ebf69e5f2c9e783e7be9ed171ce8c7756b3297f800017459e4aba336e3282cec8b1994dd3dd77f7c663858099d60c2f5ebea23b  deviceinfo
+sha512sums="4362a8ab773c713e08ca5f1374d4988411b600565736501ed7257125223033024aac35a76c6152b8619542d1b726d1be3fa2225e720aab0c786c9b7a0002b3f5  deviceinfo
 809cac74c2ea02e21359c7f37f90a0efdf90ea1d23082acff6786e6dbaa1c2b5616a4d36de751ac6c73cfa727362bc23df95b0c78bf4dd1d3441ac182372358a  weston.ini"

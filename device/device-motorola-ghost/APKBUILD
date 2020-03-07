@@ -3,7 +3,7 @@
 pkgname="device-motorola-ghost"
 pkgdesc="Moto X (2013)"
 pkgver=0.1
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="ce1863d641f301a93f9b0a56931cc91b10684f883455703ea638bf50dffd08d713666a1db9543216503638912df181e0d99a71cf2f990267055bdb9e8fb8bd77  deviceinfo"
+sha512sums="ad7fed663bad382afa39c32ef8b4dfd1dafe041c15e7fefd10118907173a851c6374f40c5be58544b8ac3cd37aacfb86837593021ecbee727f0ee32dd6133f3a  deviceinfo"

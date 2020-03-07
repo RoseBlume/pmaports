@@ -3,7 +3,7 @@
 pkgname="device-asus-z00t"
 pkgdesc="Zenfone 2 Laser/Selfie (1080p)"
 pkgver=0.1
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -31,5 +31,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="cc08d1ca6e943b99923a1b17e4f76c87c33f021e7cb2630bd63b9bacdf06d1228c8db4b302a35b25910055ae143c87da9178334c1e3c6c0a89d4f3a5dd2436ba  deviceinfo
+sha512sums="76725fe1ec57b53986e897ef235f10580d3f3d36d58eb0b5e340965d234d1ae1b12e52f88aeb825372c9344aa6469c300cd4020adf07b41f763a27b6909d2eb9  deviceinfo
 5bcf314aa8e77db9d9673a93886906bd15e8c3c57f8d0c4343977d2ce8d017af5608a3d13cd2cbacf155e3ecf632ccab6ff6f3b0c95eb4a2a3b35686a3c842db  90-touchscreen.rules"

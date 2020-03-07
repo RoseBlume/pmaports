@@ -3,7 +3,7 @@
 pkgname="device-motorola-peregrine"
 pkgdesc="Moto G 4G (2013)"
 pkgver=0.1
-pkgrel=8
+pkgrel=9
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -37,5 +37,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="8c859e4f6ddf1f6a1ac96af4b7012c58d71733301bd5c73519a750bf68aafb970d1889c3ef37af10ba78f9f88c0af992acc0749dcdcd58f634fd1b4d56fd3dd5  deviceinfo
+sha512sums="52895527ad690d2e9426cc2d2445f8bc11e3d5628166610583ca25f968af9e2cc65c0733591532710f8232427e6887b1e96de60ec421d237d2a228b97be14c6c  deviceinfo
 f86ef35730b89bcc8160c08db7a7fcd0970adf60c0b77af68bac397de49c0d1783e6b8db1762380c9bf874aff2d030c6f44ecb75c803d69e79ede11376409369  xorg.conf"

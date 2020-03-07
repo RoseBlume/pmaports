@@ -3,7 +3,7 @@
 pkgname="device-pine64-pinephone"
 pkgdesc="PINE64 PinePhone"
 pkgver=0.2
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -77,7 +77,7 @@ nonfree_firmware() {
 	depends="linux-firmware-rtlwifi linux-firmware-rtl_bt firmware-rtl8723bt"
 	mkdir "$subpkgdir"
 }
-sha512sums="bfb39f14c5a0b928d08cbcb5d19e63e141b052ebb72186c7c26f54d89c2ebf069674bc110215df0cacdd663610594eef5ffb3022eae5bd0e08aea34ab4e2f319  deviceinfo
+sha512sums="e380aedddd0a523dbc5fc8be42c83e3d754e8f69fe2366d1a14561600317c55f31c00524cfa5f3c1201eafaaf42273ddc6199c8f004ff2b6400dd538099b7085  deviceinfo
 35a5ce7c18747e4363c6b310a1c33143f333a9dd2031d619dee10773d499329487a5ed76749e182d56829d03511266a54890cfa706ba21565e9ba8ffdb88f872  uboot-script.cmd
 f4b5509fd6a8b23f3667f5e7262b3a19c607a37cb9eaf7d0e93eb826d45c26ec12df4810879bacb8e4042bb83cc80b2b436224c8d47b6d67361369a724bbf7ee  sysrq.conf
 c4c57d1627dd451213e1ef20d89de9266cd4edcc2d33a69aa9a1f13e16d9f9742036b69dc149fd910d7213f7525c41eb79576d4457bc85cc96eba0d986382d27  weston.ini

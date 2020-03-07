@@ -3,7 +3,7 @@
 pkgname="device-sony-scorpion"
 pkgdesc="Xperia Z3 Tablet Compact"
 pkgver=0.1
-pkgrel=7
+pkgrel=8
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="7dbf44dbb563bfea00cbb049fb85ffe7a3017ddfb7bfa2fb42615836e10664d9d4f69fd27f3785b40f2c81aa8dab6903e018764ff5c5fd664338aa9471b39c29  deviceinfo"
+sha512sums="db7fadc39c8439ca1049a7c9b06a76c9fba8f6605ed368d1d9d93bda0cb4d855d43eb8a41795f11ad89ae72683d0a2facc81e17b888245bbac177dffb42788a8  deviceinfo"

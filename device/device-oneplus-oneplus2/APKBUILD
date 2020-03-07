@@ -4,7 +4,7 @@
 pkgname="device-oneplus-oneplus2"
 pkgdesc="OnePlus 2"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -25,5 +25,5 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="306e9554fff808fefe8c2cb55385e67c319578a03976ea71dd936c21f2d264dd269de6d97c113942d5ac1181afb1c6ba0ddcdf9741fd0927939ae11247a69a85  deviceinfo
+sha512sums="b49bfffc60687e5ae15c4e22d012de5e5c49d73a5fa19a5f772c69d3bbd8c2c8fa32a6f09bc1c008a8fb5771d84377a0659630c943a4a610a12dab4db3d69858  deviceinfo
 abf299888a7a2eafc483a0077b0a60ff04a9c85e54c09758896a15d5d4fe0359765d078797d6791acd0ca5ede2f46dac2674fadbbbf0905d81e9a01e97d8b470  initfs-hook.sh"

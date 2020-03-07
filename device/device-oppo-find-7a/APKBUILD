@@ -3,7 +3,7 @@
 pkgname="device-oppo-find-7a"
 pkgdesc="OPPO Find 7a"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -27,5 +27,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="cf22482f1948c0c99c9d10cd28dbd12c9881c67266547e0271b9249c27c4cfb7d954797b11704dc3a6ece95ef15bbf45f34a659244226304ef0b264a2416c41e  deviceinfo
+sha512sums="c0dd98f2c5eb6ed377ec47052b3a578282d9ff836b0c4f0fada67a6e9fbc8d8ab2604e6c0fb2288f1e5b9f204771850c0da065591ca6c8cab1ad389f7baf3efb  deviceinfo
 fe4ea91d89f4c1f93efed0bbee8b6ddadccaa2bf0623b15fb598758dfe1fa347aaf3d60b4a67e270a1716ffaae98c158ea6d574d0ca2e4895c7ee768c357abdc  initfs-hook.sh"

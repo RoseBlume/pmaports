@@ -3,7 +3,7 @@
 pkgname=device-semc-anzu
 pkgdesc="Xperia Arc"
 pkgver=1
-pkgrel=11
+pkgrel=12
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -32,5 +32,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="023df887ed3bf308c84f8a344c24ea76739b553057c0a3472ae112776f69329c280b00bcf4d36b65bde0e0fc26b6a7e3724fd6c80ddd289b3e3a1492af747592  deviceinfo
+sha512sums="215b6b19b49ce29d84b003930315beca794c2129472ecee49046fcfd13bacc803d949312ed8d851b879c675010aa2c52dafbe3fde52ec9d37ceda7fb5b8ef8dd  deviceinfo
 fc2241310bfc9777cd2240857d9176c48dbc8bdbd871b280e2703a2dce7c3810c0a36b78557088d81a161900c74ece2015c40b3c7e72f7970b46a3991e7856c2  modules-load.conf"

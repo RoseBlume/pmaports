@@ -2,7 +2,7 @@
 pkgname="device-finepower-f1"
 pkgdesc="FinePower F1"
 pkgver=0.2
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -30,6 +30,6 @@ package() {
 }
 
 
-sha512sums="621dbc22d55969e1682476d96f0de142c6e5db2ebd1c2787b8dd701a2d1f5c8a93a4570cbbaa408648036bdbb9904a35a5f7cb0c9e996f7ae641b5eb1cad249b  deviceinfo
+sha512sums="b115ed8d58e2cc4a1d93d728c3e23181904ec2fe157edb7813ba368174a0f380cde4df51e7b19b861dbefec81d589191def74136825d2aaaf412c9994e73bd2a  deviceinfo
 b942baf24085dd412dd0aecd1cbf96c2e4b65f96f443a0dcc67c6bd87a23f7cc612289bcecdef36280934f01ace9ba80beefe86f82d303d0ebe18e48776d2628  asound.state
 369df19f9bf7546236b81a33c00b6384e88e979c4711fead3749f8e60f4cd99f37b31baf1f00d05a821cb71ca2f440648e13083653f1a4ec0c178c7c1c415a58  asound.conf"

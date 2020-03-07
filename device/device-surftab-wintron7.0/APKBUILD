@@ -3,7 +3,7 @@
 pkgname="device-surftab-wintron7.0"
 pkgdesc="TrekStor SurfTab wintron 7.0"
 pkgver=0.3
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="x86_64"
@@ -33,5 +33,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="27c4941de46973dace7147fd65ceb447fde36e5b1350f5db2296de9ef8c68cce24580c9391f805b9b919679f66ad01c9c70826da6ffe3506870ec2ccbd5d8fee  deviceinfo
+sha512sums="b7c1f5205e557d12b5f6bd05e3e363946df93f9a69107b77c4d4b65d5aba734d2d8d00a7ef4261a6867241cd5f701f6613292035760b225d6ab235b57cc9d129  deviceinfo
 8b77755eb59c07f84cb00439f09e0f4bbc2fdf6da8e41160bb1967463c0e098d012a18465891a5d0fc64a37712ba3840a110aa7a371da90c23b4fcd7ac63c004  grub.cfg"
