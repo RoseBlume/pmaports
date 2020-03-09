@@ -3,7 +3,7 @@
 pkgname="device-chuwi-hi10plus"
 pkgdesc="CHUWI Hi10 Plus"
 pkgver=0.2
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="x86_64"
@@ -45,6 +45,6 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="8bc0b5b464a7ea758285a8d68132adc3e543242b8baf5548e131ee72cb837ded0856ec3146401d81322d6e2b7b7c6febf67f3aea92585a34ac3c36af60681027  deviceinfo
+sha512sums="e5cda72dfa54c94664362c210ea2b5e1a8e671d04de938aadf487deed7ad436c8de25fe1bedb56f863c1258f80e88082ae52d7b20d1f4e99dd1ac7369dc537f6  deviceinfo
 8191c479588ccd0c44d23a06cee975635ad9353a7469489c3436ca22051410ff5153dccfb38284dd3976fd6bb8ea6979d32224b652ce68b51f4448c2aa8fc9dd  initfs-hook.sh
 15497cf556750d2b91ef81dab7c4071dc5d1d62bab6f98db0b240e74d8b26ebcda5af2f80fe998518c3b53e72e0daa762d063c87dff46d73d70a8d879cb9aaa8  weston.ini"

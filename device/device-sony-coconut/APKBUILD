@@ -3,7 +3,7 @@
 pkgname="device-sony-coconut"
 pkgdesc="Live with Walkman"
 pkgver=0.1
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="b1b4a5c39b0e37c511201b3f0fcce588b6a4909b451758f2031c7b957ae5d9e17c37c23c1438271179594255397744f64cefe8c00aec65f11de789f44c633036  deviceinfo"
+sha512sums="45df8661c95bdd83a71295a0e32b5ec74ce2b2a690e166fea726914e3dfaaaa14ee81618f05d20beb2145ec96f96d0eb90a4257b3beb472b29dcba1d6528f0b0  deviceinfo"

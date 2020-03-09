@@ -3,7 +3,7 @@
 pkgname="device-jolla-sbj"
 pkgdesc="Jolla phone"
 pkgver=0.1
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="6d19bc7e3fe64d45881498802da641651d36315b041ae28af85f8ed3b6f90d63c2636f92a092cd140dbf4a8a59b2eac593c8d160ba27207688a457e2a4dd8de4  deviceinfo"
+sha512sums="f1fe3413a7e9bf0c40dc3908c1ef496dffd49633959842d6443083e39301861847897036c3f023fe8d947c1b2ad0487b9e31f9c8b2ee503bb913a2dc180df47f  deviceinfo"

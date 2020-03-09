@@ -3,7 +3,7 @@
 pkgname="device-motorola-falcon"
 pkgdesc="Moto G (2013)"
 pkgver=0.1
-pkgrel=8
+pkgrel=9
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="c96c0c697845eff646cae833ebbb77e22d0b05003798d6fc7bf6068aaaa72c8a62c0abf37cf475795adb82170c71990e8150c943211222c1d251838b22b58810  deviceinfo"
+sha512sums="6980694509f30005d6817121d63660397213f5a3c7765440f0e94ce711748a92ebb733a2d656ed65dbb73ce96e9afcd1156a102318d18a5ff738d86c04226419  deviceinfo"

@@ -3,7 +3,7 @@
 pkgname="device-xiaomi-cancro"
 pkgdesc="Mi 3"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="2cb865c9d4d85f7a2e05e2d62cc3f8f9492937e439dc2b002c1b8cbdf6fd584b06bedee2d1730ce1f37c1d54e282b7aa5fc5da8efe3fc0173240b245c9ac9905  deviceinfo"
+sha512sums="41ac6e4179f11b0e9ef46683edb5c243891f6d16bcafd484e012c78adbb1341403a4f8b7f967a9403dfa4057f530d1a755e612f69e4b1031c2b23bc833f22fc1  deviceinfo"

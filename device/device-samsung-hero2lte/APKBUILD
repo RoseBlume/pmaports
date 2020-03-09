@@ -3,7 +3,7 @@
 pkgname="device-samsung-hero2lte"
 pkgdesc="Samsung Galaxy S7 edge"
 pkgver=0.1
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -21,5 +21,5 @@ package() {
 }
 
 
-sha512sums="f780adfb37cbaa3930cb4eb4eef2b439c0b83d9a941a898f0396cb4120db4f5d5677903df8930bd3d234c7b6d5c3787f74f6133e2ccb4b04d5fa9d530aa34478  deviceinfo
+sha512sums="46f4958b205a09bf02895a1d801366fd95070bcce36ea5d631a5c8555079b04fd8610bd0505373639367e2f1dd091c875a5f567d5cf1bde0314d8fdeb295cee4  deviceinfo
 5a7be3cb8835ffb3783fcd4539de04f7f006c726ac9aea35cdca9e90b2877dc36cf4e314851bf9078f4b2dac061b7265866792d92a79f5232c56a0e17f7910b1  initfs-hook.sh"

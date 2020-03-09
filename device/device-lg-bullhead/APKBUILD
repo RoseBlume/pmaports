@@ -3,7 +3,7 @@
 pkgname="device-lg-bullhead"
 pkgdesc="Google Nexus 5X"
 pkgver=0.1
-pkgrel=9
+pkgrel=10
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="f34a66422c240d80c5222f7b5ce6c34c023b36824b7e18a835cb8159230161f9ccf4735fd555e9f4fabd26be8c475280ee503eb213bef3bae598eb0e18f21ac6  deviceinfo"
+sha512sums="e6e388d51f0a8c31667514b51ec68009c22427853036a636e8a795d2e9bef198e2ea5a4d13eba1168d5cc13c18634b44f14d8d0af060ab16ec8675f943b4128f  deviceinfo"
