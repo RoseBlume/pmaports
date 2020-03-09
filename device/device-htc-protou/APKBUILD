@@ -3,7 +3,7 @@
 pkgname="device-htc-protou"
 pkgdesc="HTC Desire X"
 pkgver=0.1
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -34,6 +34,6 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="5184b8d7581c96cd0a58bafa3671de6d2fc0873d83ba258e2c1701033c07cff87974575d1087f01dcc304c563ed21d3b16db4d28ca2c0821be9cf2db8d8e4358  deviceinfo
+sha512sums="62ad386ec0f4cbf80ada7ea7adc042797e23c80d4c7615ed64322198335dc1f2b963a89a5a7d8d76e5c07248a0ed745bbf5df2fddc918ec7827870c0856ff2b3  deviceinfo
 b49562b112ac966896d152ba30548f5b863cc94359fb02a8b75ec43a2c1229a852a218d50201628c0cbee3b88b68136163716e78dcc4ec71401ff9dc8340e016  initfs-hook.sh
 e76d0a2e1a9b611e811f6c0c90201f019ef435132ea4e7119e6179ffc99ba72c5fb6c3bdd1041ff06186d75a163bf3443d0c073c7fe1b55c10b58af53ada163a  pointercal"

@@ -3,7 +3,7 @@
 pkgname="device-bq-chaozu"
 pkgdesc="Aquaris U"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="8077e5b98d1dffaa8da6a939615968124f243c07e2dc3c7dad935b7a13ec2ed8d20b68845c0f45247f21e6fab5e8cbe0e0c8e77e0e8c28f67ead3d5e8d0b4a47  deviceinfo"
+sha512sums="cf676777e0c76f4c4a78d8bb1c11672ed91a38ba3d3193f2ef44cc8af01020852829a5b99b2d5a5ab15c3b9648b5c64fcb7c46fb36e37e3a886dbaef738cdf0b  deviceinfo"

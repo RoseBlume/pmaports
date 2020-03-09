@@ -3,7 +3,7 @@
 pkgname="device-leeco-s2"
 pkgdesc="LeEco Le 2"
 pkgver=0.1
-pkgrel=8
+pkgrel=9
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -20,4 +20,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="5deca83a38b110e4ce49724a7630ceabd82fff4d4f4d80728d949c0f9e87ffb72b3dca55620ac27f355089c7efb3ff3b79653a7edfbd1c26b53d4c6194b2a987  deviceinfo"
+sha512sums="a508c3dedd400d5be6c94122ce7a46f4c4afd9ef8f7e0f5e42efce6ada8a61687235f78fbb8ad95d6b81e4a2c193d37f1fc7e3fa6db20ee2dc76d663c7e1c351  deviceinfo"

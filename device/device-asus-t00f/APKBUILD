@@ -3,7 +3,7 @@
 pkgname="device-asus-t00f"
 pkgdesc="Asus Zenfone 5"
 pkgver=0.1
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="MIT"
 arch="x86"
@@ -36,5 +36,5 @@ x11() {
 		"$subpkgdir"/etc/X11/xorg.conf.d/10-t00f.conf
 }
 
-sha512sums="86f148f85fabc042533e6c697dea7a83c3da2011b0e7e97cbf86f396500f003344973bbc97b61049b676889d209a3fa3e470bc3e3dd3fcc15e698e62e16a7b06  deviceinfo
+sha512sums="9c07f783f3cd15300b3e6b6ec4f45b84c37cac67cd35f2becc447629d423964e87249e88fb3cd281886ff8ba393723fca1e9fb46044d98d7275ea45ec2f9533a  deviceinfo
 2511fa519813061531757996fbbbb9eecae1a136d2e13149fd7afe04d19982c7eaa5ced8df57860bb816186f206915fcbd4a9e34fdf92b2c6efe3320a223c328  xorg.conf"

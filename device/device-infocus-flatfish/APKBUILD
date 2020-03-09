@@ -3,7 +3,7 @@
 pkgname="device-infocus-flatfish"
 pkgdesc="InFocus New Tab F1"
 pkgver=0.1
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -25,5 +25,5 @@ package() {
 	install -Dm644 "$srcdir"/fb.modes "$pkgdir"/etc/fb.modes
 }
 
-sha512sums="ac71e56d9fadd01c4b2699e2095abd2a0a23c297b2ca6ba2aa8b739154854d10e6ac5113ee1fd3daf7420010e951f036131aa14b060ff93d580884ecc4a331f2  deviceinfo
+sha512sums="815d6abf7a806788e62395c8d4b539f37f57b69ce7aa92e42a01edc73d413680b38a43fce9e39c0911a629f1d92702ead6c229c0627eb0031e98b51fe9feafcb  deviceinfo
 2961df06a303e28139f67ae8abc99d0ddc48d2aa4c1d67a51e924493a27b46fff7e6072ddfd4273bdfa6b489598cbfda65400c3afdfaf16fce7fc407d19284f0  fb.modes"

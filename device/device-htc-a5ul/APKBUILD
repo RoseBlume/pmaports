@@ -3,7 +3,7 @@
 pkgname="device-htc-a5ul"
 pkgdesc="hTC Desire 816"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,5 +20,5 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="4beb2d25e9c65eca0a0edda889454b3e637d4740e8b380dbc16491e1471f327c81f9755c4295ae83e71c999d75dc6508e520bee0e08fde1e888382294ae81169  deviceinfo
+sha512sums="c88b87abc81ac149ec8e50010f39d7a76a25dea88fafbc8e7c0491c19863182e4f8ad94f55ae4a49d57331481ae665d5e9d418fc0c8fe0256069e1b2106e9bbb  deviceinfo
 765abaad5fda0dfda5e62e1e48414d3eea822198f39d0792171a04d73f86f6273a6e562afab430cbfcdd084412568a0ad03d012e9c40c5564f5cd1b9c0f181eb  initfs-hook.sh"
