@@ -22,7 +22,7 @@ pmbootstrap -q shutdown
 
 # Make sure we have a valid device (pmbootstrap#1128)
 device="$(pmbootstrap config device)"
-deviceinfo="$pmaports/device/device-$device/deviceinfo"
+deviceinfo="$pmaports/device/testing/device-$device/deviceinfo"
 if ! [ -e "$deviceinfo" ]; then
 	echo "ERROR: Could not find deviceinfo file for selected device '$device'."
 	echo "Expected path: $deviceinfo"
