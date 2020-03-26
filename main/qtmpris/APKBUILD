@@ -1,0 +1,28 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=qtmpris
+pkgver=1.0.4
+pkgrel=0
+pkgdesc="Qt and QML MPRIS interface and adaptor"
+url="https://git.sailfishos.org/mer-core/qtmpris"
+arch="all"
+license="LGPL-2.1-or-later"
+depends_dev="nemo-qml-plugin-dbus-dev"
+makedepends="$depends_dev
+	qt5-qtbase-dev
+	qtdbusextended-dev
+	"
+subpackages="$pkgname-dev"
+source="https://git.sailfishos.org/mer-core/qtmpris/-/archive/$pkgver/qtmpris-$pkgver.tar.gz"
+options="!check" # No suitable tests
+
+build() {
+	qmake-qt5
+	make
+}
+
+package() {
+	INSTALL_ROOT="$pkgdir" make install
+}
+
+sha512sums="8dfcff60b2fb3906923236ae1457e603b9921e49c83fef531474712bc73ba2acf702482f53c4abb49c9921d2ff836250b92818b610baa8b14a47f50f171f5c5d  qtmpris-1.0.4.tar.gz"
