@@ -1,0 +1,26 @@
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=qtmpris
+pkgver=1.0.5
+pkgrel=0
+pkgdesc="Qt and QML MPRIS interface and adaptor"
+url="https://git.sailfishos.org/mer-core/qtmpris"
+arch="all !armhf"
+license="LGPL-2.1-or-later"
+makedepends="
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	"
+subpackages="$pkgname-dev"
+source="https://git.sailfishos.org/mer-core/qtmpris/-/archive/$pkgver/qtmpris-$pkgver.tar.gz"
+options="!check" # No suitable tests
+
+build() {
+	qmake-qt5
+	make
+}
+
+package() {
+	INSTALL_ROOT="$pkgdir" make install
+}
+
+sha512sums="51cefd6875885ab297087ccb22bc02d17e681020aaf96cc51ecbc758bf38e8584f79d0926cf4742e25a323502d269a5636210e771aaaf4842f61d8b53ef1f793  qtmpris-1.0.5.tar.gz"
