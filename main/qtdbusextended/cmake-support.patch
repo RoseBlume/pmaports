@@ -1,0 +1,195 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..0b8e002
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,44 @@
++cmake_minimum_required(VERSION 3.1.0)
++
++project(dbusextended
++	VERSION 0.0.3
++	DESCRIPTION "Provides additional features to the QDBusAbstractInterface class")
++
++set(CMAKE_AUTOMOC ON)
++set(CMAKE_AUTORCC ON)
++set(CMAKE_AUTOUIC ON)
++
++set(CMAKE_INCLUDE_CURRENT_DIR ON)
++
++include(FeatureSummary)
++include(GNUInstallDirs)
++
++set(QT_MIN_VERSION "5.6.0")
++find_package(Qt5 COMPONENTS Core DBus REQUIRED)
++
++add_subdirectory(src)
++
++# CMake Config File
++include(CMakePackageConfigHelpers)
++set(CMAKECONFIG_INSTALL_DIR "share/cmake/${PROJECT_NAME}")
++
++configure_package_config_file(
++	"${PROJECT_NAME}Config.cmake.in"
++	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++	INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/)
++write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
++	VERSION ${$PROJECT_NAME}_VERSION}
++	COMPATIBILITY AnyNewerVersion)
++
++install(FILES
++	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/
++	COMPONENT Devel)
++export(TARGETS ${PROJECT_NAME} FILE ${PROJECT_NAME}Targets.cmake)
++install(EXPORT ${PROJECT_NAME}Targets
++	FILE ${PROJECT_NAME}Targets.cmake
++	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/
++	COMPONENT Devel)
++
++feature_summary(WHAT PACKAGES_FOUND PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
+diff --git a/dbusextended-qt.pro b/dbusextended-qt.pro
+deleted file mode 100644
+index 65d9262..0000000
+--- a/dbusextended-qt.pro
++++ /dev/null
+@@ -1,2 +0,0 @@
+-TEMPLATE = subdirs
+-SUBDIRS = src
+diff --git a/dbusextendedConfig.cmake.in b/dbusextendedConfig.cmake.in
+new file mode 100644
+index 0000000..a5f86b4
+--- /dev/null
++++ b/dbusextendedConfig.cmake.in
+@@ -0,0 +1,7 @@
++@PACKAGE_INIT@
++
++include(CMakeFindDependencyMacro)
++find_dependency(Qt5Core @REQUIRED_QT_VERSION@)
++
++include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
++@PACKAGE_INCLUDE_QCHTARGETS@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+new file mode 100644
+index 0000000..62ed74e
+--- /dev/null
++++ b/src/CMakeLists.txt
+@@ -0,0 +1,42 @@
++set(SRC
++	dbusextendedabstractinterface.cpp
++	dbusextendedpendingcallwatcher.cpp
++	dbusextended.h
++	dbusextendedabstractinterface.h)
++set(HEADERS
++	dbusextended.h
++	dbusextendedabstractinterface.h
++	DBusExtended
++	DBusExtendedAbstractInterface)
++
++add_library(${PROJECT_NAME} SHARED ${SRC})
++
++target_link_libraries(${PROJECT_NAME}
++	Qt5::Core
++	Qt5::DBus)
++target_include_directories(${PROJECT_NAME} PUBLIC
++	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}>
++	$<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
++
++set_target_properties(${PROJECT_NAME} PROPERTIES
++	SOVERSION ${PROJECT_VERSION_MAJOR}
++	VERSION ${PROJECT_VERSION})
++
++# Create pkgconfig file
++configure_file(${PROJECT_NAME}.pc.in
++	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-qt5.pc
++	@ONLY)
++
++configure_file(${PROJECT_NAME}-qt5.prf.in
++	${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-qt5.prf
++	@ONLY)
++
++install(TARGETS ${PROJECT_NAME}
++	EXPORT ${PROJECT_NAME}Targets
++	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
++install(FILES ${HEADERS} DESTINATION
++	${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-qt5.pc
++	DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-qt5.prf
++	DESTINATION ${CMAKE_INSTALL_LIBDIR}/qt5/mkspecs/features/)
+diff --git a/src/dbusextended-qt5.prf.in b/src/dbusextended-qt5.prf.in
+index 63c81dd..5cace20 100644
+--- a/src/dbusextended-qt5.prf.in
++++ b/src/dbusextended-qt5.prf.in
+@@ -1,2 +1,2 @@
+ CONFIG += link_pkgconfig
+-PKGCONFIG += $$TARGET
++PKGCONFIG += @PROJECT_NAME@
+diff --git a/src/dbusextended.pc.in b/src/dbusextended.pc.in
+new file mode 100644
+index 0000000..07c34d3
+--- /dev/null
++++ b/src/dbusextended.pc.in
+@@ -0,0 +1,11 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
++libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@PROJECT_NAME@
++
++Name: @PROJECT_NAME@
++Description: @PROJECT_DESCRIPTION@
++Version: @PROJECT_VERSION@
++Libs: -l@PROJECT_NAME@
++Cflags: -I${includedir}
++Requires: Qt5Core Qt5DBus
+diff --git a/src/src.pro b/src/src.pro
+deleted file mode 100644
+index e9c2c28..0000000
+--- a/src/src.pro
++++ /dev/null
+@@ -1,45 +0,0 @@
+-include(../common.pri)
+-
+-TEMPLATE = lib
+-CONFIG += qt
+-
+-QT = core dbus
+-
+-TARGET = $${QTDBUSEXTENDEDLIB}
+-
+-QMAKE_SUBSTITUTES = $${TARGET}.prf.in
+-
+-DEFINES += QT_DBUS_EXTENDED_LIBRARY
+-
+-# Generate pkg-config support by default
+-# Note that we HAVE TO also create prl config as QMake implementation
+-# mixes both of them together.
+-CONFIG += create_pc create_prl no_install_prl
+-
+-SOURCES += \
+-    dbusextendedabstractinterface.cpp \
+-    dbusextendedpendingcallwatcher.cpp
+-
+-HEADERS += \
+-    dbusextended.h \
+-    dbusextendedabstractinterface.h \
+-    dbusextendedpendingcallwatcher_p.h
+-
+-INSTALL_HEADERS = \
+-    DBusExtended \
+-    DBusExtendedAbstractInterface \
+-    dbusextended.h \
+-    dbusextendedabstractinterface.h
+-
+-target.path = $$[QT_INSTALL_LIBS]
+-headers.files = $$INSTALL_HEADERS
+-headers.path = $$[QT_INSTALL_HEADERS]/DBusExtended
+-prf.files = $${TARGET}.prf
+-prf.path = $$[QMAKE_MKSPECS]/features
+-INSTALLS += target headers prf
+-
+-QMAKE_PKGCONFIG_LIBDIR = $$target.path
+-QMAKE_PKGCONFIG_INCDIR = $$headers.path
+-QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+-QMAKE_PKGCONFIG_NAME = DBusExtended
+-QMAKE_PKGCONFIG_REQUIRES += Qt5Core Qt5DBus
