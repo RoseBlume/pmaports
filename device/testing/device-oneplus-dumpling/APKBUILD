@@ -1,10 +1,10 @@
 # Reference: <https://postmarketos.org/devicepkg>
 # Contributor: Jami Kettunen <jami.kettunen@protonmail.com>
 
-pkgname="device-oneplus-cheeseburger"
-pkgdesc="OnePlus 5"
+pkgname="device-oneplus-dumpling"
+pkgdesc="OnePlus 5T"
 pkgver=0.1
-pkgrel=3
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -21,4 +21,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="26573d40952841f72d3c956f10b102f735f590290e45d65c6a7c953ecfb98765c6ba5c71b3358ada7a6b8d05abd14006ba3e27de458bce2d32c46f43079697f8  deviceinfo"
+sha512sums="a8064803ccd9e70f1e2a803af39a3ebbc872a57af9a4d0902b4d0b5d7de9ad17fb8cc76dd68da7ee38b2cb2d0d009832ae1bf19e08b8536b3b8529c12056dfb7  deviceinfo"
