@@ -1,0 +1,40 @@
+# Forked from Alpine to include fixes for crash from master
+
+pkgname=libqmi
+pkgver=1.25.0_git20202702
+pkgrel=0
+pkgdesc="QMI modem protocol helper library"
+url="https://www.freedesktop.org/wiki/Software/libqmi"
+arch="all"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+makedepends="glib-dev gtk-doc libgudev-dev libmbim-dev linux-headers python3 autoconf-archive automake libtool"
+subpackages="$pkgname-dev $pkgname-doc"
+_commit=3701c4682922cf00d0f4b05c4ac7ef1797e5c240
+source="https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$_commit/libqmi-$_commit.tar.gz"
+
+# Tests fail
+[ "$CARCH" = s390x ] && options="$options !check"
+
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	autoreconf -fi
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-static \
+		--enable-mbim-qmux \
+		--enable-more-warnings=yes
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="29908ac8dcaa35f5f2837804e0316fe7ae466af6f1a25b932335f44fede2808bad4e56c4b44dcbfce6c3c24dc36c3fe2fe6829b6727a1fc0acb8451de9634488  libqmi-3701c4682922cf00d0f4b05c4ac7ef1797e5c240.tar.gz"
