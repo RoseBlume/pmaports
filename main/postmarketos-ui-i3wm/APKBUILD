@@ -1,23 +1,34 @@
 # Contributor: Martijn Braam <martijn@brixit.nl>
 # Maintainer: Martijn Braam <martijn@brixit.nl>
 pkgname=postmarketos-ui-i3wm
-pkgver=0.3
-pkgrel=4
+pkgver=0.4
+pkgrel=0
 pkgdesc="(X11) Tiling WM (keyboard required)"
 url="https://i3wm.org"
 arch="noarch"
 license="GPL-3.0-or-later"
-depends="xorg-server mesa-egl i3wm i3status dmenu xset xinput st lightdm lightdm-openrc"
+depends="xorg-server mesa-egl i3wm i3status dmenu xset xinput st lightdm lightdm-openrc dbus-x11"
 install="$pkgname.post-install $pkgname.pre-deinstall $pkgname.post-deinstall $pkgname.post-upgrade"
-source="lock.sh 60-lightdm-autologin.conf"
+source="lock.sh
+	60-lightdm-autologin.conf
+	xinitrc_i3.sh
+	i3-postmarketOS.desktop"
 options="!check"
 
 package() {
 	install -D -m755 "$srcdir"/lock.sh \
 		"$pkgdir"/usr/bin/lock.sh
 
-	install -Dm644 "$srcdir"/60-lightdm-autologin.conf \
+	install -D -m755 "$srcdir"/xinitrc_i3.sh \
+		"$pkgdir"/usr/bin/xinitrc_i3
+
+	install -D -m644 "$srcdir"/i3-postmarketOS.desktop \
+		"$pkgdir"/usr/share/xsessions/i3-postmarketOS.desktop
+
+	install -D -m644 "$srcdir"/60-lightdm-autologin.conf \
 		"$pkgdir"/usr/share/lightdm/lightdm.conf.d/60-autologin.conf
 }
 sha512sums="2165141499a830beb33ee42e410ba39104f3e70cd61507f0607115d421846104659fa7e9d4193b3394f7384fc33c2233269bb61c99d5d8a2368aa83500e54b35  lock.sh
-60f4e1f3314ce8de6b92a2eb642f199c5ed24a18981958d787f0e876fa629598340cf467ab991dda4e3927ed6b11011dc0357bdcf0e5f1baac444939b4647445  60-lightdm-autologin.conf"
+082d52fbb28a9737e6c8ddfa12bf8e6b2b510ca22db438f2d38a0f6fcc780830f803e211c7e575df32a2313ad1c16fbd06f52229eb14d377ff0719541fdc2118  60-lightdm-autologin.conf
+0904322e72c86ffdef3fcc073a3ef8ecd8f0c53a0fc191973590ee079ae8534ffd1cbe3da5961b4bd92b4dc06bc840f9b6e4378ed452b5b7bf31a40ac1d17002  xinitrc_i3.sh
+65577a166d21d670ec3657fd33e65ad3648b8bc816ea13903dd5b58ad50e64a6cf2e36a8b78532fc9733cb31e18bc5a8327b7b2d7dd36946d456a576dddcd22b  i3-postmarketOS.desktop"
