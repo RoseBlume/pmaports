@@ -1,0 +1,950 @@
+diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+index 8af204d602fe..18b73bd309fc 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
++++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+@@ -238,6 +238,14 @@
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&wlan_regulator_pin>;
+ 	};
++
++	battery: battery {
++		compatible = "simple-battery";
++
++		voltage-min-design-microvolt = <3200000>;
++		voltage-max-design-microvolt = <4350000>;
++		charge-full-design-microamp-hours = <2300000>;
++	};
+ };
+ 
+ &soc {
+@@ -529,6 +537,18 @@
+ 
+ 			usb_otg_vbus: usb-otg-vbus { };
+ 		};
++
++		fuelgauge: max17048@36 {
++			compatible = "maxim,max17048";
++			reg = <0x36>;
++			interrupt-parent = <&msmgpio>;
++			interrupts = <9 0x0>;
++			max17048,alert_gpio = <&msmgpio 9 0x00>;
++			max17048,alert_threshold = <2>;
++			power-supplies = <&charger>;
++			monitored-battery = <&battery>;
++		};
++
+ 	};
+ 
+ 	i2c@f9924000 {
+@@ -668,6 +688,10 @@
+ 
+ &spmi_bus {
+ 	pm8941@0 {
++		charger@1000 {
++			status = "disabled";
++		};
++		
+ 		gpios@c000 {
+ 			gpio_keys_pin_a: gpio-keys-active {
+ 				pins = "gpio2", "gpio3";
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index 27164a1d3c7c..89811f21e756 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -373,6 +373,16 @@ config BATTERY_MAX17042
+ 	  with MAX17042. This driver also supports max17047/50 chips which are
+ 	  improved version of max17042.
+ 
++config BATTERY_MAX17048
++	tristate "Maxim MAX17048 Fuel Gauge"
++	depends on I2C
++	depends on OF
++	select REGMAP_I2C
++	help
++	  MAX17048 is fuel-gauge systems for lithium-ion (Li+) batteries
++	  in handheld and portable equipment. The MAX17048 is configured
++	  to operate with a single lithium cell
++
+ config BATTERY_MAX1721X
+ 	tristate "MAX17211/MAX17215 standalone gas-gauge"
+ 	depends on W1
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index 6c7da920ea83..7d66721e7830 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -50,6 +50,7 @@ obj-$(CONFIG_CHARGER_DA9150)	+= da9150-charger.o
+ obj-$(CONFIG_BATTERY_DA9150)	+= da9150-fg.o
+ obj-$(CONFIG_BATTERY_MAX17040)	+= max17040_battery.o
+ obj-$(CONFIG_BATTERY_MAX17042)	+= max17042_battery.o
++obj-$(CONFIG_BATTERY_MAX17048)	+= max17048_battery.o
+ obj-$(CONFIG_BATTERY_MAX1721X)	+= max1721x_battery.o
+ obj-$(CONFIG_BATTERY_Z2)	+= z2_battery.o
+ obj-$(CONFIG_BATTERY_RT5033)	+= rt5033_battery.o
+diff --git a/drivers/power/supply/max17048_battery.c b/drivers/power/supply/max17048_battery.c
+new file mode 100644
+index 000000000000..b3d107d9d3cd
+--- /dev/null
++++ b/drivers/power/supply/max17048_battery.c
+@@ -0,0 +1,862 @@
++/*
++ *  max17048_battery.c
++ *  fuel-gauge systems for lithium-ion (Li+) batteries
++ *
++ *  Copyright (C) 2012 Nvidia Cooperation
++ *  Chandler Zhang <chazhang@nvidia.com>
++ *  Syed Rafiuddin <srafiuddin@nvidia.com>
++ *
++ *  Copyright (C) 2013 LGE Inc.
++ *  ChoongRyeol Lee <choongryeol.lee@lge.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++#define DEBUG
++
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/power_supply.h>
++#include <linux/interrupt.h>
++#include <linux/gpio.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/of_gpio.h>
++#include <linux/debugfs.h>
++#include <linux/suspend.h>
++#include <linux/syscalls.h>
++#include <linux/completion.h>
++
++#define MODE_REG      0x06
++#define VCELL_REG     0x02
++#define SOC_REG       0x04
++#define VERSION_REG   0x08
++// TODO:
++#define HIBRT_REG     0x0A
++#define CONFIG_REG    0x0C
++#define VALRT_REG     0x14
++#define CRATE_REG     0x16
++// TODO:
++#define VRESET_REG    0x18
++#define STATUS_REG    0x1A
++
++#define CFG_ALRT_MASK    0x0020
++#define CFG_ATHD_MASK    0x001F
++#define CFG_ALSC_MASK    0x0040
++// TODO:
++#define CFG_RCOMP_MASK    0xFF00
++#define CFG_RCOMP_SHIFT    8
++#define CFG_ALSC_SHIFT   6
++#define STAT_RI_MASK     0x0100
++#define STAT_CLEAR_MASK  0xFF00
++
++#define MAX17048_VERSION_11    0x11
++#define MAX17048_VERSION_12    0x12
++
++#define POLL_INTERVAL_MS	300
++
++struct max17048_chip {
++	struct i2c_client *client;
++	struct power_supply *batt_psy;
++	struct dentry *dent;
++	struct notifier_block pm_notifier;
++	struct delayed_work monitor_work;
++	struct completion monitor_work_done;
++	s16 crate;
++	int vcell;
++	int soc;
++	int capacity_level;
++	struct mutex lock;
++	int alert_gpio;
++	int alert_irq;
++	int alert_threshold;
++	int max_uvolt;
++	int min_uvolt;
++	int fcc_uah;
++	int uvolt;
++	int chg_state;
++	int batt_health;
++	int poll_interval_ms;
++};
++
++static struct max17048_chip *ref; // FIXME: this is an ugly hack for debugfs
++static int max17048_clear_interrupt(struct max17048_chip *chip);
++
++static int bound_check(int max, int min, int val)
++{
++	val = max(min, val);
++	val = min(max, val);
++	return val;
++}
++
++static int max17048_write_word(struct i2c_client *client, int reg, u16 value)
++{
++	int ret;
++
++	ret = i2c_smbus_write_word_data(client, reg, swab16(value));
++	if (ret < 0)
++		dev_err(&client->dev, "%s(): Failed in writing register"
++			"0x%02x err %d\n", __func__, reg, ret);
++
++	return ret;
++}
++
++static int max17048_read_word(struct i2c_client *client, int reg)
++{
++	int ret;
++
++	ret = i2c_smbus_read_word_data(client, reg);
++	if (ret < 0)
++		dev_err(&client->dev, "%s(): Failed in reading register"
++			"0x%02x err %d\n", __func__, reg, ret);
++	else
++		ret = (int)swab16((uint16_t)(ret & 0x0000ffff));
++
++	return ret;
++}
++
++static int max17048_masked_write_word(struct i2c_client *client, int reg,
++			       u16 mask, u16 val)
++{
++	s32 rc;
++	u16 temp;
++
++	temp = max17048_read_word(client, reg);
++	if (temp < 0) {
++		dev_err(&client->dev, "max17048_read_word failed: reg=%03X, rc=%d\n",
++			reg, temp);
++		return temp;
++	}
++
++	if ((temp & mask) == (val & mask))
++		return 0;
++
++	temp &= ~mask;
++	temp |= val & mask;
++	rc = max17048_write_word(client, reg, temp);
++	if (rc) {
++		dev_err(&client->dev, "max17048_write_word failed: reg=%03X, rc=%d\n",
++			reg, rc);
++		return rc;
++	}
++
++	return 0;
++}
++
++#ifdef CONFIG_DEBUG_FS
++struct debug_reg {
++	char  *name;
++	u8  reg;
++};
++
++#define MAX17048_DEBUG_REG(x) {#x, x##_REG}
++
++static struct debug_reg max17048_debug_regs[] = {
++	MAX17048_DEBUG_REG(MODE),
++	MAX17048_DEBUG_REG(VCELL),
++	MAX17048_DEBUG_REG(SOC),
++	MAX17048_DEBUG_REG(VERSION),
++	MAX17048_DEBUG_REG(HIBRT),
++	MAX17048_DEBUG_REG(CONFIG),
++	MAX17048_DEBUG_REG(VALRT),
++	MAX17048_DEBUG_REG(CRATE),
++	MAX17048_DEBUG_REG(VRESET),
++	MAX17048_DEBUG_REG(STATUS),
++};
++
++static int set_reg(void *data, u64 val)
++{
++	u32 addr = (u32) data;
++	int ret;
++	struct i2c_client *client = ref->client;
++
++	ret = max17048_write_word(client, addr, (u16) val);
++
++	return ret;
++}
++
++static int get_reg(void *data, u64 *val)
++{
++	u32 addr = (u32) data;
++	int ret;
++	struct i2c_client *client = ref->client;
++
++	ret = max17048_read_word(client, addr);
++	if (ret < 0)
++		return ret;
++
++	*val = ret;
++
++	return 0;
++}
++DEFINE_SIMPLE_ATTRIBUTE(reg_fops, get_reg, set_reg, "0x%04llx\n");
++
++#endif /* CONFIG_DEBUG_FS */
++
++/* Using Quickstart instead of reset for Power Test
++*  DO NOT USE THIS COMMAND ANOTHER SCENE.
++*/
++static int max17048_set_reset(struct max17048_chip *chip)
++{
++	max17048_write_word(chip->client, MODE_REG, 0x4000);
++	dev_info(&chip->client->dev, "Reset (Quickstart)\n");
++	return 0;
++}
++
++static int max17048_get_crate(struct max17048_chip *chip)
++{
++	int crate;
++
++	crate = max17048_read_word(chip->client, CRATE_REG);
++	if (crate < 0) {
++		dev_err(&chip->client->dev, "%s(): err %d\n", __func__, crate);
++		return crate;
++	} else {
++		chip->crate = crate;
++	}
++
++	return 0;
++}
++
++static int max17048_get_vcell(struct max17048_chip *chip)
++{
++	int vcell;
++
++	vcell = max17048_read_word(chip->client, VCELL_REG);
++	if (vcell < 0) {
++		dev_err(&chip->client->dev, "%s(): err %d\n", __func__, vcell);
++		return vcell;
++	} else {
++		chip->vcell = vcell;
++		chip->uvolt = (vcell * 20000) >> 8;
++	}
++
++	return 0;
++}
++
++static int max17048_get_soc(struct max17048_chip *chip)
++{
++	int soc;
++
++	soc = max17048_read_word(chip->client, SOC_REG);
++	if (soc < 0) {
++		dev_err(&chip->client->dev, "%s(): err %d\n", __func__, soc);
++		return soc;
++	} else {
++		chip->soc = soc;
++		/*
++		 * This is strange, 512 should be 256 according to Maxim datasheet. 
++		 * Perhaps LG changed TABLE registers? 
++		 */
++		chip->capacity_level = bound_check(100, 0, soc / 512); 
++		dev_dbg(&chip->client->dev, "%s(): SOC raw = 0x%x\n", __func__, soc);
++	}
++
++	return 0;
++}
++
++static uint16_t max17048_get_version(struct max17048_chip *chip)
++{
++	return (uint16_t) max17048_read_word(chip->client, VERSION_REG);
++}
++
++static void max17048_work(struct work_struct *work)
++{
++	struct max17048_chip *chip =
++		container_of(work, struct max17048_chip, monitor_work.work);
++	int ret = 0;
++
++	mutex_lock(&chip->lock);
++
++	dev_dbg(&chip->client->dev, "%s()\n", __func__);
++	max17048_get_vcell(chip);
++	max17048_get_soc(chip);
++	complete_all(&chip->monitor_work_done);
++
++	ret = max17048_clear_interrupt(chip);
++	if (ret < 0)
++		dev_err(&chip->client->dev, "%s(): error clear alert irq register\n", __func__);
++
++	if (chip->capacity_level == 0) {
++		schedule_delayed_work(&chip->monitor_work,
++				msecs_to_jiffies(chip->poll_interval_ms));
++	} else {
++		dev_dbg(&chip->client->dev, "%s(): rsoc=0x%04X rvcell=0x%04X soc=%d"\
++					     " v_uV=%d\n", __func__,
++			 chip->soc, chip->vcell,
++			 chip->capacity_level, chip->uvolt);
++	}
++
++	mutex_unlock(&chip->lock);
++	power_supply_changed(chip->batt_psy);
++}
++
++static irqreturn_t max17048_interrupt_handler(int irq, void *data)
++{
++	struct max17048_chip *chip = data;
++
++	dev_dbg(&chip->client->dev, "%s(): interupt occured\n", __func__);
++	schedule_delayed_work(&chip->monitor_work, 0);
++
++	return IRQ_HANDLED;
++}
++
++static int max17048_clear_interrupt(struct max17048_chip *chip)
++{
++	int ret;
++
++	dev_dbg(&chip->client->dev, "%s()\n", __func__);
++
++	ret = max17048_masked_write_word(chip->client,
++			CONFIG_REG, CFG_ALRT_MASK, 0);
++	if (ret < 0) {
++		dev_err(&chip->client->dev, "%s(): failed to clear alert status bit\n", __func__);
++		return ret;
++	}
++
++	ret = max17048_masked_write_word(chip->client,
++			STATUS_REG, STAT_CLEAR_MASK, 0);
++	if (ret < 0) {
++		dev_err(&chip->client->dev, "%s(): failed to clear status reg\n", __func__);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int max17048_set_athd_alert(struct max17048_chip *chip, int level)
++{
++	int ret;
++
++	dev_dbg(&chip->client->dev, "%s()\n", __func__);
++
++	level = bound_check(32, 1, level);
++	level = 32 - level;
++
++	ret = max17048_masked_write_word(chip->client,
++			CONFIG_REG, CFG_ATHD_MASK, level);
++	if (ret < 0)
++		dev_err(&chip->client->dev, "%s(): failed to set athd alert\n", __func__);
++
++	return ret;
++}
++
++static int max17048_set_alsc_alert(struct max17048_chip *chip, bool enable)
++{
++	int ret;
++	u16 val;
++
++	dev_dbg(&chip->client->dev, "%s(): with %d\n", __func__, enable);
++
++	val = (u16)(!!enable << CFG_ALSC_SHIFT);
++
++	ret = max17048_masked_write_word(chip->client,
++			CONFIG_REG, CFG_ALSC_MASK, val);
++	if (ret < 0)
++		dev_err(&chip->client->dev, "%s(): failed to set alsc alert\n", __func__);
++
++	return ret;
++}
++
++static ssize_t fuelrst_store(struct device *dev,
++			  struct device_attribute *attr,
++			  const char *buf,
++			  size_t count)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	struct max17048_chip *chip = i2c_get_clientdata(client);
++
++	if (!chip)
++		return -ENODEV;
++
++	if (strncmp(buf, "reset", 5) == 0) {
++		max17048_set_reset(chip);
++		schedule_delayed_work(&chip->monitor_work, 0);
++	} else {
++		return -EINVAL;
++	}
++
++	return count;
++}
++DEVICE_ATTR_WO(fuelrst);
++
++static int max17048_parse_dt(struct device *dev,	// TODO: binding documentation
++		struct max17048_chip *chip)
++{
++	struct device_node *dev_node = dev->of_node;
++	int ret = 0;
++
++	chip->alert_gpio = of_get_named_gpio(dev_node,
++			"max17048,alert_gpio", 0);
++	if (chip->alert_gpio < 0) {
++		dev_err(dev, "%s(): failed to get stat-gpio\n", __func__);
++		ret = chip->alert_gpio;
++		goto out;
++	}
++	ret = of_property_read_u32(dev_node, "max17048,alert_threshold",
++				&chip->alert_threshold);
++	if (ret) {
++		dev_err(dev, "%s(): failed to read alert_threshold\n", __func__);
++		goto out;
++	}
++
++	dev_dbg(dev, "%s(): alert_thres = %d\n", __func__, chip->alert_threshold);
++
++out:
++	return ret;
++}
++
++static int max17048_get_prop_status(struct max17048_chip *chip)
++{
++	int ret;
++	int cap;
++	int crate;
++
++	mutex_lock(&chip->lock);
++	cap = chip->capacity_level;
++	mutex_unlock(&chip->lock);
++
++        ret = power_supply_am_i_supplied(chip->batt_psy);
++        if (ret < 0 || cap == -EINVAL) 
++                return POWER_SUPPLY_STATUS_UNKNOWN;
++        if (ret == 0) 
++                return POWER_SUPPLY_STATUS_DISCHARGING;
++	if (cap >= 95)
++		return POWER_SUPPLY_STATUS_FULL;
++
++	mutex_lock(&chip->lock);
++	ret = max17048_get_crate(chip);
++	crate = chip->crate;
++	mutex_unlock(&chip->lock);
++
++	if (ret)
++		return ret;
++	if (crate < 0)
++		return POWER_SUPPLY_STATUS_NOT_CHARGING;
++	if (crate > 0)
++		return POWER_SUPPLY_STATUS_CHARGING;
++
++	return POWER_SUPPLY_STATUS_UNKNOWN;
++}
++
++static int max17048_get_prop_vbatt_uv(struct max17048_chip *chip)
++{
++	int ret;
++
++	mutex_lock(&chip->lock); // Perhaps not needed.
++	ret = max17048_get_vcell(chip);
++	mutex_unlock(&chip->lock);
++
++	if (ret)
++		return ret;
++	return chip->uvolt;
++}
++
++static int max17048_get_prop_health(struct max17048_chip *chip)
++{
++	int ret;
++	int uv;
++
++	uv = max17048_get_prop_vbatt_uv(chip);
++
++	if (uv < 0) {
++		ret = POWER_SUPPLY_HEALTH_UNKNOWN;
++	} else if (uv < chip->min_uvolt) {
++		ret = POWER_SUPPLY_HEALTH_DEAD;
++	} else if (uv > chip->max_uvolt) {
++		ret = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
++	} else {
++		ret = POWER_SUPPLY_HEALTH_GOOD;
++	}
++
++	return ret;
++}
++
++static int max17048_get_prop_present(struct max17048_chip *chip)
++{
++	/*FIXME - need to implement */
++	return true;
++}
++
++static int max17048_get_prop_capacity(struct max17048_chip *chip)
++{
++	int ret;
++
++	if (chip->capacity_level == -EINVAL)
++		return -EINVAL;
++
++	ret = wait_for_completion_timeout(&chip->monitor_work_done,
++					msecs_to_jiffies(500)); // TODO is it right?
++	if (!ret)
++		dev_err(&chip->client->dev, "%s(): timeout monitor work done\n", __func__);
++
++	return chip->capacity_level;
++}
++
++static enum power_supply_property max17048_battery_props[] = { // TODO: compare with kernel/Documentation + charger-manager
++	POWER_SUPPLY_PROP_STATUS,
++	POWER_SUPPLY_PROP_HEALTH,
++	POWER_SUPPLY_PROP_PRESENT,
++	POWER_SUPPLY_PROP_TECHNOLOGY,
++	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
++	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
++	POWER_SUPPLY_PROP_VOLTAGE_NOW,
++	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
++};
++
++static int max17048_get_property(struct power_supply *psy,
++			    enum power_supply_property psp,
++			    union power_supply_propval *val)
++{
++	struct max17048_chip *chip = power_supply_get_drvdata(psy);
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
++		val->intval = max17048_get_prop_status(chip);
++		break;
++	case POWER_SUPPLY_PROP_HEALTH:
++		val->intval = max17048_get_prop_health(chip);
++		break;
++	case POWER_SUPPLY_PROP_PRESENT:
++		val->intval = max17048_get_prop_present(chip);
++		break;
++	case POWER_SUPPLY_PROP_TECHNOLOGY:
++		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
++		break;
++	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
++		val->intval = chip->max_uvolt;
++		break;
++	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
++		val->intval = chip->min_uvolt;
++		break;
++	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
++		val->intval = max17048_get_prop_vbatt_uv(chip);
++		break;
++	case POWER_SUPPLY_PROP_CAPACITY:
++		val->intval = max17048_get_prop_capacity(chip);
++		break;
++	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
++		val->intval = chip->fcc_uah;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static void max17048_external_power_changed(struct power_supply *psy)
++{
++	struct max17048_chip *chip = power_supply_get_drvdata(psy);
++	int chg_state;
++	int batt_health;
++
++	chg_state = max17048_get_prop_status(chip);
++	batt_health = max17048_get_prop_health(chip);
++
++	if ((chip->chg_state ^ chg_state)
++			||(chip->batt_health ^ batt_health)) {
++		chip->chg_state = chg_state;
++		chip->batt_health = batt_health;
++		dev_info(&chip->client->dev,
++			 "Power supply changed state = %d health = %d",
++			 chg_state, batt_health);
++		power_supply_changed(psy);
++	}
++}
++
++static int max17048_create_debugfs_entries(struct max17048_chip *chip)
++{
++#ifdef CONFIG_DEBUG_FS
++	int i;
++
++	chip->dent = debugfs_create_dir("max17048", NULL);
++	if (IS_ERR(chip->dent)) {
++		dev_err(&chip->client->dev, "max17048 driver couldn't create debugfs dir\n");
++		return -EFAULT;
++	}
++
++	for (i = 0 ; i < ARRAY_SIZE(max17048_debug_regs) ; i++) {
++		char *name = max17048_debug_regs[i].name;
++		u32 reg = max17048_debug_regs[i].reg;
++		struct dentry *file;
++
++		file = debugfs_create_file(name, 0644, chip->dent,
++					(void *) reg, &reg_fops);
++		if (IS_ERR(file)) {
++			dev_err(&chip->client->dev, "debugfs_create_file %s failed\n", name);
++			return -EFAULT;
++		}
++	}
++#endif /* CONFIG_DEBUG_FS */
++	return 0;
++}
++
++static void max17048_remove_debugfs_entries(struct max17048_chip *chip)
++{
++#ifdef CONFIG_DEBUG_FS
++	debugfs_remove_recursive(chip->dent);
++#endif
++}
++
++static int max17048_hw_init(struct max17048_chip *chip)
++{
++	int ret;
++
++	ret = max17048_masked_write_word(chip->client,
++			STATUS_REG, STAT_RI_MASK, 0);
++	if (ret) {
++		dev_err(&chip->client->dev, "%s(): failed to clear ri bit\n", __func__);
++		return ret;
++	}
++
++	ret = max17048_set_athd_alert(chip, chip->alert_threshold);
++	if (ret) {
++		dev_err(&chip->client->dev,
++			"%s(): failed to set athd alert threshold\n", __func__);
++		return ret;
++	}
++
++	// TODO: Consider using VALRT_REG for under/overvoltage alerts
++
++	ret = max17048_set_alsc_alert(chip, true);
++	if (ret) {
++		dev_err(&chip->client->dev, 
++			"%s(): failed to set alsc alert\n", __func__);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int max17048_pm_notifier(struct notifier_block *notifier, // TODO: review pm_event and max17048 hibernation
++			unsigned long pm_event, void *unused)
++{
++	struct max17048_chip *chip = container_of(notifier,
++				struct max17048_chip, pm_notifier);
++
++	switch (pm_event) {
++	case PM_SUSPEND_PREPARE:
++		max17048_set_alsc_alert(chip, false);
++		cancel_delayed_work_sync(&chip->monitor_work);
++		break;
++	case PM_POST_SUSPEND:
++		reinit_completion(&chip->monitor_work_done);
++		schedule_delayed_work(&chip->monitor_work,
++					msecs_to_jiffies(200));
++		max17048_set_alsc_alert(chip, true);
++		break;
++	default:
++		break;
++	}
++
++	return NOTIFY_DONE;
++}
++
++static const struct power_supply_desc max17048_psy_desc = {
++	.name		= "max17048-battery",
++	.type		= POWER_SUPPLY_TYPE_BATTERY,
++	.get_property	= max17048_get_property,
++	.external_power_changed	= max17048_external_power_changed,
++	.properties	= max17048_battery_props,
++	.num_properties	= ARRAY_SIZE(max17048_battery_props),
++};
++
++static int max17048_probe(struct i2c_client *client,
++			const struct i2c_device_id *id)
++{
++	struct max17048_chip *chip;
++	const struct power_supply_desc *max17048_desc = &max17048_psy_desc;
++	struct power_supply_config psy_cfg = {};
++	struct power_supply_battery_info batt_info = {};
++	struct device *dev = &client->dev;
++	int ret;
++	uint16_t version;
++
++	dev_dbg(dev, "%s(): start\n", __func__);
++
++	if (!i2c_check_functionality(client->adapter,
++				I2C_FUNC_SMBUS_WORD_DATA)) {
++		dev_err(dev, "%s(): i2c_check_functionality fail\n", __func__);
++		return -EIO;
++	}
++
++	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
++	if (!chip)
++		return -ENOMEM;
++
++	chip->client = client;
++	i2c_set_clientdata(client, chip);
++	psy_cfg.drv_data = chip;
++	psy_cfg.of_node = dev->of_node;
++
++	version = max17048_get_version(chip);
++	dev_info(dev, "MAX17048 Fuel-Gauge Ver 0x%x\n", version);
++	if (version != MAX17048_VERSION_11 &&
++	    version != MAX17048_VERSION_12) {
++		dev_err(dev, "%s(): Not supported chip version: 0x%x\n", __func__,
++			version);
++		ret = -ENODEV;
++		goto error;
++	}
++	init_completion(&chip->monitor_work_done);
++	chip->capacity_level = -EINVAL;
++	chip->chg_state = POWER_SUPPLY_STATUS_UNKNOWN;
++	chip->batt_health = POWER_SUPPLY_HEALTH_UNKNOWN;
++	chip->poll_interval_ms = POLL_INTERVAL_MS;
++	
++	ref = chip;
++	chip->batt_psy = devm_power_supply_register(dev, max17048_desc,
++						   &psy_cfg);
++	if (IS_ERR(chip->batt_psy)) {
++		dev_err(dev, "failed: power supply register\n");
++		ret = PTR_ERR(chip->batt_psy);
++		goto error;
++	}
++
++	ret = max17048_parse_dt(dev, chip);
++	if (ret) {
++		dev_err(dev, "%s(): failed to parse dt\n", __func__);
++		goto  error;
++	}
++	ret = power_supply_get_battery_info(chip->batt_psy, &batt_info);
++	if (ret) {
++		dev_err(dev, "%s(): failed to get battery info\n", __func__);
++		goto  error;
++	}
++	chip->min_uvolt = batt_info.voltage_min_design_uv;
++	chip->max_uvolt = batt_info.voltage_max_design_uv;
++	chip->fcc_uah = batt_info.charge_full_design_uah;
++
++	mutex_init(&chip->lock);
++	INIT_DELAYED_WORK(&chip->monitor_work, max17048_work);
++
++	ret = devm_gpio_request_one(dev, chip->alert_gpio, GPIOF_DIR_IN,
++				    "max17048_alert");
++	if (ret) {
++		dev_err(dev, "%s(): GPIO Request Failed : return %d\n",
++			__func__, ret);
++		goto error;
++	}
++
++	chip->alert_irq = gpio_to_irq(chip->alert_gpio);
++	if (chip->alert_irq < 0) {
++		dev_err(dev, "%s(): failed to get alert irq\n", __func__);
++		goto error;
++	}
++
++	ret = devm_request_threaded_irq(dev, chip->alert_irq, NULL,
++				max17048_interrupt_handler,
++				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
++				"MAX17048_Alert", chip);
++	if (ret) {
++		dev_err(dev, "%s(): IRQ Request Failed : return %d\n",
++			__func__, ret);
++		goto error;
++	}
++
++	ret = enable_irq_wake(chip->alert_irq);
++	if (ret) {
++		dev_err(dev, "%s(): set irq to wakeup source failed\n", __func__);
++		goto error;
++	}
++
++	disable_irq(chip->alert_irq);
++
++	ret = device_create_file(dev, &dev_attr_fuelrst);
++	if (ret) {
++		dev_err(dev, "%s(): fuelrst creation failed: %d\n", __func__, ret);
++		ret = -ENODEV;
++		goto err_create_file_fuelrst;
++	}
++
++	ret = max17048_create_debugfs_entries(chip);
++	if (ret) {
++		dev_err(dev, "max17048_create_debugfs_entries failed\n");
++		goto err_create_debugfs;
++	}
++
++	ret = max17048_hw_init(chip);
++	if (ret) {
++		dev_err(dev, "%s(): failed to init hw\n", __func__);
++		goto err_hw_init;
++	}
++
++	chip->pm_notifier.notifier_call = max17048_pm_notifier;
++	ret = register_pm_notifier(&chip->pm_notifier);
++	if (ret) {
++		dev_err(dev, "%s(): failed to register pm notifier\n", __func__);
++		goto err_hw_init;
++	}
++
++	schedule_delayed_work(&chip->monitor_work, 0);
++	enable_irq(chip->alert_irq);
++
++	dev_dbg(dev, "%s(): done\n", __func__);
++	return 0;
++
++err_hw_init:
++	max17048_remove_debugfs_entries(chip);
++err_create_debugfs:
++	device_remove_file(dev, &dev_attr_fuelrst);
++err_create_file_fuelrst:
++	disable_irq_wake(chip->alert_irq);
++error:
++	ref = NULL;
++	return ret;
++}
++
++static int max17048_remove(struct i2c_client *client)
++{
++	struct max17048_chip *chip = i2c_get_clientdata(client);
++
++	unregister_pm_notifier(&chip->pm_notifier);
++	max17048_remove_debugfs_entries(chip);
++	device_remove_file(&client->dev, &dev_attr_fuelrst);
++	disable_irq_wake(chip->alert_irq);
++	ref = NULL;
++
++	return 0;
++}
++
++static struct of_device_id max17048_match_table[] = {
++	{ .compatible = "maxim,max17048", },
++	{ },
++};
++
++static const struct i2c_device_id max17048_id[] = {
++	{ "max17048", 0 },
++	{ },
++};
++MODULE_DEVICE_TABLE(i2c, max17048_id);
++
++static struct i2c_driver max17048_i2c_driver = {
++	.driver	= {
++		.name = "max17048-battery",
++		.owner = THIS_MODULE,
++		.of_match_table = max17048_match_table,
++	},
++	.probe = max17048_probe,
++	.remove = max17048_remove,
++	.id_table = max17048_id,
++};
++
++static int __init max17048_init(void)
++{
++	return i2c_add_driver(&max17048_i2c_driver);
++}
++module_init(max17048_init);
++
++static void __exit max17048_exit(void)
++{
++	i2c_del_driver(&max17048_i2c_driver);
++}
++module_exit(max17048_exit);
++
++MODULE_DESCRIPTION("MAX17048 Fuel Gauge");
++MODULE_LICENSE("GPL");
