@@ -1,0 +1,21 @@
+From 023f6b11c4858d4f6bc5ab796018b6e2fe6800a1 Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sun, 23 Jun 2019 14:22:46 +0200
+Subject: [PATCH] Update syscalls.h
+
+---
+ include/trace/events/syscalls.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/trace/events/syscalls.h b/include/trace/events/syscalls.h
+index b35533b94277..016226f3e45d 100644
+--- a/include/trace/events/syscalls.h
++++ b/include/trace/events/syscalls.h
+@@ -69,5 +69,5 @@ TRACE_EVENT_FLAGS(sys_exit, TRACE_EVENT_FL_CAP_ANY)
+ #endif /* _TRACE_EVENTS_SYSCALLS_H */
+ 
+ /* This part must be outside protection */
+-#include <trace/define_trace.h>
+-
++#include "../../../drivers/media/platform/msm/camera/cam_utils/cam_trace.h"
++	

@@ -1,0 +1,22 @@
+From cc5e8eceff89977f3ba1188edc4e565cde026b06 Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sun, 23 Jun 2019 16:08:02 +0200
+Subject: [PATCH] Update tracer_pkt_private.h
+
+---
+ drivers/soc/qcom/tracer_pkt_private.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/soc/qcom/tracer_pkt_private.h b/drivers/soc/qcom/tracer_pkt_private.h
+index fc760e6b68d1..7651b5db9be3 100644
+--- a/drivers/soc/qcom/tracer_pkt_private.h
++++ b/drivers/soc/qcom/tracer_pkt_private.h
+@@ -15,7 +15,7 @@
+ #undef TRACE_SYSTEM
+ #define TRACE_SYSTEM tracer_pkt
+ #undef TRACE_INCLUDE_PATH
+-#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_PATH ../../../drivers/soc/qcom/
+ #undef TRACE_INCLUDE_FILE
+ #define TRACE_INCLUDE_FILE tracer_pkt_private
+ 

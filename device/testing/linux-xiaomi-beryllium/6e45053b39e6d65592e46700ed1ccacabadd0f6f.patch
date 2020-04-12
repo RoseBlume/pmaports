@@ -1,0 +1,22 @@
+From 6e45053b39e6d65592e46700ed1ccacabadd0f6f Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sat, 22 Jun 2019 12:34:20 +0200
+Subject: [PATCH] Update btfm_slim_codec.c
+
+---
+ drivers/bluetooth/btfm_slim_codec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/btfm_slim_codec.c b/drivers/bluetooth/btfm_slim_codec.c
+index 4c6986a536eb..35c1c74fb84a 100644
+--- a/drivers/bluetooth/btfm_slim_codec.c
++++ b/drivers/bluetooth/btfm_slim_codec.c
+@@ -24,7 +24,7 @@
+ #include <sound/soc.h>
+ #include <sound/soc-dapm.h>
+ #include <sound/tlv.h>
+-#include <btfm_slim.h>
++#include "btfm_slim.h"
+ 
+ static int bt_soc_enable_status;
+ int btfm_feedback_ch_setting;

@@ -1,0 +1,22 @@
+From 7e7dd3cc177ac0297ff308fa36ee8b2e93e9b215 Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sat, 22 Jun 2019 18:26:31 +0200
+Subject: [PATCH] Update cam_cci_dev.h
+
+---
+ .../platform/msm/camera/cam_sensor_module/cam_cci/cam_cci_dev.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/msm/camera/cam_sensor_module/cam_cci/cam_cci_dev.h b/drivers/media/platform/msm/camera/cam_sensor_module/cam_cci/cam_cci_dev.h
+index 0a596fce60b6..c6f3ea7b59da 100644
+--- a/drivers/media/platform/msm/camera/cam_sensor_module/cam_cci/cam_cci_dev.h
++++ b/drivers/media/platform/msm/camera/cam_sensor_module/cam_cci/cam_cci_dev.h
+@@ -33,7 +33,7 @@
+ #include "../cam_sensor_utils/cam_sensor_cmn_header.h"
+ #include "../../cam_utils/cam_io_util.h"
+ #include "../cam_sensor_utils/cam_sensor_util.h"
+-#include "../../cam_core/cam_subdev.h"
++#include "../../cam_req_mgr/cam_subdev.h"
+ #include "../../cam_cpas/include/cam_cpas_api.h"
+ #include "cam_cci_hwreg.h"
+ #include "../../cam_utils/cam_soc_util.h"

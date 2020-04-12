@@ -1,0 +1,22 @@
+From 563a001912743ba3a3e4b341e8e28db154aeca12 Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sun, 23 Jun 2019 14:31:50 +0200
+Subject: [PATCH] Update trace_events.h
+
+---
+ include/trace/trace_events.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+index 7bbd5d34b1a6..ea365db6b038 100644
+--- a/include/trace/trace_events.h
++++ b/include/trace/trace_events.h
+@@ -137,7 +137,7 @@ TRACE_MAKE_SYSTEM_STR();
+ #define TRACE_EVENT_PERF_PERM(name, expr...)				\
+ 	__TRACE_EVENT_PERF_PERM(name, expr)
+ 
+-#include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
++#include "../../drivers/media/platform/msm/camera/cam_utils/cam_trace.h"
+ 
+ /*
+  * Stage 2 of the trace events.

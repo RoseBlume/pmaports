@@ -1,0 +1,22 @@
+From 90406c8d515fdbe127eeb9a84bf5c7a1cd49db1c Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sat, 22 Jun 2019 12:49:34 +0200
+Subject: [PATCH] Update btfm_slim_wcn3990.c
+
+---
+ drivers/bluetooth/btfm_slim_wcn3990.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/btfm_slim_wcn3990.c b/drivers/bluetooth/btfm_slim_wcn3990.c
+index 59b23a24dd81..511c0b64385b 100644
+--- a/drivers/bluetooth/btfm_slim_wcn3990.c
++++ b/drivers/bluetooth/btfm_slim_wcn3990.c
+@@ -11,7 +11,7 @@
+  */
+ #include <linux/slimbus/slimbus.h>
+ #include "btfm_slim.h"
+-#include <btfm_slim_wcn3990.h>
++#include "btfm_slim_wcn3990.h"
+ 
+ /* WCN3990 Port assignment */
+ struct btfmslim_ch wcn3990_rxport[] = {

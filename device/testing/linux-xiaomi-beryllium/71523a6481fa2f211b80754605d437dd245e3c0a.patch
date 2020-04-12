@@ -1,0 +1,22 @@
+From 71523a6481fa2f211b80754605d437dd245e3c0a Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sat, 22 Jun 2019 17:40:21 +0200
+Subject: [PATCH] Update cam_sensor_util.h
+
+---
+ .../camera/cam_sensor_module/cam_sensor_utils/cam_sensor_util.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_utils/cam_sensor_util.h b/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_utils/cam_sensor_util.h
+index 313b33ce5826..7b443c50d608 100644
+--- a/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_utils/cam_sensor_util.h
++++ b/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_utils/cam_sensor_util.h
+@@ -18,7 +18,7 @@
+ #include <linux/gpio.h>
+ #include <linux/of_gpio.h>
+ #include <linux/of.h>
+-#include "./cam_sensor_cmn_header.h"
++#include "cam_sensor_cmn_header.h"
+ #include "../../cam_req_mgr/cam_req_mgr_util.h"
+ #include "../../cam_req_mgr/cam_req_mgr_interface.h"
+ #include "../../cam_req_mgr/cam_mem_mgr.h"

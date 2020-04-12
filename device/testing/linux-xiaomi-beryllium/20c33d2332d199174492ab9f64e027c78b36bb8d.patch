@@ -1,0 +1,24 @@
+From 20c33d2332d199174492ab9f64e027c78b36bb8d Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sat, 22 Jun 2019 16:57:02 +0200
+Subject: [PATCH] Update cam_sensor_i2c.h
+
+---
+ .../camera/cam_sensor_module/cam_sensor_io/cam_sensor_i2c.h   | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_io/cam_sensor_i2c.h b/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_io/cam_sensor_i2c.h
+index e79fffb49d77..bed9afc45a77 100644
+--- a/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_io/cam_sensor_i2c.h
++++ b/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_io/cam_sensor_i2c.h
+@@ -17,8 +17,8 @@
+ #include <media/v4l2-subdev.h>
+ #include <media/cam_sensor.h>
+ #include <media/cam_sensor.h>
+-#include "cam_cci_dev.h"
+-#include "cam_sensor_io.h"
++#include "../cam_cci/cam_cci_dev.h"
++#include "./cam_sensor_io.h"
+ 
+ #define I2C_POLL_TIME_MS 5
+ #define MAX_POLL_DELAY_MS 100

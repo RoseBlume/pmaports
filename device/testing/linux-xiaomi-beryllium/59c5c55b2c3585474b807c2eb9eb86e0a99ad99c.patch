@@ -1,0 +1,22 @@
+From 59c5c55b2c3585474b807c2eb9eb86e0a99ad99c Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sat, 22 Jun 2019 17:48:43 +0200
+Subject: [PATCH] Update cam_sensor_io.h
+
+---
+ .../msm/camera/cam_sensor_module/cam_sensor_io/cam_sensor_io.h  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_io/cam_sensor_io.h b/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_io/cam_sensor_io.h
+index 4a12b4e11d2d..1621767daa4d 100644
+--- a/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_io/cam_sensor_io.h
++++ b/drivers/media/platform/msm/camera/cam_sensor_module/cam_sensor_io/cam_sensor_io.h
+@@ -15,7 +15,7 @@
+ 
+ #include <media/cam_sensor.h>
+ 
+-#include "cam_sensor_cmn_header.h"
++#include "../cam_sensor_utils/cam_sensor_cmn_header.h"
+ 
+ #define CCI_MASTER 1
+ #define I2C_MASTER 2

@@ -1,0 +1,22 @@
+From ca12964322de07846e58a8a185d22e83d5a9e83d Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sat, 22 Jun 2019 14:56:34 +0200
+Subject: [PATCH] Update cam_trace.h
+
+---
+ drivers/media/platform/msm/camera/cam_utils/cam_trace.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/msm/camera/cam_utils/cam_trace.h b/drivers/media/platform/msm/camera/cam_utils/cam_trace.h
+index c7dc0b6b2d00..7bf51a27dbc4 100644
+--- a/drivers/media/platform/msm/camera/cam_utils/cam_trace.h
++++ b/drivers/media/platform/msm/camera/cam_utils/cam_trace.h
+@@ -25,7 +25,7 @@
+ #include <media/cam_req_mgr.h>
+ #include "cam_req_mgr_core.h"
+ #include "cam_req_mgr_interface.h"
+-#include "cam_context.h"
++#include "../cam_core/cam_context.h"
+ 
+ TRACE_EVENT(cam_context_state,
+ 	TP_PROTO(const char *name, struct cam_context *ctx),

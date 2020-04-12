@@ -1,0 +1,22 @@
+From 945cae4a8a1ca424670188bc9ab9c41bdcb99379 Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sat, 29 Jun 2019 16:16:57 +0200
+Subject: [PATCH] Update mdss_compat_utils.c
+
+---
+ drivers/video/fbdev/msm/mdss_compat_utils.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/video/fbdev/msm/mdss_compat_utils.c b/drivers/video/fbdev/msm/mdss_compat_utils.c
+index 3bd5a87140d6..54c742641ed9 100644
+--- a/drivers/video/fbdev/msm/mdss_compat_utils.c
++++ b/drivers/video/fbdev/msm/mdss_compat_utils.c
+@@ -16,7 +16,7 @@
+  */
+ 
+ #include <linux/compat.h>
+-#include <linux/fb.h>
++//#include <linux/fb.h>
+ 
+ #include <linux/uaccess.h>
+ 

@@ -1,0 +1,20 @@
+From 0fc66875a59ec2c8912a70a9c9c845affda8ca22 Mon Sep 17 00:00:00 2001
+From: Venji10 <38562746+Venji10@users.noreply.github.com>
+Date: Sun, 23 Jun 2019 15:53:42 +0200
+Subject: [PATCH] Update ipa_trace.h
+
+---
+ drivers/platform/msm/ipa/ipa_v3/ipa_trace.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/platform/msm/ipa/ipa_v3/ipa_trace.h b/drivers/platform/msm/ipa/ipa_v3/ipa_trace.h
+index b67899ba894e..9e341ab1d203 100644
+--- a/drivers/platform/msm/ipa/ipa_v3/ipa_trace.h
++++ b/drivers/platform/msm/ipa/ipa_v3/ipa_trace.h
+@@ -149,5 +149,5 @@ TRACE_EVENT(
+ 
+ /* This part must be outside protection */
+ #undef TRACE_INCLUDE_PATH
+-#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_PATH ../../drivers/platform/msm/ipa/ipa_v3/
+ #include <trace/define_trace.h>
