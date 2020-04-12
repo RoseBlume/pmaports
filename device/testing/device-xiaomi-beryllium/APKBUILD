@@ -7,8 +7,14 @@ url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base linux-xiaomi-beryllium mkbootimg mesa-dri-swrast"
+depends="postmarketos-base mkbootimg mesa-dri-swrast"
 makedepends="devicepkg-dev"
+subpackages="
+        $pkgname-kernel-downstream:kernel_downstream
+        $pkgname-kernel-mainline:kernel_mainline
+        $pkgname-nonfree-firmware:nonfree_firmware
+"
+
 source="deviceinfo"
 
 build() {
@@ -17,6 +23,24 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+}
+
+kernel_downstream() {
+        pkgdesc="USB, display (w/o HW acceleration) and touchscreen works (see device page in wiki for details)"
+        depends="linux-xiaomi-beryllium"
+        devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_mainline() {
+        pkgdesc="USB and display works (see device page in wiki for details)"
+        depends="linux-xiaomi-beryllium-mainline"
+        devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+nonfree_firmware() {
+        pkgdesc="GPU firmware"
+        depends="firmware-xiaomi-beryllium"
+        mkdir "$subpkgdir"
 }
 
 sha512sums="67a8cb1060601edca7a5ffdb978dc7ad1de0bdedeb5ac5eccdd73e5504ac43d845cb023aa8de8f16d3e875233d22a4531c301d815381b175a0b7699febfd0024  deviceinfo"
