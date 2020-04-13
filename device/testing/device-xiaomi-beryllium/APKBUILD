@@ -7,7 +7,7 @@ url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base mkbootimg mesa-dri-swrast"
+depends="postmarketos-base mkbootimg"
 makedepends="devicepkg-dev"
 subpackages="
         $pkgname-kernel-downstream:kernel_downstream
@@ -26,13 +26,13 @@ package() {
 
 kernel_downstream() {
         pkgdesc="USB, display (w/o HW acceleration) and touchscreen works (see device page in wiki for details)"
-        depends="linux-xiaomi-beryllium"
+        depends="linux-xiaomi-beryllium mesa-dri-swrast"
         devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_mainline() {
         pkgdesc="USB and display works (see device page in wiki for details) (GPU firmware needed)"
-        depends="linux-xiaomi-beryllium-mainline"
+        depends="linux-xiaomi-beryllium-mainline mesa-dri-freedreno"
         devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
