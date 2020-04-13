@@ -12,7 +12,6 @@ makedepends="devicepkg-dev"
 subpackages="
         $pkgname-kernel-downstream:kernel_downstream
         $pkgname-kernel-mainline:kernel_mainline
-        $pkgname-nonfree-firmware:nonfree_firmware
 "
 
 source="deviceinfo"
@@ -32,15 +31,9 @@ kernel_downstream() {
 }
 
 kernel_mainline() {
-        pkgdesc="USB and display works (see device page in wiki for details)"
+        pkgdesc="USB and display works (see device page in wiki for details) (GPU firmware needed)"
         depends="linux-xiaomi-beryllium-mainline"
         devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
-}
-
-nonfree_firmware() {
-        pkgdesc="GPU firmware"
-        depends="firmware-xiaomi-beryllium"
-        mkdir "$subpkgdir"
 }
 
 sha512sums="18ff69fbac64bf776cc264105a1a5db754b06728f6a3ba903d42f371da364b0412d323917daaf44c98041b11213a84817b5b3e26b6a619d2ea33f1d774b87876  deviceinfo"
