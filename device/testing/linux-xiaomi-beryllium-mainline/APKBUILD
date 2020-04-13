@@ -15,7 +15,6 @@ makedepends="bison flex perl sed installkernel bash gmp-dev bc linux-headers elf
 
 # Compiler: latest GCC from Alpine
 HOSTCC="${CC:-gcc}"
-HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
 
 # Source
 _repository="linux-beryllium"
