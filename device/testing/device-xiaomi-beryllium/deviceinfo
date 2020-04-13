@@ -16,8 +16,8 @@ deviceinfo_screen_width="1080"
 deviceinfo_screen_height="2246"
 
 deviceinfo_no_framebuffer=true
-deviceinfo_rootfs_image_sector_size="512"
-#deviceinfo_flash_sparse=true
+#deviceinfo_rootfs_image_sector_size="4096" set for flashing to internal storage
+deviceinfo_flash_sparse=true
 
 # Bootloader related
 deviceinfo_flash_method="fastboot"
