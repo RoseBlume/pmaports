@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-pine64-pinebookpro
 pkgdesc="PINE64 Pinebook Pro"
-pkgver=0.1
+pkgver=0.2
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -18,6 +18,7 @@ source="
 	mem_sleep.conf
 	ucm/rockchip,es8316-codec.conf
 	ucm/HiFi
+	asound.state
 "
 
 build() {
@@ -43,6 +44,9 @@ package() {
 	install -D -m644 "$srcdir"/HiFi \
 		"$pkgdir"/usr/share/alsa/ucm2/rockchip,es8316-codec.conf/HiFi
 
+	# ALSA
+	install -D -m644 "$srcdir"/asound.state \
+		"$pkgdir"/var/lib/alsa/asound.state
 }
 
 nonfree_firmware() {
@@ -56,4 +60,5 @@ sha512sums="a8d2d60ae752c16a9f9e2627a367636d36d61e82cf38fdb2c4f408f2f09d6fcf8f88
 13a53bd00dd0afb8908b0bc98d388d5f37ab1df334a3ff0f56928f0f4e4e658253c78f2c368e31979cf8b4ebcc519d0efe0e2255979c00198b82a8eb37d93dd0  10-usb-kbd.hwdb
 bcae155e24a151d3c098833680b83b6004a329962f115480d560ebe19257eab87286b8a4c194e456c067ca54fb53e59a5a16b022cea13c11135b0855145db563  mem_sleep.conf
 846384cab3e9581a03007cf4f39f8538315e804d1573903dd223d22d5ca0b6f260e348467aead5124689288fb7d2ec22c1e9aba8e89683efdbd33ddfe10de852  rockchip,es8316-codec.conf
-520157f8215bd33e89f530fc37db451cf672df697de8883c91635df4fc32c4788dde1dd313c7d8b229916579fa25e0d60c8baf4721dcd9f95550abaa6d98a536  HiFi"
+520157f8215bd33e89f530fc37db451cf672df697de8883c91635df4fc32c4788dde1dd313c7d8b229916579fa25e0d60c8baf4721dcd9f95550abaa6d98a536  HiFi
+740c52c09cd02039a23593698c22d56bc65c22696866ed156dfb82bfbb813dd2d8b91a760921603ecbee4788c638df5df215091e491d437dfe9ec5af3761c5b4  asound.state"
