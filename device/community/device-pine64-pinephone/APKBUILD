@@ -1,0 +1,90 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Martijn Braam <martijn@brixit.nl>
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=device-pine64-pinephone
+pkgver=0.3
+pkgrel=0
+pkgdesc="PINE64 PinePhone"
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+depends="postmarketos-base u-boot-pinephone uboot-tools mesa-git-dri-gallium linux-postmarketos-allwinner gpsd atinout"
+makedepends="devicepkg-dev"
+install="$pkgname.post-install"
+source="deviceinfo
+	uboot-script.cmd
+	sysrq.conf
+	hwtest.ini
+	gpsd_pinephone.initd
+	gpsd_device-hook.sh
+	90-modem-eg25.rules
+	ucm/sun50i-a64-audio.conf
+	ucm/HiFi.conf
+	ucm/VoiceCall.conf
+	eg25.initd
+	setup-modem-audio.sh
+	setup-modem-audio.initd
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+	mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n postmarketos -d "$srcdir"/uboot-script.cmd "$srcdir"/boot.scr
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	install -D -m644 "$srcdir"/boot.scr \
+		"$pkgdir"/boot/boot.scr
+	install -D -m644 "$srcdir"/hwtest.ini \
+		"$pkgdir"/usr/share/hwtest.ini
+
+	# GPS
+	install -D -m755 "$srcdir"/gpsd_pinephone.initd \
+		"$pkgdir"/etc/init.d/gpsd_pinephone
+	install -D -m755 "$srcdir"/gpsd_device-hook.sh \
+		"$pkgdir"/etc/gpsd/device-hook
+	install -D -m644 "$srcdir"/90-modem-eg25.rules \
+		"$pkgdir"/usr/lib/udev/rules.d/90-modem-eg25.rules
+
+	# Fix "sysrq: HELP..." messages in dmesg while playing audio
+	# (Headphone output interferes with the serial console on the headphone jack)
+	install -D -m644 "$srcdir"/sysrq.conf \
+		"$pkgdir"/etc/sysctl.d/sysrq.conf
+
+	# Alsa usecase manager config
+	install -D -m644 "$srcdir"/sun50i-a64-audio.conf \
+		"$pkgdir"/usr/share/alsa/ucm2/sun50i-a64-audio/sun50i-a64-audio.conf
+	install -D -m644 "$srcdir"/HiFi.conf \
+		"$pkgdir"/usr/share/alsa/ucm2/sun50i-a64-audio/HiFi.conf
+	install -D -m644 "$srcdir"/VoiceCall.conf \
+		"$pkgdir"/usr/share/alsa/ucm2/sun50i-a64-audio/VoiceCall.conf
+
+	# Modem
+	install -Dm755 "$srcdir"/eg25.initd "$pkgdir"/etc/init.d/eg25
+	install -Dm755 "$srcdir"/setup-modem-audio.sh \
+		"$pkgdir"/usr/bin/pinephone_setup-modem-audio
+	install -Dm755 "$srcdir"/setup-modem-audio.initd \
+		"$pkgdir"/etc/init.d/pinephone_setup-modem-audio
+}
+
+nonfree_firmware() {
+	pkgdesc="Wifi and Bluetooth firmware"
+	depends="linux-firmware-rtlwifi linux-firmware-rtl_bt firmware-rtl8723bt"
+	mkdir "$subpkgdir"
+}
+sha512sums="d652289aee7c54e2785136fbcd360e5909d80b0940758771cdb8f01504f397ed36a38e5015e947007b84bc58b29fd0f67dc7b886facfe47e15d694bf54617d7e  deviceinfo
+8a7c4f2ee8ce946c611e5023a1d23f5e1898faee02c2171ce03b2ce0e83a6d79cd4301f80e404ae62fb7e7db7b6bbb2b5e0e0480b396532e941db37300feee1e  uboot-script.cmd
+f4b5509fd6a8b23f3667f5e7262b3a19c607a37cb9eaf7d0e93eb826d45c26ec12df4810879bacb8e4042bb83cc80b2b436224c8d47b6d67361369a724bbf7ee  sysrq.conf
+3dd6d612c381cb0002049d1974d8fb5aa5a53a1eb4d6bcbf62eb2ad52cfdc45f0f6ad24a699716d3513b0371aa1316f25dc72afc10d7176cc3b99d0965c3f030  hwtest.ini
+1017fc3f325227da58c77abdc59e9735288d91a7ccc63ec784fe0241c523786b617a11ce8045dab2a74ca12a7dd70aaa334af91836418db1e96a3266fecaa4fd  gpsd_pinephone.initd
+ccbc83b84b5028bc2c8e526759004ce71b50b2675ecffee98f5676c70a3332197a231ff9d2fd46444dd3c0a637ec08ce6125b18240fe6bfc13f624a15192e648  gpsd_device-hook.sh
+aa0b7191548e89ddfc6cf5b1f637c7ee7ab4c2025cbfc6328e7e482e5b179ea072779ca332a18094e3d424708b923c2334210591fc369831426992f540c07abc  90-modem-eg25.rules
+e852b48a687f9b2a0eca444aa3d00a1818aead9f5e5d28e070b51c9d6f8ec648e66f1d88e2bfa94d74533f9ffb9aacc1703da2a06693f85fa04ff97fd7528012  sun50i-a64-audio.conf
+03e2ed3a4212c0ed336586de38b4882c1bb640e04d34dc63ec218c80ff7046c19aaf82c8cdb48db4d3d42f6124addc16b689fd686a90a0f3174c586d1f50e6f2  HiFi.conf
+d44307c4cbd1fcd4846d30bc1e72800ebd4cbc43fe75e896a501dff06f1b3df21385a009ba5f81ed3f19a5e039bd082da3a88efdf3c034089c8fff3bc16e0a7a  VoiceCall.conf
+5a1a9c774253e8211cc54f4b3961c4bdc35427726d037b0ecad099915e856590e8267a4a47943ab753772d57261eef89924b407b305b1099a9c4ecd7b5f00b35  eg25.initd
+dc110f617efe28df3001630836c7df0cab20e74e99c4bb9d2c2f86367ae024dd30060e8c051c7be0e66e86f4656bef345189a6c13276808c4301d1a6deb8be7d  setup-modem-audio.sh
+dadfb8ceb7a82fd4a684a0fd4459bfdf0330fccc1d1781dd8549ee9ab5d571b97ee1e5b8dde66ec85e08db410e2d66e63f9da3d0c327ee80bd8303bf81d03eaf  setup-modem-audio.initd"
