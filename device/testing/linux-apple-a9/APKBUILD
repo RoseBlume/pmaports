@@ -1,0 +1,42 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/hx_h9p_defconfig
+
+pkgname="linux-apple-a9"
+pkgver=5.4.14
+pkgrel=0
+pkgdesc="Apple iPhone 7 kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="apple-a9"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl"
+
+# Source
+_commit="0c2f7dda13d67bb7e06123df516f8bdb1000a79b"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/corellium/linux-sandcastle/archive/$_commit.tar.gz
+	$_config
+"
+builddir="$srcdir/linux-sandcastle-$_commit"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	msg Doing a build now!
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+}
+
+sha512sums="ba1f1d6b9ab07f0791cfb11f9ff2a7f36f9b43e6eb29cc58d208e7c29237e783408146a460dc93ca514768e593c508d8cd0b04d9c948d98878f8cd15e1633f36  linux-apple-a9-0c2f7dda13d67bb7e06123df516f8bdb1000a79b.tar.gz
+bac02544ce2308bdc7b1cb0dc1451d48ab43e8aa03136688e4773aa8aff1d32b267a0d6b421919b16188e37feb9b322dd907f2e4994cdf93e752882291272aae  config-apple-a9.aarch64"

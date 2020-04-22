@@ -1,0 +1,25 @@
+# Contributor: Firstname Lastname <email> (CHANGEME!)
+# Maintainer: Firstname Lastname <email> (CHANGEME!)
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-apple-a9"
+pkgdesc="Apple iPhone 7"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-apple-a9 mesa-dri-swrast"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="(run 'pmbootstrap checksum device-apple-a9' to fill)"
+
