@@ -103,6 +103,8 @@ def check_versions(args, packages):
         master = get_package_version(args, package, commit, False)
         if not master:
             if pmb.helpers.git.rev_parse(args, args.aports) != "0":
+                print(pmb.helpers.git.rev_parse(args, args.aports))
+                print(type(pmb.helpers.git.rev_parse(args, args.aports)))
                 print("- {}: {} (HEAD) (new package)".format(package, head) + "[ERROR]")
                 error = True
             else:
