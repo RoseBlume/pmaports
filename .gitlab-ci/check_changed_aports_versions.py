@@ -57,9 +57,10 @@ def version_compare_operator(result):
 
 def exit_with_error_message():
     print()
-    print("ERROR: Modified package(s) don't have an increased version!")
+    print("ERROR: Modified package(s) don't have an increased version or a new package has a nonzero pkgrel!")
     print()
-    print("This can either happen if you did not change the pkgver/pkgrel")
+    print("This can happen if you added a new package with a nonzero")
+    print("pkgrel. If you did not change the pkgver/pkgrel")
     print("variables in the APKBUILDs. Or you did change them, but the")
     print("packages have been updated in the official master branch, and now")
     print("your versions are not higher anymore.")
@@ -101,7 +102,13 @@ def check_versions(args, packages):
         head = get_package_version(args, package, "HEAD")
         master = get_package_version(args, package, commit, False)
         if not master:
-            print("- {}: {} (HEAD) (new package)".format(package, head))
+            if pmb.helpers.git.rev_parse(args, args.aports) != "0":
+                print(pmb.helpers.git.rev_parse(args, args.aports))
+                print(type(pmb.helpers.git.rev_parse(args, args.aports)))
+                print("- {}: {} (HEAD) (new package)".format(package, head) + "[ERROR]")
+                error = True
+            else:
+                print("- {}: {} (HEAD) (new package)".format(package, head))
             continue
 
         # Compare head and master versions
