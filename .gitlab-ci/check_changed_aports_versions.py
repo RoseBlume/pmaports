@@ -103,7 +103,8 @@ def check_versions(args, packages):
         head = get_package_version(args, package, "HEAD")
         master = get_package_version(args, package, commit, False)
         if not master:
-            if head.rpartition('r')[1] != "0":
+            print(head.rpartition('r')[2])
+            if head.rpartition('r')[2] != "0":
                 print(f"- {package}: {head} (HEAD) (new package)" + " [ERROR]")
                 error = True
             else:
