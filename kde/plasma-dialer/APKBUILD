@@ -1,15 +1,15 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=plasma-dialer
-pkgver=0_git20200320
-pkgrel=1
-_commit="00b39c359e26b5da5633a27155e03a25f652fb71"
+pkgver=0_git20200324
+pkgrel=0
+_commit="da748c7191e7edc4c2fee502dbe47afa8188e64c"
 pkgdesc="A dialer for Plasma Mobile"
-arch="all !armhf"
+arch="all !armhf" # Blocked qt5-qtdeclarative
 url="https://invent.kde.org/kde/plasma-dialer"
 license="GPL-2.0-or-later"
 depends="kirigami2"
-makedepends="extra-cmake-modules qt5-qtbase-dev qt5-qtdeclarative-dev kcoreaddons-dev ki18n-dev kpeople-dev kdbusaddons-dev knotifications-dev telepathy-qt-dev libphonenumber-dev"
-source="$pkgname-$_commit.tar.gz::https://invent.kde.org/kde/plasma-dialer/-/archive/$_commit/plasma-dialer-$_commit.tar.gz"
+makedepends="extra-cmake-modules qt5-qtbase-dev qt5-qtdeclarative-dev kcoreaddons-dev ki18n-dev kpeople-dev kdbusaddons-dev knotifications-dev pulseaudio-dev telepathy-qt-dev libphonenumber-dev"
+source="https://invent.kde.org/kde/plasma-dialer/-/archive/$_commit/plasma-dialer-$_commit.tar.gz"
 options="!check" # No tests
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -18,7 +18,7 @@ build() {
 		-DCMAKE_BUILD_TYPE=None \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
-	make -C build
+	cmake --build build
 }
 
 check() {
@@ -27,6 +27,6 @@ check() {
 }
 
 package() {
-	DESTDIR="$pkgdir" make -C build install
+	DESTDIR="$pkgdir" cmake --build build --target install
 }
-sha512sums="b658eac04edadc8f00ced9e11490e4355ca93d4f6e15a0d1074f45015c6d113b467e549130869071077cc54015ebd0be6264ae1a43a58deac4bc4987376e5af5  plasma-dialer-00b39c359e26b5da5633a27155e03a25f652fb71.tar.gz"
+sha512sums="ae63dc76f904acd2f23318649ea0cf547d4b9b311d6d1e20b96c46d2d8c68a95b7fd12e1b8054bd6c321806d83ddb02f31500ea3b013df0af5b37e7550e21a3f  plasma-dialer-da748c7191e7edc4c2fee502dbe47afa8188e64c.tar.gz"
