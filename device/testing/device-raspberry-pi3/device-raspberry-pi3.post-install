@@ -1,5 +1,0 @@
-#!/bin/sh
-
-cd /boot/dtbs-rpi/
-find . -type f -regex ".*\.dtbo\?$" -exec install -Dm644 {} /boot/{} \;
-
