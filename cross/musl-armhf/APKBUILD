@@ -1,9 +1,14 @@
 # Automatically generated aport, do not edit!
 # Generator: pmbootstrap aportgen musl-armhf
 
-pkgname="musl-armhf"
-pkgver="1.1.24"
-pkgrel=5
+# Stub for apkbuild-lint
+if [ -z "$(type -t arch_to_hostspec)" ]; then
+	arch_to_hostspec() { :; }
+fi
+
+pkgname=musl-armhf
+pkgver=1.1.24
+pkgrel=6
 arch="armv7 aarch64 x86_64 x86"
 subpackages="musl-dev-armhf:package_dev"
 
@@ -18,37 +23,37 @@ pkgdesc="the musl library (lib c) implementation for $_arch"
 _target="$(arch_to_hostspec $_arch)"
 
 source="
-    musl-$pkgver-r$pkgrel-$_arch.apk::$_mirror/edge/main/$_arch/musl-$pkgver-r$pkgrel.apk
-    musl-dev-$pkgver-r$pkgrel-$_arch.apk::$_mirror/edge/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
+	musl-$pkgver-r$pkgrel-$_arch.apk::$_mirror/v3.12/main/$_arch/musl-$pkgver-r$pkgrel.apk
+	musl-dev-$pkgver-r$pkgrel-$_arch.apk::$_mirror/v3.12/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
 "
 
 package() {
-    mkdir -p "$pkgdir/usr/$_target"
-    cd "$pkgdir/usr/$_target"
-    # Use 'busybox tar' to avoid 'tar: Child returned status 141'
-    # on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-    busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch.apk
-    rm .PKGINFO .SIGN.*
+	mkdir -p "$pkgdir/usr/$_target"
+	cd "$pkgdir/usr/$_target"
+	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
+	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
+	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch.apk
+	rm .PKGINFO .SIGN.*
 }
 package_dev() {
-    mkdir -p "$subpkgdir/usr/$_target"
-    cd "$subpkgdir/usr/$_target"
-    # Use 'busybox tar' to avoid 'tar: Child returned status 141'
-    # on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-    busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch.apk
-    rm .PKGINFO .SIGN.*
+	mkdir -p "$subpkgdir/usr/$_target"
+	cd "$subpkgdir/usr/$_target"
+	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
+	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
+	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch.apk
+	rm .PKGINFO .SIGN.*
 
-    # symlink everything from /usr/$_target/usr/* to /usr/$_target/*
-    # so the cross-compiler gcc does not fail to build.
-    for _dir in include lib; do
-        mkdir -p "$subpkgdir/usr/$_target/$_dir"
-        cd "$subpkgdir/usr/$_target/usr/$_dir"
-        for i in *; do
-            cd "$subpkgdir/usr/$_target/$_dir"
-            ln -s /usr/$_target/usr/$_dir/$i $i
-        done
-    done
+	# symlink everything from /usr/$_target/usr/* to /usr/$_target/*
+	# so the cross-compiler gcc does not fail to build.
+	for _dir in include lib; do
+		mkdir -p "$subpkgdir/usr/$_target/$_dir"
+		cd "$subpkgdir/usr/$_target/usr/$_dir"
+		for i in *; do
+			cd "$subpkgdir/usr/$_target/$_dir"
+			ln -s /usr/$_target/usr/$_dir/$i $i
+		done
+	done
 }
 
-sha512sums="7edf63371024161ab8befb25f57c8d11c31569c8b9cb428b40140100175e1b57c113d11694cc283aafe903777f0985f7cce8c69bd11365b064b6fbc431736480  musl-1.1.24-r5-armhf.apk
-741bce0e7f63335143d825ec744a147cbc222b9fee2bbe3179eff998d6a6e719b7f1cc7a8bd47c356314b64dd9e91bc8e34dcd7381e75dea38673707370916bf  musl-dev-1.1.24-r5-armhf.apk"
+sha512sums="4272a296ff7bf8f5953f0ac1969668af64664b9982d0efa2dc9d600e1a0ac148d1f1a8314c4ab23adea2d7a0dd1df678e6130b1f068de63ef5f619867e770bd1  musl-1.1.24-r6-armhf.apk
+ff86d8793cdb1952b350dea270a0dc8eaf21903dc6e394baa302f7d952aed21acd5d00fd3e0bb2a4972032843352e3554c2552f62abae6e0dcdc4aeaab2d72cb  musl-dev-1.1.24-r6-armhf.apk"
