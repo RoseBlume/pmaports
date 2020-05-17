@@ -39,6 +39,15 @@ def deviceinfo_obsolete(info):
                                " remove it (reasons for removal are at"
                                " <https://postmarketos.org/deviceinfo>)")
 
+def deviceinfo_empty(info):
+    """
+    Test for empty options used in the deviceinfo file.
+    """
+    for option in info:
+        if info[option] == "":
+            raise RuntimeError(f"option {option} in deviceinfo is empty")
+
+
 
 def test_deviceinfo(args):
     """
@@ -54,6 +63,7 @@ def test_deviceinfo(args):
             # Successful deviceinfo parsing / obsolete options
             info = pmb.parse.deviceinfo(args, device)
             deviceinfo_obsolete(info)
+            deviceinfo_empty(info)
 
             # deviceinfo_name must start with manufacturer
             name = info["name"]
