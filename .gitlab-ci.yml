@@ -67,7 +67,7 @@ aports-static:
   stage: first
   <<: *only-default
   before_script:
-    - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
+    - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/wip/install_pmbootstrap.sh"
     - sh ./install_pmbootstrap.sh pytest
   script:
     - apk -q add git
@@ -85,7 +85,7 @@ aports-static:
 aport-lint:
   stage: first
   before_script:
-    - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
+    - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/wip/install_pmbootstrap.sh"
     - sh ./install_pmbootstrap.sh
   script:
     - su pmos -c ".gitlab-ci/apkbuild-linting.py"
@@ -104,7 +104,7 @@ kernel-kconfig:
       - device/*/linux-*/config-*
       - main/linux-*/config-*
   before_script:
-    - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
+    - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/wip/install_pmbootstrap.sh"
     - sh ./install_pmbootstrap.sh pytest
   script:
     - su pmos -c "pmbootstrap kconfig check"
@@ -125,7 +125,7 @@ aports-build:
   stage: second
   <<: *only-default
   before_script:
-    - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
+    - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/wip/install_pmbootstrap.sh"
     - sh ./install_pmbootstrap.sh
   script:
     - PYTHONUNBUFFERED=1 su pmos -c ".gitlab-ci/build_changed_aports.py"
