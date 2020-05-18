@@ -2,7 +2,7 @@
 pkgname=device-sony-honami
 pkgdesc="Sony Xperia Z1"
 pkgver=1.2
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -34,5 +34,5 @@ nonfree_firmware() {
 }
 
 
-sha512sums="fed001f601c004467e4c70afd37e2df9ac837e1f64ee5a67752efd60ad8d4b9665e84c105012ca2b5e6a6323f61a687893c6a79163c3b2e29c21c7c650df7b4d  deviceinfo
+sha512sums="93272516daaaabaed81622a26620a6bd61b0a463b2d50d3520d3f439bb13afe82832f02b8d2b244950d6340b789af008edb98bb0ae15da8700ebd97586daf1c1  deviceinfo
 1651ac9eda3c97fafe55abe0f0ae429e04f73edcbf2c56aa3259f81837f7adde348bcb385daed05c30cfc61415455a459a917ed3acccbfd9b7a1caa32a851d40  90-android-touch-dev.rules"

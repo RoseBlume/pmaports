@@ -2,7 +2,7 @@
 pkgname=device-google-crosshatch
 pkgdesc="Google Pixel 3 XL"
 pkgver=0.1
-pkgrel=7
+pkgrel=8
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -35,4 +35,4 @@ kernel_mainline() {
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
-sha512sums="c4122bf7cae468b656884678f64f1bd8fb2e5d9c07fc44a777831864efea2eefdc84329cb0e498de4e7ad40787fbf4ea76846bc7a142747d006afd5ea16847d3  deviceinfo"
+sha512sums="982e85ace7af12178b2fadb7b86f30a1e7bbc75c2687b959d17dcd8ec45c584faaee6e46278cf4cee856b2b9145cc7a5656c00c68799b801624025f02e621529  deviceinfo"

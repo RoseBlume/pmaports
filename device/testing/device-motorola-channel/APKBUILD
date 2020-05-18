@@ -3,7 +3,7 @@
 pkgname=device-motorola-channel
 pkgdesc="Motorola G7 Play"
 pkgver=0.1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -27,4 +27,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="4625074160c5b32fa244250f1c3c608134258fa81722c1ffc2dd0862644d09474b436bdc277fab878e8e3ff1ccbc33e446fa0b33358960a150e70f0063742370  deviceinfo"
+sha512sums="a53606d3520ff7dad459743e9504da512fb9ad8a9199a5819be5e524fca6330f06d0064d8dab210fc07942cf3ecf59c2698c6fd71da5cda3ad44d77f991ed477  deviceinfo"

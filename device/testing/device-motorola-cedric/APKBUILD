@@ -2,7 +2,7 @@
 pkgname=device-motorola-cedric
 pkgdesc="Motorola Moto G5"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -26,5 +26,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="bb655bb78bf4444d494d5a03fcede2a9e5ece9f5e2b195295afe6067b27ef9c56f6cbad30ede2ea0bb8ed983eccaf7c7d95e0af3abccf6c4be3d1676e3e84d11  deviceinfo
+sha512sums="b98732c9bd1346dafb0ce210d4114cfa07380de355b52dfc7c4bdbd576df168ada282f9ae779ea5fcab378fcc54e7aec11761460677f678e08ea49c357279fb8  deviceinfo
 371dd1df5fa3b81031c9277b45e1b6dc158c2a71ef519c374aac8fd23792004ed7bd8dcba7c3097e08a571d15313acb732e3716ef57ddc6c11f8cb88b8c91670  initfs-hook.sh"

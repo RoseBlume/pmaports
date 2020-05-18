@@ -2,7 +2,7 @@
 pkgname=device-google-glass
 pkgdesc="Google Glass"
 pkgver=0.2
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -26,5 +26,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="3192c6fa4cea56402b2d3d4f7afd77acdfbe8456b663f803f03311c4404c4e79f58a36ce42a7a36564c23ca3dc20a2b32bc42812dafeaac0b49687837ad99e60  deviceinfo
+sha512sums="31d27e17470f9d64377540278e6b61227012ec661672c78786f2390fdd33d4dabb77b15f76081f26d76396b6e67cb0a48efc6adb8f978d33a3f17c15bbe7126d  deviceinfo
 e204252a8c987269538039f510b42e094fa5ce141f9f5ded461cbb8074202fc343ccd300a0cc28595d4bb9162992104ad5ac916fd4028857e0f646250998910c  initfs-hook.sh"

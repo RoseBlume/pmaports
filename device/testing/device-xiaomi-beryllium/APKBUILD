@@ -4,7 +4,7 @@
 pkgname=device-xiaomi-beryllium
 pkgdesc="Xiaomi Poco F1"
 pkgver=0.1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -45,4 +45,4 @@ kernel_mainline() {
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
-sha512sums="722dc0db90f7e09e5d09520d52a67e8d1810c2c65e53b9bb4fbac6b1e90c087733994ddd58786be19e678e06641f407a268a70eac6457277b62da193085dc807  deviceinfo"
+sha512sums="93b527fd3878c9b627631ad3457f777087732e35318278e95c49cbf20590c7738c66e6febd916109566f15905740b798d88108ad4033cc49b460c804f3799ecb  deviceinfo"

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-t2m-flame
 pkgver=1
-pkgrel=18
+pkgrel=19
 pkgdesc="Mozilla Flame"
 url="https://postmarketos.org"
 arch="armhf"
@@ -29,5 +29,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="b64086b4f2bdea389bce7de38bdbbd28e0dc9ca07dbd43e898993e0eda2338550f11b82bad015d9597bc6cf25a8835f97e4741643f92e832071914b6149be7d4  deviceinfo
+sha512sums="438579f99b91be3698650ad0d751e16d52ab8b3041c2e199b9310997737959031835c1f5d95a52cecd9a64fa2bf967a9ab38e8d47a23fc894b4c595ce6a49120  deviceinfo
 25256120a19cba6b6f9ae0cda7b2c8c84d168a6457e82afee438d50d2c28b9598bfe690301c15156d866b77cd87652d9b7cc3d9b0637f69414aae09fec159c91  90-android-touch-dev.rules"

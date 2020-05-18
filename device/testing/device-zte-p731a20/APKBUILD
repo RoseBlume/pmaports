@@ -2,7 +2,7 @@
 pkgname=device-zte-p731a20
 pkgdesc="ZTE Blade AF3"
 pkgver=0.1
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -21,5 +21,5 @@ package() {
 }
 
 
-sha512sums="0364dd8e3e2f074bed7e4e714246ee7e991d6a4bb52efba39ca3c0fdfa0f7860a62c47c4f39033f0e7f817ed45c883a494ae54f49e6ed84d550a90ac4fa7cb6c  deviceinfo
+sha512sums="bcc154911057fe4fcc766fc3b0b9bd6a98efff6a437de6bd08686e49d8b5ba431273102deaae573b994a66114a2b0f7d17625b44f92c4255b0dfc7930077575b  deviceinfo
 46c58ff11a1f6cecc3f450f462c9a2b01d2a651f933a796c8a9c2e72f5fba0a0fe876429b5e7dad2fbc64fb056150d56929cd932b39053bed64b389c825bac0d  initfs-hook.sh"

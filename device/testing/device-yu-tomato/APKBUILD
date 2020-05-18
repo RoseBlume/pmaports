@@ -4,7 +4,7 @@
 pkgname=device-yu-tomato
 pkgdesc="Yureka"
 pkgver=0.1
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -21,4 +21,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="de02eb4aaebd861d85f83c6d91398509bf92ed92be6ff1eda69957bcfb10789827e81633c569c5bf1d0fcd4521f3410dd3d86787994b994428ee76a65b684916  deviceinfo"
+sha512sums="40f93841604be15c931a01bb847ecf91dfcbc03ea1a0597476f622f8120ab9fc5a4a03361467ce84cbb33605c006000bee90b819210ed50b20aa8335ca1a73cf  deviceinfo"

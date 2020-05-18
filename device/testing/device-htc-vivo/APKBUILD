@@ -2,7 +2,7 @@
 pkgname=device-htc-vivo
 pkgdesc="Incredible S"
 pkgver=1
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -19,5 +19,5 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="134236cf0ff3b8a852fed44864ecb6c219beabe4cf8559d441a319ccf1bd8d5b68b649cc3273e0cc773baec9f79e7e805525127054923d5d32f648ddcfea61e2  deviceinfo
+sha512sums="1e3bad4c7fa8b86c6a6fb00fc598e79d13b3d1eb7208546f9628989f0f1e98514f594b6e7467b71166fda8322ed24e1037349b198c5c609203dd7bfb13dd146d  deviceinfo
 2d02a02649ee3dc28041045086ffe11c9077067393954295343efb80727432902494da4c3b68f992880f3c0f01a9d164c2517f51519c92445e3ed88872a71e2f  initfs-hook.sh"

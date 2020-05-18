@@ -2,7 +2,7 @@
 pkgname=device-huawei-y530
 pkgdesc="Huawei Ascend Y530"
 pkgver=1
-pkgrel=16
+pkgrel=17
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -26,4 +26,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="65f348904e76868791f210945de710ca4f2c4a9186fd973faa4072fda54b575bd9ccae63539a986b3babeb63d920cb0ea065935b6e76c0bcd2ca89a49155dfc4  deviceinfo"
+sha512sums="16af93e0deb9d252785628e9382b5a1cf1c2108c352b57940fe0b9f309209f21bfe503617bf99ac433887280855d5d2d4872f25e350a89edf4c32a47617b8871  deviceinfo"

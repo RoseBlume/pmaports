@@ -3,7 +3,7 @@
 pkgname=device-alcatel-pop7lte
 pkgdesc="Alcatel OneTouch Pop 7S"
 pkgver=0.1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -33,5 +33,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="b772d6414a1aaacbe86d90f8852a186d8ab100fab4590290daa0d65a6012d46e084b996e7f5e1852d531d05e32f058c0e1165446d18ee289a499b3154f94a9ce  deviceinfo
+sha512sums="2475e4d285014fa8e1b0b7194fd48b403be9091395b800ea94a8f26cfa90c5d88cf3fa73eea26500d97337fe1c71ee43d1deb36afff14a10aa815fab28d207bf  deviceinfo
 117a02c9301a340837452d9743c8e716909e0e82c0e4d6c4fdef012dcdbd509a3d1c23cb511c646dfc90945d7bc22c02e97ce31bdd8fac8924d9bc05b24d5b29  initfs-hook.sh"

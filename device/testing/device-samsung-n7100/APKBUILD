@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-n7100
 pkgver=1
-pkgrel=21
+pkgrel=22
 pkgdesc="Samsung Galaxy Note II (GSM)"
 url="https://postmarketos.org"
 arch="armhf"
@@ -21,5 +21,5 @@ package() {
 		"$pkgdir"/etc/udev/rules.d/90-android-touch-dev.rules
 }
 
-sha512sums="ddea062ab2b862148a9eea902c1267d8dbcddecbc5bada331d74de659cebc0ebba2da878106777573c3db2f287c021254d04ef677b13e1511dff14c53154caee  deviceinfo
+sha512sums="a10d955c3763bebf0660025ef5603604b3737061cc8f846c68b35dec63c32d2c57dc0b3ad65a02fca756b91728b7005dc8a209d2e2cb8e22b23029a75889736d  deviceinfo
 089635daddd88eec35451bfe98dc3713035e3623c896dd21305b990ecf422e8fbb54e010cf347919bbb3a7385f639ab119280477fe0783df3228168d97d96fc6  90-android-touch-dev.rules"

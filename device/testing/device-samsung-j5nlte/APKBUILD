@@ -2,7 +2,7 @@
 pkgname=device-samsung-j5nlte
 pkgdesc="Samsung Galaxy J5 2015 (SM-J500FN)"
 pkgver=1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -26,4 +26,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="44eaf8e8fc7b542716f3b609d0e9f76d20e4c6da716296d360ad506ca609554dbc881315851acf38a771e27558dae9451a95d943c771a25d41808ee48a105697  deviceinfo"
+sha512sums="e73f526c011a30a1078e586f229e40df187321d0686a3726e02ac4761ef3ace2ee3073cf897f22ec4671de80754800b433d663e9a525276d45c87e36cf9c22e4  deviceinfo"

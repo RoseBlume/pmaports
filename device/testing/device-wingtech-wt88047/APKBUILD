@@ -2,7 +2,7 @@
 pkgname=device-wingtech-wt88047
 pkgdesc="Xiaomi Redmi 2"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="8ca9ebe89264f0347e80248cd9a0330368d10ce47c64a248bbfa21996290bc4c8e1f72d2aafa2a35bb87fed06b8fb4d95d6306acc622cd704be93b01a4b68238  deviceinfo"
+sha512sums="ce0bd3ab54d8594b1c8f9e8f7bfc9964aa98731169f20f87090fa30b623e24d111c97dded431bcc2f9c058f31666b4c647dd33c512677b9ac6735c643208c77b  deviceinfo"

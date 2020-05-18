@@ -2,7 +2,7 @@
 pkgname=device-pine64-rockpro64
 pkgdesc="PINE64 RockPro64"
 pkgver=0.1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -31,5 +31,5 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="434545492e9bc18ddd46080979a4df99f0339867fbd28c4e20d7500f4f567a02df07b05152ae1189ae12eb2884b3d30627463830481ab2192160076b8a7ffbf4  deviceinfo
+sha512sums="7436834d9148597f8a41f83d4cb0b7bcd3931639d4b92486bf0794478967bcae902886ffc9f285a470a7fa3ee8e2350bed81b549b20a12a7011d4e9ff4439bc6  deviceinfo
 bd974f4f2b27b868bd63d0134c3e4c062a786be781d2585f42326cfb135211cb038be8d769ec178b94cfe860290d2e502e5eb88ff077ea04b808980237cf624c  extlinux.conf"
