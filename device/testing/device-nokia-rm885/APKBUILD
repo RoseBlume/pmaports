@@ -2,7 +2,7 @@
 pkgname=device-nokia-rm885
 pkgdesc="Lumia 720"
 pkgver=0.1
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="b761d8d0ff78b628b6417abcec6afb9d335c16da434dec054f50cdf3d3ffc24aeefd43dc500786252bb9bf9b1a0939ed35734c31af6ba5c8ec088b13f49736a3  deviceinfo"
+sha512sums="dc5ede95ae378c9bcadc51f4687a7d3f4317ef37a83455b60ff8b5b0882eabd2e1c956fb2385fd25d33d905fd6555b3879e25701b2d2dc52d0712df254a333f5  deviceinfo"

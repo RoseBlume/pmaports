@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lg-d855
 pkgver=1
-pkgrel=21
+pkgrel=22
 pkgdesc="LG G3 International"
 url="https://postmarketos.org"
 arch="armhf"
@@ -21,5 +21,5 @@ package() {
 		"$pkgdir"/etc/udev/rules.d/90-android-touch-dev.rules
 }
 
-sha512sums="66e72d96263a6c8987d09c7782e6616fe5af5cf7fbdec2c0eee643f29f36f97fae953849399f5be14cacba8ddbe83d78fb4c20b5c5a1439b69da63acde213cc8  deviceinfo
+sha512sums="00f942521b5fd4a0491a66bbc1fa48e15f610306401f867654cc868df0565331a149c58f2fd7bb712edc6fd2d10387cc2625ddb75c83a3608b6f61a16653db52  deviceinfo
 ee25f3d0377f027d108593eb7953b8db49d7f05a5c36a0c8ca7e7849d15e3c217bc1ac97d77a66e28d2db4b81c0f50b905639911276da40321d2b6cca7f797df  90-android-touch-dev.rules"

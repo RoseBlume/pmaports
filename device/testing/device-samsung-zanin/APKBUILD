@@ -2,7 +2,7 @@
 pkgname=device-samsung-zanin
 pkgdesc="Samsung Galaxy Chat"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -22,5 +22,5 @@ package() {
 }
 
 
-sha512sums="e58c02856b995773a468490a253395366ffa893a533cce1b026363a5b425ba3f31401c074d08e14f9b9aefcfce05cc74bbe9c6cdcb03de356aa853e147de7664  deviceinfo
+sha512sums="3c50f018ad4df52a07a1ce1e5a44c3ef42e23eddac9f3b0a8d3c7b25e95d813013ec4027da70721f36e75397df9808c10cc70e06c5760562e0b8309e63f198da  deviceinfo
 27a2263ce1dc96de8ac3a2ff6fc8d19c1ae591c883ff201637c5b8dfbbb07d807200853fa51de7d9ee1d0126ceb3a35a6787da53fd25389bbbb78c126eb049a3  initfs-hook.sh"

@@ -2,7 +2,7 @@
 pkgname=device-xiaomi-tissot
 pkgdesc="Xiaomi A1"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -26,4 +26,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="cf52d61d85448148e025fd9996d5b17e360449bdb20ba1ea3e323acfcb2e35265b88a3f153c2df2700b0ff2dda2d01815c286e8faa5571874dd9fe21ff3eb5e1  deviceinfo"
+sha512sums="5cb58a8c85c18429c48bf616a65c3c33ab2e9e6b4ae3a971967b2ed39ee8262f59c15cf981aac1f83844fe8f84172b4b8f6c9dfda0b3c28f98a01da71eb1fe30  deviceinfo"

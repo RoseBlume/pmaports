@@ -2,7 +2,7 @@
 pkgname=device-nextbit-robin
 pkgdesc="Nextbit Robin"
 pkgver=0.1
-pkgrel=8
+pkgrel=9
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="8e3035aa24a4cd3644200001ce1df8773aa96df7c45b6261c5c2c6feb218459325d516fe0b83ae0f2ae10ea053ee932fec65f98bea2b1f104e6f2ee367c2fa4e  deviceinfo"
+sha512sums="9b4ca44e46263148583c2c47888a8d3806284e07f2349394d99f48fb37e4c1017cbe9873dbaed97769f2d14a4d00f4c9b484756326f12a216ec4ba5f71ac8df1  deviceinfo"

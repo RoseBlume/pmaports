@@ -2,7 +2,7 @@
 pkgname=device-huawei-cameron
 pkgdesc="Huawei Mediapad M5 Pro"
 pkgver=0.1
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="059f527006efe39cc9abbe83debc7516a98c43c98b2528e7a4239fbf7399276c576da7e19e28b602c14797e4d70f9c5cab537973a0de3bbd8858627711f42bf8  deviceinfo"
+sha512sums="ebb86a7b4e54de4bbaff45d94f4576b855f3353d46e075ec91b2b7fa26fe113d20062678a737cab2f636f2e76f7f773173084fb83ee3b482bcbfb37e5231c12c  deviceinfo"

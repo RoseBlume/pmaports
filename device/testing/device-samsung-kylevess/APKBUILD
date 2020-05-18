@@ -2,7 +2,7 @@
 pkgname=device-samsung-kylevess
 pkgdesc="Samsung Trend Lite"
 pkgver=0.1
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="cfb69e1c39f39a12a79c66d757bccd624285a0f314140f28f9f180ba2ec01bd5673f5154c1a989c6990d4ae1898b3be2524b8d1637dabd1f19edbadbab96b549  deviceinfo"
+sha512sums="7907857bb47cd9495d3fd47379d968f6888abe3dba59080cfb4eda1676d969c49a67aee5f529cdbc36367919b277b260183b875f811ef241facb9933c45ade85  deviceinfo"

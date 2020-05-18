@@ -2,7 +2,7 @@
 pkgname=device-motorola-surnia
 pkgdesc="Motorola Moto E (2nd Gen)"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="36ea56a505b16b5b071306a37297699cce1786af1b6123081b588b27202b17bdfe57e2f1a14074ba7894e4e5b44e8735ad5b70beee9410cc6b5cac174890c2a9  deviceinfo"
+sha512sums="5b82097808700a733abc24f2963196a9206ca40f10e87f50a6ab18dd6f36a8562ab41ecf1fd95824ee2cb45bb3317a26e79abf74e2c2cac94f91cd280fda55b6  deviceinfo"

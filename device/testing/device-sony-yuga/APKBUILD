@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-sony-yuga
 pkgver=1
-pkgrel=18
+pkgrel=19
 pkgdesc="Sony Xperia Z"
 url="https://postmarketos.org"
 arch="armhf"
@@ -25,5 +25,5 @@ package() {
 	ln -s /dev/null "$pkgdir"/etc/udev/rules.d/60-persistent-v4l.rules
 }
 
-sha512sums="ac94f48f1ed3aa073fe4e5093b32a0d7a9def7bf1e26715341d7b9dc8d56bfa92b29c39997998a845355ec5a4e17d70ada59dd1eb280da1b478de233b7786371  deviceinfo
+sha512sums="2c0e746adb1b4d98d3c2b386f27066f0ebe7bea0d646d18a1bea33eaa0db369ee1c6a747f85537ab5f99467b09290c313b516371646830d1a4218a968c0c7025  deviceinfo
 8b6034c0338ab4c7d648f47983aad6da07e427e7dba47baabf85a1b3ddeeda47c8d7fbcd547a302c9a759b2943ee30d3e82c3b368d8582833a058e4671638a9e  90-android-touch-dev.rules"

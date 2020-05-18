@@ -2,7 +2,7 @@
 pkgname=device-sony-nicki
 pkgdesc="Sony Xperia M"
 pkgver=0.1
-pkgrel=6
+pkgrel=7
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -47,7 +47,7 @@ package() {
 	ln -s /dev/null "$pkgdir"/etc/udev/rules.d/60-persistent-v4l.rules
 }
 
-sha512sums="dc8a2eee63de2d228f357f1eda804481af10b4152c12dcbc97d481cbe2bf3ad8071c05ea56b54829194b33b14a602d1f72eaf355de2b05d572c6deefa9ddd472  deviceinfo
+sha512sums="799fc6572888e37c2b57de565db27c8841a933e4aedf657491580f7065132f5cfd391a0df7bc0c423672be84c141c5bc31520294d061a2608cd722746c3bbd83  deviceinfo
 a3d3a0cf43c5f216279666143d6042f2669dbe3dc5ecec2817b6118a0c122f5b927799b37432bee3167359c118d0142fd8e8e8d67374e8ab1d837673f217e1ae  90-android-touch-dev.rules
 336b6ac90946ec4b4626e9dcb8f1cce503d0ad6fc164177e53502b580aa509dc31ae2ef4fcb9fb04906576cdd6590f625f127e2c29ec61493e30cb6508fdb68d  screen-workaround.sh
 aac9a5d4c856b6feaf4f2961251fbc81d9173e24c3b20806e803711b40e388a173abf2651d5d828d36a504ef2de12c1c1eacea1f1b9479e31f55234012140405  fb.modes

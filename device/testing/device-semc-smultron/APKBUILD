@@ -2,7 +2,7 @@
 pkgname=device-semc-smultron
 pkgdesc="Xperia mini"
 pkgver=0.1
-pkgrel=8
+pkgrel=9
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -23,6 +23,6 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="9a8469b07562505865a856f3aceb6242c0c67af66edbaffb93614bb43f07866b663a2803b4f97cecd55968a76f2c3b00aea87b4b78adbefda9cbc4cac84e9cc1  deviceinfo
+sha512sums="3954af8ca21b59029f8046dd73a678eff2759e13ae32d4b1a81d27732e35cf0ec7c9d04a3ed61579f4009a942b18e0305442eba2d2320bb6b74de94afa0fae93  deviceinfo
 246889c74e09d2aeeaea62313f101727f07f9972fb15252cbf1d2e3c07aa850a85a25cc291407d8e560edb49e8bfbdb04eb09c412ed4c366f0b4bbcfbdcbcbb9  fb.modes
 80c247fa375fe88b354d299fc3802e9717d3a0c93d6c768ee2a39f4bea8deb573bcdf64a4d22bc6e1c2eef0acf26ac36f41a5cc73dd748908d26de11bb26cf6f  directfbrc"

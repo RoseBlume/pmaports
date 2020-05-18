@@ -2,7 +2,7 @@
 pkgname=device-wiko-lenny3
 pkgdesc="Lenny 3"
 pkgver=0.1
-pkgrel=8
+pkgrel=9
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="ba3f1bab4493702862cbc326c02d78a1a072f2599c406b6251d920abc9492a5c2504e0538fc05a4a9f989076e90eeee6eb90a5b1744a2c57760ccc7f18379d1d  deviceinfo"
+sha512sums="d6badd7597a27454e9d4ade45403ef2200b54c67b1ceb910d6bef53dd83e5d45d0247f1a6adf9dbba89fa44f7522505b4604df65f9ac27e28accfb7748cabe19  deviceinfo"

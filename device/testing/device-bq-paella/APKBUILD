@@ -3,7 +3,7 @@
 pkgname=device-bq-paella
 pkgdesc="BQ Aquaris X5 Cyanogen Edition"
 pkgver=1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -27,4 +27,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="e813ad9c744845b0520830bc14fe9ca603999d6b7fbc8309fa7a3a6816ebb102310ec99d7cf163fe2d5735ac65f8f7f43b3f584a7ec2d556d414ee88275facb5  deviceinfo"
+sha512sums="bcc8d5903cdb8b81cd9ff770fa21273304148ef76a7fd85b09d772dbe269f70b47519604941a66d383bac3203f0389857989cd8e1376fb681f6e222f45a7de66  deviceinfo"

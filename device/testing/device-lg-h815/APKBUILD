@@ -2,7 +2,7 @@
 pkgname=device-lg-h815
 pkgdesc="LG G4 (h815)"
 pkgver=0.1
-pkgrel=9
+pkgrel=10
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="32ff88256a6a064f3eeabd3c55fd858173a3bd1eb6b36d9c6db19818bbe56363b4d1be65092a66ac2b9422c36404a1693c4f2ed796a018360b3c312879d5639f  deviceinfo"
+sha512sums="9149b2abc0437fc405eb829cc24317d8ce506912d101936ceab8416a8f7f797c003f9281337efd3e8abf788e820a86f5693be050ac2149c60a487cf11e3d4c0e  deviceinfo"

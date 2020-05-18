@@ -2,7 +2,7 @@
 pkgname=device-wileyfox-crackling
 pkgdesc="Wileyfox Swift"
 pkgver=3
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -50,5 +50,5 @@ nonfree_firmware_modem() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="ab89dd65d4a30af8a61c3595961b3015440bfc49fc13b6143f26b1f35376d4f53548410d75032d4e802efc6f6917316b9100b0bb6272ee18fa99ebee31f7bafa  deviceinfo
+sha512sums="fa3d448872f534601efc1d058b5fc2d845338b9fbcea3d5a477f85a5cb0edc3111c132161267d3d75c74c62aa0c0cd5ab1965b8d2260d40e0a2c7c39b8d2a665  deviceinfo
 a033c958c7539c7f2ce0b1f5ee3977900f8a71a02e9ff5e7f32aaeb7e3687e1765034a7c30477c050e3e0af67e534ecc2984eecbfce34c689247c24f69149d27  modprobe.conf"

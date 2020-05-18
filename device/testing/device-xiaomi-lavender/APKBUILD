@@ -3,7 +3,7 @@
 pkgname=device-xiaomi-lavender
 pkgdesc="Xiaomi Redmi Note 7"
 pkgver=0.1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -36,4 +36,4 @@ kernel_mainline() {
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
-sha512sums="32f5e0eb003c6df6e5fe1a91741097b9721542b646cbce993fd303b0eae507dc10cc709021e5f31e462bc6ef5c58816f546d217cc1da97ed74da34f6c4c6c45d  deviceinfo"
+sha512sums="281a7b393a07b39c2b36c63d9831940d428503c3adcad1fb3143ba9921364a792676e49738b5fb6497c5616933f1d994d29da304b3e2f48039e733f7ec636e8d  deviceinfo"

@@ -2,7 +2,7 @@
 pkgname=device-oneplus-oneplus3
 pkgdesc="OnePlus 3"
 pkgver=1
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -36,4 +36,4 @@ nonfree_firmware() {
 		"
 	mkdir "$subpkgdir"
 }
-sha512sums="6d54dd43909b9f8cb430969b04e63c3738433845d09cfc1a2c2b94ddcecd1f590080e6d55d447a572a8b88e6f8b181b64d5d32a4239c01e9f0f9ce1940c9dee0  deviceinfo"
+sha512sums="a49d17a82235f246a36ca3af5c1306e980ecca73b0916b79e456b6119deb0b564b5fdaea2f158f4a16915f9d448d3c09f98940bc760643897906a64028fd5032  deviceinfo"

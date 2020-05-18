@@ -2,7 +2,7 @@
 pkgname=device-fairphone-fp1
 pkgdesc="FP1"
 pkgver=0.1
-pkgrel=5
+pkgrel=6
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="99f320f9998586a01a056b164c67f297c54b3529dcad73dc70956de919953f7097c8d93bfefa53d13b544c0d14cbcd28cdad356207b58e8816f03a3a19e47087  deviceinfo"
+sha512sums="db55a7f1a2ede3576328dbafab0486f51b3e03aea91d86b53ea288e28b0c9d30f3e3e30bf63185e3ef127d316d3054ff2c04c67a9776a43bfada0d1ebf448140  deviceinfo"

@@ -3,7 +3,7 @@
 pkgname=device-bq-picmt
 pkgdesc="BQ Aquaris X5"
 pkgver=1
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -27,4 +27,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="29f99696dc50e624223b3ee1cfbccc3d99fbe63b06b4bc340a57a796fed009e6048d4bbd440d2fc5fd38dcb4823fd172a019030230cb56164cc2498f7677cf76  deviceinfo"
+sha512sums="3c90b95aa8d403048fd158e33214094ca574f95c05e11a8390e53b83ae45aaf6f6ebc2f05970cdfd7e53ed67d99efa788da179100673c75297400d6bfd7f83c6  deviceinfo"

@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-i9003
 pkgver=1
-pkgrel=24
+pkgrel=25
 pkgdesc="Samsung Galaxy SI SLC"
 url="https://postmarketos.org"
 arch="armhf"
@@ -24,5 +24,5 @@ package() {
 		"$pkgdir"/etc/udev/rules.d/90-android-touch-dev.rules
 }
 
-sha512sums="1c5f783dbd0334bbfaf9d69f2642f179017a6919b1c83dca6911d6a13a68618d7c3a34a9d68f94985a5c67051a07ce263f7fe04023b446b1d5c2b6027001368b  deviceinfo
+sha512sums="0c88e11050be738147b99116857bb950a3beae761071a8abf82e6b2d1245cf0e3fa7d80b2b9edd41b2cd0083c61239245c0ddb2fb7ddf943b16c5521ec258c0c  deviceinfo
 079336f0a62fe45e839dcaa56479736fb67125ef5adf9bf73fc513c696d5a9fe14cfc9912f4aeb989476aa23bcd1befca25f0163c827691eea7eec1c7b97f303  90-android-touch-dev.rules"

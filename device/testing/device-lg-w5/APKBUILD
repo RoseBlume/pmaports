@@ -2,7 +2,7 @@
 pkgname=device-lg-w5
 pkgdesc="L70"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -19,4 +19,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="28a93dc968619d25fee14b267272694ad7a4a3c01143957e568ee6c69b16baa8ab1eefe2875555452c0a2e6f47caf2090314d974ebc6aa21fdb71c81fc518c81  deviceinfo"
+sha512sums="f1aeebeecb881c5cae913541324034f6b38385ae7855f40926483a1236362508aa0a8c2d3ea098863ba4841d7f1dfb9e078ddede0252d0727c8b89f704a3d582  deviceinfo"

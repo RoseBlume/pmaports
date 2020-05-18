@@ -2,7 +2,7 @@
 pkgname=device-xiaomi-aries
 pkgdesc="Xiaomi Mi 2"
 pkgver=0.1
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -20,5 +20,5 @@ package() {
 }
 
 
-sha512sums="b354837c728e21026fc402467e459b76fff6aed0ca137adf1db2297ba7e57d84c7614bf73fe01d6385748bef95fec81e586635b45467b1adc64f80acfa5dd1c8  deviceinfo
+sha512sums="320d3852eca30581e936165dad1b5fcc34f063127a577e2ef50f6d82697638305938565c46c92a1583e3ab760c3c4d1e5cc7be78b46b951b76d45c61dad26748  deviceinfo
 73d199fdf7eccc2041ea8fabecc8b833d845791d5e7740b9d8e81e8fb917a0db55958f8c0d5499142a5726cf1ee40d6eb0ca16f7dc160276354d940b5abeeedc  initfs-hook.sh"

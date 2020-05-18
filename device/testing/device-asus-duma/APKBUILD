@@ -2,7 +2,7 @@
 pkgname=device-asus-duma
 pkgdesc="ASUS MeMO Pad FHD 10 (ME302KL)"
 pkgver=0.1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="armhf"
@@ -26,4 +26,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="66fcfa0934ec94b83cf5553e3ffdf1e5abd42ba0c71d0bfd084d830165dd85bd34713bb91949ffcece09e8116d2ef72861cd865950f4902b472de136fb7d1330  deviceinfo"
+sha512sums="9b1ede859caa0112ec30414d7f5b265dc452e78534f7b402636797103c4bca8434d94605b62979dc815873d70ec2675170882afa144f34133f3a3f0c45fe1bb5  deviceinfo"
