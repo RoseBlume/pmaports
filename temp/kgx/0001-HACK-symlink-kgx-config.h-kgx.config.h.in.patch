@@ -1,0 +1,31 @@
+From 2b57ef9235e1b632a2a0c784bb9acab3433e2ed3 Mon Sep 17 00:00:00 2001
+From: Oliver Smith <ollieparanoid@postmarketos.org>
+Date: Tue, 19 May 2020 22:28:29 +0200
+Subject: [PATCH] HACK: symlink kgx-config.h -> kgx.config.h.in
+
+For some reason, the build system does not generate kgx-config.h
+properly, when building against Alpine 3.12:
+
+../src/kgx-process.h:24:10: fatal error: kgx-config.h: No such file or directory
+   24 | #include "kgx-config.h"
+      |          ^~~~~~~~~~~~~~
+
+This hack links against kgx-config.h.in, which is the same file, except
+that the git version commit is not filled out (which is not present
+anyway).
+---
+ src/kgx-config.h | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 120000 src/kgx-config.h
+
+diff --git a/src/kgx-config.h b/src/kgx-config.h
+new file mode 120000
+index 0000000..272aa80
+--- /dev/null
++++ b/src/kgx-config.h
+@@ -0,0 +1 @@
++../output/kgx-config.h.in
+\ No newline at end of file
+-- 
+2.20.1
+
