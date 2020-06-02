@@ -1,0 +1,31 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+
+pkgname=device-oneplus-fajita
+pkgdesc="OnePlus 6T"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base mkbootimg linux-oneplus-sdm845 soc-qcom-sdm845"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Modem, WiFi and GPU Firmware"
+	depends="firmware-oneplus-sdm845"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="25bf602f9cb312580f6556fcbfcf4bf90bbcf96fae542054edfddf646cc6bc6031e424327723cb8fc2062966c259062e19f1d15086e3443caf93a22690730044  deviceinfo"
