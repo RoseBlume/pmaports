@@ -1,6 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
-pkgname=device-samsung-a3ulte
-pkgdesc="Samsung Galaxy A3 (SM-A300FU)"
+# Maintainer: Nikita Travkin <nikitos.tr@gmail.com>
+# Maintainer: Minecrell <minecrell@minecrell.net>
+pkgname=device-wileyfox-crackling
+pkgdesc="Wileyfox Swift"
 pkgver=3
 pkgrel=1
 url="https://postmarketos.org"
@@ -26,29 +28,29 @@ package() {
 }
 
 kernel_mainline() {
-	pkgdesc="Mainline kernel (no modem, audio routed directly)"
+	pkgdesc="Mainline kernel (no charging, no modem, audio routed directly)"
 	depends="linux-postmarketos-qcom-msm8916"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 kernel_mainline_modem() {
-	pkgdesc="Mainline kernel (non-free modem, audio routed through ADSP)"
+	pkgdesc="Mainline kernel (no charging, non-free modem, audio routed through ADSP)"
 	depends="linux-postmarketos-qcom-msm8916 soc-qcom-msm8916-modem"
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
 nonfree_firmware() {
 	pkgdesc="GPU/WiFi/BT/Video(/Modem) firmware"
-	depends="linux-firmware-qcom firmware-samsung-a3ulte-venus firmware-samsung-a3ulte-wcnss"
+	depends="linux-firmware-qcom firmware-wileyfox-crackling-venus firmware-wileyfox-crackling-wcnss"
 	mkdir "$subpkgdir"
 }
 
 nonfree_firmware_modem() {
 	pkgdesc="Modem firmware"
-	depends="firmware-samsung-a3ulte-modem"
+	depends="firmware-wileyfox-crackling-modem"
 	install_if="$pkgname-nonfree-firmware $pkgname-kernel-mainline-modem"
 	mkdir "$subpkgdir"
 }
 
-sha512sums="5bc4a4168addd501ef2278bc01a13d747fa7969f2f602e30db7ffd073b85dc5e8e9f2869a930bdf17ae7aaf9dbea2d540705994386ba4a780fd891771feb6558  deviceinfo
-ee4263607eee2d12bd796d19606de35005f0a1ae4b8ff86e4556f2233c533b62d651dabe558081b5ff768a6b8158f34dd9b74b3dcece159e55d635b1d807928b  modprobe.conf"
+sha512sums="2b2b3ca29bfbe70c47550de1736595b7b613a34728e2339e45baa3188615531cca17690b6c85118aecc0dcc695a1586f49a806663eea841612b17ef7a1ca595c  deviceinfo
+a033c958c7539c7f2ce0b1f5ee3977900f8a71a02e9ff5e7f32aaeb7e3687e1765034a7c30477c050e3e0af67e534ecc2984eecbfce34c689247c24f69149d27  modprobe.conf"
