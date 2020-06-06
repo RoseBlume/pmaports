@@ -11,7 +11,7 @@ pkgrel=1
 pkgdesc="Tools necessary to build programs for armv7 targets"
 url="https://www.gnu.org/software/binutils/"
 makedepends="gettext libtool autoconf automake bison texinfo"
-arch="armhf aarch64 x86_64 x86"
+arch="x86_64"
 license="GPL-2.0 GPL-3.0-or-later LGPL-2.0 BSD"
 source="https://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz
 	binutils-ld-fix-static-linking.patch
