@@ -432,6 +432,12 @@ show_splash() {
 		return
 	fi
 
+	# Disable splash screen, this is useful if you're mainlining
+	# without UART.
+	if grep -q PMOS_NOSPLASH /proc/cmdline; then
+		return
+	fi
+
 	gzip -c -d "$1" >/tmp/splash.ppm
 	fbsplash -s /tmp/splash.ppm
 }
