@@ -1,0 +1,134 @@
+# Forked from Alpine to apply Purism's patches for responsivness
+pkgname=gtk+3.0
+pkgver=9999_git20191223
+pkgrel=0
+_commit="6c2d6dd3b3cd979aa987d00b7f5bc5666dd55d69"
+pkgdesc="The GTK+ Toolkit (v3)"
+url="https://www.gtk.org/"
+install="$pkgname.post-install $pkgname.post-upgrade $pkgname.post-deinstall"
+arch="all"
+license="LGPL-2.1-or-later"
+options="!check" # Most glade tests fail :c
+subpackages="$pkgname-demo $pkgname-dev $pkgname-doc $pkgname-lang $pkgname-dbg"
+depends="shared-mime-info gtk-update-icon-cache"
+
+replaces="gtk+"
+
+depends_dev="
+	atk-dev
+	gdk-pixbuf-dev
+	glib-dev
+	libepoxy-dev
+	libxext-dev
+	libxi-dev
+	libxinerama-dev
+	wayland-protocols
+	wayland-libs-client
+	wayland-libs-cursor
+	libxkbcommon-dev
+	"
+makedepends="
+	$depends_dev
+	perl
+	cups-dev
+	expat-dev
+	gettext-dev
+	gnutls-dev
+	gobject-introspection-dev
+	libice-dev
+	tiff-dev
+	zlib-dev
+	at-spi2-atk-dev
+	cairo-dev
+	fontconfig-dev
+	pango-dev
+	wayland-dev
+	libx11-dev
+	libxcomposite-dev
+	libxcursor-dev
+	libxdamage-dev
+	libxfixes-dev
+	libxrandr-dev
+	autoconf
+	automake
+	gtk-doc
+	"
+source="https://source.puri.sm/Librem5/gtk/-/archive/$_commit/gtk-$_commit.tar.gz
+	10-Revert-gdkseatdefault-Grab-touch-events-where-applic.patch
+	"
+
+builddir="$srcdir/gtk-$_commit"
+
+prepare() {
+	default_prepare
+
+	NOCONFIGURE=1 ./autogen.sh
+}
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--enable-xkb \
+		--enable-xinerama \
+		--enable-xrandr \
+		--enable-xfixes \
+		--enable-xcomposite \
+		--enable-xdamage \
+		--enable-x11-backend \
+		--enable-wayland-backend \
+		--disable-tests # Broken build and we don't run them anyway
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=655517
+	sed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+	local _makeopts
+	case "$CARCH" in
+	# build hangs if -j >1 on aarch64
+	aarch64*|arm*)	_makeopts="-j1" ;;
+	*)		_makeopts="" ;;
+	esac
+
+	make $_makeopts
+}
+
+package() {
+	DESTDIR="$pkgdir" make install
+
+	# use gtk-update-icon-cache from gtk+2.0 for now
+	rm -f "$pkgdir"/usr/bin/gtk-update-icon-cache
+	rm -f "$pkgdir"/usr/share/man/man1/gtk-update-icon-cache.1
+}
+
+demo() {
+	pkgdesc="$pkgdesc (demonstration application)"
+	install -Dm755 "$pkgdir"/usr/bin/gtk3-demo \
+				   "$pkgdir"/usr/bin/gtk3-widget-factory \
+				   "$pkgdir"/usr/bin/gtk3-demo-application \
+				   -t "$subpkgdir"/usr/bin
+	install -Dm644 "$pkgdir"/usr/share/gtk-3.0/gtkbuilder.rng \
+				   -t "$subpkgdir"/usr/share/gtk-3.0
+	install -Dm644 "$pkgdir"/usr/share/glib-2.0/schemas/org.gtk.Demo.gschema.xml \
+				   -t "$subpkgdir"/usr/share/glib-2.0/schemas
+	install -Dm644 "$pkgdir"/usr/share/applications/gtk3-widget-factory.desktop \
+				   "$pkgdir"/usr/share/applications/gtk3-demo.desktop \
+				   -t "$subpkgdir"/usr/share/applications
+	mkdir -p "$subpkgdir"/usr/share
+	mv "$pkgdir"/usr/share/icons "$subpkgdir"/usr/share
+}
+
+dev() {
+	replaces="gtk+-dev"
+	default_dev
+}
+
+doc() {
+	replaces="gtk+-doc"
+	default_doc
+}
+
+sha512sums="720b2a0192adb58380bfed922da7c66617465f2d3f8b28987b2f128d8d5804c64edbbf357c4dea3a0c912d6120617ed24c64d95ff0693e153b54cf0c0568e448  gtk-6c2d6dd3b3cd979aa987d00b7f5bc5666dd55d69.tar.gz
+e4ea76484b70bd9beb65b2964bbcff3b3f78f5f6fe70b12309a7721ca134e3735e8aaac09803f93b393a6130a703f8f346c0df89ad45d18c580dac1e0e922276  10-Revert-gdkseatdefault-Grab-touch-events-where-applic.patch"
