@@ -2,17 +2,13 @@
 # Contributor: Antoine Fontaine <antoine.fontaine@epfl.ch>
 # Maintainer: Antoine Fontaine <antoine.fontaine@epfl.ch>
 
-# Preferably we would build our own Android images, but this requires a large amount of storage and hardware:
-# 20G of "sources", that include prebuilt glibc binairies (clang, bison, protobuf!) and may require multilib.
-# So we use pre-built images by Anbox for now.
-
 pkgname=anbox-image
 pkgver=7.1.2_p39
 _pkgver="${pkgver/p/r}"
-pkgrel=2
+pkgrel=3
 pkgdesc="Android image for running in Anbox"
 url="https://anbox.io"
-arch="x86_64 armv7 aarch64"
+arch="x86_64 aarch64"
 makedepends="squashfs-tools"
 license="GPL-3.0-only"
 _fdroidver=1007051
