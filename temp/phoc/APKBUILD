@@ -1,0 +1,34 @@
+# Forked from Alpine to update to newer versions
+pkgname=phoc
+pkgver=0.1.8
+pkgrel=0
+pkgdesc="wlroots based Phone compositor for the Phosh shell"
+arch="all !s390x" # no wlroots
+url="https://source.puri.sm/Librem5/phoc"
+license="GPL-3.0-only"
+makedepends="meson ninja gobject-introspection-dev libinput-dev wayland-dev
+	wayland-protocols libxkbcommon-dev wlroots-dev gnome-desktop-dev"
+checkdepends="xvfb-run"
+options="!check" # Needs fullblown EGL
+source="https://source.puri.sm/Librem5/phoc/-/archive/v$pkgver/phoc-v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-v$pkgver"
+
+build() {
+	meson \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--buildtype=plain \
+		. output
+	ninja -C output
+}
+
+check() {
+	xvfb-run ninja -C output test
+}
+
+package() {
+	DESTDIR="$pkgdir/" ninja -C output install
+}
+sha512sums="7fd9a1a83334c37903df95eda9915bcfe30bca1a1bd4cc6d540701303dba712f0c628de8bc8351a1651edc9ee7742a11bd8647a4f0cae62486ef21e738d88c85  phoc-v0.1.8.tar.gz"
