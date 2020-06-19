@@ -1,0 +1,53 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname=linux-sony-hollyss
+pkgver=3.10.72
+pkgrel=0
+pkgdesc="Sony Xperia M5 kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="sony-hollyss"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl"
+
+# Source
+_repository="CHANGEME"
+_commit="123456"
+_config="config-$_flavor.$arch"
+source="
+	kernel-3.10.tar
+	$_config
+	gcc7-give-up-on-ilog2-const-optimizations.patch
+	gcc8-fix-put-user.patch
+	mt_cpufreq_64.c.patch
+	setup.c.patch
+
+	
+"
+builddir="$srcdir/kernel-3.10"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+}
+
+sha512sums="eb9eca973733e71fb02fa4777a3e31ff8190d5f5a51133af69001a81bb35438bff2218c90dd12ec02cc7439458942d2ecfe8bf128002382ae09359a13f0fa036  kernel-3.10.tar
+b2176f7259c4234732ea82592c2587004478e3e7743eddd3ef275dcfd4f19f60fea8255ee943653faeb525e727def80e381918bc620a813bbd7b6dd65bbb5bd6  config-sony-hollyss.aarch64
+77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+f14120224c75ed3ca2944ec92a684d16643f4517cd86f328fb85dffca501ea7eef40daec1b24ed8b9877c4f888fa00e5d91a0fa57e74ed5eae156aeb38ddf09e  mt_cpufreq_64.c.patch
+d120bafcc31d6bc25009057a213ca4731e5074c9a21271fb492bbe82ec95d9d769a757aa931677970ff45cb525850ea27a7864ba1ec8f982931d9aafb8635077  setup.c.patch"
