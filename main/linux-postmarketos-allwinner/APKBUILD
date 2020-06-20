@@ -2,7 +2,7 @@ _flavor=postmarketos-allwinner
 _config="config-$_flavor.$CARCH"
 pkgname=linux-$_flavor
 pkgver=5.7.0_git20200629
-pkgrel=0
+pkgrel=1
 arch="aarch64"
 pkgdesc="Kernel fork with Pine64 patches"
 url="https://gitlab.com/pine64-org/linux/"
@@ -65,6 +65,6 @@ dev() {
 }
 
 sha512sums="2a5b845a9879a2dd2757b51160d712a4375bf3db2bea4a212191c68f6c4472b131b64066af2b83889ac0ccdf1e4443ef83c789aabeca93db7502e6ac21eb3934  linux-postmarketos-allwinner-aad90c10f4ff90ec9c541447ccddd6a0d58afd1e.tar.gz
-9c94a170a22496a2fa1aba525bb5bc641e917919a747a00ef94aedaac46bd0e290b0a407918bbbab8664607b53d52eec1949fed125f541ccd61c1b0dd7219233  config-postmarketos-allwinner.aarch64
+643272d395c2c2a23512bd17e0e826fa3cf1f387b8d29fcb26148e0cb1979ba70c2d37ce427745ebd72960c8b7160fd736e0328cd57a4c663be1b5f7919b054c  config-postmarketos-allwinner.aarch64
 3c0d9d282a36a5f6a442b434839d77851f9b20185725cb73aee88e6e209c68fd3d71df8e2a36ffcdb605c47f86df5dbcda5d00353c75c23303861936196924e0  disable-power-save.patch
 c6e1ff1c060f68a59fa57a7cfc573a500fc8d200f56193530f7c1967e4f70f17cb2c930496f6a6489a6a10de130a2e66f5cd328eb6c4ae936f4af348a7413c3b  touch-dts.patch"
