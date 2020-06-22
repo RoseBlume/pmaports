@@ -1,0 +1,52 @@
+From a61327742da495aff5f45d01a37163a97d097e24 Mon Sep 17 00:00:00 2001
+From: Bart Ribbers <bribbers@disroot.org>
+Date: Mon, 22 Jun 2020 11:24:08 +0200
+Subject: [PATCH] Revert "Don't use os-release"
+
+This reverts commit 808ada194a7a4bd360ae7995fe8e5dc721761723.
+---
+ .../pages/summary/gis-summary-page.c          | 24 ++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/gnome-initial-setup/pages/summary/gis-summary-page.c b/gnome-initial-setup/pages/summary/gis-summary-page.c
+index 92d4132..8d17b7c 100644
+--- a/gnome-initial-setup/pages/summary/gis-summary-page.c
++++ b/gnome-initial-setup/pages/summary/gis-summary-page.c
+@@ -250,11 +250,33 @@ static void
+ update_distro_name (GisSummaryPage *page)
+ {
+   GisSummaryPagePrivate *priv = gis_summary_page_get_instance_private (page);
++  char *buffer;
++  char *name;
+   char *text;
+ 
+-  text = g_strdup_printf (_("_Start Using your Librem 5"));
++  name = NULL;
++
++  if (g_file_get_contents ("/etc/os-release", &buffer, NULL, NULL))
++    {
++      name = get_item (buffer, "NAME");
++      g_free (buffer);
++    }
++
++  if (!name)
++    name = g_strdup ("GNOME 3");
++
++  /* Translators: the parameter here is the name of a distribution,
++   * like "Fedora" or "Ubuntu". It falls back to "GNOME 3" if we can't
++   * detect any distribution. */
++  text = g_strdup_printf (_("_Start Using %s"), name);
+   gtk_label_set_label (GTK_LABEL (priv->start_button_label), text);
+   g_free (text);
++
++  /* Translators: the parameter here is the name of a distribution,
++   * like "Fedora" or "Ubuntu". It falls back to "GNOME 3" if we can't
++   * detect any distribution. */
++
++  g_free (name);
+ }
+ 
+ static void
+-- 
+2.27.0
+

@@ -1,0 +1,37 @@
+# Forked from Alpine to apply Purism's mobile patches
+pkgname=gnome-initial-setup
+pkgver=9999_git20191217
+pkgrel=0
+_commit="10e0c5f447f2cf81086c78da94307fc908540957"
+pkgdesc="A simple, easy,and safe way to prepare a new system"
+url="https://wiki.gnome.org/Design/OS/InitialSetup"
+arch="all !armhf !s390x !ppc64le !mips !mips64" # limited by gnome-shell&mutter
+license="GPL-2.0-or-later"
+depends="gsettings-desktop-schemas iso-codes dbus:org.freedesktop.Secrets"
+makedepends="meson cheese-dev ibus-dev networkmanager-dev polkit-dev
+	accountsservice-dev gnome-desktop-dev fontconfig-dev libgweather-dev
+	gtk+3.0-dev gnome-online-accounts-dev gdm-dev geocode-glib-dev
+	geoclue-dev rest-dev libpwquality-dev webkit2gtk-dev libsecret-dev
+	libnma-dev krb5-dev libhandy-dev"
+options="!check" # no tests
+subpackages="$pkgname-lang"
+source="https://source.puri.sm/Librem5/gnome-initial-setup/-/archive/$_commit/gnome-initial-setup-$_commit.tar.gz
+	0001-Revert-Don-t-use-os-release.patch
+	"
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	abuild-meson \
+		-Dregion-page=false \
+		-Dsoftware-sources=disabled \
+		-Dsystemd=false \
+		. output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="db95de650a207da9afe9e0534942addd965c9dae15bbcb34e9d0bfe0d80a644f69f000e1e68448b0073ebbb98291fa8e02b6381a6c46959cf016dce348a3b521  gnome-initial-setup-10e0c5f447f2cf81086c78da94307fc908540957.tar.gz
+0e0a8136b5dcc3511e75cacb7345703e97322a4043161bfb2e1cf67a58697783a9baba67d399d9482e2b75f170cd7d06ddad69f5cf6a5be7e653a2452b0e942a  0001-Revert-Don-t-use-os-release.patch"
