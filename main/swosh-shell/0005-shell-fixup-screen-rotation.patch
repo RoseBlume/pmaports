@@ -1,0 +1,136 @@
+From 8c864e9284d7ac27867530bc3ce224650cd77d74 Mon Sep 17 00:00:00 2001
+From: Antoine Fontaine <antoine.fontaine@epfl.ch>
+Date: Sun, 5 Jul 2020 05:25:14 +0200
+Subject: [PATCH 5/5] shell: fixup screen rotation
+
+fixes https://source.puri.sm/afontain/phosh/-/issues/3.
+---
+ src/shell.c             | 34 +++++++++++++++++++++++++++++-----
+ tools/meson.build       |  2 ++
+ tools/swosh-map-outputs | 21 +++++++++++++++++++++
+ 3 files changed, 52 insertions(+), 5 deletions(-)
+ create mode 100755 tools/swosh-map-outputs
+
+diff --git a/src/shell.c b/src/shell.c
+index 6eb5f6a..e35b618 100644
+--- a/src/shell.c
++++ b/src/shell.c
+@@ -21,6 +21,7 @@
+ 
+ #include "config.h"
+ #include "shell.h"
++#include "swosh-utils.h"
+ 
+ #include "batteryinfo.h"
+ #include "background-manager.h"
+@@ -104,6 +105,20 @@ typedef struct _PhoshShell
+ G_DEFINE_TYPE_WITH_PRIVATE (PhoshShell, phosh_shell, G_TYPE_OBJECT)
+ 
+ 
++static void
++swosh_map_touch_inputs_to_output (PhoshMonitor *monitor)
++{
++  char *command;
++  g_return_if_fail (PHOSH_IS_MONITOR (monitor));
++
++  //FIXME
++  command = g_strdup_printf ("swosh-map-outputs %s", monitor->name);
++  g_print ("command %s, output %s\n", command, monitor->name);
++  system (command);
++  g_free (command);
++}
++
++
+ static void
+ settings_activated_cb (PhoshShell *self,
+                        PhoshPanel *window)
+@@ -515,6 +530,12 @@ phosh_shell_constructed (GObject *object)
+       self);
+   }
+ 
++  if (priv->primary_monitor) {
++    g_signal_connect (priv->primary_monitor, "configured", G_CALLBACK (swosh_map_touch_inputs_to_output), NULL);
++    if (phosh_monitor_is_configured (priv->primary_monitor))
++      swosh_map_touch_inputs_to_output (priv->primary_monitor);
++  }
++
+   g_idle_add ((GSourceFunc) setup_idle_cb, self);
+ }
+ 
+@@ -584,18 +605,17 @@ phosh_shell_rotate_display (PhoshShell *self,
+                             guint degree)
+ {
+   PhoshShellPrivate *priv = phosh_shell_get_instance_private (self);
+-  PhoshWayland *wl = phosh_wayland_get_default();
+   guint current;
++  char *command;
+ 
+-  g_return_if_fail (phosh_wayland_get_phosh_private (wl));
+   g_return_if_fail (priv->primary_monitor);
+   current = phosh_monitor_get_rotation (priv->primary_monitor);
+   if (current == degree)
+     return;
+ 
+-  phosh_private_rotate_display (phosh_wayland_get_phosh_private (wl),
+-                                phosh_layer_surface_get_wl_surface (priv->panel),
+-                                degree);
++  command = g_strdup_printf ("output %s transform %i", priv->primary_monitor->name, degree);
++  swaymsg (command);
++  g_free (command);
+   g_object_notify_by_pspec (G_OBJECT (self), props[PHOSH_SHELL_PROP_ROTATION]);
+ }
+ 
+@@ -622,6 +642,10 @@ phosh_shell_set_primary_monitor (PhoshShell *self, PhoshMonitor *monitor)
+   panels_dispose (self);
+   panels_create (self);
+ 
++  g_signal_connect (monitor, "configured", G_CALLBACK (swosh_map_touch_inputs_to_output), NULL);
++  if (phosh_monitor_is_configured (monitor))
++    swosh_map_touch_inputs_to_output (monitor);
++
+   g_object_notify_by_pspec (G_OBJECT (self), props[PHOSH_SHELL_PROP_PRIMARY_MONITOR]);
+ }
+ 
+diff --git a/tools/meson.build b/tools/meson.build
+index cf625be..ea5d25e 100644
+--- a/tools/meson.build
++++ b/tools/meson.build
+@@ -26,6 +26,8 @@ executable('swosh-osk-stub', ['phosh-osk-stub.c'],
+            install: true,
+            dependencies: osk_stub_deps)
+ 
++install_data('swosh-map-outputs', install_dir: bindir)
++
+ executable('app-buttons', ['app-buttons.c'] + stubs,
+            dependencies: phosh_tool_dep)
+ 
+diff --git a/tools/swosh-map-outputs b/tools/swosh-map-outputs
+new file mode 100755
+index 0000000..72bdede
+--- /dev/null
++++ b/tools/swosh-map-outputs
+@@ -0,0 +1,21 @@
++#!/bin/sh
++
++exec >/tmp/swosh-map.log 2>&1
++
++# This script will map every touch devices to the output specified
++# as first argument. This allows rotating the output while still
++# having matching input.
++
++set -e
++output="$1"
++if [ -z "$output" ]; then
++	echo "missing output argument"
++	exit 1
++fi
++
++for input in $(swaymsg -t get_inputs --raw |
++		jq '.[] | select(.type == "touch") | .identifier')
++do
++	printf "mapping %s to %s\n" "$input" "$output"
++	swaymsg input "$input" map_to_output "$output"
++done
+-- 
+2.27.0
+

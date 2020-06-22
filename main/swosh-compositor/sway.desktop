@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Swosh
+Name[en]=Swosh
+Comment=This session logs you into Swosh
+Comment[en]=This session logs in you into Swosh
+Exec=dbus-run-session /usr/bin/sway
+TryExec=/usr/bin/swosh
+Icon=
+Type=Application
+X-DesktopNames=Sway
+Keywords=launch;Sway;desktop;session;

@@ -1,0 +1,101 @@
+# Forked from Alpine to add patches. More patches to come.
+
+pkgname=swosh-compositor
+pkgver=1.4
+pkgrel=5
+pkgdesc="Patched sway for swosh"
+url="https://source.puri.sm/afontain/sway"
+arch="all"
+license="MIT"
+options="suid !check" # no test suite
+depends="swaybg"
+replaces="sway"
+provides="sway"
+makedepends="cairo-dev
+	gdk-pixbuf-dev
+	json-c-dev
+	libevdev-dev
+	libinput-dev
+	libxkbcommon-dev
+	linux-pam-dev
+	meson
+	ninja
+	pango-dev
+	pcre2-dev
+	scdoc
+	wayland-dev
+	wayland-protocols
+	wlroots-dev
+	"
+subpackages="
+	$pkgname-doc
+	$pkgname-bash-completion:bashcomp:noarch
+	$pkgname-fish-completion:fishcomp:noarch
+	$pkgname-zsh-completion:zshcomp:noarch
+	"
+source="$pkgname-$pkgver.tar.gz::https://github.com/swaywm/sway/archive/$pkgver.tar.gz
+	0001-layer_shell-arrange-layers-in-reverse-order.patch
+	sway.desktop
+	config
+	start_shell
+	swosh_defaults
+	"
+builddir="$srcdir/sway-$pkgver"
+
+build() {
+	meson \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--buildtype=plain \
+		. output
+	ninja -C output
+}
+
+bashcomp() {
+	depends=""
+	pkgdesc="Bash completions for $pkgname"
+	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
+
+	mkdir -p "$subpkgdir"/usr/share/
+	mv "$pkgdir"/usr/share/bash-completion "$subpkgdir"/usr/share/
+}
+
+fishcomp() {
+	depends=""
+	pkgdesc="Fish completions for $pkgname"
+	install_if="$pkgname=$pkgver-r$pkgrel fish"
+
+	mkdir -p "$subpkgdir"/usr/share/fish
+	mv "$pkgdir"/usr/share/fish/vendor_completions.d "$subpkgdir"/usr/share/fish/completions
+}
+
+zshcomp() {
+	depends=""
+	pkgdesc="Zsh completions for $pkgname"
+	install_if="$pkgname=$pkgver-r$pkgrel zsh"
+
+	mkdir -p "$subpkgdir"/usr/share/zsh
+	mv "$pkgdir"/usr/share/zsh/site-functions "$subpkgdir"/usr/share/zsh
+}
+
+package() {
+	DESTDIR="$pkgdir" ninja -C output install
+	chmod u+s "$pkgdir"/usr/bin/sway
+
+	install -D -m644 "$srcdir"/config \
+		"$pkgdir"/etc/sway/config
+	install -D -m644 "$srcdir"/start_shell \
+		"$pkgdir"/etc/sway/config.d/start_shell
+	install -D -m644 "$srcdir"/swosh_defaults \
+		"$pkgdir"/etc/sway/config.d/swosh_defaults
+	install -D -m644 "$srcdir"/sway.desktop \
+		"$pkgdir"/usr/share/wayland-sessions/sway.desktop
+}
+
+sha512sums="3b280bdfdbdae8fb9b4f555bc630c64e7c1d09f7b2c783b99413863a6b620d50cd2b6d10d63e11fdfb9c678fce9a403228ac52fa69fb52561ffbd06790505a71  swosh-compositor-1.4.tar.gz
+5aca56597eab4127660bc8e264d7255c13995d180b45fc03ca1626ec60ab4795a17317e70cac87d456dec30b75172e99df8d85fe87ca974d1af398c7c848f80c  0001-layer_shell-arrange-layers-in-reverse-order.patch
+d231af7b634335e9329d5a80d5c0c5f842daec5f4b3f2e670d22739f3b6a788758375b8743133edecae4327be5b101ebe29f60ea4ea6211d17f82ea80f6115e8  sway.desktop
+0d2f37a8fc8ccc277912e72aca8ac4e52b4077b382dad7b3ab73ec40950a3fc90545de3c12a1ee5749ebdf490d2bd5b143f3d0fd98099e5a4c94e5e6cdd293e2  config
+5f7c500c5d0d77f7576a2fce3fd414cfb3d2b30072d1a092bfcd9a25a68d0df3ddb38f80fdf00a466331b8bb6f18da3a2ecd1ffedc4e1c3cf71b408d964d2116  start_shell
+84fb459fa96b41648c6c6ff220ed1c0abe4446f6d88f8fc95d3e97cee763b602802eeb995a99af659662d5035993391805a82d366e89d6b97d8cbb22aa92ff89  swosh_defaults"

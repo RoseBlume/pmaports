@@ -1,0 +1,49 @@
+From 12e1e486e8f16a41fb458621772e0fd359b9fc06 Mon Sep 17 00:00:00 2001
+From: Antoine Fontaine <antoine.fontaine@epfl.ch>
+Date: Wed, 24 Jun 2020 00:47:02 +0200
+Subject: [PATCH 3/5] home: autohide action buttons when home screen is open
+
+---
+ src/home.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/home.c b/src/home.c
+index addd81d..a3f3bfb 100644
+--- a/src/home.c
++++ b/src/home.c
+@@ -51,6 +51,8 @@ struct _PhoshHome
+   GtkWidget *btn_home;
+   GtkWidget *arrow_home;
+   GtkWidget *btn_osk;
++  GtkWidget *btn_next;
++  GtkWidget *btn_close;
+   GtkWidget *overview;
+ 
+   struct {
+@@ -258,6 +260,8 @@ phosh_home_class_init (PhoshHomeClass *klass)
+   gtk_widget_class_bind_template_child (widget_class, PhoshHome, btn_home);
+   gtk_widget_class_bind_template_child (widget_class, PhoshHome, arrow_home);
+   gtk_widget_class_bind_template_child (widget_class, PhoshHome, btn_osk);
++  gtk_widget_class_bind_template_child (widget_class, PhoshHome, btn_next);
++  gtk_widget_class_bind_template_child (widget_class, PhoshHome, btn_close);
+   gtk_widget_class_bind_template_child (widget_class, PhoshHome, overview);
+ 
+   gtk_widget_class_set_css_name (widget_class, "phosh-home");
+@@ -349,10 +353,14 @@ phosh_home_set_state (PhoshHome *self, PhoshHomeState state)
+ 
+   if (state == PHOSH_HOME_STATE_UNFOLDED) {
+     gtk_widget_hide (self->btn_osk);
++    gtk_widget_hide (self->btn_next);
++    gtk_widget_hide (self->btn_close);
+     kbd_interactivity = TRUE;
+     phosh_overview_reset (PHOSH_OVERVIEW (self->overview));
+   } else {
+     gtk_widget_show (self->btn_osk);
++    gtk_widget_show (self->btn_next);
++    gtk_widget_show (self->btn_close);
+     kbd_interactivity = FALSE;
+   }
+   phosh_layer_surface_set_kbd_interactivity (PHOSH_LAYER_SURFACE (self), kbd_interactivity);
+-- 
+2.27.0
+
