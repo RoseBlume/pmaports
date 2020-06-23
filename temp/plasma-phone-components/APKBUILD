@@ -2,13 +2,13 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=plasma-phone-components
 pkgver=5.18.80_git20200328
-pkgrel=1
+pkgrel=2
 _commit="46f6138509c99d1d1d14f31cee7c417ecf2804e9"
 pkgdesc="Modules providing phone functionality for Plasma"
 arch="all !armhf"
 url="https://www.plasma-mobile.org/"
 license="GPL-2.0-or-later AND LGPL-2.1-or-later"
-depends="plasma-nano qt5-qtquickcontrols2 plasma-workspace dbus-x11 kactivities plasma-pa plasma-nm libqofono breeze-icons plasma-settings telepathy-ofono telephony-service"
+depends="plasma-nano qt5-qtquickcontrols2 plasma-workspace dbus-x11 kactivities plasma-pa plasma-nm libqofono breeze-icons plasma-settings telepathy-ofono telephony-service $pkgname-vkbd-style"
 makedepends="extra-cmake-modules qt5-qtbase-dev qt5-qtdeclarative-dev kactivities-dev plasma-framework-dev kservice-dev kdeclarative-dev ki18n-dev kio-dev kcoreaddons-dev kconfig-dev kbookmarks-dev kwidgetsaddons-dev kcompletion-dev kitemviews-dev kjobwidgets-dev solid-dev kxmlgui-dev kconfigwidgets-dev kauth-dev kcodecs-dev kpackage-dev kwindowsystem-dev kdbusaddons-dev knotifications-dev kwayland-dev gst-plugins-base-dev"
 source="
 	$pkgname-$_commit.tar.gz::https://invent.kde.org/kde/plasma-phone-components/-/archive/$_commit/plasma-phone-components-$_commit.tar.gz
@@ -16,6 +16,7 @@ source="
 	"
 options="!check" # No tests
 builddir="$srcdir/$pkgname-$_commit"
+subpackages="$pkgname-vkbd-style:vkbd_style:noarch"
 
 build() {
 	cmake -B build \
@@ -32,6 +33,13 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" make -C build install
+}
+
+vkbd_style() {
+	depends=""
+	pkgdesc="Plasma Mobile style for QT virtual keyboard"
+
+	amove usr/lib/qt5/qml/QtQuick/VirtualKeyboard/Styles/Plasma
 }
 sha512sums="97caf44a3830ac7f6bcac2feac31aef59e8afa7d7d834f68f6c0dc04ae2b1a923a6d1af48c5c3d41309c525dad92c8c2eb8b5b4ecf58f183518d756074f013e9  plasma-phone-components-46f6138509c99d1d1d14f31cee7c417ecf2804e9.tar.gz
 5853e72077c356f8347ea1c8503d5e301505acaa39ccf2fa105abe054a3063e735f5bcb2db1c1357f53032714599bfbf687fff2cbe21a1743930b946900ff7cf  set-postmarketos-wallpaper.patch"
