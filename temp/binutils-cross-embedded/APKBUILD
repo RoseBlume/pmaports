@@ -1,0 +1,97 @@
+# Forked from Alpine, because it's only in edge. Needed for crust.
+_pkgbase=binutils
+_targets="or1k-elf"
+pkgname="binutils-cross-embedded"
+pkgver=2.34
+pkgrel=1
+pkgdesc="Tools necessary to build programs for embedded targets"
+url="https://www.gnu.org/software/binutils/"
+makedepends="gettext libtool autoconf automake bison texinfo zlib-dev"
+arch="x86_64"
+license="GPL-2.0 GPL-3.0-or-later LGPL-2.0 BSD"
+subpackages="binutils-or1k-elf:or1k_elf"
+source="https://ftp.gnu.org/gnu/$_pkgbase/$_pkgbase-$pkgver.tar.xz"
+
+builddir="$srcdir/$_pkgbase-$pkgver"
+
+build() {
+	for target in $_targets; do
+		workingdir="$srcdir/build-$target"
+		mkdir "$workingdir"
+		cd "$workingdir"
+		"$builddir"/configure \
+			--target=$target \
+			--with-sysroot=/usr/$target \
+			--prefix=/usr/ \
+			--infodir=/deleteme/info \
+			--htmldir=/deleteme/html \
+			--pdfdir=/deleteme/pdf \
+			--mandir=/deleteme/man \
+			--with-gnu-as \
+			--with-gnu-ld \
+			--enable-deterministic-archieves \
+			--enable-interwork \
+			--enable-multilib \
+			--enable-plugins \
+			--enable-ld=default \
+			--disable-nls
+		make tooldir=/usr
+	done
+}
+
+check() {
+	for target in $_targets; do
+		workingdir="$srcdir/build-$target"
+		cd "$workingdir"
+		make check
+	done
+}
+
+package() {
+	for target in $_targets; do
+		depends="$depends $_pkgbase-$target"
+	done
+	mkdir -p "$pkgdir"
+}
+
+_install_subpkg() {
+	target="${subpkgname#$_pkgbase-}"
+	pkgdesc="Tools necessary to build programs for $target"
+	workingdir="$srcdir/build-$target"
+	cd "$workingdir"
+	make install DESTDIR="$subpkgdir"
+	rm -rf "$subpkgdir"/deleteme
+	for bin in ar as nm objcopy objdump ranlib strip readelf; do
+		rm -f "$subpkgdir"/usr/bin/"$bin"
+	done
+}
+
+arm_none_eabi() {
+	_install_subpkg
+}
+
+avr() {
+	_install_subpkg
+}
+
+mips_mti_elf() {
+	_install_subpkg
+}
+
+msp430_elf() {
+	_install_subpkg
+}
+
+xtensa_esp32_elf() {
+	_install_subpkg
+}
+
+xtensa_lx106_elf() {
+	_install_subpkg
+}
+
+or1k_elf() {
+	_install_subpkg
+}
+
+sha512sums="2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c66a092a82adc443182eacd8a5a8001c19a76101f0c7ba40c27de0bbd  binutils-2.34.tar.xz"
