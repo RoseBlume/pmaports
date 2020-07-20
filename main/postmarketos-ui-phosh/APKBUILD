@@ -37,6 +37,7 @@ source="60-lightdm-autologin.conf
 	qt-tweaks.sh
 	dconf-profile-postmarketos
 	01-phoc-scaling
+	scale-to-fit
 	"
 options="!check"
 
@@ -53,6 +54,8 @@ package() {
 		"$pkgdir"/etc/dconf/profile/user
 	install -Dm755 "$srcdir"/01-phoc-scaling \
 		"$pkgdir"/etc/dconf/db/postmarketos.d/01-phoc-scaling
+	install -Dm755 "$srcdir"/scale-to-fit \
+		"$pkgdir"/usr/bin/scale-to-fit
 }
 
 qt_tweaks() {
@@ -69,4 +72,5 @@ sha512sums="c51a5cf93495069d71900dd1c6fbddfa3bdfb70dbab8141d1b115b6150975a12206c
 57793bb079c76ba3bdcfca7880aa887de11fe80e7a05557b78435e57feabab70fbaeedc42da3aec6f914c35bba8e8ee9918367516eb45ee247f63f694624f179  gtk-app-wayland.sh
 6e193eca3961a78d47b4656892eae34d019d9317a255a201f5ea61e3300caff04c526a27cd98d0edc072b36e3eaf3a1768f4cd27c5e2be8b19c167d535c820a6  qt-tweaks.sh
 e00756c2c056f68123d877f2f6a5ad3434ca7851095f021c26831c081728b821cf7947ba08d6742eee51d93dc83859a7ead553f4dcbc8b6fcefa33ae344ba178  dconf-profile-postmarketos
-6d99bd718fece9d202ebf76b807335b1e31ebeca52f2b8870bb4772787cf76bf4602f2506bc4ed077da0eac584ec72b879ad8317c926aabcf2ed48b0d7ba48f7  01-phoc-scaling"
+6d99bd718fece9d202ebf76b807335b1e31ebeca52f2b8870bb4772787cf76bf4602f2506bc4ed077da0eac584ec72b879ad8317c926aabcf2ed48b0d7ba48f7  01-phoc-scaling
+369d8552ecb935a389e6d2f54ede4dc7f0ec01447ef8500b7aadc2d9fa293d31e3ba8af01e1378718b0e293a31b7989087820558cacf84dc9fb6317be3ca3eb0  scale-to-fit"
