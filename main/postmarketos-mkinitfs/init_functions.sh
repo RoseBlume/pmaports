@@ -220,7 +220,7 @@ delete_old_install_partition() {
 		return
 	fi
 
-	device="$(echo "$partition" | sed -E 's/3$//')"
+	device="$(echo "$partition" | sed -E 's/p?3$//')"
 	echo "First boot after running on-device installer - deleting old" \
 		"install partition: $partition"
 	parted -s "$device" rm 3
