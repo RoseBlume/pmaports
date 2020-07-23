@@ -1,0 +1,16 @@
+pkgname=postmarketos-config-firefox
+pkgver=1
+pkgrel=0
+pkgdesc="Firefox tweaks for small screens"
+url="https://postmarketos.org"
+depends=""
+source="prefs.js"
+arch="noarch"
+license="GPL3"
+options="!check"
+
+package() {
+	install -Dm644 "$srcdir/prefs.js" \
+		"$pkgdir/usr/lib/firefox/defaults/pref/pmos-prefs.js"
+}
+sha512sums="ad762e31303406d455dc692740feb928508b47ebf2c628253aec77b646ad707e0006de9c1b700f07c0e143c3b0b2988bcb8a0439d6d778d4c9b9d179e44f7c9d  prefs.js"
