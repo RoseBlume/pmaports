@@ -46,6 +46,7 @@ _pmb_recommends="breeze-gtk
 	qmlkonsole
 	spacebar
 	xdg-user-dirs
+	postmarketos-config-firefox
 	"
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="kwinrc
