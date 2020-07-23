@@ -29,6 +29,7 @@ _pmb_recommends="calls
 	postmarketos-artwork-wallpapers
 	xdg-user-dirs
 	xorg-server-xwayland
+	postmarketos-config-firefox
 	"
 subpackages="$pkgname-qt_tweaks"
 install="$pkgname.post-install $pkgname.post-upgrade"
