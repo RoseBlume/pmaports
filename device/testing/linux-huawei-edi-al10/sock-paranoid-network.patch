@@ -1,0 +1,13 @@
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 98568723..db1919cb 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -574,7 +574,7 @@ static int sock_setbindtodevice(struct sock *sk, char __user *optval,
+ 
+ 	/* Sorry... */
+ 	ret = -EPERM;
+-	if (!ns_capable(net->user_ns, CAP_NET_RAW) && !in_egroup_p(AID_INET))	
++	if (!ns_capable(net->user_ns, CAP_NET_RAW))	
+ 		goto out;
+ 
+ 	ret = -EINVAL;

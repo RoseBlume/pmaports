@@ -1,0 +1,22 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-huawei-edi-al10
+pkgdesc="Huawei Honor Note 8"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-huawei-edi-al10 mkbootimg mesa-dri-gallium"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="3ebd2a4e88fbfb6ef241f09768c7c3bbd65d744f1c1ae3ffb2e21a344b23481d169c4651c635c81cc594b19f69c7a7c45d2dbc5e1a195cfcbeaf8d5d15eae03b  deviceinfo"
