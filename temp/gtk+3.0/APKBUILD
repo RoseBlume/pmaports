@@ -1,8 +1,8 @@
 # Forked from Alpine to apply Purism's patches for responsivness
 pkgname=gtk+3.0
-pkgver=9999_git20191223
+pkgver=9999_git20200616
 pkgrel=0
-_commit="6c2d6dd3b3cd979aa987d00b7f5bc5666dd55d69"
+_commit="21ecddab70544dc4421cd34247e9c7c2ef551409"
 pkgdesc="The GTK+ Toolkit (v3)"
 url="https://www.gtk.org/"
 install="$pkgname.post-install $pkgname.post-upgrade $pkgname.post-deinstall"
@@ -130,5 +130,5 @@ doc() {
 	default_doc
 }
 
-sha512sums="720b2a0192adb58380bfed922da7c66617465f2d3f8b28987b2f128d8d5804c64edbbf357c4dea3a0c912d6120617ed24c64d95ff0693e153b54cf0c0568e448  gtk-6c2d6dd3b3cd979aa987d00b7f5bc5666dd55d69.tar.gz
+sha512sums="8d2a85ad058191348927454170c8ab63dfbdfce6a7b3172824aa33b128d17b6f3de7ba85445efa658adb5d7a98d60730e014d1113b19a2f036222f32ae62bf00  gtk-21ecddab70544dc4421cd34247e9c7c2ef551409.tar.gz
 e4ea76484b70bd9beb65b2964bbcff3b3f78f5f6fe70b12309a7721ca134e3735e8aaac09803f93b393a6130a703f8f346c0df89ad45d18c580dac1e0e922276  10-Revert-gdkseatdefault-Grab-touch-events-where-applic.patch"
