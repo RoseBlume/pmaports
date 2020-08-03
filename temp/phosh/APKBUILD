@@ -1,7 +1,7 @@
 # Forked from Alpine to upgrade to newer version
 pkgname=phosh
-pkgver=0.4.1
-pkgrel=2
+pkgver=0.4.3
+pkgrel=0
 pkgdesc="Shell PoC for the Librem5"
 # Blocked on mips and s390x by gnome-session, gnome-settings-daemon, squeekboard and libhandy
 # Blocked on ppc64le by gnome-session
@@ -17,12 +17,7 @@ subpackages="$pkgname-lang"
 source="$pkgname-$pkgver.tar.xz::https://repo.pureos.net/pureos/pool/main/p/phosh/phosh_$pkgver.tar.xz
 	phosh.desktop
 	sm.puri.OSK0.desktop
-	0001-panel-implement-reboot-action.patch
 	0002-PMOS-Hide-Logout-action.patch
-	0003-shell-Add-phosh_shell_get_locked.patch
-	0004-settings-Emit-feedback-when-notifications-get-added.patch
-	0005-phosh-wayland.c-Indent.patch
-	0006-Add-keyboard-forwarding-protocol.patch
 	"
 options="!check" # Needs a running Wayland compositor
 
@@ -51,12 +46,7 @@ package() {
 		"$pkgdir"/usr/share/applications/sm.puri.OSK0.desktop
 
 }
-sha512sums="2d0b68523530d6239494ee6137e1cc40a7d6e157141c7dacb91e8c3ff380e7c6dabb35149264fb2603064463eabafd15ac9745c9630ebf8cd50d19436eb3d0ac  phosh-0.4.1.tar.xz
+sha512sums="43eec9987daec6f220e853021a8e32cfdb00f73e097479847e846ab318d506419f8d4d0712ff8f12d2e7b1b863a9edbf4465ad430df092b593f0b06d24bc27b1  phosh-0.4.3.tar.xz
 6644870edbbbc6b88d6e19f7771d81dba1a11066c2b34e4c22736db73a2dfd0d4909b4967503059c35385c5139a834a5c06a3c56b148ba1275d7f089c0c5f33c  phosh.desktop
 f97019598323276cf97ae62f04b6245983198e04b228ddc605835ee46845d9b88c6890fb86e97e4bb6f1ad73361437d9ed18c91e81fe1284a88cdcb92d3fdc69  sm.puri.OSK0.desktop
-b3e5be6fd8ec694659a8e92f08758876becb81e940b51ded00508319aff5eb21b0bd8f151505d9eebfedf1830c47018f01a04c89692191ac9c4fc4acc3772786  0001-panel-implement-reboot-action.patch
-f289c8a9db01741058881ca6b20c386fcd87f00d3f638f1d32d181bed70d36e9696d84f4c210b581138fff6fceeafa5dcbcb4e1097f04eb29d8cee2930ca4446  0002-PMOS-Hide-Logout-action.patch
-04c1e006a6e7bf89825df4a1293d3afd4ccb27c077d3c3d8307a738f754e6d3ff839b5c0c70fd5f25c633330d1f8d55c4a0cf0392b3feade251db7750a01906e  0003-shell-Add-phosh_shell_get_locked.patch
-53d12b170707192ff870b3cd10ec0514ff7bc20489d2438057240dd58c12de34ab615de23bc0043e4da638e9f0a2442e276395dddee139938d621e8cee12e714  0004-settings-Emit-feedback-when-notifications-get-added.patch
-dc4758711a0f192ac9778820571efde560558344b8c1016e2a9445828d5f2a4c6b6a6d3e25c2affcde7ad398d5c42863c0a8e005355fb75b7d3639003da566d5  0005-phosh-wayland.c-Indent.patch
-599d77c52ee7cb20cef0c9ac9385b2a6a0083b19500ac0b89432058376f01ae32d99c5036a7004a3f82afaa0ed1279501e9be11df0b82aa2ba75c4ddd79f955c  0006-Add-keyboard-forwarding-protocol.patch"
+f289c8a9db01741058881ca6b20c386fcd87f00d3f638f1d32d181bed70d36e9696d84f4c210b581138fff6fceeafa5dcbcb4e1097f04eb29d8cee2930ca4446  0002-PMOS-Hide-Logout-action.patch"
