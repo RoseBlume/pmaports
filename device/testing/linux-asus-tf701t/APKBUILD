@@ -15,7 +15,7 @@ makedepends="bash bc bison devicepkg-dev flex openssl-dev perl xz"
 
 # Source
 _repository="android_kernel_asus_tf701t"
-_commit="05f4d1b67a2dde55ebfeac72af12deadf0752140"
+_commit="2226ef745f61a8826b9656cd909cc141aa1db481"
 _config="config-asus-tf701t.armv7"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/LineageOS/$_repository/archive/$_commit.tar.gz
@@ -25,7 +25,6 @@ source="
 	kernel-use-the-gnu89-standard-explicitly.patch
 	tf_defs_patch.patch
 	mach-tegra.patch
-	elan_makefile.patch
 "
 builddir="$srcdir/$_repository-$_commit"
 _outdir="out"
@@ -45,11 +44,10 @@ package() {
 	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
 }
 
-sha512sums="21112e87e2d87b94dd14b13c3b03fd668e869388323acfeefd8fdc35aaeef214bf64ab6c1c67adae4771f3d2fbcdf57203b1ab262b97c09d57e8b98eda7f64a5  linux-asus-tf701t-05f4d1b67a2dde55ebfeac72af12deadf0752140.tar.gz
-d1d9ec903a20b76914fbea88182b7781bd6a0d9809ed6ed806ae5f332bc1330b17d54c33d5e854885d4f5df870cf2985a510644ae583659960c6da546240bbc6  config-asus-tf701t.armv7
+sha512sums="987ea945c308c4c26859b52e22425d72933aefab39670059f2d268e88a15439643abb2d830594373ff6eac665c3ecc6c5fbb78a3aa72ecbe79a0e09ec75ea484  linux-asus-tf701t-2226ef745f61a8826b9656cd909cc141aa1db481.tar.gz
+73d0651155bb2d742b9ede9524c1b895bc4334410730e3f441263f9386c1ed21457638abde106c29fdbc47978e979c1952c3d510e6a42e1dc5dc69796a5c59b0  config-asus-tf701t.armv7
 77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
 197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
 ad0182a483791fc88e058838bc331b2f04a75ba291e763767babdb815efadfc3b4fda97e69e2e3f00a426cabea088e35297a92bd287592597d1e309be68ee92c  kernel-use-the-gnu89-standard-explicitly.patch
 845904937e13efa3ae17e53c65c63b2e6e21b80780f86ecb7c684331d2c93a74e3538b69af7644cffa471de3581ad8e7a343850ac882d955267361bb09029241  tf_defs_patch.patch
-ec5524250a18db441a1ca2956ca9173891169afbef263aa383850960fad7ba415f33df3312697a803178b41d2d00236e1cae6f24871c5bf8db02e4f2357d5cb0  mach-tegra.patch
-37fabbab86ad00ab7677897c4ec565f41ebda9b8f651972f157574ac04d5e275804de6f97c9b13e194e3bc4ca2699950fccfcf1327f9e7a8a6f3ab043d449659  elan_makefile.patch"
+ec5524250a18db441a1ca2956ca9173891169afbef263aa383850960fad7ba415f33df3312697a803178b41d2d00236e1cae6f24871c5bf8db02e4f2357d5cb0  mach-tegra.patch"
