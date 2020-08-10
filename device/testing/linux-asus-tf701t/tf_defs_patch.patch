@@ -1,0 +1,15 @@
+Fix compilation error for tf_driver, need this when not building for android as well
+--- a/security/tf_driver/tf_defs.h
++++ b/security/tf_driver/tf_defs.h
+@@ -538,10 +538,7 @@
+  * Kernel Differences
+  */
+ 
+-#ifdef CONFIG_ANDROID
++/*#ifdef CONFIG_ANDROID*/
+ #define GROUP_INFO		get_current_groups()
+-#else
+-#define GROUP_INFO		(current->group_info)
+-#endif
+ 
+ #endif  /* !defined(__TF_DEFS_H__) */
