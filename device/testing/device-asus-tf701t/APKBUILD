@@ -2,14 +2,14 @@
 pkgname=device-asus-tf701t
 pkgdesc="Asus Transformer Pad"
 pkgver=0
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
-depends="postmarketos-base linux-asus-tf701t mkbootimg mesa-dri-gallium firmware-aosp-broadcom-wlan $pkgname-nvram"
+depends="postmarketos-base linux-asus-tf701t mkbootimg mesa-dri-gallium"
 makedepends="devicepkg-dev"
-subpackages="$pkgname-nvram"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 source="deviceinfo initfs-hook.sh nvram.txt"
 
 build() {
@@ -20,9 +20,9 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-
-nvram() {
-	pkgdesc="nvram.txt for Wifi firmware"
+nonfree_firmware() {
+	pkgdesc="Wifi firmware needed to use WiFi"
+	depends="firmware-aosp-broadcom-wlan"
 	mkdir "$subpkgdir"
 	install -D -m644 "$srcdir"/nvram.txt \
 	"$subpkgdir"/lib/firmware/postmarketos/bcmdhd/bcm43341/nvram.txt
