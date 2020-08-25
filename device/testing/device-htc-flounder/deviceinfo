@@ -6,7 +6,8 @@ deviceinfo_name="Google Nexus 9"
 deviceinfo_manufacturer="HTC"
 deviceinfo_codename="htc-flounder"
 deviceinfo_year="2014"
-deviceinfo_dtb=""
+deviceinfo_dtb="nvidia/tegra132-flounder"
+deviceinfo_append_dtb="true"
 deviceinfo_modules_initfs=""
 deviceinfo_arch="aarch64"
 
@@ -20,7 +21,7 @@ deviceinfo_dev_touchscreen="/dev/input/event2"
 
 # Bootloader related
 deviceinfo_flash_method="fastboot"
-deviceinfo_kernel_cmdline="no_console_suspend=1 tegra_wdt.enable_on_probe=1 tegra_wdt.heartbeat=120 androidboot.hardware=flounder androidboot.selinux=permissive selinux=0"
+deviceinfo_kernel_cmdline="no_console_suspend=1 console=tty1 clk_ignore_unused PMOS_NO_OUTPUT_REDIRECT console=ttyS0,115200"
 deviceinfo_generate_bootimg="true"
 deviceinfo_bootimg_qcdt="false"
 deviceinfo_flash_offset_base="0x10000000"

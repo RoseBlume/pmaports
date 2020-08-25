@@ -33,7 +33,7 @@ if [ -n "$KERNEL_IMAGE_NAME" ]; then
 		install -Dm644 "$KERNEL_IMAGE_NAME" "$_target"
 	fi
 else
-	for _zimg in zImage-dtb Image.gz-dtb *zImage Image; do
+	for _zimg in zImage-dtb Image.gz-dtb *zImage Image.gz Image; do
 		[ -e "$_zimg" ] || continue
 		echo "zImage found: $_zimg"
 		install -Dm644 "$_zimg" "$_target"
