@@ -1,0 +1,50 @@
+# Forked from Alpine to enable libphonenumber (used by "calls" in Phosh)
+
+pkgname=evolution-data-server
+pkgver=9999
+_pkgver=3.36.5
+pkgrel=0
+pkgdesc="data server for evolution"
+url="https://projects.gnome.org/evolution"
+arch="all"
+license="GPL-2.0-or-later"
+depends_dev="libgdata-dev db-dev gcr-dev icu-dev"
+makedepends="$depends_dev gperf flex bison glib-dev gtk+3.0-dev libsecret-dev
+	libsoup-dev libxml2-dev nss-dev sqlite-dev krb5-dev gnu-libiconv-dev
+	openldap-dev json-glib-dev webkit2gtk-dev libgweather-dev
+	cmake libical-dev libcanberra-dev vala gobject-introspection-dev
+	gnome-online-accounts-dev libphonenumber-dev"
+subpackages="$pkgname-dev $pkgname-lang"
+source="https://download.gnome.org/sources/evolution-data-server/${_pkgver%.*}/evolution-data-server-$_pkgver.tar.xz"
+builddir="$srcdir/$pkgname-$_pkgver"
+options="!check" # disabled for pmOS, tests fail with qemu user mode emulation for aarch64
+
+build() {
+	CFLAGS="$CFLAGS -I/usr/include/gnu-libiconv" \
+	cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=/usr/lib \
+		-DSYSCONF_INSTALL_DIR=/etc \
+		-DCMAKE_BUILD_TYPE=None \
+		-DENABLE_GOA=ON \
+		-DENABLE_UOA=OFF \
+		-DENABLE_INTROSPECTION=ON \
+		-DENABLE_VALA_BINDINGS=ON \
+		-DWITH_SYSTEMUSERUNITDIR=no \
+		-DWITH_PHONENUMBER=ON
+	cmake --build build
+}
+
+check() {
+	# failing tests
+	case "$CARCH" in
+		s390x) ;;
+		*) make -C build check ;;
+	esac
+}
+
+package() {
+	make -C build DESTDIR="$pkgdir" install
+}
+
+sha512sums="65ec23a665e3a547b10ad6a6be5f0533db269406c3e8db64a63cffb8e1b410e83b9c39bd7cd5dac5ecd5cf61ef96dc529ba1bd00ad0a09b3bf2c4e98f3d156e3  evolution-data-server-3.36.5.tar.xz"
