@@ -85,5 +85,20 @@ if grep -q "^initstepslew" /etc/chrony/chrony.conf; then
 	sed -i 's/^initstepslew/#initstepslew/' /etc/chrony/chrony.conf
 fi
 
+# Write the /etc/os-release file
+cat << EOF > /etc/os-release
+# This file is overwritten by postmarketos-base
+PRETTY_NAME="postmarketOS v20.05"
+NAME="postmarketOS"
+VERSION_ID="v20.05"
+VERSION="v20.05"
+ID="postmarketos"
+ID_LIKE="alpine"
+HOME_URL="https://www.postmarketos.org/"
+SUPPORT_URL="https://gitlab.com/postmarketOS"
+BUG_REPORT_URL="https://postmarketos.org/issues"
+EOF
+
+
 exit 0
 
