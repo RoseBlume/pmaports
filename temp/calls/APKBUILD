@@ -1,0 +1,37 @@
+# Forked from Alpine to upgrade to latest version
+
+pkgname=calls
+pkgver=0.1.7
+pkgrel=0
+pkgdesc="A phone dialer and call handler"
+arch="all !s390x !mips !mips64" # Blocked by libhandy
+url="https://gitlab.gnome.org/Community/Purism/calls"
+license="GPL-3.0-or-later"
+depends="modemmanager"
+makedepends="meson ninja vala gettext-dev gobject-introspection-dev gtk+3.0-dev libhandy-dev
+	gsound-dev libpeas-dev modemmanager-dev gom-dev evolution-data-server-dev folks-dev
+	feedbackd-dev"
+subpackages="$pkgname-lang"
+source="https://source.puri.sm/Librem5/calls/-/archive/v$pkgver/calls-v$pkgver.tar.gz"
+options="!check" # Requires running Wayland compositor
+builddir="$srcdir/$pkgname-v$pkgver"
+
+build() {
+	meson \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--buildtype=plain \
+		. output
+	ninja -C output
+}
+
+check() {
+	ninja -C output test
+}
+
+package() {
+	DESTDIR="$pkgdir" ninja -C output install
+}
+sha512sums="15b463de14f89c80fe95579517f8b00575f245586c6fff81374000cd7ce6becf03e632cde15a0a78e0848b04f73381ecb61c69d543990c243a5992bf5d269a01  calls-v0.1.7.tar.gz"
