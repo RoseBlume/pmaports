@@ -1,4 +1,4 @@
-From 12e1e486e8f16a41fb458621772e0fd359b9fc06 Mon Sep 17 00:00:00 2001
+From 73a806316888cac3ca5b07fd8d01194ef8ba39ea Mon Sep 17 00:00:00 2001
 From: Antoine Fontaine <antoine.fontaine@epfl.ch>
 Date: Wed, 24 Jun 2020 00:47:02 +0200
 Subject: [PATCH 3/5] home: autohide action buttons when home screen is open
@@ -8,7 +8,7 @@ Subject: [PATCH 3/5] home: autohide action buttons when home screen is open
  1 file changed, 8 insertions(+)
 
 diff --git a/src/home.c b/src/home.c
-index addd81d..a3f3bfb 100644
+index 8b1a04e..7e47663 100644
 --- a/src/home.c
 +++ b/src/home.c
 @@ -51,6 +51,8 @@ struct _PhoshHome
@@ -45,5 +45,5 @@ index addd81d..a3f3bfb 100644
    }
    phosh_layer_surface_set_kbd_interactivity (PHOSH_LAYER_SURFACE (self), kbd_interactivity);
 -- 
-2.27.0
+2.28.0
 

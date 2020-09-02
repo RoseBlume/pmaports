@@ -1,18 +1,21 @@
-From 8c864e9284d7ac27867530bc3ce224650cd77d74 Mon Sep 17 00:00:00 2001
+From 9f3be56d7147610b75b65ae68af4d69967b6494c Mon Sep 17 00:00:00 2001
 From: Antoine Fontaine <antoine.fontaine@epfl.ch>
 Date: Sun, 5 Jul 2020 05:25:14 +0200
 Subject: [PATCH 5/5] shell: fixup screen rotation
 
 fixes https://source.puri.sm/afontain/phosh/-/issues/3.
+
+It actually sets the mapping *twice* most of the time, but it's not
+causing any known issues, so it'll be good enough for now.
 ---
- src/shell.c             | 34 +++++++++++++++++++++++++++++-----
+ src/shell.c             | 36 ++++++++++++++++++++++++++++++------
  tools/meson.build       |  2 ++
- tools/swosh-map-outputs | 21 +++++++++++++++++++++
- 3 files changed, 52 insertions(+), 5 deletions(-)
+ tools/swosh-map-outputs | 19 +++++++++++++++++++
+ 3 files changed, 51 insertions(+), 6 deletions(-)
  create mode 100755 tools/swosh-map-outputs
 
 diff --git a/src/shell.c b/src/shell.c
-index 6eb5f6a..e35b618 100644
+index d316b24..03577f7 100644
 --- a/src/shell.c
 +++ b/src/shell.c
 @@ -21,6 +21,7 @@
@@ -23,7 +26,7 @@ index 6eb5f6a..e35b618 100644
  
  #include "batteryinfo.h"
  #include "background-manager.h"
-@@ -104,6 +105,20 @@ typedef struct _PhoshShell
+@@ -107,6 +108,20 @@ typedef struct _PhoshShell
  G_DEFINE_TYPE_WITH_PRIVATE (PhoshShell, phosh_shell, G_TYPE_OBJECT)
  
  
@@ -44,7 +47,7 @@ index 6eb5f6a..e35b618 100644
  static void
  settings_activated_cb (PhoshShell *self,
                         PhoshPanel *window)
-@@ -515,6 +530,12 @@ phosh_shell_constructed (GObject *object)
+@@ -569,6 +584,12 @@ phosh_shell_constructed (GObject *object)
        self);
    }
  
@@ -57,7 +60,7 @@ index 6eb5f6a..e35b618 100644
    g_idle_add ((GSourceFunc) setup_idle_cb, self);
  }
  
-@@ -584,18 +605,17 @@ phosh_shell_rotate_display (PhoshShell *self,
+@@ -638,19 +659,18 @@ phosh_shell_rotate_display (PhoshShell *self,
                              guint degree)
  {
    PhoshShellPrivate *priv = phosh_shell_get_instance_private (self);
@@ -65,6 +68,7 @@ index 6eb5f6a..e35b618 100644
    guint current;
 +  char *command;
  
+-  /* TODO: Use builtin monitor once we support wlr-output-management */
 -  g_return_if_fail (phosh_wayland_get_phosh_private (wl));
    g_return_if_fail (priv->primary_monitor);
    current = phosh_monitor_get_rotation (priv->primary_monitor);
@@ -77,10 +81,11 @@ index 6eb5f6a..e35b618 100644
 +  command = g_strdup_printf ("output %s transform %i", priv->primary_monitor->name, degree);
 +  swaymsg (command);
 +  g_free (command);
-   g_object_notify_by_pspec (G_OBJECT (self), props[PHOSH_SHELL_PROP_ROTATION]);
++  g_object_notify_by_pspec (G_OBJECT (self), props[PHOSH_SHELL_PROP_ROTATION]);
  }
  
-@@ -622,6 +642,10 @@ phosh_shell_set_primary_monitor (PhoshShell *self, PhoshMonitor *monitor)
+ 
+@@ -692,6 +712,10 @@ phosh_shell_set_primary_monitor (PhoshShell *self, PhoshMonitor *monitor)
    panels_dispose (self);
    panels_create (self);
  
@@ -106,13 +111,11 @@ index cf625be..ea5d25e 100644
  
 diff --git a/tools/swosh-map-outputs b/tools/swosh-map-outputs
 new file mode 100755
-index 0000000..72bdede
+index 0000000..169d804
 --- /dev/null
 +++ b/tools/swosh-map-outputs
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,19 @@
 +#!/bin/sh
-+
-+exec >/tmp/swosh-map.log 2>&1
 +
 +# This script will map every touch devices to the output specified
 +# as first argument. This allows rotating the output while still
@@ -132,5 +135,5 @@ index 0000000..72bdede
 +	swaymsg input "$input" map_to_output "$output"
 +done
 -- 
-2.27.0
+2.28.0
 

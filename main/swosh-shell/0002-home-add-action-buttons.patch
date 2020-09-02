@@ -1,4 +1,4 @@
-From aa2488699a51cb83dc540cf98f92a62d199179b5 Mon Sep 17 00:00:00 2001
+From c66d303fded4dcdeca023e57437e4dd510f11517 Mon Sep 17 00:00:00 2001
 From: Antoine Fontaine <antoine.fontaine@epfl.ch>
 Date: Sun, 21 Jun 2020 01:34:50 +0200
 Subject: [PATCH 2/5] home: add action buttons
@@ -18,7 +18,7 @@ Subject: [PATCH 2/5] home: add action buttons
  create mode 100644 src/swosh-utils.h
 
 diff --git a/src/home.c b/src/home.c
-index 05446b6..addd81d 100644
+index b8e3e8c..8b1a04e 100644
 --- a/src/home.c
 +++ b/src/home.c
 @@ -13,6 +13,7 @@
@@ -49,10 +49,10 @@ index 05446b6..addd81d 100644
  
    gtk_widget_class_set_template_from_resource (widget_class,
 diff --git a/src/meson.build b/src/meson.build
-index a664bc5..017f118 100644
+index 1308e42..29718bd 100644
 --- a/src/meson.build
 +++ b/src/meson.build
-@@ -116,6 +116,8 @@ libphosh_sources = [
+@@ -124,6 +124,8 @@ libphosh_sources = [
    'proximity.c',
    'sensor-proxy-manager.c',
    'sensor-proxy-manager.h',
@@ -61,7 +61,7 @@ index a664bc5..017f118 100644
    'rotateinfo.c',
    'rotateinfo.h',
    'screen-saver-manager.c',
-@@ -126,6 +128,8 @@ libphosh_sources = [
+@@ -134,6 +136,8 @@ libphosh_sources = [
    'session.h',
    'shell.c',
    'shell.h',
@@ -346,5 +346,5 @@ index 9f733a3..64636d7 100644
              </child>
            </object>
 -- 
-2.27.0
+2.28.0
 

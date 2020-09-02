@@ -1,7 +1,7 @@
 # Forked from Alpine to add patches. More patches to come.
 
 pkgname=swosh-compositor
-pkgver=1.4
+pkgver=1.5
 pkgrel=5
 pkgdesc="Patched sway for swosh"
 url="https://source.puri.sm/afontain/sway"
@@ -93,8 +93,8 @@ package() {
 		"$pkgdir"/usr/share/wayland-sessions/sway.desktop
 }
 
-sha512sums="3b280bdfdbdae8fb9b4f555bc630c64e7c1d09f7b2c783b99413863a6b620d50cd2b6d10d63e11fdfb9c678fce9a403228ac52fa69fb52561ffbd06790505a71  swosh-compositor-1.4.tar.gz
-5aca56597eab4127660bc8e264d7255c13995d180b45fc03ca1626ec60ab4795a17317e70cac87d456dec30b75172e99df8d85fe87ca974d1af398c7c848f80c  0001-layer_shell-arrange-layers-in-reverse-order.patch
+sha512sums="702e44f8923a4ca05d831dd7ed76165654f113a8b2754d332c509ee844528f47c52b7f21deca78d4a79dad465cbcd0934574fff4ad9bb7a45aec3124dea5bca4  swosh-compositor-1.5.tar.gz
+0b93e44ab75c37c0196c86c1c80801fe3814a270fcbae3fe6db1a3ca088726d7e68c4cb1119a904e86ba5bef47790ee454fa6c3ff6bacb5359651b2f8b476a9a  0001-layer_shell-arrange-layers-in-reverse-order.patch
 d231af7b634335e9329d5a80d5c0c5f842daec5f4b3f2e670d22739f3b6a788758375b8743133edecae4327be5b101ebe29f60ea4ea6211d17f82ea80f6115e8  sway.desktop
 0d2f37a8fc8ccc277912e72aca8ac4e52b4077b382dad7b3ab73ec40950a3fc90545de3c12a1ee5749ebdf490d2bd5b143f3d0fd98099e5a4c94e5e6cdd293e2  config
 5f7c500c5d0d77f7576a2fce3fd414cfb3d2b30072d1a092bfcd9a25a68d0df3ddb38f80fdf00a466331b8bb6f18da3a2ecd1ffedc4e1c3cf71b408d964d2116  start_shell
