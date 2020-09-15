@@ -150,8 +150,9 @@ mr-settings:
 build-x86_64:
   extends: .build
 
-build-x86:
-  extends: .build
+# disabled on v20.05
+# build-x86:
+#   extends: .build
 
 build-aarch64:
   extends: .build
@@ -159,5 +160,6 @@ build-aarch64:
 build-armv7:
   extends: .build
 
-build-armhf:
-  extends: .build
+# disabled on v20.05
+# build-armhf:
+#   extends: .build
