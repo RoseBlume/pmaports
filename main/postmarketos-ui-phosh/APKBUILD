@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-phosh
-pkgver=4
-pkgrel=1
+pkgver=5
+pkgrel=0
 pkgdesc="(Wayland) Mobile UI developed for the Librem 5 (works only with numeric passwords!)"
 url="https://puri.sm"
 arch="noarch !armhf"
@@ -18,6 +18,7 @@ depends="bluez
 	"
 _pmb_recommends="calls
 	chatty
+	eog
 	firefox-esr
 	gedit
 	gnome-calculator
@@ -26,6 +27,7 @@ _pmb_recommends="calls
 	gnome-software
 	kgx
 	mobile-config-firefox
+	nemo
 	postmarketos-artwork-wallpapers
 	postmarketos-hidden-desktop-entries
 	postmarketos-welcome-gtk3
@@ -74,11 +76,11 @@ qt_tweaks() {
 }
 
 sha512sums="c51a5cf93495069d71900dd1c6fbddfa3bdfb70dbab8141d1b115b6150975a12206c63517f18dc516e0366028b32e014b6d37a20e19ff73d5f0934c518d3ab39  60-lightdm-autologin.conf
-10075ef585527e2b2a47a9aba02c8089fabb099992c4cd7d634f614d3e40e9ee918803277d5534d44e7e838d6a8fa2bae43ed146c693c2ff9a1b5619f6d8c2da  000-gschema.override
+9838252f737dc32368930e3c141dace27c062c9606a3d32b67e7c6c3a97a87d8cbc1b9b80543a2bbd6a96ba113375606bc98939c6915cf38a3eec630acfa7e0a  000-gschema.override
 4113ef59267e88d205ef1e1aec0ed11ccf817a25c232f2006a538b56fb466fad5025ad445d109e367ca92ee98d9b25f1f9a1a4b9bae2cb80df12a3739d62d10a  osk.sh
 57793bb079c76ba3bdcfca7880aa887de11fe80e7a05557b78435e57feabab70fbaeedc42da3aec6f914c35bba8e8ee9918367516eb45ee247f63f694624f179  gtk-app-wayland.sh
 6e193eca3961a78d47b4656892eae34d019d9317a255a201f5ea61e3300caff04c526a27cd98d0edc072b36e3eaf3a1768f4cd27c5e2be8b19c167d535c820a6  qt-tweaks.sh
 e00756c2c056f68123d877f2f6a5ad3434ca7851095f021c26831c081728b821cf7947ba08d6742eee51d93dc83859a7ead553f4dcbc8b6fcefa33ae344ba178  dconf-profile-postmarketos
-74d5942b97ea123a0389d329a578f5782dcd87eab0f881744736e39cf784f665fc4ceda0c178ba1d78576d33dfefee6206377410642c9232561c0c0371cae48b  mimeapps.list
+0a376140da36538fd73cbd8305ff97b54d2b82831bab64a3b7167019f1d005752eda4e81ef7c19fd64fcba3a775c9e87fca1a250b55a522a0ee9728ab712f089  mimeapps.list
 4a60c08c86688f2d92820bc07305fe1bcff54986d29ee5dd84c7902ea5247b73b96f7453d2da9931a19903b2f5825b8a636f92edcf89bc205a7d389defea0b0e  01-phoc-scaling
 834d1c558b6a9ca26345928895a5436919aab13f944410240516953a13f8fdafae995af4b1baeee560a800c405a4d67c44bb92499bf8cacae7a17f6d9893577e  02-gnome-software-no-first-run"
