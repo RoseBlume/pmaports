@@ -1,7 +1,7 @@
 # Contributor: Martijn Braam <martijn@brixit.nl>
 # Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=megapixels
-pkgver=0.5.0
+pkgver=0.7.0
 pkgrel=0
 pkgdesc="GTK+3 camera app for ARM devices"
 url="https://git.sr.ht/~martijnbraam/megapixels"
@@ -20,4 +20,4 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 
-sha512sums="08f26e46243f115e0eaad06bf26d297ac67b6bc872ceb8b5c637d40cd623642ba2e02a9c1789bafeec0d53b57b1f9d9ddfc12071c3fe56a1c492d812fa29f0dc  megapixels-0.5.0.tar.gz"
+sha512sums="d886eef5697f75a9e65b8b8b0d75f42fd4092cbfce507e26d452470369632490e161c9e99596358f4cbf9e980af4a103dbf82ebbeb7bf63b49f86b38a0fdcc4e  megapixels-0.7.0.tar.gz"
