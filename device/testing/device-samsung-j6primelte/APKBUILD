@@ -1,0 +1,22 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-j6primelte
+pkgdesc="Samsung Galaxy J6 Plus"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-j6primelte mkbootimg mesa-dri-gallium"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="f4a153c13409d6fea43ec07513df521addc55c5c341b0dc04553bb2a92bb2a94ee0864224a935ded2e58504654b10725c207fb4b5f0b3f28f2b24fb0d91e2d44  deviceinfo"
