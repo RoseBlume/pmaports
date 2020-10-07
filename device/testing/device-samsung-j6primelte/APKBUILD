@@ -7,9 +7,9 @@ url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
-depends="postmarketos-base linux-samsung-j6primelte firmware-samsung-j6primelte mkbootimg mesa-dri-gallium"
+depends="postmarketos-base linux-samsung-j6primelte firmware-samsung-j6primelte mkbootimg mesa-dri-gallium mdss-fb-init-hack"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo initfs-hook.sh"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -19,4 +19,5 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="f4a153c13409d6fea43ec07513df521addc55c5c341b0dc04553bb2a92bb2a94ee0864224a935ded2e58504654b10725c207fb4b5f0b3f28f2b24fb0d91e2d44  deviceinfo"
+sha512sums="6da9ca6b118235be7f82ca574e9112bb569825bdad62db29faf82734fd694fdeb87671ed29da29b1cfc6a9f3bf0413af0c06401a51ccf511f770a5cfcb29ff39  deviceinfo
+286e9f7e648eb456c0b440527c161f2d8b4e3734e09e8375d88d16752cda5526a8b33a97aea1cdecabb8306b7b1afd92fb45bbe25fad78e0bb4771066be7b645  initfs-hook.sh"
