@@ -7,7 +7,7 @@ url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
-depends="postmarketos-base linux-samsung-j6primelte firmware-samsung-j6primelte mkbootimg mesa-dri-gallium mdss-fb-init-hack"
+depends="postmarketos-base linux-samsung-j6primelte mkbootimg mesa-dri-gallium mdss-fb-init-hack"
 makedepends="devicepkg-dev"
 source="deviceinfo initfs-hook.sh"
 
