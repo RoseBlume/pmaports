@@ -2,7 +2,7 @@
 # Kernel config based on: arch/arm/configs/j6primelte_swa_open_defconfig
 
 pkgname=linux-samsung-j6primelte
-pkgver=3.18.124
+pkgver=3.18.71
 pkgrel=0
 pkgdesc="Samsung Galaxy J6 Plus kernel fork"
 arch="armv7"
@@ -21,7 +21,7 @@ fi
 
 # Source
 _repository="pmos_kernel_samsung_j6p"
-_commit="7a1d200ef616bd73e4f9e07dcf5081b00be15d03"
+_commit="8f35f8d5645f7888ceb8e43d39ace86bf772cd5f"
 _config="config-$_flavor.$arch"
 source="
 	$pkgname-$_commit.tar.gz::https://gitlab.com/linux-on-samsung-halium/$_repository/-/archive/$_commit/$_repository-$_commit.tar.gz
@@ -46,6 +46,6 @@ package() {
 	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
 }
 
-sha512sums="f7a486c34bb265376164ab28b5b292d9a737ccc29c0c3d70e4e146a27a6b5f89a35255c3fdd7aa149baca3656b015301a52a887dacc76821136151428b125c34  linux-samsung-j6primelte-7a1d200ef616bd73e4f9e07dcf5081b00be15d03.tar.gz
+sha512sums="61c8e71d0ed0d26f0b5255c526be6c1913053a2c0fdf036b09eafad4334d6393f711045f52eaf3429700b18a4e8eed3029f92e34018f5802fbccae0d5fd42b1d  linux-samsung-j6primelte-8f35f8d5645f7888ceb8e43d39ace86bf772cd5f.tar.gz
 38157ed6aec0189be008a6e7c54e8399f8d499eeb5d958375501a3b3067463701d0f83f9389c590a21a7dfff13471c0cbdf7e564d73d95737d7ff36eae5acc77  config-samsung-j6primelte.armv7
 84f97f389b6a7305519a257666367157f84ed20c64633d51b8608f7d55517514870b487ac7428ac5c2a49b0a1371100a8862120b415c3eda5255ad485385ac81  scripts-dtc-yylloc.patch"
