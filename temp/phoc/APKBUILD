@@ -1,6 +1,6 @@
 # Forked from Alpine to update to newer versions
 pkgname=phoc
-pkgver=0.4.2
+pkgver=0.4.3
 pkgrel=0
 pkgdesc="wlroots based Phone compositor for the Phosh shell"
 arch="all !s390x" # no wlroots
@@ -14,23 +14,19 @@ source="https://source.puri.sm/Librem5/phoc/-/archive/v$pkgver/phoc-v$pkgver.tar
 builddir="$srcdir/$pkgname-v$pkgver"
 
 build() {
-	meson \
-		--prefix=/usr \
-		--sysconfdir=/etc \
-		--mandir=/usr/share/man \
-		--localstatedir=/var \
-		--buildtype=plain \
+	abuild-meson \
+		-Dembed-wlroots=disabled \
 		. output
-	ninja -C output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
 }
 
 check() {
-	xvfb-run ninja -C output test
+	xvfb-run meson test --no-rebuild -v -C output
 }
 
 package() {
-	DESTDIR="$pkgdir/" ninja -C output install
+	DESTDIR="$pkgdir/" meson install --no-rebuild -C output
 	install -Dm755 helpers/scale-to-fit \
-		"$pkgdir"/usr/bin/scale-to-fit
+		-t "$pkgdir"/usr/bin
 }
-sha512sums="24d431eb0fcb4683f565c3cf9e80513bc3e33b24b3384ba56ca65198ae91a3c961d74a6304072adc173948b802123a3928b3793d462ddb744a749e297d49ce85  phoc-v0.4.2.tar.gz"
+sha512sums="3207f73bf1c83a6a5c2a5fe0b85037c87c3485dca3bade88bba986aa36c55e4a79a1574c10c4a29e7dc4d4c66d1587678a1ce955bc9dd767d5c983afbe18043e  phoc-v0.4.3.tar.gz"
