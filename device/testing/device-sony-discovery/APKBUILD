@@ -1,0 +1,45 @@
+# Maintainer: Konrad Dybcio <konrad.dybcio@somainline.org>
+# Co-Maintainer: Martin Botka <martin.botka@somainline.org>
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-sony-discovery
+pkgdesc="Sony Xperia XA2 Ultra"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base mkbootimg mesa-dri-gallium linux-postmarketos-qcom-sdm660"
+makedepends="devicepkg-dev"
+install="$pkgname.post-install"
+source="
+	deviceinfo
+	rootston.ini
+"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-phosh
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+phosh() {
+	install_if="$pkgname postmarketos-ui-phosh"
+	install -Dm644 "$srcdir"/rootston.ini \
+		"$subpkgdir"/etc/phosh/rootston.ini
+}
+
+nonfree_firmware() {
+	pkgdesc="Various firmware files required for most subsystems to run."
+	depends="firmware-sony-ninges soc-qcom-sdm660"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="9cc619f8d9185a50f747a33302d8fcc6d9b8f5fc591c79f598a30425d0d136014dd1ca3eed4d24ce6e57cf65708a45bbc426ebf032ce1027f86aa21b013d7f07  deviceinfo
+aad7cce10db5ec156585893c82932bd42f2c86e4d68208b5f3816ac7f5f80eb6ddf15157666e81de97d30b20897f88e1027545a87fe5c96c37b5e75e3e125ee4  rootston.ini"
