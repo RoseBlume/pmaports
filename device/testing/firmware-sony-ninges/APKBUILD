@@ -1,0 +1,21 @@
+# Maintainer: Konrad Dybcio <konrad.dybcio@somainline.org>
+# Co-Maintainer: Martin Botka <martin.botka@somainline.org>
+pkgname=firmware-sony-ninges
+pkgver=1
+pkgrel=0
+pkgdesc="Firmware for Sony Xperia XA2/Plus/Ultra & 10/10 Plus"
+url="postmarketos.org"
+arch="armhf armv7 aarch64"
+license="BSD-3-Clause"
+install="$pkgname.post-install"
+options="!check !archcheck !strip !tracedeps pmb:cross-native"
+depends="rsync"
+
+# Sources
+source="enable_firmware.initd"
+
+package() {
+	install -Dm755 "$srcdir/enable_firmware.initd" "$pkgdir/etc/init.d/enable_firmware"
+}
+
+sha512sums="429e832df65406110a5203f41f5f46f47ff63d75554695c4ae0a93e865543535c7f401ffd1da859dcb458e7e1139bc9e16f4ce40dbecd28d7e11ecb5c4f0aff7  enable_firmware.initd"
