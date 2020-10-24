@@ -1,39 +1,35 @@
-# Maintainer: Alexey Min <alexey.min@gmail.com>
+# Maintainer: Konrad Dybcio <konrad.dybcio@somainline.org>
 # Kernel config based on: arch/arm64/configs/defconfig
 
 _flavor="postmarketos-qcom-sdm660"
 pkgname=linux-$_flavor
-pkgver=5.6_rc1
-pkgrel=1
-pkgdesc="QCOM group's fork of mainline linux"
-arch="aarch64"  # sdm660 is arm64 only
-url="https://kernel.org/"
+pkgver=5.9
+pkgrel=0
+pkgdesc="Mainline kernel fork for Qualcomm SDM630/636/660 devices"
+arch="aarch64"
+url="https://github.com/SoMainline/linux"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps pmb:cross-native"
 makedepends="bison findutils flex installkernel openssl-dev perl"
 
-_repo="linux-postmarketos"
-_commit="8dc3769c8a680bfc1f38221e68d3fd994f490970"
-
-source="
-	$_repo-$_commit.tar.bz2::https://gitlab.com/postmarketOS/$_repo/-/archive/$_commit/$_repo-$_commit.tar.bz2
-	config-$_flavor.aarch64
-	0001-arm64-dts-qcom-Add-sdm630-sdm660-SoC-and-xiaomi-lave.patch
-"
-
 _carch="arm64"
-
-builddir="$srcdir/$_repo-$_commit"
+# Source
+_commit="v5.9-pmos-25102020"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/SoMainline/linux/archive/$_commit.tar.gz
+	config-$_flavor.$arch
+"
+builddir="$srcdir/linux-${_commit#v}"
 
 prepare() {
 	default_prepare
-	cp -v "$srcdir/config-$_flavor.$CARCH" "$builddir"/.config
+	cp "$srcdir/config-$_flavor.$arch" .config
 }
 
 build() {
 	unset LDFLAGS
 	make ARCH="$_carch" CC="${CC:-gcc}" \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+		KBUILD_BUILD_VERSION=$((pkgrel + 1 ))
 }
 
 package() {
@@ -49,7 +45,5 @@ package() {
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/usr/share/dtb"
 }
-
-sha512sums="b53b17709eea1b8cd8fc9158762f0e2fefad7baa383dbee2ba758e9aed89cf411b2bd65386823821b877ced5f0b525f5ddc67cd048fddf47c9104eea42ab81f0  linux-postmarketos-8dc3769c8a680bfc1f38221e68d3fd994f490970.tar.bz2
-dd51522254d69e339dba74f575accf8d62b2c593b2e8d52e60aa6e9856da631a8430bff954f262ab30d6172806003448c0030f549180ff6001fd9ef7e5a126c5  config-postmarketos-qcom-sdm660.aarch64
-a5c4036e916716a66277c40d2adfc526401c7abdfe5222e237deb585bd4081cb36023696e794e0531413caf1296b88072f3506086dee99e1388e2874d72880bc  0001-arm64-dts-qcom-Add-sdm630-sdm660-SoC-and-xiaomi-lave.patch"
+sha512sums="76308f9ddc402ddd4037d9157b7451ce4b4925f1716e5688b45ba144e544cd6d91ce13fc0b0897efae63f889e8897d4213d1ca93fc2d5b4afb2fb69ced1a3f41  linux-postmarketos-qcom-sdm660-v5.9-pmos-25102020.tar.gz
+9f7245e8fe129ce5f5bee18c74d8c052fd698b0d436873ebc64a73a022d4855c73077b970589c4ee9b43ffb0464d4cef13fb236a7a13a8147e97cbb58fab514d  config-postmarketos-qcom-sdm660.aarch64"
