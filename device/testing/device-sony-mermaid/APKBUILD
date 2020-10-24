@@ -1,0 +1,45 @@
+# Maintainer: Martin Botka <martin.botka@somainline.org>
+# Co-Maintainer: Konrad Dybcio <konrad.dybcio@somainline.org>
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-sony-mermaid
+pkgdesc="Sony Xperia 10 Plus"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base mkbootimg mesa-dri-gallium linux-postmarketos-qcom-sdm660"
+makedepends="devicepkg-dev"
+install="$pkgname.post-install"
+source="
+	deviceinfo
+	rootston.ini
+"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-phosh
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+phosh() {
+	install_if="$pkgname postmarketos-ui-phosh"
+	install -Dm644 "$srcdir"/rootston.ini \
+		"$subpkgdir"/etc/phosh/rootston.ini
+}
+
+nonfree_firmware() {
+	pkgdesc="Various firmware files required for most subsystems to run."
+	depends="firmware-sony-ninges soc-qcom-sdm660"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="0bd8ee0008c7adfd555d0b98de5bedb870e0232e7c10d40e9d7b88c52478712fc9fc05d8a4bc30c9a1662531ce944bc06e61f0c99b59a2ccfba88ee41c8e2440  deviceinfo
+aad7cce10db5ec156585893c82932bd42f2c86e4d68208b5f3816ac7f5f80eb6ddf15157666e81de97d30b20897f88e1027545a87fe5c96c37b5e75e3e125ee4  rootston.ini"
