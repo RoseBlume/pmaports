@@ -49,6 +49,8 @@ nonfree_firmware_modem() {
 	pkgdesc="Modem firmware"
 	depends="firmware-oppo-a51f-modem"
 	install_if="$pkgname-nonfree-firmware $pkgname-kernel-mainline-modem"
+
 	mkdir "$subpkgdir"
 }
+
 sha512sums="1db537a1d7f04dabd55912593070eac900a5fd07fb20d840f9fe5b4871e4e878a0423c7c17096f8c64375835fc55a7526304f6d8f986f74820494d252857a922  deviceinfo"
