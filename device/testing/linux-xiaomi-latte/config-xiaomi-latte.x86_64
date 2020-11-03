@@ -1793,8 +1793,8 @@ CONFIG_BCM4356=y
 # CONFIG_BCMDHD_SDIO is not set
 CONFIG_BCMDHD_PCIE=y
 CONFIG_INTEL_PLATFORM=y
-CONFIG_BCMDHD_FW_PATH="/system/vendor/firmware/brcm/fw_bcmdhd_4356a2_pcie.bin"
-CONFIG_BCMDHD_NVRAM_PATH="/system/vendor/firmware/brcm/nvram_pcie_4356_a2.cal"
+CONFIG_BCMDHD_FW_PATH="/lib/firmware/postmarketos/brcm/fw_bcmdhd_4356a2_pcie.bin"
+CONFIG_BCMDHD_NVRAM_PATH="/lib/firmware/postmarketos/brcm/nvram_pcie_4356_a2.cal"
 # CONFIG_DHD_USE_STATIC_BUF is not set
 # CONFIG_DHD_USE_SCHED_SCAN is not set
 # CONFIG_HOSTAP is not set
