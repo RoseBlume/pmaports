@@ -1,0 +1,29 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-latte
+pkgdesc="Xiaomi Mi Pad 2"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="x86_64"
+options="!check !archcheck"
+depends="postmarketos-base linux-xiaomi-latte mkbootimg mesa-dri-gallium"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Graphics, WiFi, Blutooth and other Firmware for MiPad 2"
+	depends="firmware-xiaomi-latte"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="(run 'pmbootstrap checksum device-xiaomi-latte' to fill)"

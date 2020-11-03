@@ -1,0 +1,23 @@
+pkgname=firmware-xiaomi-latte
+pkgver=0.1
+pkgrel=1
+arch="x86_64"
+pkgdesc="Firmware for Xiaomi Mi Pad 2(latte)"
+url="https://gitlab.com/maverickpuss/coffee-with-milk/-/archive/v0.1/coffee-with-milk-v0.1.tar.gz"
+license="unknown"
+options="!check !strip !archcheck"
+source="$url"
+
+_fwdir="/lib/firmware/postmarketos"
+
+package() {
+	cd "$srcdir"
+
+	# WiFi
+	install -Dm644 system/vendor/firmware/bcm43362/fw_bcmdhd.bin "$pkgdir/$_fwdir"/brcm/brcmfmac43362-sdio.bin
+	install -Dm644 system/etc/nvram.txt "$pkgdir/$_fwdir"/brcm/brcmfmac43362-sdio.txt
+
+	# Bluetooth
+	install -Dm644 system/etc/firmware/BCM2076B1_002.002.004.0132.0141_reduced_2dB.hcd "$pkgdir/$_fwdir"/brcm/BCM2076B1.hcd
+}
+
