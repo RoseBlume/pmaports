@@ -26,4 +26,4 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="(run 'pmbootstrap checksum device-xiaomi-latte' to fill)"
+sha512sums="f4a248096e22a951f181b2a0733ba59a64b28d70247aef7103943db1ddaf4df6d0fb28064662d956519a0f34adc1756a133cc009fbad9c02a0cfffb4da234987  deviceinfo"
