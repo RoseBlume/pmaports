@@ -62,35 +62,36 @@ package() {
 
   # install other brcm files
   for _i in $_brcm_other_files; do
-    install -Dm644 "$_proprietary_dir/vendor/firmware/brcm/$_i" "$pkgdir/$_fwdir"/brcm/$_i
+    install -Dm644 "$_proprietary_dir/vendor/firmware/brcm/$_i" "$pkgdir/$_fwdir/brcm/$_i"
   done
 
   # install camera files
   for _i in $_camera_files; do
-    install -Dm644 "$_proprietary_dir/vendor/firmware/$_i" "$pkgdir/$_fwdir"/$_i
+    install -Dm644 "$_proprietary_dir/vendor/firmware/$_i" "$pkgdir/$_fwdir/$_i"
   done
 
   # install i915 file
-  install -Dm644 "$_proprietary_dir/vendor/firmware/i915/$_i915_file" "$pkgdir/$_fwdir"/i915/$_i915_file
+  install -Dm644 "$_proprietary_dir/vendor/firmware/i915/$_i915_file" "$pkgdir/$_fwdir/i915/$_i915_file"
 
   # install misc files
   for _i in $_misc_files; do
-    install -Dm644 "$_proprietary_dir/etc/firmware/$_i" "$pkgdir/$_fwdir"/$_i
+    install -Dm644 "$_proprietary_dir/etc/firmware/$_i" "$pkgdir/$_fwdir/$_i"
   done
 
   # install special named files
   # brcm
-  install -Dm644 "$_proprietary_dir/vendor/firmware/brcm/fw_bcmdhd_4356a2_pcie.bin" "$pkgdir/$_fwdir"/brcm/fw_bcmdhd.bin
+  install -Dm644 "$_proprietary_dir/vendor/firmware/brcm/fw_bcmdhd_4356a2_pcie.bin" "$pkgdir/$_fwdir/brcm/fw_bcmdhd.bin"
   # not sure if this is the correct name to be used
-  install -Dm644 "$_proprietary_dir/vendor/firmware/brcm/nvram_pcie_4356_a2.cal" "$pkgdir/$_fwdir"/brcm/fw_bcmdhd.txt
+  install -Dm644 "$_proprietary_dir/vendor/firmware/brcm/nvram_pcie_4356_a2.cal" "$pkgdir/$_fwdir/brcm/fw_bcmdhd.txt"
 
   # sound
-  install -Dm644 "$_proprietary_dir/etc/firmware/dfw_sst.fortemedia.bin" "$pkgdir/$_fwdir"/dfw_sst.bin
-  install -Dm644 "$_proprietary_dir/etc/firmware/fw_sst_22a8.fortemedia.bin" "$pkgdir/$_fwdir"/fw_sst_22a8.bin
+  install -Dm644 "$_proprietary_dir/etc/firmware/dfw_sst.fortemedia.bin" "$pkgdir/$_fwdir/dfw_sst.bin"
+  install -Dm644 "$_proprietary_dir/etc/firmware/fw_sst_22a8.fortemedia.bin" "$pkgdir/$_fwdir/fw_sst_22a8.bin"
 
   # bt(Bluetooth file)
-  install -Dm644 "$_proprietary_dir/etc/firmware/fw_sst_22a8.fortemedia.bin" "$pkgdir/$_fwdir"/fw_sst_22a8.bin
+  install -Dm644 "$_proprietary_dir/etc/firmware/fw_sst_22a8.fortemedia.bin" "$pkgdir/$_fwdir/fw_sst_22a8.bin"
   # not sure if it should be renamed like so
-  install -Dm644 "$_proprietary_dir/etc/firmware/bt/BCM4356A2_001.003.015.0084.0268_ORC.hcd "$pkgdir/$_fwdir"/bt/BCM4356A2.hcd
+  install -Dm644 "$_proprietary_dir/etc/firmware/bt/BCM4356A2_001.003.015.0084.0268_ORC.hcd" "$pkgdir/$_fwdir/bt/BCM4356A2.hcd"
 }
 
+sha512sums="dc22f90c8a6c181dc6a9a75b783c3e9094ec07d3d4f5d4c872bdb14c75c09fe7dff4d9cfc65891a1d855798ed6301e9cb9cdb96a6eb54974d11421b29693d594  coffee-with-milk-v0.3.tar.gz"
