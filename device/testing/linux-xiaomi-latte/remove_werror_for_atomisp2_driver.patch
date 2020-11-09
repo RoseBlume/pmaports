@@ -1,0 +1,11 @@
+diff --git a/drivers/external_drivers/camera/drivers/media/pci/atomisp2/Makefile.common b/drivers/external_drivers/camera/drivers/media/pci/atomisp2/Makefile.common
+index ca02407287a..b0ad893d0db 100644
+--- a/drivers/external_drivers/camera/drivers/media/pci/atomisp2/Makefile.common
++++ b/drivers/external_drivers/camera/drivers/media/pci/atomisp2/Makefile.common
+@@ -74,5 +74,5 @@ else
+ DEFINES += -DSYSTEM_hive_isp_css_system
+ endif
+ 
+-ccflags-y += $(INCLUDES) $(DEFINES) -fno-common -Werror
++ccflags-y += $(INCLUDES) $(DEFINES) -fno-common
+ 

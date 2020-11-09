@@ -1,0 +1,56 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: x86_64
+
+pkgname=linux-xiaomi-latte
+pkgver=3.14.79
+pkgrel=0
+pkgdesc="Xiaomi Mi Pad 2 kernel fork(cm-13.0-deprecated branch from LineageOS)"
+arch="x86_64"
+_carch="x86_64"
+# very important, do not change this name, otherwise in the kconfig step it
+# will complain about no dependency matches
+_flavor="xiaomi-latte"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl"
+
+# Source
+_repo_owner="latte-dev"
+_repository="android_kernel_xiaomi_latte"
+_commit="6e67c7ca996f53e50df85bda1983c6c73700ea23"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.zip::http://localhost/android_kernel_xiaomi_latte.zip
+	$_config
+	gcc7-give-up-on-ilog2-const-optimizations.patch
+	gcc8-fix-put-user.patch
+	per_cpu_load_addr.patch
+	remove_werror_for_atomisp2_driver.patch
+"
+# very important: if you are using a local zip, it should be the name of the
+# name of the local zip instead of the $_repository-$commit template
+builddir="$srcdir/android_kernel_xiaomi_latte"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+}
+
+sha512sums="3d9fb4afa7ebebc6a541bcbcd5f79b4943a74266b9283c56ef5fc8350fc3b19cd2f774bbf73975fca5842ef07e5cae4970c5866a81d7491bf71deb394d5785e4  linux-xiaomi-latte-6e67c7ca996f53e50df85bda1983c6c73700ea23.zip
+ae22ca79faec99c05ff69ed1f6af7106ab8c2b294f805af4c205b8e69f0c673c20deddb2a569043087301cf566b7d5e1ec580b684f48d38181c53a419f678eb2  config-xiaomi-latte.x86_64
+77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+8c982672aadeeb918b28bb841a1814af84cad700cc3c9cfdefca87fa7175ee3873f84b381af68aca448a9e0588c3b2726fa45516f726c06433408960ccd4c0a7  per_cpu_load_addr.patch
+e820e882c60c23c899fb90a657d2c50c8c05d91100c3de3106ce8580b8324b4863d2fbcb034abf6261d4ffd6b8d6d4c654e8ca074ae6c68a2ac9c310e978a80b  remove_werror_for_atomisp2_driver.patch"
