@@ -1,7 +1,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-asus-tf701t
 pkgdesc="Asus Transformer Pad"
-pkgver=0
+pkgver=1
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -23,8 +23,7 @@ package() {
 nonfree_firmware() {
 	pkgdesc="Wifi firmware needed to use WiFi"
 	depends="firmware-aosp-broadcom-wlan"
-	mkdir "$subpkgdir"
-	install -D -m644 "$srcdir"/nvram.txt \
+	install -Dm644 "$srcdir"/nvram.txt \
 	"$subpkgdir"/lib/firmware/postmarketos/bcmdhd/bcm43341/nvram.txt
 }
 
