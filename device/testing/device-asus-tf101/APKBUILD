@@ -2,7 +2,7 @@
 pkgname=device-asus-tf101
 pkgdesc="Asus Eee Pad Transformer"
 pkgver=0.2
-pkgrel=10
+pkgrel=11
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -10,26 +10,45 @@ options="!check !archcheck"
 depends="postmarketos-base linux-asus-tf101 mkbootimg blobtools"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo nvram_4329.txt modules-load.conf"
+source="
+	deviceinfo
+	nvram_4329.txt
+	bcm4329.hcd
+	mac.txt
+	modules-load.conf
+	start-brcm-patchram-plus.start
+	"
 
 build() {
 	devicepkg_build $startdir $pkgname
 }
 
 nonfree_firmware() {
-       pkgdesc="Wifi firmware"
-       depends="firmware-aosp-broadcom-wlan"
+       pkgdesc="Wifi and Bluetooth firmware"
+       depends="firmware-aosp-broadcom-wlan brcm-patchram-plus"
        mkdir "$subpkgdir"
+       # Wifi
        install -D -m644 "$srcdir"/nvram_4329.txt \
            "$subpkgdir"/lib/firmware/postmarketos/bcmdhd/bcm4329/nvram_4329.txt
+       # Bluetooth
+       install -D -m644 "$srcdir"/bcm4329.hcd \
+	   "$subpkgdir"/lib/firmware/postmarketos/brcm/bcm4329.hcd
+       install -D -m644 "$srcdir"/mac.txt \
+	   "$subpkgdir"/lib/firmware/postmarketos/brcm/mac.txt
 }
 
 package() {
 	devicepkg_package $startdir $pkgname
 	install -Dm644 "$srcdir"/modules-load.conf \
 		"$pkgdir"/etc/modules-load.d/00-$pkgname.conf
+        # Start brcm patchram
+	install -Dm755 "$srcdir"/start-brcm-patchram-plus.start \
+                "$pkgdir"/etc/local.d/start-brcm-patchram-plus.start
 }
 
 sha512sums="4e4a8e4202cff822e18c1da82abf65f8cdbfc6e34acd6386940b976e0a45da30c0b7aab6a73f8bc3fc9430284678fe64eb967a94543be175103b11acf036bbf3  deviceinfo
 d2da77986b419abd225349b5dea197b427de15e530021bf8f81e00a8c519d1a66cf92643b75aa396dccda78496ddd070a73ef91243af8bf78f839d21e6792546  nvram_4329.txt
-49645401e265f49cb942ef899f6ad80eb52c5b94c9eca5c311dcc3d64e0da49fa905674f3e5dc228fd2c4f3162f0c76b2a6fbab9a531031c2b21b27c57ce3ba2  modules-load.conf"
+2714ade57db990b57a5a56354697f98f10feaff3f1734328f5fb5b0485d6c92542b1bd80f70971fe662f7b3a416f3d2f3e7b35b10ee3f79ace64d8e5d55c7fb5  bcm4329.hcd
+52b0522bb3655a8215927705a3939d44104b1a853506806af8f0af44a388c40693fd4bdd29ff689af37f10281b340a36b6c679a11036d8230b897cc600f8f224  mac.txt
+49645401e265f49cb942ef899f6ad80eb52c5b94c9eca5c311dcc3d64e0da49fa905674f3e5dc228fd2c4f3162f0c76b2a6fbab9a531031c2b21b27c57ce3ba2  modules-load.conf
+034f254022b893b905ba03ed0edc29a82c35554a7c5cb8fd4b39528b2de4c6108035bb31848b79fdfe0836edaf916d8e6408433055304f81285f16cfb9ebf209  start-brcm-patchram-plus.start"
