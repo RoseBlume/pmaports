@@ -10,10 +10,11 @@ options="!check !archcheck"
 depends="postmarketos-base linux-asus-tf101 mkbootimg blobtools"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+_repository="firmware-asus-tf101"
 source="
 	deviceinfo
-	nvram_4329.txt
-	bcm4329.hcd
+	https://github.com/antonialoytorrens/$_repository/raw/master/bcm4329/nvram_4329.txt
+	https://github.com/antonialoytorrens/$_repository/raw/master/brcm/bcm4329.hcd
 	mac.txt
 	modules-load.conf
 	start-brcm-patchram-plus.start
