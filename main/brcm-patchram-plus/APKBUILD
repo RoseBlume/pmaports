@@ -1,24 +1,25 @@
 pkgname=brcm-patchram-plus
 pkgver=1
-pkgrel=1
+pkgrel=2
 pkgdesc="Downloads a patchram files in the HCD format to Broadcom Bluetooth based silicon and combo chips."
-url="https://github.com/antonialoytorrens/edison-firmware"
+url="https://github.com/intel/edison-firmware"
 arch="all"
 license="Apache-2.0"
 makedepends="gcc"
 options="!check"
-source="brcm_patchram_plus.c Makefile"
-builddir="$srcdir/"
+_repository="brcm-patchram-plus"
+_commit="5147642a7c85e3fdc6785848443399e60827b211"
+source="$pkgname-$_commit.tar.gz::https://github.com/antonialoytorrens/$_repository/archive/$_commit.tar.gz"
+builddir="$srcdir/$_repository-$_commit"
 
 build() {
- cd "$srcdir"
+ cd "$builddir"
  make
 }
 
 package() {
- install -D -m755 "$srcdir"/brcm_patchram_plus \
+ install -D -m755 "$builddir"/brcm_patchram_plus \
  "$pkgdir"/usr/sbin/brcm_patchram_plus
 }
 
-sha512sums="8c31a0ca72966335ceef7207ae6c34ff4aa5e9e6d946e520c1b05a895eaf0c71848c5f049421dd8c3931da8c08c9ec02621c07c4fb957fad5fa88da667942ce6  brcm_patchram_plus.c
-612e08a9843bf8337b2eab93ba3d5fb6647e36e48343c2d7f60e947747da96b8651276931226d88ff4193368f9b25ca2da408da35282e4029053d02de507e1f4  Makefile"
+sha512sums="349d8e23992d794e004dffffd5a3ee95dafda1b9c0966fb54701fee52e2fc5ea20e50ead354b78b03abf3e53eea22bb497b2316ba6e27197a1f182fd675ed516  brcm-patchram-plus-5147642a7c85e3fdc6785848443399e60827b211.tar.gz"
