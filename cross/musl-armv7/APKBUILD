@@ -8,7 +8,7 @@ fi
 
 pkgname=musl-armv7
 pkgver=1.1.24
-pkgrel=9
+pkgrel=10
 arch="armhf aarch64 x86_64 x86"
 subpackages="musl-dev-armv7:package_dev"
 
@@ -55,5 +55,5 @@ package_dev() {
 	done
 }
 
-sha512sums="754af44ac69366f8c67c81104f53b0c777cc3fbbed9aca0dd48e0de5b40c31b084ab53f6f8523d73d2bbcd1f9e0fb36c196c1656307b213dc8231c3eed1736be  musl-1.1.24-r9-armv7-v3.12.apk
-f57986835d4fddafe6164f56ff6fe4347e52d2adcc28d5b17b4125135c585cff6dede27d0964d474b43fb3ab1742175df7cd4a332ab5f6fb35f97afa0bd4657f  musl-dev-1.1.24-r9-armv7-v3.12.apk"
+sha512sums="364bf027d6cd3833fe8dc5a99f2088858db5c8e55ce36a8f52cd8dad9a69589ad2c8ae1d6227aeb5f290d6f82467605443c035997b3a36e8f3ee80c1fe88599f  musl-1.1.24-r10-armv7-v3.12.apk
+c52911421599d62a79c1e6850adb8fd94bcaf360286f2ec44a06b35bc56c2e1032d8bc23f5277dbb22b6b7960b928bf60582913806af902180256f0c6de68601  musl-dev-1.1.24-r10-armv7-v3.12.apk"

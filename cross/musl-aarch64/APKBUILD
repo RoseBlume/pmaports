@@ -8,7 +8,7 @@ fi
 
 pkgname=musl-aarch64
 pkgver=1.1.24
-pkgrel=9
+pkgrel=10
 arch="armhf armv7 x86_64 x86"
 subpackages="musl-dev-aarch64:package_dev"
 
@@ -55,5 +55,5 @@ package_dev() {
 	done
 }
 
-sha512sums="1dcd613c03f14cea331adc4fccd5a8dba8452a9c22785b27520849de82d33dce01a496829c21519cbc17a5412895f97cb981680bb4d06aac3cfef521eb21b466  musl-1.1.24-r9-aarch64-v3.12.apk
-97b078b02ca31eb7c04194dfd88021371617eed5185df044933157d889b64a7a5f0dad4d2b2bc53257ed9bfb953d398a9f1467f9eb0c17c46e8e147c26b5984f  musl-dev-1.1.24-r9-aarch64-v3.12.apk"
+sha512sums="b5bb7c8c6484a424e116d47ea1f26cd282dc7563362d356675d63683dca80a2bc6d3c87b2068d397768c31668d47ac34b1f8bfad64a0aae8a71115c535bbe5a9  musl-1.1.24-r10-aarch64-v3.12.apk
+f0a01494ea67b9dfd95f4ed2bdda526479167e8644a234db3a8b3116f151f93e9e64afba24088295b1b888403d84ab1a58f88b14edca0e9b88f5eb10529158d7  musl-dev-1.1.24-r10-aarch64-v3.12.apk"
