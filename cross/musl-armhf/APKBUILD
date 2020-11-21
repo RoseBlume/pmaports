@@ -7,8 +7,8 @@ if [ -z "$(type -t arch_to_hostspec)" ]; then
 fi
 
 pkgname=musl-armhf
-pkgver=1.2.2_pre0
-pkgrel=1
+pkgver=1.2.2_pre3
+pkgrel=0
 arch="x86_64"
 subpackages="musl-dev-armhf:package_dev"
 
@@ -55,5 +55,5 @@ package_dev() {
 	done
 }
 
-sha512sums="2ee85432badfb384837d1acaedfdf15010a26c53da6052a282304555c01c7ceaa5427e474ea6a6d199d07f9be1027b2744a42d2ba6613f569212d964510818b9  musl-1.2.2_pre0-r1-armhf-edge.apk
-297691e77a158af874a60be8b0217bf0cc02bd0dede2b6892e28531a83c1e61f228e200a53e212f3ce5473ef47eb441584f7b834213d286b9a9b4a182ad01841  musl-dev-1.2.2_pre0-r1-armhf-edge.apk"
+sha512sums="0559ce69f9482a3c17e4e60c48e0e9cc71f5cc0be230178c4e48d354db40e8d5f013d3d3d4cccaebafd23bfe3612644f58a20d1beb13a8c7c2613e9c0d191a49  musl-1.2.2_pre3-r0-armhf-edge.apk
+3c20be72dfc798dc33494d508f3f9260a6fb388004b23706a6a1f6dbd7da32864ced1a479b0a1c884c4540f7d12f855132eda14dc93147255cd532d998ce5cb7  musl-dev-1.2.2_pre3-r0-armhf-edge.apk"

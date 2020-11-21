@@ -1,0 +1,24 @@
+From f04b2bf8d1bd81ac99dfc8c95fcadb9a7af64b8a Mon Sep 17 00:00:00 2001
+From: Martijn Braam <martijn@brixit.nl>
+Date: Tue, 20 Oct 2020 17:58:00 +0200
+Subject: [PATCH] dts: pinephone: remove bt firmware suffix
+
+---
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
+index 6bc0e9d6d847..d897b6a28cc4 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
+@@ -822,7 +822,6 @@ bluetooth {
+ 		reset-gpios = <&r_pio 0 4 GPIO_ACTIVE_LOW>; /* PL4 */
+ 		device-wake-gpios = <&pio 7 6 GPIO_ACTIVE_LOW>; /* PH6 */
+ 		host-wake-gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>; /* PL5 */
+-		firmware-postfix = "pinephone";
+ 	};
+ };
+ 
+-- 
+2.25.4
+
