@@ -2,14 +2,18 @@
 pkgname=device-xiaomi-latte
 pkgdesc="Xiaomi Mi Pad 2"
 pkgver=0.1
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="x86_64"
 options="!check !archcheck"
 depends="postmarketos-base linux-xiaomi-latte mkbootimg mesa-dri-gallium"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="
+  deviceinfo
+  initfs-hook.sh
+  90-android-touch-dev.rules
+"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
@@ -17,7 +21,11 @@ build() {
 }
 
 package() {
-	devicepkg_package $startdir $pkgname
+  devicepkg_package $startdir $pkgname
+
+  # rules for touchscreen
+  install -D -m644 "$srcdir"/90-android-touch-dev.rules \
+    "$pkgdir"/etc/udev/rules.d/90-android-touch-dev.rules
 }
 
 nonfree_firmware() {
@@ -26,4 +34,6 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="f4a248096e22a951f181b2a0733ba59a64b28d70247aef7103943db1ddaf4df6d0fb28064662d956519a0f34adc1756a133cc009fbad9c02a0cfffb4da234987  deviceinfo"
+sha512sums="6c0802b8f3551ac8c3839b75c360c406ef3d20afc1a513bd36d06459e955f75c6471709a7517c9d3a3838f7f78b810824b968ccaf500d400227aed861bedb727  deviceinfo
+0d6ddb4855299333c24fc58dea24e73cc3fdadee87ba0320b72773b3e9aef26b386ecd457645e8933a7393308ac04ae7c4efef2622fb8d04b1cef005f57b495d  initfs-hook.sh
+cd16fa516a845214b1f1ede770e282ed775dfeea8b767e43fe90388dab286c8986e7e3a94a9ab2c0035a85d0b62c1a4f935f38c55ff838530c453c74fc70eed4  90-android-touch-dev.rules"
