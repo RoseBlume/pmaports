@@ -13,12 +13,12 @@ source="$pkgname-$_commit.tar.gz::https://github.com/antonialoytorrens/$_reposit
 builddir="$srcdir/$_repository-$_commit"
 
 build() {
- make
+	make
 }
 
 package() {
- install -D -m755 "$builddir"/brcm_patchram_plus \
- "$pkgdir"/usr/sbin/brcm_patchram_plus
+	install -D -m755 "$builddir"/brcm_patchram_plus \
+	"$pkgdir"/usr/sbin/brcm_patchram_plus
 }
 
 sha512sums="349d8e23992d794e004dffffd5a3ee95dafda1b9c0966fb54701fee52e2fc5ea20e50ead354b78b03abf3e53eea22bb497b2316ba6e27197a1f182fd675ed516  brcm-patchram-plus-5147642a7c85e3fdc6785848443399e60827b211.tar.gz"
