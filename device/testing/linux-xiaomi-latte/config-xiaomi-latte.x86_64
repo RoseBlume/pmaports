@@ -1,6 +1,8 @@
-#
-# Automatically generated file; DO NOT EDIT.
-# Linux/x86_64 3.14.79 Kernel Configuration
+# Kernel config based on: arch/x86/configs/x86_64_defconfig
+# Changes:
+# - enable devtmpfs (needed for udev -> touch support in weston)
+# - disable DEVTMPFS_MOUNT because the troubleshooting docs says "do not enable it"
+# - enable CONFIG_USB_ETH for usb network
 #
 CONFIG_64BIT=y
 CONFIG_X86_64=y
@@ -1129,7 +1131,7 @@ CONFIG_HAVE_BPF_JIT=y
 #
 CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
 CONFIG_DEVTMPFS=y
-CONFIG_DEVTMPFS_MOUNT=y
+# CONFIG_DEVTMPFS_MOUNT is not set
 CONFIG_STANDALONE=y
 CONFIG_PREVENT_FIRMWARE_BUILD=y
 CONFIG_FW_LOADER=y
