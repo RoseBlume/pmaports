@@ -2,7 +2,7 @@
 pkgname=device-asus-tf101
 pkgdesc="Asus Eee Pad Transformer"
 pkgver=0.2
-pkgrel=11
+pkgrel=12
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -26,16 +26,7 @@ build() {
 
 nonfree_firmware() {
 	pkgdesc="Wifi and Bluetooth firmware"
-	depends="firmware-aosp-broadcom-wlan brcm-patchram-plus"
-	mkdir "$subpkgdir"
-	# Wifi
-	install -D -m644 "$srcdir"/nvram_4329.txt \
-	"$subpkgdir"/lib/firmware/postmarketos/bcmdhd/bcm4329/nvram_4329.txt
-	# Bluetooth
-	install -D -m644 "$srcdir"/bcm4329.hcd \
-	"$subpkgdir"/lib/firmware/postmarketos/brcm/bcm4329.hcd
-	install -D -m644 "$srcdir"/mac.txt \
-	"$subpkgdir"/lib/firmware/postmarketos/brcm/mac.txt
+	depends="firmware-asus-tf101"
 }
 
 package() {
