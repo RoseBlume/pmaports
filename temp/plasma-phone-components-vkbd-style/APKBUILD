@@ -1,0 +1,20 @@
+# postmarketos-ondev currently depends on this
+pkgname=plasma-phone-components-vkbd-style
+pkgver=5.19.5
+pkgrel=0
+pkgdesc="Legacy virtual keyboard style (dropped in 5.19.99)"
+arch="noarch"
+url="https://www.plasma-mobile.org/"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+source="https://invent.kde.org/plasma/plasma-phone-components/-/archive/v$pkgver/plasma-phone-components-v$pkgver.tar.bz2"
+options="!check pmb:cross-native"
+builddir="$srcdir/plasma-phone-components-v$pkgver/qtvirtualkeyboardplugin"
+
+package() {
+	for i in style.qml images/*.svg; do
+		install -v -Dm644 "$i" \
+			"$pkgdir/usr/lib/qt5/qml/QtQuick/VirtualKeyboard/Styles/Plasma/$i"
+	done
+}
+
+sha512sums="d1d8705a7065bf198982432564180bf8765def2866759d83b1161d65d1f1d85ab16860f552d75138cd4c962aa46b4a925a8b6256d884bc393062bd6f564ff51d  plasma-phone-components-v5.19.5.tar.bz2"
