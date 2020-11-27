@@ -1,0 +1,113 @@
+--- a/brcm_patchram_plus.c	2020-11-27 02:12:51.194989572 +0100
++++ b/brcm_patchram_plus.c	2020-11-27 02:15:42.500535020 +0100
+@@ -73,14 +73,6 @@
+ **                 It will return 0 for success and a number greater than 0
+ **                 for any errors.
+ **
+-**                 For Android, this program invoked using a 
+-**                 "system(2)" call from the beginning of the bt_enable
+-**                 function inside the file 
+-**                 system/bluetooth/bluedroid/bluetooth.c.
+-**
+-**                 If the Android system property "ro.bt.bcm_bdaddr_path" is
+-**                 set, then the bd_addr will be read from this path.
+-**                 This is overridden by --bd_addr on the command line.
+ **  
+ ******************************************************************************/
+ 
+@@ -94,29 +86,13 @@
+ 
+ #include <stdlib.h>
+ 
+-#ifdef ANDROID
+-#include <termios.h>
+-#else
+ #include <sys/termios.h>
+ #include <sys/ioctl.h>
+ #include <limits.h>
+-#endif
+ 
+ #include <string.h>
+ #include <signal.h>
+ 
+-#ifdef ANDROID
+-#include <cutils/properties.h>
+-#define LOG_TAG "brcm_patchram_plus"
+-#include <cutils/log.h>
+-#undef printf
+-#define printf LOGD
+-#undef fprintf
+-#define fprintf(x, ...) \
+-  { if(x==stderr) LOGE(__VA_ARGS__); else fprintf(x, __VA_ARGS__); }
+-
+-#endif //ANDROID
+-
+ #ifndef N_HCI
+ #define N_HCI	15
+ #endif
+@@ -741,58 +717,9 @@
+ 	return;
+ }
+ 
+-#ifdef ANDROID
+-void
+-read_default_bdaddr()
+-{
+-	int sz;
+-	int fd;
+-
+-	char path[PROPERTY_VALUE_MAX];
+-
+-	char bdaddr[18];
+-	int len = 17;
+-	memset(bdaddr, 0, (len + 1) * sizeof(char));
+-
+-	property_get("ro.bt.bdaddr_path", path, "");
+-	if (path[0] == 0)
+-		return;
+-
+-	fd = open(path, O_RDONLY);
+-	if (fd < 0) {
+-		fprintf(stderr, "open(%s) failed: %s (%d)", path, strerror(errno),
+-				errno);
+-		return;
+-	}
+-
+-	sz = read(fd, bdaddr, len);
+-	if (sz < 0) {
+-		fprintf(stderr, "read(%s) failed: %s (%d)", path, strerror(errno),
+-				errno);
+-		close(fd);
+-		return;
+-	} else if (sz != len) {
+-		fprintf(stderr, "read(%s) unexpected size %d", path, sz);
+-		close(fd);
+-		return;
+-	}
+-
+-	if (debug) {
+-		printf("Read default bdaddr of %s\n", bdaddr);
+-	}
+-
+-	parse_bdaddr(bdaddr);
+-}
+-#endif
+-
+-
+ int
+ main (int argc, char **argv)
+ {
+-#ifdef ANDROID
+-	read_default_bdaddr();
+-#endif
+-
+ 	if (parse_cmd_line(argc, argv)) {
+ 		exit(1);
+ 	}
+@@ -860,4 +787,4 @@
+ 	}
+ 
+ 	exit(0);
+-}
++}
+\ No hi ha cap caràcter de salt de línia al final del fitxer

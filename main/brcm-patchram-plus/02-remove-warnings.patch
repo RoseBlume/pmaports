@@ -1,0 +1,28 @@
+--- a/brcm_patchram_plus.c	2020-11-27 02:20:27.618781762 +0100
++++ b/brcm_patchram_plus.c	2020-11-27 02:22:07.003498651 +0100
+@@ -79,6 +79,7 @@
+ #include <stdio.h>
+ #include <getopt.h>
+ #include <errno.h>
++#include <unistd.h>
+ 
+ #include <sys/types.h>
+ #include <sys/stat.h>
+@@ -86,7 +87,7 @@
+ 
+ #include <stdlib.h>
+ 
+-#include <sys/termios.h>
++#include <termios.h>
+ #include <sys/ioctl.h>
+ #include <limits.h>
+ 
+@@ -423,7 +424,7 @@
+ 		parse_fork};
+ 
+ 	while (1) {
+-		int this_option_optind = optind ? optind : 1;
++		// int this_option_optind = optind ? optind : 1;
+ 		int option_index = 0;
+ 
+ 		static struct option long_options[] = {

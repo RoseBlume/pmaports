@@ -5,11 +5,13 @@ pkgdesc="Downloads a patchram files in the HCD format to Broadcom Bluetooth base
 url="https://github.com/intel/edison-firmware"
 arch="all"
 license="Apache-2.0"
-makedepends="gcc"
 options="!check"
 _repository="brcm-patchram-plus"
-_commit="5147642a7c85e3fdc6785848443399e60827b211"
-source="$pkgname-$_commit.tar.gz::https://github.com/antonialoytorrens/$_repository/archive/$_commit.tar.gz"
+_commit="bc0bdf9aab19eedcc4e02cee8eab04bd8c39196d"
+source="$pkgname-$_commit.tar.gz::https://github.com/antonialoytorrens/$_repository/archive/$_commit.tar.gz
+	01-remove-android-code.patch
+	02-remove-warnings.patch
+	"
 builddir="$srcdir/$_repository-$_commit"
 
 build() {
@@ -18,7 +20,9 @@ build() {
 
 package() {
 	install -D -m755 "$builddir"/brcm_patchram_plus \
-	"$pkgdir"/usr/sbin/brcm_patchram_plus
+		"$pkgdir"/usr/sbin/brcm_patchram_plus
 }
 
-sha512sums="349d8e23992d794e004dffffd5a3ee95dafda1b9c0966fb54701fee52e2fc5ea20e50ead354b78b03abf3e53eea22bb497b2316ba6e27197a1f182fd675ed516  brcm-patchram-plus-5147642a7c85e3fdc6785848443399e60827b211.tar.gz"
+sha512sums="b4c4c54e6edf59179b44f50aa98cba44dce18e7f9d6f25a1a26ee8073bc2ad81fab5646b1e2d42f884d559dc123b24fdd339fa2c2b0d9618498ec0d150dc673b  brcm-patchram-plus-bc0bdf9aab19eedcc4e02cee8eab04bd8c39196d.tar.gz
+2305e3bd77f478ad06c99e71e65010ebce53128bde7f5f16537ae363333fbc90ecc5eefb50fb95842d1e6a4a3606e591363583f3662392c42b2a41ee0d16e165  01-remove-android-code.patch
+ec125c7ebd9a1f7bee4b6a8683f4304ed23820f9b3856db6c016cac7ea23630a560a7e7cc874353a42e8ae5d11dfb1638b1b715c4902c891742141129f44d10c  02-remove-warnings.patch"
