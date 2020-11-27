@@ -11,15 +11,19 @@ _repository="firmware-asus-tf101"
 source="
 	https://github.com/antonialoytorrens/$_repository/raw/master/bcm4329/nvram_4329.txt
 	https://github.com/antonialoytorrens/$_repository/raw/master/brcm/bcm4329.hcd
+	start-brcm-patchram-plus.start
 	"
 
 package() {
 	# Wifi
 	install -D -m644 "$srcdir"/nvram_4329.txt \
-	"$pkgdir"/lib/firmware/postmarketos/bcmdhd/bcm4329/nvram_4329.txt
+		"$pkgdir"/lib/firmware/postmarketos/bcmdhd/bcm4329/nvram_4329.txt
 	# Bluetooth
 	install -D -m644 "$srcdir"/bcm4329.hcd \
-	"$pkgdir"/lib/firmware/postmarketos/brcm/bcm4329.hcd
+		"$pkgdir"/lib/firmware/postmarketos/brcm/bcm4329.hcd
+	# Start brcm patchram
+	install -Dm755 "$srcdir"/start-brcm-patchram-plus.start \
+		"$pkgdir"/etc/local.d/start-brcm-patchram-plus.start
 }
 
 sha512sums="d2da77986b419abd225349b5dea197b427de15e530021bf8f81e00a8c519d1a66cf92643b75aa396dccda78496ddd070a73ef91243af8bf78f839d21e6792546  nvram_4329.txt
