@@ -3,4 +3,9 @@
 # Start brcm-patchram-plus for TF101
 
 rfkill unblock 0
-/usr/sbin/brcm_patchram_plus -d --patchram /lib/firmware/postmarketos/brcm/bcm4329.hcd --baudrate 921600 --bd_addr $(cat /lib/firmware/postmarketos/brcm/mac.txt) --enable_hci /dev/ttyHS2&
+/usr/sbin/brcm_patchram_plus \
+ 		-d \
+ 		--patchram /lib/firmware/postmarketos/brcm/bcm4329.hcd \
+ 		--baudrate 921600 \
+ 		--bd_addr $(cat /lib/firmware/postmarketos/brcm/mac.txt) \
+ 		--enable_hci /dev/ttyHS2
