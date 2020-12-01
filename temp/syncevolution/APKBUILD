@@ -1,0 +1,50 @@
+# Contributor: Martijn Braam <martijn@brixit.nl>
+# Maintainer: Martijn Braam <martijn@brixit.nl>
+pkgname=syncevolution
+pkgver=1.5.3
+pkgrel=0
+pkgdesc="SyncEvolution synchronizes PIM data via various protocols (SyncML, CalDAV/CardDAV, ActiveSync)."
+url="https://github.com/freedesktop/SyncEvolution-syncevolution"
+arch="all"
+license="GPL-2.0"
+depends=""
+makedepends="autoconf automake libtool boost-dev gettext-dev intltool glib-dev libunique-dev bluez-dev openobex-dev libnotify-dev dbus-glib-dev sqlite-dev libical-dev evolution-data-server-dev neon-dev"
+install=""
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://download.01.org/syncevolution/syncevolution/sources/syncevolution-$pkgver.tar.gz"
+builddir="$srcdir/syncevolution-$pkgver"
+
+build() {
+	autoreconf -fiv
+	cd src/synthesis
+	autoreconf -fiv
+	cd ../..
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--enable-bluetooth \
+		--enable-core \
+		--enable-dbus-service \
+		--enable-notify \
+		--enable-gui \
+		--enable-pbap \
+		--enable-dav \
+		--disable-ecal 
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+
+
+sha512sums="ebfd0b8eac8c44eeb6e0d5d60c3f9aa79a545d24628b913c1358a60fe5be47369860a63f5e80fa11db1172a6c281aad1685bb6baf11869c5cf19fd0f67fbb312  syncevolution-1.5.3.tar.gz"
