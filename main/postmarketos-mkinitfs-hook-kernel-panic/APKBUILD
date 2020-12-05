@@ -1,5 +1,5 @@
 pkgname=postmarketos-mkinitfs-hook-kernel-panic
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=0
 pkgdesc="Script to cause a kernel panic after 30s from the initramfs (for debugging only)"
 url="https://postmarketos.org"
@@ -14,4 +14,4 @@ package() {
 		"$pkgdir"/etc/postmarketos-mkinitfs/hooks/
 }
 
-sha512sums="39be4de98daf4306c15dc8196bcd7649a149e5babccf9860c753d40f1e17ef550556444f65238d30d9dbc3d8610319b0d00f9ff99f128fd8a6bd4cdfb3b38dbe  00-kernel-panic.sh"
+sha512sums="6e061e827af0c79e3469eadfda7b92943bf03c9b0f878927895fde7f6045f4677074b913bacf81dcbbc8720c359e97189b871bf2f5f053bcd0101ce9a9dd2cec  00-kernel-panic.sh"
