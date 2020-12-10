@@ -2,7 +2,7 @@
 pkgname=device-oneplus-oneplus3
 pkgdesc="OnePlus 3"
 pkgver=1
-pkgrel=4
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -34,7 +34,6 @@ nonfree_firmware() {
 		firmware-oneplus-oneplus3-op3
 		msm-modem-rpmsg
 		qrtr
-		qrtr-openrc
 		"
 	install="$subpkgname.post-install"
 	mkdir "$subpkgdir"

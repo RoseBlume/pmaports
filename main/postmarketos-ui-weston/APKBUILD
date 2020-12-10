@@ -1,14 +1,13 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-weston
 pkgver=5
-pkgrel=0
+pkgrel=1
 pkgdesc="(Wayland) Reference compositor (demo, not a phone interface)"
 url="https://postmarketos.org"
 arch="noarch"
 license="GPL-3.0-or-later"
 depends="elogind
 	lightdm
-	lightdm-openrc
 	weston-clients
 	weston
 	weston-shell-desktop

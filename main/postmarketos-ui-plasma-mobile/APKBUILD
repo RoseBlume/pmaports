@@ -1,7 +1,7 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-plasma-mobile
 pkgver=3.1
-pkgrel=2
+pkgrel=3
 pkgdesc="(Wayland) Mobile variant of KDE Plasma (does not run without hardware acceleration, allows only numeric passwords!)"
 url="https://wiki.postmarketos.org/wiki/Plasma_Mobile"
 arch="noarch !armhf !x86" # armhf: pmaports#75, x86: aports#11807
@@ -10,12 +10,10 @@ depends="bluedevil
 	breeze
 	elogind
 	iio-sensor-proxy
-	iio-sensor-proxy-openrc
 	kscreen
 	kwallet-pam
 	kwayland-integration
 	ofono
-	ofono-openrc
 	plasma-phone-components
 	plasma-nm-mobile
 	polkit-kde-agent-1
@@ -24,7 +22,6 @@ depends="bluedevil
 	qt5-qtvirtualkeyboard
 	xdg-desktop-portal-kde
 	urfkill
-	urfkill-openrc
 	"
 # Required to launch
 depends="$depends

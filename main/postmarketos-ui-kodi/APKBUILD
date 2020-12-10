@@ -1,12 +1,12 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-kodi
 pkgver=1
-pkgrel=4
+pkgrel=5
 pkgdesc="(Wayland) 10-foot UI useful on TV's"
 url="https://kodi.tv"
 arch="noarch !armhf !x86" # x86: aports#11807
 license="GPL-3.0-or-later"
-depends="kodi-wayland kodi cage lightdm lightdm-openrc elogind pulseaudio upower"
+depends="kodi-wayland kodi cage lightdm elogind pulseaudio upower"
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="63-lightdm-autologin.conf kodi.desktop"
 options="!check"
