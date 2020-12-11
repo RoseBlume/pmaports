@@ -5,14 +5,11 @@ for i in $(awk '{if($NF && ($1 !~ /^#/)) print $NF}' /etc/acpi.map); do
         ln -s /etc/acpi/handler.sh /etc/acpi/$i
 done
 
-# Enable acpid
 rc-update add acpid default
 # hwdrivers is required for acpid to 'see' all devices
 rc-update add hwdrivers boot
-# Enable ofono
 rc-update add ofono default
-# Enable swclock
-rc-update -q add swclock boot
+rc-update add swclock boot
 
 # Load nokia-modem module on boot
 NMC=/etc/modules-load.d/nokia-modem.conf

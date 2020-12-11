@@ -1,3 +1,5 @@
 #!/bin/sh
 
-rc-update add modemmanager default || echo "please add modemmanager to the default runlevel"
+rc-update add modemmanager default
+
+exit 0
