@@ -5,6 +5,7 @@ import sys
 
 # Same dir
 import common
+import openrc_subpackages
 
 # pmbootstrap
 import testcases.add_pmbootstrap_to_import_path
@@ -81,3 +82,6 @@ if __name__ == "__main__":
     # Build packages
     print(f"building in strict mode for {arch}: {', '.join(packages)}")
     build_strict(packages, arch)
+
+    # Do tests with built packages
+    openrc_subpackages.run_test(arch, packages)

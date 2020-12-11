@@ -31,5 +31,9 @@ if ! [ -e $deviceinfo ]; then
 	exit 1
 fi
 
+# Lint OpenRC services in *.post-install early (another test from this script
+# can only be done after building, gets called from build_change_aports.py)
+"$pmaports"/.gitlab-ci/openrc_subpackages.py
+
 # Run testcases
 pytest -vv -x --tb=native "$pmaports/.gitlab-ci/testcases" "$@"
