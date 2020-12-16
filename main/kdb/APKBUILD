@@ -1,0 +1,51 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=kdb
+pkgver=3.2.0_git20201116
+pkgrel=0
+_commit="b36d74f13a1421437a725fb74502c993c359392a"
+pkgdesc="A database connectivity and creation framework for various database vendors"
+url="http://www.kexi-project.org"
+arch="all"
+license="LGPL-2.0-or-later"
+depends_dev="
+	icu-dev
+	kcoreaddons-dev
+	ki18n-dev
+	postgresql-dev
+	qt5-qtbase-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt5-qttools-dev
+	"
+subpackages="$pkgname-dev $pkgname-doc"
+#source="https://download.kde.org/stable/kdb/src/kdb-$pkgver.tar.xz"
+source="https://invent.kde.org/libraries/kdb/-/archive/$_commit/kdb-$_commit.tar.gz
+	include-kdeinstalldirs-as-first-thing.patch
+	"
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON \
+		-DBUILD_TESTING=ON
+	cmake --build build
+}
+
+check() {
+	cd build
+	# HeadersTest requires itself to be installed
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest -E "HeadersTest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="ff61fad286083eee2c6b17655e5b9fbb7ecbb0dfc492fbf9f6781ce4808ce0a2fe2f554bd351d2a4c4d7c5821692194bb88043252448bbf43abc631d96fb0ba4  kdb-b36d74f13a1421437a725fb74502c993c359392a.tar.gz
+c8593da0841a422fa7085144916d90552b4ff47e2776ad9fb442c4f609747b92d4e60b5ef2cda1af4f21809e2bfaf0db0dbea742352184b3652feaf722f41089  include-kdeinstalldirs-as-first-thing.patch"
