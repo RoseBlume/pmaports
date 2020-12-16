@@ -1,0 +1,13 @@
+diff --git a/daemon/src/devices/abstractfirmwareinfo.h b/daemon/src/devices/abstractfirmwareinfo.h
+index 061d4b0..dc97e65 100644
+--- a/daemon/src/devices/abstractfirmwareinfo.h
++++ b/daemon/src/devices/abstractfirmwareinfo.h
+@@ -35,7 +35,7 @@ public:
+ protected:
+     QByteArray m_bytes;
+     uint16_t m_crc16;
+-    u_int32_t m_crc32;
++    uint32_t m_crc32;
+     Type m_type;
+     QString m_version;
+ 

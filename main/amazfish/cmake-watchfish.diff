@@ -1,0 +1,104 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..8de6be0
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,98 @@
++include(GenerateExportHeader)
++
++option(WATCHFIST_FEATURE_NOTIFICATIONMONITOR "Build notification monitor" TRUE)
++option(WATCHFIST_FEATURE_WALLTIME "Build walltime" TRUE)
++option(WATCHFIST_FEATURE_MUSIC "Build music" TRUE)
++option(WATCHFIST_FEATURE_CALENDAR "Build calendar" TRUE)
++option(WATCHFIST_FEATURE_VOICECALL "Build voicecall" TRUE)
++option(WATCHFIST_FEATURE_VOLUME "Build volume" TRUE)
++
++add_library(watchfish SHARED)
++generate_export_header(watchfish)
++
++if (EXISTS "/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml")
++	set(MER_EDITION_SAILFISH TRUE)
++	target_link_libraries(
++		Qt5::Contacts)
++else()
++	set(MER_EDITION_SAILFISH FALSE)
++endif()
++
++target_link_libraries(watchfish
++	Qt::DBus)
++if (WATCHFIST_FEATURE_NOTIFICATIONMONITOR)
++	target_link_libraries(watchfish
++		dbus-1)
++
++	list(APPEND SRC
++		notificationmonitor.cpp
++		notification.cpp)
++	list(APPEND HEADERS
++		notificationmonitor.h
++		notificationmonitor_p.h
++		notification.h)
++endif()
++
++if (WATCHFIST_FEATURE_WALLTIME)
++	target_link_libraries(watchfish
++		timed-qt5)
++
++	list(APPEND SRC
++		walltimemonitor.cpp)
++	list(APPEND HEADERS
++		walltimemonitor.h
++		walltimemonitor_p.h)
++endif()
++
++if (WATCHFIST_FEATURE_MUSIC)
++	target_link_libraries(watchfish
++		mpris-qt5)
++
++	list(APPEND SRC
++		musiccontroller.cpp)
++	list(APPEND HEADERS
++		musiccontroller.h
++		musiccontroller_p.h)
++endif()
++
++if (WATCHFIST_FEATURE_CALENDAR)
++	if (EXISTS "/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml")
++		target_link_libraries(watchfish
++			libmkcal-qt5
++			libkcalcoren-qt5)
++	else()
++		target_link_libraries(watchfish
++			KF5::Contacts)
++	endif()
++
++	list(APPEND SRC
++		calendarsource.cpp
++		calendarevent.cpp)
++	list(APPEND HEADERS
++		calendarsource.h
++		calendarevent.h)
++
++	if (MER_EDITION_SAILFISH)
++		list(APPEND HEADERS
++			calendarsource_p.h)
++	endif()
++endif()
++
++if (WATCHFIST_FEATURE_VOICECALL)
++	list(APPEND SRC
++		voicecallcontroller.cpp)
++	list(APPEND HEADERS
++		voicecallcontroller.h
++		voicecallcontroller_p.h)
++endif()
++
++if (WATCHFIST_FEATURE_VOLUME)
++	list(APPEND SRC
++		volumecontroller.cpp)
++	list(APPEND HEADERS
++		volumecontroller.h
++		volumecontroller_p.h)
++endif()
++
++install(TARGETS watchfish
++	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

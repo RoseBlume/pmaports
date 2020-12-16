@@ -1,0 +1,70 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=amazfish
+pkgver=1.7.1_git20201219
+pkgrel=0
+_commit="f74ceb81b7a9e87e478ddbaf7acc60b8d433fa8a"
+_commit_qble="d47239a4c2e125257c1fe1ed7cca85094a64fc94"
+_commit_libwatchfish="c0457613537ad9ddab26e46c3c3e2b074a6c208a"
+pkgdesc="Companion app for several smartwatches"
+url="https://github.com/piggz/harbour-amazfish"
+arch="all"
+license="AGPL-3.0-ONLY"
+depends="kirigami2"
+makedepends="
+	cmake
+	dbus-dev
+	kcontacts-dev
+	kdb-dev
+	kirigami2-dev
+	qt5-qtbase-dev
+	qt5-qtconnectivity-dev
+	qt5-qtlocation-dev
+	qtmpris-dev
+	"
+source="https://github.com/piggz/harbour-amazfish/archive/$_commit/harbour-amazfish-$_commit.tar.gz
+	https://github.com/piggz/qble/archive/$_commit_qble/qble-$_commit_qble.tar.gz
+	https://github.com/piggz/libwatchfish/archive/$_commit_libwatchfish/libwatchfish-$_commit_libwatchfish.tar.gz
+	build-fix.patch
+	cmake.patch
+	cmake-qble.diff
+	"
+options="!check" # No tests
+builddir="$srcdir/harbour-amazfish-$_commit"
+
+prepare() {
+	default_prepare
+
+	rmdir \
+		qble \
+		daemon/libwatchfish
+	mv "$srcdir/qble-$_commit_qble" qble
+	mv "$srcdir/libwatchfish-$_commit_libwatchfish" daemon/libwatchfish
+
+	cd "$builddir"/qble
+	patch -p1 < "$srcdir"/cmake-qble.diff
+}
+
+build() {
+#	qmake-qt5 \
+#		PREFIX=/usr \
+#		FLAVOR=kirigami
+#	make
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	#cmake --build build
+	VERBOSE=1 make -C build -j1
+}
+
+package() {
+#	INSTALL_ROOT="$pkgdir" make install
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="e32a6179aeed9fe543938bb4ff428619f368c3c532f6bd148739c07305f5ae16d64c578c0885133595a649ee2006f5123579c6d4fc8b73c212f39b4630ca7f8b  harbour-amazfish-f74ceb81b7a9e87e478ddbaf7acc60b8d433fa8a.tar.gz
+999082ad1045aab724ef858166e58fdee3818cccc77cb1595631161bcf199eb5db7725fce826dc58bd3a1bbc1bfb4dcaf31abc4d8cc37532ec0d531caaa28680  qble-d47239a4c2e125257c1fe1ed7cca85094a64fc94.tar.gz
+44decc27fa889a87ed74925d67b81bcacf27b06becaf094c52caf4eb9a954443c6c83321d70db351c087d82d1423abc50a0f63455318c8e41d750698707e09de  libwatchfish-c0457613537ad9ddab26e46c3c3e2b074a6c208a.tar.gz
+cf7795f53966a1624d0ba4da72944f7d986a81073ca96e2e0c30389111c09c4c1abb8016f909e71c74e8340a538bdd9efcbe14b9b1bd7829219545cd82f3e30e  build-fix.patch
+d894938110ecdd90820a7979e9c1b936884fd7a5324485832889f838dfd38fb7cf271e0593e19deafda8f626f4f20568932eaf0581e502165349272ebeb5a12c  cmake.patch
+0ea41b2d64ee64a8872d588958f084961d57fd37acf97498238eee3f2f52a11e0c57462a9a860eb63ab30e61cd92a03c3dc3185883c911124444e725856aef43  cmake-qble.diff"

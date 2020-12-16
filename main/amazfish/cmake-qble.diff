@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..4ee7a57
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,10 @@
++list(APPEND SRC
++	${cmake_current_source_dir}/qbledevice.cpp
++	${cmake_current_source_dir}/qbleservice.cpp
++	${cmake_current_source_dir}/qblecharacteristic.cpp
++	${cmake_current_source_dir}/bluezadapter.cpp)
++set(APPEND HEADERS
++	${cmake_current_source_dir}/qbledevice.h
++	${cmake_current_source_dir}/qbleservice.h
++	${cmake_current_source_dir}/qblecharacteristic.h
++	${cmake_current_source_dir}/bluezadapater.h)

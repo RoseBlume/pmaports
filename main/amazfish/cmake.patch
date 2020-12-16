@@ -1,0 +1,307 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..4d9d77d
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,37 @@
++cmake_minimum_required(VERSION 3.13.0)
++
++project(harbour-amazfish
++	VERSION 1.7.2
++	DESCRIPTION "Companion application for various smartwatches")
++
++set(CMAKE_AUTOMOC ON)
++set(CMAKE_AUTORCC ON)
++
++set(CMAKE_INCLUDE_CURRENT_DIR ON)
++
++include(FeatureSummary)
++include(GNUInstallDirs)
++
++option(FLAVOR "Supported platforms: kirigami, silica, qtcontrols, ubports" silica)
++
++set(QT_MIN_VERSION "5.6.0")
++set(KF5_MIN_VERSION "5.75.0")
++find_package(Qt5 ${QT_MIN_VERSION} COMPONENTS Qml Bluetooth Location REQUIRED)
++find_package(PkgConfig REQUIRED)
++find_package(KF5Contacts ${KF5_MIN_VERSION} CONFIG REQUIRED)
++find_package(KDb CONFIG REQUIRED)
++find_package(DBus1 CONFIG REQUIRED)
++
++pkg_check_modules(MPRIS-QT mpris-qt5 REQUIRED IMPORTED_TARGET)
++
++if(MPRIS-QT_FOUND)
++	set_property(GLOBAL APPEND PROPERTY PACKAGES_FOUND mpris-qt5)
++else()
++	set_property(GLOBAL APPEND PROPERTY PACKAGES_NOT_FOUND mpris-qt5)
++endif()
++
++add_subdirectory(lib)
++add_subdirectory(daemon)
++#add_subdirectory(ui)
++
++feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+diff --git a/daemon/CMakeLists.txt b/daemon/CMakeLists.txt
+new file mode 100644
+index 0000000..29ae2c6
+--- /dev/null
++++ b/daemon/CMakeLists.txt
+@@ -0,0 +1,233 @@
++set(SRC
++	src/devices/abstractfirmwareinfo.cpp
++	src/devices/biplitedevice.cpp
++	src/devices/biplitefirmwareinfo.cpp
++	src/devices/gtsdevice.cpp
++	src/devices/gtsfirmwareinfo.cpp
++	src/devices/pinetimejfdevice.cpp
++	src/operations/updatefirmwareoperationnew.cpp
++	src/qaesencryption.cpp
++	src/services/currenttimeservice.cpp
++	src/services/pinetimemusicservice.cpp
++	src/typeconversion.cpp
++	src/bipbatteryinfo.cpp
++	src/devicefactory.cpp
++	src/services/mibandservice.cpp
++	src/services/miband2service.cpp
++	src/services/alertnotificationservice.cpp
++	src/services/hrmservice.cpp
++	src/services/deviceinfoservice.cpp
++	src/services/bipfirmwareservice.cpp
++	src/operations/abstractoperation.cpp
++	src/operations/activityfetchoperation.cpp
++	src/operations/logfetchoperation.cpp
++	src/operations/sportssummaryoperation.cpp
++	src/operations/updatefirmwareoperation.cpp
++	src/devices/abstractdevice.cpp
++	src/devices/bipdevice.cpp
++	src/devices/bipfirmwareinfo.cpp
++	src/dbushrm.cpp
++	src/activitysummary.cpp
++	src/deviceinterface.cpp
++	src/activitysample.cpp
++	src/activitykind.cpp
++	src/operations/sportsdetailoperation.cpp
++	src/operations/abstractfetchoperation.cpp
++	src/bipactivitydetailparser.cpp
++	src/activitycoordinate.cpp
++	src/harbour-amazfish-daemon.cpp
++	src/huamiweathercondition.cpp
++
++	# Qble
++	${PROJECT_SOURCE_DIR}/qble/qbledevice.cpp
++	${PROJECT_SOURCE_DIR}/qble/qbleservice.cpp
++	${PROJECT_SOURCE_DIR}/qble/qblecharacteristic.cpp
++	${PROJECT_SOURCE_DIR}/qble/bluezadapter.cpp
++	)
++set(HEADERS
++	src/devices/abstractfirmwareinfo.h
++	src/devices/biplitedevice.h
++	src/devices/biplitefirmwareinfo.h
++	src/devices/gtsdevice.h
++	src/devices/gtsfirmwareinfo.h
++	src/devices/pinetimejfdevice.h
++	src/operations/updatefirmwareoperationnew.h
++	src/qaesencryption.h
++	src/services/currenttimeservice.h
++	src/services/pinetimemusicservice.h
++	src/typeconversion.h
++	src/bipbatteryinfo.h
++	src/deviceinterface.h
++	src/activitykind.h
++	src/devices/bipfirmwareinfo.h
++	src/dbushrm.h
++	src/activitysummary.h
++	src/activitysample.h
++	src/devicefactory.h
++	src/services/mibandservice.h
++	src/services/miband2service.h
++	src/services/alertnotificationservice.h
++	src/services/hrmservice.h
++	src/services/deviceinfoservice.h
++	src/services/bipfirmwareservice.h
++	src/operations/abstractoperation.h
++	src/operations/activityfetchoperation.h
++	src/operations/logfetchoperation.h
++	src/operations/sportssummaryoperation.h
++	src/operations/updatefirmwareoperation.h
++	src/operations/sportsdetailoperation.h
++	src/operations/abstractfetchoperation.h
++	src/devices/abstractdevice.h
++	src/devices/bipdevice.h
++	src/bipactivitydetailparser.h
++	src/activitycoordinate.h
++
++	# Qble
++	${PROJECT_SOURCE_DIR}/qble/qbledevice.h
++	${PROJECT_SOURCE_DIR}/qble/qbleservice.h
++	${PROJECT_SOURCE_DIR}/qble/qblecharacteristic.h
++	${PROJECT_SOURCE_DIR}/qble/bluezadapter.h)
++
++include_directories(
++	${PROJECT_SOURCE_DIR}/lib/src
++	src
++	src/devices
++	src/operations
++	src/services
++	libwatchfish)
++
++add_executable(harbour-amazfishd ${SRC} ${HEADERS})
++
++# TODO: Debug, remove
++set_target_properties(harbour-amazfishd PROPERTIES COMPILE_OPTIONS "-w")
++
++target_link_libraries(harbour-amazfishd
++	Qt5::Bluetooth
++	Qt5::Location
++	Qt5::DBus
++	Qt5::Xml
++	KDb
++	amazfish
++	z)
++
++# libwatchfish
++if (EXISTS "/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml")
++	add_definitions(-DMER_EDITION_SAILFISH=TRUE)
++	set(MER_EDITION_SAILFISH TRUE)
++
++	pkg_check_modules(MLITE5 mlite5 REQUIRED IMPORTED_TARGET)
++	if(MLITE5_FOUND)
++		set_property(GLOBAL APPEND PROPERTY PACKAGES_FOUND mlite5)
++	else()
++		set_property(GLOBAL APPEND PROPERTY PACKAGES_NOT_FOUND mlite5)
++	endif()
++	target_link_libraries(watchfish
++		Qt5::Contacts
++		PkgConfig::MLITE5)
++	set(WATCHFIST_FEATURE_NOTIFICATIONMONITOR TRUE)
++	set(WATCHFIST_FEATURE_MUSIC TRUE)
++	set(WATCHFIST_FEATURE_CALENDAR TRUE)
++	set(WATCHFIST_FEATURE_VOICECALL TRUE)
++else()
++	set(MER_EDITION_SAILFISH FALSE)
++	set(WATCHFIST_FEATURE_NOTIFICATIONMONITOR TRUE)
++	set(WATCHFIST_FEATURE_MUSIC TRUE)
++	set(WATCHFIST_FEATURE_CALENDAR TRUE)
++endif()
++
++if (WATCHFIST_FEATURE_NOTIFICATIONMONITOR)
++	target_link_libraries(harbour-amazfishd
++		dbus-1)
++
++	list(APPEND SRC
++		libwatchfish/notificationmonitor.cpp
++		libwatchfish/notification.cpp)
++	target_sources(harbour-amazfishd
++		PUBLIC
++			libwatchfish/notificationmonitor.h
++			libwatchfish/notificationmonitor_p.h
++			libwatchfish/notification.h)
++
++endif()
++
++if (WATCHFIST_FEATURE_WALLTIME)
++	pkg_check_modules(TIMED-QT timed-qt5 REQUIRED IMPORTED_TARGET)
++	if(TIMED-QT_FOUND)
++		set_property(GLOBAL APPEND PROPERTY PACKAGES_FOUND timed-qt5)
++	else()
++		set_property(GLOBAL APPEND PROPERTY PACKAGES_NOT_FOUND timed-qt5)
++	endif()
++
++	target_link_libraries(harbour-amazfishd
++		PkgConfig::TIMED-QT)
++
++	list(APPEND SRC
++		libwatchfish/walltimemonitor.cpp)
++	list(APPEND HEADERS
++		libwatchfish/walltimemonitor.h
++		libwatchfish/walltimemonitor_p.h)
++	target_sources(harbour-amazfishd
++		PUBLIC
++			libwatchfish/walltimemonitor.h
++			libwatchfish/walltimemonitor_p.h)
++
++endif()
++
++if (WATCHFIST_FEATURE_MUSIC)
++	target_link_libraries(harbour-amazfishd
++		PkgConfig::MPRIS-QT)
++
++	target_sources(harbour-amazfishd
++		PUBLIC
++			libwatchfish/musiccontroller.cpp
++			libwatchfish/musiccontroller.h
++			libwatchfish/musiccontroller_p.h)
++	list(APPEND SRC
++		libwatchfish/musiccontroller.cpp)
++endif()
++
++if (WATCHFIST_FEATURE_CALENDAR)
++	if (EXISTS "/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml")
++		target_link_libraries(harbour-amazfishd
++			libmkcal-qt5
++			libkcalcoren-qt5)
++	else()
++		target_link_libraries(harbour-amazfishd
++			KF5::Contacts)
++	endif()
++
++	list(APPEND SRC
++		libwatchfish/calendarsource.cpp
++		libwatchfish/calendarevent.cpp)
++	target_sources(harbour-amazfishd
++		PUBLIC
++			libwatchfish/calendarsource.h
++			libwatchfish/calendarevent.h)
++
++	if (MER_EDITION_SAILFISH)
++		target_sources(harbour-amazfishd
++			PUBLIC
++				libwatchfish/calendarsource_p.h)
++	endif()
++endif()
++
++if (WATCHFIST_FEATURE_VOICECALL)
++	list(APPEND SRC
++		libwatchfish/voicecallcontroller.cpp)
++	target_sources(harbour-amazfishd
++		PUBLIC
++			libwatchfish/voicecallcontroller.h
++			libwatchfish/voicecallcontroller_p.h)
++endif()
++
++if (WATCHFIST_FEATURE_VOLUME)
++	list(APPEND SRC
++		libwatchfish/volumecontroller.cpp)
++	target_sources(harbour-amazfishd
++		PUBLIC
++			libwatchfish/volumecontroller.h
++			libwatchfish/volumecontroller_p.h)
++endif()
++
++install(TARGETS harbour-amazfishd RUNTIME
++	DESTINATION ${CMAKE_INSTALL_BINDIR})
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+new file mode 100644
+index 0000000..a70df02
+--- /dev/null
++++ b/lib/CMakeLists.txt
+@@ -0,0 +1,19 @@
++set(SRC
++	src/amazfishconfig.cpp
++	src/weather/city.cpp
++	src/weather/citymanager.cpp
++	src/weather/citysearchmodel.cpp
++	src/weather/currentweather.cpp)
++set(HEADERS
++	src/amazfishconfig.h
++	src/weather/apikey.h
++	src/weather/city.h
++	src/weather/citymanager.h
++	src/weather/citysearchmodel.h
++	src/weather/currentweather.h)
++
++add_library(amazfish SHARED ${SRC} ${HEADERS})
++
++target_link_libraries(amazfish
++	Qt5::Core
++	Qt5::Network)
