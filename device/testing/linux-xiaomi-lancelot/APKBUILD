@@ -1,0 +1,49 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/lancelot_defconfig
+
+pkgname=linux-xiaomi-lancelot
+pkgver=4.14.141
+pkgrel=0
+pkgdesc="Xiaomi Redmi 9 kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="xiaomi-lancelot"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl"
+
+# Source
+_model="lancelot-q-oss"
+_config="config-$_flavor.$arch"
+_repo="Xiaomi_Kernel_OpenSource"
+source="
+	$pkgname.tar.gz::https://github.com/MiCode/$_repo/archive/$_model.tar.gz
+	$_config
+	gcc10-extern_YYLOC_global_declaration.patch
+	04_dct_python3.patch
+"
+builddir="$srcdir/$_repo-$_model"
+_outdir="out"
+
+prepare() {
+	ls
+	echo $PWD
+	default_prepare
+	REPLACE_GCCH=0 . downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+}
+
+sha512sums="aca0449e5f72e6ded457a4fc58a640c17f543df47d4c888760b62dbb04d4eb02cf7c421e0900b9645b1c0b9ce437862fff5089cda813a8d5227c91b018f5832b  linux-xiaomi-lancelot.tar.gz
+20f34b8734a80462be9b6852fb20eb2d2d87acf8007a14cc289db20b371567e76b7a0919b97506c544a4b13889c090b81ea7413b742b96ee8b25a63cbe022cab  config-xiaomi-lancelot.aarch64
+76d27201179c5c85e3d897d01ba36c160fbb8e74b5597a4a3bfe23b99c770e62a4b045f5fcb58784d0a009018986f3f6d0720e3eb08dbe51f7f99f9490934d68  gcc10-extern_YYLOC_global_declaration.patch
+04bdd77a0f59c425bceb4a354ed9e8428978e10bc9bf67dc58daaffaef97ee948158784c103f3ad56c057aaaa7fa066b5dcf72991d0c4ac072c524d1155eee45  04_dct_python3.patch"

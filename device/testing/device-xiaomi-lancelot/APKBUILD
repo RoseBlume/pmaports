@@ -1,0 +1,22 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-lancelot
+pkgdesc="Xiaomi Redmi 9"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-xiaomi-lancelot mkbootimg mesa-dri-gallium msm-fb-refresher"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="b32af521535a0effcb2aa6dc35d732948a1927288058b9e3e684a885afa65ef910cbdc850092424a3ad21db6e2a6a71ed02a3083db31ad4ccbccffb76b25798c  deviceinfo"
