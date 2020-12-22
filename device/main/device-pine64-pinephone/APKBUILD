@@ -125,6 +125,14 @@ ofono() {
 		"$subpkgdir"/usr/bin/pinephone_setup-modem
 }
 
+ofono() {
+	pkgdesc="ofono support"
+	install_if="$pkgname=$pkgver-r$pkgrel ofono"
+	replaces="$pkgname"
+	install -Dm755 "$srcdir"/setup-modem.sh.ofono \
+		"$subpkgdir"/usr/bin/pinephone_setup-modem
+}
+
 nonfree_firmware() {
 	pkgdesc="Wifi, Bluetooth and Autofocus firmware"
 	depends="
