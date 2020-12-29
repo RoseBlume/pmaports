@@ -1,0 +1,85 @@
+From 331c9d2432dedef7994fdf0578b2cc022d43145c Mon Sep 17 00:00:00 2001
+From: clayton craft <clayton@craftyguy.net>
+Date: Mon, 28 Dec 2020 20:14:50 +0000
+Subject: [PATCH] libresolv
+
+musl doesn't implement these functions
+---
+ gweb/gresolv.c | 35 +++++++++++++----------------------
+ 1 file changed, 13 insertions(+), 22 deletions(-)
+
+diff --git a/gweb/gresolv.c b/gweb/gresolv.c
+index bb1c32d..05051ce 100644
+--- a/gweb/gresolv.c
++++ b/gweb/gresolv.c
+@@ -28,6 +28,7 @@
+ #include <stdarg.h>
+ #include <string.h>
+ #include <stdlib.h>
++#include <stdio.h>
+ #include <resolv.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+@@ -899,8 +900,6 @@ GResolv *g_resolv_new(int index)
+ 	resolv->index = index;
+ 	resolv->nameserver_list = NULL;
+ 
+-	res_ninit(&resolv->res);
+-
+ 	return resolv;
+ }
+ 
+@@ -932,8 +931,6 @@ void g_resolv_unref(GResolv *resolv)
+ 
+ 	flush_nameservers(resolv);
+ 
+-	res_nclose(&resolv->res);
+-
+ 	g_free(resolv);
+ }
+ 
+@@ -1032,29 +1029,23 @@ guint g_resolv_lookup_hostname(GResolv *resolv, const char *hostname,
+ 		return 0;
+ 
+ 	if (resolv->nameserver_list == NULL) {
+-		int i;
+ 		printf("g_resolv_lookup_hostname: nameserver_list NULL\n");
+ 
+ 		printf("g_resolv_lookup_hostname: nscount=%d\n", resolv->res.nscount);
+-
+-		for (i = 0; i < resolv->res.nscount; i++) {
+-			char buf[100];
+-			int family = resolv->res.nsaddr_list[i].sin_family;
+-			void *sa_addr = &resolv->res.nsaddr_list[i].sin_addr;
+-
+-			if (family != AF_INET &&
+-					resolv->res._u._ext.nsaddrs[i]) {
+-				family = AF_INET6;
+-				sa_addr = &resolv->res._u._ext.nsaddrs[i]->sin6_addr;
+-			}
+-
+-			if (family != AF_INET && family != AF_INET6) {
+-				printf("g_resolv_lookup_hostname: skipping b/c family=%d\n", family);
+-				continue;
++		FILE *f = fopen("/etc/resolv.conf", "r");
++		if (f) {
++			char line[256], *s;
++			int i;
++			while (fgets(line, sizeof(line), f)) {
++				if (strncmp(line, "nameserver", 10) || !isspace(line[10]))
++					continue;
++				for (s = &line[11]; isspace(s[0]); s++);
++				for (i = 0; s[i] && !isspace(s[i]); i++);
++				s[i] = 0;
++				g_resolv_add_nameserver(resolv, s, 53, 0);
+ 			}
++			fclose(f);
+ 
+-			if (inet_ntop(family, sa_addr, buf, sizeof(buf)))
+-				g_resolv_add_nameserver(resolv, buf, 53, 0);
+ 		}
+ 
+ 		if (resolv->nameserver_list == NULL) {
+-- 
+2.29.2
+
