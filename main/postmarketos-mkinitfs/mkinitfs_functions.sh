@@ -39,17 +39,32 @@ source_deviceinfo()
 	. /etc/deviceinfo
 }
 
+usage() {
+	echo "postmarketos-mkinitfs"
+	echo "usage: $(basename "$0") -o OUTFILE KERNELVERSION"
+	exit 1
+}
+
 parse_commandline()
 {
-	if [ "$1" != "-o" ]; then
-		echo "postmarketos-mkinitfs"
-		echo "usage: $(basename "$0") -o OUTFILE KERNELVERSION"
-		exit 1
+	while getopts "o:" arg; do
+		case $arg in
+		o) outfile="$OPTARG"
+		   outfile_extra="$outfile-extra" ;;
+		?) usage ;;
+		esac
+	done
+	if [ -z "$outfile" ]; then
+		echo "OUTFILE is not set"
+		usage
 	fi
 
-	outfile=$2
-	outfile_extra=$2-extra
-	kernel=$3
+	shift "$((OPTIND - 1))"
+	if [ -z "$1" ]; then
+		echo "KERNELVERSION is not set"
+		usage
+	fi
+	kernel="$1"
 }
 
 # Verify that each file required by the installed hooks exists and exit with an

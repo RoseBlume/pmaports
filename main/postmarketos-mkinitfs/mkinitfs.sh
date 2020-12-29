@@ -7,7 +7,7 @@ outfile_extra=""
 
 # initialize
 source_deviceinfo
-parse_commandline "$1" "$2" "$3"
+parse_commandline "$@"
 check_hook_files
 
 echo "==> initramfs: creating $outfile"
