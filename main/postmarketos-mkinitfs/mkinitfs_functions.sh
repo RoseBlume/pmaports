@@ -39,7 +39,8 @@ source_deviceinfo()
 	. /etc/deviceinfo
 }
 
-usage() {
+usage()
+{
 	echo "postmarketos-mkinitfs"
 	echo "usage: $(basename "$0") -o OUTFILE KERNELVERSION"
 	exit 1
