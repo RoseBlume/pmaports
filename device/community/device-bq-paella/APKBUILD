@@ -4,7 +4,7 @@
 pkgname=device-bq-paella
 pkgdesc="BQ Aquaris X5"
 pkgver=3
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -53,5 +53,5 @@ nonfree_firmware_modem() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="3820751ffde4e111d44a8edde789a6ea3d9f4f582f8a9c3bb63ad2621f79ee43d436e97c90d791611ed10c2c28ca1c0a363bcf7b7d563046510f7ff778ac6f5e  deviceinfo
-84ab0cbcdcab61aaceabff46d2c13aa29242a2eeab2f666ee996041f1969396a8124228c204d81aaf0b6427ee51b8a70bfdaa11b53c94390263d8af96a2fd511  modprobe.conf"
+sha512sums="7e693384eb5ba46f14cbf57a9d9e9cffa2cd82af96f0978123fd618ca955ac3ca22ad1b3d4d2aea43ab8ee42b03dbeaa00ce0e08b5e831de9b6a0b7787e416f4  deviceinfo
+41b20303e1d8f732c3e22831e260227788e83267cf9eddd36e99ca562cf767dd36d1b02ba03cc253e8e0d2344d96a0b0679be03154ba3ede765d2304ff8b99b4  modprobe.conf"
