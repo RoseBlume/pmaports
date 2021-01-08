@@ -1,15 +1,22 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-huawei-kiwi
 pkgdesc="Huawei Honor 5X"
-pkgver=0.1
+pkgver=1
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base linux-huawei-kiwi mkbootimg mesa-dri-gallium msm-fb-refresher"
+depends="postmarketos-base mkbootimg linux-huawei-kiwi soc-qcom-msm8916"
 makedepends="devicepkg-dev"
 source="deviceinfo"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+nonfree_firmware() {
+	pkgdesc="Modem/GPU/WiFi/BT/Video firmware"
+	depends="linux-firmware-qcom firmware-huawei-kiwi wcnss-wlan"
+	mkdir "$subpkgdir"
+}
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -19,4 +26,4 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="357b58de0ecc26c95aff3eb52b662374a1459da2192c6421ff19c0323e9024a2a2619b91327b0c49a72f4273c27b75460b7053a8560e5b1d5f1211dbd1d5e2b1  deviceinfo"
+sha512sums="b5b7cd938f471f5cbd8f4c8c8d0cbc8d49928933fc9ccaf768aa982857a86fb23684f97cc95f687cbc358d098759b08405d505c0624f10d82888a156409ba2e8  deviceinfo"
