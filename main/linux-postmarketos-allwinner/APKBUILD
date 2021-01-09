@@ -55,6 +55,15 @@ build() {
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor" \
 		CFLAGS_MODULE=-fno-pic
+
+	# Due to the compiling setup in postmarketOS the kernel tools are
+	# built with the host architecture instead of the target architecture
+	# These files get removed here and build again
+	file scripts/* | grep ELF | cut -d ":" -f 1 | xargs rm
+	env
+	make ARCH="$_carch" scripts
+	file scripts/* | grep ELF
+	exit 1
 }
 
 package() {
@@ -65,6 +74,10 @@ package() {
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/usr/share/dtb"
+
+	# Remove broken symlinks, replaced by -dev package
+	rm "$pkgdir"/lib/modules/*/build
+	rm "$pkgdir"/lib/modules/*/source
 }
 
 dev() {
@@ -77,6 +90,24 @@ dev() {
 	make -j1 headers_install \
 		ARCH="$_carch" \
 		INSTALL_HDR_PATH="$subpkgdir"/usr
+
+	_version=$(basename "$pkgdir"/lib/modules/*)
+	_sourcepkg=/usr/src/linux-headers-$_version
+	_dest="$subpkgdir"/$_sourcepkg
+
+	# https://github.com/torvalds/linux/blob/master/scripts/package/builddeb
+	find . arch/$_carch -maxdepth 1 -name Makefile\* >> copylist
+	find include scripts -type f -o -type l >> copylist
+	find arch/$_carch -name Kbuild.platforms -o -name Platform >> copylist
+	find $(find arch/$_carch -name include -o -name scripts -type d) -type f >> copylist
+	find arch/$_carch/include Module.symvers include scripts -type f >> copylist
+
+	mkdir -p "$subpkgdir"/lib/modules/$_version/
+	mkdir -p "$_dest"
+	tar -c -f - -C "$builddir" -T copylist | tar -xf - -C "$_dest"
+	cp .config "$_dest"/.config
+	ln -s /usr/src/linux-headers-$_version "$subpkgdir"/lib/modules/$_version/build
+	ln -s /usr/src/linux-headers-$_version "$subpkgdir"/lib/modules/$_version/source
 }
 
 sha512sums="0b9971fbbebbfe50e4560292e821c6253443d76cad931666981a38a805f82e64dde8d8ec918fc2d38294a4260cd6952a3ac07c3e3a1a5e9ce066de53db86277e  linux-postmarketos-allwinner-orange-pi-5.10-20210102-0145.tar.gz
