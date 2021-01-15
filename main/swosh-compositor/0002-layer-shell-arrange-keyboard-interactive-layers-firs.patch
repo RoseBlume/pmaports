@@ -1,0 +1,88 @@
+From a2578399a396155b09dd52a9461345a68827b916 Mon Sep 17 00:00:00 2001
+From: Antoine Fontaine <antoine.fontaine@epfl.ch>
+Date: Tue, 23 Jun 2020 12:26:35 +0200
+Subject: [PATCH 2/3] layer-shell: arrange keyboard-interactive layers first
+
+---
+ sway/desktop/layer_shell.c | 36 ++++++++++++++++++++++++++----------
+ 1 file changed, 26 insertions(+), 10 deletions(-)
+
+diff --git a/sway/desktop/layer_shell.c b/sway/desktop/layer_shell.c
+index f9cfea82..29f65291 100644
+--- a/sway/desktop/layer_shell.c
++++ b/sway/desktop/layer_shell.c
+@@ -91,7 +91,8 @@ static void apply_exclusive(struct wlr_box *usable_area,
+ }
+ 
+ static void arrange_layer(struct sway_output *output, struct wl_list *list,
+-		struct wlr_box *usable_area, bool exclusive) {
++		struct wlr_box *usable_area, bool exclusive, int keyboard) {
++	// keyboard argument can be 0 (no), 1 (yes) or 2 (don't care)
+ 	struct sway_layer_surface *sway_layer;
+ 	struct wlr_box full_area = { 0 };
+ 	wlr_output_effective_resolution(output->wlr_output,
+@@ -102,6 +103,9 @@ static void arrange_layer(struct sway_output *output, struct wl_list *list,
+ 		if (exclusive != (state->exclusive_zone > 0)) {
+ 			continue;
+ 		}
++		if (keyboard != state->keyboard_interactive) {
++			continue;
++		}
+ 		struct wlr_box bounds;
+ 		if (state->exclusive_zone == -1) {
+ 			bounds = full_area;
+@@ -174,15 +178,26 @@ void arrange_layers(struct sway_output *output) {
+ 	wlr_output_effective_resolution(output->wlr_output,
+ 			&usable_area.width, &usable_area.height);
+ 
+-	// Arrange exclusive surfaces from top->bottom
++	// Arrange exclusive surfaces from top->bottom:
++	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_OVERLAY],
++			&usable_area, true, 1);
+ 	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_OVERLAY],
+-			&usable_area, true);
++			&usable_area, true, 0);
++
++	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_TOP],
++			&usable_area, true, 1);
+ 	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_TOP],
+-			&usable_area, true);
++			&usable_area, true, 0);
++
++	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_BOTTOM],
++			&usable_area, true, 1);
+ 	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_BOTTOM],
+-			&usable_area, true);
++			&usable_area, true, 0);
++
++	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_BACKGROUND],
++			&usable_area, true, 1);
+ 	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_BACKGROUND],
+-			&usable_area, true);
++			&usable_area, true, 0);
+ 
+ 	if (memcmp(&usable_area, &output->usable_area,
+ 				sizeof(struct wlr_box)) != 0) {
+@@ -192,14 +207,15 @@ void arrange_layers(struct sway_output *output) {
+ 	}
+ 
+ 	// Arrange non-exlusive surfaces from top->bottom
++	// no matter whether they are keyboard-interactive
+ 	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_OVERLAY],
+-			&usable_area, false);
++			&usable_area, false, 2);
+ 	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_TOP],
+-			&usable_area, false);
++			&usable_area, false, 2);
+ 	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_BOTTOM],
+-			&usable_area, false);
++			&usable_area, false, 2);
+ 	arrange_layer(output, &output->layers[ZWLR_LAYER_SHELL_V1_LAYER_BACKGROUND],
+-			&usable_area, false);
++			&usable_area, false, 2);
+ 
+ 	// Find topmost keyboard interactive layer, if such a layer exists
+ 	uint32_t layers_above_shell[] = {
+-- 
+2.28.0
+

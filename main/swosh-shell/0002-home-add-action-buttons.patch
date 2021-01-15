@@ -1,0 +1,350 @@
+From c66d303fded4dcdeca023e57437e4dd510f11517 Mon Sep 17 00:00:00 2001
+From: Antoine Fontaine <antoine.fontaine@epfl.ch>
+Date: Sun, 21 Jun 2020 01:34:50 +0200
+Subject: [PATCH 2/5] home: add action buttons
+
+---
+ src/home.c                 |   6 +-
+ src/meson.build            |   4 ++
+ src/simple-action-button.c | 124 +++++++++++++++++++++++++++++++++++++
+ src/simple-action-button.h |  18 ++++++
+ src/swosh-utils.c          |  28 +++++++++
+ src/swosh-utils.h          |  10 +++
+ src/ui/home.ui             |  46 +++++++++++++-
+ 7 files changed, 232 insertions(+), 4 deletions(-)
+ create mode 100644 src/simple-action-button.c
+ create mode 100644 src/simple-action-button.h
+ create mode 100644 src/swosh-utils.c
+ create mode 100644 src/swosh-utils.h
+
+diff --git a/src/home.c b/src/home.c
+index b8e3e8c..8b1a04e 100644
+--- a/src/home.c
++++ b/src/home.c
+@@ -13,6 +13,7 @@
+ #include "shell.h"
+ #include "phosh-enums.h"
+ #include "osk/osk-button.h"
++#include "simple-action-button.h"
+ 
+ #define HANDY_USE_UNSTABLE_API
+ #include <handy.h>
+@@ -25,8 +26,8 @@
+  *
+  * #PhoshHome contains the #PhoshOverview that manages running
+  * applications and the app grid. It also manages a button
+- * at the bottom of the screen to fold and unfold the #PhoshOverview
+- * and a button to toggle the OSK.
++ * at the bottom of the screen to fold and unfold the #PhoshOverview,
++ * the action buttons and a button to toggle the OSK.
+  */
+ enum {
+   OSK_ACTIVATED,
+@@ -249,6 +250,7 @@ phosh_home_class_init (PhoshHomeClass *klass)
+ 
+   g_type_ensure (PHOSH_TYPE_ARROW);
+   g_type_ensure (PHOSH_TYPE_OSK_BUTTON);
++  g_type_ensure (SWOSH_TYPE_SIMPLE_ACTION_BUTTON);
+   g_type_ensure (PHOSH_TYPE_OVERVIEW);
+ 
+   gtk_widget_class_set_template_from_resource (widget_class,
+diff --git a/src/meson.build b/src/meson.build
+index 1308e42..29718bd 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -124,6 +124,8 @@ libphosh_sources = [
+   'proximity.c',
+   'sensor-proxy-manager.c',
+   'sensor-proxy-manager.h',
++  'simple-action-button.c',
++  'simple-action-button.h',
+   'rotateinfo.c',
+   'rotateinfo.h',
+   'screen-saver-manager.c',
+@@ -134,6 +136,8 @@ libphosh_sources = [
+   'session.h',
+   'shell.c',
+   'shell.h',
++  'swosh-utils.c',
++  'swosh-utils.h',
+   'system-prompt.c',
+   'system-prompt.h',
+   'system-prompter.c',
+diff --git a/src/simple-action-button.c b/src/simple-action-button.c
+new file mode 100644
+index 0000000..d4fbe94
+--- /dev/null
++++ b/src/simple-action-button.c
+@@ -0,0 +1,124 @@
++/*
++ * Copyright (C) 2020 Antoine Fontaine <antoine.fontaine@epfl.ch>
++ * SPDX-License-Identifier: GPL-3.0+
++ */
++
++#define G_LOG_DOMAIN "swosh-simple_action-button"
++
++#include "simple-action-button.h"
++
++#include <gtk/gtk.h>
++#include "swosh-utils.h"
++
++/**
++ * SECTION:swosh-simple_action-button
++ * @short_description: A button that fires the main simple_action
++ * @Title: SwoshSimpleAction
++ *
++ * The #SwoshSimpleActionButton is responsible for activating the main simple_action
++ */
++struct _SwoshSimpleActionButton
++{
++  GtkButton parent;
++  gchar *cmd;
++  gchar *icon;
++};
++
++G_DEFINE_TYPE (SwoshSimpleActionButton, swosh_simple_action_button, GTK_TYPE_BUTTON)
++
++enum {
++  PROP_0,
++  PROP_COMMAND,
++  PROP_ICON,
++  LAST_PROP
++};
++static GParamSpec *props[LAST_PROP];
++
++
++static void
++clicked_cb (SwoshSimpleActionButton *self, gpointer data)
++{
++  swaymsg (self->cmd);
++}
++
++
++static void
++swosh_simple_action_button_constructed (GObject *object)
++{
++  SwoshSimpleActionButton *self = SWOSH_SIMPLE_ACTION_BUTTON (object);
++  GtkWidget *image;
++
++  G_OBJECT_CLASS (swosh_simple_action_button_parent_class)->constructed (object);
++
++  g_signal_connect (self,
++                    "clicked",
++                    G_CALLBACK (clicked_cb),
++                    NULL);
++
++  image = gtk_image_new_from_icon_name (self->icon, GTK_ICON_SIZE_BUTTON);
++  gtk_button_set_image (GTK_BUTTON (self), image);
++  gtk_button_set_always_show_image (GTK_BUTTON (self), TRUE);
++}
++
++
++static void
++swosh_simple_action_button_set_property (GObject      *object,
++                                         guint         property_id,
++                                         const GValue *value,
++                                         GParamSpec   *pspec)
++{
++  SwoshSimpleActionButton *self = SWOSH_SIMPLE_ACTION_BUTTON (object);
++
++  switch (property_id) {
++    case PROP_COMMAND:
++      self->cmd = g_value_dup_string (value);
++      break;
++    case PROP_ICON:
++      self->icon = g_value_dup_string (value);
++      break;
++    default:
++      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
++      break;
++  }
++}
++
++
++static void
++swosh_simple_action_button_class_init (SwoshSimpleActionButtonClass *klass)
++{
++  GObjectClass *object_class = G_OBJECT_CLASS (klass);
++
++  object_class->constructed = swosh_simple_action_button_constructed;
++  object_class->set_property = swosh_simple_action_button_set_property;
++
++  props[PROP_COMMAND] =
++    g_param_spec_string (
++      "command",
++      "Command",
++      "The command to pass to swaymsg",
++      NULL,
++      G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
++
++  props[PROP_ICON] =
++    g_param_spec_string (
++      "icon",
++      "Icon",
++      "The icon name the button will use, as given by gtk3-icon-browser",
++      NULL,
++      G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY);
++
++  g_object_class_install_properties (object_class, LAST_PROP, props);
++}
++
++
++static void
++swosh_simple_action_button_init (SwoshSimpleActionButton *self)
++{
++}
++
++
++GtkWidget *
++swosh_simple_action_button_new (char *msg, char *icon)
++{
++  return g_object_new (SWOSH_TYPE_SIMPLE_ACTION_BUTTON, NULL);
++}
+diff --git a/src/simple-action-button.h b/src/simple-action-button.h
+new file mode 100644
+index 0000000..8ebecac
+--- /dev/null
++++ b/src/simple-action-button.h
+@@ -0,0 +1,18 @@
++/*
++ * Copyright (C) 2020 Antoine Fontaine <antoine.fontaine@epfl.ch>
++ * SPDX-License-Identifier: GPL-3.0+
++ */
++
++#pragma once
++
++#include <gtk/gtk.h>
++
++G_BEGIN_DECLS
++
++#define SWOSH_TYPE_SIMPLE_ACTION_BUTTON (swosh_simple_action_button_get_type())
++
++G_DECLARE_FINAL_TYPE (SwoshSimpleActionButton, swosh_simple_action_button, SWOSH, SIMPLE_ACTION_BUTTON, GtkButton)
++
++GtkWidget * swosh_simple_action_button_new (char *msg, char *icon);
++
++G_END_DECLS
+diff --git a/src/swosh-utils.c b/src/swosh-utils.c
+new file mode 100644
+index 0000000..54fb1ab
+--- /dev/null
++++ b/src/swosh-utils.c
+@@ -0,0 +1,28 @@
++/*
++ * Copyright (C) 2020 Antoine Fontaine <antoine.fontaine@epfl.ch>
++ * SPDX-License-Identifier: GPL-3.0+
++ */
++
++#include "swosh-utils.h"
++
++void
++swosh_main_action (void)
++{
++  swaymsg ("focus next");
++}
++
++/*
++ * send a message to sway. This is a transpositon of swaymsg(1)
++ * that shouldn't take flags.
++ */
++void
++swaymsg (char *msg)
++{
++  char *command;
++  int err_code;
++  g_return_if_fail (msg != NULL);
++  command = g_strdup_printf ("swaymsg %s", msg);
++  err_code = system (command); // FIXME: find a cleaner way
++  if (err_code)
++    g_warning ("could not send message, code %i\n", err_code);
++}
+diff --git a/src/swosh-utils.h b/src/swosh-utils.h
+new file mode 100644
+index 0000000..e41f11e
+--- /dev/null
++++ b/src/swosh-utils.h
+@@ -0,0 +1,10 @@
++/*
++ * Copyright (C) 2020 Antoine Fontaine <antoine.fontaine@epfl.ch>
++ * SPDX-License-Identifier: GPL-3.0+
++ */
++#pragma once
++
++#include <gtk/gtk.h>
++
++void swosh_main_action (void);
++void swaymsg (char *msg);
+diff --git a/src/ui/home.ui b/src/ui/home.ui
+index 9f733a3..64636d7 100644
+--- a/src/ui/home.ui
++++ b/src/ui/home.ui
+@@ -17,6 +17,48 @@
+             <property name="height_request">40</property>
+             <property name="visible">True</property>
+             <property name="can_focus">False</property>
++            <child>
++              <object class="SwoshSimpleActionButton" id="btn_next">
++		<property name="visible">True</property>
++		<property name="can_focus">True</property>
++		<property name="halign">end</property>
++		<property name="valign">center</property>
++		<property name="margin_left">6</property>
++		<property name="receives_default">True</property>
++		<property name="command">focus next</property>
++		<property name="icon">go-next-symbolic</property>
++		<style>
++		  <class name="phosh-osk-button"/>
++		</style>
++              </object>
++              <packing>
++                <property name="expand">False</property>
++                <property name="fill">True</property>
++                <property name="pack_type">start</property>
++                <property name="position">0</property>
++              </packing>
++            </child>
++            <child>
++              <object class="SwoshSimpleActionButton" id="btn_close">
++		<property name="visible">True</property>
++		<property name="can_focus">True</property>
++		<property name="halign">end</property>
++		<property name="valign">center</property>
++		<property name="margin_left">6</property>
++		<property name="receives_default">True</property>
++		<property name="command">kill</property>
++		<property name="icon">window-close-symbolic</property>
++		<style>
++		  <class name="phosh-osk-button"/>
++		</style>
++              </object>
++              <packing>
++                <property name="expand">False</property>
++                <property name="fill">True</property>
++                <property name="pack_type">start</property>
++                <property name="position">1</property>
++              </packing>
++            </child>
+             <child type="center">
+               <object class="GtkButton" id="btn_home">
+                 <property name="visible">True</property>
+@@ -36,7 +78,7 @@
+               <packing>
+                 <property name="expand">True</property>
+                 <property name="fill">True</property>
+-                <property name="position">0</property>
++                <property name="position">2</property>
+               </packing>
+             </child>
+             <child>
+@@ -55,7 +97,7 @@
+                 <property name="expand">False</property>
+                 <property name="fill">True</property>
+                 <property name="pack_type">end</property>
+-                <property name="position">1</property>
++                <property name="position">3</property>
+               </packing>
+             </child>
+           </object>
+-- 
+2.28.0
+

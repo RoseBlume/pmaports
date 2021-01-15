@@ -1,0 +1,56 @@
+# Maintainer: Antoine Fontaine <antoine.fontaine@epfl.ch>
+pkgname=postmarketos-ui-swosh
+pkgver=0
+pkgrel=0
+pkgdesc="(Wayland) Mobile UI developed forked from phosh. Aiming for convergence with a sway experience"
+url="https://source.puri.sm/afontain/phosh/"
+arch="noarch !armhf"
+license="GPL-3.0-or-later"
+depends="
+	calls
+	chatty
+	epiphany
+	gnome-keyring
+	kgx
+	lightdm
+	lightdm-openrc
+	swosh-shell
+	swosh-compositor
+	postmarketos-artwork-wallpapers
+	pulseaudio
+	xorg-server-xwayland
+	"
+subpackages="$pkgname-qt_tweaks"
+install="$pkgname.post-install $pkgname.post-upgrade"
+source="68-lightdm-autologin.conf
+	000-gschema.override
+	osk.sh
+	gtk-app-wayland.sh
+	qt-tweaks.sh
+	"
+options="!check"
+
+package() {
+	install -Dm644 "$srcdir"/68-lightdm-autologin.conf \
+		"$pkgdir"/usr/share/lightdm/lightdm.conf.d/68-autologin.conf
+	install -Dm644 "$srcdir"/000-gschema.override \
+		"$pkgdir"/usr/share/glib-2.0/schemas/000-postmarketos.gschema.override
+	install -Dm755 "$srcdir"/gtk-app-wayland.sh \
+		"$pkgdir"/etc/profile.d/gtk-app-wayland.sh
+	install -Dm755 "$srcdir"/osk.sh \
+		"$pkgdir"/usr/bin/osk-wayland
+}
+
+qt_tweaks() {
+	source="qt-tweaks.sh"
+	install_if="$pkgname qt5-qtbase"
+	depends="qt5-qtwayland"
+	install -Dm755 "$srcdir"/qt-tweaks.sh \
+		"$subpkgdir"/etc/profile.d/phosh-qt-tweaks.sh
+}
+
+sha512sums="a87050518103d9093be97fab4503726d05dc997765873617658a6fc21b4434f22a467ac10729bb47500f94690355cbb32a492a1875ce52269aaf9dc7aac8e501  68-lightdm-autologin.conf
+d487ad8171773cf60241a917466f3da1f05a380429719c738bf6832741afef5798476374f693f60bfbdb0f3d4d3ee8c22343dc143f23eb9f1a415847c14f052c  000-gschema.override
+4113ef59267e88d205ef1e1aec0ed11ccf817a25c232f2006a538b56fb466fad5025ad445d109e367ca92ee98d9b25f1f9a1a4b9bae2cb80df12a3739d62d10a  osk.sh
+57793bb079c76ba3bdcfca7880aa887de11fe80e7a05557b78435e57feabab70fbaeedc42da3aec6f914c35bba8e8ee9918367516eb45ee247f63f694624f179  gtk-app-wayland.sh
+6e193eca3961a78d47b4656892eae34d019d9317a255a201f5ea61e3300caff04c526a27cd98d0edc072b36e3eaf3a1768f4cd27c5e2be8b19c167d535c820a6  qt-tweaks.sh"

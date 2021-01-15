@@ -1,0 +1,303 @@
+From 9b01ead13861195a7c330ffcc1854488adb3f250 Mon Sep 17 00:00:00 2001
+From: Antoine Fontaine <antoine.fontaine@epfl.ch>
+Date: Sun, 5 Jul 2020 03:31:26 +0200
+Subject: [PATCH 4/5] ci: disable gitlab-ci
+
+---
+ .gitlab-ci.yml | 284 -------------------------------------------------
+ 1 file changed, 284 deletions(-)
+ delete mode 100644 .gitlab-ci.yml
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+deleted file mode 100644
+index fed3005..0000000
+--- a/.gitlab-ci.yml
++++ /dev/null
+@@ -1,284 +0,0 @@
+-include:
+- - 'https://source.puri.sm/Librem5/librem5-ci/raw/master/librem5-pipeline-definitions.yml'
+-
+-stages:
+- - build
+- - test+docs
+- - package
+- - test-package
+-
+-variables:
+-  DEPS: build-essential git wget lcov
+-  WANT_BUILD_DEPS: "true"
+-  XVFB_RUN: xvfb-run -a -s -noreset
+-  COMMON_BUILD_OPTS: -Db_coverage=true --werror
+-
+-.buster_vars: &buster_vars
+-  variables:
+-    CI_REPO: "deb http://ci.puri.sm/ scratch librem5"
+-    DIST: buster
+-    BUILD_OPTS: -Dphoc_tests=disabled -Dgtk_doc=false ${COMMON_BUILD_OPTS}
+-
+-.bullseye_vars: &bullseye_vars
+-  variables:
+-    CI_REPO: "deb http://ci.puri.sm/ bullseyeci main"
+-    DIST: bullseye
+-    BUILD_OPTS: -Dphoc_tests=enabled -Dgtk_doc=true ${COMMON_BUILD_OPTS}
+-
+-.build_step: &build_step
+-  script:
+-    - git submodule update --recursive
+-    - 'echo "Build opts: ${BUILD_OPTS}"'
+-    - meson ${BUILD_OPTS} . _build
+-    - ninja -C _build
+-
+-.test_step: &test_step
+-  script:
+-    - export LC_ALL=C.UTF-8
+-    - ${XVFB_RUN} ninja -C _build test
+-    - ninja -C _build coverage
+-
+-# For the smoke tests we also want debug packages, phoc,
+-# weston-info, gdb, valgrind, ...
+-.smoketest_vars:
+-  variables: &smoketest_vars
+-    CI_REPO: "deb http://ci.puri.sm/ scratch librem5"
+-    DIST: buster
+-    DEPS: phoc wget gnome-session gdb weston valgrind
+-          libhandy-0.0-0-dbgsym libgtk-3-0-dbgsym libglib2.0-0-dbgsym
+-          dconf-gsettings-backend-dbgsym libfeedback-0.0-0-dbgsym
+-          xvfb imagemagick
+-    WANT_BUILD_DEPS: "false"
+-
+-
+-before_script:
+-  - export DEBIAN_FRONTEND=noninteractive
+-  - apt-get -y update
+-  - apt-get -y install wget ca-certificates gnupg eatmydata
+-  - echo "Using CI repo ${CI_REPO}"
+-  - echo "$CI_REPO" > /etc/apt/sources.list.d/ci.list
+-  - wget -O- https://ci.puri.sm/ci-repo.key | apt-key add -
+-  - echo "deb http://debug.mirrors.debian.org/debian-debug/ ${DIST}-debug main" > /etc/apt/sources.list.d/debug.list
+-  - eatmydata apt-get -y update
+-  - '[ "$WANT_BUILD_DEPS" != "true" ] || eatmydata apt-get -y build-dep .'
+-  - eatmydata apt-get -y install $DEPS
+-  - ulimit -c unlimited
+-
+-.tags: &tags
+-  tags:
+-    - librem5
+-
+-build:native-debian-buster:
+-  <<: *tags
+-  stage: build
+-  image: debian:buster
+-  <<: *buster_vars
+-  <<: *build_step
+-  artifacts:
+-    paths:
+-      - _build
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-unit-test:native-debian-buster:
+-  <<: *tags
+-  stage: test+docs
+-  image: debian:buster
+-  dependencies:
+-    - build:native-debian-buster
+-  <<: *buster_vars
+-  <<: *test_step
+-  coverage: '/^\s+lines\.+:\s+([\d.]+\%)\s+/'
+-  artifacts:
+-    when: always
+-    paths:
+-      - _build
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-build:native-debian-bullseye:
+-  <<: *tags
+-  stage: build
+-  image: debian:bullseye
+-  <<: *bullseye_vars
+-  <<: *build_step
+-  artifacts:
+-    paths:
+-      - _build
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-unit-test:native-debian-bullseye:
+-  <<: *tags
+-  stage: test+docs
+-  image: debian:bullseye
+-  dependencies:
+-    - build:native-debian-bullseye
+-  <<: *bullseye_vars
+-  <<: *test_step
+-  coverage: '/^\s+lines\.+:\s+([\d.]+\%)\s+/'
+-  artifacts:
+-    when: always
+-    paths:
+-      - _build
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-build-gtkdoc:
+-  <<: *tags
+-  image: debian:bullseye
+-  stage: test+docs
+-  dependencies:
+-    - build:native-debian-bullseye
+-  <<: *bullseye_vars
+-  script:
+-    - ninja -C _build phosh-doc
+-    - mv _build/docs/html/ _reference/
+-  artifacts:
+-    paths:
+-      - _reference
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-check-po:
+-  <<: *tags
+-  stage: test+docs
+-  image: debian:bullseye
+-  dependencies:
+-    - build:native-debian-bullseye
+-  before_script:
+-    - apt-get -y update
+-    - apt-get -y install intltool
+-  <<: *bullseye_vars
+-  script:
+-    # barf on untranslated C files. Seems intltool
+-    # can't be told to exit with non-zero exit status
+-    # in this case
+-    - cd po/
+-    - intltool-update -m 2>&1 | grep -qs '/.*\.c' && { intltool-update -m; exit 1; } || exit 0
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-build:native-alpinelinux-edge:
+-  <<: *tags
+-  stage: build
+-  image: alpine:edge
+-  allow_failure: true
+-  before_script:
+-    - echo "https://alpine.global.ssl.fastly.net/alpine/edge/testing" >> /etc/apk/repositories
+-    - apk -q add alpine-sdk
+-    - apk -q add meson ninja gtk+3.0-dev gnome-desktop-dev libhandy-dev gcr-dev upower-dev linux-pam-dev git pulseaudio-dev networkmanager-dev polkit-elogind-dev libsecret-dev feedbackd-dev
+-  artifacts:
+-    paths:
+-      - _build
+-  script:
+-    - git submodule update --recursive
+-    - meson --werror . _build
+-    - ninja -C _build
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-unit-test:native-alpinelinux-edge:
+-  <<: *tags
+-  stage: test+docs
+-  image: alpine:edge
+-  allow_failure: true
+-  dependencies:
+-    - build:native-alpinelinux-edge
+-  before_script:
+-    - echo "https://alpine.global.ssl.fastly.net/alpine/edge/testing" >> /etc/apk/repositories
+-    - apk -q add alpine-sdk
+-    - apk -q add xvfb-run meson ninja glib-dev wayland-protocols wayland-dev musl-dev gnome-desktop-dev libhandy-dev gcr-dev upower-dev linux-pam-dev pulseaudio-dev networkmanager-dev polkit-elogind-dev libsecret-dev gcovr feedbackd-dev
+-  script:
+-    - export LC_ALL=C.UTF-8
+-    - ${XVFB_RUN} ninja -C _build test
+-  artifacts:
+-    when: always
+-    paths:
+-      - _build
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-test:smoke:one-output:
+-  <<: *tags
+-  stage: test+docs
+-  image: debian:buster
+-  variables: *smoketest_vars
+-  dependencies:
+-    - build:native-debian-buster
+-  script:
+-    - export OUTDIR=output
+-    - export G_DEBUG=fatal-criticals
+-    - export WLR_X11_OUTPUTS=1
+-    - tests/smoke
+-  artifacts:
+-    paths:
+-      - output/*.log
+-      - output/*.png
+-    when: always
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-test:smoke:two-outputs:
+-  <<: *tags
+-  stage: test+docs
+-  image: debian:buster
+-  variables: *smoketest_vars
+-  dependencies:
+-    - build:native-debian-buster
+-  script:
+-    - export OUTDIR=output
+-    - export G_DEBUG=fatal-criticals
+-    - export WLR_X11_OUTPUTS=2
+-    - tests/smoke
+-  artifacts:
+-    paths:
+-      - output/*.log
+-      - output/*.png
+-    when: always
+-  except:
+-    variables:
+-      - $PKG_ONLY == "1"
+-
+-package:deb-debian-buster:
+-  extends: .l5-build-debian-package
+-
+-package:deb-debian-buster:arm64:
+-  tags:
+-    - librem5:arm64
+-  extends: .l5-build-debian-package
+-
+-package:deb-pureos-amber:
+-  variables:
+-    L5_DOCKER_IMAGE: pureos/amber
+-    L5_ADD_SCRATCH_CI: 'false'
+-  before_script:
+-    - export DEBIAN_FRONTEND=noninteractive
+-    - echo "man-db man-db/auto-update boolean false" | debconf-set-selections
+-    - echo "deb https://repo.pureos.net/pureos amber-phone-staging main" > /etc/apt/sources.list.d/staging.list
+-    - echo "deb https://repo.pureos.net/pureos amber-proposed-updates main" >> /etc/apt/sources.list.d/staging.list
+-    - apt-get -y update
+-    - apt-get -y build-dep .
+-    - apt-get -y install build-essential git devscripts
+-    - git submodule update --recursive
+-  extends: .l5-build-debian-package
+-
+-autopkgtest-debian-buster-package:
+-  dependencies:
+-    - package:deb-debian-buster
+-  extends: .l5-autopkgtest-debian-package
+-
+-lintian-debian-buster-package:
+-  dependencies:
+-    - package:deb-debian-buster
+-  extends: .l5-lintian-debian-package
+-
+-- 
+2.28.0
+

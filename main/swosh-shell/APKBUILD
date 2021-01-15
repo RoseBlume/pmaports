@@ -1,0 +1,63 @@
+# Maintainer: Antoine Fontaine <antoine.fontaine@epfl.ch>
+# Forked from phosh to add patches
+pkgname=swosh-shell
+pkgver=0.4.3
+pkgrel=0
+pkgdesc="patched shell for swosh"
+# Blocked on mips and s390x by gnome-session, gnome-settings-daemon, squeekboard and libhandy
+# Blocked on ppc64le by gnome-session
+arch="all !s390x !ppc64le !mips !mips64"
+url="https://source.puri.sm/afontain/phosh"
+license="GPL-3.0-only"
+depends="wayland-protocols phoc gnome-session bash dbus-x11 gnome-settings-daemon
+	squeekboard libpulse dbus:org.freedesktop.Secrets elogind gnome-control-center swosh-compositor jq"
+makedepends="gtk+3.0-dev meson ninja gnome-desktop-dev libhandy-dev gcr-dev upower-dev
+	linux-pam-dev git cmake pulseaudio-dev networkmanager-dev polkit-elogind-dev
+	libsecret-dev feedbackd-dev"
+subpackages="$pkgname-lang"
+source="$pkgname-$pkgver.tar.xz::https://repo.pureos.net/pureos/pool/main/p/phosh/phosh_$pkgver.tar.xz
+	swosh.desktop
+	sm.puri.SwoshOSK0.desktop
+	0001-various-move-what-s-needed-so-it-doesn-t-conflict-wi.patch
+	0002-home-add-action-buttons.patch
+	0003-home-autohide-action-buttons-when-home-screen-is-ope.patch
+	0004-ci-disable-gitlab-ci.patch
+	0005-shell-fixup-screen-rotation.patch
+	32bit-build-fix.patch
+	"
+options="!check" # Needs a running Wayland compositor
+builddir="$srcdir/phosh-$pkgver"
+
+build() {
+	meson \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--localstatedir=/var \
+		--buildtype=plain \
+		. output
+	ninja -C output
+}
+
+check() {
+	ninja -C output test
+}
+
+package() {
+	DESTDIR="$pkgdir/" ninja -C output install
+
+	install -D -m644 "$srcdir"/swosh.desktop \
+		"$pkgdir"/usr/share/wayland-sessions/swosh.desktop
+
+	install -D -m644 "$srcdir"/sm.puri.SwoshOSK0.desktop \
+		"$pkgdir"/usr/share/applications/sm.puri.SwoshOSK0.desktop
+}
+sha512sums="43eec9987daec6f220e853021a8e32cfdb00f73e097479847e846ab318d506419f8d4d0712ff8f12d2e7b1b863a9edbf4465ad430df092b593f0b06d24bc27b1  swosh-shell-0.4.3.tar.xz
+7593e758f6161d36feeaba14b087746d14d5d8d7fd41ce6318867acb85198bb4c08041da25e096ffa8bc1b8e2e88db20726cb7199e919ad718d221c72298eb0e  swosh.desktop
+f97019598323276cf97ae62f04b6245983198e04b228ddc605835ee46845d9b88c6890fb86e97e4bb6f1ad73361437d9ed18c91e81fe1284a88cdcb92d3fdc69  sm.puri.SwoshOSK0.desktop
+afde80999fb31951912a0391d9ae50d94ea21916601c9007623d9ee1d75e1f4869bbd643c35701ec71ebc6284ef4d7b7c7ce4b5a02eb934bd01f25495db2df09  0001-various-move-what-s-needed-so-it-doesn-t-conflict-wi.patch
+2a870ffb7abf9e6decb19c7d8bfd166ff3b66cc93bd6251ba27245351575637e424f7d99bae212f15fb7f24cd5b50311ea1d4e0ddb34ca73ad3250a43f01b5d4  0002-home-add-action-buttons.patch
+06346c7d365b013e64a11fdac4293309fbe3c4fe5497bacb82bebec8d7dacfd106541b3a18b3312eeee0c80000c6fb1fa78fda3d0d29b86bea1836bc7889adb3  0003-home-autohide-action-buttons-when-home-screen-is-ope.patch
+3bd2afca42d4295afc2b7de4ed87177da497dd779f643d71980939a0f0d9815b0234270e416a12297fca225ef36003964b511199b8a0db2b0dc5d12b3162f47b  0004-ci-disable-gitlab-ci.patch
+d7824660a23d3962b7ccb5cd16cca106a933558cb2207903a1d547f091ef405d5f87560930dddf1f2af05f319bb0ce16fac211480c576a9495e1c4ab8908f362  0005-shell-fixup-screen-rotation.patch
+0a0244df828e458257a54c3967c08f7a2935b1da94c52388843d70a21966fed70b5aff905142ccaa1610a3d25b749123a9803884ec0df00056233bc5a9b6c30a  32bit-build-fix.patch"

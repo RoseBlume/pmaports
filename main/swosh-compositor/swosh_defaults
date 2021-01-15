@@ -1,0 +1,27 @@
+
+focus_wrapping workspace
+
+workspace_layout tabbed
+
+output DSI-1 {
+	scale 2
+}
+
+#output Virtual-1 {
+#	res 720 1440
+#	scale 2
+#}
+
+
+# Activate smart borders (always)
+smart_borders on
+
+
+#
+# Hardware keys
+#
+bindsym XF86AudioRaiseVolume workspace prev
+bindsym XF86AudioLowerVolume workspace next
+# or if you want the power keys to change volume:
+#bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+#bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
