@@ -1,0 +1,57 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+if [ "${CC:0:5}" != "gcc4-" ]; then
+	CC="gcc4-$CC"
+	HOSTCC="gcc4-gcc"
+	CROSS_COMPILE="gcc4-$CROSS_COMPILE"
+fi
+
+pkgname=linux-huawei-edi-al10
+pkgver=4.4.23
+pkgrel=0
+pkgdesc="Huawei Honor Note 8 kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="huawei-edi-al10"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl gcc4 python2 grep"
+
+# Source
+_repository="linux-huawei-edi-al10"
+_commit="master"
+_config="config-$_flavor.$arch"
+source="
+    $pkgname-$_commit.tar.gz::https://github.com/muttleyxd/$_repository/archive/$_commit.tar.gz
+	$_config
+	hisi-define-no-sanitize-address.patch
+	shitty-tzdriver-makefile.patch
+	sock-paranoid-network.patch
+	disable-bfmr.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+}
+
+sha512sums="48645d3509da7ac3b64cf4adbe7a84c40bef5aee8d65bc696cbbb4b41d2af34aae350a335f8d6da1b6668b12c4d937cc436a4ed783b157ef7dc147aa89e2691a  linux-huawei-edi-al10-master.tar.gz
+83976dff4448b02330c689457cc12ee94e017c7ea0b8a8443dbf14f6ad4d4dad22dbd246ae36593f6fbe9b0148176d05d94677eee7e8d0d4727e4e43a581e262  config-huawei-edi-al10.aarch64
+8512313baf368d4b2dca6b03f98ba1d4172449390bf1b80b4142626bd9dd43376f3892837b3a92300f79e9e74492bdf0688eccdc41418d7937e784cb29b59ef9  hisi-define-no-sanitize-address.patch
+1d4001f4d758146e48916251d271cd2d970891cf4909591495eeb098d800a45f8b4a80f78a8cbf7a3eb1133c2990565ef6fb6b2984378167e2d4e56f7b319709  shitty-tzdriver-makefile.patch
+cd2e94cc14fd7d981f2614e580656b1c8f26a7b3984321eeb5f30e054e45564e9747d184ac9d0e35d6dd13a6e3484be2f1eadb3b47416d06067cf5abab056734  sock-paranoid-network.patch
+0e6bee7782dac48fe2f14dd3aae6472824e9325de96f69f1500dcb24b6300859b3d3fda9ef79e2187744f87cac1d620c5904a75931eee637c0790338f320fc6c  disable-bfmr.patch"
