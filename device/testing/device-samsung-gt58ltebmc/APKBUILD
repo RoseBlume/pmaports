@@ -1,0 +1,31 @@
+# Contributor: Armen Nieuwenhuizen <armen138@pm.me> 
+# Maintainer: Armen Nieuwenhuizen <armen138@pm.me>
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname="device-samsung-gt58ltebmc"
+pkgdesc="Samsung Galaxy Tab A 8.0"
+pkgver=1
+pkgrel=2
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916 soc-qcom-msm8916"		 
+makedepends="devicepkg-dev"
+source="deviceinfo"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="GPU/WiFi/BT/Video firmware"
+	depends="linux-firmware-qcom firmware-samsung-gt58ltebmc-venus firmware-samsung-gt58ltebmc-wcnss"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="4b86ce3b15889014ce54b4e130c87be28ba66a5a56790a05b96d643b4910eba456e5bb435f15711c44ef01ea2aa26a34f93b40a1b70256c89ffc31dec12e6395  deviceinfo"

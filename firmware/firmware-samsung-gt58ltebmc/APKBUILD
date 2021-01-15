@@ -1,0 +1,37 @@
+pkgname=firmware-samsung-gt58ltebmc
+pkgver=1
+pkgrel=1
+pkgdesc="Firmware for Samsung Galaxy Tab A 8.0 LTE (2015) (SM-T357W)"
+url="https://cloud.armen138.com"
+subpackages="$pkgname-modem $pkgname-venus $pkgname-wcnss"
+arch="aarch64"
+license="proprietary"
+options="!check !strip !archcheck"
+source="T357W.tar.gz::https://cloud.armen138.com/index.php/s/YjLieBAokyXWgDQ/download"
+
+_fwdir="/lib/firmware/postmarketos"
+
+package() {
+	# parent package is empty
+	mkdir -p "$pkgdir"
+}
+
+modem() {
+	pkgdesc="Samsung Galaxy Tab A 8.0 LTE (2015) (SM-T357W) modem firmware"
+	install -Dm644 "$srcdir"/modem.* -t "$subpkgdir/$_fwdir"
+}
+
+venus() {
+	pkgdesc="Samsung Galaxy Tab A 8.0 LTE (2015) (SM-T357W) video firmware"
+	install -Dm644 "$srcdir"/venus.* -t "$subpkgdir/$_fwdir"/qcom/venus-1.8
+}
+
+wcnss() {
+	pkgdesc="Samsung Galaxy Tab A 8.0 LTE (2015) (SM-T357W) WiFi/BT firmware"
+	cd "$srcdir"
+	install -Dm644 wcnss.* -t "$subpkgdir/$_fwdir"
+	install -Dm644 WCNSS_* -t "$subpkgdir/$_fwdir"/wlan/prima
+}
+
+
+sha512sums="9649fc2d48a569380f7c5b49036c57196a83f2ab1481beb0d9e25630cade7b932d8a3c0459b7d1eb3834b005a55ca5df32f7edc89f48b44b63605f81ef42ab58  T357W.tar.gz"
