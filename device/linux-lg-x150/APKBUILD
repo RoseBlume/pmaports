@@ -1,0 +1,51 @@
+# Maintainer: Mr Heating <MrHeating@tutanota.com>
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm/configs/v10_defconfig
+
+pkgname=linux-lg-x150
+pkgver=3.10.54
+pkgrel=0
+pkgdesc="LG Bello II kernel fork"
+arch="armv7"
+_carch="arm"
+_flavor="lg-x150"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps"
+makedepends="perl sed installkernel bash gmp-dev bc linux-headers elfutils-dev devicepkg-dev xz"
+
+# Source
+_repository="linux-kernel-3.10.54-for-lg-x150-v10n"
+_commit="612495e3457dbfe7dbeb7e5d896f6573944fbec9"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://gitlab.com/exe-cute/$_repository/-/archive/$_commit/$_repository-$_commit.tar.gz
+	$_config
+	gcc7-give-up-on-ilog2-const-optimizations.patch
+	gcc8-fix-put-user.patch
+	kernel-use-the-gnu89-standard-explicitly.patch
+	fix_recordmcount.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+
+prepare() {
+	default_prepare
+	downstreamkernel_prepare "$srcdir" "$builddir" "$_config" "$_carch" "$HOSTCC"
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
+}
+
+sha512sums="6f7c6d9a6ad224e32d4df3ca28a0b3e9bc632873ff9fd9e973f6a6032ce45b80ad3eee1693a2052eec9fb114669e2b66531c53c0084920d5b24d32d568ba7a61  linux-lg-x150-612495e3457dbfe7dbeb7e5d896f6573944fbec9.tar.gz
+4c4adc337ecbb3a508116f9497985df784234d3361a9adb247ba21e0317a48e88e69350c8c40da88fafea8977203004c3f6efb79d6ae9be56f42abdec1442535  config-lg-x150.armv7
+77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+081bbe4917996fc78b15000f6e14ef964144daf11b8a718db00a8b39fa61c773df3cddee61987cd4fdc0b5dab882c61da4d1d216ec6f80f373571fe0891dae98  kernel-use-the-gnu89-standard-explicitly.patch
+6aa11a75f422ac5c20cddfce23bff81940e61e65bc86fe1070c60714a6ccf631b2da70bff20e2b88e723706f0f233eb03540a8d9389adffd495592e8ab6bd82a  fix_recordmcount.patch"
