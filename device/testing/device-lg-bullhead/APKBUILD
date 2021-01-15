@@ -10,6 +10,13 @@ options="!check !archcheck"
 depends="postmarketos-base linux-lg-bullhead mkbootimg mesa-dri-swrast msm-fb-refresher"
 makedepends="devicepkg-dev"
 source="deviceinfo"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+nonfree_firmware() {
+	pkgdesc="Proprietary WiFi, Modem, GPU and sensors firmware"
+	depends="firmware-lg-bullhead"
+	mkdir "$subpkgdir"
+}
 
 build() {
 	devicepkg_build $startdir $pkgname
