@@ -1,15 +1,15 @@
 # Forked from Alpine to apply Purism's mobile patches
 pkgname=gnome-software
-pkgver=9999_git20191031
-_commit="b915095540fa7ada6778aded0d51a93572762d89"
-pkgrel=1
+pkgver=9999_git20200928
+_commit="11036d7a4d0283c6a207a5d1f768281042737ceb"
+pkgrel=0
 pkgdesc="Software lets you install and update applications and system extensions"
 url="https://wiki.gnome.org/Apps/Software"
 arch="all !s390x !mips !mips64"
 license="GPL-2.0-or-later"
 makedepends="meson appstream-glib-dev gdk-pixbuf-dev libxmlb-dev glib-dev gtk+3.0-dev
 	json-glib-dev libsoup-dev gnome-desktop-dev gspell-dev polkit-dev gtk-doc
-	ostree-dev flatpak-dev libgudev-dev gnome-online-accounts-dev libhandy-dev"
+	ostree-dev flatpak-dev libgudev-dev gnome-online-accounts-dev libhandy1-dev"
 options="!check" # lots of failing tests
 subpackages="$pkgname-lang $pkgname-doc $pkgname-dbg $pkgname-static
 	$pkgname-dev $pkgname-plugin-flatpak:flatpak_plugin"
@@ -17,6 +17,7 @@ source="https://source.puri.sm/Librem5/gnome-software/-/archive/$_commit/gnome-s
 	445.patch
 	install-more-headers.patch
 	org.gnome.software.gschema.override
+	0001-category-page-Fix-the-UI-template.patch
 	"
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -72,7 +73,8 @@ flatpak_plugin() {
 	amove usr/share/metainfo/org.gnome.Software.Plugin.Flatpak.metainfo.xml
 }
 
-sha512sums="12d276f0a30c744c8ff1ee162b75340181a58516389a4ccb1013017c03c5d75eb193f7f79975c02c5de9506c2585a70eb4f67a93410877dcf24e8fb4cbcd006e  gnome-software-b915095540fa7ada6778aded0d51a93572762d89.tar.gz
+sha512sums="87373e50d406c7b4f91e4bc1272eefac83977d5681ee8c8ee9562f44baac70ff2a189832f0c02b316bca7c1d3996fbf3a6e16d16597247d63d1e86b2caff7261  gnome-software-11036d7a4d0283c6a207a5d1f768281042737ceb.tar.gz
 2a8746ac0f948022b10fd29bcaf159d428954061d5ae19db86a09733f69901eda61e109ed4b3d3d484d91c182b2967e4b3bc11ce78774885bb9105a752c55c35  445.patch
 e7de617dbdecaa46fad25d8fe7d7ea5db324aaed73555bbe6814357b4ac3b787269653863679cff4318250dcc7729299b549f41220f441d9033a448af28da9dd  install-more-headers.patch
-711dfa147c587a665c18ff15539984fd38d56580c41ce81ea52a35f875770e6dad1ded6d2cb18af70e6e697ad11f9c94c06916f6bbcfe65900df89a8bf8bd723  org.gnome.software.gschema.override"
+711dfa147c587a665c18ff15539984fd38d56580c41ce81ea52a35f875770e6dad1ded6d2cb18af70e6e697ad11f9c94c06916f6bbcfe65900df89a8bf8bd723  org.gnome.software.gschema.override
+c71f39836005a085eed9c4cd3a7e3fb4636b97406169e333b3bc30dd3e00ff11961a70178aa649b05b991e3fa9f8afb69c7bcd98495cc12cc05e3074a10ff353  0001-category-page-Fix-the-UI-template.patch"
