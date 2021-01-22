@@ -1,13 +1,13 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-pine64-pinebookpro
 pkgdesc="PINE64 Pinebook Pro"
-pkgver=0.1
-pkgrel=4
+pkgver=0.5
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base linux-postmarketos-rockchip u-boot-rockpro64 mesa-dri-gallium alsa-ucm-conf"
+depends="postmarketos-base linux-pinebookpro u-boot-pinebookpro mesa-dri-gallium alsa-ucm-conf"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 install="$pkgname.post-install"
@@ -52,7 +52,7 @@ nonfree_firmware() {
 }
 
 sha512sums="3247ea65950e82311bf2a56273c7523849682fa3cc2dfc19e54c0154a626869181b22e9545bf952cf262e188d032f5342e5a679a63d0c02d6cb972ad0cd2206a  deviceinfo
-6b3695373d6df7b6ac9f59a8c492d2f5e1ef1c6192662224547b500b071bf00ee4335c57736ba787eec236a2e8bde3c559f3cfc3d1e6fe13a7386d7a0db3ff78  extlinux.conf
+fbeaefc57e9a313aa9001a5cb73ba06772c9871c905536d88ba14da281ce1c96c70cc53f9930ea5c88261da2548d9b428c8f972d29eaf49d1992b95ac756abe3  extlinux.conf
 d3988fe83c54228d743f4a8c190e9530404a436a7fbc0b004bf20d3986b502d864717d8cc9c76812e599266bf84cb08f9a86e1bfd220875799c5a022aea588ec  10-pinebookpro.hwdb
 bcae155e24a151d3c098833680b83b6004a329962f115480d560ebe19257eab87286b8a4c194e456c067ca54fb53e59a5a16b022cea13c11135b0855145db563  mem_sleep.conf
 846384cab3e9581a03007cf4f39f8538315e804d1573903dd223d22d5ca0b6f260e348467aead5124689288fb7d2ec22c1e9aba8e89683efdbd33ddfe10de852  rockchip,es8316-codec.conf
