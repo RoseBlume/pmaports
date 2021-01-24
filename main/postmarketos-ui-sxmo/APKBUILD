@@ -1,12 +1,15 @@
 # Maintainer: Miles Alan <m@milesalan.com>
 pkgname=postmarketos-ui-sxmo
-pkgver=1.2.0
+pkgver=1.2.1
 pkgrel=0
 pkgdesc="(X11) Simple X Mobile: Mobile environment based on simple & suckless software (best compatibility on pinephone)"
 url="http://sr.ht/~mil/Sxmo"
 arch="noarch !armhf"
 license="MIT"
 depends="sxmo-xdm-config"
+subpackages="$pkgname-eg25-manager:eg25_manager"
+source="eg25-manager.initd"
+
 _pmb_recommends="
 	firefox-esr
 	foxtrotgps
@@ -22,3 +25,13 @@ options="!check" # has no tests
 package() {
 	mkdir -p "$pkgdir"
 }
+
+eg25_manager() {
+	pkgdesc="Dummy eg25-manager workaround for sxmo#156"
+	install_if="$pkgname=$pkgver-r$pkgrel eg25-manager"
+	replaces="eg25-manager-openrc"
+
+	install -Dm755 eg25-manager.initd \
+		"$subpkgdir"/etc/init.d/eg25-manager
+}
+sha512sums="129d35d50d926cbcaec83fd2316ad3c4bee3cf7d69c4c67798b7c1f86623556c087289f557ad353ff7f03e09dc7ae4aafeac14ecaba487e7d216cc4257a7f116  eg25-manager.initd"

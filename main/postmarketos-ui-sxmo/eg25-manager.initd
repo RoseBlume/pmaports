@@ -1,0 +1,9 @@
+#!/sbin/openrc-run
+# Workaround for: https://todo.sr.ht/~mil/sxmo-tickets/156
+description="EG25 Manager Dummy (Workaround for Sxmo)"
+command="/usr/bin/true"
+
+depend()
+{
+        after modemmanager
+}
