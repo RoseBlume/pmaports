@@ -1,0 +1,46 @@
+# Forked from Alpine, needed to build more recent modemmanager
+
+pkgname=libqmi
+pkgver=1.26.8
+pkgrel=0
+pkgdesc="QMI modem protocol helper library"
+url="https://www.freedesktop.org/wiki/Software/libqmi"
+arch="all"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+makedepends="glib-dev gtk-doc libgudev-dev libmbim-dev linux-headers python3"
+subpackages="
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-bash-completion
+	"
+source="https://www.freedesktop.org/software/libqmi/libqmi-$pkgver.tar.xz"
+
+# Tests fail
+[ "$CARCH" = s390x ] && options="$options !check"
+
+options="!check"  # likely to fail in qemu
+
+# Workaround build freeze with QEMU user emulation
+export JOBS=1
+export MAKEFLAGS=-j$JOBS
+
+build() {
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-static \
+		--enable-mbim-qmux \
+		--enable-qrtr
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="f04633b7f514a1189e2450f0e1bd4137a7300fb12c5873adb58943bdd7b5ab0168dcfe5b91b06fb152b1b484897c827a4334cdc350d654b074ee9c6deb9bf7a1  libqmi-1.26.8.tar.xz"
