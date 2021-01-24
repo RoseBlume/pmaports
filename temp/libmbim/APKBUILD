@@ -1,0 +1,53 @@
+# Forked from Alpine, needed for newer modemmanager
+
+pkgname=libmbim
+pkgver=1.24.4
+pkgrel=0
+pkgdesc="MBIM modem protocol helper library"
+url="https://www.freedesktop.org/wiki/Software/libmbim/"
+arch="all"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+makedepends="gtk-doc python3 glib-dev py3-gobject3 libgudev-dev
+	gobject-introspection-dev"
+subpackages="
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-tools
+	$pkgname-bash-completion
+	"
+source="https://www.freedesktop.org/software/libmbim/libmbim-$pkgver.tar.xz"
+
+options="!check" # fails with qemu
+
+# Workaround build freeze with QEMU user emulation
+export JOBS=1
+export MAKEFLAGS=-j$JOBS
+
+build() {
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-static \
+		--enable-introspection=yes
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+tools() {
+	pkgdesc="Tools for libmbim"
+
+	mkdir -p "$subpkgdir"/usr/bin "$subpkgdir"/usr/libexec
+	mv "$pkgdir"/usr/bin/* "$subpkgdir"/usr/bin
+	mv "$pkgdir"/usr/libexec/* "$subpkgdir"/usr/libexec
+	rmdir -p "$pkgdir"/usr/bin "$pkgdir"/usr/libexec 2>/dev/null || true
+}
+
+sha512sums="bb0b82c64213e5b382a807c5c4c36751138c343419dc6abf1605573c91620af1a6de45587eab7341265f950548924fa65fa4bfedba0659b2f9eb80fa23ae88bc  libmbim-1.24.4.tar.xz"
