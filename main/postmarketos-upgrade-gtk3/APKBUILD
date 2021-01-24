@@ -1,0 +1,36 @@
+# Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
+pkgname=postmarketos-upgrade-gtk3
+pkgver=0_git20210124
+pkgrel=0
+_commit="f1bcc8393c55993ef80c8b07630f04f23de96d01"
+pkgdesc="postmarketOS upgrade instructions app"
+url="https://gitlab.com/postmarketOS/postmarketos-upgrade-gtk3"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="
+	libhandy-dev
+	meson
+	"
+source="https://gitlab.com/postmarketOS/postmarketos-upgrade-gtk3/-/archive/$_commit/postmarketos-upgrade-gtk3-$_commit.tar.gz"
+options="!check" # No tests
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install -C output
+
+	install -Dm644 "data/upgrade-message" \
+		"$pkgdir/etc/upgrade-message"
+
+	# Autostart on first login, the app removes the symlink when started
+	local _autostartdir="$pkgdir/etc/skel/.config/autostart"
+	mkdir -p "$_autostartdir"
+	ln -s "/usr/share/applications/org.postmarketos.Upgrade.desktop" \
+		"$_autostartdir/org.postmarketos.Upgrade.desktop"
+}
+
+sha512sums="935473907d182e54f98bd24085f01a2499189eaade2bb68ad483c9c0b04c4fe63d8f023012e4997d66e454f212702285293cecfc344942bed537b62cdda326db  postmarketos-upgrade-gtk3-f1bcc8393c55993ef80c8b07630f04f23de96d01.tar.gz"
