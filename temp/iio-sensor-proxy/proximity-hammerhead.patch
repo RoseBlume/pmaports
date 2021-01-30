@@ -1,0 +1,34 @@
+diff --git a/data/80-iio-sensor-proxy.rules b/data/80-iio-sensor-proxy.rules
+index 85d93f9..82c3bd5 100644
+--- a/data/80-iio-sensor-proxy.rules
++++ b/data/80-iio-sensor-proxy.rules
+@@ -14,6 +14,7 @@ SUBSYSTEM=="iio", TEST=="in_illuminance_raw", ENV{IIO_SENSOR_PROXY_TYPE}+="iio-p
+ SUBSYSTEM=="iio", TEST=="in_intensity_clear_raw", ENV{IIO_SENSOR_PROXY_TYPE}+="iio-poll-als"
+ SUBSYSTEM=="iio", TEST=="scan_elements/in_intensity_both_en", ENV{IIO_SENSOR_PROXY_TYPE}+="iio-buffer-als"
+ SUBSYSTEM=="iio", TEST=="in_proximity_raw", ENV{IIO_SENSOR_PROXY_TYPE}+="iio-poll-proximity"
++SUBSYSTEM=="iio", TEST=="in_proximity0_raw", ENV{IIO_SENSOR_PROXY_TYPE}+="iio-poll-proximity"
+ SUBSYSTEM=="input", ENV{ID_INPUT_ACCELEROMETER}=="1", ENV{IIO_SENSOR_PROXY_TYPE}+="input-accel"
+ 
+ ENV{IIO_SENSOR_PROXY_TYPE}=="", GOTO="iio_sensor_proxy_end"
+diff --git a/src/drv-iio-poll-proximity.c b/src/drv-iio-poll-proximity.c
+index 4d6f07b..1c49243 100644
+--- a/src/drv-iio-poll-proximity.c
++++ b/src/drv-iio-poll-proximity.c
+@@ -38,7 +38,7 @@ poll_proximity (gpointer user_data)
+ 	gdouble near_level = drv_data->near_level;
+ 
+ 	/* g_udev_device_get_sysfs_attr_as_int does not update when there's no event */
+-	prox = g_udev_device_get_sysfs_attr_as_int_uncached (drv_data->dev, "in_proximity_raw");
++	prox = g_udev_device_get_sysfs_attr_as_int_uncached (drv_data->dev, "in_proximity0_raw");
+ 	/* Use a margin so we don't trigger too often */
+ 	near_level *=  (drv_data->last_level > near_level) ? PROXIMITY_WATER_MARK_LOW : PROXIMITY_WATER_MARK_HIGH;
+ 	readings.is_near = (prox > near_level) ? PROXIMITY_NEAR_TRUE : PROXIMITY_NEAR_FALSE;
+@@ -81,7 +81,7 @@ get_near_level (GUdevDevice *device)
+ 
+ 	near_level = g_udev_device_get_property_as_int (device, PROXIMITY_NEAR_LEVEL);
+ 	if (!near_level)
+-		near_level = g_udev_device_get_sysfs_attr_as_int (device, "in_proximity_nearlevel");
++		near_level = g_udev_device_get_sysfs_attr_as_int (device, "in_proximity0_nearlevel");
+ 
+ 	if (!near_level) {
+ 		g_warning ("Found proximity sensor but no " PROXIMITY_NEAR_LEVEL " udev property");
