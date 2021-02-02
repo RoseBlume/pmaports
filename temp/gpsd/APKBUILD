@@ -1,15 +1,16 @@
 # Forked from Alpine INSERT-REASON-HERE (CHANGEME!)
 
 pkgname=gpsd
-pkgver=3.20
+pkgver=9999
+_pkgver=3.20
 pkgrel=1
 pkgdesc="A GPS daemon"
 arch=all
 url="http://catb.org/gpsd/"
 license="BSD"
-makedepends="scons python3-dev libcap-dev ncurses-dev python"
+makedepends="scons python3-dev libcap-dev ncurses-dev"
 subpackages="$pkgname-dev $pkgname-doc py3-$pkgname:_py $pkgname-clients:_clients"
-source="https://download-mirror.savannah.gnu.org/releases/gpsd/$pkgname-$pkgver.tar.gz
+source="https://download-mirror.savannah.gnu.org/releases/gpsd/$pkgname-$_pkgver.tar.gz
 	timepps.h
 	gpsd-use-local-timepps-header.patch
 	0001-workaround-for-scons-using-python2.patch
@@ -17,7 +18,7 @@ source="https://download-mirror.savannah.gnu.org/releases/gpsd/$pkgname-$pkgver.
 	gpsd.initd
 	gpsd.confd"
 
-builddir="$srcdir/$pkgname-$pkgver"
+builddir="$srcdir/$pkgname-$_pkgver"
 options="!check" # FIXME: tests fails
 
 prepare() {
