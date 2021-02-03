@@ -1,9 +1,14 @@
 pkgname=firmware-lg-hammerhead
 pkgver=1
-pkgrel=3
+pkgrel=4
 _modem_commit="d0565ebb2033bbd267b8be698373f075c9a82cd5"
 pkgdesc="Firmware for LG hammerhead (Nexus 5)"
-subpackages="$pkgname-modem $pkgname-adsp $pkgname-bluetooth"
+subpackages="
+	$pkgname-adsp
+	$pkgname-bluetooth
+	$pkgname-modem
+	$pkgname-venus
+	"
 url="https://developers.google.com/android/drivers#hammerheadm4b30z"
 arch="armv7"
 license="proprietary"
@@ -41,6 +46,15 @@ adsp() {
 
 	cd "$srcdir/qcom/vendor/qcom/hammerhead/proprietary"
 	for _i in adsp.*; do
+		install -Dm644 $_i "$subpkgdir"/lib/firmware/postmarketos/$_i
+	done
+}
+
+venus() {
+	pkgdesc="LG Nexus 5 venus firmware"
+
+	cd "$srcdir/qcom/vendor/qcom/hammerhead/proprietary"
+	for _i in venus.*; do
 		install -Dm644 $_i "$subpkgdir"/lib/firmware/postmarketos/$_i
 	done
 }
