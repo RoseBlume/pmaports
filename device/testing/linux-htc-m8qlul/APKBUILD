@@ -1,0 +1,55 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname=linux-htc-m8qlul
+pkgver=3.10.108
+pkgrel=0
+pkgdesc="HTC One M8s kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="htc-m8qlul"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl dtbtool"
+
+# Source
+_repository="android_kernel_htc_msm8939"
+_commit="5285e19915a8ea1368acb7f6792d7d92d97ba6f2"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/M8s-dev/$_repository/archive/$_commit.tar.gz
+	$_config
+	gcc8-fix-put-user.patch
+	gcc10-extern_YYLOC_global_declaration.patch
+	no-types-include.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+
+	# Master DTB (deviceinfo_bootimg_qcdt)
+	dtbTool -p scripts/dtc/ -o "$_outdir/arch/$_carch/boot"/dt.img \
+		"$_outdir/arch/$_carch/boot/"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+	install -Dm644 "$_outdir/arch/$_carch/boot"/dt.img \
+		"$pkgdir"/boot/dt.img
+}
+
+sha512sums="01ab9c11403bda48320cb7e666354f305ab029f75dbabe00ba1d6b119b9868a3a26a11f2b6a238d497cefe2cc79b6e38e5de9ba80614c50b572793097bc5f7d4  linux-htc-m8qlul-5285e19915a8ea1368acb7f6792d7d92d97ba6f2.tar.gz
+30c5d784ca2a8f9dbc940c3f9b41767a702dd4ce72ba18aca42b940f1e385d59b32eb5b35c153a60dab46fcb9852f4c0e19dd98aff793632d591009516c9b8d8  config-htc-m8qlul.aarch64
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+2b48f1bf0e3f70703d2cdafc47d5e615cc7c56c70bec56b2e3297d3fa4a7a1321d649a8679614553dde8fe52ff1051dae38d5990e3744c9ca986d92187dcdbeb  gcc10-extern_YYLOC_global_declaration.patch
+73271afd1978729fba0ee279c43fc70e23dbf130ef3e91e8cdd78a567ff22760e9f03a9519dfd805090b77f5a1d90def0f197df10fbbec62f1a357e616748e08  no-types-include.patch"
