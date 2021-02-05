@@ -11,7 +11,7 @@ _flavor="htc-m8qlul"
 url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps pmb:cross-native"
-makedepends="bash bc bison devicepkg-dev flex openssl-dev perl dtbtool"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl dtbtool linux-headers"
 
 # Source
 _repository="android_kernel_htc_msm8939"
@@ -22,7 +22,7 @@ source="
 	$_config
 	gcc8-fix-put-user.patch
 	gcc10-extern_YYLOC_global_declaration.patch
-	no-types-include.patch
+	01_prima_gcc6.patch
 "
 builddir="$srcdir/$_repository-$_commit"
 _outdir="out"
@@ -52,4 +52,4 @@ sha512sums="01ab9c11403bda48320cb7e666354f305ab029f75dbabe00ba1d6b119b9868a3a26a
 30c5d784ca2a8f9dbc940c3f9b41767a702dd4ce72ba18aca42b940f1e385d59b32eb5b35c153a60dab46fcb9852f4c0e19dd98aff793632d591009516c9b8d8  config-htc-m8qlul.aarch64
 197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
 2b48f1bf0e3f70703d2cdafc47d5e615cc7c56c70bec56b2e3297d3fa4a7a1321d649a8679614553dde8fe52ff1051dae38d5990e3744c9ca986d92187dcdbeb  gcc10-extern_YYLOC_global_declaration.patch
-73271afd1978729fba0ee279c43fc70e23dbf130ef3e91e8cdd78a567ff22760e9f03a9519dfd805090b77f5a1d90def0f197df10fbbec62f1a357e616748e08  no-types-include.patch"
+a246e10cd979a7f5defb3a97049448b70cff892d667e41f998431ddbeb0e19a84687296b2456e807dd48090823bec63a340f07f3b4ba32121113914e41d299da  01_prima_gcc6.patch"
