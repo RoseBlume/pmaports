@@ -3,7 +3,7 @@
 pkgname=modemmanager
 pkgver=9999
 _pkgver=1.14.8
-pkgrel=2
+pkgrel=3
 pkgdesc="ModemManager library"
 url="http://www.freedesktop.org/wiki/Software/ModemManager"
 arch="armhf armv7 aarch64"
@@ -22,6 +22,10 @@ subpackages="
 	$pkgname-dev
 	$pkgname-openrc
 	$pkgname-bash-completion
+	$pkgname-plugin-generic:generic
+	$pkgname-plugin-quectel:quectel
+	$pkgname-plugin-broadmobi:broadmobi
+	$pkgname-plugin-cinterion:cinterion
 	"
 source="https://www.freedesktop.org/software/ModemManager/ModemManager-$_pkgver.tar.xz
 	$pkgname.rules
@@ -52,7 +56,12 @@ build() {
 		--disable-static \
 		--with-dbus-sys-dir=/etc/dbus-1/system.d \
 		--enable-vala=yes \
-		--with-systemd-suspend-resume=yes
+		--with-systemd-suspend-resume=yes \
+		--disable-all-plugins \
+		--enable-plugin-generic \
+		--enable-plugin-quectel \
+		--enable-plugin-broadmobi \
+		--enable-plugin-cinterion
 	make
 }
 
@@ -66,11 +75,52 @@ libmm() {
 	rmdir "$subpkgdir/usr/include" "$subpkgdir/usr/share"
 }
 
+generic() {
+	cd "$builddir"
+	mkdir -p "$subpkgdir"
+	make DESTDIR="$pkgdir" -C plugins install
+	mkdir -p "$subpkgdir/usr/lib/ModemManager"
+	mv -f "$pkgdir/usr/lib/ModemManager/libmm-plugin-generic.so" "$subpkgdir/usr/lib/ModemManager/libmm-plugin-generic.so"
+	rm -rf "$pkgdir/usr/lib/ModemManager"
+}
+
+# PinePhone Quectel modem
+quectel() {
+	cd "$builddir"
+	mkdir -p "$subpkgdir"
+	make DESTDIR="$pkgdir" -C plugins install
+	mkdir -p "$subpkgdir/usr/lib/ModemManager"
+	mv -f "$pkgdir/usr/lib/ModemManager/libmm-plugin-quectel.so" "$subpkgdir/usr/lib/ModemManager/libmm-plugin-quectel.so"
+	rm -rf "$pkgdir/usr/lib/ModemManager"
+}
+
+# Librem 5 Broadmobi modem
+broadmobi() {
+	cd "$builddir"
+	mkdir -p "$subpkgdir"
+	make DESTDIR="$pkgdir" -C plugins install
+	mkdir -p "$subpkgdir/usr/lib/ModemManager"
+	mv -f "$pkgdir/usr/lib/ModemManager/libmm-plugin-broadmobi.so" "$subpkgdir/usr/lib/ModemManager/libmm-plugin-broadmobi.so"
+	rm -rf "$pkgdir/usr/lib/ModemManager"
+}
+
+# Librem 5 Gemalto Cinterion modem
+cinterion() {
+	cd "$builddir"
+	mkdir -p "$subpkgdir"
+	make DESTDIR="$pkgdir" -C plugins install
+	mkdir -p "$subpkgdir/usr/lib/ModemManager"
+	mv -f "$pkgdir/usr/lib/ModemManager/libmm-plugin-cinterion.so" "$subpkgdir/usr/lib/ModemManager/libmm-plugin-cinterion.so"
+	rm -rf "$pkgdir/usr/lib/ModemManager"
+}
+
 package() {
 	make DESTDIR="$pkgdir" install
 	make DESTDIR="$pkgdir" -C libmm-glib uninstall
+	make DESTDIR="$pkgdir" -C plugins uninstall
 	rmdir "$pkgdir"/usr/lib/girepository-1.0 # in libmm-glib
-	rm -rf "$pkgdir"/usr/share/dbus-1/system-services #systemd-service
+	rmdir "$pkgdir"/usr/lib/ModemManager # in modemmanager-plugin-*
+	rm -rf "$pkgdir"/usr/share/dbus-1/system-services # systemd-service
 	mkdir -p "$pkgdir/usr/share/polkit-1/rules.d"
 	install -m644 -D "$srcdir/$pkgname.rules" \
 		"$pkgdir/usr/share/polkit-1/rules.d/01-org.freedesktop.ModemManager.rules"
@@ -84,6 +134,8 @@ If your USB modem shows up as a Flash drive when you plug it in:
 
 install 'usb-modeswitch' to automatically switch to USB modem mode whenever you plug it in.
 To control your modem without the root password: add your user account to the 'plugdev' group.
+
+Make sure you install the right ModemManager plugin for your modem.
 EOF
 }
 
