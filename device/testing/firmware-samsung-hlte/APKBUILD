@@ -1,0 +1,26 @@
+pkgname=firmware-samsung-hlte
+pkgver=0
+pkgrel=0
+pkgdesc="Samsung Galaxy Note 3 Firmware"
+url="https://github.com/TheMuppets/proprietary_vendor_samsung"
+arch="armv7"
+license="proprietary"
+options="!check !strip !archcheck !spdx"
+
+# Source
+_commit="63715ce31aedd827bd1f8bac5e5c42cc47f28f85"
+source="$pkgname-$_commit-bcmdhd_sta.bin::https://github.com/TheMuppets/proprietary_vendor_samsung/raw/$_commit/hlte-common/proprietary/etc/wifi/bcmdhd_sta.bin
+	$pkgname-$_commit-nvram_net.txt::https://raw.githubusercontent.com/TheMuppets/proprietary_vendor_samsung/$_commit/hlte-common/proprietary/etc/wifi/nvram_net.txt"
+
+package() {
+	# Wifi
+	install -Dm644 "$srcdir/$pkgname-$_commit-bcmdhd_sta.bin" \
+		"$pkgdir/lib/firmware/postmarketos/brcm/brcmfmac4339-sdio.bin"
+	install -Dm644 "$srcdir/$pkgname-$_commit-nvram_net.txt" \
+		"$pkgdir/lib/firmware/postmarketos/brcm/brcmfmac4339-sdio.samsung,hlte.txt"
+}
+
+sha512sums="
+b9344478874f94af33052e76116f2c24b577c4c8178a3c7fc8eb9bb6a1d8c3f497443a88cf1b94256ef3e17806541d7271784505ac16de2b322ccb5ddcec54d3  firmware-samsung-hlte-63715ce31aedd827bd1f8bac5e5c42cc47f28f85-bcmdhd_sta.bin
+5c4d01630e96b7b35241116d4e46442b706d53a1691ef329b94fcba2e4d3673983535e6416ac53fb086e9d25b8619151f8618d8b744c685ea7d293cb9fdb2499  firmware-samsung-hlte-63715ce31aedd827bd1f8bac5e5c42cc47f28f85-nvram_net.txt
+"
