@@ -1,0 +1,17 @@
+# Maintainer: Johannes Marbach <n0-0ne+gitlab@mailbox.org>
+pkgname=install-makedepends
+pkgver=0.0.1
+pkgrel=0
+pkgdesc="Tool to install makedepends for packages"
+url="https://postmarketos.org"
+depends="git"
+source="install-makedepends.sh"
+arch="noarch"
+license="GPL-3.0-or-later"
+options="!check"
+
+package() {
+	install -Dm755 "$srcdir/install-makedepends.sh" \
+		"$pkgdir/bin/install-makedepends"
+}
+sha512sums="2868704d03fdcf1806371d0819f72eb5c8ee55238d2ccf0cf80d858a835905e2b9f7cb8e986b9a754b2b93568716df887667b4958721cfaf56faea5faa9b882f  install-makedepends.sh"

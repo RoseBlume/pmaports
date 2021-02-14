@@ -15,6 +15,7 @@ fi
 
 # Shell: shellcheck
 sh_files="
+	./main/install-makedepends/install-makedepends.sh
 	./main/postmarketos-base/rootfs-usr-lib-firmwareload.sh
 	./main/postmarketos-mkinitfs/init.sh.in
 	./main/postmarketos-mkinitfs/init_functions.sh
