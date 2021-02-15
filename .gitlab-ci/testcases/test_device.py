@@ -96,3 +96,33 @@ def test_aports_device_kernel(args):
                                " multiple kernels in depends (see"
                                " <https://postmarketos.org/devicepkg>): " +
                                path)
+
+
+def test_aports_maintained(args):
+    """
+    Ensure that aports in /device/{main,community} have "Maintainer:" and
+    "Co-Maintainer:" (only required for main) listed in their APKBUILDs.
+    """
+    for path in glob.iglob(f"{args.aports}/device/main/*/APKBUILD"):
+        if '/firmware-' in path:
+            continue
+        maintainers = pmb.parse._apkbuild.maintainers(path)
+        assert maintainers and len(maintainers) >= 2, \
+            f"{path} in main needs at least 1 Maintainer and 1 Co-Maintainer"
+
+    for path in glob.iglob(f"{args.aports}/device/community/*/APKBUILD"):
+        if '/firmware-' in path:
+            continue
+        maintainers = pmb.parse._apkbuild.maintainers(path)
+        assert maintainers, f"{path} in community needs at least 1 Maintainer"
+
+
+def test_aports_unmaintained(args):
+    """
+    Ensure that aports in /device/unmaintained have an "Unmaintained:" comment
+    that describes why the aport is unmaintained.
+    """
+    for path in glob.iglob(f"{args.aports}/device/unmaintained/*/APKBUILD"):
+        unmaintained = pmb.parse._apkbuild.unmaintained(path)
+        assert unmaintained, f"{path} should have an Unmaintained: " +\
+            "comment that describes why the package is unmaintained"
