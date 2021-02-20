@@ -1,9 +1,13 @@
-# Forked from Alpine, because it's only in edge. Needed for crust.
+# Forked from Alpine, because it's only in edge. Needed for crust and
+# u-boot-librem5.
 _pkgbase=gcc
-_targets="or1k-elf"
-pkgname="gcc-cross-embedded-stage1"
+_targets="
+	arm-none-eabi
+	or1k-elf
+	"
+pkgname=gcc-cross-embedded-stage1
 pkgver=9.3.0
-pkgrel=1
+pkgrel=2
 pkgdesc="The GNU Compiler Collection for embedded targets"
 url="http://gcc.gnu.org"
 depends="gcc"
@@ -11,8 +15,15 @@ makedepends="bash linux-headers gmp-dev mpfr-dev mpc1-dev zlib-dev"
 arch="x86_64"
 license="GPL-3.0-or-later"
 
-subpackages="gcc-or1k-elf-stage1:or1k_elf"
-makedepends="$makedepends binutils-or1k-elf"
+subpackages="
+	gcc-or1k-elf-stage1:or1k_elf
+	gcc-arm-none-eabi-stage1:arm_none_eabi
+	"
+makedepends="
+	$makedepends
+	binutils-or1k-elf
+	binutils-arm-none-eabi
+"
 
 _islver=0.20
 source="https://mirrors.kernel.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz
