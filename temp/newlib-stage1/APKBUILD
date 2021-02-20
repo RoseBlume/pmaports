@@ -1,8 +1,11 @@
 # Forked from Alpine, because it's only in edge. Needed for crust.
-_targets="or1k-elf"
+_targets="
+	arm-none-eabi
+	or1k-elf
+	"
 pkgname=newlib-stage1
 pkgver=3.3.0
-pkgrel=0
+pkgrel=1
 pkgdesc="A C standard library implementation intended for use on embedded systems"
 url="http://www.sourceware.org/newlib/"
 makedepends="texinfo"
@@ -11,8 +14,17 @@ license="BSD"
 source="ftp://sourceware.org/pub/newlib/newlib-$pkgver.tar.gz"
 options="!check"
 
-subpackages="newlib-or1k-elf-stage1:or1k_elf"
-makedepends="$makedepends binutils-or1k-elf gcc-or1k-elf-stage1"
+subpackages="
+	newlib-or1k-elf-stage1:or1k_elf
+	newlib-arm-none-eabi-stage1:arm_none_eabi
+	"
+makedepends="
+	$makedepends
+	binutils-or1k-elf
+	binutils-arm-none-eabi
+	gcc-or1k-elf-stage1
+	gcc-arm-none-eabi-stage1
+	"
 
 builddir="$srcdir/newlib-$pkgver"
 
