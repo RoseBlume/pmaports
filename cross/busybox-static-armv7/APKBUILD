@@ -7,8 +7,8 @@ if [ -z "$(type -t arch_to_hostspec)" ]; then
 fi
 
 pkgname=busybox-static-armv7
-pkgver=1.33.0
-pkgrel=2
+pkgver=1.32.1
+pkgrel=3
 
 _arch="armv7"
 _mirror="http://dl-2.alpinelinux.org/alpine/"
@@ -21,14 +21,14 @@ pkgdesc="Statically linked Busybox for $_arch"
 _target="$(arch_to_hostspec $_arch)"
 
 source="
-	busybox-static-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/busybox-static-$pkgver-r$pkgrel.apk
+	busybox-static-$pkgver-r$pkgrel-$_arch-v3.13.apk::$_mirror/v3.13/main/$_arch/busybox-static-$pkgver-r$pkgrel.apk
 "
 
 package() {
 	mkdir -p "$pkgdir/usr/$_target"
 	cd "$pkgdir/usr/$_target"
-	tar -xf $srcdir/busybox-static-$pkgver-r$pkgrel-$_arch-edge.apk
+	tar -xf $srcdir/busybox-static-$pkgver-r$pkgrel-$_arch-v3.13.apk
 	rm .PKGINFO .SIGN.*
 }
 
-sha512sums="030f6349a03aee294ab743b4a09156b120f8c1ddc081042f3c43597b97da31cb7036ac43248cbe601212b5aa8229c4ec7017a68f6a7682e419e24ab2adc817c4  busybox-static-1.33.0-r2-armv7-edge.apk"
+sha512sums="69c7c0ab3605aa1b909c601360a4ae31683ba1365b185c5bdc0f19d67ba256c2622a0efd92d5d8dd8a6384f5794218ec952cd5c2b7ad54ee7ff031a2dd589f57  busybox-static-1.32.1-r3-armv7-v3.13.apk"
