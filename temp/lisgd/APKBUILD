@@ -19,4 +19,4 @@ build() {
 package() {
 	make PREFIX=/usr DESTDIR="$pkgdir" install
 }
-sha512sums="fe897bd9e86848f9dcf6a182693b64bdf9987f128151162546de4cb94635d069ad77cb8f94dd1e7721f18b1baf3ee3d992bb883c2a0acb928d623ff8822661e1  lisgd-0.2.0.tar.gz"
+sha512sums="a8849e586b6bf472bb54a90a9d7c3f6bd6b1fa3351c0662f79202ea95cb81b9a98d5fb04117fe3c6b4dc8eebc55ad3f33ab3c20891fc36c04d8ae6749e0fd5b1  lisgd-0.2.0.tar.gz"
