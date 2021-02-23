@@ -1,0 +1,31 @@
+# Forked from Alpine edge, dependency of pure-maps
+
+pkgname=nemo-qml-plugin-dbus
+pkgver=2.1.24
+pkgrel=0
+pkgdesc="Nemo QML dbus plugin"
+url="https://git.sailfishos.org/mer-core/nemo-qml-plugin-dbus"
+arch="all !armhf" # armhf blocked by qt5-qtdeclarative-dev
+license="BSD-3-Clause AND LGPL-2.1-only"
+depends_dev="
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	"
+makedepends="$depends_dev"
+subpackages="$pkgname-dev"
+source="https://git.sailfishos.org/mer-core/nemo-qml-plugin-dbus/-/archive/$pkgver/nemo-qml-plugin-dbus-$pkgver.tar.gz"
+options="!check" # No tests
+
+build() {
+	qmake-qt5
+	make
+}
+
+package() {
+	INSTALL_ROOT="$pkgdir" make install
+
+	# Remove installed tests
+	rm -r "$pkgdir"/opt
+}
+
+sha512sums="f9825725db6364ea2ba4e4ceb3707bc75611294ef2d8f3c5d8ba99520c3b4ad860a51d1cd424e5f366ba04a09a49580d4d5cbb0500b76be113aaaf07480f9c15  nemo-qml-plugin-dbus-2.1.24.tar.gz"
