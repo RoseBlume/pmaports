@@ -4,7 +4,7 @@ pkgver=0.3
 pkgrel=4
 pkgdesc="(X11) Lightweight desktop (stylus recommended)"
 url="https://gitlab.com/postmarketOS/xfce4-phone"
-arch="noarch"
+arch="noarch !armhf"
 license="GPL-3.0-or-later"
 depends="elogind
 	lightdm
