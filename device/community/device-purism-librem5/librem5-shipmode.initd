@@ -1,3 +1,36 @@
 #!/sbin/openrc-run
 description="Put the Librem 5 into 'ship mode' so that the battery does not drain when off."
-command="/usr/bin/librem5-shipmode"
+
+start()
+{
+	ebegin "Placing Librem 5 into ship mode"
+	if [ "$RC_REBOOT" -eq "YES" ]; then
+		eend "System rebooting, not setting ship mode."
+		return 0
+	fi
+	# The bq25895 chargers' ship mode prevents the battery from discharging
+	# even when the phone is powered off. This script is only useful
+	# on the Librem 5 phone:
+	if grep -qvsi 'Librem 5' /sys/firmware/devicetree/base/model; then
+		eerror 'Not a Librem 5'
+		return 1
+	fi
+
+	# When a charger is connected, ship mode would prevent further charging
+	# when turned off. Disconnecting the charger later would of course
+	# result in the "old" behaviour of slowly discharging while powered off
+	# because ship mode is not set:
+	charging=$(cat /sys/class/power_supply/bq25890-charger/online)
+	if [ "$charging" -eq "1" ]; then
+		eend "Charger connected, not setting ship mode."
+		return 0
+	fi
+
+	# Only continue setting ship mode when running on battery.
+	# Connecting a charger will turn on the phone. The battery will
+	# not have been discharged in the meantime though:
+	i2cset -f -y 3 0x6a 0x00 0x88
+	# shut off the battery with 10-15 second delay
+	i2cset -f -y 3 0x6a 0x09 0x6e
+	eend "Librem 5 is now in ship mode"
+}
