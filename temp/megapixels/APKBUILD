@@ -1,15 +1,15 @@
 # Contributor: Martijn Braam <martijn@brixit.nl>
 # Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=megapixels
-pkgver=0.13.1
+pkgver=0.15.0
 pkgrel=0
 pkgdesc="GTK+3 camera app for mobile devices"
 url="https://git.sr.ht/~martijnbraam/megapixels"
 arch="all"
 license="GPL-3.0-only"
 # Required by postprocess.sh
-depends="cmd:dcraw_emu cmd:convert cmd:exiftool"
-makedepends="glib-dev gtk+3.0-dev tiff-dev meson"
+depends="libraw-tools graphicsmagick exiftool"
+makedepends="glib-dev gtk+3.0-dev tiff-dev zbar-dev meson"
 source="
 	$pkgname-$pkgver.tar.gz::https://git.sr.ht/~martijnbraam/megapixels/archive/$pkgver.tar.gz
 "
@@ -24,4 +24,4 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 
-sha512sums="cf44d99e1966437902ff1ff6e23bb5fd5cb5917e3b1b85e16451288867f37f254d6cb1df6af9511e33a5dadbb88ff5dfaabd5c2bb26223da81ff3c5d745c9c1a  megapixels-0.13.1.tar.gz"
+sha512sums="70334d5b0c38c4fb0914c68c7dc666b6e1e30fa003a03e21c80fb6675a034d2912c703379580a1af79848e566c6e0e62ed758eee5d6d60c2ef674bb2c18ceb7c  megapixels-0.15.0.tar.gz"
