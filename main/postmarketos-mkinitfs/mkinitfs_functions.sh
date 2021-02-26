@@ -407,6 +407,23 @@ create_bootimg()
 		${_second} \
 		${_dt} \
 		-o "${outfile/initramfs-/boot.img-}" || exit 1
+	
+	
+	if [ "${deviceinfo_bootimg_amazon_soho_hack}" = "true" ]; then
+		
+		echo "==> Amending boot.img for Amazon signature verification exploit"
+		
+		SOHO_HEADER_DATA='\x50\x03\x00\x00\x00\x25\xe4\x00'
+		SOHO_HEADER_SIZE=848
+		SOHO_HEADER_OFFSET=52
+		
+		dd if=/dev/zero of=tempfile bs=$SOHO_HEADER_SIZE count=1
+		echo -ne $SOHO_HEADER_DATA | dd of=tempfile bs=$SOHO_HEADER_OFFSET seek=1 conv=notrunc
+		cat ${outfile/initramfs-/boot.img-} >> tempfile
+		mv tempfile ${outfile/initramfs-/boot.img-}
+		
+	fi
+	
 	if [ "${deviceinfo_bootimg_blobpack}" = "true" ] || [ "${deviceinfo_bootimg_blobpack}" = "sign" ]; then
 		echo "==> initramfs: creating blob"
 		_flags=""

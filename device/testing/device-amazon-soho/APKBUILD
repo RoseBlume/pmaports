@@ -1,0 +1,26 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-amazon-soho
+pkgdesc="Amazon Kindle Fire HD (3rd Generation)"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-amazon-soho mkbootimg mesa-dri-gallium"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	initfs-hook.sh
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="3c8da5b37a4a5de3fd06b4489f351d3b99eb72ee1ce9d63f872cc3976d6641741d85e8d26ed57827287aba920793e34a7c6293a94704a3c699699021fbda90db  deviceinfo
+982663a75b3c5640f97123f77d0e6b1239af2d838ac88c9da3de1eb49bd9b382d736e462637a8419dc488ceba265be9dbb8bd3faefba11e297ce4b7c5ac98114  initfs-hook.sh"
