@@ -413,7 +413,6 @@ create_bootimg()
 		# shellcheck disable=SC3060 disable=SC2039
 		sh "${deviceinfo_mkinitfs_postprocess}" "${outfile/initramfs-/boot.img-}"
 	fi
-	
 	if [ "${deviceinfo_bootimg_blobpack}" = "true" ] || [ "${deviceinfo_bootimg_blobpack}" = "sign" ]; then
 		echo "==> initramfs: creating blob"
 		_flags=""
