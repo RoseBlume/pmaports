@@ -3,6 +3,7 @@
 # Declare used deviceinfo variables to pass shellcheck (order alphabetically)
 deviceinfo_append_dtb=""
 deviceinfo_arch=""
+deviceinfo_bootimg_amazon_soho_hack=""
 deviceinfo_bootimg_append_seandroidenforce=""
 deviceinfo_bootimg_blobpack=""
 deviceinfo_bootimg_dtb_second=""
