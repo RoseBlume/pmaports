@@ -25,6 +25,11 @@ source="https://github.com/MycroftAI/mycroft-gui/archive/v$pkgver/mycroft-gui-v$
 	0002-fix-mycroft-gui-core-loader-and-stop.patch
 	"
 
+# Failing tests on aarch64, probably because of Qemu
+case "$CARCH" in
+	aarch64) options="!check" ;;
+esac
+
 build() {
 	cmake -B build \
 		-DCMAKE_BUILD_TYPE=None \
