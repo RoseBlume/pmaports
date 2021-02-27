@@ -7,7 +7,7 @@ pkgrel=0
 _confver=35
 url="https://postmarketos.org"
 license="MIT"
-arch="aarch64"
+arch="" # temporarily disabled, see MR 1988
 options="!check !archcheck"
 depends="
 	alsa-ucm-conf
