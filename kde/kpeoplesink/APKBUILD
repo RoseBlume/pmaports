@@ -6,7 +6,7 @@ _commit="9c14f17cefec6e56467b19130febe2eff734d3b7"
 pkgdesc="Expose Sink contacts to KPeople"
 url="https://invent.kde.org/pim/kpeoplesink"
 # armhf blocked by qt5-qtdeclarative
-arch="all !armhf"
+arch="all !armhf !armv7"  # armv7: pma#996
 license="LGPL-2.1-or-later"
 makedepends="
 	extra-cmake-modules
