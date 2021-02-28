@@ -22,6 +22,17 @@ source="https://github.com/rinigus/mapbox-gl-qml/archive/$pkgver/mapbox-gl-qml-$
 	"
 options="!check" # No tests
 
+prepare() {
+	default_prepare
+
+	# Hack to make it build on v21.03. For some reason it does not find
+	# headers in /usr/include/qt5/ (but it works on master).
+	# https://builds.sr.ht/~postmarketos/job/442810
+	for i in QMapbox QMapboxGL qmapbox.hpp qmapboxgl.hpp; do
+		ln -s /usr/include/qt5/"$i" src/include
+	done
+}
+
 build() {
 	cmake -B build \
 		-DCMAKE_BUILD_TYPE=None \
