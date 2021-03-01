@@ -1,0 +1,21 @@
+Fix compilation error due to needing these functions when not building for Android as well
+diff --git a/arch/arm/mach-tegra/common.c b/arch/arm/mach-tegra/common.c
+index 07a75e33..c048c0ca 100644
+--- a/arch/arm/mach-tegra/common.c
++++ b/arch/arm/mach-tegra/common.c
+@@ -1377,7 +1377,6 @@ static int __init tegra_pmic_rst_reason(char *id)
+ 
+ __setup("pmic_rst_reason=", tegra_pmic_rst_reason);
+ 
+-#ifdef CONFIG_ANDROID
+ static bool androidboot_mode_charger;
+ 
+ bool get_androidboot_mode_charger(void)
+@@ -1393,7 +1392,6 @@ static int __init tegra_androidboot_mode(char *options)
+ 	return 1;
+ }
+ __setup("androidboot.mode=", tegra_androidboot_mode);
+-#endif
+ 
+ /*
+  * Tegra has a protected aperture that prevents access by most non-CPU
