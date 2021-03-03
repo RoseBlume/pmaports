@@ -1,0 +1,155 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=discover
+pkgver=5.21.2
+pkgrel=0
+# armhf blocked by qt5-qtdeclarative
+# s390x blocked by flatpak
+arch="all !armhf !s390x !mips64"
+url="https://userbase.kde.org/Discover"
+pkgdesc="KDE Plasma resources management GUI"
+license="LGPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND GFDL-1.2-only"
+depends="kirigami2"
+makedepends="
+	appstream-dev
+	attica-dev
+	extra-cmake-modules
+	flatpak-dev
+	karchive-dev
+	kauth-dev
+	kcmutils-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	kidletime-dev
+	kio-dev
+	kitemmodels-dev
+	knewstuff-dev
+	kuserfeedback-dev
+	kxmlgui-dev
+	libapk-qt-dev
+	plasma-framework-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="
+	https://download.kde.org/$_rel/plasma/$pkgver/discover-$pkgver.tar.xz
+	0001-port-away-from-qaction.patch
+	0002-Add-support-for-Alpine-Linux-apk-backend.patch
+	alpine-appstream-data.json
+	"
+subpackages="
+	$pkgname-backend-apk:backend_apk
+	$pkgname-backend-flatpak:backend_flatpak
+	$pkgname-lang
+	"
+
+case "$CARCH" in
+	x86|x86_64)
+		makedepends="$makedepends fwupd-dev"
+		subpackages="$subpackages $pkgname-backend-fwupd:backend_fwupd"
+		;;
+	*) ;;
+esac
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_DISABLE_FIND_PACKAGE_Snapd=ON
+	cmake --build build
+}
+
+check() {
+	cd build
+	# knsbackendtest and flatpaktest fail to find their required executables
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "(knsbackend|flatpak)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+backend_flatpak() {
+	pkgdesc="Flatpak backend for $pkgname"
+	depends=""
+	install_if="$pkgname flatpak"
+
+	mkdir -p \
+		"$subpkgdir"/usr/lib/qt5/plugins/discover \
+		"$subpkgdir"/usr/share/libdiscover/categories \
+		"$subpkgdir"/usr/lib/qt5/plugins/discover-notifier \
+		"$subpkgdir"/usr/share/applications \
+		"$subpkgdir"/usr/share/metainfo \
+		"$subpkgdir"/usr/share/icons/hicolor/scalable/apps
+
+	mv "$pkgdir"/usr/lib/qt5/plugins/discover/flatpak-backend.so \
+		"$subpkgdir"/usr/lib/qt5/plugins/discover/
+	mv "$pkgdir"/usr/share/libdiscover/categories/flatpak-backend-categories.xml \
+		"$subpkgdir"/usr/share/libdiscover/categories/
+	mv "$pkgdir"/usr/lib/qt5/plugins/discover-notifier/FlatpakNotifier.so \
+		"$subpkgdir"/usr/lib/qt5/plugins/discover-notifier/
+	mv "$pkgdir"/usr/share/applications/org.kde.discover-flatpak.desktop \
+		"$subpkgdir"/usr/share/applications/
+	mv "$pkgdir"/usr/share/metainfo/org.kde.discover.flatpak.appdata.xml \
+		"$subpkgdir"/usr/share/metainfo/
+	mv "$pkgdir"/usr/share/icons/hicolor/scalable/apps/flatpak-discover.svg \
+		"$subpkgdir"/usr/share/icons/hicolor/scalable/apps/
+}
+
+backend_apk() {
+	pkgdesc="Apk backend for $pkgname"
+	depends=""
+	install_if="$pkgname apk-tools"
+
+	mkdir -p \
+		"$subpkgdir"/usr/lib/qt5/plugins/discover \
+		"$subpkgdir"/usr/share/libdiscover/external-appstream-urls \
+		"$subpkgdir"/usr/lib/libexec/kauth/ \
+		"$subpkgdir"/usr/share/polkit-1/actions/ \
+		"$subpkgdir"/usr/share/dbus-1/system.d/ \
+		"$subpkgdir"/usr/share/dbus-1/system-services/
+
+	mv "$pkgdir"/usr/lib/qt5/plugins/discover/alpineapk-backend.so \
+		"$subpkgdir"/usr/lib/qt5/plugins/discover/
+	mv "$pkgdir"/usr/lib/libexec/kauth/alpineapk_kauth_helper \
+		"$subpkgdir"/usr/lib/libexec/kauth/
+	mv "$pkgdir"/usr/share/polkit-1/actions/org.kde.discover.alpineapkbackend.policy \
+		"$subpkgdir"/usr/share/polkit-1/actions/
+	mv "$pkgdir"/usr/share/dbus-1/system.d/org.kde.discover.alpineapkbackend.conf \
+		"$subpkgdir"/usr/share/dbus-1/system.d/
+	mv "$pkgdir"/usr/share/dbus-1/system-services/org.kde.discover.alpineapkbackend.service \
+		"$subpkgdir"/usr/share/dbus-1/system-services/
+
+	# JSON file contains placeholder for replacement - @CARCH@
+	sed -i "s/@CARCH@/$CARCH/g" "$srcdir"/alpine-appstream-data.json
+	install -Dm644 "$srcdir"/alpine-appstream-data.json \
+		"$subpkgdir"/usr/share/libdiscover/external-appstream-urls/alpine-appstream-data.json
+}
+
+backend_fwupd() {
+	pkgdesc="fwupd backend for $pkgname"
+	depends=""
+	install_if="$pkgname fwupd"
+
+	mkdir -p \
+		"$subpkgdir"/usr/lib/qt5/plugins/discover
+
+	mv "$pkgdir"/usr/lib/qt5/plugins/discover/fwupd-backend.so \
+		"$subpkgdir"/usr/lib/qt5/plugins/discover/
+}
+
+sha512sums="c5299c92fd67df0dac56ec80f04cad1d10cc8f4b05c7e1d2e8de5a30c6a723489aa8c44049255efee03763337cfb8d8912facceebd41483732fb111a18542596  discover-5.21.2.tar.xz
+60537172868d4922266632d1821a0a971fcab572a37a388f06801537b6c4c7ae63cb19443c2e2be8e76acb8fd2811c005a2c625f645f93fdf8cbedaa1afd051d  0001-port-away-from-qaction.patch
+2d7fa6c1540c789d32312d0c61bd758ddd54b749a85a046659f31f63fb75fe0f27e324b4d32ffc8309c2667f3ae195feaa7f8595d301e2889930a19693324433  0002-Add-support-for-Alpine-Linux-apk-backend.patch
+f9f73888f8e20b317987da55028bd578de854fb34293466d1bc5deb82e32dc164916f724411de64a42235ecda37205d3f1ba26621ed7ab710b94273acce34aa3  alpine-appstream-data.json"

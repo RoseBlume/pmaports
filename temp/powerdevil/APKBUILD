@@ -1,0 +1,74 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=powerdevil
+pkgver=5.21.2
+pkgrel=0
+pkgdesc="Manages the power consumption settings of a Plasma Shell"
+# armhf blocked by extra-cmake-modules
+# s390x blocked by libksysguard
+arch="all !armhf !s390x !mips64"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND LGPL-2.0-or-later AND (LGPL-2.1-only OR LGPL-3.0-only)"
+depends="upower"
+depends_dev="
+	bluez-qt-dev
+	eudev-dev
+	kactivities-dev
+	kauth-dev
+	kconfig-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kidletime-dev
+	kio-dev
+	knotifications-dev
+	knotifyconfig-dev
+	kwayland-dev
+	libkscreen-dev
+	networkmanager-qt-dev
+	plasma-workspace-dev
+	qt5-qtbase-dev
+	qt5-qtx11extras-dev
+	solid-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	kdoctools-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/powerdevil-$pkgver.tar.xz"
+subpackages="$pkgname-dev $pkgname-libs $pkgname-doc $pkgname-lang"
+
+prepare() {
+	default_prepare
+
+	# qmlplugindump fails for armv7+qemu (pmb#1970). This is purely for
+	# packager knowledge and doesn't affect runtime, so we can disable it.
+	if [ "$CARCH" = "armv7" ]; then
+		sed -i "s/ecm_find_qmlmodule/# ecm_find_qmlmodule/g" CMakeLists.txt
+	fi
+}
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="e9bbe3d04dffb6637bf3a5803616fca0462869b37a7b73113b22e2e732ead333aa06cbcba10374810c353f61a07f47dc8dbdd65e452b1c12e21ba432dd2e844a  powerdevil-5.21.2.tar.xz"
