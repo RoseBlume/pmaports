@@ -1,0 +1,48 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=maliit-keyboard
+pkgver=0_git20210303
+pkgrel=0
+_commit="77fe50acc5e104fbf537a534cc04bad9fea977d9"
+pkgdesc="Maliit Keyboard 2"
+# armhf blocked by qt5-qtdeclarative
+# s390x blocked by libpinyin
+arch="all !armhf !s390x"
+url="https://github.com/maliit/keyboard"
+license="LGPL-3.0-only AND BSD-3-Clause AND CC-BY-SA-3.0"
+makedepends="
+	anthy-dev
+	cmake
+	glib-dev
+	hunspell-dev
+	libpinyin-dev
+	maliit-framework-dev
+	presage-dev
+	qt5-qtbase-dev
+	qt5-qtfeedback-dev
+	qt5-qtmultimedia-dev
+	"
+checkdepends="xvfb-run"
+source="$pkgname-$_commit.tar.gz::https://github.com/maliit/keyboard/archive/$_commit/keyboard-$_commit.tar.gz"
+subpackages="$pkgname-doc"
+options="!check" # Disabled
+builddir="$srcdir/keyboard-$_commit"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-Denable-tests=OFF # Broken https://github.com/maliit/keyboard/issues/7
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="3dd1425fbe85f86411f4c50a56781181f957395fa1fb0cd2c329e6c569f366a943b7dfd6c614dd22369400ea9fadafcc5532aaa64cd4c93012debdfd0ee722af  maliit-keyboard-77fe50acc5e104fbf537a534cc04bad9fea977d9.tar.gz"
