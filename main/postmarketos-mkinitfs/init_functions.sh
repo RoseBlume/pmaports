@@ -164,6 +164,11 @@ find_boot_partition() {
 	findfs LABEL="pmOS_inst_boot" || findfs LABEL="pmOS_boot"
 }
 
+get_partition_type() {
+	partition="$1"
+	blkid "$partition" | sed 's/^.*TYPE="\([a-zA-z0-9_]*\)".*$/\1/'
+}
+
 # $1: path
 # $2: set to "rw" for read-write
 # Mount the boot partition. It gets mounted twice, first at /boot (ro), then at
@@ -287,17 +292,21 @@ unlock_root_partition() {
 
 resize_root_filesystem() {
 	partition="$(find_root_partition)"
+	type="$(get_partition_type "$partition")"
 	touch /etc/mtab # see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=673323
-	echo "Check/repair root filesystem ($partition)"
-	e2fsck -y "$partition"
-	echo "Resize root filesystem ($partition)"
-	resize2fs -f "$partition"
+	if [ "$type" = "ext4" ]; then
+		echo "Check/repair root filesystem ($partition)"
+		e2fsck -y "$partition"
+		echo "Resize root filesystem ($partition)"
+		resize2fs -f "$partition"
+        fi
 }
 
 mount_root_partition() {
 	partition="$(find_root_partition)"
+	type="$(get_partition_type "$partition")"
 	echo "Mount root partition ($partition) to /sysroot (read-only)"
-	mount -t ext4 -o ro "$partition" /sysroot
+	mount -t "$type" -o ro "$partition" /sysroot
 	if ! [ -e /sysroot/usr ]; then
 		echo "ERROR: unable to mount root partition!"
 		show_splash /splash-mounterror.ppm.gz
