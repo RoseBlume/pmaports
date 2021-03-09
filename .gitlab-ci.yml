@@ -155,3 +155,9 @@ build-aarch64:
 
 build-armv7:
   extends: .build
+
+build-armhf:
+  # Don't run armhf CI on stable releases
+  only:
+    - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+  extends: .build
