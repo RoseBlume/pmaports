@@ -1,17 +1,32 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=plasma-phonebook
-pkgver=0_git20200618
+pkgver=0.1
 pkgrel=0
-_commit="c67aecb8a373d735b92839f809711ca6c111ac5d"
 pkgdesc="Contacts application which allows adding, modifying and removing contacts"
+# armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://invent.kde.org/kde/plasma-phonebook"
 license="LicenseRef-KDE-Accepted-GPL"
-depends="kirigami2 qt5-qtquickcontrols qt5-qtbase-sqlite"
-makedepends="extra-cmake-modules qt5-qtbase-dev qt5-qtdeclarative-dev qt5-qtsvg-dev qt5-qtquickcontrols2-dev kcoreaddons-dev kirigami2-dev kpeople-dev kcontacts-dev kpeoplevcard-dev"
-source="https://invent.kde.org/kde/plasma-phonebook/-/archive/$_commit/plasma-phonebook-$_commit.tar.gz"
+depends="
+	kirigami2
+	qt5-qtbase-sqlite
+	qt5-qtquickcontrols
+	"
+makedepends="
+	extra-cmake-modules
+	kcontacts-dev
+	kcoreaddons-dev
+	kirigami2-dev
+	kpeople-dev
+	kpeoplevcard-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	qt5-qtquickcontrols2-dev
+	qt5-qtsvg-dev
+	"
+source="https://download.kde.org/stable/plasma-phonebook/$pkgver/plasma-phonebook-$pkgver.tar.xz"
+subpackages="$pkgname-lang"
 options="!check" # No tests
-builddir="$srcdir/$pkgname-$_commit"
 
 prepare() {
 	default_prepare
@@ -37,6 +52,6 @@ check() {
 }
 
 package() {
-	DESTDIR="$pkgdir" cmake --build build --target install
+	DESTDIR="$pkgdir" cmake --install build
 }
-sha512sums="a1b06880b6030bcd159cbd9f6b3dcdde0abf43c86ae02b9009e3c21b0e13d96772d7294ed9285319136a5128e8daf7a29a7f56606838dae211d0b9f57f6dba3a  plasma-phonebook-c67aecb8a373d735b92839f809711ca6c111ac5d.tar.gz"
+sha512sums="a58d81581910d4d81824e07f4b6166212fa75e001e27340e422c9201d12603c9f7660dcd6e8a049fc0ea58b6c475dc6c3f67b8b489819067084d4aec4b8b514c  plasma-phonebook-0.1.tar.xz"
