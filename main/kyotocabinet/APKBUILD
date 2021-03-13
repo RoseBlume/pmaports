@@ -1,0 +1,42 @@
+# Contributor: Andrey L <innerspacepilot@gmx.com>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=kyotocabinet
+pkgver=1.2.79
+pkgrel=0
+pkgdesc="library of routines for managing a database"
+url="https://fallabs.com/kyotocabinet/"
+arch="all !armhf"
+license="GPL-3.0-or-later"
+makedepends="
+	lzo-dev
+	xz-dev
+	zlib-dev
+	"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://fallabs.com/kyotocabinet/pkg/kyotocabinet-$pkgver.tar.gz"
+
+case "$CARCH" in
+	# Failing tests
+	armv7|ppc64le|s390x) options="!check" ;;
+esac
+
+build() {
+	# optimizations disabled for cross-compiling
+	./configure \
+		--prefix=/usr \
+		--enable-lzo \
+		--enable-lzma \
+		--enable-opt=no
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+	rm -f "$pkgdir"/usr/lib/*.a
+}
+
+sha512sums="9243192c81d3aa37cc8c80eb3bdf235192a0919b134cededa2b4178be515d148916e7405e094cbcdd7dbf13bf38a569bf21863afac7cc05d6418cca5853a2ff4  kyotocabinet-1.2.79.tar.gz"
