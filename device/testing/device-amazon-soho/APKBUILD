@@ -12,6 +12,7 @@ makedepends="devicepkg-dev"
 source="
 	deviceinfo
 	initfs-hook.sh
+	amazon-omap-boot-hack.sh
 "
 
 build() {
@@ -20,7 +21,9 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+	install -Dm755 "$srcdir/amazon-omap-boot-hack.sh" "$pkgdir/usr/share/postmarketos-mkinitfs/amazon-omap-boot-hack.sh"
 }
 
-sha512sums="3c8da5b37a4a5de3fd06b4489f351d3b99eb72ee1ce9d63f872cc3976d6641741d85e8d26ed57827287aba920793e34a7c6293a94704a3c699699021fbda90db  deviceinfo
-982663a75b3c5640f97123f77d0e6b1239af2d838ac88c9da3de1eb49bd9b382d736e462637a8419dc488ceba265be9dbb8bd3faefba11e297ce4b7c5ac98114  initfs-hook.sh"
+sha512sums="7650d11b462a709e1eafc4135d20ffee6a03af9ddb94db4228532c6997e464e5b9b058080051f3dd12976f389a857fab9ecbda44db285220dc89a37251c1f2d6  deviceinfo
+1aca985770246b9ca140996a498815b5c9ca3458a6cb84db85825344f01deda8b1de7c88e2e0c610df636ad2179faac7fd90d9992add51186a6449f2d43a3f71  initfs-hook.sh
+04af9b9731e4787660b263fe1edbb1f320786c7f982c6847d491c5544e3d98298836757f87bee24706e6c793a3bd1e0ece654df385789b847680bcf9bf37bcf0  amazon-omap-boot-hack.sh"
