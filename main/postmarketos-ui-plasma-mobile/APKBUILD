@@ -33,7 +33,6 @@ depends="$depends
 	tinydm-openrc
 	xorg-server
 	"
-# kpeoplesink removed from _pmb_recommends (pma#996)
 _pmb_recommends="breeze-gtk
 	discover
 	firefox-esr
@@ -44,6 +43,7 @@ _pmb_recommends="breeze-gtk
 	kde-gtk-config
 	kirigami-gallery
 	koko
+	kpeoplesink
 	kpeoplevcard
 	megapixels
 	mobile-config-firefox
