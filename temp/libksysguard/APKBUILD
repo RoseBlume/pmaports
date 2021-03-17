@@ -1,7 +1,7 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=libksysguard
-pkgver=5.21.2
+pkgver=5.21.3
 pkgrel=0
 pkgdesc="KDE system monitor library"
 # armhf blocked by extra-cmake-modules
@@ -57,4 +57,4 @@ check() {
 package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
-sha512sums="9508df88feb13b6ea24a26f6dfc086f2149e612d7b3f661c13c9fd774dd498dedfc29e4bddba1dd1a8514b197f143ce92c25e4b788ac1ca4b2d5873ed8075225  libksysguard-5.21.2.tar.xz"
+sha512sums="a34fa702d5cf5c0468c8575ca67599e601db57f64f556829f9d75818295c46887446f2ed8476597f8e825956f55d933d7c883f246b24aeec3e7171a67c1d41b2  libksysguard-5.21.3.tar.xz"
