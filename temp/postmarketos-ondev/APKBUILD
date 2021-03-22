@@ -1,0 +1,40 @@
+# Forked from Alpine edge
+pkgname=postmarketos-ondev
+pkgver=0.4.4
+pkgrel=0
+pkgdesc="Calamares based on-device installer"
+url="https://postmarketos.org"
+# armhf blocked by qt5-qtdeclarative
+# ppc64le, s390x and mips64 blocked by calamares
+arch="all !armhf !ppc64le !s390x !mips64"
+license="GPL-3.0-or-later"
+depends="
+	$pkgname-openrc
+	calamares
+	calamares-extensions-brand-default-mobile
+	calamares-extensions-mod-mobile
+	calamares-mod-mount
+	calamares-mod-shellprocess
+	calamares-mod-unpackfs
+	e2fsprogs
+	i3wm
+	kirigami2
+	mesa-egl
+	qt5-qtvirtualkeyboard
+	qtvirtualkeyboard-plasma
+	tinydm
+	tinydm-openrc
+	unclutter-xfixes
+	xorg-server
+	xset
+	"
+subpackages="$pkgname-openrc"
+install="$pkgname.post-install"
+source="https://gitlab.com/postmarketOS/postmarketos-ondev/-/archive/$pkgver/postmarketos-ondev-$pkgver.tar.gz"
+options="!check"  # has no tests
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="00765df67e4e881263bd04224151f9062392054403596e61ff241c36fd9ec5d17c8cef025afb45fd00c205627fab947d2405150eb94b119a43482a48a236466c  postmarketos-ondev-0.4.4.tar.gz"
