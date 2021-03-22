@@ -1,0 +1,35 @@
+# Forked from Alpine edge
+
+pkgname=phoc
+pkgver=0.7.0
+pkgrel=0
+pkgdesc="wlroots based Phone compositor for the Phosh shell"
+arch="all !s390x" # no wlroots
+url="https://source.puri.sm/Librem5/phoc"
+license="GPL-3.0-only"
+makedepends="meson ninja gobject-introspection-dev libinput-dev wayland-dev
+	wayland-protocols libxkbcommon-dev wlroots-dev gnome-desktop-dev"
+checkdepends="xvfb-run"
+options="!check" # Needs fullblown EGL
+source="https://source.puri.sm/Librem5/phoc/-/archive/v$pkgver/phoc-v$pkgver.tar.gz"
+
+builddir="$srcdir/$pkgname-v$pkgver"
+options="!check" # postmarketOS cross compiling
+
+build() {
+	abuild-meson \
+		-Dembed-wlroots=disabled \
+		. output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+check() {
+	xvfb-run meson test --no-rebuild -v -C output
+}
+
+package() {
+	DESTDIR="$pkgdir/" meson install --no-rebuild -C output
+	install -Dm755 helpers/scale-to-fit \
+		-t "$pkgdir"/usr/bin
+}
+sha512sums="141e6449298e3b138f6d471d885800b6676f9ad1c2d953813e49cb935102dc4b51e268fc7d31fafe381f0a3e6821c27d628ebac7b242e043b38e4877fc291f5b  phoc-v0.7.0.tar.gz"
