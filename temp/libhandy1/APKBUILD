@@ -1,0 +1,40 @@
+# Forked from Alpine edge
+
+pkgname=libhandy1
+pkgver=1.2.0
+pkgrel=0
+pkgdesc="Library full of GTK+ widgets for mobile phones"
+url="https://gitlab.gnome.org/GNOME/libhandy"
+arch="all !s390x !mips !mips64" # limited by 'adwaita-icon-theme'
+license="LGPL-2.0-or-later"
+makedepends="meson glib-dev gtk+3.0-dev vala py3-setuptools gobject-introspection-dev
+	glade-dev"
+checkdepends="xvfb-run ibus adwaita-icon-theme"
+subpackages="$pkgname-dev $pkgname-lang"
+source="https://download.gnome.org/sources/libhandy/${pkgver%.*}/libhandy-$pkgver.tar.xz
+	"
+builddir="$srcdir/libhandy-$pkgver"
+
+build() {
+	abuild-meson \
+		-Dexamples=true \
+		. output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+check() {
+	xvfb-run meson test --no-rebuild -v -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+dev() {
+	default_dev
+
+	mkdir -p "$subpkgdir"/usr
+	mv "$pkgdir"/usr/bin "$subpkgdir"/usr
+}
+
+sha512sums="34f84479fcef6fdd3b46a03a0b4806887708ce8295461eae655e34febdec5b62de56e34e58696545f086be8de1e2c0ac13a61a4bbe0a945a87e7d8e860a5f919  libhandy-1.2.0.tar.xz"
