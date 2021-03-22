@@ -1,7 +1,7 @@
 # U-boot with patches to make the PinePhone boot faster and have control over the ddr clock speed
 pkgname=u-boot-pinephone
 pkgver=2021.01_git20201228
-pkgrel=0
+pkgrel=1
 # Last commit from "crust" branch, as used in "crust-meta":
 # https://gitlab.com/pine64-org/crust-meta/-/blob/8886bcc829179bf77216fade71f0ede9bd014e67/Makefile#L78
 _commit="7492749fec31b1086bc8933bf113a766aea021aa"
@@ -14,6 +14,7 @@ makedepends="$depends_dev bc dtc python3-dev py3-setuptools swig bison flex open
 options="!check"
 source="https://gitlab.com/pine64-org/u-boot/-/archive/$_commit/u-boot-$_commit.tar.gz
 	update-u-boot
+	0001-CONFIG_DRAM_CLK-528.patch
 	"
 builddir="$srcdir/u-boot-$_commit"
 
@@ -33,8 +34,8 @@ build() {
 prepare() {
 	default_prepare
 
-	if ! grep -q "CONFIG_DRAM_CLK=552" configs/pinephone_defconfig; then
-		error "CONFIG_DRAM_CLK must be 552!"
+	if ! grep -q "CONFIG_DRAM_CLK=528" configs/pinephone_defconfig; then
+		error "CONFIG_DRAM_CLK must be 528!"
 		return 1
 	fi
 }
@@ -47,4 +48,5 @@ package() {
 }
 
 sha512sums="73b132cdc26113a83d060f0d243320ca989b4efa98fe95a2205526a42f615ced7046bb9d4878c67a9a550b04c2519d90be3c2272be97c878d759bf5d027cf536  u-boot-7492749fec31b1086bc8933bf113a766aea021aa.tar.gz
-4a3a1772a7309d44e7977dee4aca499d5c79675d99cda1395d8765abb415b8456260c7a989650f0bd2dfda0377af2346917fbcbf3e356a36265ed07e161ddc3b  update-u-boot"
+4a3a1772a7309d44e7977dee4aca499d5c79675d99cda1395d8765abb415b8456260c7a989650f0bd2dfda0377af2346917fbcbf3e356a36265ed07e161ddc3b  update-u-boot
+014c6c41b19b003532daab3c109b00133545fa845f458b01863b9e65cd00c1d8dc32d4ceea661729b1cec9869eefe88004b680acecdf9be0b7b191dac434ccb2  0001-CONFIG_DRAM_CLK-528.patch"
