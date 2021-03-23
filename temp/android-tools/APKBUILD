@@ -1,0 +1,33 @@
+# Forked from Alpine edge
+
+pkgname=android-tools
+pkgver=30.0.5p1
+pkgrel=0
+pkgdesc="Android platform tools"
+url="https://sites.google.com/a/android.com/tools/"
+arch="x86 x86_64 aarch64 armv7 armhf"
+license="Apache-2.0 MIT"
+options="!check" # upstream doesn't have a test suite
+makedepends="pcre2-dev linux-headers libusb-dev gtest-dev go perl cmake
+	protobuf-dev brotli-dev zstd-dev lz4-dev"
+source="https://github.com/nmeum/$pkgname/releases/download/$pkgver/$pkgname-$pkgver.tar.xz"
+
+build() {
+	cd "$builddir"
+
+	mkdir build && cd build
+	cmake \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+		-DCMAKE_C_FLAGS="$CFLAGS" \
+		..
+	make
+}
+
+package() {
+	cd "$builddir/build"
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="8807d7e93ca04994c641278f6b260361f5c06186c9d9edacb0caa72484d5367c35f84c3fb3ad66bf969055e87af48c0b69241b70271e4f3891d1bb2e8336a7f6  android-tools-30.0.5p1.tar.xz"
