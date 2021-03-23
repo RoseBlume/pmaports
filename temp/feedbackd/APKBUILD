@@ -1,0 +1,35 @@
+# Forked from Alpine edge
+
+pkgname=feedbackd
+pkgver=0_git20210125
+pkgrel=0
+pkgdesc="A daemon to provide haptic (and later more) feedback on events"
+url="https://source.puri.sm/Librem5/feedbackd"
+arch="all"
+license="GPL-3.0-or-later"
+depends="dbus feedbackd-device-themes"
+makedepends="meson glib-dev gsound-dev libgudev-dev json-glib-dev gtk-doc
+	vala gobject-introspection-dev"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://source.puri.sm/Librem5/feedbackd/-/archive/v0.0.0+${pkgver#0_}/feedbackd-v0.0.0+${pkgver#0_}.tar.gz"
+builddir="$srcdir/$pkgname-v0.0.0+${pkgver#0_}"
+install="$pkgname.pre-install $pkgname.pre-upgrade"
+
+build() {
+	abuild-meson \
+		-Dgtk_doc=true \
+		. output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+check() {
+	meson test --no-rebuild -v -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+	install -Dm644 "$builddir"/debian/feedbackd.udev \
+		"$pkgdir"/usr/lib/udev/rules.d/90-feedbackd.rules
+}
+
+sha512sums="1f0397052e0eb7815ed4f922065b3b283288a5aeceeb03feb9de0c303182c37526bbbcefdfbb7aac6116c29b6672c4e92fa7a022a9e02bb750931de93354ebd1  feedbackd-v0.0.0+git20210125.tar.gz"
