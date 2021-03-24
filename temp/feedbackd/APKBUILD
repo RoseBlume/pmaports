@@ -2,7 +2,7 @@
 
 pkgname=feedbackd
 pkgver=0_git20210125
-pkgrel=1
+pkgrel=2
 pkgdesc="A daemon to provide haptic (and later more) feedback on events"
 url="https://source.puri.sm/Librem5/feedbackd"
 arch="all"
@@ -11,14 +11,14 @@ options="!check" # tests fail on bpo
 depends="dbus feedbackd-device-themes"
 makedepends="meson glib-dev gsound-dev libgudev-dev json-glib-dev gtk-doc
 	vala gobject-introspection-dev"
-subpackages="$pkgname-dev $pkgname-doc"
+subpackages="$pkgname-dev"
 source="https://source.puri.sm/Librem5/feedbackd/-/archive/v0.0.0+${pkgver#0_}/feedbackd-v0.0.0+${pkgver#0_}.tar.gz"
 builddir="$srcdir/$pkgname-v0.0.0+${pkgver#0_}"
 install="$pkgname.pre-install $pkgname.pre-upgrade"
 
 build() {
 	abuild-meson \
-		-Dgtk_doc=true \
+		-Dgtk_doc=false \
 		. output
 	meson compile ${JOBS:+-j ${JOBS}} -C output
 }
