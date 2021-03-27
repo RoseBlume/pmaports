@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 5.11.4 Kernel Configuration
+# Linux/arm64 5.11.6 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="aarch64-alpine-linux-musl-gcc (Alpine 10.2.1_git20210318) 10.2.1 20210318"
 CONFIG_CC_IS_GCC=y
@@ -2261,9 +2261,7 @@ CONFIG_REDPINE_COEX_MODE=y
 # CONFIG_REDPINE_P2P is not set
 # CONFIG_CARACALLA_BOARD is not set
 # CONFIG_REDPINE_ZIGB is not set
-CONFIG_RS9116_FLASH_MODE=y
-CONFIG_RS9116_PURISM=y
-CONFIG_REDPINE_LOAD_FW_FROM_FLASH_ONLY=y
+# CONFIG_RS9116_FLASH_MODE is not set
 # CONFIG_WLAN_VENDOR_ST is not set
 # CONFIG_WLAN_VENDOR_TI is not set
 # CONFIG_WLAN_VENDOR_ZYDAS is not set

@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/vendorkernel>
 # Maintainer:  Clayton Craft <clayton@craftyguy.net>
 pkgname=linux-purism-librem5
-pkgver=5.11.4
-pkgrel=3
+pkgver=5.11.6
+pkgrel=1
 _purismrel=1
 # <kernel ver>.<purism kernel release>
 _purismver=${pkgver}pureos$_purismrel
@@ -25,6 +25,7 @@ makedepends="
 	xz
 	"
 subpackages="$pkgname-dev"
+install="$pkgname.post-upgrade"
 
 # Source
 _repository="linux-next"
@@ -74,9 +75,9 @@ dev() {
 		ARCH="$_carch" \
 		INSTALL_HDR_PATH="$subpkgdir"/usr
 }
-sha512sums="d2e0f49403413f581aee6e47e021cb04fc003fbf821349c188a0c6a57561ba702c327badf9b181c6f8fdc6952ebc7f061482d6508ae48dc336842eb94c5ed558  linux-purism-librem5-5.11.4pureos1.tar.gz
+sha512sums="c79ca90f761cab9dd2806c91da2891a78f64c2a7c060a2dc2bd580235c991832f516ca8b23bf01d05d635f53a856aec9d7417baf611096599a7940aaea8c902a  linux-purism-librem5-5.11.6pureos1.tar.gz
 9870bff4b187188b519b23264c2634ee4232011fed6d2f66a7b4971db354ac3dffa0e1552bd0dc953c66ec622e18ce8899fdbcfba94f60867fc5004d6da96753  8f11380ec32912370b8ae9134a0387a6f18862f7.patch
 5baae99010bde62e253fdd56f21ba096c217ba2ab9c367c80b34bc0f445a79a8fb8b5d14682f71ad6061d73c81fc16a608f4be037d792978dbbaf74267844260  0001-Revert-arm64-dts-librem5-Drop-separte-DP-device-tree.patch
 1a12f74895b0fc710792e3881f23754a8eb92d25b11a2751db007a1b08f72729043d1e824096c97dc795b8e33300274887b428997ddaacf4b61f52ef3bd78ce5  0002-bq25890_charger-enter-ship-mode-on-power-off.patch
 00286a7ea3d3167150eca1025f271bb76e05d8a47c481879b1322ec9e88250c365b1b0ddcc8140ccc9b8f6138ffec843f184645c0c7d4ff11f75c988f5c4945c  0003-Revert-redpine-Clean-up-loop-in-the-interrupt-handler.patch
-07ce9dfb837e8a1ae10bc0edbbca107a3b12a2e5e2935fa9a1aa24c8f31e3c564685f2cb4a7b231960bdc666bcead1a946645ec7615b985d5c3d0cf6babaf098  config-purism-librem5.aarch64"
+71d2dd80757556ed450f4a8576986ef011c480d9c15234bb178a276f8b4b0b14e71a10c406d961ca166d5c4032a4c920804877b726aead0872d3debc0f6df9b2  config-purism-librem5.aarch64"
