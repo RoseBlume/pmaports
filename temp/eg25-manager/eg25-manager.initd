@@ -6,4 +6,5 @@ command="/usr/bin/eg25manager"
 depend()
 {
         after modemmanager
+        after ofono
 }
