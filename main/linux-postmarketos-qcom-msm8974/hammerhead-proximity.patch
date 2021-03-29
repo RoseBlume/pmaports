@@ -1,0 +1,77 @@
+diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+index fc619cb6f939..d492d9964fd2 100644
+--- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
++++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
+@@ -677,6 +677,7 @@ avago_apds993@39 {
+ 			vddio-supply = <&pm8941_lvs1>;
+ 			led-max-microamp = <100000>;
+ 			amstaos,proximity-diodes = <0>;
++			proximity-near-level = <100>;
+ 		};
+ 	};
+ 
+diff --git a/drivers/iio/light/tsl2772.c b/drivers/iio/light/tsl2772.c
+index d79205361dfa..c2f55c2f504a 100644
+--- a/drivers/iio/light/tsl2772.c
++++ b/drivers/iio/light/tsl2772.c
+@@ -179,6 +179,7 @@ struct tsl2772_chip {
+ 	const struct tsl2772_chip_info	*chip_info;
+ 	const struct iio_info *info;
+ 	s64 event_timestamp;
++	uint32_t near_level;
+ 	/*
+ 	 * This structure is intentionally large to accommodate
+ 	 * updates via sysfs.
+@@ -614,6 +615,10 @@ static void tsl2772_parse_dt(struct tsl2772_chip *chip)
+ {
+ 	tsl2772_read_prox_led_current(chip);
+ 	tsl2772_read_prox_diodes(chip);
++
++	if (of_property_read_u32(chip->client->dev.of_node, "proximity-near-level",
++				     &chip->near_level))
++		chip->near_level = 0;
+ }
+ 
+ /**
+@@ -1512,6 +1517,25 @@ static const struct iio_event_spec tsl2772_events[] = {
+ 	},
+ };
+ 
++static ssize_t tsl2772_read_near_level(struct iio_dev *indio_dev,
++					uintptr_t priv,
++					const struct iio_chan_spec *chan,
++					char *buf)
++{
++	struct tsl2772_chip *chip = iio_priv(indio_dev);
++
++	return sprintf(buf, "%u\n", chip->near_level);
++}
++
++static const struct iio_chan_spec_ext_info tsl2772_ext_info[] = {
++	{
++		.name = "nearlevel",
++		.shared = IIO_SEPARATE,
++		.read = tsl2772_read_near_level,
++	},
++	{ /* sentinel */ }
++};
++
+ static const struct tsl2772_chip_info tsl2772_chip_info_tbl[] = {
+ 	[ALS] = {
+ 		.channel_with_events = {
+@@ -1716,6 +1740,7 @@ static const struct tsl2772_chip_info tsl2772_chip_info_tbl[] = {
+ 				BIT(IIO_CHAN_INFO_CALIBSCALE),
+ 			.event_spec = tsl2772_events,
+ 			.num_event_specs = ARRAY_SIZE(tsl2772_events),
++			.ext_info = tsl2772_ext_info,
+ 			},
+ 		},
+ 		.channel_without_events = {
+@@ -1748,6 +1773,7 @@ static const struct tsl2772_chip_info tsl2772_chip_info_tbl[] = {
+ 				BIT(IIO_CHAN_INFO_CALIBSCALE),
+ 			.info_mask_separate_available =
+ 				BIT(IIO_CHAN_INFO_CALIBSCALE),
++			.ext_info = tsl2772_ext_info,
+ 			},
+ 		},
+ 		.chan_table_elements = 4,
