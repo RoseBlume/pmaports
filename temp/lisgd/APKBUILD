@@ -1,7 +1,7 @@
 # Forked from Alpine edge, dependency of sxmo-utils
 
 pkgname=lisgd
-pkgver=0.2.0
+pkgver=0.3.0
 pkgrel=0
 pkgdesc="simple libinput gesture daemon"
 url="http://git.sr.ht/~mil/lisgd"
@@ -19,4 +19,4 @@ build() {
 package() {
 	make PREFIX=/usr DESTDIR="$pkgdir" install
 }
-sha512sums="a8849e586b6bf472bb54a90a9d7c3f6bd6b1fa3351c0662f79202ea95cb81b9a98d5fb04117fe3c6b4dc8eebc55ad3f33ab3c20891fc36c04d8ae6749e0fd5b1  lisgd-0.2.0.tar.gz"
+sha512sums="0cb99e1169105a52c0a716c58f6c7450407f7e6dfa25fb9db53ef702b231b43a18553995b0f57469ac76ed55126114d56ccc712da3a5bde7d41bcf3af37b5c8d  lisgd-0.3.0.tar.gz"
