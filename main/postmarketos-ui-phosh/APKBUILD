@@ -2,21 +2,24 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-phosh
 pkgver=5
-pkgrel=0
+pkgrel=1
 pkgdesc="(Wayland) Mobile UI developed for the Librem 5 (works only with numeric passwords!)"
 url="https://puri.sm"
 arch="noarch !armhf"
 license="GPL-3.0-or-later"
-depends="bluez
+depends="
+	bluez
 	gnome-keyring
 	iio-sensor-proxy
 	lightdm
 	lightdm-openrc
 	phosh
 	polkit-elogind
+	postmarketos-upgrade-gtk3
 	pulseaudio
 	"
-_pmb_recommends="calls
+_pmb_recommends="
+	calls
 	chatty
 	eog
 	firefox-esr
