@@ -1,0 +1,81 @@
+From 58cefd4e18391ae6492a3ff8797f8dad86b22bae Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sun, 4 Apr 2021 16:13:22 +0200
+Subject: [PATCH] Fix compile error with new glib versions
+
+Glib doesn't like being included under extern "C" anymore
+
+In file included from /usr/include/glib-2.0/glib/gatomic.h:31,
+                 from /usr/include/glib-2.0/glib/gthread.h:32,
+                 from /usr/include/glib-2.0/glib/gasyncqueue.h:32,
+                 from /usr/include/glib-2.0/glib.h:32,
+                 from /usr/include/glib-2.0/gobject/gbinding.h:28,
+                 from /usr/include/glib-2.0/glib-object.h:22,
+                 from /usr/include/glib-2.0/gio/gioenums.h:28,
+                 from /usr/include/glib-2.0/gio/giotypes.h:28,
+                 from /usr/include/glib-2.0/gio/gio.h:26,
+                 from /home/pmos/build/src/lomiri-url-dispatcher-ef11846cacf67e42cc35533d7d115e59b371e8c7/service/dispatcher.h:23,
+                 from /home/pmos/build/src/lomiri-url-dispatcher-ef11846cacf67e42cc35533d7d115e59b371e8c7/service/service.cpp:19:
+/usr/include/c++/10.2.1/type_traits:2925:3: error: template with C linkage
+ 2925 |   template<typename _Fn, typename... _Args>
+      |   ^~~~~~~~
+/home/pmos/build/src/lomiri-url-dispatcher-ef11846cacf67e42cc35533d7d115e59b371e8c7/service/service.cpp:18:1: note: 'extern "C"' linkage started here
+   18 | extern "C" {
+      | ^~~~~~~~~~
+---
+ service/overlay-tracker.cpp | 2 --
+ service/overlay-tracker.h   | 7 +++++++
+ service/service.cpp         | 2 --
+ 3 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/service/overlay-tracker.cpp b/service/overlay-tracker.cpp
+index e34cad4..8f828ea 100644
+--- a/service/overlay-tracker.cpp
++++ b/service/overlay-tracker.cpp
+@@ -17,9 +17,7 @@
+  *   Ted Gould <ted.gould@canonical.com>
+  */
+ 
+-extern "C" {
+ #include "overlay-tracker.h"
+-}
+ 
+ #include "overlay-tracker-iface.h"
+ #include "overlay-tracker-mir.h"
+diff --git a/service/overlay-tracker.h b/service/overlay-tracker.h
+index a7d4e29..38ef4a8 100644
+--- a/service/overlay-tracker.h
++++ b/service/overlay-tracker.h
+@@ -22,8 +22,15 @@
+ 
+ typedef struct _OverlayTracker OverlayTracker;
+ 
++#ifdef __cplusplus
++extern "C" {
++#endif
++
+ OverlayTracker * overlay_tracker_new ();
+ void overlay_tracker_delete (OverlayTracker * tracker);
+ gboolean overlay_tracker_add (OverlayTracker * tracker, const char * appid, unsigned long pid, const char * url);
+ gboolean overlay_tracker_badurl (OverlayTracker * tracker, unsigned long pid, const char * url);
+ 
++#ifdef __cplusplus
++}
++#endif
+diff --git a/service/service.cpp b/service/service.cpp
+index 69e1fe3..3cb1285 100644
+--- a/service/service.cpp
++++ b/service/service.cpp
+@@ -15,9 +15,7 @@
+  *
+  */
+ 
+-extern "C" {
+ #include "dispatcher.h"
+-}
+ 
+ #include <glib.h>
+ #include <glib-unix.h>
+-- 
+2.31.1
+

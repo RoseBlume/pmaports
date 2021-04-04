@@ -11,7 +11,8 @@ license="LGPL-3.0-only"
 depends_dev="ubuntu-app-launch-dev json-glib-dev click-dev libapparmor-dev"
 makedepends="$depends_dev cmake dbus-test-runner cmake-extras glib-dev gtest-dev gmock intltool dbus-test-runner-dev"
 checkdepends="py3-dbusmock"
-source="$pkgname-$_commit.tar.gz::https://github.com/ubports/url-dispatcher/archive/$_commit.tar.gz"
+source="$pkgname-$_commit.tar.gz::https://github.com/ubports/url-dispatcher/archive/$_commit.tar.gz
+	0001-Fix-compile-error-with-new-glib-versions.patch"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # several tests hang
@@ -34,4 +35,5 @@ package() {
 	make -C build DESTDIR="$pkgdir" install
 }
 
-sha512sums="208e7c2f233f67dd05489b9dd46499b71a364387a154cee0fd630c23224a2416fd133f3022d8890ae13156f7f4c0c3ca37c8c6e39d9552b35d4f02395cb120cc  url-dispatcher-58a498dbd19e46f3baa17629bb8b56be860cb738.tar.gz"
+sha512sums="208e7c2f233f67dd05489b9dd46499b71a364387a154cee0fd630c23224a2416fd133f3022d8890ae13156f7f4c0c3ca37c8c6e39d9552b35d4f02395cb120cc  url-dispatcher-58a498dbd19e46f3baa17629bb8b56be860cb738.tar.gz
+04e1f9166b8bd357224edef8b35bf56008ff1ad5f6f3c00b952bbbca7da2ffabfb8e0b760531532c91158a14713d19654fc2578863e57d7e7a0bfe6d549ad2f6  0001-Fix-compile-error-with-new-glib-versions.patch"
