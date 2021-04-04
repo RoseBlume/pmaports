@@ -11,7 +11,8 @@ license="LGPL-3.0-only"
 depends_dev="qt5-qtdeclarative-dev"
 makedepends="$depends_dev cmake qt5-qtbase-dev"
 checkdepends="dbus-test-runner py3-dbus py3-gobject3"
-source="$pkgname-$_commit.tar.gz::https://github.com/ubports/qmenumodel/archive/$_commit.tar.gz"
+source="$pkgname-$_commit.tar.gz::https://github.com/ubports/qmenumodel/archive/$_commit.tar.gz
+	0001-Move-glib-includes-outside-of-extern-C.patch"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -32,4 +33,5 @@ package() {
 	make -C build DESTDIR="$pkgdir" install
 }
 
-sha512sums="c998ef8ca4168ed45b45f7c7cdc14104cf1678769bcb303c112b76fb5715092d340197d622b82c38f2d18be9b188ad573bc559a6ddd593c071e512222067cbcc  qmenumodel-a9f44cb712a3ce39e377341fe2b52c05a4b37e68.tar.gz"
+sha512sums="c998ef8ca4168ed45b45f7c7cdc14104cf1678769bcb303c112b76fb5715092d340197d622b82c38f2d18be9b188ad573bc559a6ddd593c071e512222067cbcc  qmenumodel-a9f44cb712a3ce39e377341fe2b52c05a4b37e68.tar.gz
+b5bf67e189eba37c72911f23623d2daf1e29f3defa64e28e215fa1fbc283b603ec73f6b7967b55fecdaf9435de449629c1cef34a690819cb67337db80c024ed8  0001-Move-glib-includes-outside-of-extern-C.patch"
