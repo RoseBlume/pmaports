@@ -1,0 +1,59 @@
+From cab2be96b58a9cbcd84ff1945d406d24a702a211 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sun, 4 Apr 2021 16:08:50 +0200
+Subject: [PATCH] Fix compile error with new glib versions
+
+glib.h doesn't like being included under extern "C" anymore
+
+/home/pmos/build/src/lomiri-app-launch-6db9025235d4e8517c970c39505d137d2a6f470a/liblomiri-app-launch/lomiri-app-launch.cpp:20:1: note: 'extern "C"' linkage started here
+   20 | extern "C" {
+      | ^~~~~~~~~~
+In file included from /usr/include/glib-2.0/glib/gatomic.h:31,
+                 from /usr/include/glib-2.0/glib/gthread.h:32,
+                 from /usr/include/glib-2.0/glib/gasyncqueue.h:32,
+                 from /usr/include/glib-2.0/glib.h:32,
+                 from /home/pmos/build/src/lomiri-app-launch-6db9025235d4e8517c970c39505d137d2a6f470a/liblomiri-app-launch/lomiri-app-launch.h:20,
+                 from /home/pmos/build/src/lomiri-app-launch-6db9025235d4e8517c970c39505d137d2a6f470a/liblomiri-app-launch/lomiri-app-launch.cpp:21:
+/usr/include/c++/10.2.1/type_traits:2930:3: error: template with C linkage
+ 2930 |   template<typename _Fn, typename... _Args>
+      |   ^~~~~~~~
+/home/pmos/build/src/lomiri-app-launch-6db9025235d4e8517c970c39505d137d2a6f470a/liblomiri-app-launch/lomiri-app-launch.cpp:20:1: note: 'extern "C"' linkage started here
+   20 | extern "C" {
+      | ^~~~~~~~~~
+---
+ libubuntu-app-launch/application.cpp       | 2 --
+ libubuntu-app-launch/ubuntu-app-launch.cpp | 3 ++-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/libubuntu-app-launch/application.cpp b/libubuntu-app-launch/application.cpp
+index 29ebf69..a89300a 100644
+--- a/libubuntu-app-launch/application.cpp
++++ b/libubuntu-app-launch/application.cpp
+@@ -17,9 +17,7 @@
+  *     Ted Gould <ted.gould@canonical.com>
+  */
+ 
+-extern "C" {
+ #include "ubuntu-app-launch.h"
+-}
+ 
+ #include "application.h"
+ #include "info-watcher.h"
+diff --git a/libubuntu-app-launch/ubuntu-app-launch.cpp b/libubuntu-app-launch/ubuntu-app-launch.cpp
+index ad74fdd..cc1edbf 100644
+--- a/libubuntu-app-launch/ubuntu-app-launch.cpp
++++ b/libubuntu-app-launch/ubuntu-app-launch.cpp
+@@ -17,8 +17,9 @@
+  *     Ted Gould <ted.gould@canonical.com>
+  */
+ 
+-extern "C" {
+ #include "ubuntu-app-launch.h"
++
++extern "C" {
+ #include <gio/gio.h>
+ #include <gio/gunixfdlist.h>
+ #include <string.h>
+-- 
+2.31.1
+
