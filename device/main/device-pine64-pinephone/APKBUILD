@@ -4,7 +4,7 @@
 # Co-Maintainer: Bart Ribbers <bribbers@disroot.org>
 # Co-Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=device-pine64-pinephone
-pkgver=0.25
+pkgver=0.26
 pkgrel=0
 pkgdesc="PINE64 PinePhone"
 url="https://postmarketos.org"
@@ -54,6 +54,7 @@ source="
 	ucm/HiFi.conf
 	ucm/PinePhone.conf
 	ucm/VoiceCall.conf
+	01-disable-animations
 	"
 # workaround to purge the -elogind subpackage that was previously
 # created/installed
@@ -142,6 +143,8 @@ phosh() {
 	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-phosh"
 	depends="wys-pinephone"
 	mkdir "$subpkgdir"
+	install -Dm755 "$srcdir"/01-disable-animations \
+		"$pkgdir"/etc/dconf/db/postmarketos.d/03-disable-animations
 }
 
 plasma_mobile() {
@@ -176,4 +179,5 @@ f4b5509fd6a8b23f3667f5e7262b3a19c607a37cb9eaf7d0e93eb826d45c26ec12df4810879bacb8
 9d4bcc02c6c501b3a205516c8f276ef4293d88edea61ac725887ec28f9f6788320e9f9edd7f1cf29bbf6122acfad2ef5b3ad5e4b33763fe867bd23d2ac17ed5c  uboot-script.cmd
 de88fc198c11637d9c6465f8a6fb4deab3d0802bdb52ffaa9a08833aa0ef63689b674b12b44cb314f3870d9d21fc3ae55f8db03c9a838860301be60a88e48835  HiFi.conf
 e852b48a687f9b2a0eca444aa3d00a1818aead9f5e5d28e070b51c9d6f8ec648e66f1d88e2bfa94d74533f9ffb9aacc1703da2a06693f85fa04ff97fd7528012  PinePhone.conf
-6c6ffd481a1ac66864f2c713ac4c16c8e112e49a6bc2ff3bb0d492426504cad0e953275a8ed13f247ef8c95bdd1814d9aea934ff76bb4dfada6b1b7b2eedea19  VoiceCall.conf"
+6c6ffd481a1ac66864f2c713ac4c16c8e112e49a6bc2ff3bb0d492426504cad0e953275a8ed13f247ef8c95bdd1814d9aea934ff76bb4dfada6b1b7b2eedea19  VoiceCall.conf
+2f21ee3facd335963ef19b82b854fbd8768c96c67522ab8b7ca71ad6a54f47f245638c4bb8b5c59073ff44a67fe96f2388a005dbc4f6f41106c7f84a68d26bff  01-disable-animations"
