@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-nevisp
 pkgdesc="Samsung Galaxy Fame GT-S6810P"
-pkgver=0.2
+pkgver=0.3
 pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
@@ -27,5 +27,5 @@ nonfree_firmware() {
 	depends="firmware-samsung-nevisp"
 	mkdir "$subpkgdir"
 }
-sha512sums="d960dfd3fb0d4e8d24582e78f7033d0238e2b57b973ce08f75af750a36d456507b8d4e028ae2b4533af86b86784b4b9f0022d82f23518ad87d8b5dc4d52ed9fc  deviceinfo
+sha512sums="a4fe474566f3cbff7ee470dc73bbd198e32fa1649d5916980b083fb7286fbb48cd388f0e2b6d9b5e273c4d48ac0483ef2c7affb7af1b38d7406f099a9e22486e  deviceinfo
 0aa06f2147be0ce89fb1ae418abff809ffa8de677afce4e3b29926ccea66f776065d2bb95675a8692230e40e57ec2ce657d9b3f79be56f1db35f4a724a3484f9  modules-load.conf"
