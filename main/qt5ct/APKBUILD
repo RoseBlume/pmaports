@@ -1,7 +1,7 @@
 # Contributor: rahmanshaber <rahmanshaber@yahoo.com>
 # Maintainer: rahmanshaber <rahmanshaber@yahoo.com>
 pkgname=qt5ct
-pkgver=0.39
+pkgver=1.1
 pkgrel=0
 pkgdesc="Qt5 Configuration Tool."
 arch="all"
@@ -13,16 +13,16 @@ builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
 	cd "$builddir"
-	qmake-qt5 qt5ct.pro 
+	qmake-qt5 qt5ct.pro
 	make
 }
 
 check() {
-	cd "$builddir"	
+	cd "$builddir"
 }
 
 package() {
 	cd "$builddir"
 	INSTALL_ROOT="$pkgdir" make install
 }
-sha512sums="ea7a4f34bae5aac622bcf9171982a16a982c8318d8c218c97e452e9fa7f4ea39018d269b2c62467830642961f873d9464c5a93a88529562340f13582436bdf65  qt5ct-0.39.tar.bz2"
+sha512sums="0df00c0680aefb0eada1ddb70886fd63641c403ab42843f8d209413a56895dce0a88eb88a98d09d23a30df3b15ca1d595237592958769a1be86719f2a16cbdf7  qt5ct-1.1.tar.bz2"
