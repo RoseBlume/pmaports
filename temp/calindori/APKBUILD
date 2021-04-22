@@ -1,0 +1,45 @@
+# Forked from Alpine to upgrade to 1.4
+pkgname=calindori
+pkgver=1.4
+pkgrel=0
+pkgdesc="Calendar for Plasma Mobile"
+# armhf blocked by qt5-qtdeclarative
+# s390x blocked by plasma-framework
+arch="all !armhf !s390x !mips64"
+url="https://invent.kde.org/plasma-mobile/calindori"
+license="GPL-3.0-or-later AND LGPL-3.0-or-later AND BSD-2-Clause AND CC-BY-SA-4.0 AND CC0-1.0"
+depends="
+	kirigami2
+	qt5-qtquickcontrols
+	qt5-qtquickcontrols2
+	"
+makedepends="
+	extra-cmake-modules
+	kcalendarcore-dev
+	kconfig-dev
+	ki18n-dev
+	kirigami2-dev
+	kpeople-dev
+	plasma-framework-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	qt5-qtquickcontrols2-dev
+	qt5-qtsvg-dev
+	qt5-qttools-dev
+	"
+source="https://download.kde.org/stable/calindori/calindori-$pkgver.tar.xz"
+subpackages="$pkgname-lang"
+options="!check" # No tests
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="052d786db1c44d026e9ee86724b7c63c6fc78b01de058d18ed6ad1b73b049d294a76564df9402c3b969a1ceefacb9a385dc0ec5a20c3be2bae3fe71f7a095ca1  calindori-1.4.tar.xz"
