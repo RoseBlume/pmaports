@@ -2,12 +2,12 @@
 pkgname=soc-qcom-sdm845
 pkgdesc="Common package for Qualcomm SDM845 devices"
 pkgver=4
-pkgrel=2
+pkgrel=3
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
 options="!check !archcheck !tracedeps"
-depends="mesa-dri-gallium swclock-offset"
+depends="mesa-dri-gallium msm-modem-uim-selection swclock-offset"
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-ucm
@@ -17,6 +17,7 @@ _ucm_commit="f959b6c46165f23eebcf34ffefef14c6be015a55"
 source="
 	alsa-ucm-conf-$_ucm_commit.tar.gz::https://gitlab.com/sdm845-mainline/alsa-ucm-conf/-/archive/$_ucm_commit/alsa-ucm-conf-$_ucm_commit.tar.gz
 	90-feedbackd-pmi8998.rules
+	sdm845-modem-prepare.initd
 "
 
 package() {
@@ -28,8 +29,11 @@ package() {
 nonfree_firmware() {
 	pkgdesc="Modem, WiFi and GPU Firmware"
 	depends="pd-mapper pd-mapper-openrc tqftpserv tqftpserv-openrc msm-modem"
-	install="$subpkgname.post-install"
+	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	mkdir "$subpkgdir"
+
+	install -Dm755 "$srcdir"/sdm845-modem-prepare.initd \
+		"$subpkgdir"/etc/init.d/sdm845-modem-prepare
 }
 
 ucm() {
@@ -43,4 +47,5 @@ ucm() {
 sha512sums="
 48fba9c041a2a2dfef9f038dfeeb7f636ed4e3b4d1babe2bd9b6ee350a4a34472b0f20d69b57864aa79fb28b24bb38a88ef1542a6d3211db713b361a4d136745  alsa-ucm-conf-f959b6c46165f23eebcf34ffefef14c6be015a55.tar.gz
 ea3c7f9664eb9be2ffb6879db044b44cd826747b73c6527d54d79102e58a44e1b32d08d0b1b261329eae43d6a30bc8ef80d89b1d63af1c74ba5dc66ac57911d7  90-feedbackd-pmi8998.rules
+bf89bdb8db0ab3decd53ed74ea5690ee758be4b63f090c4b728f82557a333cf3a8c208a24a5d83ddb5d4978ea7881ee89c67a9d88e1cfc89d14d87124da4ee69  sdm845-modem-prepare.initd
 "
