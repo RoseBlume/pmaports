@@ -1,0 +1,57 @@
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+# Co-Maintainer: Uclydde <julianbraha@gmail.com>
+# Stable Linux kernel with patches for SM8150 devices
+# Kernel config based on: arch/arm64/configs/defconfig and sm8150.config
+
+_flavor="postmarketos-qcom-sm8150"
+pkgname=linux-$_flavor
+pkgver=5.12
+pkgrel=0
+pkgdesc="Mainline Kernel fork for SM8150 devices"
+arch="aarch64"
+_carch="arm64"
+url="https://gitlab.com/sm8150-mainline/linux"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bison findutils flex installkernel openssl-dev perl"
+
+_repo="linux"
+_config="config-$_flavor.$arch"
+_commit="0c9254439b2eeef9f7c67bbca0124e615740aae7"
+
+# Source
+source="
+	$_repo-$_commit.tar.gz::https://gitlab.com/sm8150-mainline/$_repo/-/archive/$_commit/$_repo-$_commit.tar.gz
+	$_config
+"
+builddir="$srcdir/$_repo-$_commit"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/config-$_flavor.$arch" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+	make zinstall modules_install dtbs_install \
+		ARCH="$_carch" \
+		INSTALL_PATH="$pkgdir"/boot/ \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/usr/share/dtb
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+1212cddd14adb437856ffc67a88c23bcd65718c35572c0eb8bf06e8842ce447f9b6622a1278078492d648d407320b403e07c4a78e305de18f40cc8237526ae7c  linux-0c9254439b2eeef9f7c67bbca0124e615740aae7.tar.gz
+4dafd3752aaf2a718a969205873a37b9bf853b23b90c38974b623ec1863aa4e47799a6ecfbae20c875efc652d49fd733093923f135d6a1553a6d0512450f74a4  config-postmarketos-qcom-sm8150.aarch64
+"
