@@ -1,12 +1,12 @@
 # forked from Alpine Linux
 pkgname=nxp-mfgtools
-pkgver=1.4.43
+pkgver=1.4.127
 pkgrel=0
 pkgdesc="Freescale/NXP i.MX Chip image deploy tools"
 url="https://github.com/boundarydevices/imx_usb_loader"
 arch="all"
 license="LGPL-2.1-only"
-options="!check" # No tests available
+options="!check !pmb:crossdirect" # No tests available
 subpackages="$pkgname-uuu:_uuu lib$pkgname-dev"
 makedepends="cmake libusb-dev bzip2-dev libzip-dev openssl-dev"
 source="https://github.com/NXPmicro/mfgtools/archive/uuu_$pkgver.tar.gz"
@@ -40,4 +40,4 @@ _uuu() {
 	mv "$pkgdir/usr/bin/uuu" "$subpkgdir/usr/bin/"
 }
 
-sha512sums="c00fb6809e03026b396a5a250dac78c2337377c02d86e9075d39e2f655d0844a633b1008a2f930bcb23ac3821bedf11705bfb46a1f6984382cf4f395a063753e  uuu_1.4.43.tar.gz"
+sha512sums="3c4913862f5fb7d71792cda16c8b2563de81c30f807e0f9b7f4b88197ffb448babb20dbcbcbd287b841a03a767d30544d8de84a503d922f2076dc865e41866c3  uuu_1.4.127.tar.gz"
