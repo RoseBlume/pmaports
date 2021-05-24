@@ -1,0 +1,38 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Contributor: Danct12 <danct12@disroot.org>
+# Maintainer: Rasmus Thomsen <oss@cogitri.dev>
+pkgname=chatty
+pkgver=0.3.0_git20210521
+pkgrel=0
+pkgdesc="A phone dialer and call handler"
+arch="all !s390x !mips !mips64" # Blocked by libhandy and evolution
+url="https://source.puri.sm/Librem5/chatty"
+license="GPL-3.0-or-later"
+depends="
+	cyrus-sasl
+	libpurple-xmpp
+	purple-carbons
+	purple-lurch
+	purple-xmpp-http-upload
+	"
+makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
+	evolution-data-server-dev libgee-dev folks-dev feedbackd-dev libphonenumber-dev olm-dev modemmanager-dev"
+checkdepends="appstream-glib desktop-file-utils"
+_commit="62858ea9ec35db3aa7cd9de90077786622cf8ad1"
+# source="https://source.puri.sm/Librem5/chatty/-/archive/v$pkgver/chatty-v$pkgver.tar.gz"
+source="$pkgname-$pkgver.tar.gz::https://source.puri.sm/mohammed.sadiq/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
+subpackages="$pkgname-lang $pkgname-bash-completion $pkgname-dbg"
+options="!check" # Requires running Wayland compositor
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+sha512sums="
+f4362eaeac8ca2674791ad2fd51bfa3c34c61653f182140e044558b97008a781010b53e7888ecfa25b8322fc06a2dbbf60f1971851dff977b8afaf02e8268841  chatty-0.3.0_git20210521.tar.gz
+"
