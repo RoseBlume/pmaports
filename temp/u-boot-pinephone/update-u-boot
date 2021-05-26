@@ -7,6 +7,7 @@ dryrun=
 imagedir=
 default_freq=528
 freq=
+skip_delay=
 
 get_boot_blockdev() {
 	# Find the blockdevice where /boot is mounted from
@@ -16,19 +17,14 @@ get_boot_blockdev() {
 get_defaults() {
 	if [ -z "$board" -a -e /sys/firmware/devicetree/base/compatible ]; then
 		case "$(cat /sys/firmware/devicetree/base/compatible 2>/dev/null)" in
-		wand,*) board=wand ;;
-		pine64,pinebook-pro*) board=pinebookpro ;;
-		pine64,rockpro64*) board=rockpro64 ;;
 		pine64,pinephone*) board=pinephone ;;
+		pine64,pinetab*) board=pinetab ;;
 		esac
 	fi
 
 	if [ -z "$device" ]; then
 		case "$board" in
-		wand|cubie|cubie2) device=/dev/mmcblk0p0 ;;
-		mx6cuboxi) device=/dev/mmcblk0 ;;
-		pinebookpro|rockpro64) device=/dev/mmcblk2 ;;
-		pinephone) device=$(get_boot_blockdev) ;;
+		pinephone|pinetab) device=$(get_boot_blockdev) ;;
 		esac
 	fi
 
@@ -38,8 +34,14 @@ get_defaults() {
 	fi
 
 	if [ -z "$freq" -a -e /proc/device-tree/memory/ram_freq ]; then
-		freq=$(cat /proc/device-tree/memory/ram_freq 2>/dev/null)
-		echo Detected custom clock: $freq MHz
+		proc_freq=$(cat /proc/device-tree/memory/ram_freq 2>/dev/null)
+		if [ -n "$proc_freq" ]; then
+			echo "Detected clock: $proc_freq MHz"
+			default_freq="$proc_freq"
+		else
+			echo "WARNING: Failed to read clock from /proc/device-tree/memory/ram_freq"
+			echo "Using default clock: $default_freq MHz"
+		fi
 	elif [ -z "$freq" ]; then
 		echo Using default clock: $default_freq MHz
 	else
@@ -56,11 +58,11 @@ usage() {
 	get_defaults
 
 	cat <<EOF
-usage: $0 [-n,--dry-run] [-i,--imagedir <imagedir>] [-b|--board <board-type>] [-d|--device <device>] [-r|--ram-freq <freq>]
+usage: $0 [-n,--dry-run] [-i,--imagedir <imagedir>] [-b|--board <board-type>] [-d|--device <device>] [-r|--ram-freq <freq>] [-s|--skip-delay]
 
 options:
 
- -b,--board <board>       Specify the board type: wand, cubie, cubie2, cuboxi, pinebookpro, rockpro64
+ -b,--board <board>       Specify the board type: pinephone, pinetab
                           (current default: ${board:-none})
 
  -d,--device <device>     Specify the device where to install u-boot
@@ -76,7 +78,28 @@ options:
                           * 552 (default before v21.03 / edge 2021-04-05)
                           * 624
 
+ -s,--skip-delay          Skip delay and flash the image immediately 
+
 EOF
+}
+
+validate_checksum() {
+	file="$1"
+	file_sha512="$file.sha512"
+	file_size=$(stat -c%s $file)
+	device="$2"
+	bs="$3"
+	seek="$4"
+
+	checksum0=$(cat $file_sha512 | awk {'print $1'})
+	checksum1=$(dd if=$device bs=1 skip=$(($seek * $bs)) count=$file_size status=none | sha512sum | awk {'print $1'})
+	if [ "$checksum0" != "$checksum1" ]; then
+		echo "File: $checksum0"
+		echo "Part: $checksum1"
+		die "Checksum failed"
+	fi
+	echo "Successful U-Boot image checksum verification on $device :"
+	echo -e "\t$checksum1"
 }
 
 while [ $# -gt 0 ]; do
@@ -85,12 +108,8 @@ while [ $# -gt 0 ]; do
 	case "$opt" in
 	-b|--board)
 		case "$1" in
-		wand|wandboard) board="wand" ;;
-		cubie|cubieboard) board="cubie" ;;
-		cuboxi|mx6cuboxi) board="mx6cuboxi" ;;
-		pinebookpro) board="pinebookpro" ;;
-		rockpro64) board="rockpro64" ;;
 		pinephone) board="pinephone" ;;
+		pinetab) board="pinetab" ;;
 		*) usage; exit 1;;
 		esac
 		shift
@@ -114,6 +133,9 @@ while [ $# -gt 0 ]; do
 		*) usage; exit 1;;
 		esac
 		shift
+		;;
+	-s|--skip-delay)
+		skip_delay="yes"
 		;;
         --)
                 break
@@ -139,43 +161,32 @@ if [ -z "$dryrun" ]; then
 		echo "then boot on it and update u-boot running this command:"
 		echo "update-u-boot -d /dev/mmcblk2"
 		echo 
-		read -p "Continue? [y/Y] " -n 1 -r
+		read -p "Continue? (y/n) [n]: " -n 1 -r
 		echo 
-		if [[ ! $REPLY =~ ^[Yy]$ ]]
-		then
-			exit 0
-		fi
-	else
-		freq=$default_freq
+		case "$REPLY" in
+			y|Y) ;;
+			*) exit 1 ;;
+		esac
 	fi
-	echo "Updating $board u-boot in $device in 3 seconds..."
-	sleep 3
+	if [ -z "$skip_delay" ]; then
+		echo "Updating $board u-boot in $device in 3 seconds..."
+		sleep 3
+	else
+		echo "Updating $board u-boot in $device"
+	fi
+fi
+
+if [ -z "$freq" ]; then
+	freq=$default_freq
 fi
 
 (
 set -e
 case "$board" in
-wand)
-	[ -e "$imagedir/wandboard" ] || die "wandboard images not installed, apk add u-boot-wandboard"
-	$dryrun dd if=$imagedir/wandboard/SPL of=$device bs=1k seek=1 status=none
-	$dryrun dd if=$imagedir/wandboard/u-boot.img of=$device bs=1k seek=69 status=none
-	;;
-cubie|cubie2)
-	[ -e "$imagedir/Cubieboard${board#cubie}" ] || die "Cubieboard images not installed, apk add u-boot-cubieboard"
-	$dryrun dd if=$imagedir/Cubieboard${board#cubie}/u-boot-sunxi-with-spl.bin of=$device bs=1024 seek=8 status=none
-	;;
-mx6cuboxi)
-	[ -e "$imagedir/mx6cuboxi" ] || die "iMX6 Cubox-i images not installed, apk add u-boot-cuboxi"
-	$dryrun dd if=$imagedir/mx6cuboxi/SPL of=$device bs=1k seek=1 status=none
-	$dryrun dd if=$imagedir/mx6cuboxi/u-boot.img of=$device bs=1k seek=69 status=none
-	;;
-pinebookpro|rockpro64)
-	[ -e "$imagedir/pine64-rockpro64/" ] || die "rockpro64 images not installed, apk add u-boot-rockpro64"
-	$dryrun dd if=$imagedir/pine64-rockpro64/u-boot-rockchip.bin of=$device bs=1024 seek=32 status=none
-	;;
-pinephone)
+pinephone|pinetab)
 	[ -e "$imagedir/pine64-pinephone/" ] || die "pinephone images not installed, apk add u-boot-pinephone"
-	$dryrun dd if=$imagedir/pine64-pinephone/u-boot-sunxi-with-spl-$freq.bin of=$device bs=1024 seek=8 status=none
+	$dryrun dd if=$imagedir/pine64-pinephone/u-boot-sunxi-with-spl-$freq.bin of=$device bs=1024 seek=8 oflag=direct status=none
+	[ -z "$dryrun" ] && validate_checksum $imagedir/pine64-pinephone/u-boot-sunxi-with-spl-$freq.bin $device 1024 8
 	;;
 esac
 $dryrun sync
