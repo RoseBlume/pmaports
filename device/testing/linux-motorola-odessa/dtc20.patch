@@ -1,0 +1,28 @@
+From f89cbee8eaaea88579ecc113d294aceefde41339 Mon Sep 17 00:00:00 2001
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 27 Feb 2018 17:49:57 -0600
+Subject: [PATCH] kbuild: add dtc as dependency on .dtb files
+
+If dtc is rebuilt, we should rebuild .dtb files with the new dtc.
+
+Acked-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+
+Change-Id: I313ee55506628c0922161541adf293735cb4edae
+---
+ scripts/Makefile.lib | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 065f12ef2bfd..ac2fe58fe367 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -331,7 +331,7 @@ cmd_dtc = mkdir -p $(dir ${dtc-tmp}) ; \
+ 		-d $(depfile).dtc.tmp $(dtc-tmp) ; \
+ 	cat $(depfile).pre.tmp $(depfile).dtc.tmp > $(depfile)
+ 
+-$(obj)/%.dtb: $(src)/%.dts FORCE
++$(obj)/%.dtb: $(src)/%.dts $(DTC) FORCE
+ 	$(call if_changed_dep,dtc)
+ 
+ dtc-tmp = $(subst $(comma),_,$(dot-target).dts.tmp)

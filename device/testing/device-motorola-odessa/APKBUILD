@@ -1,0 +1,24 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-motorola-odessa
+pkgdesc="Motorola Moto G9+"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-motorola-odessa mkbootimg mesa-dri-gallium"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+074883cf1e3fd280c06d79a870c7f2515f2402abfc6b9a1f937d9063d960bdb04e23ae24ca8d17ca4c89b644a24b541d78003a7f84de14d27ee2a8a1a975f773  deviceinfo
+"

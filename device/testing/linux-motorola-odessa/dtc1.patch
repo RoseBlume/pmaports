@@ -1,0 +1,2520 @@
+From 0cc38741d985984ec4887a9cb9f8f0f2498a6a01 Mon Sep 17 00:00:00 2001
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 3 Oct 2017 11:37:04 -0500
+Subject: [PATCH] scripts/dtc: Update to upstream version
+ v1.4.5-3-gb1a60033c110
+
+This adds the following commits from upstream:
+
+b1a60033c110 tests: Add a test for overlays syntactic sugar
+737b2df39cc8 overlay: Add syntactic sugar version of overlays
+497432fd2131 checks: Use proper format modifier for size_t
+22a65c5331c2 dtc: Bump version to v1.4.5
+c575d8059fff Add fdtoverlay to .gitignore
+b6a6f9490d19 fdtoverlay: Sanity check blob size
+8c1eb1526d2d pylibfdt: Use Python2 explicitly
+ee3d26f6960b checks: add interrupts property check
+c1e7738988f5 checks: add gpio binding properties check
+b3bbac02d5e3 checks: add phandle with arg property checks
+fe50bd1ecc1d fdtget: Split out cell list display into a new function
+62d812308d11 README: Add a note about test_tree1.dts
+5bed86aee9e8 pylibfdt: Add support for fdt_subnode_offset()
+46f31b65b3b3 pylibfdt: Add support for fdt_node_offset_by_phandle()
+a3ae43723687 pylibfdt: Add support for fdt_parent_offset()
+a198af80344c pylibfdt: Add support for fdt_get_phandle()
+b9eba92ea50f tests: Return a failure code when any tests fail
+155faf6cc209 pylibfdt: Use local pylibfdt module
+50e5cd07f325 pylibfdt: Add a test for use of uint32_t
+ab78860f09f5 pylibfdt: Add stdint include to fix uint32_t
+36f511fb1113 tests: Add stacked overlay tests on fdtoverlay
+1bb00655d3e5 fdt: Allow stacked overlays phandle references
+a33c2247ac8d Introduce fdt_setprop_placeholder() method
+0016f8c2aa32 dtc: change default phandles to ePAPR style instead of both
+e3b9a9588a35 tests: fdtoverlay unit test
+42409146f2db fdtoverlay: A tool that applies overlays
+aae22722fc8d manual: Document missing options
+13ce6e1c2fc4 dtc: fix sprintf() format string error, again
+d990b8013889 Makefile: Fix build on MSYS2 and Cygwin
+51f56dedf8ea Clean up shared library compile/link options
+21a2bc896e3d Suppress expected error message in fdtdump test
+2a42b14d0d03 dtc: check.c fix compile error
+a10cb3c818d3 Fix get_node_by_path string equality check
+548aea2c436a fdtdump: Discourage use of fdtdump
+c2258841a785 fdtdump: Fix over-zealous version check
+9067ee4be0e6 Fix a few whitespace and style nits
+e56f2b07be38 pylibfdt: Use setup.py to build the swig file
+896f1c133265 pylibfdt: Use Makefile constructs to implement NO_PYTHON
+90db6d9989ca pylibfdt: Allow setup.py to operate stand-alone
+e20d9658cd8f Add Coverity Scan support
+b04a2cf08862 pylibfdt: Fix code style in setup.py
+1c5170d3a466 pylibfdt: Rename libfdt.swig to libfdt.i
+580a9f6c2880 Add a libfdt function to write a property placeholder
+ab15256d8d02 pylibfdt: Use the call function to simplify the Makefile
+9f2e3a3a1f19 pylibfdt: Use the correct libfdt version in the module
+e91c652af215 pylibfdt: Enable installation of Python module
+8a892fd85d94 pylibfdt: Allow building to be disabled
+741cdff85d3e .travis.yml: Add builds with and without Python library prerequisites
+14c4171f4f9a pylibfdt: Use package_dir to set the package directory
+89a5062ab231 pylibfdt: Use environment to pass C flags and files
+4e0e0d049757 pylibfdt: Allow pkg-config to be supplied in the environment
+6afd7d9688f5 Correct typo: s/pylibgfdt/pylibfdt/
+
+Signed-off-by: Rob Herring <robh@kernel.org>
+
+Change-Id: I85e11e18fa3fbf96c026d06b8148765ccaec3554
+---
+ scripts/dtc/checks.c                 | 282 ++++++++-
+ scripts/dtc/dtc-lexer.lex.c_shipped  |  10 +-
+ scripts/dtc/dtc-parser.tab.c_shipped | 430 ++++++-------
+ scripts/dtc/dtc-parser.y             |  20 +-
+ scripts/dtc/dtc.c                    |   2 +-
+ scripts/dtc/dtc.h                    |   3 +
+ scripts/dtc/libfdt/fdt_addresses.c   |  96 +++
+ scripts/dtc/libfdt/fdt_empty_tree.c  |   1 -
+ scripts/dtc/libfdt/fdt_overlay.c     | 861 +++++++++++++++++++++++++++
+ scripts/dtc/libfdt/fdt_ro.c          |   4 +-
+ scripts/dtc/libfdt/fdt_rw.c          |  24 +-
+ scripts/dtc/libfdt/fdt_sw.c          |  16 +-
+ scripts/dtc/libfdt/fdt_wip.c         |   4 +-
+ scripts/dtc/libfdt/libfdt.h          |  47 ++
+ scripts/dtc/livetree.c               |  31 +-
+ scripts/dtc/version_gen.h            |   2 +-
+ 16 files changed, 1603 insertions(+), 230 deletions(-)
+ create mode 100644 scripts/dtc/libfdt/fdt_addresses.c
+ create mode 100644 scripts/dtc/libfdt/fdt_overlay.c
+
+diff --git a/scripts/dtc/checks.c b/scripts/dtc/checks.c
+index f6356cb0b0bd..449f76d76a6c 100644
+--- a/scripts/dtc/checks.c
++++ b/scripts/dtc/checks.c
+@@ -892,7 +892,7 @@ static void check_simple_bus_reg(struct check *c, struct dt_info *dti, struct no
+ 	while (size--)
+ 		reg = (reg << 32) | fdt32_to_cpu(*(cells++));
+ 
+-	snprintf(unit_addr, sizeof(unit_addr), "%llx", (unsigned long long)reg);
++	snprintf(unit_addr, sizeof(unit_addr), "%"PRIx64, reg);
+ 	if (!streq(unitname, unit_addr))
+ 		FAIL(c, dti, "Node %s simple-bus unit address format error, expected \"%s\"",
+ 		     node->fullpath, unit_addr);
+@@ -975,6 +975,265 @@ static void check_obsolete_chosen_interrupt_controller(struct check *c,
+ WARNING(obsolete_chosen_interrupt_controller,
+ 	check_obsolete_chosen_interrupt_controller, NULL);
+ 
++struct provider {
++	const char *prop_name;
++	const char *cell_name;
++	bool optional;
++};
++
++static void check_property_phandle_args(struct check *c,
++					  struct dt_info *dti,
++				          struct node *node,
++				          struct property *prop,
++				          const struct provider *provider)
++{
++	struct node *root = dti->dt;
++	int cell, cellsize = 0;
++
++	if (prop->val.len % sizeof(cell_t)) {
++		FAIL(c, dti, "property '%s' size (%d) is invalid, expected multiple of %zu in node %s",
++		     prop->name, prop->val.len, sizeof(cell_t), node->fullpath);
++		return;
++	}
++
++	for (cell = 0; cell < prop->val.len / sizeof(cell_t); cell += cellsize + 1) {
++		struct node *provider_node;
++		struct property *cellprop;
++		int phandle;
++
++		phandle = propval_cell_n(prop, cell);
++		/*
++		 * Some bindings use a cell value 0 or -1 to skip over optional
++		 * entries when each index position has a specific definition.
++		 */
++		if (phandle == 0 || phandle == -1) {
++			cellsize = 0;
++			continue;
++		}
++
++		/* If we have markers, verify the current cell is a phandle */
++		if (prop->val.markers) {
++			struct marker *m = prop->val.markers;
++			for_each_marker_of_type(m, REF_PHANDLE) {
++				if (m->offset == (cell * sizeof(cell_t)))
++					break;
++			}
++			if (!m)
++				FAIL(c, dti, "Property '%s', cell %d is not a phandle reference in %s",
++				     prop->name, cell, node->fullpath);
++		}
++
++		provider_node = get_node_by_phandle(root, phandle);
++		if (!provider_node) {
++			FAIL(c, dti, "Could not get phandle node for %s:%s(cell %d)",
++			     node->fullpath, prop->name, cell);
++			break;
++		}
++
++		cellprop = get_property(provider_node, provider->cell_name);
++		if (cellprop) {
++			cellsize = propval_cell(cellprop);
++		} else if (provider->optional) {
++			cellsize = 0;
++		} else {
++			FAIL(c, dti, "Missing property '%s' in node %s or bad phandle (referred from %s:%s[%d])",
++			     provider->cell_name,
++			     provider_node->fullpath,
++			     node->fullpath, prop->name, cell);
++			break;
++		}
++
++		if (prop->val.len < ((cell + cellsize + 1) * sizeof(cell_t))) {
++			FAIL(c, dti, "%s property size (%d) too small for cell size %d in %s",
++			     prop->name, prop->val.len, cellsize, node->fullpath);
++		}
++	}
++}
++
++static void check_provider_cells_property(struct check *c,
++					  struct dt_info *dti,
++				          struct node *node)
++{
++	struct provider *provider = c->data;
++	struct property *prop;
++
++	prop = get_property(node, provider->prop_name);
++	if (!prop)
++		return;
++
++	check_property_phandle_args(c, dti, node, prop, provider);
++}
++#define WARNING_PROPERTY_PHANDLE_CELLS(nm, propname, cells_name, ...) \
++	static struct provider nm##_provider = { (propname), (cells_name), __VA_ARGS__ }; \
++	WARNING(nm##_property, check_provider_cells_property, &nm##_provider, &phandle_references);
++
++WARNING_PROPERTY_PHANDLE_CELLS(clocks, "clocks", "#clock-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(cooling_device, "cooling-device", "#cooling-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(dmas, "dmas", "#dma-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(hwlocks, "hwlocks", "#hwlock-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(interrupts_extended, "interrupts-extended", "#interrupt-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(io_channels, "io-channels", "#io-channel-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(iommus, "iommus", "#iommu-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(mboxes, "mboxes", "#mbox-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(msi_parent, "msi-parent", "#msi-cells", true);
++WARNING_PROPERTY_PHANDLE_CELLS(mux_controls, "mux-controls", "#mux-control-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(phys, "phys", "#phy-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(power_domains, "power-domains", "#power-domain-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(pwms, "pwms", "#pwm-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(resets, "resets", "#reset-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(sound_dais, "sound-dais", "#sound-dai-cells");
++WARNING_PROPERTY_PHANDLE_CELLS(thermal_sensors, "thermal-sensors", "#thermal-sensor-cells");
++
++static bool prop_is_gpio(struct property *prop)
++{
++	char *str;
++
++	/*
++	 * *-gpios and *-gpio can appear in property names,
++	 * so skip over any false matches (only one known ATM)
++	 */
++	if (strstr(prop->name, "nr-gpio"))
++		return false;
++
++	str = strrchr(prop->name, '-');
++	if (str)
++		str++;
++	else
++		str = prop->name;
++	if (!(streq(str, "gpios") || streq(str, "gpio")))
++		return false;
++
++	return true;
++}
++
++static void check_gpios_property(struct check *c,
++					  struct dt_info *dti,
++				          struct node *node)
++{
++	struct property *prop;
++
++	/* Skip GPIO hog nodes which have 'gpios' property */
++	if (get_property(node, "gpio-hog"))
++		return;
++
++	for_each_property(node, prop) {
++		struct provider provider;
++
++		if (!prop_is_gpio(prop))
++			continue;
++
++		provider.prop_name = prop->name;
++		provider.cell_name = "#gpio-cells";
++		provider.optional = false;
++		check_property_phandle_args(c, dti, node, prop, &provider);
++	}
++
++}
++WARNING(gpios_property, check_gpios_property, NULL, &phandle_references);
++
++static void check_deprecated_gpio_property(struct check *c,
++					   struct dt_info *dti,
++				           struct node *node)
++{
++	struct property *prop;
++
++	for_each_property(node, prop) {
++		char *str;
++
++		if (!prop_is_gpio(prop))
++			continue;
++
++		str = strstr(prop->name, "gpio");
++		if (!streq(str, "gpio"))
++			continue;
++
++		FAIL(c, dti, "'[*-]gpio' is deprecated, use '[*-]gpios' instead for %s:%s",
++		     node->fullpath, prop->name);
++	}
++
++}
++CHECK(deprecated_gpio_property, check_deprecated_gpio_property, NULL);
++
++static bool node_is_interrupt_provider(struct node *node)
++{
++	struct property *prop;
++
++	prop = get_property(node, "interrupt-controller");
++	if (prop)
++		return true;
++
++	prop = get_property(node, "interrupt-map");
++	if (prop)
++		return true;
++
++	return false;
++}
++static void check_interrupts_property(struct check *c,
++				      struct dt_info *dti,
++				      struct node *node)
++{
++	struct node *root = dti->dt;
++	struct node *irq_node = NULL, *parent = node;
++	struct property *irq_prop, *prop = NULL;
++	int irq_cells, phandle;
++
++	irq_prop = get_property(node, "interrupts");
++	if (!irq_prop)
++		return;
++
++	if (irq_prop->val.len % sizeof(cell_t))
++		FAIL(c, dti, "property '%s' size (%d) is invalid, expected multiple of %zu in node %s",
++		     irq_prop->name, irq_prop->val.len, sizeof(cell_t),
++		     node->fullpath);
++
++	while (parent && !prop) {
++		if (parent != node && node_is_interrupt_provider(parent)) {
++			irq_node = parent;
++			break;
++		}
++
++		prop = get_property(parent, "interrupt-parent");
++		if (prop) {
++			phandle = propval_cell(prop);
++			irq_node = get_node_by_phandle(root, phandle);
++			if (!irq_node) {
++				FAIL(c, dti, "Bad interrupt-parent phandle for %s",
++				     node->fullpath);
++				return;
++			}
++			if (!node_is_interrupt_provider(irq_node))
++				FAIL(c, dti,
++				     "Missing interrupt-controller or interrupt-map property in %s",
++				     irq_node->fullpath);
++
++			break;
++		}
++
++		parent = parent->parent;
++	}
++
++	if (!irq_node) {
++		FAIL(c, dti, "Missing interrupt-parent for %s", node->fullpath);
++		return;
++	}
++
++	prop = get_property(irq_node, "#interrupt-cells");
++	if (!prop) {
++		FAIL(c, dti, "Missing #interrupt-cells in interrupt-parent %s",
++		     irq_node->fullpath);
++		return;
++	}
++
++	irq_cells = propval_cell(prop);
++	if (irq_prop->val.len % (irq_cells * sizeof(cell_t))) {
++		FAIL(c, dti,
++		     "interrupts size is (%d), expected multiple of %d in %s",
++		     irq_prop->val.len, (int)(irq_cells * sizeof(cell_t)),
++		     node->fullpath);
++	}
++}
++WARNING(interrupts_property, check_interrupts_property, &phandle_references);
++
+ static struct check *check_table[] = {
+ 	&duplicate_node_names, &duplicate_property_names,
+ 	&node_name_chars, &node_name_format, &property_name_chars,
+@@ -1006,6 +1265,27 @@ static struct check *check_table[] = {
+ 	&avoid_default_addr_size,
+ 	&obsolete_chosen_interrupt_controller,
+ 
++	&clocks_property,
++	&cooling_device_property,
++	&dmas_property,
++	&hwlocks_property,
++	&interrupts_extended_property,
++	&io_channels_property,
++	&iommus_property,
++	&mboxes_property,
++	&msi_parent_property,
++	&mux_controls_property,
++	&phys_property,
++	&power_domains_property,
++	&pwms_property,
++	&resets_property,
++	&sound_dais_property,
++	&thermal_sensors_property,
++
++	&deprecated_gpio_property,
++	&gpios_property,
++	&interrupts_property,
++
+ 	&always_fail,
+ };
+ 
+diff --git a/scripts/dtc/dtc-lexer.lex.c_shipped b/scripts/dtc/dtc-lexer.lex.c_shipped
+index 9db3a409c507..79952cd3cabb 100644
+--- a/scripts/dtc/dtc-lexer.lex.c_shipped
++++ b/scripts/dtc/dtc-lexer.lex.c_shipped
+@@ -1396,7 +1396,7 @@ static int yy_get_next_buffer (void)
+ {
+     	char *dest = YY_CURRENT_BUFFER_LVALUE->yy_ch_buf;
+ 	char *source = (yytext_ptr);
+-	yy_size_t number_to_move, i;
++	int number_to_move, i;
+ 	int ret_val;
+ 
+ 	if ( (yy_c_buf_p) > &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[(yy_n_chars) + 1] )
+@@ -1425,7 +1425,7 @@ static int yy_get_next_buffer (void)
+ 	/* Try to read more data. */
+ 
+ 	/* First move last chars to start of buffer. */
+-	number_to_move = (yy_size_t) ((yy_c_buf_p) - (yytext_ptr)) - 1;
++	number_to_move = (int) ((yy_c_buf_p) - (yytext_ptr) - 1);
+ 
+ 	for ( i = 0; i < number_to_move; ++i )
+ 		*(dest++) = *(source++);
+@@ -1507,7 +1507,7 @@ static int yy_get_next_buffer (void)
+ 	else
+ 		ret_val = EOB_ACT_CONTINUE_SCAN;
+ 
+-	if ((int) ((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
++	if (((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+ 		/* Extend the array by 50%, plus the number we really need. */
+ 		int new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
+ 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc((void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf,new_size  );
+@@ -1986,10 +1986,10 @@ YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
+ 	YY_BUFFER_STATE b;
+ 	char *buf;
+ 	yy_size_t n;
+-	yy_size_t i;
++	int i;
+     
+ 	/* Get memory for full buffer, including space for trailing EOB's. */
+-	n = (yy_size_t) _yybytes_len + 2;
++	n = (yy_size_t) (_yybytes_len + 2);
+ 	buf = (char *) yyalloc(n  );
+ 	if ( ! buf )
+ 		YY_FATAL_ERROR( "out of dynamic memory in yy_scan_bytes()" );
+diff --git a/scripts/dtc/dtc-parser.tab.c_shipped b/scripts/dtc/dtc-parser.tab.c_shipped
+index 0a7a5ed86f04..aea514fa6928 100644
+--- a/scripts/dtc/dtc-parser.tab.c_shipped
++++ b/scripts/dtc/dtc-parser.tab.c_shipped
+@@ -448,7 +448,7 @@ union yyalloc
+ /* YYNNTS -- Number of nonterminals.  */
+ #define YYNNTS  30
+ /* YYNRULES -- Number of rules.  */
+-#define YYNRULES  84
++#define YYNRULES  85
+ /* YYNSTATES -- Number of states.  */
+ #define YYNSTATES  149
+ 
+@@ -499,14 +499,14 @@ static const yytype_uint8 yytranslate[] =
+ static const yytype_uint16 yyrline[] =
+ {
+        0,   109,   109,   117,   121,   128,   129,   139,   142,   149,
+-     153,   161,   165,   170,   181,   191,   206,   214,   217,   224,
+-     228,   232,   236,   244,   248,   252,   256,   260,   276,   286,
+-     294,   297,   301,   308,   324,   329,   348,   362,   369,   370,
+-     371,   378,   382,   383,   387,   388,   392,   393,   397,   398,
+-     402,   403,   407,   408,   412,   413,   414,   418,   419,   420,
+-     421,   422,   426,   427,   428,   432,   433,   434,   438,   439,
+-     448,   457,   461,   462,   463,   464,   469,   472,   476,   484,
+-     487,   491,   499,   503,   507
++     153,   161,   165,   170,   181,   200,   213,   220,   228,   231,
++     238,   242,   246,   250,   258,   262,   266,   270,   274,   290,
++     300,   308,   311,   315,   322,   338,   343,   362,   376,   383,
++     384,   385,   392,   396,   397,   401,   402,   406,   407,   411,
++     412,   416,   417,   421,   422,   426,   427,   428,   432,   433,
++     434,   435,   436,   440,   441,   442,   446,   447,   448,   452,
++     453,   462,   471,   475,   476,   477,   478,   483,   486,   490,
++     498,   501,   505,   513,   517,   521
+ };
+ #endif
+ 
+@@ -582,20 +582,20 @@ static const yytype_int8 yypact[] =
+ static const yytype_uint8 yydefact[] =
+ {
+        0,     0,     0,     5,     7,     3,     1,     6,     0,     0,
+-       0,     7,     0,    38,    39,     0,     0,    10,     0,     2,
+-       8,     4,     0,     0,     0,    72,     0,    41,    42,    44,
+-      46,    48,    50,    52,    54,    57,    64,    67,    71,     0,
+-      17,    11,     0,     0,     0,     0,    73,    74,    75,    40,
++      16,     7,     0,    39,    40,     0,     0,    10,     0,     2,
++       8,     4,     0,     0,     0,    73,     0,    42,    43,    45,
++      47,    49,    51,    53,    55,    58,    65,    68,    72,     0,
++      18,    11,     0,     0,     0,     0,    74,    75,    76,    41,
+        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+        0,     0,     0,     0,     0,     0,     0,     0,     0,     9,
+-      79,     0,     0,    14,    12,    45,     0,    47,    49,    51,
+-      53,    55,    56,    60,    61,    59,    58,    62,    63,    65,
+-      66,    69,    68,    70,     0,     0,     0,     0,    18,     0,
+-      79,    15,    13,     0,     0,     0,    20,    30,    82,    22,
+-      84,     0,    81,    80,    43,    21,    83,     0,     0,    16,
+-      29,    19,    31,     0,    23,    32,    26,     0,    76,    34,
+-       0,     0,     0,     0,    37,    36,    24,    35,    33,     0,
+-      77,    78,    25,     0,    28,     0,     0,     0,    27
++      80,     0,     0,    14,    12,    46,     0,    48,    50,    52,
++      54,    56,    57,    61,    62,    60,    59,    63,    64,    66,
++      67,    70,    69,    71,     0,     0,     0,     0,    19,     0,
++      80,    15,    13,     0,     0,     0,    21,    31,    83,    23,
++      85,     0,    82,    81,    44,    22,    84,     0,     0,    17,
++      30,    20,    32,     0,    24,    33,    27,     0,    77,    35,
++       0,     0,     0,     0,    38,    37,    25,    36,    34,     0,
++      78,    79,    26,     0,    29,     0,     0,     0,    28
+ };
+ 
+   /* YYPGOTO[NTERM-NUM].  */
+@@ -678,28 +678,28 @@ static const yytype_uint8 yystos[] =
+ static const yytype_uint8 yyr1[] =
+ {
+        0,    48,    49,    50,    50,    51,    51,    52,    52,    53,
+-      53,    54,    54,    54,    54,    54,    55,    56,    56,    57,
+-      57,    57,    57,    58,    58,    58,    58,    58,    58,    58,
+-      59,    59,    59,    60,    60,    60,    60,    60,    61,    61,
+-      61,    62,    63,    63,    64,    64,    65,    65,    66,    66,
+-      67,    67,    68,    68,    69,    69,    69,    70,    70,    70,
+-      70,    70,    71,    71,    71,    72,    72,    72,    73,    73,
+-      73,    73,    74,    74,    74,    74,    75,    75,    75,    76,
+-      76,    76,    77,    77,    77
++      53,    54,    54,    54,    54,    54,    54,    55,    56,    56,
++      57,    57,    57,    57,    58,    58,    58,    58,    58,    58,
++      58,    59,    59,    59,    60,    60,    60,    60,    60,    61,
++      61,    61,    62,    63,    63,    64,    64,    65,    65,    66,
++      66,    67,    67,    68,    68,    69,    69,    69,    70,    70,
++      70,    70,    70,    71,    71,    71,    72,    72,    72,    73,
++      73,    73,    73,    74,    74,    74,    74,    75,    75,    75,
++      76,    76,    76,    77,    77,    77
+ };
+ 
+   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
+ static const yytype_uint8 yyr2[] =
+ {
+        0,     2,     3,     2,     4,     1,     2,     0,     2,     4,
+-       2,     2,     3,     4,     3,     4,     5,     0,     2,     4,
+-       2,     3,     2,     2,     3,     4,     2,     9,     5,     2,
+-       0,     2,     2,     3,     1,     2,     2,     2,     1,     1,
+-       3,     1,     1,     5,     1,     3,     1,     3,     1,     3,
+-       1,     3,     1,     3,     1,     3,     3,     1,     3,     3,
+-       3,     3,     3,     3,     1,     3,     3,     1,     3,     3,
+-       3,     1,     1,     2,     2,     2,     0,     2,     2,     0,
+-       2,     2,     2,     3,     2
++       2,     2,     3,     4,     3,     4,     0,     5,     0,     2,
++       4,     2,     3,     2,     2,     3,     4,     2,     9,     5,
++       2,     0,     2,     2,     3,     1,     2,     2,     2,     1,
++       1,     3,     1,     1,     5,     1,     3,     1,     3,     1,
++       3,     1,     3,     1,     3,     1,     3,     3,     1,     3,
++       3,     3,     3,     3,     3,     1,     3,     3,     1,     3,
++       3,     3,     1,     1,     2,     2,     2,     0,     2,     2,
++       0,     2,     2,     2,     3,     2
+ };
+ 
+ 
+@@ -1572,17 +1572,26 @@ yyreduce:
+     {
+ 			struct node *target = get_node_by_ref((yyvsp[-2].node), (yyvsp[-1].labelref));
+ 
+-			if (target)
++			if (target) {
+ 				merge_nodes(target, (yyvsp[0].node));
+-			else
+-				ERROR(&(yylsp[-1]), "Label or path %s not found", (yyvsp[-1].labelref));
++			} else {
++				/*
++				 * We rely on the rule being always:
++				 *   versioninfo plugindecl memreserves devicetree
++				 * so $-1 is what we want (plugindecl)
++				 */
++				if ((yyvsp[(-1) - (3)].flags) & DTSF_PLUGIN)
++					add_orphan_node((yyvsp[-2].node), (yyvsp[0].node), (yyvsp[-1].labelref));
++				else
++					ERROR(&(yylsp[-1]), "Label or path %s not found", (yyvsp[-1].labelref));
++			}
+ 			(yyval.node) = (yyvsp[-2].node);
+ 		}
+-#line 1582 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1591 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+   case 15:
+-#line 192 "dtc-parser.y" /* yacc.c:1646  */
++#line 201 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			struct node *target = get_node_by_ref((yyvsp[-3].node), (yyvsp[-1].labelref));
+ 
+@@ -1594,100 +1603,109 @@ yyreduce:
+ 
+ 			(yyval.node) = (yyvsp[-3].node);
+ 		}
+-#line 1598 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1607 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+   case 16:
+-#line 207 "dtc-parser.y" /* yacc.c:1646  */
++#line 213 "dtc-parser.y" /* yacc.c:1646  */
+     {
+-			(yyval.node) = build_node((yyvsp[-3].proplist), (yyvsp[-2].nodelist));
++			/* build empty node */
++			(yyval.node) = name_node(build_node(NULL, NULL), "");
+ 		}
+-#line 1606 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1616 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+   case 17:
+-#line 214 "dtc-parser.y" /* yacc.c:1646  */
++#line 221 "dtc-parser.y" /* yacc.c:1646  */
+     {
+-			(yyval.proplist) = NULL;
++			(yyval.node) = build_node((yyvsp[-3].proplist), (yyvsp[-2].nodelist));
+ 		}
+-#line 1614 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1624 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+   case 18:
+-#line 218 "dtc-parser.y" /* yacc.c:1646  */
++#line 228 "dtc-parser.y" /* yacc.c:1646  */
+     {
+-			(yyval.proplist) = chain_property((yyvsp[0].prop), (yyvsp[-1].proplist));
++			(yyval.proplist) = NULL;
+ 		}
+-#line 1622 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1632 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+   case 19:
+-#line 225 "dtc-parser.y" /* yacc.c:1646  */
++#line 232 "dtc-parser.y" /* yacc.c:1646  */
+     {
+-			(yyval.prop) = build_property((yyvsp[-3].propnodename), (yyvsp[-1].data));
++			(yyval.proplist) = chain_property((yyvsp[0].prop), (yyvsp[-1].proplist));
+ 		}
+-#line 1630 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1640 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+   case 20:
+-#line 229 "dtc-parser.y" /* yacc.c:1646  */
++#line 239 "dtc-parser.y" /* yacc.c:1646  */
+     {
+-			(yyval.prop) = build_property((yyvsp[-1].propnodename), empty_data);
++			(yyval.prop) = build_property((yyvsp[-3].propnodename), (yyvsp[-1].data));
+ 		}
+-#line 1638 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1648 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+   case 21:
+-#line 233 "dtc-parser.y" /* yacc.c:1646  */
++#line 243 "dtc-parser.y" /* yacc.c:1646  */
+     {
+-			(yyval.prop) = build_property_delete((yyvsp[-1].propnodename));
++			(yyval.prop) = build_property((yyvsp[-1].propnodename), empty_data);
+ 		}
+-#line 1646 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1656 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+   case 22:
+-#line 237 "dtc-parser.y" /* yacc.c:1646  */
++#line 247 "dtc-parser.y" /* yacc.c:1646  */
++    {
++			(yyval.prop) = build_property_delete((yyvsp[-1].propnodename));
++		}
++#line 1664 "dtc-parser.tab.c" /* yacc.c:1646  */
++    break;
++
++  case 23:
++#line 251 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			add_label(&(yyvsp[0].prop)->labels, (yyvsp[-1].labelref));
+ 			(yyval.prop) = (yyvsp[0].prop);
+ 		}
+-#line 1655 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1673 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 23:
+-#line 245 "dtc-parser.y" /* yacc.c:1646  */
++  case 24:
++#line 259 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = data_merge((yyvsp[-1].data), (yyvsp[0].data));
+ 		}
+-#line 1663 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1681 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 24:
+-#line 249 "dtc-parser.y" /* yacc.c:1646  */
++  case 25:
++#line 263 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = data_merge((yyvsp[-2].data), (yyvsp[-1].array).data);
+ 		}
+-#line 1671 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1689 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 25:
+-#line 253 "dtc-parser.y" /* yacc.c:1646  */
++  case 26:
++#line 267 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = data_merge((yyvsp[-3].data), (yyvsp[-1].data));
+ 		}
+-#line 1679 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1697 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 26:
+-#line 257 "dtc-parser.y" /* yacc.c:1646  */
++  case 27:
++#line 271 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = data_add_marker((yyvsp[-1].data), REF_PATH, (yyvsp[0].labelref));
+ 		}
+-#line 1687 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1705 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 27:
+-#line 261 "dtc-parser.y" /* yacc.c:1646  */
++  case 28:
++#line 275 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			FILE *f = srcfile_relative_open((yyvsp[-5].data).val, NULL);
+ 			struct data d;
+@@ -1703,11 +1721,11 @@ yyreduce:
+ 			(yyval.data) = data_merge((yyvsp[-8].data), d);
+ 			fclose(f);
+ 		}
+-#line 1707 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1725 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 28:
+-#line 277 "dtc-parser.y" /* yacc.c:1646  */
++  case 29:
++#line 291 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			FILE *f = srcfile_relative_open((yyvsp[-1].data).val, NULL);
+ 			struct data d = empty_data;
+@@ -1717,43 +1735,43 @@ yyreduce:
+ 			(yyval.data) = data_merge((yyvsp[-4].data), d);
+ 			fclose(f);
+ 		}
+-#line 1721 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1739 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 29:
+-#line 287 "dtc-parser.y" /* yacc.c:1646  */
++  case 30:
++#line 301 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = data_add_marker((yyvsp[-1].data), LABEL, (yyvsp[0].labelref));
+ 		}
+-#line 1729 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1747 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 30:
+-#line 294 "dtc-parser.y" /* yacc.c:1646  */
++  case 31:
++#line 308 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = empty_data;
+ 		}
+-#line 1737 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1755 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 31:
+-#line 298 "dtc-parser.y" /* yacc.c:1646  */
++  case 32:
++#line 312 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = (yyvsp[-1].data);
+ 		}
+-#line 1745 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1763 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 32:
+-#line 302 "dtc-parser.y" /* yacc.c:1646  */
++  case 33:
++#line 316 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = data_add_marker((yyvsp[-1].data), LABEL, (yyvsp[0].labelref));
+ 		}
+-#line 1753 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1771 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 33:
+-#line 309 "dtc-parser.y" /* yacc.c:1646  */
++  case 34:
++#line 323 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			unsigned long long bits;
+ 
+@@ -1769,20 +1787,20 @@ yyreduce:
+ 			(yyval.array).data = empty_data;
+ 			(yyval.array).bits = bits;
+ 		}
+-#line 1773 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1791 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 34:
+-#line 325 "dtc-parser.y" /* yacc.c:1646  */
++  case 35:
++#line 339 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.array).data = empty_data;
+ 			(yyval.array).bits = 32;
+ 		}
+-#line 1782 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1800 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 35:
+-#line 330 "dtc-parser.y" /* yacc.c:1646  */
++  case 36:
++#line 344 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			if ((yyvsp[-1].array).bits < 64) {
+ 				uint64_t mask = (1ULL << (yyvsp[-1].array).bits) - 1;
+@@ -1801,11 +1819,11 @@ yyreduce:
+ 
+ 			(yyval.array).data = data_append_integer((yyvsp[-1].array).data, (yyvsp[0].integer), (yyvsp[-1].array).bits);
+ 		}
+-#line 1805 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1823 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 36:
+-#line 349 "dtc-parser.y" /* yacc.c:1646  */
++  case 37:
++#line 363 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			uint64_t val = ~0ULL >> (64 - (yyvsp[-1].array).bits);
+ 
+@@ -1819,129 +1837,129 @@ yyreduce:
+ 
+ 			(yyval.array).data = data_append_integer((yyvsp[-1].array).data, val, (yyvsp[-1].array).bits);
+ 		}
+-#line 1823 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1841 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 37:
+-#line 363 "dtc-parser.y" /* yacc.c:1646  */
++  case 38:
++#line 377 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.array).data = data_add_marker((yyvsp[-1].array).data, LABEL, (yyvsp[0].labelref));
+ 		}
+-#line 1831 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1849 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 40:
+-#line 372 "dtc-parser.y" /* yacc.c:1646  */
++  case 41:
++#line 386 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.integer) = (yyvsp[-1].integer);
+ 		}
+-#line 1839 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1857 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 43:
+-#line 383 "dtc-parser.y" /* yacc.c:1646  */
++  case 44:
++#line 397 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-4].integer) ? (yyvsp[-2].integer) : (yyvsp[0].integer); }
+-#line 1845 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1863 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 45:
+-#line 388 "dtc-parser.y" /* yacc.c:1646  */
++  case 46:
++#line 402 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) || (yyvsp[0].integer); }
+-#line 1851 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1869 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 47:
+-#line 393 "dtc-parser.y" /* yacc.c:1646  */
++  case 48:
++#line 407 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) && (yyvsp[0].integer); }
+-#line 1857 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1875 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 49:
+-#line 398 "dtc-parser.y" /* yacc.c:1646  */
++  case 50:
++#line 412 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) | (yyvsp[0].integer); }
+-#line 1863 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1881 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 51:
+-#line 403 "dtc-parser.y" /* yacc.c:1646  */
++  case 52:
++#line 417 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) ^ (yyvsp[0].integer); }
+-#line 1869 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1887 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 53:
+-#line 408 "dtc-parser.y" /* yacc.c:1646  */
++  case 54:
++#line 422 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) & (yyvsp[0].integer); }
+-#line 1875 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1893 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 55:
+-#line 413 "dtc-parser.y" /* yacc.c:1646  */
++  case 56:
++#line 427 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) == (yyvsp[0].integer); }
+-#line 1881 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1899 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 56:
+-#line 414 "dtc-parser.y" /* yacc.c:1646  */
++  case 57:
++#line 428 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) != (yyvsp[0].integer); }
+-#line 1887 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1905 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 58:
+-#line 419 "dtc-parser.y" /* yacc.c:1646  */
++  case 59:
++#line 433 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) < (yyvsp[0].integer); }
+-#line 1893 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1911 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 59:
+-#line 420 "dtc-parser.y" /* yacc.c:1646  */
++  case 60:
++#line 434 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) > (yyvsp[0].integer); }
+-#line 1899 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1917 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 60:
+-#line 421 "dtc-parser.y" /* yacc.c:1646  */
++  case 61:
++#line 435 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) <= (yyvsp[0].integer); }
+-#line 1905 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1923 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 61:
+-#line 422 "dtc-parser.y" /* yacc.c:1646  */
++  case 62:
++#line 436 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) >= (yyvsp[0].integer); }
+-#line 1911 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1929 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 62:
+-#line 426 "dtc-parser.y" /* yacc.c:1646  */
++  case 63:
++#line 440 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) << (yyvsp[0].integer); }
+-#line 1917 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1935 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 63:
+-#line 427 "dtc-parser.y" /* yacc.c:1646  */
++  case 64:
++#line 441 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) >> (yyvsp[0].integer); }
+-#line 1923 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1941 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 65:
+-#line 432 "dtc-parser.y" /* yacc.c:1646  */
++  case 66:
++#line 446 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) + (yyvsp[0].integer); }
+-#line 1929 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1947 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 66:
+-#line 433 "dtc-parser.y" /* yacc.c:1646  */
++  case 67:
++#line 447 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) - (yyvsp[0].integer); }
+-#line 1935 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1953 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 68:
+-#line 438 "dtc-parser.y" /* yacc.c:1646  */
++  case 69:
++#line 452 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = (yyvsp[-2].integer) * (yyvsp[0].integer); }
+-#line 1941 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1959 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 69:
+-#line 440 "dtc-parser.y" /* yacc.c:1646  */
++  case 70:
++#line 454 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			if ((yyvsp[0].integer) != 0) {
+ 				(yyval.integer) = (yyvsp[-2].integer) / (yyvsp[0].integer);
+@@ -1950,11 +1968,11 @@ yyreduce:
+ 				(yyval.integer) = 0;
+ 			}
+ 		}
+-#line 1954 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1972 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 70:
+-#line 449 "dtc-parser.y" /* yacc.c:1646  */
++  case 71:
++#line 463 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			if ((yyvsp[0].integer) != 0) {
+ 				(yyval.integer) = (yyvsp[-2].integer) % (yyvsp[0].integer);
+@@ -1963,103 +1981,103 @@ yyreduce:
+ 				(yyval.integer) = 0;
+ 			}
+ 		}
+-#line 1967 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1985 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 73:
+-#line 462 "dtc-parser.y" /* yacc.c:1646  */
++  case 74:
++#line 476 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = -(yyvsp[0].integer); }
+-#line 1973 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1991 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 74:
+-#line 463 "dtc-parser.y" /* yacc.c:1646  */
++  case 75:
++#line 477 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = ~(yyvsp[0].integer); }
+-#line 1979 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 1997 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 75:
+-#line 464 "dtc-parser.y" /* yacc.c:1646  */
++  case 76:
++#line 478 "dtc-parser.y" /* yacc.c:1646  */
+     { (yyval.integer) = !(yyvsp[0].integer); }
+-#line 1985 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2003 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 76:
+-#line 469 "dtc-parser.y" /* yacc.c:1646  */
++  case 77:
++#line 483 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = empty_data;
+ 		}
+-#line 1993 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2011 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 77:
+-#line 473 "dtc-parser.y" /* yacc.c:1646  */
++  case 78:
++#line 487 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = data_append_byte((yyvsp[-1].data), (yyvsp[0].byte));
+ 		}
+-#line 2001 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2019 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 78:
+-#line 477 "dtc-parser.y" /* yacc.c:1646  */
++  case 79:
++#line 491 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.data) = data_add_marker((yyvsp[-1].data), LABEL, (yyvsp[0].labelref));
+ 		}
+-#line 2009 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2027 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 79:
+-#line 484 "dtc-parser.y" /* yacc.c:1646  */
++  case 80:
++#line 498 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.nodelist) = NULL;
+ 		}
+-#line 2017 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2035 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 80:
+-#line 488 "dtc-parser.y" /* yacc.c:1646  */
++  case 81:
++#line 502 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.nodelist) = chain_node((yyvsp[-1].node), (yyvsp[0].nodelist));
+ 		}
+-#line 2025 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2043 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 81:
+-#line 492 "dtc-parser.y" /* yacc.c:1646  */
++  case 82:
++#line 506 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			ERROR(&(yylsp[0]), "Properties must precede subnodes");
+ 			YYERROR;
+ 		}
+-#line 2034 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2052 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 82:
+-#line 500 "dtc-parser.y" /* yacc.c:1646  */
++  case 83:
++#line 514 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.node) = name_node((yyvsp[0].node), (yyvsp[-1].propnodename));
+ 		}
+-#line 2042 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2060 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 83:
+-#line 504 "dtc-parser.y" /* yacc.c:1646  */
++  case 84:
++#line 518 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			(yyval.node) = name_node(build_node_delete(), (yyvsp[-1].propnodename));
+ 		}
+-#line 2050 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2068 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+-  case 84:
+-#line 508 "dtc-parser.y" /* yacc.c:1646  */
++  case 85:
++#line 522 "dtc-parser.y" /* yacc.c:1646  */
+     {
+ 			add_label(&(yyvsp[0].node)->labels, (yyvsp[-1].labelref));
+ 			(yyval.node) = (yyvsp[0].node);
+ 		}
+-#line 2059 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2077 "dtc-parser.tab.c" /* yacc.c:1646  */
+     break;
+ 
+ 
+-#line 2063 "dtc-parser.tab.c" /* yacc.c:1646  */
++#line 2081 "dtc-parser.tab.c" /* yacc.c:1646  */
+       default: break;
+     }
+   /* User semantic actions sometimes alter yychar, and that requires
+@@ -2294,7 +2312,7 @@ yyreturn:
+ #endif
+   return yyresult;
+ }
+-#line 514 "dtc-parser.y" /* yacc.c:1906  */
++#line 528 "dtc-parser.y" /* yacc.c:1906  */
+ 
+ 
+ void yyerror(char const *s)
+diff --git a/scripts/dtc/dtc-parser.y b/scripts/dtc/dtc-parser.y
+index ca3f5003427c..affc81a8f9ab 100644
+--- a/scripts/dtc/dtc-parser.y
++++ b/scripts/dtc/dtc-parser.y
+@@ -182,10 +182,19 @@ devicetree:
+ 		{
+ 			struct node *target = get_node_by_ref($1, $2);
+ 
+-			if (target)
++			if (target) {
+ 				merge_nodes(target, $3);
+-			else
+-				ERROR(&@2, "Label or path %s not found", $2);
++			} else {
++				/*
++				 * We rely on the rule being always:
++				 *   versioninfo plugindecl memreserves devicetree
++				 * so $-1 is what we want (plugindecl)
++				 */
++				if ($<flags>-1 & DTSF_PLUGIN)
++					add_orphan_node($1, $3, $2);
++				else
++					ERROR(&@2, "Label or path %s not found", $2);
++			}
+ 			$$ = $1;
+ 		}
+ 	| devicetree DT_DEL_NODE DT_REF ';'
+@@ -200,6 +209,11 @@ devicetree:
+ 
+ 			$$ = $1;
+ 		}
++	| /* empty */
++		{
++			/* build empty node */
++			$$ = name_node(build_node(NULL, NULL), "");
++		}
+ 	;
+ 
+ nodedef:
+diff --git a/scripts/dtc/dtc.c b/scripts/dtc/dtc.c
+index f5eed9d72c02..5ed873c72ad1 100644
+--- a/scripts/dtc/dtc.c
++++ b/scripts/dtc/dtc.c
+@@ -31,7 +31,7 @@ int reservenum;		/* Number of memory reservation slots */
+ int minsize;		/* Minimum blob size */
+ int padsize;		/* Additional padding to blob */
+ int alignsize;		/* Additional padding to blob accroding to the alignsize */
+-int phandle_format = PHANDLE_BOTH;	/* Use linux,phandle or phandle properties */
++int phandle_format = PHANDLE_EPAPR;	/* Use linux,phandle or phandle properties */
+ int generate_symbols;	/* enable symbols & fixup support */
+ int generate_fixups;		/* suppress generation of fixups on symbol support */
+ int auto_label_aliases;		/* auto generate labels -> aliases */
+diff --git a/scripts/dtc/dtc.h b/scripts/dtc/dtc.h
+index fc24e17510fd..35cf926cc14a 100644
+--- a/scripts/dtc/dtc.h
++++ b/scripts/dtc/dtc.h
+@@ -31,6 +31,7 @@
+ #include <ctype.h>
+ #include <errno.h>
+ #include <unistd.h>
++#include <inttypes.h>
+ 
+ #include <libfdt_env.h>
+ #include <fdt.h>
+@@ -202,6 +203,7 @@ struct node *build_node_delete(void);
+ struct node *name_node(struct node *node, char *name);
+ struct node *chain_node(struct node *first, struct node *list);
+ struct node *merge_nodes(struct node *old_node, struct node *new_node);
++void add_orphan_node(struct node *old_node, struct node *new_node, char *ref);
+ 
+ void add_property(struct node *node, struct property *prop);
+ void delete_property_by_name(struct node *node, char *name);
+@@ -215,6 +217,7 @@ void append_to_property(struct node *node,
+ const char *get_unitname(struct node *node);
+ struct property *get_property(struct node *node, const char *propname);
+ cell_t propval_cell(struct property *prop);
++cell_t propval_cell_n(struct property *prop, int n);
+ struct property *get_property_by_label(struct node *tree, const char *label,
+ 				       struct node **node);
+ struct marker *get_marker_label(struct node *tree, const char *label,
+diff --git a/scripts/dtc/libfdt/fdt_addresses.c b/scripts/dtc/libfdt/fdt_addresses.c
+new file mode 100644
+index 000000000000..eff4dbcc729d
+--- /dev/null
++++ b/scripts/dtc/libfdt/fdt_addresses.c
+@@ -0,0 +1,96 @@
++/*
++ * libfdt - Flat Device Tree manipulation
++ * Copyright (C) 2014 David Gibson <david@gibson.dropbear.id.au>
++ *
++ * libfdt is dual licensed: you can use it either under the terms of
++ * the GPL, or the BSD license, at your option.
++ *
++ *  a) This library is free software; you can redistribute it and/or
++ *     modify it under the terms of the GNU General Public License as
++ *     published by the Free Software Foundation; either version 2 of the
++ *     License, or (at your option) any later version.
++ *
++ *     This library is distributed in the hope that it will be useful,
++ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *     GNU General Public License for more details.
++ *
++ *     You should have received a copy of the GNU General Public
++ *     License along with this library; if not, write to the Free
++ *     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
++ *     MA 02110-1301 USA
++ *
++ * Alternatively,
++ *
++ *  b) Redistribution and use in source and binary forms, with or
++ *     without modification, are permitted provided that the following
++ *     conditions are met:
++ *
++ *     1. Redistributions of source code must retain the above
++ *        copyright notice, this list of conditions and the following
++ *        disclaimer.
++ *     2. Redistributions in binary form must reproduce the above
++ *        copyright notice, this list of conditions and the following
++ *        disclaimer in the documentation and/or other materials
++ *        provided with the distribution.
++ *
++ *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
++ *     CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
++ *     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
++ *     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
++ *     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ *     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++ *     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
++ *     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
++ *     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ *     HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ *     CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++ *     OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
++ *     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++#include "libfdt_env.h"
++
++#include <fdt.h>
++#include <libfdt.h>
++
++#include "libfdt_internal.h"
++
++int fdt_address_cells(const void *fdt, int nodeoffset)
++{
++	const fdt32_t *ac;
++	int val;
++	int len;
++
++	ac = fdt_getprop(fdt, nodeoffset, "#address-cells", &len);
++	if (!ac)
++		return 2;
++
++	if (len != sizeof(*ac))
++		return -FDT_ERR_BADNCELLS;
++
++	val = fdt32_to_cpu(*ac);
++	if ((val <= 0) || (val > FDT_MAX_NCELLS))
++		return -FDT_ERR_BADNCELLS;
++
++	return val;
++}
++
++int fdt_size_cells(const void *fdt, int nodeoffset)
++{
++	const fdt32_t *sc;
++	int val;
++	int len;
++
++	sc = fdt_getprop(fdt, nodeoffset, "#size-cells", &len);
++	if (!sc)
++		return 2;
++
++	if (len != sizeof(*sc))
++		return -FDT_ERR_BADNCELLS;
++
++	val = fdt32_to_cpu(*sc);
++	if ((val < 0) || (val > FDT_MAX_NCELLS))
++		return -FDT_ERR_BADNCELLS;
++
++	return val;
++}
+diff --git a/scripts/dtc/libfdt/fdt_empty_tree.c b/scripts/dtc/libfdt/fdt_empty_tree.c
+index f72d13b1d19c..f2ae9b77c285 100644
+--- a/scripts/dtc/libfdt/fdt_empty_tree.c
++++ b/scripts/dtc/libfdt/fdt_empty_tree.c
+@@ -81,4 +81,3 @@ int fdt_create_empty_tree(void *buf, int bufsize)
+ 
+ 	return fdt_open_into(buf, buf, bufsize);
+ }
+-
+diff --git a/scripts/dtc/libfdt/fdt_overlay.c b/scripts/dtc/libfdt/fdt_overlay.c
+new file mode 100644
+index 000000000000..bd81241e6658
+--- /dev/null
++++ b/scripts/dtc/libfdt/fdt_overlay.c
+@@ -0,0 +1,861 @@
++#include "libfdt_env.h"
++
++#include <fdt.h>
++#include <libfdt.h>
++
++#include "libfdt_internal.h"
++
++/**
++ * overlay_get_target_phandle - retrieves the target phandle of a fragment
++ * @fdto: pointer to the device tree overlay blob
++ * @fragment: node offset of the fragment in the overlay
++ *
++ * overlay_get_target_phandle() retrieves the target phandle of an
++ * overlay fragment when that fragment uses a phandle (target
++ * property) instead of a path (target-path property).
++ *
++ * returns:
++ *      the phandle pointed by the target property
++ *      0, if the phandle was not found
++ *	-1, if the phandle was malformed
++ */
++static uint32_t overlay_get_target_phandle(const void *fdto, int fragment)
++{
++	const fdt32_t *val;
++	int len;
++
++	val = fdt_getprop(fdto, fragment, "target", &len);
++	if (!val)
++		return 0;
++
++	if ((len != sizeof(*val)) || (fdt32_to_cpu(*val) == (uint32_t)-1))
++		return (uint32_t)-1;
++
++	return fdt32_to_cpu(*val);
++}
++
++/**
++ * overlay_get_target - retrieves the offset of a fragment's target
++ * @fdt: Base device tree blob
++ * @fdto: Device tree overlay blob
++ * @fragment: node offset of the fragment in the overlay
++ * @pathp: pointer which receives the path of the target (or NULL)
++ *
++ * overlay_get_target() retrieves the target offset in the base
++ * device tree of a fragment, no matter how the actual targetting is
++ * done (through a phandle or a path)
++ *
++ * returns:
++ *      the targetted node offset in the base device tree
++ *      Negative error code on error
++ */
++static int overlay_get_target(const void *fdt, const void *fdto,
++			      int fragment, char const **pathp)
++{
++	uint32_t phandle;
++	const char *path = NULL;
++	int path_len = 0, ret;
++
++	/* Try first to do a phandle based lookup */
++	phandle = overlay_get_target_phandle(fdto, fragment);
++	if (phandle == (uint32_t)-1)
++		return -FDT_ERR_BADPHANDLE;
++
++	/* no phandle, try path */
++	if (!phandle) {
++		/* And then a path based lookup */
++		path = fdt_getprop(fdto, fragment, "target-path", &path_len);
++		if (path)
++			ret = fdt_path_offset(fdt, path);
++		else
++			ret = path_len;
++	} else
++		ret = fdt_node_offset_by_phandle(fdt, phandle);
++
++	/*
++	* If we haven't found either a target or a
++	* target-path property in a node that contains a
++	* __overlay__ subnode (we wouldn't be called
++	* otherwise), consider it a improperly written
++	* overlay
++	*/
++	if (ret < 0 && path_len == -FDT_ERR_NOTFOUND)
++		ret = -FDT_ERR_BADOVERLAY;
++
++	/* return on error */
++	if (ret < 0)
++		return ret;
++
++	/* return pointer to path (if available) */
++	if (pathp)
++		*pathp = path ? path : NULL;
++
++	return ret;
++}
++
++/**
++ * overlay_phandle_add_offset - Increases a phandle by an offset
++ * @fdt: Base device tree blob
++ * @node: Device tree overlay blob
++ * @name: Name of the property to modify (phandle or linux,phandle)
++ * @delta: offset to apply
++ *
++ * overlay_phandle_add_offset() increments a node phandle by a given
++ * offset.
++ *
++ * returns:
++ *      0 on success.
++ *      Negative error code on error
++ */
++static int overlay_phandle_add_offset(void *fdt, int node,
++				      const char *name, uint32_t delta)
++{
++	const fdt32_t *val;
++	uint32_t adj_val;
++	int len;
++
++	val = fdt_getprop(fdt, node, name, &len);
++	if (!val)
++		return len;
++
++	if (len != sizeof(*val))
++		return -FDT_ERR_BADPHANDLE;
++
++	adj_val = fdt32_to_cpu(*val);
++	if ((adj_val + delta) < adj_val)
++		return -FDT_ERR_NOPHANDLES;
++
++	adj_val += delta;
++	if (adj_val == (uint32_t)-1)
++		return -FDT_ERR_NOPHANDLES;
++
++	return fdt_setprop_inplace_u32(fdt, node, name, adj_val);
++}
++
++/**
++ * overlay_adjust_node_phandles - Offsets the phandles of a node
++ * @fdto: Device tree overlay blob
++ * @node: Offset of the node we want to adjust
++ * @delta: Offset to shift the phandles of
++ *
++ * overlay_adjust_node_phandles() adds a constant to all the phandles
++ * of a given node. This is mainly use as part of the overlay
++ * application process, when we want to update all the overlay
++ * phandles to not conflict with the overlays of the base device tree.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_adjust_node_phandles(void *fdto, int node,
++					uint32_t delta)
++{
++	int child;
++	int ret;
++
++	ret = overlay_phandle_add_offset(fdto, node, "phandle", delta);
++	if (ret && ret != -FDT_ERR_NOTFOUND)
++		return ret;
++
++	ret = overlay_phandle_add_offset(fdto, node, "linux,phandle", delta);
++	if (ret && ret != -FDT_ERR_NOTFOUND)
++		return ret;
++
++	fdt_for_each_subnode(child, fdto, node) {
++		ret = overlay_adjust_node_phandles(fdto, child, delta);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++/**
++ * overlay_adjust_local_phandles - Adjust the phandles of a whole overlay
++ * @fdto: Device tree overlay blob
++ * @delta: Offset to shift the phandles of
++ *
++ * overlay_adjust_local_phandles() adds a constant to all the
++ * phandles of an overlay. This is mainly use as part of the overlay
++ * application process, when we want to update all the overlay
++ * phandles to not conflict with the overlays of the base device tree.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_adjust_local_phandles(void *fdto, uint32_t delta)
++{
++	/*
++	 * Start adjusting the phandles from the overlay root
++	 */
++	return overlay_adjust_node_phandles(fdto, 0, delta);
++}
++
++/**
++ * overlay_update_local_node_references - Adjust the overlay references
++ * @fdto: Device tree overlay blob
++ * @tree_node: Node offset of the node to operate on
++ * @fixup_node: Node offset of the matching local fixups node
++ * @delta: Offset to shift the phandles of
++ *
++ * overlay_update_local_nodes_references() update the phandles
++ * pointing to a node within the device tree overlay by adding a
++ * constant delta.
++ *
++ * This is mainly used as part of a device tree application process,
++ * where you want the device tree overlays phandles to not conflict
++ * with the ones from the base device tree before merging them.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_update_local_node_references(void *fdto,
++						int tree_node,
++						int fixup_node,
++						uint32_t delta)
++{
++	int fixup_prop;
++	int fixup_child;
++	int ret;
++
++	fdt_for_each_property_offset(fixup_prop, fdto, fixup_node) {
++		const fdt32_t *fixup_val;
++		const char *tree_val;
++		const char *name;
++		int fixup_len;
++		int tree_len;
++		int i;
++
++		fixup_val = fdt_getprop_by_offset(fdto, fixup_prop,
++						  &name, &fixup_len);
++		if (!fixup_val)
++			return fixup_len;
++
++		if (fixup_len % sizeof(uint32_t))
++			return -FDT_ERR_BADOVERLAY;
++
++		tree_val = fdt_getprop(fdto, tree_node, name, &tree_len);
++		if (!tree_val) {
++			if (tree_len == -FDT_ERR_NOTFOUND)
++				return -FDT_ERR_BADOVERLAY;
++
++			return tree_len;
++		}
++
++		for (i = 0; i < (fixup_len / sizeof(uint32_t)); i++) {
++			fdt32_t adj_val;
++			uint32_t poffset;
++
++			poffset = fdt32_to_cpu(fixup_val[i]);
++
++			/*
++			 * phandles to fixup can be unaligned.
++			 *
++			 * Use a memcpy for the architectures that do
++			 * not support unaligned accesses.
++			 */
++			memcpy(&adj_val, tree_val + poffset, sizeof(adj_val));
++
++			adj_val = cpu_to_fdt32(fdt32_to_cpu(adj_val) + delta);
++
++			ret = fdt_setprop_inplace_namelen_partial(fdto,
++								  tree_node,
++								  name,
++								  strlen(name),
++								  poffset,
++								  &adj_val,
++								  sizeof(adj_val));
++			if (ret == -FDT_ERR_NOSPACE)
++				return -FDT_ERR_BADOVERLAY;
++
++			if (ret)
++				return ret;
++		}
++	}
++
++	fdt_for_each_subnode(fixup_child, fdto, fixup_node) {
++		const char *fixup_child_name = fdt_get_name(fdto, fixup_child,
++							    NULL);
++		int tree_child;
++
++		tree_child = fdt_subnode_offset(fdto, tree_node,
++						fixup_child_name);
++		if (tree_child == -FDT_ERR_NOTFOUND)
++			return -FDT_ERR_BADOVERLAY;
++		if (tree_child < 0)
++			return tree_child;
++
++		ret = overlay_update_local_node_references(fdto,
++							   tree_child,
++							   fixup_child,
++							   delta);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++/**
++ * overlay_update_local_references - Adjust the overlay references
++ * @fdto: Device tree overlay blob
++ * @delta: Offset to shift the phandles of
++ *
++ * overlay_update_local_references() update all the phandles pointing
++ * to a node within the device tree overlay by adding a constant
++ * delta to not conflict with the base overlay.
++ *
++ * This is mainly used as part of a device tree application process,
++ * where you want the device tree overlays phandles to not conflict
++ * with the ones from the base device tree before merging them.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_update_local_references(void *fdto, uint32_t delta)
++{
++	int fixups;
++
++	fixups = fdt_path_offset(fdto, "/__local_fixups__");
++	if (fixups < 0) {
++		/* There's no local phandles to adjust, bail out */
++		if (fixups == -FDT_ERR_NOTFOUND)
++			return 0;
++
++		return fixups;
++	}
++
++	/*
++	 * Update our local references from the root of the tree
++	 */
++	return overlay_update_local_node_references(fdto, 0, fixups,
++						    delta);
++}
++
++/**
++ * overlay_fixup_one_phandle - Set an overlay phandle to the base one
++ * @fdt: Base Device Tree blob
++ * @fdto: Device tree overlay blob
++ * @symbols_off: Node offset of the symbols node in the base device tree
++ * @path: Path to a node holding a phandle in the overlay
++ * @path_len: number of path characters to consider
++ * @name: Name of the property holding the phandle reference in the overlay
++ * @name_len: number of name characters to consider
++ * @poffset: Offset within the overlay property where the phandle is stored
++ * @label: Label of the node referenced by the phandle
++ *
++ * overlay_fixup_one_phandle() resolves an overlay phandle pointing to
++ * a node in the base device tree.
++ *
++ * This is part of the device tree overlay application process, when
++ * you want all the phandles in the overlay to point to the actual
++ * base dt nodes.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_fixup_one_phandle(void *fdt, void *fdto,
++				     int symbols_off,
++				     const char *path, uint32_t path_len,
++				     const char *name, uint32_t name_len,
++				     int poffset, const char *label)
++{
++	const char *symbol_path;
++	uint32_t phandle;
++	fdt32_t phandle_prop;
++	int symbol_off, fixup_off;
++	int prop_len;
++
++	if (symbols_off < 0)
++		return symbols_off;
++
++	symbol_path = fdt_getprop(fdt, symbols_off, label,
++				  &prop_len);
++	if (!symbol_path)
++		return prop_len;
++
++	symbol_off = fdt_path_offset(fdt, symbol_path);
++	if (symbol_off < 0)
++		return symbol_off;
++
++	phandle = fdt_get_phandle(fdt, symbol_off);
++	if (!phandle)
++		return -FDT_ERR_NOTFOUND;
++
++	fixup_off = fdt_path_offset_namelen(fdto, path, path_len);
++	if (fixup_off == -FDT_ERR_NOTFOUND)
++		return -FDT_ERR_BADOVERLAY;
++	if (fixup_off < 0)
++		return fixup_off;
++
++	phandle_prop = cpu_to_fdt32(phandle);
++	return fdt_setprop_inplace_namelen_partial(fdto, fixup_off,
++						   name, name_len, poffset,
++						   &phandle_prop,
++						   sizeof(phandle_prop));
++};
++
++/**
++ * overlay_fixup_phandle - Set an overlay phandle to the base one
++ * @fdt: Base Device Tree blob
++ * @fdto: Device tree overlay blob
++ * @symbols_off: Node offset of the symbols node in the base device tree
++ * @property: Property offset in the overlay holding the list of fixups
++ *
++ * overlay_fixup_phandle() resolves all the overlay phandles pointed
++ * to in a __fixups__ property, and updates them to match the phandles
++ * in use in the base device tree.
++ *
++ * This is part of the device tree overlay application process, when
++ * you want all the phandles in the overlay to point to the actual
++ * base dt nodes.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_fixup_phandle(void *fdt, void *fdto, int symbols_off,
++				 int property)
++{
++	const char *value;
++	const char *label;
++	int len;
++
++	value = fdt_getprop_by_offset(fdto, property,
++				      &label, &len);
++	if (!value) {
++		if (len == -FDT_ERR_NOTFOUND)
++			return -FDT_ERR_INTERNAL;
++
++		return len;
++	}
++
++	do {
++		const char *path, *name, *fixup_end;
++		const char *fixup_str = value;
++		uint32_t path_len, name_len;
++		uint32_t fixup_len;
++		char *sep, *endptr;
++		int poffset, ret;
++
++		fixup_end = memchr(value, '\0', len);
++		if (!fixup_end)
++			return -FDT_ERR_BADOVERLAY;
++		fixup_len = fixup_end - fixup_str;
++
++		len -= fixup_len + 1;
++		value += fixup_len + 1;
++
++		path = fixup_str;
++		sep = memchr(fixup_str, ':', fixup_len);
++		if (!sep || *sep != ':')
++			return -FDT_ERR_BADOVERLAY;
++
++		path_len = sep - path;
++		if (path_len == (fixup_len - 1))
++			return -FDT_ERR_BADOVERLAY;
++
++		fixup_len -= path_len + 1;
++		name = sep + 1;
++		sep = memchr(name, ':', fixup_len);
++		if (!sep || *sep != ':')
++			return -FDT_ERR_BADOVERLAY;
++
++		name_len = sep - name;
++		if (!name_len)
++			return -FDT_ERR_BADOVERLAY;
++
++		poffset = strtoul(sep + 1, &endptr, 10);
++		if ((*endptr != '\0') || (endptr <= (sep + 1)))
++			return -FDT_ERR_BADOVERLAY;
++
++		ret = overlay_fixup_one_phandle(fdt, fdto, symbols_off,
++						path, path_len, name, name_len,
++						poffset, label);
++		if (ret)
++			return ret;
++	} while (len > 0);
++
++	return 0;
++}
++
++/**
++ * overlay_fixup_phandles - Resolve the overlay phandles to the base
++ *                          device tree
++ * @fdt: Base Device Tree blob
++ * @fdto: Device tree overlay blob
++ *
++ * overlay_fixup_phandles() resolves all the overlay phandles pointing
++ * to nodes in the base device tree.
++ *
++ * This is one of the steps of the device tree overlay application
++ * process, when you want all the phandles in the overlay to point to
++ * the actual base dt nodes.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_fixup_phandles(void *fdt, void *fdto)
++{
++	int fixups_off, symbols_off;
++	int property;
++
++	/* We can have overlays without any fixups */
++	fixups_off = fdt_path_offset(fdto, "/__fixups__");
++	if (fixups_off == -FDT_ERR_NOTFOUND)
++		return 0; /* nothing to do */
++	if (fixups_off < 0)
++		return fixups_off;
++
++	/* And base DTs without symbols */
++	symbols_off = fdt_path_offset(fdt, "/__symbols__");
++	if ((symbols_off < 0 && (symbols_off != -FDT_ERR_NOTFOUND)))
++		return symbols_off;
++
++	fdt_for_each_property_offset(property, fdto, fixups_off) {
++		int ret;
++
++		ret = overlay_fixup_phandle(fdt, fdto, symbols_off, property);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++/**
++ * overlay_apply_node - Merges a node into the base device tree
++ * @fdt: Base Device Tree blob
++ * @target: Node offset in the base device tree to apply the fragment to
++ * @fdto: Device tree overlay blob
++ * @node: Node offset in the overlay holding the changes to merge
++ *
++ * overlay_apply_node() merges a node into a target base device tree
++ * node pointed.
++ *
++ * This is part of the final step in the device tree overlay
++ * application process, when all the phandles have been adjusted and
++ * resolved and you just have to merge overlay into the base device
++ * tree.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_apply_node(void *fdt, int target,
++			      void *fdto, int node)
++{
++	int property;
++	int subnode;
++
++	fdt_for_each_property_offset(property, fdto, node) {
++		const char *name;
++		const void *prop;
++		int prop_len;
++		int ret;
++
++		prop = fdt_getprop_by_offset(fdto, property, &name,
++					     &prop_len);
++		if (prop_len == -FDT_ERR_NOTFOUND)
++			return -FDT_ERR_INTERNAL;
++		if (prop_len < 0)
++			return prop_len;
++
++		ret = fdt_setprop(fdt, target, name, prop, prop_len);
++		if (ret)
++			return ret;
++	}
++
++	fdt_for_each_subnode(subnode, fdto, node) {
++		const char *name = fdt_get_name(fdto, subnode, NULL);
++		int nnode;
++		int ret;
++
++		nnode = fdt_add_subnode(fdt, target, name);
++		if (nnode == -FDT_ERR_EXISTS) {
++			nnode = fdt_subnode_offset(fdt, target, name);
++			if (nnode == -FDT_ERR_NOTFOUND)
++				return -FDT_ERR_INTERNAL;
++		}
++
++		if (nnode < 0)
++			return nnode;
++
++		ret = overlay_apply_node(fdt, nnode, fdto, subnode);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++/**
++ * overlay_merge - Merge an overlay into its base device tree
++ * @fdt: Base Device Tree blob
++ * @fdto: Device tree overlay blob
++ *
++ * overlay_merge() merges an overlay into its base device tree.
++ *
++ * This is the next to last step in the device tree overlay application
++ * process, when all the phandles have been adjusted and resolved and
++ * you just have to merge overlay into the base device tree.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_merge(void *fdt, void *fdto)
++{
++	int fragment;
++
++	fdt_for_each_subnode(fragment, fdto, 0) {
++		int overlay;
++		int target;
++		int ret;
++
++		/*
++		 * Each fragments will have an __overlay__ node. If
++		 * they don't, it's not supposed to be merged
++		 */
++		overlay = fdt_subnode_offset(fdto, fragment, "__overlay__");
++		if (overlay == -FDT_ERR_NOTFOUND)
++			continue;
++
++		if (overlay < 0)
++			return overlay;
++
++		target = overlay_get_target(fdt, fdto, fragment, NULL);
++		if (target < 0)
++			return target;
++
++		ret = overlay_apply_node(fdt, target, fdto, overlay);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++static int get_path_len(const void *fdt, int nodeoffset)
++{
++	int len = 0, namelen;
++	const char *name;
++
++	FDT_CHECK_HEADER(fdt);
++
++	for (;;) {
++		name = fdt_get_name(fdt, nodeoffset, &namelen);
++		if (!name)
++			return namelen;
++
++		/* root? we're done */
++		if (namelen == 0)
++			break;
++
++		nodeoffset = fdt_parent_offset(fdt, nodeoffset);
++		if (nodeoffset < 0)
++			return nodeoffset;
++		len += namelen + 1;
++	}
++
++	/* in case of root pretend it's "/" */
++	if (len == 0)
++		len++;
++	return len;
++}
++
++/**
++ * overlay_symbol_update - Update the symbols of base tree after a merge
++ * @fdt: Base Device Tree blob
++ * @fdto: Device tree overlay blob
++ *
++ * overlay_symbol_update() updates the symbols of the base tree with the
++ * symbols of the applied overlay
++ *
++ * This is the last step in the device tree overlay application
++ * process, allowing the reference of overlay symbols by subsequent
++ * overlay operations.
++ *
++ * returns:
++ *      0 on success
++ *      Negative error code on failure
++ */
++static int overlay_symbol_update(void *fdt, void *fdto)
++{
++	int root_sym, ov_sym, prop, path_len, fragment, target;
++	int len, frag_name_len, ret, rel_path_len;
++	const char *s, *e;
++	const char *path;
++	const char *name;
++	const char *frag_name;
++	const char *rel_path;
++	const char *target_path;
++	char *buf;
++	void *p;
++
++	ov_sym = fdt_subnode_offset(fdto, 0, "__symbols__");
++
++	/* if no overlay symbols exist no problem */
++	if (ov_sym < 0)
++		return 0;
++
++	root_sym = fdt_subnode_offset(fdt, 0, "__symbols__");
++
++	/* it no root symbols exist we should create them */
++	if (root_sym == -FDT_ERR_NOTFOUND)
++		root_sym = fdt_add_subnode(fdt, 0, "__symbols__");
++
++	/* any error is fatal now */
++	if (root_sym < 0)
++		return root_sym;
++
++	/* iterate over each overlay symbol */
++	fdt_for_each_property_offset(prop, fdto, ov_sym) {
++		path = fdt_getprop_by_offset(fdto, prop, &name, &path_len);
++		if (!path)
++			return path_len;
++
++		/* verify it's a string property (terminated by a single \0) */
++		if (path_len < 1 || memchr(path, '\0', path_len) != &path[path_len - 1])
++			return -FDT_ERR_BADVALUE;
++
++		/* keep end marker to avoid strlen() */
++		e = path + path_len;
++
++		/* format: /<fragment-name>/__overlay__/<relative-subnode-path> */
++
++		if (*path != '/')
++			return -FDT_ERR_BADVALUE;
++
++		/* get fragment name first */
++		s = strchr(path + 1, '/');
++		if (!s)
++			return -FDT_ERR_BADOVERLAY;
++
++		frag_name = path + 1;
++		frag_name_len = s - path - 1;
++
++		/* verify format; safe since "s" lies in \0 terminated prop */
++		len = sizeof("/__overlay__/") - 1;
++		if ((e - s) < len || memcmp(s, "/__overlay__/", len))
++			return -FDT_ERR_BADOVERLAY;
++
++		rel_path = s + len;
++		rel_path_len = e - rel_path;
++
++		/* find the fragment index in which the symbol lies */
++		ret = fdt_subnode_offset_namelen(fdto, 0, frag_name,
++					       frag_name_len);
++		/* not found? */
++		if (ret < 0)
++			return -FDT_ERR_BADOVERLAY;
++		fragment = ret;
++
++		/* an __overlay__ subnode must exist */
++		ret = fdt_subnode_offset(fdto, fragment, "__overlay__");
++		if (ret < 0)
++			return -FDT_ERR_BADOVERLAY;
++
++		/* get the target of the fragment */
++		ret = overlay_get_target(fdt, fdto, fragment, &target_path);
++		if (ret < 0)
++			return ret;
++		target = ret;
++
++		/* if we have a target path use */
++		if (!target_path) {
++			ret = get_path_len(fdt, target);
++			if (ret < 0)
++				return ret;
++			len = ret;
++		} else {
++			len = strlen(target_path);
++		}
++
++		ret = fdt_setprop_placeholder(fdt, root_sym, name,
++				len + (len > 1) + rel_path_len + 1, &p);
++		if (ret < 0)
++			return ret;
++
++		if (!target_path) {
++			/* again in case setprop_placeholder changed it */
++			ret = overlay_get_target(fdt, fdto, fragment, &target_path);
++			if (ret < 0)
++				return ret;
++			target = ret;
++		}
++
++		buf = p;
++		if (len > 1) { /* target is not root */
++			if (!target_path) {
++				ret = fdt_get_path(fdt, target, buf, len + 1);
++				if (ret < 0)
++					return ret;
++			} else
++				memcpy(buf, target_path, len + 1);
++
++		} else
++			len--;
++
++		buf[len] = '/';
++		memcpy(buf + len + 1, rel_path, rel_path_len);
++		buf[len + 1 + rel_path_len] = '\0';
++	}
++
++	return 0;
++}
++
++int fdt_overlay_apply(void *fdt, void *fdto)
++{
++	uint32_t delta = fdt_get_max_phandle(fdt);
++	int ret;
++
++	FDT_CHECK_HEADER(fdt);
++	FDT_CHECK_HEADER(fdto);
++
++	ret = overlay_adjust_local_phandles(fdto, delta);
++	if (ret)
++		goto err;
++
++	ret = overlay_update_local_references(fdto, delta);
++	if (ret)
++		goto err;
++
++	ret = overlay_fixup_phandles(fdt, fdto);
++	if (ret)
++		goto err;
++
++	ret = overlay_merge(fdt, fdto);
++	if (ret)
++		goto err;
++
++	ret = overlay_symbol_update(fdt, fdto);
++	if (ret)
++		goto err;
++
++	/*
++	 * The overlay has been damaged, erase its magic.
++	 */
++	fdt_set_magic(fdto, ~0);
++
++	return 0;
++
++err:
++	/*
++	 * The overlay might have been damaged, erase its magic.
++	 */
++	fdt_set_magic(fdto, ~0);
++
++	/*
++	 * The base device tree might have been damaged, erase its
++	 * magic.
++	 */
++	fdt_set_magic(fdt, ~0);
++
++	return ret;
++}
+diff --git a/scripts/dtc/libfdt/fdt_ro.c b/scripts/dtc/libfdt/fdt_ro.c
+index 3d00d2eee0e3..08de2cce674d 100644
+--- a/scripts/dtc/libfdt/fdt_ro.c
++++ b/scripts/dtc/libfdt/fdt_ro.c
+@@ -60,7 +60,7 @@ static int _fdt_nodename_eq(const void *fdt, int offset,
+ {
+ 	const char *p = fdt_offset_ptr(fdt, offset + FDT_TAGSIZE, len+1);
+ 
+-	if (! p)
++	if (!p)
+ 		/* short match */
+ 		return 0;
+ 
+@@ -327,7 +327,7 @@ const void *fdt_getprop_namelen(const void *fdt, int nodeoffset,
+ 	const struct fdt_property *prop;
+ 
+ 	prop = fdt_get_property_namelen(fdt, nodeoffset, name, namelen, lenp);
+-	if (! prop)
++	if (!prop)
+ 		return NULL;
+ 
+ 	return prop->data;
+diff --git a/scripts/dtc/libfdt/fdt_rw.c b/scripts/dtc/libfdt/fdt_rw.c
+index 6078ea8b6af7..b9f1679fca6c 100644
+--- a/scripts/dtc/libfdt/fdt_rw.c
++++ b/scripts/dtc/libfdt/fdt_rw.c
+@@ -207,7 +207,7 @@ static int _fdt_resize_property(void *fdt, int nodeoffset, const char *name,
+ 	int err;
+ 
+ 	*prop = fdt_get_property_w(fdt, nodeoffset, name, &oldlen);
+-	if (! (*prop))
++	if (!*prop)
+ 		return oldlen;
+ 
+ 	if ((err = _fdt_splice_struct(fdt, (*prop)->data, FDT_TAGALIGN(oldlen),
+@@ -269,8 +269,8 @@ int fdt_set_name(void *fdt, int nodeoffset, const char *name)
+ 	return 0;
+ }
+ 
+-int fdt_setprop(void *fdt, int nodeoffset, const char *name,
+-		const void *val, int len)
++int fdt_setprop_placeholder(void *fdt, int nodeoffset, const char *name,
++			    int len, void **prop_data)
+ {
+ 	struct fdt_property *prop;
+ 	int err;
+@@ -283,8 +283,22 @@ int fdt_setprop(void *fdt, int nodeoffset, const char *name,
+ 	if (err)
+ 		return err;
+ 
++	*prop_data = prop->data;
++	return 0;
++}
++
++int fdt_setprop(void *fdt, int nodeoffset, const char *name,
++		const void *val, int len)
++{
++	void *prop_data;
++	int err;
++
++	err = fdt_setprop_placeholder(fdt, nodeoffset, name, len, &prop_data);
++	if (err)
++		return err;
++
+ 	if (len)
+-		memcpy(prop->data, val, len);
++		memcpy(prop_data, val, len);
+ 	return 0;
+ }
+ 
+@@ -323,7 +337,7 @@ int fdt_delprop(void *fdt, int nodeoffset, const char *name)
+ 	FDT_RW_CHECK_HEADER(fdt);
+ 
+ 	prop = fdt_get_property_w(fdt, nodeoffset, name, &len);
+-	if (! prop)
++	if (!prop)
+ 		return len;
+ 
+ 	proplen = sizeof(*prop) + FDT_TAGALIGN(len);
+diff --git a/scripts/dtc/libfdt/fdt_sw.c b/scripts/dtc/libfdt/fdt_sw.c
+index 6a804859fd0c..2bd15e7aef87 100644
+--- a/scripts/dtc/libfdt/fdt_sw.c
++++ b/scripts/dtc/libfdt/fdt_sw.c
+@@ -220,7 +220,7 @@ static int _fdt_find_add_string(void *fdt, const char *s)
+ 	return offset;
+ }
+ 
+-int fdt_property(void *fdt, const char *name, const void *val, int len)
++int fdt_property_placeholder(void *fdt, const char *name, int len, void **valp)
+ {
+ 	struct fdt_property *prop;
+ 	int nameoff;
+@@ -238,7 +238,19 @@ int fdt_property(void *fdt, const char *name, const void *val, int len)
+ 	prop->tag = cpu_to_fdt32(FDT_PROP);
+ 	prop->nameoff = cpu_to_fdt32(nameoff);
+ 	prop->len = cpu_to_fdt32(len);
+-	memcpy(prop->data, val, len);
++	*valp = prop->data;
++	return 0;
++}
++
++int fdt_property(void *fdt, const char *name, const void *val, int len)
++{
++	void *ptr;
++	int ret;
++
++	ret = fdt_property_placeholder(fdt, name, len, &ptr);
++	if (ret)
++		return ret;
++	memcpy(ptr, val, len);
+ 	return 0;
+ }
+ 
+diff --git a/scripts/dtc/libfdt/fdt_wip.c b/scripts/dtc/libfdt/fdt_wip.c
+index 6aaab399929c..5e859198622b 100644
+--- a/scripts/dtc/libfdt/fdt_wip.c
++++ b/scripts/dtc/libfdt/fdt_wip.c
+@@ -82,7 +82,7 @@ int fdt_setprop_inplace(void *fdt, int nodeoffset, const char *name,
+ 	int proplen;
+ 
+ 	propval = fdt_getprop(fdt, nodeoffset, name, &proplen);
+-	if (! propval)
++	if (!propval)
+ 		return proplen;
+ 
+ 	if (proplen != len)
+@@ -107,7 +107,7 @@ int fdt_nop_property(void *fdt, int nodeoffset, const char *name)
+ 	int len;
+ 
+ 	prop = fdt_get_property_w(fdt, nodeoffset, name, &len);
+-	if (! prop)
++	if (!prop)
+ 		return len;
+ 
+ 	_fdt_nop_region(prop, len + sizeof(*prop));
+diff --git a/scripts/dtc/libfdt/libfdt.h b/scripts/dtc/libfdt/libfdt.h
+index ba86caa73d01..7f83023ee109 100644
+--- a/scripts/dtc/libfdt/libfdt.h
++++ b/scripts/dtc/libfdt/libfdt.h
+@@ -1314,6 +1314,22 @@ static inline int fdt_property_cell(void *fdt, const char *name, uint32_t val)
+ {
+ 	return fdt_property_u32(fdt, name, val);
+ }
++
++/**
++ * fdt_property_placeholder - add a new property and return a ptr to its value
++ *
++ * @fdt: pointer to the device tree blob
++ * @name: name of property to add
++ * @len: length of property value in bytes
++ * @valp: returns a pointer to where where the value should be placed
++ *
++ * returns:
++ *	0, on success
++ *	-FDT_ERR_BADMAGIC,
++ *	-FDT_ERR_NOSPACE, standard meanings
++ */
++int fdt_property_placeholder(void *fdt, const char *name, int len, void **valp);
++
+ #define fdt_property_string(fdt, name, str) \
+ 	fdt_property(fdt, name, str, strlen(str)+1)
+ int fdt_end_node(void *fdt);
+@@ -1432,6 +1448,37 @@ int fdt_set_name(void *fdt, int nodeoffset, const char *name);
+ int fdt_setprop(void *fdt, int nodeoffset, const char *name,
+ 		const void *val, int len);
+ 
++/**
++ * fdt_setprop _placeholder - allocate space for a property
++ * @fdt: pointer to the device tree blob
++ * @nodeoffset: offset of the node whose property to change
++ * @name: name of the property to change
++ * @len: length of the property value
++ * @prop_data: return pointer to property data
++ *
++ * fdt_setprop_placeholer() allocates the named property in the given node.
++ * If the property exists it is resized. In either case a pointer to the
++ * property data is returned.
++ *
++ * This function may insert or delete data from the blob, and will
++ * therefore change the offsets of some existing nodes.
++ *
++ * returns:
++ *	0, on success
++ *	-FDT_ERR_NOSPACE, there is insufficient free space in the blob to
++ *		contain the new property value
++ *	-FDT_ERR_BADOFFSET, nodeoffset did not point to FDT_BEGIN_NODE tag
++ *	-FDT_ERR_BADLAYOUT,
++ *	-FDT_ERR_BADMAGIC,
++ *	-FDT_ERR_BADVERSION,
++ *	-FDT_ERR_BADSTATE,
++ *	-FDT_ERR_BADSTRUCTURE,
++ *	-FDT_ERR_BADLAYOUT,
++ *	-FDT_ERR_TRUNCATED, standard meanings
++ */
++int fdt_setprop_placeholder(void *fdt, int nodeoffset, const char *name,
++			    int len, void **prop_data);
++
+ /**
+  * fdt_setprop_u32 - set a property to a 32-bit integer
+  * @fdt: pointer to the device tree blob
+diff --git a/scripts/dtc/livetree.c b/scripts/dtc/livetree.c
+index 3673de07e4e5..6846ad2fd6d2 100644
+--- a/scripts/dtc/livetree.c
++++ b/scripts/dtc/livetree.c
+@@ -216,6 +216,28 @@ struct node *merge_nodes(struct node *old_node, struct node *new_node)
+ 	return old_node;
+ }
+ 
++void add_orphan_node(struct node *dt, struct node *new_node, char *ref)
++{
++	static unsigned int next_orphan_fragment = 0;
++	struct node *node;
++	struct property *p;
++	struct data d = empty_data;
++	char *name;
++
++	d = data_add_marker(d, REF_PHANDLE, ref);
++	d = data_append_integer(d, 0xffffffff, 32);
++
++	p = build_property("target", d);
++
++	xasprintf(&name, "fragment@%u",
++			next_orphan_fragment++);
++	name_node(new_node, "__overlay__");
++	node = build_node(p, new_node);
++	name_node(node, name);
++
++	add_child(dt, node);
++}
++
+ struct node *chain_node(struct node *first, struct node *list)
+ {
+ 	assert(first->next_sibling == NULL);
+@@ -396,6 +418,12 @@ cell_t propval_cell(struct property *prop)
+ 	return fdt32_to_cpu(*((fdt32_t *)prop->val.val));
+ }
+ 
++cell_t propval_cell_n(struct property *prop, int n)
++{
++	assert(prop->val.len / sizeof(cell_t) >= n);
++	return fdt32_to_cpu(*((fdt32_t *)prop->val.val + n));
++}
++
+ struct property *get_property_by_label(struct node *tree, const char *label,
+ 				       struct node **node)
+ {
+@@ -478,7 +506,8 @@ struct node *get_node_by_path(struct node *tree, const char *path)
+ 	p = strchr(path, '/');
+ 
+ 	for_each_child(tree, child) {
+-		if (p && strneq(path, child->name, p-path))
++		if (p && (strlen(child->name) == p-path) &&
++				strneq(path, child->name, p-path))
+ 			return get_node_by_path(child, p+1);
+ 		else if (!p && streq(path, child->name))
+ 			return child;
+diff --git a/scripts/dtc/version_gen.h b/scripts/dtc/version_gen.h
+index 1229e07b4912..d88393cab14a 100644
+--- a/scripts/dtc/version_gen.h
++++ b/scripts/dtc/version_gen.h
+@@ -1 +1 @@
+-#define DTC_VERSION "DTC 1.4.4-g756ffc4f"
++#define DTC_VERSION "DTC 1.4.5-gb1a60033"

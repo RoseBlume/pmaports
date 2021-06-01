@@ -1,0 +1,42 @@
+From e31a01923613bb1f8a2b5a1fc7b950ee2812d816 Mon Sep 17 00:00:00 2001
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 21 Mar 2017 09:14:20 -0500
+Subject: [PATCH] dtc: update warning settings for new bus and node/property
+ name checks
+
+dtc gained new warnings checking PCI and simple buses, unit address
+formatting, and stricter node and property name checking. Disable the
+new dtc warnings by default as there are 1000s. As before, warnings are
+enabled with W=1 or W=2. The strict node and property name checks are a
+bit subjective, so they are only enabled for W=2.
+
+Signed-off-by: Rob Herring <robh@kernel.org>
+
+Change-Id: I2ae0a1a3692dcb4810bd9adfa8965d4c6884aa75
+---
+ scripts/Makefile.lib | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 446540515adb..66bab23a7dc8 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -272,7 +272,17 @@ DTC ?= $(objtree)/scripts/dtc/dtc
+ 
+ # Disable noisy checks by default
+ ifeq ($(KBUILD_ENABLE_EXTRA_GCC_CHECKS),)
+-DTC_FLAGS += -Wno-unit_address_vs_reg
++DTC_FLAGS += -Wno-unit_address_vs_reg \
++	-Wno-simple_bus_reg \
++	-Wno-unit_address_format \
++	-Wno-pci_bridge \
++	-Wno-pci_device_bus_num \
++	-Wno-pci_device_reg
++endif
++
++ifeq ($(KBUILD_ENABLE_EXTRA_GCC_CHECKS),2)
++DTC_FLAGS += -Wnode_name_chars_strict \
++	-Wproperty_name_chars_strict
+ endif
+ ifeq ($(DTC_EXT),)
+ DTC_FLAGS += -Wno-simple_bus_reg \

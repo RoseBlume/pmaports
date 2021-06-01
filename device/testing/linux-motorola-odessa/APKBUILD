@@ -1,0 +1,87 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname=linux-motorola-odessa
+pkgver=4.14.117
+pkgrel=0
+pkgdesc="Motorola Moto G9+ kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="motorola-odessa"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bash bc dtc bison devicepkg-dev flex openssl-dev perl linux-headers linux-pam"
+
+# Compiler: GCC 6 (doesn't boot when compiled with newer versions)
+#if [ "${CC:0:5}" != "gcc6-" ]; then
+#   CC="gcc6-$CC"
+#   HOSTCC="gcc6-gcc"
+#   CROSS_COMPILE="gcc6-$CROSS_COMPILE"
+#fi
+
+
+# Source
+_repository="kernel-msm"
+_commit="5bf4be17f3c83f85ce0bf270f12904feeaeb7460"
+_config="config-$_flavor.$arch"
+source="
+    $pkgname-$_commit.tar.gz::https://github.com/MotorolaMobilityLLC/$_repository/archive/$_commit.tar.gz
+    $_config
+    linux4.17-gcc10-extern_YYLOC_global_declaration.patch
+    dsi-staging-fix-duplicate-static.patch
+    net-phy-micrel-Use-strlcpy-for-ethtool-get_strings.patch
+    fix_ipa_buf_size_mismatch.patch
+    0006-Suppress-error-about-static-buffer-overflow.patch
+    0002-Fix-dangerous-relocation.patch
+    dtc1.patch
+    dtc3.patch
+    dtc8.patch
+    dtc14.patch
+    dtc16.patch
+    dtc19.patch
+    dtc20.patch
+    99_framebuffer.patch
+    mdss-panel-to-fb-var.patch
+    remove_bootloader_cmdline_opts.patch	
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+    REPLACE_GCCH=0
+    default_prepare
+    . downstreamkernel_prepare
+}
+
+build() {
+    unset LDFLAGS
+    make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+        KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+    downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+}
+
+
+sha512sums="
+2572be3d4ab8935ddaa21f2d97fbc80f30f5e0405a440ddac067c04b54ee6a974b80d192f69f38e6b556e152b88bb0e038cc39838539f9fd65639e97d6e2abf1  linux-motorola-odessa-5bf4be17f3c83f85ce0bf270f12904feeaeb7460.tar.gz
+0db7563eee1122700304c2a33da1cd35e474a213888caf564843b5ec72b8eb1242c2eaae497e794ece4c77aabfe521999710222ad9419debe928a13c29bc542f  config-motorola-odessa.aarch64
+eaf2e61fcb508cdd239b8fed209d2a09ecac77287f6b46d003918fdf1c6fa2ee63f7390f3ff7c49029b8ed6cbcdd81c7e9a4b1ece9f5060b6fc84e322bd47f41  linux4.17-gcc10-extern_YYLOC_global_declaration.patch
+45cd1dded5c56c93aa80a016ec9a96098633d6b38a02f2614cc0d96737409c24230d22eaaf8a244ce5d2eef07fb34cddcb06aea87e4b7805138cb5ac8c62f7cf  dsi-staging-fix-duplicate-static.patch
+b081e9bfb3eb3f024486de2952d4b0dc6c81facb31ddf4456b386fb5c043a3a11cefe1636dece5cf0ea655746ed35a79c8318cabba8661e39c580e6faed97ba7  net-phy-micrel-Use-strlcpy-for-ethtool-get_strings.patch
+592d87cbb9532e0311a9d23bc10bdbae9859709993e7b88a7202cd7023e8cc3fcdaa1810a2171771222df2ead44b8de048cb5b10b5088f44607d7c7c5b15da1b  fix_ipa_buf_size_mismatch.patch
+3835f7e4fca12aaba82fe21cc9632f0e569a8c4405231d137aea4f2640190d919e1a44612082decfbaaa41faa3c6a3ff0442086afb81d59c984a5697fdb9cac9  0006-Suppress-error-about-static-buffer-overflow.patch
+39007dd285b502633c7bbf398acd6841a14fb6f5e0a3ad8570d31be77763b537b2352401701d67c53d36ddbf4068ee32446bf3b4ef9aa20c39f052ca491d2be4  0002-Fix-dangerous-relocation.patch
+a5530308035d7674eba2d5cb09e62befbc62892b26ccadcac5aef9d3f5ef4cf628eca7f26ae9d26168e50de797980bed6b052c2bc2767d431f7ddc4fe920b96c  dtc1.patch
+398d29642d2fdafeb295f09899a438f98b5273a4bace7cc53a4450dcfdc6dccc87210abc2a632f7e50825893e0d845baa330cb85b1efaee2e2dc76065bcc8264  dtc3.patch
+c79d319f5279a5caa2794cb24bfb2a50fcb327ce39129a2f558a341cd79006238e740c021e018a76c7d1366813eb4635d903a0821dc13afdfd638415e1e017fe  dtc8.patch
+2fc1731df159902c46c2211fd14a873dea8b8ba3f918dbea31574f97e23222958a9cf60f17226509daaec22d4b644bb61a6dc89c3d925f5a21893411f74191ab  dtc14.patch
+e8257d77082b376a7b31548a55da71b2799b22413b6f712a789e343324f4c0fc82ec2d2b9450e0a6584ac441d2c7017f8d26de25f30c4b309daaca66ed57c381  dtc16.patch
+9362160754616d1b501ef4998deab730f8b3a7a12ed1df03eeb627a90cd5d080af882e8738c25e0283749ff83026897d6978ba24bcce9cf0e77518e4dd46c216  dtc19.patch
+2714f4e9d3b642aa219f62710f6cd74c90e4d22616092adfeca554612bda68cac7ab8ee4ce5fac4b1965acdea66cd9cba602d6e8369847e33c08e504cd9cda93  dtc20.patch
+d64746ff65de81cc894e33cd8f9b3bf0a5ee9e979d95f67a50a4c0bc7072aa459632841db4b64b68cfc01fa3503d2e8122d03f177932a5f0fbe0ddad5db3bb4d  99_framebuffer.patch
+d5b868c64b8ebddcf74cb3aa478f30f0897af1e14e4fc42d977921104a6c568cc0bf36fc8a3b0f538cd3ca2ebf59244fdf23186a903259e5acc14d1c4ef4ccc3  mdss-panel-to-fb-var.patch
+9ce867c4254b537ef5d2485780c26b72da8a3a8767ba71557f3b48d6c550e0e14c8c3e575b31bf65d2878f08a8a4926e48a1c2f1be534bf80a7a57f58313b0fd  remove_bootloader_cmdline_opts.patch
+"
