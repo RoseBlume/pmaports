@@ -1,0 +1,31 @@
+From 745323cd14e9746119bba9a12067fff54b455baf Mon Sep 17 00:00:00 2001
+From: Nathan Chancellor <natechancellor@gmail.com>
+Date: Fri, 11 Jan 2019 11:09:31 -0700
+Subject: [PATCH] scripts/dtc: Fix function parameters
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+../scripts/dtc/checks.c:60:9: warning: initialization of ‘void (*)(struct check *, struct dt_info *, struct node *)’ from incompatible pointer type ‘void (*)(struct check *, struct node *, struct node *)’ [-Wincompatible-pointer-types]
+
+Fixes: 8085154df5ae ("of: add checking for conditional status")
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+
+Change-Id: I39184ab88d5b69a2c3e38096961fcef018f4606d
+---
+ scripts/dtc/checks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/dtc/checks.c b/scripts/dtc/checks.c
+index d50730d631da..df690c481a52 100644
+--- a/scripts/dtc/checks.c
++++ b/scripts/dtc/checks.c
+@@ -179,7 +179,7 @@ static void check_is_string(struct check *c, struct dt_info *dti,
+ #define ERROR_IF_NOT_STRING(nm, propname) \
+ 	ERROR(nm, check_is_string, (propname))
+ 
+-static void check_is_null_terminated(struct check *c, struct node *root,
++static void check_is_null_terminated(struct check *c, struct dt_info *dti,
+ 			    struct node *node)
+ {
+ 	struct property *prop;

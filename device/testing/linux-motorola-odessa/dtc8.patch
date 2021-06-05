@@ -1,0 +1,56 @@
+From 35c1e6d60fb10dc3011a7c13f9ba0796bfae1a3c Mon Sep 17 00:00:00 2001
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 25 Oct 2017 10:59:13 -0500
+Subject: [PATCH] scripts/dtc: Update to upstream version
+ v1.4.5-6-gc1e55a5513e9
+
+Pickup the fix for handling unresolved phandles in overlays.
+
+This adds the following commits from upstream:
+
+c1e55a5513e9 checks: fix handling of unresolved phandles for dts plugins
+f8872e29ce06 tests: Avoid 64-bit arithmetic in assembler
+48c91c08bcfa libfdt: add stringlist functions to linker script
+
+Signed-off-by: Rob Herring <robh@kernel.org>
+
+Change-Id: I9f3c6b4d5a4064656a5d4328693236180af62291
+---
+ scripts/dtc/checks.c      | 9 +++++++++
+ scripts/dtc/version_gen.h | 2 +-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/dtc/checks.c b/scripts/dtc/checks.c
+index 449f76d76a6c..e1ca5de837df 100644
+--- a/scripts/dtc/checks.c
++++ b/scripts/dtc/checks.c
+@@ -1007,6 +1007,10 @@ static void check_property_phandle_args(struct check *c,
+ 		 * entries when each index position has a specific definition.
+ 		 */
+ 		if (phandle == 0 || phandle == -1) {
++			/* Give up if this is an overlay with external references */
++			if (dti->dtsflags & DTSF_PLUGIN)
++				break;
++
+ 			cellsize = 0;
+ 			continue;
+ 		}
+@@ -1195,6 +1199,11 @@ static void check_interrupts_property(struct check *c,
+ 		prop = get_property(parent, "interrupt-parent");
+ 		if (prop) {
+ 			phandle = propval_cell(prop);
++			/* Give up if this is an overlay with external references */
++			if ((phandle == 0 || phandle == -1) &&
++			    (dti->dtsflags & DTSF_PLUGIN))
++					return;
++
+ 			irq_node = get_node_by_phandle(root, phandle);
+ 			if (!irq_node) {
+ 				FAIL(c, dti, "Bad interrupt-parent phandle for %s",
+diff --git a/scripts/dtc/version_gen.h b/scripts/dtc/version_gen.h
+index d88393cab14a..6a4e84798966 100644
+--- a/scripts/dtc/version_gen.h
++++ b/scripts/dtc/version_gen.h
+@@ -1 +1 @@
+-#define DTC_VERSION "DTC 1.4.5-gb1a60033"
++#define DTC_VERSION "DTC 1.4.5-gc1e55a55"

@@ -1,0 +1,35 @@
+From 6bd97a083e26e3f6fd3c8f7608138d61da5dd22e Mon Sep 17 00:00:00 2001
+From: David Gibson <david@gibson.dropbear.id.au>
+Date: Sun, 27 Oct 2013 19:18:06 +1100
+Subject: [PATCH] scripts/dtc: checks.c Remove tree check functions
+
+The tree check functions from the checking infrastructure aren't very
+useful.  There were only two examples using them, and they're basically
+equivalent to a node check which is applied only to the root node, so those
+are easily replaced.
+
+Signed-off-by: David Gibson <david@gibson.dropbear.id.au>
+
+* Even though included DTC is 1.4.4-g756ffc4f this specific bit was missed or excluded.
+
+Signed-off-by: Andrew Hexen <SyberHexen@gmail.com>
+---
+ scripts/dtc/checks.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/dtc/checks.c b/scripts/dtc/checks.c
+index df690c481a52..f6356cb0b0bd 100644
+--- a/scripts/dtc/checks.c
++++ b/scripts/dtc/checks.c
+@@ -194,9 +194,9 @@ static void check_is_null_terminated(struct check *c, struct dt_info *dti,
+ 		     propname, node->fullpath);
+ }
+ #define WARNING_IF_NOT_NULL_TERMINATED(nm, propname) \
+-	WARNING(nm, NULL, check_is_null_terminated, NULL, (propname))
++	WARNING(nm, check_is_null_terminated, (propname))
+ #define ERROR_IF_NOT_NULL_TERMINATED(nm, propname) \
+-	ERROR(nm, NULL, check_is_null_terminated, NULL, (propname))
++	ERROR(nm, check_is_null_terminated, (propname))
+ 
+ static void check_is_cell(struct check *c, struct dt_info *dti,
+ 			  struct node *node)
