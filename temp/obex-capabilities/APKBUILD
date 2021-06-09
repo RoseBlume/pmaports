@@ -1,0 +1,30 @@
+# Maintainer: Dylan Van Assche <me@dylanvanassche.be>
+pkgname=obex-capabilities
+pkgver=0.1.1
+pkgrel=0
+pkgdesc="Script to generate Bluetooth OBEX capabilities XML files at runtime"
+url="https://gitlab.com/postmarketOS/obex-capabilities"
+arch="noarch"
+license="GPL-3.0-or-later"
+depends="python3 py3-dbus"
+makedepends="py3-setuptools"
+checkdepends="py3-pytest"
+source="$pkgname-$pkgver.tar.gz::https://gitlab.com/postmarketos/$pkgname/-/archive/$pkgver/$pkgname-$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-$pkgver"
+
+build() {
+	python3 setup.py build
+}
+
+check() {
+	python3 setup.py test
+}
+
+package() {
+	python3 setup.py install --prefix=/usr --root="$pkgdir"
+        ls $pkgdir
+}
+
+sha512sums="
+df399e97dc4487a89513b8ca80069bf3fff7e7677eb5183370b4b81b7acb3182acbb052347aa3c4582dcdd381d276db19d19e28c1dd215d34b7d13456e3ccb8e  obex-capabilities-bc63d34206e343751c28acbf1dda042e73d7efa5.tar.gz
+"
