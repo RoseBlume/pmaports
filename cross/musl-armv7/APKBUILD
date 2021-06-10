@@ -8,12 +8,12 @@ fi
 
 pkgname=musl-armv7
 pkgver=1.2.2
-pkgrel=0
+pkgrel=1
 arch="x86_64"
 subpackages="musl-dev-armv7:package_dev"
 
 _arch="armv7"
-_mirror="http://dl-2.alpinelinux.org/alpine/"
+_mirror="http://dl-cdn.alpinelinux.org/alpine/"
 
 url="https://musl-libc.org"
 license="MIT"
@@ -55,5 +55,5 @@ package_dev() {
 	done
 }
 
-sha512sums="0e14258a5844ba46eb06e8600fa256775bf0aa755b84caf02ee130f48fcf7dbeb3ef7bec8ebb933394a848194c148fe0c42b24fb9c00ce686b729745c19d7b15  musl-1.2.2-r0-armv7-v3.13.apk
-5de4f764c3dbffaffc48fe6ef4f959100a7b72bfaa08044ef4b502e88f1c5d7dca921d43f3f4c6e4051164f092070cf9fd075570e8a2f21af54220259bcb8943  musl-dev-1.2.2-r0-armv7-v3.13.apk"
+sha512sums="3014cd534b4d9a1205a80b8900707f1e99ee77e428f1cf384a8267def166a922d024e3ce15ce4d2e713f77bce2708b22adef37065020ba31410a52d1c18a92df  musl-1.2.2-r1-armv7-v3.13.apk
+66119f300d9ef0bc79ddbd492783a2d73641b58a51626a253a1b733a64bfd5480e6b7957b93cd08a65a5cc4a2231390cf4faebbd7815ea1607ddd8c58453211d  musl-dev-1.2.2-r1-armv7-v3.13.apk"

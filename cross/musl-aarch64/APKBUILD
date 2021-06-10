@@ -8,12 +8,12 @@ fi
 
 pkgname=musl-aarch64
 pkgver=1.2.2
-pkgrel=0
+pkgrel=1
 arch="x86_64"
 subpackages="musl-dev-aarch64:package_dev"
 
 _arch="aarch64"
-_mirror="http://dl-2.alpinelinux.org/alpine/"
+_mirror="http://dl-cdn.alpinelinux.org/alpine/"
 
 url="https://musl-libc.org"
 license="MIT"
@@ -55,5 +55,5 @@ package_dev() {
 	done
 }
 
-sha512sums="a325d29f1642f446eebb14db6638d83fbc9b91da736aa19051dc03e1e0aaeee39c6a96dd27642cf2886e3d1e8c1132aeddf36fd987a4ded61a2074520fbffa72  musl-1.2.2-r0-aarch64-v3.13.apk
-002d962af5150cd7f4647170c3f2d166d857de217958367de005371d30c9e98423543fd1a4fee68c6dcc4fc43da4c93bd3c50ec8572845664255d21323953e30  musl-dev-1.2.2-r0-aarch64-v3.13.apk"
+sha512sums="e0c3c224e546bd558abe45783d4be98bed6950d3b8a4d4cdba639e217d72999355a3969df2a4226412da8e72fe5cf5d077c01e25a9b364a062867266f5958b6d  musl-1.2.2-r1-aarch64-v3.13.apk
+3334cdecd0dc6c8a42abc19283cc057aa77a629ca847f8c3e53bb5cdb5bfa6e650536bea9ae29fcf198d498b04b5a33cb8438e1908520d6c65ee22da899b7334  musl-dev-1.2.2-r1-aarch64-v3.13.apk"
