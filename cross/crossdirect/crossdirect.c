@@ -118,7 +118,8 @@ int main(int argc, char **argv)
 		NULL };
 	char *ldPreload = getenv("LD_PRELOAD");
 	if (ldPreload) {
-		if (strcmp(ldPreload, "/usr/lib/libfakeroot.so") == 0) {
+		if (strcmp(ldPreload, "/usr/lib/libfakeroot.so") == 0 ||
+		    strcmp(ldPreload, "libfakeroot.so") == 0) {
 			env[0] = "LD_PRELOAD=/native/usr/lib/libfakeroot.so";
 		} else {
 			fprintf(stderr, "ERROR: crossdirect: can't handle LD_PRELOAD: %s\n", ldPreload);
