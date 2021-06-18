@@ -1,0 +1,25 @@
+# Maintainer: Martijn Braam <martijn@brixit.nl>
+pkgname=postmarketos-backup
+pkgver=1.0.0
+pkgrel=0
+pkgdesc="Test for pmos backuo"
+url="https://gitlab.com/postmarketOS/postmarketos-backup"
+arch="noarch"
+license="GPL-3.0-or-later"
+depends="python3 py3-gobject3 gtk+3.0 libhandy1"
+makedepends="py3-setuptools glib-dev libhandy1-dev meson"
+source="https://gitlab.com/postmarketOS/postmarketos-backup/-/archive/$pkgver/postmarketos-backup-$pkgver.tar.gz"
+options="!check" # There's no testsuite
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+ed0727c85867c84752c53f0acfa1a95a8e301538954cabe061805de17ad9a8a353db7bc8f4e7abee3883fa8480cab15311043fe07f93f22229b3fb77be7523dd  postmarketos-backup-1.0.0.tar.gz
+"
