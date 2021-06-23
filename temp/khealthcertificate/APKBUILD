@@ -1,0 +1,40 @@
+# Contributor: Luca Weiss <luca@z3ntu.xyz>
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
+pkgname=khealthcertificate
+pkgver=0_git20210623
+_commit="4b2cf8ae3289598d47d97edbb9756c56635f1174"
+pkgrel=0
+pkgdesc="Handling of digital vaccination, test and recovery certificates"
+url="https://invent.kde.org/pim/khealthcertificate"
+arch="all"
+license="LGPL-2.0-or-later"
+makedepends="cmake extra-cmake-modules karchive-dev kcodecs-dev"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://invent.kde.org/pim/khealthcertificate/-/archive/$_commit/khealthcertificate-$_commit.tar.gz"
+builddir="$srcdir/khealthcertificate-$_commit"
+
+build() {
+	if [ "$CBUILD" != "$CHOST" ]; then
+		CMAKE_CROSSOPTS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
+	fi
+	cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True \
+		-DCMAKE_BUILD_TYPE=None \
+		$CMAKE_CROSSOPTS .
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+66a255c085c117069479c5f6c58c888f8981eab8ba746946ff331c94927b076eb1e26addc99433fe0df8b45d58c7266d98efc14e13ab7ba5acf136028c7387a6  khealthcertificate-4b2cf8ae3289598d47d97edbb9756c56635f1174.tar.gz
+"
