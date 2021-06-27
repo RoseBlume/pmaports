@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # Enable autostart of deferred initcalls (needed to bring Wi-Fi online)
+# deferred-initcalls comes from postmarketos-base package
 rc-update -q add deferred-initcalls sysinit
 
 # Explicitly specify wlan device. Without this, p2p0 will be
@@ -9,7 +10,7 @@ if ! grep -q "i wlan0" /etc/conf.d/wpa_supplicant ; then
 	sed -i 's/-Dwext,nl80211/-Dwext,nl80211 -i wlan0/' /etc/conf.d/wpa_supplicant
 fi
 
-# Replace sshd with dropbear (workaround for sshd failure on downstream
-# kernels, see issue #808 https://gitlab.com/postmarketOS/pmaports/-/issues/808 )
-rc-update -q del sshd default
-rc-update -q add dropbear default
+# Append Android mount points to fstab, if needed
+if ! grep -q "# Android specific mount points:" /etc/fstab ; then
+	cat /etc/fstab.android >> /etc/fstab
+fi
