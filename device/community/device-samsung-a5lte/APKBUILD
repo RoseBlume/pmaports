@@ -4,14 +4,14 @@
 pkgname=device-samsung-a5lte
 pkgdesc="Samsung Galaxy A5 (SM-A500F)"
 pkgver=4
-pkgrel=0
+pkgrel=1
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base mkbootimg soc-qcom-msm8916"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo touchkey-leds-off.start"
 subpackages="
 	$pkgname-kernel-mainline:kernel_mainline
 	$pkgname-kernel-mainline-modem:kernel_mainline_modem
@@ -25,6 +25,10 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	# Script to power off touchkey leds on startup
+	install -Dm755 "$startdir"/touchkey-leds-off.start \
+		"$pkgdir"/etc/local.d/touchkey-leds-off.start
 }
 
 kernel_mainline() {
@@ -52,4 +56,7 @@ nonfree_firmware_modem() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="f8966469bc1a5b51043e7415312896fea7b480808c4ee3e8d5049b41363f584b4664a752527399c888acac0fb9ab986874174c728b0599556f61afb5e7d678d8  deviceinfo"
+sha512sums="
+f8966469bc1a5b51043e7415312896fea7b480808c4ee3e8d5049b41363f584b4664a752527399c888acac0fb9ab986874174c728b0599556f61afb5e7d678d8  deviceinfo
+ccca0d9ac87074888fae68146d7967042332c2894078c537ad30dd7e77711ffa5234641a60495a21004485540cc3880687baffaf7fd1feb063ea7d57f7de93cf  touchkey-leds-off.start
+"
