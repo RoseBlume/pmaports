@@ -1,0 +1,63 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname=linux-pantech-ef71
+pkgver=3.18.140
+pkgrel=0
+pkgdesc="SKY I'm Back kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="pantech-ef71"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	flex
+	openssl-dev
+	perl
+	gcc6
+"
+
+# Compiler: GCC 6 (doesn't boot when compiled with newer versions)
+if [ "${CC:0:5}" != "gcc6-" ]; then
+	CC="gcc6-$CC"
+	HOSTCC="gcc6-gcc"
+	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
+fi
+
+# Source
+_repository="android_kernel_pantech_msm8937"
+_commit="43a62d22c054a8cda4361de80a98726f7a6f9199"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/HexagonWin/$_repository/archive/$_commit.tar.gz
+	$_config
+	yylloc.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+}
+
+sha512sums="
+11e4f6cbc2d930da4119dc7c38b2d7475a913f2f27b978504b68fc422f9df179411b98afd66751b40001cc7e2319391fe814cad9b9e4ed0c8b6fd101a53cd4a2  linux-pantech-ef71-43a62d22c054a8cda4361de80a98726f7a6f9199.tar.gz
+8cbc1d214c43820e86e2974f3f9ad979a84569db8c16f46a160afea8f91e9ef8cb4ba8ef7bb250d7e084ae3d1a6f5927e4a49d68c74b8c33310fb48fc9c743f6  config-pantech-ef71.aarch64
+f81102a27fecb39d41907143016d0219a85b571c1bfa68bc0675f6eade4749b3dd2c955c268c6109a78edc2c2ac1519b33d8c647f66916eae19543b18d30b9b1  yylloc.patch
+"

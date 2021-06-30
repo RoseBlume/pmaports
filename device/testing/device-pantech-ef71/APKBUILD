@@ -1,0 +1,27 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-pantech-ef71
+pkgdesc="SKY I'm Back"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-pantech-ef71
+	mesa-dri-gallium
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="28adbeb90c7629affa040f7704f7683666db2c410654b93af90a810d71f0e4a9a4e9b2867eed40e9ca17895d1e5ef9ab12e4b65659da9fbd930446f44fb6467e  deviceinfo"

@@ -1,0 +1,94 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm/configs/(CHANGEME!)
+
+pkgname=linux-samsung-tre3calte
+pkgver=3.10.9
+pkgrel=0
+pkgdesc="Samsung Galaxy Note 4 S-LTE kernel fork"
+arch="armv7"
+_carch="arm"
+_flavor="samsung-tre3calte"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	dtbtool-exynos
+	flex
+	openssl-dev
+	perl
+	xz
+	linux-headers
+	gcc6
+"
+
+# Compiler: GCC 6 (doesn't boot when compiled with newer versions)
+if [ "${CC:0:5}" != "gcc6-" ]; then
+	CC="gcc6-$CC"
+	HOSTCC="gcc6-gcc"
+	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
+fi
+
+# Source
+_repository="android_kernel_samsung_universal5433"
+_commit="0fb78e0d5caf4e8d97f3ad0fbdb9be7c2d5f29ed"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/universal5433/$_repository/archive/$_commit.tar.gz
+	$_config
+	gcc7-give-up-on-ilog2-const-optimizations.patch
+	gcc8-fix-put-user.patch
+	tima_uevent.patch
+	0007-usb_gadget-set-random-rndis-host-MAC-address-to-prev.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	mkdir -p out/security/tima_uevent/
+	touch out/security/tima_uevent/.tima_uevent.o.d
+	mkdir -p out/drivers/sensorhub/brcm/factory/
+	touch out/drivers/sensorhub/brcm/factory/.accel_icm20610.o.d
+	mkdir -p out/drivers/sensorhub/brcm/factory/
+	touch out/drivers/sensorhub/brcm/factory/.gyro_icm20610.o.d
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+
+	# Master DTB (deviceinfo_bootimg_qcdt)
+	dtbTool-exynos -o "$_outdir/arch/$_carch/boot"/dt.img \
+		$(find "$_outdir/arch/$_carch/boot/dts/" -name *tre3calte*.dtb)
+	
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" CFLAGS_MODULE="-fno-pic" \
+	KBUILD_BUILD_VERSION="$((pkgrel + 1))-postmarketOS" modules
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+	install -Dm644 "$_outdir/arch/$_carch/boot"/dt.img \
+		"$pkgdir"/boot/dt.img
+
+	# module package
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1))-postmarketOS" \
+		INSTALL_MOD_PATH="$pkgdir" INSTALL_MOD_STRIP=1 \
+		modules_install
+}
+
+sha512sums="
+5ab586dba0beff14f03b5a08c5f4161ce2bd860ffd667eb6064cd90679ea9e9ffd94bff2e38fbf189d2e6971d34e03b220e84ae6ce48f9cd797c23b6b2e872e0  linux-samsung-tre3calte-0fb78e0d5caf4e8d97f3ad0fbdb9be7c2d5f29ed.tar.gz
+b1ac447665442d6cfebf96ce926e9844c8e17a61ea58442c20835970aa32d4d1d7ce80d50e5b52078746fc1dcc143c4ddb2dac61ed4dfe47c4d60bef01e973dd  config-samsung-tre3calte.armv7
+77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+65463af35cf55f5ccdaf18c86a1f59dc3e6e8b808e5ff1537cb26eaaa1b064036c88363f68eadeba28b34ff38dc427d0596c5d421ccdc77659e0642daeb0b3d4  tima_uevent.patch
+128825721a6b4afca494520f6f60c47e309e922fd2a8b97fd5dea5f56058fb447618b33a65778611ad52067f5f880af07f06e092c75640efbcac78320b4b6568  0007-usb_gadget-set-random-rndis-host-MAC-address-to-prev.patch
+"
