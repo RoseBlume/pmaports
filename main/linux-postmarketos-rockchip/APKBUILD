@@ -10,15 +10,19 @@
 # boot failure
 
 pkgname=linux-postmarketos-rockchip
-pkgver=5.11.2
-pkgrel=1
+pkgver=5.13.0
+pkgrel=0
 pkgdesc="Mainline kernel for rockchip devices"
 arch="aarch64"
 _carch="arm64"
 _flavor="${pkgname#linux-}"
 url="https://kernel.org"
 license="GPL-2.0-only"
-options="!strip !check !tracedeps pmb:cross-native pmb:kconfigcheck-anbox"
+options="!strip !check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-anbox
+	pmb:kconfigcheck-nftables
+	"
 makedepends="
 	bison
 	devicepkg-dev
@@ -66,5 +70,7 @@ package() {
 }
 
 
-sha512sums="16090ec6dea7a8c417ca7483b296902c9b55b423482ad8a881dffcaae76411806bc9502373efd6a51b0acefec3a44c19c5a7d42c5b76c1321183a4798a5959d3  linux-5.11.2.tar.xz
-25103c98349c1e91e2161b2cfe995f4fc376483d7660f47000cc67db2c0698bcd77cecda73379d9114a26c56d338bda1081f2a2faee63ee420d95434bda56138  config-postmarketos-rockchip.aarch64"
+sha512sums="
+a8edf97e9d38a49f1be2bde1e29ad96274bb2c6f7e8a2bebaa1161dd4df9cabcbaec4ff644c45bee94f86ae47725087d6deed0cd954209cec717621d137db85e  linux-5.13.tar.xz
+344c40c5db68bf73f0924aa6ddc258517913a36250be47ca3a90ed5277977459a98c74a1b33a950c7dbeeeb094e239abd135fcf8da3b9632a47430a9ac46a343  config-postmarketos-rockchip.aarch64
+"
