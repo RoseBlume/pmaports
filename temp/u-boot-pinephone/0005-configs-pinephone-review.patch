@@ -1,0 +1,39 @@
+From 01cab96703c7c880bc1c831d213fd6b35a71dc10 Mon Sep 17 00:00:00 2001
+From: Bobby The Builder <bob@najdan.com>
+Date: Tue, 15 Jun 2021 17:18:57 -0400
+Subject: [PATCH 5/5] configs: pinephone review
+
+reorder and chery-pick configs for pinephone and pinetab
+---
+ configs/pinephone_defconfig | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/configs/pinephone_defconfig b/configs/pinephone_defconfig
+index 64ecef59c9..369690ac38 100644
+--- a/configs/pinephone_defconfig
++++ b/configs/pinephone_defconfig
+@@ -1,12 +1,14 @@
+-CONFIG_ARM=y
+ CONFIG_ARCH_SUNXI=y
+-CONFIG_SPL=y
+-CONFIG_MACH_SUN50I=y
+-CONFIG_SUNXI_DRAM_LPDDR3_STOCK=y
+-CONFIG_DRAM_CLK=552
++CONFIG_ARM=y
++CONFIG_BOOTDELAY=0
++CONFIG_DEFAULT_DEVICE_TREE="sun50i-a64-pinephone-1.2"
++CONFIG_DRAM_CLK=528
+ CONFIG_DRAM_ZQ=3881949
++CONFIG_MACH_SUN50I=y
+ CONFIG_MMC_SUNXI_SLOT_EXTRA=2
++CONFIG_OF_LIST="sun50i-a64-pinephone-1.1 sun50i-a64-pinephone-1.2"
+ CONFIG_PINEPHONE_DT_SELECTION=y
+-CONFIG_DEFAULT_DEVICE_TREE="sun50i-a64-pinephone-1.2"
++CONFIG_PINEPHONE_LEDS=y
++CONFIG_SPL=y
++CONFIG_SUNXI_DRAM_LPDDR3_STOCK=y
+ # CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
+-CONFIG_OF_LIST="sun50i-a64-pinephone-1.1 sun50i-a64-pinephone-1.2"
+-- 
+2.31.1
+

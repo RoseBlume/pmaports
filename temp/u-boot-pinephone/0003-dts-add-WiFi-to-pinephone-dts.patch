@@ -1,0 +1,59 @@
+From e0dec600a8f6155d83655d7782989989411dc404 Mon Sep 17 00:00:00 2001
+From: Bobby The Builder <bob@najdan.com>
+Date: Thu, 10 Jun 2021 16:10:27 -0400
+Subject: [PATCH 3/5] dts: add WiFi to pinephone dts
+
+---
+ arch/arm/dts/sun50i-a64-pinephone.dtsi | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/arch/arm/dts/sun50i-a64-pinephone.dtsi b/arch/arm/dts/sun50i-a64-pinephone.dtsi
+index 25150aba74..86d55e38d8 100644
+--- a/arch/arm/dts/sun50i-a64-pinephone.dtsi
++++ b/arch/arm/dts/sun50i-a64-pinephone.dtsi
+@@ -14,6 +14,7 @@
+ / {
+ 	aliases {
+ 		serial0 = &uart0;
++		ethernet0 = &rtl8723cs;
+ 	};
+ 
+ 	backlight: backlight {
+@@ -49,6 +50,13 @@
+ 		};
+ 	};
+ 
++	reg_vbat_wifi: vbat-wifi {
++		compatible = "regulator-fixed";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-name = "vbat-wifi";
++	};
++
+ 	speaker_amp: audio-amplifier {
+ 		compatible = "simple-audio-amplifier";
+ 		enable-gpios = <&pio 2 7 GPIO_ACTIVE_HIGH>; /* PC7 */
+@@ -195,6 +203,20 @@
+ 	status = "okay";
+ };
+ 
++&mmc1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&mmc1_pins>;
++	vmmc-supply = <&reg_vbat_wifi>;
++	vqmmc-supply = <&reg_dldo4>;
++	bus-width = <4>;
++	non-removable;
++	status = "okay";
++
++	rtl8723cs: wifi@1 {
++		reg = <1>;
++	};
++};
++
+ &mmc2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mmc2_pins>;
+-- 
+2.31.1
+

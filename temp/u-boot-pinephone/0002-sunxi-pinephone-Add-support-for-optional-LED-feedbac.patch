@@ -1,0 +1,63 @@
+From a4e044a51b915abae4f08e953a58396f7e128a68 Mon Sep 17 00:00:00 2001
+From: Ondrej Jirman <megous@megous.com>
+Date: Mon, 13 Jan 2020 17:23:21 +0100
+Subject: [PATCH 2/5] sunxi: pinephone: Add support for optional LED feedback
+ during boot
+
+Signed-off-by: Ondrej Jirman <megous@megous.com>
+---
+ arch/arm/mach-sunxi/Kconfig |  5 +++++
+ board/sunxi/board.c         | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/arch/arm/mach-sunxi/Kconfig b/arch/arm/mach-sunxi/Kconfig
+index 0135575ca1..5e32d6fee7 100644
+--- a/arch/arm/mach-sunxi/Kconfig
++++ b/arch/arm/mach-sunxi/Kconfig
+@@ -1,5 +1,10 @@
+ if ARCH_SUNXI
+ 
++config PINEPHONE_LEDS
++	bool "Notify boot status via LEDs on PinePhone"
++	---help---
++	LED boot notification.
++
+ config SPL_LDSCRIPT
+ 	default "arch/arm/cpu/armv7/sunxi/u-boot-spl.lds" if !ARM64
+ 
+diff --git a/board/sunxi/board.c b/board/sunxi/board.c
+index 21651a1bfc..0a93e00c9e 100644
+--- a/board/sunxi/board.c
++++ b/board/sunxi/board.c
+@@ -645,6 +645,12 @@ void sunxi_board_init(void)
+ {
+ 	int power_failed = 0;
+ 
++#ifdef CONFIG_PINEPHONE_LEDS
++	/* PD18:G PD19:R PD20:B */
++	gpio_request(SUNXI_GPD(18), "led:green");
++	gpio_direction_output(SUNXI_GPD(18), 1);
++#endif
++
+ #ifdef CONFIG_SY8106A_POWER
+ 	power_failed = sy8106a_set_vout1(CONFIG_SY8106A_VOUT1_VOLT);
+ #endif
+@@ -982,6 +988,15 @@ int ft_board_setup(void *blob, struct bd_info *bd)
+ 	if (r)
+ 		return r;
+ #endif
++
++#ifdef CONFIG_PINEPHONE_LEDS
++	gpio_request(SUNXI_GPD(18), "led:green");
++	gpio_direction_output(SUNXI_GPD(18), 0);
++
++	gpio_request(SUNXI_GPD(19), "led:blue");
++	gpio_direction_output(SUNXI_GPD(19), 1);
++#endif
++
+ 	return 0;
+ }
+ 
+-- 
+2.31.1
+
