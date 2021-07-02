@@ -57,6 +57,7 @@ build() {
 	unset LDFLAGS
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+
 }
 
 package() {
@@ -67,10 +68,11 @@ package() {
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs-$_flavor"
+	ls -lah "$pkgdir/boot"
 }
 
 
 sha512sums="
 a8edf97e9d38a49f1be2bde1e29ad96274bb2c6f7e8a2bebaa1161dd4df9cabcbaec4ff644c45bee94f86ae47725087d6deed0cd954209cec717621d137db85e  linux-5.13.tar.xz
-344c40c5db68bf73f0924aa6ddc258517913a36250be47ca3a90ed5277977459a98c74a1b33a950c7dbeeeb094e239abd135fcf8da3b9632a47430a9ac46a343  config-postmarketos-rockchip.aarch64
+d6f0bc90f1cdb5111d97db84714f3c80d01347706ad799ad0872c5a3b14cb5cbeb71a82e5c84291adb5b72af570b27868a7e1d36ee785265d52eb0d9376dfa52  config-postmarketos-rockchip.aarch64
 "
