@@ -1,8 +1,7 @@
 # Contributor: Julian P Samaroo <jpsamaroo@jpsamaroo.me>
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=mmsd-tng
-pkgver=1.0_beta4
-_pkgver=${pkgver%%_*}.${pkgver##*_}
+pkgver=1.0
 pkgrel=0
 pkgdesc="Daemon for receiving and managing GSM MMS messages"
 url="https://gitlab.com/kop316/mmsd"
@@ -21,10 +20,10 @@ makedepends="
 	modemmanager-dev
 	"
 source="
-	$pkgname-$pkgver.tar.gz::https://gitlab.com/kop316/mmsd/-/archive/${_pkgver}/mmsd-${_pkgver}.tar.gz
+	$pkgname-$pkgver.tar.gz::http://gitlab.com/kop316/mmsd/-/archive/${pkgver}/mmsd-${pkgver}.tar.gz
 	mmsd.desktop
 	"
-builddir="$srcdir/${pkgname%%-tng}-$_pkgver"
+builddir="$srcdir/${pkgname%%-tng}-$pkgver"
 
 build() {
 	abuild-meson . output
@@ -42,6 +41,6 @@ package() {
 }
 
 sha512sums="
-7c4fa5423f48cb160f353ad48e4908a6b4b5d3e106f63a24e2b611d8a094d6dff7e1957cc8b51534c6ca6bc3a96c89d613c37549474529b0b5f5151f572f2541  mmsd-tng-1.0_beta4.tar.gz
+0e020e159b74ad12dfe28259d98bfd40daa1cd53323f030d442c81ec38ac522fa828203438bc71965c004ec825fc5b2bd71bd7282bb2f69ece417badcdacde1b  mmsd-tng-1.0.tar.gz
 13777f0b9572687aa4686e4f984f5ad075b3bc78638d444b79b9b37d961d470a420409cfb610cc6bb20fb0352061f52556fc68fb2b45e8878bdc8fe8313b5c2a  mmsd.desktop
 "

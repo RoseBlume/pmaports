@@ -1,0 +1,24 @@
+From 2bcd2451f12625e45aeb64f22550806b0da01f2f Mon Sep 17 00:00:00 2001
+From: Bobby The Builder <bob@najdan.com>
+Date: Thu, 15 Jul 2021 12:49:05 -0400
+Subject: [PATCH] build fix
+
+---
+ src/users/chatty-mm-account.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/users/chatty-mm-account.c b/src/users/chatty-mm-account.c
+index c695f62..e27e8a6 100644
+--- a/src/users/chatty-mm-account.c
++++ b/src/users/chatty-mm-account.c
+@@ -266,6 +266,7 @@ chatty_mm_account_recieve_mms_cb (ChattyMmAccount *self,
+   ChattyMmBuddy *senderbuddy;
+   ChattyMsgDirection message_dir;
+   ChattyMessage   *messagecheck;
++  guint position;
+ 
+   /* See if a chat exists already for this MMS */
+   chat = chatty_mm_account_find_chat (self, recipientlist);
+-- 
+2.31.1
+
