@@ -1,0 +1,64 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname=linux-meizu-mblu2
+pkgver=3.18.119
+pkgrel=0
+pkgdesc="Meizu M2 kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="meizu-mblu2"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	flex
+	openssl-dev
+	perl
+	xz
+	gcc6
+	linux-headers
+	python2
+"
+# Compiler: GCC 6 (doesn't boot when compiled with newer versions)
+if [ "${CC:0:5}" != "gcc6-" ]; then
+	CC="gcc6-$CC"
+	HOSTCC="gcc6-gcc"
+	CROSS_COMPILE="gcc6-$CROSS_COMPILE"
+fi
+
+
+# Source
+_repository="android_kernel_meizu_mblu2"
+_commit="5321bc16e8d82b6060e3ebf25ad9484f544d9300"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/M2Repos/$_repository/archive/$_commit.tar.gz
+	$_config
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+}
+
+sha512sums="
+3770c0d91ef562e9e7ae1ec5eefe66a9bd9c99f8f9ad9ec35eb0c8f43d2d4ae72bbdc328635b7d1a4c57e6483df49f949c829f270cb70b3f8c46957e858f327b  linux-meizu-mblu2-5321bc16e8d82b6060e3ebf25ad9484f544d9300.tar.gz
+89d1aa17a517a9202935847baeaa7dbbaa8fe067169ff74979e190d880f664236a2898195dcf090278fef36c556dcfd5410428528be038005f9efb53dff17132  config-meizu-mblu2.aarch64
+"
