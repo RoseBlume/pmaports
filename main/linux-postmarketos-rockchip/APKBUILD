@@ -33,6 +33,9 @@ makedepends="
 	perl
 	rsync
 	xz
+	clang
+	lld
+	llvm11
 	"
 
 # Source
@@ -41,6 +44,10 @@ case $pkgver in
 	*.*.*)	_kernver=${pkgver%.0};;
 	*.*)	_kernver=$pkgver;;
 esac
+
+export LLVM=1
+export LLVM_IAS=1
+
 source="
 	https://cdn.kernel.org/pub/linux/kernel/v${_kernver%%.*}.x/linux-$_kernver.tar.xz
 	$_config
@@ -55,7 +62,7 @@ prepare() {
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
+	make ARCH="$_carch" CC=clang \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
 
 }
@@ -74,5 +81,5 @@ package() {
 
 sha512sums="
 a8edf97e9d38a49f1be2bde1e29ad96274bb2c6f7e8a2bebaa1161dd4df9cabcbaec4ff644c45bee94f86ae47725087d6deed0cd954209cec717621d137db85e  linux-5.13.tar.xz
-d6f0bc90f1cdb5111d97db84714f3c80d01347706ad799ad0872c5a3b14cb5cbeb71a82e5c84291adb5b72af570b27868a7e1d36ee785265d52eb0d9376dfa52  config-postmarketos-rockchip.aarch64
+ade671835e98db3605741fca9c0e5f440b4d97c8289ef81267ad765c6d3c895e011aa8e9b3cc5a2575689384b3daf0d6d93815670fa4c6be94fcfcd031b1e281  config-postmarketos-rockchip.aarch64
 "
