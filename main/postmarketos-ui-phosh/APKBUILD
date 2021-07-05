@@ -1,7 +1,7 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-phosh
 pkgver=6
-pkgrel=7
+pkgrel=8
 pkgdesc="(Wayland) Mobile UI developed for the Librem 5 (works only with numeric passwords!)"
 url="https://puri.sm"
 arch="noarch !armhf"
@@ -49,7 +49,6 @@ source="
 	dconf-profile-postmarketos
 	gtk-app-wayland.sh
 	mimeapps.list
-	mpris-proxy.desktop
 	osk.sh
 	pipewire.desktop
 	qt-tweaks.sh
@@ -71,8 +70,6 @@ package() {
 		"$pkgdir"/etc/dconf/db/postmarketos.d/01-phoc-scaling
 	install -Dm755 "$srcdir"/02-gnome-software-no-first-run \
 		"$pkgdir"/etc/dconf/db/postmarketos.d/02-gnome-software-no-first-run
-	install -Dm644 "$srcdir"/mpris-proxy.desktop \
-		"$pkgdir"/etc/xdg/autostart/mpris-proxy.desktop
 }
 
 qt_tweaks() {
@@ -97,7 +94,6 @@ sha512sums="77a8aec2a43829422481c17beaf4224d686cc973f80d72be383103a6be0bf5d06894
 e00756c2c056f68123d877f2f6a5ad3434ca7851095f021c26831c081728b821cf7947ba08d6742eee51d93dc83859a7ead553f4dcbc8b6fcefa33ae344ba178  dconf-profile-postmarketos
 57793bb079c76ba3bdcfca7880aa887de11fe80e7a05557b78435e57feabab70fbaeedc42da3aec6f914c35bba8e8ee9918367516eb45ee247f63f694624f179  gtk-app-wayland.sh
 0a376140da36538fd73cbd8305ff97b54d2b82831bab64a3b7167019f1d005752eda4e81ef7c19fd64fcba3a775c9e87fca1a250b55a522a0ee9728ab712f089  mimeapps.list
-9276b4282860229da47b8b690307a8bf8907370fcdebf0be4c2b71f933593e115572e61d846cb13821d51859ec9e53af6de250afa953b42c06cf0ad4905377c3  mpris-proxy.desktop
 4113ef59267e88d205ef1e1aec0ed11ccf817a25c232f2006a538b56fb466fad5025ad445d109e367ca92ee98d9b25f1f9a1a4b9bae2cb80df12a3739d62d10a  osk.sh
 e499c5440e1690447ea0840898b577083be0387264e0b5c65e93ee5b4bdf7a01ad51814be4168d75e167451baebcd4cc37a55920a4240249b268dad8b180f540  pipewire.desktop
 6e193eca3961a78d47b4656892eae34d019d9317a255a201f5ea61e3300caff04c526a27cd98d0edc072b36e3eaf3a1768f4cd27c5e2be8b19c167d535c820a6  qt-tweaks.sh"
