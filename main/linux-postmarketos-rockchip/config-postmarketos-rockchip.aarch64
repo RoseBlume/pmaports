@@ -5076,6 +5076,7 @@ CONFIG_88EU_AP_MODE=y
 #
 # Android
 #
+CONFIG_ASHMEM=y
 # end of Android
 
 # CONFIG_STAGING_BOARD is not set
@@ -5849,7 +5850,11 @@ CONFIG_RAS=y
 #
 # Android
 #
-# CONFIG_ANDROID is not set
+CONFIG_ANDROID=y
+CONFIG_ANDROID_BINDER_IPC=y
+# CONFIG_ANDROID_BINDERFS is not set
+CONFIG_ANDROID_BINDER_DEVICES="binder"
+# CONFIG_ANDROID_BINDER_IPC_SELFTEST is not set
 # end of Android
 
 # CONFIG_LIBNVDIMM is not set
