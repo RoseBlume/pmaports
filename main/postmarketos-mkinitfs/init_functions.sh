@@ -506,6 +506,11 @@ run_osk_sdl() {
 			;;
 	esac
 
+	if [ -x /usr/bin/phys-keyboard-present ] && [ ! "$(/usr/bin/phys-keyboard-present)" ]; then
+			OSK_EXTRA_ARGS="$OSK_EXTRA_ARGS -x"
+		fi
+
+	# shellcheck disable=SC2086
 	osk-sdl $OSK_EXTRA_ARGS -n root -d "$partition" -c /etc/osk.conf \
 		-o /boot/osk.conf -v > /osk-sdl.log 2>&1
 }
