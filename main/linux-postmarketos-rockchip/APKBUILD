@@ -32,6 +32,7 @@ makedepends="
 	openssl-dev
 	perl
 	rsync
+	gzip
 	xz
 	clang
 	lld
@@ -75,9 +76,8 @@ package() {
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs-$_flavor"
-	gzip "$pkgdir"/boot/vmlinuz-postmarketos-rockchip
-	mv "$pkgdir"/boot/vmlinuz-postmarketos-rockchip.gz \ 
-		"$pkgdir"/boot/vmlinuz-postmarketos-rockchip
+	gzip -v "$pkgdir"/boot/vmlinuz-postmarketos-rockchip
+	mv "$pkgdir"/boot/vmlinuz-postmarketos-rockchip.gz "$pkgdir"/boot/vmlinuz-postmarketos-rockchip
 }
 
 
