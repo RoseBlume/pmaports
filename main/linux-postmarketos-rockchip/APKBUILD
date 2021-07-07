@@ -75,7 +75,9 @@ package() {
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs-$_flavor"
-	ls -lah "$pkgdir/boot"
+	gzip "$pkgdir"/boot/vmlinuz-postmarketos-rockchip
+	mv "$pkgdir"/boot/vmlinuz-postmarketos-rockchip.gz \ 
+		"$pkgdir"/boot/vmlinuz-postmarketos-rockchip
 }
 
 
