@@ -3,7 +3,7 @@
 # Co-Maintainer: Minecrell <minecrell@minecrell.net>
 pkgname=device-samsung-a5lte
 pkgdesc="Samsung Galaxy A5 (SM-A500F)"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -11,12 +11,16 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base mkbootimg soc-qcom-msm8916"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="
+	95-rt5033-battery-refresh.rules
+	deviceinfo
+"
 subpackages="
 	$pkgname-kernel-mainline:kernel_mainline
 	$pkgname-kernel-mainline-modem:kernel_mainline_modem
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-nonfree-firmware-modem:nonfree_firmware_modem
+	$pkgname-upower
 "
 
 build() {
@@ -52,4 +56,13 @@ nonfree_firmware_modem() {
 	mkdir "$subpkgdir"
 }
 
-sha512sums="f8966469bc1a5b51043e7415312896fea7b480808c4ee3e8d5049b41363f584b4664a752527399c888acac0fb9ab986874174c728b0599556f61afb5e7d678d8  deviceinfo"
+upower() {
+	install_if="$pkgname=$pkgver-r$pkgrel upower"
+	install -Dm644 "$srcdir"/95-rt5033-battery-refresh.rules \
+		"$subpkgdir"/etc/udev/rules.d/95-rt5033-battery-refresh.rules
+}
+
+sha512sums="
+30662473480a17abf44038dcd128aebce433d16df5eb1d6c3c05d3e183cfe3553e171cd1bed35360567701531cd1c0a1ef0069201ffcff66227957d12f764fe6  95-rt5033-battery-refresh.rules
+f8966469bc1a5b51043e7415312896fea7b480808c4ee3e8d5049b41363f584b4664a752527399c888acac0fb9ab986874174c728b0599556f61afb5e7d678d8  deviceinfo
+"
