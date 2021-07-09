@@ -1,0 +1,49 @@
+# Forked from Alpine to package latest master for new features
+pkgname=libqmi
+pkgver=1.29.9_git20210802
+pkgrel=0
+pkgdesc="QMI modem protocol helper library"
+url="https://www.freedesktop.org/wiki/Software/libqmi"
+arch="armv7 aarch64"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+makedepends="glib-dev gtk-doc libgudev-dev libmbim-dev libqrtr-glib-dev
+	linux-headers python3"
+makedepends="$makedepends automake autoconf libtool"
+subpackages="
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-bash-completion
+	"
+_commit=d780ddf3b33791b072bfe4a8313054677f6d6900
+source="https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$_commit/libqmi-$_commit.tar.gz"
+builddir="$srcdir/libqmi-$_commit"
+
+prepare() {
+	default_prepare
+	autoreconf -fi
+}
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-static \
+		--enable-mbim-qmux \
+		--enable-qrtr
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+7dc896ad7686424e06ac6399c508dbf686ebe447cba8fe0f2b1ccb207ab2a9e3a5a3123774222bfeca0b20b56f4cf25814718674b0d66c314b2d7cf383c7e114  libqmi-d780ddf3b33791b072bfe4a8313054677f6d6900.tar.gz
+"
