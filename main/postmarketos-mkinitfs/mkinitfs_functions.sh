@@ -242,6 +242,13 @@ get_binaries_extra()
 				/usr/lib/xorg/modules/dri/${deviceinfo_mesa_driver}_dri.so
 			"
 		fi
+
+		if [ -x /usr/bin/phys-keyboard-present ]; then
+			BINARIES_EXTRA="
+				$BINARIES_EXTRA
+				/usr/bin/phys-keyboard-present
+			"
+		fi
 	fi
 
 	tmp1=$(mktemp /tmp/mkinitfs.XXXXXX)
