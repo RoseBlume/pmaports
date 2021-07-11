@@ -1,0 +1,59 @@
+# Reference: <https://github.com/rlawoehd187/android_kernel_lg_msm8974>
+# Kernel config based on: arch/arm/configs/lineageos_f320_defconfig
+
+pkgname=linux-lg-f320
+pkgver=3.4.113
+pkgrel=0
+pkgdesc="LG G2 (Korean) kernel fork"
+arch="armv7"
+_carch="arm"
+_flavor="lg-f320"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl dtbtool xz"
+
+# Source
+_repository="android_kernel_lge_msm8974"
+_commit="32ecac5f63f0da0b76ff897af5fc437b3aaea4f2"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/rlawoehd187/$_repository/archive/$_commit.tar.gz
+	$_config
+	gcc7-give-up-on-ilog2-const-optimizations.patch
+	gcc8-fix-put-user.patch
+	gcc10-extern_YYLOC_global_declaration.patch
+	kernel-use-the-gnu89-standard-explicitly.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+
+	# Master DTB (deviceinfo_bootimg_qcdt)
+	dtbTool -p scripts/dtc/ -o "$_outdir/arch/$_carch/boot"/dt.img \
+		"$_outdir/arch/$_carch/boot/"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+	install -Dm644 "$_outdir/arch/$_carch/boot"/dt.img \
+		"$pkgdir"/boot/dt.img
+}
+
+sha512sums="
+dbf7139b9c537abd2b49f25ba60bf465b20947fe0095c64ff2655d7951b86199b27056dbc235181e21393b9e385661b72f76d6971e270e7f4350c63b50854fd5  linux-lg-f320-32ecac5f63f0da0b76ff897af5fc437b3aaea4f2.tar.gz
+349f64dcf437a58618d423a0ee23a1e874e75ff8bd7f0c3ada7b9b8630844fe1649d9cf2b6faa8f74012647181cf263679d4b103ee1734a8874ade434f0135ff  config-lg-f320.armv7
+77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+2b48f1bf0e3f70703d2cdafc47d5e615cc7c56c70bec56b2e3297d3fa4a7a1321d649a8679614553dde8fe52ff1051dae38d5990e3744c9ca986d92187dcdbeb  gcc10-extern_YYLOC_global_declaration.patch
+ad0182a483791fc88e058838bc331b2f04a75ba291e763767babdb815efadfc3b4fda97e69e2e3f00a426cabea088e35297a92bd287592597d1e309be68ee92c  kernel-use-the-gnu89-standard-explicitly.patch
+"
