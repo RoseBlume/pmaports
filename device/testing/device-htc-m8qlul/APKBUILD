@@ -1,0 +1,22 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-htc-m8qlul
+pkgdesc="HTC One M8s"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-htc-m8qlul mkbootimg mesa-dri-gallium"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="24ea139bdd27257723278081ecbbfb515bc789f93e718f22847eb5b2f32ceefe03384889fddd44964219cb7ff570a147931de8b677d66cc4dbc2fa0f696f7e65  deviceinfo"

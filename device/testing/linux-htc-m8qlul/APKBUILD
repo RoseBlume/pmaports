@@ -1,0 +1,53 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/m8qlul_vz_defconfig
+
+pkgname=linux-htc-m8qlul
+pkgver=3.10.49
+pkgrel=0
+pkgdesc="HTC One M8s kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="htc-m8qlul"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl dtbtool linux-headers"
+
+# Source
+_repository="android_kernel_htc_msm8939"
+_commit="5449372d69b88a98f0c99bab759bf41cbb8641a9"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/M8s-dev/$_repository/archive/$_commit.tar.gz
+	$_config
+	gcc8-fix-put-user.patch
+	gcc10-extern_YYLOC_global_declaration.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+
+	# Master DTB (deviceinfo_bootimg_qcdt)
+	dtbTool -p scripts/dtc/ -o "$_outdir/arch/$_carch/boot"/dt.img \
+		"$_outdir/arch/$_carch/boot/"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+	install -Dm644 "$_outdir/arch/$_carch/boot"/dt.img \
+		"$pkgdir"/boot/dt.img
+}
+
+sha512sums="1e671324b18c02e0010958778b8ff439b41534735ee3f19ed1867e769f6aff90664bdf079991861e99747e6922209cf45c3ec0cd6085f3aa95228e5c40366c3d  linux-htc-m8qlul-5449372d69b88a98f0c99bab759bf41cbb8641a9.tar.gz
+94b3cb874035fd61d70902caa88f0b10812b0944ef38db2802b686fa3ae4bef5441ad29a2b455b92d9ffc8c5e1ce53f3ab17b599ad980540b902d233f6fd3c26  config-htc-m8qlul.aarch64
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+2b48f1bf0e3f70703d2cdafc47d5e615cc7c56c70bec56b2e3297d3fa4a7a1321d649a8679614553dde8fe52ff1051dae38d5990e3744c9ca986d92187dcdbeb  gcc10-extern_YYLOC_global_declaration.patch"
