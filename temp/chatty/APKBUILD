@@ -2,7 +2,7 @@
 # Contributor: Danct12 <danct12@disroot.org>
 # Maintainer: Rasmus Thomsen <oss@cogitri.dev>
 pkgname=chatty
-pkgver=0.3.2_git20210713
+pkgver=0.3.3_git20210717
 pkgrel=0
 pkgdesc="A phone dialer and call handler"
 arch="aarch64"
@@ -18,11 +18,9 @@ depends="
 makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
 	evolution-data-server-dev libgee-dev folks-dev feedbackd-dev libphonenumber-dev olm-dev modemmanager-dev"
 checkdepends="appstream-glib desktop-file-utils"
-_commit="9470484588cf10c825c746c7b0c2c95ae2483125"
+_commit="ec4b6304f13ce6bbe5ce8e30b8d467bb29774395"
 # source="https://source.puri.sm/Librem5/chatty/-/archive/v$pkgver/chatty-v$pkgver.tar.gz"
-source="$pkgname-$pkgver.tar.gz::http://source.puri.sm/kop316/chatty/-/archive/$_commit/chatty-$_commit.tar.gz
-	0001-build-fix.patch
-"
+source="$pkgname-$pkgver.tar.gz::http://source.puri.sm/kop316/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
 subpackages="$pkgname-lang $pkgname-bash-completion $pkgname-dbg"
 options="!check" # Requires running Wayland compositor
 builddir="$srcdir/$pkgname-$_commit"
@@ -36,6 +34,5 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 sha512sums="
-3039e5a4c7051d36abfdc5c5dc8cbb12a56d2b440d3942ca4d9c9770894795075badfce906aa60941cc448b0f119b0d3ad12454592e20ca5a811f06b80795adf  chatty-0.3.2_git20210713.tar.gz
-83c5108fb6912b05b15c6e99f6f05992b45493847eb871e4787b303b55e4de56da691e2437946f22509b9e65552bc4bc720accbc28d87dc5b9fd401e16cb75b1  0001-build-fix.patch
+5ccee4311d86bba12f3ca84c0c2f701e9462b7fd646dd2f741c68c59a22d586cac48703067432b7670dd07c42e774a58706c54cf95dcaa3306ed1980add35c43  chatty-0.3.3_git20210717.tar.gz
 "
