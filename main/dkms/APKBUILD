@@ -1,0 +1,34 @@
+# Maintainer: Ralf Rachinger <ralfrachinger@gmail.com>
+pkgname=dkms
+pkgver=2.8.4
+pkgrel=0
+pkgdesc="Dynamic Kernel Module Support"
+url="https://github.com/dell/dkms"
+arch="noarch"
+license="GPL-2.0-or-later"
+triggers="$pkgname.trigger=/etc/dkms/triggers:/lib/modules/*"
+depends="bash gcc kmod make patch linux-headers"
+subpackages="$pkgname-doc $pkgname-bash-completion"
+source="$pkgname-$pkgver.tar.gz::https://github.com/dell/dkms/archive/v$pkgver.tar.gz
+	dkms-removemodule.sh
+"
+options="!check"
+
+
+package() {
+	make \
+	DESTDIR="$pkgdir" \
+	install
+
+	install -Dm755 "$srcdir/dkms-removemodule.sh" \
+		"$pkgdir/sbin/dkms-removemodule.sh"
+
+	mkdir -p "$pkgdir/etc/dkms/triggers"
+
+	# remove fedora hooks
+	rm -r "$pkgdir/etc/kernel"
+}
+
+
+sha512sums="1b8b987b239db8cf00f367ee4f5faf13dc41b450f09fb046dc719e51d6a762d6b700bf41156d8011c3ea7e139064119d6717b60c1bf7fa0a75ea1fc63887baa5  dkms-2.8.4.tar.gz
+4cc0db29b653f2907869e324682ad91ade051a3f2a9bab592b5be0ac8265b96f2df3df9a887dd7755c320fa7d1ff0b92d6fa19458416c91ff757d3c8566ac415  dkms-removemodule.sh"
