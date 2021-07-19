@@ -21,4 +21,9 @@ start_pre()
 				"the fbkeyboard service or built in."
 		fi
 	fi
+
+	# Replace the loading splash when framebuffer console isn't there to do it
+	if [ ! -e /sys/class/graphics/fbcon ]; then
+		fbsplash -s /usr/share/postmarketos-splashes/splash-missing-fbcon.ppm.gz
+	fi
 }

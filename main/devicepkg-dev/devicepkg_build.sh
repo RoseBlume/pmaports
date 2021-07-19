@@ -36,6 +36,7 @@ generate_splash_screens()
 	       "splash-noinitramfsextra" "initramfs-extra not found\\nhttps://postmarketos.org/troubleshooting" "--center" \
 	       "splash-norootfs"         "rootfs not found\\nhttps://postmarketos.org/troubleshooting" "--center" \
 	       "splash-resizefs"         "Loading...\\nResizing file system during initial boot" "--center" \
+	       "splash-missing-fbcon"    "Kernel is missing framebuffer console support" "--center" \
 	       "splash-mounterror"       "unable to mount root partition\\nhttps://postmarketos.org/troubleshooting" "--center" \
 	       "splash-debug-shell"      "WARNING\\ndebug-shell is active\\nhttps://postmarketos.org/debug-shell" "--center" \
 	       "splash-charging-error"   "CHARGING MODE\\nerror starting charging-sdl\\nhttps://postmarketos.org/troubleshooting" "--center"
