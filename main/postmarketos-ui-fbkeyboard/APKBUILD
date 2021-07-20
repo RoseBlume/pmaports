@@ -11,7 +11,6 @@ depends="
 	fbkeyboard
 	networkmanager
 	postmarketos-base-ui
-	postmarketos-splash
 	"
 install="$pkgname.post-install $pkgname.pre-deinstall $pkgname.post-upgrade"
 source="fbkeyboard.init"
