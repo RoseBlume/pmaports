@@ -1,0 +1,87 @@
+pkgname=firmware-samsung-j6primelte
+pkgver=1
+pkgrel=0
+_commit="c70d814aac84ee267e1401120163439712059b1a"
+pkgdesc="Firmware files for Samsung Galaxy J6 Plus"
+url="https://postmarketos.org"
+subpackages="$pkgname-cmn $pkgname-cpe $pkgname-cppf $pkgname-dualfp $pkgname-isdb $pkgname-mdtp $pkgname-mldap $pkgname-proca $pkgname-venus $pkgname-wcnss $pkgname-wcnss-nv:wcnss_nv"
+arch="armv7"
+license="proprietary"
+source="https://gitlab.com/linux-on-samsung-halium/firmware_samsung_j6primelte_pmos/-/archive/$_commit/firmware_samsung_j6primelte_pmos-$_commit.tar.gz"
+options="!check !strip !archcheck !tracedeps pmb:cross-native"
+builddir="$srcdir/firmware_samsung_j6primelte_pmos-$_commit"
+
+_fwdir="/lib/firmware/postmarketos"
+
+package() {
+	# parent package is empty
+	mkdir -p "$pkgdir"
+}
+
+cmn() {
+	pkgdesc="Samsung Galaxy J6 Plus CMN firmware"
+	install -Dm644 "$builddir"/cmn* -t "$subpkgdir/$_fwdir"
+
+}
+
+cpe() {
+	pkgdesc="Samsung Galaxy J6 Plus CPE firmware"
+	install -Dm644 "$builddir"/cpe_9335.* -t "$subpkgdir/$_fwdir"
+
+}
+
+cppf() {
+	pkgdesc="Samsung Galaxy J6 Plus CPFF firmware"
+	install -Dm644 "$builddir"/cppf.* -t "$subpkgdir/$_fwdir"
+
+}
+
+dualfp() {
+	pkgdesc="Samsung Galaxy J6 Plus DUALFP firmware"
+	install -Dm644 "$builddir"/dualfp.* -t "$subpkgdir/$_fwdir"
+
+}
+
+isdb() {
+	pkgdesc="Samsung Galaxy J6 Plus ISDB firmware"
+	install -Dm644 "$builddir"/isdbtmm.* -t "$subpkgdir/$_fwdir"
+
+}
+
+mdtp() {
+	pkgdesc="Samsung Galaxy J6 Plus MDTP firmware"
+	install -Dm644 "$builddir"/mdtp.* -t "$subpkgdir/$_fwdir"
+
+}
+
+mldap() {
+	pkgdesc="Samsung Galaxy J6 Plus MLDAP firmware"
+	install -Dm644 "$builddir"/mldap.* -t "$subpkgdir/$_fwdir"
+
+}
+
+proca() {
+	pkgdesc="Samsung Galaxy J6 Plus PROCA firmware"
+	install -Dm644 "$builddir"/proca.* -t "$subpkgdir/$_fwdir"
+
+}
+
+venus() {
+	pkgdesc="Samsung Galaxy J6 Plus video firmware"
+	install -Dm644 "$builddir"/venus.mdt "$builddir"/venus.b* \
+		-t "$subpkgdir/$_fwdir"/qcom/venus-1.8
+
+}
+
+wcnss() {
+	pkgdesc="Samsung Galaxy J6 Plus WiFi/BT firmware"
+	install -Dm644 "$builddir"/wcnss.* -t "$subpkgdir/$_fwdir"
+
+}
+
+wcnss_nv() {
+	pkgdesc="Samsung Galaxy J6 Plus Wifi/BT firmware configuration"
+	install -Dm644 "$builddir"/prima/WCNSS_* -t "$subpkgdir/$_fwdir"/wlan/prima
+
+}
+sha512sums="35038374a050b93189fa27f0030b3c75d219280351cc547f3f3f20c9b842537c0082d38c9ac43eb069ccc7bcaf7fe271b5dbabc8bdc8c279db46099d661bfe71  firmware_samsung_j6primelte_pmos-c70d814aac84ee267e1401120163439712059b1a.tar.gz"

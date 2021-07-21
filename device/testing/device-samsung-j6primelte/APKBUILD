@@ -1,0 +1,23 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-j6primelte
+pkgdesc="Samsung Galaxy J6 Plus"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-samsung-j6primelte mkbootimg mesa-dri-gallium mesa-dri-swrast mdss-fb-init-hack msm-fb-refresher"
+makedepends="devicepkg-dev"
+source="deviceinfo initfs-hook.sh"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="140086a9dd3f9fc0febed2b22bb54136af15d956fe6822022720f705898f21c49d3fa104043d1847fbdc3e5d8b8e9b41397aacd9c9645a43e86c75a5457c57d7  deviceinfo
+286e9f7e648eb456c0b440527c161f2d8b4e3734e09e8375d88d16752cda5526a8b33a97aea1cdecabb8306b7b1afd92fb45bbe25fad78e0bb4771066be7b645  initfs-hook.sh"
