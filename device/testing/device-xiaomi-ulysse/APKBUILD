@@ -1,0 +1,29 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-ulysse
+pkgdesc="Xiaomi Redmi Note 5A Lite/Prime"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-xiaomi-ulysse
+	mesa-dri-gallium
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+2014aadf59a9bc441d5da2b2d45394a10280ff52d03130e967a6c2ffae215b40c668c24001866d072ea77be444362dc2a16c48f184750eac42eb6b79d912cb4c  deviceinfo
+"

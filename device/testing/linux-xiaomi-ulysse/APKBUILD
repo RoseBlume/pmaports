@@ -1,0 +1,53 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname=linux-xiaomi-ulysse
+pkgver=4.9.274
+pkgrel=0
+pkgdesc="Xiaomi Redmi Note 5A Lite/Prime kernel fork"
+arch="aarch64"
+_carch="arm64"
+_flavor="xiaomi-ulysse"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	flex
+	openssl-dev
+	perl
+"
+
+# Source
+_repository="android_kernel_xiaomi_msm8937"
+_commit="701c20cd3ce9b547e2f23603a2dd3dbaa063e46e"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/mi-msm8937/$_repository/archive/$_commit.tar.gz
+	$_config
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+}
+
+sha512sums="
+9b4d2dca2329823ef481cceb2e222d58efc5ec3e5c26b62fce0f43c056973e4c385505f7a86debd870661e1d7a266a4413205297dee9e8bf247bf386a5ad4e9d  linux-xiaomi-ulysse-701c20cd3ce9b547e2f23603a2dd3dbaa063e46e.tar.gz
+17a82f36bb4e48ed8ddf337c4052ff2eaa0c1ed5f81d35d58603e0be8eac110d8f4593ce7c7070cc0b39c290eb7eafa62b9a0c6c86a18b1fae3613167c600f3e  config-xiaomi-ulysse.aarch64
+"
