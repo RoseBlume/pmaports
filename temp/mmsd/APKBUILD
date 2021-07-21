@@ -1,0 +1,51 @@
+# Contributor: Clayton Craft <clayton@craftyguy.net>
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=mmsd
+pkgver=0_git20210112
+pkgrel=0
+pkgdesc="Multimedia messaging service (MMS) daemon"
+url="https://source.puri.sm/fuzzy7k/mmsd"
+arch="all"
+license="GPL-2.0-only"
+makedepends="
+	autoconf
+	automake
+	dbus-dev
+	glib-dev
+	libtool
+	modemmanager-dev
+	"
+# 'modemmanager' branch
+_commit=7633d3d1ec04071faa9a4bb4d1e61a9ef2e3b42d
+source="
+	$pkgname-$pkgver.tar.gz::https://source.puri.sm/kop316/mmsd/-/archive/$_commit/mmsd-$_commit.tar.gz
+	mmsd.desktop
+	0001-libresolv.patch
+	"
+builddir="$srcdir/$pkgname-$_commit"
+
+prepare() {
+	default_prepare
+	./bootstrap
+	./configure --enable-maintainer-mode \
+		--enable-debug \
+		--prefix=$pkgdir/usr
+}
+
+build() {
+	make
+}
+
+check() {
+	make check
+}
+
+package() {
+	make install
+	install -Dm644 "$srcdir"/mmsd.desktop "$pkgdir"/etc/xdg/autostart/mmsd.desktop
+
+}
+
+sha512sums="eed97ab491c118609673ab79620475d6fa48b1b1707054d6db49dc2c9dfe2c2313911ad499573396c564fbaa8c53a48b30a6959b732a20b94d7baaea7a03b467  mmsd-0_git20210112.tar.gz
+6a9dbe8aa2115b8c691929df217020be030c0e90fb98317635c8af0a2cdfb5a4f915e79b89836a70691769a327492042168856e9680525da0687a08dc8fc36fd  mmsd.desktop
+2b7dee82877a52f5d28b639e6fc3fdce30b8b9d8f3b882a146bc0f3481673affec30e706c0310e54731894db63e5a498231d776b2d3015e6c04c410f49a7e127  0001-libresolv.patch"
