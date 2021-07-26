@@ -25,7 +25,7 @@ _repository="android_amazon_austin_kernel"
 _commit="2e2554edcef91e3a36ed8d514af1ba973efb0635"
 _config="config-$_flavor.$arch"
 source="
-	$pkgname-$_commit.tar.gz::https://github.com/adolf-gitler/$_repository/archive/$_commit.tar.gz
+	$pkgname-$_commit.tar.gz::https://github.com/GjergjiFloychi/$_repository/archive/$_commit.tar.gz
 	$_config
 "
 builddir="$srcdir/$_repository-$_commit"
