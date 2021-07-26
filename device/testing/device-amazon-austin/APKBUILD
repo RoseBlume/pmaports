@@ -1,0 +1,25 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-amazon-austin
+pkgdesc="Amazon Fire HD 7th generation (2017)"
+pkgver=0.1
+pkgrel=3
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="linux-amazon-austin mesa-dri-gallium mkbootimg postmarketos-base"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+
+sha512sums="
+391633ba305974980075888673cd4f115dfee464b114efc6d46b2af3883f7c8ddf2feeaee45092887178cee096c3bf7c9e1e1d7c052839ed0fe35027d15c12f3  deviceinfo
+"
