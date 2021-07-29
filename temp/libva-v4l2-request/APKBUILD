@@ -1,0 +1,37 @@
+pkgname=libva-v4l2-request
+pkgver=9999_git20190517
+pkgrel=0
+_commit="a3c2476de19e6635458273ceeaeceff124fabd63"
+pkgdesc="libva-v4l2-request - VA-API Backend using v4l2-request API"
+url="https://github.com/bootlin/libva-v4l2-request"
+arch="aarch64 armv7"
+license="LGPLv2+ and MIT"
+makedepends="automake autoconf gcc libdrm-dev libva-dev libtool meson"
+
+source="$pkgname.zip::http://github.com/bootlin/libva-v4l2-request/archive/$_commit.zip
+	0001-PullRequest32.patch
+"
+builddir="$srcdir/$pkgname-$_commit"
+
+prepare() {
+	default_prepare
+	./autogen.sh
+}
+
+build() {
+
+	abuild-meson . build
+	ninja -C build
+
+}
+
+package() {
+	DESTDIR="$pkgdir" ninja -C build install
+	mkdir -p "$pkgdir/usr/share/licenses/$pkgname"
+	install -Dm644 COPYING* "$pkgdir/usr/share/licenses/$pkgname/"
+}
+
+sha512sums="
+e76d16a06f907824b9aba275345f60bd8da29beb3186ddb41a72ffae28088aac79e97b5cd10f4065bf4c1eb28f8f1aee324fbdfd031509b8cd0842798f9d8fcc  libva-v4l2-request.zip
+6d04557b1c1a8fb212e541f0c6a306fe6622a0be3865622b6f5bd8c42457d44268b3cd7e11de208e1db6879a15ff3d6bede1a7195b38ac1590943e235b6f2da8  0001-PullRequest32.patch
+"
