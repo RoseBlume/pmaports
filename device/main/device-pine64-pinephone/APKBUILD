@@ -6,7 +6,7 @@
 # Co-Maintainer: Dylan Van Assche <me@dylanvanassche.be>
 pkgname=device-pine64-pinephone
 pkgver=0.30
-pkgrel=3
+pkgrel=2
 pkgdesc="PINE64 PinePhone"
 url="https://postmarketos.org"
 license="MIT"
@@ -18,7 +18,6 @@ subpackages="
 	$pkgname-shelli
 	$pkgname-plasma-mobile:plasma_mobile
 	$pkgname-upower
-        $pkgname-libao
 	"
 depends="
 	alsa-ucm-conf
@@ -33,7 +32,6 @@ depends="
 	postmarketos-base
 	u-boot-pinephone>=2021.01_git20201228-r2
 	u-boot-tools
-        libao
 	"
 makedepends="devicepkg-dev"
 install="$pkgname.post-install $pkgname.post-upgrade"
@@ -57,7 +55,6 @@ source="
 	ucm/VoiceCall.conf
 	UPower.conf
 	pulse-pinephone.conf
-        libao.conf
 	"
 # workaround to purge the -elogind subpackage that was previously
 # created/installed
@@ -168,14 +165,6 @@ shelli() {
 	install -Dm644 "$srcdir"/00_alsa_pinephone_dshare.conf \
 		"$subpkgdir"/etc/alsa/conf.d/00_alsa_pinephone_dshare.conf
 }
-
-libao() {
-	install_if="$pkgname=$pkgver-r$pkgrel libao"
-
-        # Set the default device to sysdefault
-	install -Dm644 "$srcdir"/libao.conf "$subpkgdir"/etc/libao.conf
-}
-
 sha512sums="
 5736444fd38ab4351d148ae96c479085f469bd1e51a692fb1827f8ac921a584389f7696985e1fba21c2deac88709910531f4ece282f45ff54e590c2b54b84ba3  00_alsa_pinephone_dshare.conf
 b53cc6f2531854cc9c1e4c334185a20551d64c8675ee8a8eaa03b99d80808fad421a0f6e99e5be212a974d88c85f461a71ba59ac59c29f298c82f211e3be1ef4  10-pinephone-proximity.rules
@@ -196,5 +185,4 @@ e852b48a687f9b2a0eca444aa3d00a1818aead9f5e5d28e070b51c9d6f8ec648e66f1d88e2bfa94d
 e093f71c37370927468de35a987150a3db3e1cc1c76c144bf58918a09c688c3da84303b5533241e691a6aa0758589e2a6498b1097974117782e909f0bbc6bf71  VoiceCall.conf
 ed0e03f7e1c0348c06be9a7922414469245604ce813bbf0c8910ef211cb993bbb0d0d4615c9c961d50712415f85d6b73e0cf02780ac784666aac56e4889341e4  UPower.conf
 9c472065b19141dd4c7555869b955de2e679b36e597f9fa3bdac18d0e9460986b0e2fffe1e04751301305f1b6474c1375803afb7d6212eeae91b4905d0bf8ff8  pulse-pinephone.conf
-42ecddb2760d85a7ab6891fddcc2eff580209e688e60a03d1ef9e58dee41d0755e3a37c46fa6a5269f967f6dcf805f165b4e4820eca621a4edbe21f0b7e5f646  libao.conf
 "
