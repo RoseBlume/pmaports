@@ -1,7 +1,7 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-base-ui
 pkgver=3
-pkgrel=0
+pkgrel=1
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -53,7 +53,7 @@ flatpath() {
 		echo "rootfs-$i" | sed s./.-.g
 	done
 }
-source="$(flatpath $_source644 $_source755)"
+source="$(flatpath $_source644 $_source755) libao.conf"
 
 package() {
 	local i
@@ -102,6 +102,9 @@ pulseaudio() {
 	provides="postmarketos-base-pulseaudio=$pkgver-r$pkgrel"
 	amove etc/pulse/postmarketos.pa
 	amove etc/pulse/daemon.conf.d/90-postmarketos.conf
+
+        # Set up a libao config file to point to the correct device
+	install -Dm644 "$srcdir"/libao.conf "$subpkgdir"/etc/libao.conf
 }
 
 _obexd() {
@@ -120,4 +123,5 @@ fe0651904c1f40ffa67d83daca190af199f63247e53642a59a1e1147cd06776fcf20b7b2fcc53737
 315598b67889b1f25f82b8269ed36af4fcee018a4edf2926ba966ab08e0a42e36676896d0a5636001b1eb7f16211dcf518123230049556dec9d03006e003a584  rootfs-etc-pulse-postmarketos.pa
 6b9c7bb73213187eb9ca8a94109b2b816f50c1158c90fec2e92b373864280d67741589e5bfbab8810945f031d2f4b535aad78a72e46e52ea50be5b85324da381  rootfs-etc-sleep-inhibitor.conf
 d1ddd43489e6016e3ffd716027ed2bae4a2ab5f213118bdbcb96750e267ab7c0367cd0e0e386300aa5550352653144f5caeddd790621fe0879f83ca1995bb65c  rootfs-etc-tinydm.d-env-wayland.d-50-firefox-wayland.sh
+ba20217f747eb690b25f9e978874e547fed8e80a3b977a1fc4e0d9aeef0c21013bd1c9a8cafe0eac2830c37e5a6b11e864a67028873ed6cb3e9aabc38e98fe2a  libao.conf
 "
