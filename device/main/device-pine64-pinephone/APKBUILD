@@ -18,7 +18,7 @@ subpackages="
 	$pkgname-shelli
 	$pkgname-plasma-mobile:plasma_mobile
 	$pkgname-upower
-        $pkgname-libao
+        $pkgname-pulseaudio
 	"
 depends="
 	alsa-ucm-conf
@@ -33,7 +33,6 @@ depends="
 	postmarketos-base
 	u-boot-pinephone>=2021.01_git20201228-r2
 	u-boot-tools
-        libao
 	"
 makedepends="devicepkg-dev"
 install="$pkgname.post-install $pkgname.post-upgrade"
@@ -112,10 +111,6 @@ package() {
 	install -Dm644 "$srcdir"/VoiceCall.conf \
 		"$pkgdir"/usr/share/alsa/ucm2/PinePhone/VoiceCall.conf
 
-	# Pulseaudio config
-	install -Dm644 "$srcdir"/pulse-pinephone.conf \
-		"$pkgdir"/etc/pulse/daemon.conf.d/89-pinephone.conf
-
 	# Modem
 	install -Dm755 "$srcdir"/setup-modem.sh \
 		"$pkgdir"/usr/bin/pinephone_setup-modem
@@ -169,10 +164,15 @@ shelli() {
 		"$subpkgdir"/etc/alsa/conf.d/00_alsa_pinephone_dshare.conf
 }
 
-libao() {
-	install_if="$pkgname=$pkgver-r$pkgrel libao"
+pulseaudio() {
+	install_if="$pkgname=$pkgver-r$pkgrel pulseaudio"
+        depends="pulseaudio libao"
 
-        # Set the default device to sysdefault
+	# Pulseaudio config
+	install -Dm644 "$srcdir"/pulse-pinephone.conf \
+		"$pkgdir"/etc/pulse/daemon.conf.d/89-pinephone.conf
+
+        # Set the libao default device to sysdefault
 	install -Dm644 "$srcdir"/libao.conf "$subpkgdir"/etc/libao.conf
 }
 
