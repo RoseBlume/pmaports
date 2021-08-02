@@ -1,0 +1,51 @@
+# Maintainer: Petr Vorel <petr.vorel@gmail.com>
+# Kernel config based on: arch/arm64/configs/defconfig
+# Disabled options:
+# sed 's/^\(CONFIG_.*_\(ACTIONS\|AGILEX\|ALPINE\|APPLE\|BCM2835\|BCM4908\|BCM_IPROC\|BERLIN\|BRCMSTB\|EXYNOS\|HISI\|INTEL_SOCFPGA\|K3\|KEEMBAY\|LAYERSCAPE\|LG1K\|MEDIATEK\|MESON\|MVEBU\|MXC\|N5X\|NOUVEAU\|RENESAS\|ROCKCHIP\|S32\|SEATTLE\|SPRD\|SUNXI\|SYNQUACER\|TEGRA\|THUNDER\|THUNDER2\|UNIPHIER\|VEXPRESS\|VISCONTI\|XGENE\|ZX\|ZYNQMP\)\)\(_\|=\).*/# \1 is not set/' -i arch/arm64/configs/defconfig
+
+_flavor="postmarketos-qcom-msm8992"
+pkgname=linux-$_flavor
+pkgver=5.14_rc4
+pkgrel=0
+pkgdesc="Kernel mainline Qualcomm MSM8992 devices"
+arch="aarch64"
+_carch="arm64"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="bison findutils flex installkernel openssl-dev perl"
+
+# 2 commits from qcom/for-next will be in mainline in v5.15
+_commit="3cb6a271f4b04f11270111638c24fa5c0b846dec"
+source="
+	$pkgname-$_commit.tar.gz::https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/snapshot/linux-$_commit.tar.gz
+"
+builddir="$srcdir/linux-$_commit"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/config-$_flavor.$CARCH" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION=$((pkgrel + 1 ))
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+	install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
+		"$pkgdir/boot/vmlinuz-$_flavor"
+
+	install -D "$builddir/include/config/kernel.release" \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+
+	make modules_install dtbs_install \
+		ARCH="$_carch" \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/usr/share/dtb
+}
+
+sha512sums="0eb24515e600894629f596d6d098b1517865599b10e5efadd833aa382573685d695e8d974ff49ad3603805060d8e3c2e3358769615b3ac798db3255ebf8212ad  linux-lg-bullhead-mainline-3cb6a271f4b04f11270111638c24fa5c0b846dec.tar.gz"
