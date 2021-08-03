@@ -2,7 +2,7 @@
 
 pkgname=mesa
 pkgver=21.1.6
-pkgrel=0
+pkgrel=1
 pkgdesc="Mesa DRI OpenGL library"
 url="https://www.mesa3d.org"
 arch="all"
@@ -60,6 +60,7 @@ makedepends="
 	zlib-dev
 	zstd-dev
 	glslang-dev
+	mir-dev
 	"
 source="
 	https://mesa.freedesktop.org/archive/mesa-$pkgver.tar.xz
@@ -67,6 +68,7 @@ source="
 	add-use-elf-tls.patch
 	disable-rgb10-by-default.patch
 	0001-radeonsi-On-Aarch64-force-persistent-buffers-to-GTT.patch
+	0001-treewide-Forward-port-Mir-and-MirRs-EGL-platform-pat.patch
 	"
 replaces="mesa-dricore"
 options="!check" # we skip tests intentionally
@@ -130,7 +132,7 @@ build() {
 		-Ddri-drivers=$_dri_drivers \
 		-Dvulkan-drivers=$_vulkan_drivers \
 		-Dvulkan-layers=$_vulkan_layers \
-		-Dplatforms=x11,wayland \
+		-Dplatforms=x11,wayland,mir \
 		-Dllvm=enabled \
 		-Dshared-llvm=enabled \
 		-Dshared-glapi=enabled \
@@ -337,4 +339,5 @@ sha512sums="
 de7c6fec14476539c564afa4bf59a3c8d5f34a687ffdbacfe94403e3ad4e78773222b2b74b08a1fd16b7dc9504decca1429273c179ad702c02a140e1dff15205  add-use-elf-tls.patch
 efdb49daf7daa173a349785497c2d908f3140ce133d84ef9b2b983afdafda8ee853b3edcd96889b614cc0477e076c7ba2cea4b409f396df3da0561534975459b  disable-rgb10-by-default.patch
 fdbc13888f09d157feae6ce3b8a63cc606d7ed19e364cdb89ccce25a367255b498bbe82862a487c29d8f98d5e31980ef1f0879b06823cedb54801fd54cd461ad  0001-radeonsi-On-Aarch64-force-persistent-buffers-to-GTT.patch
+9405701d280bc51a6ab74467fbb99ce0a535438aa61cb9259e386760fa33b9b10e8bc30ca961d685bb3decc46f896143601699a196a4da3fac1d734ef1c2408a  0001-treewide-Forward-port-Mir-and-MirRs-EGL-platform-pat.patch
 "
