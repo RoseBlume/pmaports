@@ -1,6 +1,6 @@
 # Maintainer: Martijn Braam <martijn@brixit.nl>
 pkgname=postmarketos-tweaks
-pkgver=0.6.1
+pkgver=0.7.3
 pkgrel=0
 pkgdesc="Tweak tool for phone UIs"
 url="https://gitlab.com/postmarketOS/postmarketos-tweaks"
@@ -34,4 +34,6 @@ pinephone() {
 	amove usr/share/postmarketos-tweaks/pinephone.yml
 }
 
-sha512sums="330e02c2e75ade3df3b8e28ab466110e2a94e98e167e070e07e7d5807ac40c768de9b3b7c5fd2070ab228ca31bf8392ec0c2d200e42b9df8689ee1eabb004e3e  postmarketos-tweaks-0.6.1.tar.gz"
+sha512sums="
+86ce03b4732a783609e99a439f801f571adb2b6041d5ffe38cde6084bad954d283dc37882d154bcd0397abfe360f957029eeb3493a17c285e2e71fe2b44eeeb2  postmarketos-tweaks-0.7.3.tar.gz
+"
