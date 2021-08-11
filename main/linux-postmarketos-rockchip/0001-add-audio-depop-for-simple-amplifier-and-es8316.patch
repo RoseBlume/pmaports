@@ -1,0 +1,168 @@
+From 78e4b3922ebb001ed6890ad108b8ec3542b604d6 Mon Sep 17 00:00:00 2001
+From: Clayton Craft <clayton@craftyguy.net>
+Date: Tue, 10 Aug 2021 21:16:02 -0700
+Subject: [PATCH] add audio depop for simple amplifier and es8316
+
+---
+ .../bindings/sound/simple-amplifier.txt       | 10 ++++++---
+ .../boot/dts/rockchip/rk3399-pinebook-pro.dts |  1 +
+ include/sound/soc-dapm.h                      | 13 ++++++++---
+ sound/soc/codecs/es8316.c                     |  2 +-
+ sound/soc/codecs/simple-amplifier.c           | 22 +++++++++++++++++--
+ 5 files changed, 39 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/sound/simple-amplifier.txt b/Documentation/devicetree/bindings/sound/simple-amplifier.txt
+index b1b097cc9b68..2bd4e87018d2 100644
+--- a/Documentation/devicetree/bindings/sound/simple-amplifier.txt
++++ b/Documentation/devicetree/bindings/sound/simple-amplifier.txt
+@@ -4,9 +4,12 @@ Required properties:
+ - compatible : "dioo,dio2125" or "simple-audio-amplifier"
+ 
+ Optional properties:
+-- enable-gpios : the gpio connected to the enable pin of the simple amplifier
+-- VCC-supply   : power supply for the device, as covered
+-                 in Documentation/devicetree/bindings/regulator/regulator.txt
++- enable-gpios  : the gpio connected to the enable pin of the simple amplifier
++- VCC-supply    : power supply for the device, as covered
++                  in Documentation/devicetree/bindings/regulator/regulator.txt
++- depop-time-ms : time to wait, in milliseconds, before or after enabling or
++                  disabling the simple amplifier, respectively, to avoid pops
++                  and crackles; defaults to no delay if omitted
+ 
+ Example:
+ 
+@@ -14,4 +17,5 @@ amp: analog-amplifier {
+ 	compatible = "simple-audio-amplifier";
+ 	VCC-supply = <&regulator>;
+ 	enable-gpios = <&gpio GPIOH_3 0>;
++	depop-time-ms = <2>;
+ };
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+index 2b5f001ff4a6..d61900db8559 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+@@ -178,6 +178,7 @@ speaker_amp: speaker-amplifier {
+ 		enable-gpios = <&gpio4 RK_PD3 GPIO_ACTIVE_HIGH>;
+ 		sound-name-prefix = "Speaker Amplifier";
+ 		VCC-supply = <&pa_5v>;
++		depop-time-ms = <2>;
+ 	};
+ 
+ 	/* Power tree */
+diff --git a/include/sound/soc-dapm.h b/include/sound/soc-dapm.h
+index c3039e97929a..6006d7292d6c 100644
+--- a/include/sound/soc-dapm.h
++++ b/include/sound/soc-dapm.h
+@@ -179,11 +179,18 @@ struct soc_enum;
+ 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+ 	.event = wevent, .event_flags = wflags, \
+ 	.subseq = wsubseq}
+-#define SND_SOC_DAPM_SUPPLY_S(wname, wsubseq, wreg, wshift, winvert, wevent, \
+-	wflags)	\
++#define SND_SOC_DAPM_SUPPLY_S(wname, wsubseq, wreg, wshift, winvert, \
++	wevent, wflags)	\
+ {	.id = snd_soc_dapm_supply, .name = wname, \
+ 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+-	.event = wevent, .event_flags = wflags, .subseq = wsubseq}
++	.event = wevent, .event_flags = wflags, \
++	.subseq = wsubseq}
++#define SND_SOC_DAPM_OUT_DRV_S(wname, wsubseq, wreg, wshift, winvert, \
++	wevent, wflags) \
++{	.id = snd_soc_dapm_out_drv, .name = wname, \
++	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
++	.event = wevent, .event_flags = wflags, \
++	.subseq = wsubseq}
+ 
+ /* Simplified versions of above macros, assuming wncontrols = ARRAY_SIZE(wcontrols) */
+ #define SOC_PGA_E_ARRAY(wname, wreg, wshift, winvert, wcontrols, \
+diff --git a/sound/soc/codecs/es8316.c b/sound/soc/codecs/es8316.c
+index 067757d1d70a..6ae4cdf1e1b7 100644
+--- a/sound/soc/codecs/es8316.c
++++ b/sound/soc/codecs/es8316.c
+@@ -522,7 +522,7 @@ static const struct snd_soc_dai_ops es8316_ops = {
+ };
+ 
+ static struct snd_soc_dai_driver es8316_dai = {
+-	.name = "ES8316 HiFi",
++	.name = "es8316-hifi",
+ 	.playback = {
+ 		.stream_name = "Playback",
+ 		.channels_min = 1,
+diff --git a/sound/soc/codecs/simple-amplifier.c b/sound/soc/codecs/simple-amplifier.c
+index b30fc1f894e1..8c25d3acd13b 100644
+--- a/sound/soc/codecs/simple-amplifier.c
++++ b/sound/soc/codecs/simple-amplifier.c
+@@ -13,6 +13,7 @@
+ 
+ struct simple_amp {
+ 	struct gpio_desc *gpiod_enable;
++	int depop_time;  /* msec */
+ };
+ 
+ static int drv_event(struct snd_soc_dapm_widget *w,
+@@ -21,20 +22,28 @@ static int drv_event(struct snd_soc_dapm_widget *w,
+ 	struct snd_soc_component *c = snd_soc_dapm_to_component(w->dapm);
+ 	struct simple_amp *priv = snd_soc_component_get_drvdata(c);
+ 	int val;
++	bool depop_pre = false, depop_post = false;
+ 
+ 	switch (event) {
+ 	case SND_SOC_DAPM_POST_PMU:
+ 		val = 1;
++		depop_pre = priv->depop_time > 0;
+ 		break;
+ 	case SND_SOC_DAPM_PRE_PMD:
+ 		val = 0;
++		depop_post = priv->depop_time > 0;
+ 		break;
+ 	default:
+ 		WARN(1, "Unexpected event");
+ 		return -EINVAL;
+ 	}
+ 
++	/* Allowing some time for ringing to stop avoids pops/crackles. */
++	if (depop_pre)
++		msleep(priv->depop_time);
+ 	gpiod_set_value_cansleep(priv->gpiod_enable, val);
++	if (depop_post)
++		msleep(priv->depop_time);
+ 
+ 	return 0;
+ }
+@@ -42,7 +51,11 @@ static int drv_event(struct snd_soc_dapm_widget *w,
+ static const struct snd_soc_dapm_widget simple_amp_dapm_widgets[] = {
+ 	SND_SOC_DAPM_INPUT("INL"),
+ 	SND_SOC_DAPM_INPUT("INR"),
+-	SND_SOC_DAPM_OUT_DRV_E("DRV", SND_SOC_NOPM, 0, 0, NULL, 0, drv_event,
++	/*
++	 * Being the last and the first OUT_DRV to be started and stopped,
++	 * respectively, helps in filtering out ringing and avoiding pops.
++	 */
++	SND_SOC_DAPM_OUT_DRV_S("DRV", 100, SND_SOC_NOPM, 0, 0, drv_event,
+ 			       (SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD)),
+ 	SND_SOC_DAPM_OUTPUT("OUTL"),
+ 	SND_SOC_DAPM_OUTPUT("OUTR"),
+@@ -69,7 +82,7 @@ static int simple_amp_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct simple_amp *priv;
+-	int err;
++	int err, ret;
+ 
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+ 	if (priv == NULL)
+@@ -85,6 +98,11 @@ static int simple_amp_probe(struct platform_device *pdev)
+ 		return err;
+ 	}
+ 
++	ret = of_property_read_u32(dev->of_node, "depop-time-ms",
++				   &priv->depop_time);
++	if (ret < 0)
++		priv->depop_time = 0;	/* optional */
++
+ 	return devm_snd_soc_register_component(dev,
+ 					       &simple_amp_component_driver,
+ 					       NULL, 0);
+-- 
+2.32.0
+
