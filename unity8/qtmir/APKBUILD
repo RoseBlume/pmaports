@@ -11,6 +11,7 @@ license="LGPL-3.0-only"
 makedepends="cmake cmake-extras gtest-dev mir-dev process-cpp-dev qt5-qtdeclarative-dev qt5-qtsensors-dev lomiri-app-launch-dev gsettings-qt-dev libqtdbustest libqtdbusmock content-hub-dev valgrind-dev lomiri-url-dispatcher-dev cgmanager-dev lttng-ust-tools"
 checkdepends="py3-dbusmock dbus"
 source="https://gitlab.com/ubports/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz"
+subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
 
