@@ -1,0 +1,29 @@
+From 7bdffdb8f1a9f7761a9b828f2473bf0ddd17df5b Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Fri, 21 May 2021 17:20:23 +0200
+Subject: [PATCH 2/6] InputMethodHostProbe: remove outdated function
+ declarations
+
+The functions aren't used anymore since maliit framework 0.99.1
+
+https://github.com/maliit/framework/commit/e3e3d1be08875ac4b00ad9e8c771598aa12b9b93
+---
+ tests/unittests/common/inputmethodhostprobe.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/tests/unittests/common/inputmethodhostprobe.h b/tests/unittests/common/inputmethodhostprobe.h
+index c60782a6..8c2824d4 100644
+--- a/tests/unittests/common/inputmethodhostprobe.h
++++ b/tests/unittests/common/inputmethodhostprobe.h
+@@ -98,8 +98,6 @@ public:
+     void setGlobalCorrectionEnabled(bool) {}
+     void switchPlugin(Maliit::SwitchDirection) {}
+     void switchPlugin(const QString&) {}
+-    void setScreenRegion(const QRegion&) {}
+-    void setInputMethodArea(const QRegion&) {}
+     void setSelection(int, int) {}
+     void setOrientationAngleLocked(bool) {}
+     QList<MImPluginDescription> pluginDescriptions(Maliit::HandlerState) const {return QList<MImPluginDescription>();}
+-- 
+2.32.0
+

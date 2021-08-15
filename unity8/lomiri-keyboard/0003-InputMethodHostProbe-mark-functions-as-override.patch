@@ -1,17 +1,18 @@
-From 55aa5a1ad06eb57d241669cee44775bcba6f2eb1 Mon Sep 17 00:00:00 2001
+From 5a1021d7a11d758b4ca03de95197a8f28e60a709 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Sat, 17 Apr 2021 13:03:18 +0200
-Subject: [PATCH 4/6] InputMethodHostProbe: mark functions as override
+Subject: [PATCH 3/6] InputMethodHostProbe: mark functions as override
 
+This is useful to compile-time check the overrides for maliit.
 ---
- tests/unittests/common/inputmethodhostprobe.h | 54 +++++++++----------
- 1 file changed, 27 insertions(+), 27 deletions(-)
+ tests/unittests/common/inputmethodhostprobe.h | 50 +++++++++----------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
 diff --git a/tests/unittests/common/inputmethodhostprobe.h b/tests/unittests/common/inputmethodhostprobe.h
-index c60782a6..13e3263a 100644
+index 8c2824d4..0387de12 100644
 --- a/tests/unittests/common/inputmethodhostprobe.h
 +++ b/tests/unittests/common/inputmethodhostprobe.h
-@@ -81,38 +81,38 @@ public:
+@@ -81,36 +81,36 @@ public:
      Q_SIGNAL void keyEventSent(QKeyEvent ev);
  
      // unused reimpl
@@ -32,8 +33,6 @@ index c60782a6..13e3263a 100644
 -    void setGlobalCorrectionEnabled(bool) {}
 -    void switchPlugin(Maliit::SwitchDirection) {}
 -    void switchPlugin(const QString&) {}
--    void setScreenRegion(const QRegion&) {}
--    void setInputMethodArea(const QRegion&) {}
 -    void setSelection(int, int) {}
 -    void setOrientationAngleLocked(bool) {}
 -    QList<MImPluginDescription> pluginDescriptions(Maliit::HandlerState) const {return QList<MImPluginDescription>();}
@@ -54,8 +53,6 @@ index c60782a6..13e3263a 100644
 +    void setGlobalCorrectionEnabled(bool) override {}
 +    void switchPlugin(Maliit::SwitchDirection) override {}
 +    void switchPlugin(const QString&) override {}
-+    void setScreenRegion(const QRegion&) override {}
-+    void setInputMethodArea(const QRegion&) override {}
 +    void setSelection(int, int) override {}
 +    void setOrientationAngleLocked(bool) override {}
 +    QList<MImPluginDescription> pluginDescriptions(Maliit::HandlerState) const override {return QList<MImPluginDescription>();}
@@ -78,5 +75,5 @@ index c60782a6..13e3263a 100644
  };
  
 -- 
-2.31.1
+2.32.0
 

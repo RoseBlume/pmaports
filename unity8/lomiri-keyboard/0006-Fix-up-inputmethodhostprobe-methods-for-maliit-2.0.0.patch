@@ -1,0 +1,26 @@
+From de5ec6a9b820bffde095ddf5b6baf7192a76735b Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sat, 17 Apr 2021 17:20:10 +0200
+Subject: [PATCH 6/6] Fix up inputmethodhostprobe methods for maliit 2.0.0
+
+---
+ tests/unittests/common/inputmethodhostprobe.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tests/unittests/common/inputmethodhostprobe.h b/tests/unittests/common/inputmethodhostprobe.h
+index d12df093..cddb3335 100644
+--- a/tests/unittests/common/inputmethodhostprobe.h
++++ b/tests/unittests/common/inputmethodhostprobe.h
+@@ -111,6 +111,9 @@ public:
+     void registerWindow(QWindow*, Maliit::Position) override {}
+     void setScreenRegion(const QRegion&, QWindow*) override {}
+     void setInputMethodArea(const QRegion&, QWindow*) override {}
++    QVariant inputMethodQuery(Qt::InputMethodQuery, const QVariant&) const override {
++        return QVariant();
++    }
+ 
+ };
+ 
+-- 
+2.32.0
+

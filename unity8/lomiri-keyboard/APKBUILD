@@ -1,0 +1,44 @@
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
+pkgname=lomiri-keyboard
+pkgver=0_git20210720
+_commit="9c17f9a215a63ebf011fc43d88045ea889ce21ba"
+pkgrel=0
+pkgdesc="Ubuntu Touch keyboard as maliit plugin"
+url="https://gitlab.com/ubports/core/lomiri-keyboard"
+arch="all"
+license="LGPL-3.0-only AND BSD-3-Clause"
+makedepends="qt5-qtbase-dev maliit-framework-dev libpinyin-dev gsettings-qt-dev hunspell-dev presage-dev anthy-dev libchewing-dev"
+checkdepends="xvfb-run bash"
+subpackages="$pkgname-dev"
+source="https://gitlab.com/ubports/core/lomiri-keyboard/-/archive/$_commit/lomiri-keyboard-$_commit.tar.gz
+	0001-Link-properly-to-hunspell.patch
+	0002-InputMethodHostProbe-remove-outdated-function-declar.patch
+	0003-InputMethodHostProbe-mark-functions-as-override.patch
+	0004-InputMethodHostProbe-move-stubs-into-header.patch
+	0005-Prefix-MALIIT-variables-with-MALIIT_PREFIX.patch
+	0006-Fix-up-inputmethodhostprobe-methods-for-maliit-2.0.0.patch
+	"
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	qmake-qt5 PREFIX=/usr
+	make
+}
+
+check() {
+	xvfb-run -a make check
+}
+
+package() {
+	make INSTALL_ROOT="$pkgdir" install
+}
+
+sha512sums="
+71577a3dc83ea8ae12178c914fb705876a3a4fbaf52e8d3adff466bc7cdc8407bdccd4b7bfef45bd281453b31b6af66013c11eb17a3dcdd1a5fc398104ad5bff  lomiri-keyboard-9c17f9a215a63ebf011fc43d88045ea889ce21ba.tar.gz
+8f8c362ecaaf5aef122b88bd8486a5ffa526691c43ade9fedbb27bac1c49f51d29f3cbdd68282d942d224e70dfd5a1edeb1bf51917cfc65f986b45480e725234  0001-Link-properly-to-hunspell.patch
+546717f661bb9252bb8058095d295dc5a5da9e1ada15591f6c0bc90227fdf4bcaf97158596c4a6ea283fd7c52a3142a3f331a9fc645f5275c34d548c346e3fb5  0002-InputMethodHostProbe-remove-outdated-function-declar.patch
+2f1157b4c9c733a489ef0ce49c99ce70dd205aafefbbdb4fe06fa6fe06fec6e789d4b89745b90e7b69d84fe5b0b9aebc34a3c70202707647708d0f40e35ee0e1  0003-InputMethodHostProbe-mark-functions-as-override.patch
+048b3cadc458b15e95507b285bef081227c12f5c43fc7ab16d1233e3fdae8a9cc79b1ab1ee2d5dcd3ce518158a5192ac2b4c41c75381a33fa5a0723163159095  0004-InputMethodHostProbe-move-stubs-into-header.patch
+9389fbf89ceddca8be9f9b98b559e2d9d9111c49ed48b5cd43e57df82654abb72557c2f0bf1949abca12e1f9a29f5242a0ea9cde7b9bb5bcf6b87e8f106caf93  0005-Prefix-MALIIT-variables-with-MALIIT_PREFIX.patch
+ca0431fbad5f5e95969c87c2ebe4689cd705b36bfe4c64f6b664347afd954ac07bb580b7cc2ff9d63b0c523a246c2ebae1862db88218de55537019b98c798399  0006-Fix-up-inputmethodhostprobe-methods-for-maliit-2.0.0.patch
+"

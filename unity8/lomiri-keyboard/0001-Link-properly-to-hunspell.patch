@@ -1,7 +1,7 @@
-From d30d3e83b062862586b471467affd843cae6b13b Mon Sep 17 00:00:00 2001
+From 54bee53d7b10f6d13d275457d26b74aae7e4e095 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Sat, 17 Apr 2021 12:55:49 +0200
-Subject: [PATCH 3/6] Link properly to hunspell
+Subject: [PATCH 1/6] Link properly to hunspell
 
 The pkg-config file describes how to link to hunspell, so use it.
 New hunspell provides e.g. libhunspell-1.7.so
@@ -49,7 +49,7 @@ New hunspell provides e.g. libhunspell-1.7.so
  40 files changed, 78 insertions(+), 40 deletions(-)
 
 diff --git a/plugins/ar/src/src.pro b/plugins/ar/src/src.pro
-index 5c00116c..8a23dbf5 100644
+index 7f6e7af8..fa337dcd 100644
 --- a/plugins/ar/src/src.pro
 +++ b/plugins/ar/src/src.pro
 @@ -40,7 +40,8 @@ OTHER_FILES += \
@@ -63,7 +63,7 @@ index 5c00116c..8a23dbf5 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/az/src/src.pro b/plugins/az/src/src.pro
-index 3f39f66e..8bd4f52b 100644
+index d406fadd..d77b1030 100644
 --- a/plugins/az/src/src.pro
 +++ b/plugins/az/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -77,7 +77,7 @@ index 3f39f66e..8bd4f52b 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/be/src/src.pro b/plugins/be/src/src.pro
-index a32f73cc..629a7db0 100644
+index 0fc53152..2bd1d442 100644
 --- a/plugins/be/src/src.pro
 +++ b/plugins/be/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -91,7 +91,7 @@ index a32f73cc..629a7db0 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/bg/src/src.pro b/plugins/bg/src/src.pro
-index b389ce7b..8c96b543 100644
+index 3b2c0bd5..6da2fb35 100644
 --- a/plugins/bg/src/src.pro
 +++ b/plugins/bg/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -105,7 +105,7 @@ index b389ce7b..8c96b543 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/bs/src/src.pro b/plugins/bs/src/src.pro
-index 141f0a3d..5d2b7359 100644
+index 6ddfd52b..27b9e57d 100644
 --- a/plugins/bs/src/src.pro
 +++ b/plugins/bs/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -119,7 +119,7 @@ index 141f0a3d..5d2b7359 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/ca/src/src.pro b/plugins/ca/src/src.pro
-index d851ef4a..8dffcec9 100644
+index bddfe25a..4a165447 100644
 --- a/plugins/ca/src/src.pro
 +++ b/plugins/ca/src/src.pro
 @@ -44,7 +44,8 @@ OTHER_FILES += \
@@ -133,7 +133,7 @@ index d851ef4a..8dffcec9 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/cs/src/src.pro b/plugins/cs/src/src.pro
-index 1c53f411..d3ce9629 100644
+index d1d9f1de..8aba5611 100644
 --- a/plugins/cs/src/src.pro
 +++ b/plugins/cs/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -147,7 +147,7 @@ index 1c53f411..d3ce9629 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/da/src/src.pro b/plugins/da/src/src.pro
-index 8c19aaa4..75c7c19b 100644
+index 40e716f9..bda5c170 100644
 --- a/plugins/da/src/src.pro
 +++ b/plugins/da/src/src.pro
 @@ -44,7 +44,8 @@ OTHER_FILES += \
@@ -161,7 +161,7 @@ index 8c19aaa4..75c7c19b 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/de/src/src.pro b/plugins/de/src/src.pro
-index ff0f1376..c57376ca 100644
+index 78f1e535..e910c1fa 100644
 --- a/plugins/de/src/src.pro
 +++ b/plugins/de/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -175,7 +175,7 @@ index ff0f1376..c57376ca 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/el/src/src.pro b/plugins/el/src/src.pro
-index 5bdc8ea5..7296c783 100644
+index 812c3929..20bd57ab 100644
 --- a/plugins/el/src/src.pro
 +++ b/plugins/el/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -189,7 +189,7 @@ index 5bdc8ea5..7296c783 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/en/src/src.pro b/plugins/en/src/src.pro
-index fcf5522f..838af99a 100644
+index 62e9ffb1..b041d93b 100644
 --- a/plugins/en/src/src.pro
 +++ b/plugins/en/src/src.pro
 @@ -44,7 +44,8 @@ OTHER_FILES += \
@@ -203,7 +203,7 @@ index fcf5522f..838af99a 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/en@dv/src/src.pro b/plugins/en@dv/src/src.pro
-index 21bbe5ce..761d81b2 100644
+index da95193b..d8f25342 100644
 --- a/plugins/en@dv/src/src.pro
 +++ b/plugins/en@dv/src/src.pro
 @@ -28,7 +28,8 @@ INSTALLS += target
@@ -217,7 +217,7 @@ index 21bbe5ce..761d81b2 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/eo/src/src.pro b/plugins/eo/src/src.pro
-index 19f1b41d..143e02fc 100644
+index 18f34291..ec817e0d 100644
 --- a/plugins/eo/src/src.pro
 +++ b/plugins/eo/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -231,7 +231,7 @@ index 19f1b41d..143e02fc 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/es/src/src.pro b/plugins/es/src/src.pro
-index 00018938..34da2372 100644
+index c7ee3790..73c6d944 100644
 --- a/plugins/es/src/src.pro
 +++ b/plugins/es/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -245,7 +245,7 @@ index 00018938..34da2372 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/fa/src/src.pro b/plugins/fa/src/src.pro
-index 7299789d..cd4595d9 100644
+index 693c6c16..ff956fe0 100644
 --- a/plugins/fa/src/src.pro
 +++ b/plugins/fa/src/src.pro
 @@ -40,7 +40,8 @@ OTHER_FILES += \
@@ -259,7 +259,7 @@ index 7299789d..cd4595d9 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/fi/src/src.pro b/plugins/fi/src/src.pro
-index 07e9c6f1..c0d1be14 100644
+index dba06f93..f84aaca0 100644
 --- a/plugins/fi/src/src.pro
 +++ b/plugins/fi/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -273,7 +273,7 @@ index 07e9c6f1..c0d1be14 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/fr-ch/src/src.pro b/plugins/fr-ch/src/src.pro
-index e0afa3a0..8eef6972 100644
+index 9f559fc8..c10bf269 100644
 --- a/plugins/fr-ch/src/src.pro
 +++ b/plugins/fr-ch/src/src.pro
 @@ -28,7 +28,8 @@ INSTALLS += target
@@ -287,7 +287,7 @@ index e0afa3a0..8eef6972 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/fr/src/src.pro b/plugins/fr/src/src.pro
-index a20581c1..d328b64e 100644
+index ecf47b71..18a5bc22 100644
 --- a/plugins/fr/src/src.pro
 +++ b/plugins/fr/src/src.pro
 @@ -45,7 +45,8 @@ OTHER_FILES += \
@@ -301,7 +301,7 @@ index a20581c1..d328b64e 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/gd/src/src.pro b/plugins/gd/src/src.pro
-index 396f3cdd..ff9736ed 100644
+index 0796f0d8..e06208fa 100644
 --- a/plugins/gd/src/src.pro
 +++ b/plugins/gd/src/src.pro
 @@ -42,7 +42,8 @@ OTHER_FILES += \
@@ -315,7 +315,7 @@ index 396f3cdd..ff9736ed 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/he/src/src.pro b/plugins/he/src/src.pro
-index 2e0bbb2f..86790d1f 100644
+index d24a7c57..c9422a40 100644
 --- a/plugins/he/src/src.pro
 +++ b/plugins/he/src/src.pro
 @@ -44,7 +44,8 @@ OTHER_FILES += \
@@ -329,7 +329,7 @@ index 2e0bbb2f..86790d1f 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/hr/src/src.pro b/plugins/hr/src/src.pro
-index 0ec65dab..101a5ae9 100644
+index e91332d5..ce42e0dd 100644
 --- a/plugins/hr/src/src.pro
 +++ b/plugins/hr/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -343,7 +343,7 @@ index 0ec65dab..101a5ae9 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/hu/src/src.pro b/plugins/hu/src/src.pro
-index 782c6581..9136e373 100644
+index 68cdba4a..0f6ec1c1 100644
 --- a/plugins/hu/src/src.pro
 +++ b/plugins/hu/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -357,7 +357,7 @@ index 782c6581..9136e373 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/is/src/src.pro b/plugins/is/src/src.pro
-index f6c07799..3dd47db4 100644
+index f7044812..fbfa60ef 100644
 --- a/plugins/is/src/src.pro
 +++ b/plugins/is/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -371,7 +371,7 @@ index f6c07799..3dd47db4 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/it/src/src.pro b/plugins/it/src/src.pro
-index df6b7fc2..60db3fdf 100644
+index 50233f5b..42c2054b 100644
 --- a/plugins/it/src/src.pro
 +++ b/plugins/it/src/src.pro
 @@ -44,7 +44,8 @@ OTHER_FILES += \
@@ -385,7 +385,7 @@ index df6b7fc2..60db3fdf 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/ko/src/src.pro b/plugins/ko/src/src.pro
-index 27fcfa9d..c42d74e3 100644
+index 77adddbf..10575882 100644
 --- a/plugins/ko/src/src.pro
 +++ b/plugins/ko/src/src.pro
 @@ -58,7 +58,6 @@ OTHER_FILES += \
@@ -397,7 +397,7 @@ index 27fcfa9d..c42d74e3 100644
  
  # presage
 diff --git a/plugins/lt/src/src.pro b/plugins/lt/src/src.pro
-index 5ca07f95..99a937c0 100644
+index 99934315..77a71242 100644
 --- a/plugins/lt/src/src.pro
 +++ b/plugins/lt/src/src.pro
 @@ -40,7 +40,8 @@ OTHER_FILES += \
@@ -411,7 +411,7 @@ index 5ca07f95..99a937c0 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/lv/src/src.pro b/plugins/lv/src/src.pro
-index b409cf07..ebb4f3b0 100644
+index 057e6c04..d629a5c3 100644
 --- a/plugins/lv/src/src.pro
 +++ b/plugins/lv/src/src.pro
 @@ -40,7 +40,8 @@ OTHER_FILES += \
@@ -425,10 +425,10 @@ index b409cf07..ebb4f3b0 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/mk/src/src.pro b/plugins/mk/src/src.pro
-index d2902a11..fc783306 100644
+index b6cf5bd4..3d502f66 100644
 --- a/plugins/mk/src/src.pro
 +++ b/plugins/mk/src/src.pro
-@@ -25,7 +25,8 @@ PLUGIN_INSTALL_PATH = $${UBUNTU_KEYBOARD_LIB_DIR}/mk/
+@@ -25,7 +25,8 @@ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/mk/
  OTHER_FILES += \
      macedonianplugin.json \
  
@@ -439,7 +439,7 @@ index d2902a11..fc783306 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/nb/src/src.pro b/plugins/nb/src/src.pro
-index 55d562d9..156cd8ec 100644
+index 0e4d7cce..380395ac 100644
 --- a/plugins/nb/src/src.pro
 +++ b/plugins/nb/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -453,7 +453,7 @@ index 55d562d9..156cd8ec 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/nl/src/src.pro b/plugins/nl/src/src.pro
-index 48078df8..695ae383 100644
+index 6370b251..ef3b3e98 100644
 --- a/plugins/nl/src/src.pro
 +++ b/plugins/nl/src/src.pro
 @@ -44,7 +44,8 @@ OTHER_FILES += \
@@ -467,7 +467,7 @@ index 48078df8..695ae383 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/pl/src/src.pro b/plugins/pl/src/src.pro
-index 8a32f22b..66eb2d50 100644
+index aebd9119..76fb9d54 100644
 --- a/plugins/pl/src/src.pro
 +++ b/plugins/pl/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -481,7 +481,7 @@ index 8a32f22b..66eb2d50 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/pt/src/src.pro b/plugins/pt/src/src.pro
-index 1ce1aa14..18ca2112 100644
+index 47b82d40..b8474cc6 100644
 --- a/plugins/pt/src/src.pro
 +++ b/plugins/pt/src/src.pro
 @@ -44,7 +44,8 @@ OTHER_FILES += \
@@ -495,7 +495,7 @@ index 1ce1aa14..18ca2112 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/ro/src/src.pro b/plugins/ro/src/src.pro
-index 8806510b..7a97a3f0 100644
+index 6678d652..6433fec5 100644
 --- a/plugins/ro/src/src.pro
 +++ b/plugins/ro/src/src.pro
 @@ -44,7 +44,8 @@ OTHER_FILES += \
@@ -509,7 +509,7 @@ index 8806510b..7a97a3f0 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/ru/src/src.pro b/plugins/ru/src/src.pro
-index bbc19b11..6a9e187b 100644
+index f56307b6..5027d4ba 100644
 --- a/plugins/ru/src/src.pro
 +++ b/plugins/ru/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -523,7 +523,7 @@ index bbc19b11..6a9e187b 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/sl/src/src.pro b/plugins/sl/src/src.pro
-index 3ca6e40a..f001e016 100644
+index 0cc03ec1..04997c8f 100644
 --- a/plugins/sl/src/src.pro
 +++ b/plugins/sl/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -537,7 +537,7 @@ index 3ca6e40a..f001e016 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/sr/src/src.pro b/plugins/sr/src/src.pro
-index 363c2d57..3a88d89c 100644
+index a00ce1f2..82654caf 100644
 --- a/plugins/sr/src/src.pro
 +++ b/plugins/sr/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -551,7 +551,7 @@ index 363c2d57..3a88d89c 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/sv/src/src.pro b/plugins/sv/src/src.pro
-index a0e4c362..54e6eaf6 100644
+index 390dc85d..170bb10f 100644
 --- a/plugins/sv/src/src.pro
 +++ b/plugins/sv/src/src.pro
 @@ -44,7 +44,8 @@ OTHER_FILES += \
@@ -565,7 +565,7 @@ index a0e4c362..54e6eaf6 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/tr/src/src.pro b/plugins/tr/src/src.pro
-index 5d625258..1f5be493 100644
+index 66764b08..48137df6 100644
 --- a/plugins/tr/src/src.pro
 +++ b/plugins/tr/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -579,7 +579,7 @@ index 5d625258..1f5be493 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/plugins/uk/src/src.pro b/plugins/uk/src/src.pro
-index 34423366..4d3abd96 100644
+index b06e19bb..396e8f96 100644
 --- a/plugins/uk/src/src.pro
 +++ b/plugins/uk/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -593,7 +593,7 @@ index 34423366..4d3abd96 100644
  INCLUDEPATH += $$PWD/../../westernsupport
  DEPENDPATH += $$PWD/../../westernsupport
 diff --git a/tests/testlayout/src/src.pro b/tests/testlayout/src/src.pro
-index abe33210..0393546f 100644
+index 83793534..5e515775 100644
 --- a/tests/testlayout/src/src.pro
 +++ b/tests/testlayout/src/src.pro
 @@ -41,7 +41,8 @@ OTHER_FILES += \
@@ -607,5 +607,5 @@ index abe33210..0393546f 100644
  INCLUDEPATH += $${TOP_SRCDIR}/plugins/westernsupport
  DEPENDPATH += $${TOP_SRCDIR}/plugins/westernsupport
 -- 
-2.31.1
+2.32.0
 
