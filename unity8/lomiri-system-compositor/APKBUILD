@@ -15,6 +15,7 @@ source="https://gitlab.com/ubports/core/lomiri-system-compositor/-/archive/$_com
 	0002-Add-missing-stdexcept-header-17.patch
 	"
 builddir="$srcdir/$pkgname-$_commit"
+options="!check" # Tests fail under QEMU
 
 build() {
 	# fails to build with fortify headers enabled

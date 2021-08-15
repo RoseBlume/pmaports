@@ -12,6 +12,7 @@ makedepends="cmake cmake-extras gtest-dev mir-dev process-cpp-dev qt5-qtdeclarat
 checkdepends="py3-dbusmock dbus"
 source="https://gitlab.com/ubports/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz"
 builddir="$srcdir/$pkgname-$_commit"
+options="!check" # Tests fail under QEMU
 
 build() {
 	cmake -B build \

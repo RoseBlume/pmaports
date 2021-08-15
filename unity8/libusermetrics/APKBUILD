@@ -14,6 +14,7 @@ checkdepends="dbus"
 source="https://gitlab.com/ubports/core/libusermetrics/-/archive/$_commit/libusermetrics-$_commit.tar.gz"
 subpackages="$pkgname-dev $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
+options="!check" # Tests fail under QEMU
 
 build() {
 	cmake -B build \

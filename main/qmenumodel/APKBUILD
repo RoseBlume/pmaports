@@ -14,6 +14,7 @@ subpackages="$pkgname-dev"
 source="https://github.com/AyatanaIndicators/qmenumodel/archive/$pkgver/qmenumodel-$pkgver.tar.gz
 	0001-Move-glib-includes-outside-of-extern-C.patch
 	"
+options="!check" # Tests fail under QEMU
 
 build() {
 	if [ "$CBUILD" != "$CHOST" ]; then
