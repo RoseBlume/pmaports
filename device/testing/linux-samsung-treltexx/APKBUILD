@@ -21,6 +21,7 @@ makedepends="
 	perl
 	xz
 	linux-headers
+	dtbtool
 "
 
 # Source
@@ -49,15 +50,21 @@ build() {
 	unset LDFLAGS
 	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+
+	# Generate master DTB (deviceinfo_bootimg_qcdt)
+	dtbTool -s 2048 -p scripts/dtc/ -o "$_outdir/arch/$_carch/boot/"dt.img "$_outdir/arch/$_carch/boot/dts"
 }
 
 package() {
 	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+
+	# Master DTB (deviceinfo_bootimg_qcdt)
+	install -Dm644 "$_outdir/arch/$_carch/boot"/dt.img "$pkgdir"/boot/dt.img
 }
 
 sha512sums="
 0e8f8fc9fad8a07213e61049ebade2b46566212944b53f127738ebc7a1dbdeea5221164df4f03d73b034f8eed015f590dd6827ed5d6bdf9a75e115c07de81dca  linux-samsung-treltexx-14ee49add016402757a1f9473aee1d3b0f280148.tar.gz
-2669d7eea1cf3fdeab4adbf0d1d2717677b8272d7b33e71c9d6173879b90a366f64eb08e41f4e4a8a8db926c695309f69b6ecad4554fb46a3655f23df7ffb141  config-samsung-treltexx.armv7
+191d8d29c08fb2c0b2deb0b5ac907866ba62cd395964bb718b2900f1fe01f682e96e4964036f6785b2176d17c6456d1455a0e8416af1f16d0af9d7508b32be3b  config-samsung-treltexx.armv7
 cdd54697ac3ffb9ec29a3cbee64211b6317fa304ebe0fe51e9d75456c27ff3f70fb7921788cf7ddd96d78775e170cd0db945b093b120c7eccb433f2e592bdf91  fix-makefile.patch
 2b48f1bf0e3f70703d2cdafc47d5e615cc7c56c70bec56b2e3297d3fa4a7a1321d649a8679614553dde8fe52ff1051dae38d5990e3744c9ca986d92187dcdbeb  gcc10-extern_YYLOC_global_declaration.patch
 77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
