@@ -1,0 +1,13 @@
+#!/sbin/openrc-run
+
+command=qmicli
+command_args=" -d qrtr://0 -p --dpm-open-port='hw-data-ep-type=embedded,hw-data-ep-iface-number=1,hw-data-rx-id=2,hw-data-tx-id=10'"
+output_log="/var/log/sdm845-modem-prepare.log"
+
+description="Get the modem ready for ModemManager"
+
+depend() {
+	after msm-modem-uim-selection
+	before modemmanager
+	before ofono
+}
