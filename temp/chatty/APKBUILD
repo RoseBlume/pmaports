@@ -19,9 +19,9 @@ makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
 	evolution-data-server-dev libgee-dev folks-dev feedbackd-dev libphonenumber-dev
 	olm-dev modemmanager-dev gspell-dev"
 checkdepends="appstream-glib desktop-file-utils"
-_commit="7a5be2749a33ffa28443911f6bebee62d103a458"
+_commit="aea232873b90cdd7806ae584e3b554e318f555a3"
 # source="https://source.puri.sm/Librem5/chatty/-/archive/v$pkgver/chatty-v$pkgver.tar.gz"
-source="$pkgname-$pkgver.tar.gz::http://source.puri.sm/kop316/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
+source="http://source.puri.sm/kop316/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
 subpackages="$pkgname-lang $pkgname-bash-completion $pkgname-dbg"
 options="!check" # Requires running Wayland compositor
 builddir="$srcdir/$pkgname-$_commit"
@@ -35,5 +35,5 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 sha512sums="
-133d83499da9debcd8a333021ac61fc95b74c0203e7a14472c8a03dc25e7c8209111a9854ed9ca548e3e402bad6dc168979e3f606aca4aba4a07f9764d1f8ebe  chatty-0.3.4_git20210823.tar.gz
+edcd18e7b6e3fd13f5690ff023428f273fce571aa1c306301906c508add32d10b715ca0ca81b82b9a6ec3f9ebc5d712e7594aeaae0e9a68ad7e99950cca843f1  chatty-aea232873b90cdd7806ae584e3b554e318f555a3.tar.gz
 "
