@@ -2,16 +2,18 @@
 pkgname=device-samsung-gt510wifi
 pkgdesc="Samsung Galaxy Tab A 9.7 WiFi (2015) (SM-T550)"
 pkgver=3
-pkgrel=3
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916 soc-qcom-msm8916"
 makedepends="devicepkg-dev"
-source="deviceinfo modprobe.conf"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-
+source="deviceinfo modprobe.conf rootston.ini"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-phosh
+"
 build() {
 	devicepkg_build $startdir $pkgname
 }
@@ -26,7 +28,14 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 
+phosh() {
+	install_if="$pkgname postmarketos-ui-phosh"
+	install -Dm644 "$srcdir"/rootston.ini \
+		"$subpkgdir"/etc/phosh/rootston.ini
+}
+
 sha512sums="
-459c395b29f49eac1ef9ad87c1bdc819ec12594cf3d0f67ca13893b3b2efd02e70c7fb5ed9e9b185d969c29e7a8fd0fce56d5de3f1e7176d2ba371720c643244  deviceinfo
+3b5e2b76c0fb9913c5a9914969ee9c5b70dbc31d359ed28832e999b28daca1a11c8a6a60ab45e7da6d7d0da928ccdd69c8554547c653b3e27e34d766ac14ccf0  deviceinfo
 8e589824aa6f2a63e37efc4b4daed6eb0dce5771803f8a5321c9513f413e719c72caa7a952671b9657e3e340bc4bd653bffe3d4685d07f4ec83d7be16e9ddab5  modprobe.conf
+3017f500a9cc6d424efd2d1498709e9319cefd6c87eaeaa4b6db6862c0df9f327ebb18b09b73c2a173aaaecc95cf465d978e08f9eaebd4f300317c433b575606  rootston.ini
 "
