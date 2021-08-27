@@ -4,7 +4,7 @@
 
 pkgname=linux-apple-iphone7
 pkgver=5.4.14
-pkgrel=0
+pkgrel=1
 pkgdesc="Apple iPhone 7 kernel fork"
 arch="aarch64"
 _carch="arm64"
@@ -12,7 +12,7 @@ _flavor="apple-iphone7"
 url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps pmb:cross-native"
-makedepends="bash bc bison devicepkg-dev flex openssl-dev perl"
+makedepends="bash bc bison devicepkg-dev flex openssl-dev perl xz"
 
 # Source
 _commit="0c2f7dda13d67bb7e06123df516f8bdb1000a79b"
@@ -34,10 +34,24 @@ build() {
 	unset LDFLAGS
 	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
 		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+
+	# Need to create custom dtbpack file
+	./dtbpack.sh
+
+	# Kernel image has to be lzma compressed
+	lzma -z --stdout arch/arm64/boot/Image > arch/arm64/boot/Image.lzma
 }
 
 package() {
 	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor" "$_outdir"
+
+	# Install compressed kernel image
+	install -Dm644 "$builddir/arch/arm64/boot/Image.lzma" \
+		"$pkgdir/boot/Image.lzma"
+
+	# Install custom dtbpack file
+	install -Dm644 "$builddir/dtbpack" \
+		"$pkgdir/boot/dtbpack"
 }
 
 sha512sums="
