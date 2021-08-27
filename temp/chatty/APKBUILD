@@ -19,7 +19,7 @@ makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
 	evolution-data-server-dev libgee-dev folks-dev feedbackd-dev libphonenumber-dev
 	olm-dev modemmanager-dev gspell-dev"
 checkdepends="appstream-glib desktop-file-utils"
-_commit="d3448c7cced3f398e5b6a31ce4ef2ff529a7d437"
+_commit="fcece40b2954b01b4b3f69942e26f3e14a3f4d4c"
 # source="https://source.puri.sm/Librem5/chatty/-/archive/v$pkgver/chatty-v$pkgver.tar.gz"
 source="http://source.puri.sm/kop316/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
 subpackages="$pkgname-lang $pkgname-bash-completion $pkgname-dbg"
@@ -35,5 +35,5 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 sha512sums="
-e161dd4295881bbb9987039c110e31c240485794ad29dba8e4b5964021658354670593ba2fb815bad04d3c836b282f0ffb344f87866509ecb9b3f8b1eff0cb23  chatty-d3448c7cced3f398e5b6a31ce4ef2ff529a7d437.tar.gz
+ac64dd57b06e53b3039daefa9adfd5faffb5d4ba68d0aaa040c3d037b9fb4259a9f2dbb541e5f55122193a8b5104127b726d2ec88e9a0b143d5add3befe62fca  chatty-fcece40b2954b01b4b3f69942e26f3e14a3f4d4c.tar.gz
 "
