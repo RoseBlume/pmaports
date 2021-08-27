@@ -42,7 +42,8 @@ build() {
 		--sysconfdir=/etc \
 		--mandir=/usr/share/man \
 		--localstatedir=/var \
-		--with-tests
+		--with-tests \
+		--enable-plugin=notification-sound
 	make
 }
 
