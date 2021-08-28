@@ -1,7 +1,7 @@
-From de5ec6a9b820bffde095ddf5b6baf7192a76735b Mon Sep 17 00:00:00 2001
+From 363afa585ba6866dc40490d638916f915ecfa6de Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Sat, 17 Apr 2021 17:20:10 +0200
-Subject: [PATCH 6/6] Fix up inputmethodhostprobe methods for maliit 2.0.0
+Subject: [PATCH 2/2] Fix up inputmethodhostprobe methods for maliit 2.0.0
 
 ---
  tests/unittests/common/inputmethodhostprobe.h | 3 +++
@@ -22,5 +22,5 @@ index d12df093..cddb3335 100644
  };
  
 -- 
-2.32.0
+2.33.0
 

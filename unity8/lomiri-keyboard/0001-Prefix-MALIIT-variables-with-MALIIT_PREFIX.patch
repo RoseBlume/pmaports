@@ -1,7 +1,7 @@
-From b2195a4f2d9de6541beaaa54f5dc787ca70ca613 Mon Sep 17 00:00:00 2001
+From 4d131a4dbeb4aee6c64a6981623d9efb393674b9 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Sat, 17 Apr 2021 18:08:32 +0200
-Subject: [PATCH 5/6] Prefix MALIIT variables with MALIIT_PREFIX
+Subject: [PATCH 1/2] Prefix MALIIT variables with MALIIT_PREFIX
 
 Otherwise the files will land somewhere where we don't want them during
 installation.
@@ -46,5 +46,5 @@ index c76d38b0..33552d6a 100644
  
  include(../word-prediction.pri)
 -- 
-2.32.0
+2.33.0
 
