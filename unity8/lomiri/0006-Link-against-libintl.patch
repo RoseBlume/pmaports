@@ -1,7 +1,7 @@
-From 9c434d3c525cda74fd94f59760458c0c1d10a116 Mon Sep 17 00:00:00 2001
+From 00ccddfaec0204fe9c606431df544f19ba10d6a1 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Tue, 29 Jan 2019 22:19:51 +0100
-Subject: [PATCH 4/6] Link against libintl
+Subject: [PATCH 6/8] Link against libintl
 
 ---
  plugins/LightDM/FullLightDM/CMakeLists.txt             | 1 +
@@ -23,10 +23,10 @@ index d9bba5fc3..226b68606 100644
  
  add_lomiri_plugin(FullLightDM 0.1 LightDM/FullLightDM TARGETS FullLightDM-qml)
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 920d86ea1..39f2cccfd 100644
+index ac03204b6..1eff11e37 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -64,6 +64,7 @@ target_link_libraries(${SHELL_APP}
+@@ -59,6 +59,7 @@ target_link_libraries(${SHELL_APP}
      LomiriGestures
      lomiri-connectivity-qt1
      lomiri-private

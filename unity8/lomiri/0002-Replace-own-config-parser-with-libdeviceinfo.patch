@@ -1,0 +1,1007 @@
+From b8bdd667f93b0fbb0119793f67288d0629d6b8d4 Mon Sep 17 00:00:00 2001
+From: Marius Gripsgard <marius@ubports.com>
+Date: Wed, 18 Sep 2019 01:36:31 +0200
+Subject: [PATCH 2/8] Replace own config parser with libdeviceinfo
+
+This replaces our own "hacky" parser with the new "global"
+libdeviceinfo, this give us a central config place for different
+devices.
+---
+ CMakeLists.txt                                |   1 +
+ debian/control                                |   2 +-
+ plugins/Utils/CMakeLists.txt                  |   6 +-
+ plugins/Utils/deviceconfig.cpp                | 113 +++++++++++
+ .../{deviceconfigparser.h => deviceconfig.h}  |  25 +--
+ plugins/Utils/deviceconfigparser.cpp          | 176 ------------------
+ plugins/Utils/plugin.cpp                      |   4 +-
+ qml/DeviceConfiguration.qml                   |  41 ++--
+ qml/DisabledScreenNotice.qml                  |   2 +-
+ qml/OrientedShell.qml                         |   5 +-
+ src/ApplicationArguments.cpp                  |   8 -
+ src/ApplicationArguments.h                    |   6 -
+ src/CMakeLists.txt                            |   5 -
+ src/LomiriApplication.cpp                     |   9 -
+ src/LomiriCommandLineParser.cpp               |   5 -
+ src/LomiriCommandLineParser.h                 |   2 -
+ tests/mocks/Utils/CMakeLists.txt              |   6 +-
+ tests/mocks/Utils/plugin.cpp                  |   4 +-
+ tests/plugins/Utils/CMakeLists.txt            |   1 -
+ .../plugins/Utils/DeviceConfigParserTest.cpp  |  76 --------
+ .../Panel/Indicators/tst_IndicatorsLight.qml  |   6 +-
+ tests/qmltests/tst_DeviceConfiguration.qml    |  25 ++-
+ tests/qmltests/tst_DisabledScreenNotice.qml   |   4 +-
+ tests/qmltests/tst_OrientedShell.qml          |   1 +
+ 24 files changed, 195 insertions(+), 338 deletions(-)
+ create mode 100644 plugins/Utils/deviceconfig.cpp
+ rename plugins/Utils/{deviceconfigparser.h => deviceconfig.h} (74%)
+ delete mode 100644 plugins/Utils/deviceconfigparser.cpp
+ delete mode 100644 tests/plugins/Utils/DeviceConfigParserTest.cpp
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d9b1a62eb..849974d4b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -74,6 +74,7 @@ find_package(Qt5Svg 5.6 REQUIRED)
+ find_package(Qt5Network 5.6 REQUIRED)
+ find_package(Qt5Xml 5.6 REQUIRED)
+ 
++pkg_check_modules(DEVICEINFO REQUIRED deviceinfo)
+ pkg_check_modules(APPLICATION_API REQUIRED lomiri-shell-application=27)
+ pkg_check_modules(QTMIRSERVER REQUIRED qtmirserver>=0.6.0)
+ pkg_check_modules(GEONAMES REQUIRED geonames>=0.2)
+diff --git a/debian/control b/debian/control
+index 07b613132..7eafc021c 100644
+--- a/debian/control
++++ b/debian/control
+@@ -15,7 +15,7 @@ Build-Depends:
+  gdb,
+  graphviz,
+  gsettings-ubuntu-schemas (>= 0.0.2+14.10.20140815),
+- libandroid-properties-dev,
++ libdeviceinfo-dev,
+  libevdev-dev,
+  libgeonames-dev (>= 0.2),
+  libgl1-mesa-dev[!arm64 !armhf] | libgl-dev[!arm64 !armhf],
+diff --git a/plugins/Utils/CMakeLists.txt b/plugins/Utils/CMakeLists.txt
+index c5463bf6b..03cd65b67 100644
+--- a/plugins/Utils/CMakeLists.txt
++++ b/plugins/Utils/CMakeLists.txt
+@@ -7,6 +7,7 @@ include_directories(
+     SYSTEM
+     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+     ${Qt5Quick_PRIVATE_INCLUDE_DIRS}
++    ${DEVICEINFO_INCLUDE_DIRS}
+ )
+ 
+ set(QMLPLUGIN_SRC
+@@ -30,7 +31,7 @@ set(QMLPLUGIN_SRC
+     windowstatestorage.cpp
+     timezoneFormatter.cpp
+     inputeventgenerator.cpp
+-    deviceconfigparser.cpp
++    deviceconfig.cpp
+     globalfunctions.cpp
+     URLDispatcher.cpp
+     tabfocusfence.cpp
+@@ -45,7 +46,8 @@ add_library(Utils-qml SHARED
+ 
+ target_link_libraries(Utils-qml
+     Qt5::Qml Qt5::Quick Qt5::DBus Qt5::Network Qt5::Gui Qt5::Sql Qt5::Concurrent
+-    )
++    ${DEVICEINFO_LDFLAGS}
++)
+ 
+ # Because this is an internal support library, we want
+ # to expose all symbols in it. Consider changing this
+diff --git a/plugins/Utils/deviceconfig.cpp b/plugins/Utils/deviceconfig.cpp
+new file mode 100644
+index 000000000..f0412cb81
+--- /dev/null
++++ b/plugins/Utils/deviceconfig.cpp
+@@ -0,0 +1,113 @@
++/*
++ * Copyright 2016 Canonical Ltd.
++ *           2019 UBports foundation.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program. If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#include "deviceconfig.h"
++
++#include <deviceinfo.h>
++#include <QDebug>
++
++DeviceConfig::DeviceConfig(QObject *parent):
++    QObject(parent),
++    m_info(std::make_shared<DeviceInfo>())
++{
++}
++
++QString DeviceConfig::name() const
++{
++    return QString::fromStdString(m_info->name());
++}
++
++Qt::ScreenOrientation DeviceConfig::primaryOrientation() const
++{
++    return stringToOrientation(m_info->primaryOrientation(), Qt::PrimaryOrientation);
++}
++
++Qt::ScreenOrientations DeviceConfig::supportedOrientations() const
++{
++    auto values = m_info->supportedOrientations();
++    if (values.empty()) {
++        return Qt::PortraitOrientation
++                | Qt::InvertedPortraitOrientation
++                | Qt::LandscapeOrientation
++                | Qt::InvertedLandscapeOrientation;
++    }
++
++    Qt::ScreenOrientations ret = Qt::PrimaryOrientation;
++    for (auto orientationString : values) {
++        ret |= stringToOrientation(orientationString, Qt::PrimaryOrientation);
++    }
++    return ret;
++}
++
++Qt::ScreenOrientation DeviceConfig::landscapeOrientation() const
++{
++    return stringToOrientation(m_info->landscapeOrientation(), Qt::LandscapeOrientation);
++}
++
++Qt::ScreenOrientation DeviceConfig::invertedLandscapeOrientation() const
++{
++    return stringToOrientation(m_info->invertedLandscapeOrientation(), Qt::InvertedLandscapeOrientation);
++}
++
++Qt::ScreenOrientation DeviceConfig::portraitOrientation() const
++{
++    return stringToOrientation(m_info->portraitOrientation(), Qt::PortraitOrientation);
++}
++
++Qt::ScreenOrientation DeviceConfig::invertedPortraitOrientation() const
++{
++    return stringToOrientation(m_info->invertedPortraitOrientation(), Qt::InvertedPortraitOrientation);
++}
++
++QString DeviceConfig::category() const
++{
++    QStringList supportedValues = {"phone", "tablet", "desktop"};
++    QString value = QString::fromStdString(DeviceInfo::deviceTypeToString(m_info->deviceType()));
++    if (!supportedValues.contains(value)) {
++        qWarning().nospace().noquote() << "Unknown option \"" << value
++                    << ". Supported options are: " << supportedValues.join(", ") << ".";
++        return "phone";
++    }
++    return value;
++}
++
++Qt::ScreenOrientation DeviceConfig::stringToOrientation(const std::string &orientationString, Qt::ScreenOrientation defaultValue) const
++{
++    if (orientationString == "Landscape") {
++        return Qt::LandscapeOrientation;
++    }
++    if (orientationString == "InvertedLandscape") {
++        return Qt::InvertedLandscapeOrientation;
++    }
++    if (orientationString == "Portrait") {
++        return Qt::PortraitOrientation;
++    }
++    if (orientationString == "InvertedPortrait") {
++        return Qt::InvertedPortraitOrientation;
++    }
++    if (!orientationString.empty()) {
++        // Some option we don't know. Give some hint on what went wrong.
++        qWarning().nospace().noquote() << "Unknown option \"" << QString::fromStdString(orientationString)
++                    << ". Supported options are: Landscape, InvertedLandscape, Portrait and InvertedPortrait.";
++    }
++    return defaultValue;
++}
++
++bool DeviceConfig::supportsMultiColorLed() const
++{
++    return m_info->contains("supportsMultiColorLed");
++}
+diff --git a/plugins/Utils/deviceconfigparser.h b/plugins/Utils/deviceconfig.h
+similarity index 74%
+rename from plugins/Utils/deviceconfigparser.h
+rename to plugins/Utils/deviceconfig.h
+index f20108f07..3e7615122 100644
+--- a/plugins/Utils/deviceconfigparser.h
++++ b/plugins/Utils/deviceconfig.h
+@@ -14,16 +14,16 @@
+  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
+-#ifndef DEVICECONFIGPARSER_H
+-#define DEVICECONFIGPARSER_H
++#pragma once
+ 
+ #include <QObject>
+-#include <QSettings>
++#include <memory>
+ 
+-class DeviceConfigParser: public QObject
++class DeviceInfo;
++class DeviceConfig: public QObject
+ {
+     Q_OBJECT
+-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY changed)
++    Q_PROPERTY(QString name READ name NOTIFY changed)
+ 
+     // NOTE: When changing this properties, also update the examples in docs and data
+     Q_PROPERTY(Qt::ScreenOrientation primaryOrientation READ primaryOrientation NOTIFY changed)
+@@ -33,13 +33,12 @@ class DeviceConfigParser: public QObject
+     Q_PROPERTY(Qt::ScreenOrientation portraitOrientation READ portraitOrientation NOTIFY changed)
+     Q_PROPERTY(Qt::ScreenOrientation invertedPortraitOrientation READ invertedPortraitOrientation NOTIFY changed)
+     Q_PROPERTY(QString category READ category NOTIFY changed)
+-    Q_PROPERTY(bool supportsMultiColorLed READ supportsMultiColorLed NOTIFY changed)
++    Q_PROPERTY(bool supportsMultiColorLed READ supportsMultiColorLed)
+ 
+ public:
+-    DeviceConfigParser(QObject *parent = nullptr);
++    DeviceConfig(QObject *parent = nullptr);
+ 
+     QString name() const;
+-    void setName(const QString &name);
+ 
+     Qt::ScreenOrientation primaryOrientation() const;
+     Qt::ScreenOrientations supportedOrientations() const;
+@@ -54,13 +53,7 @@ Q_SIGNALS:
+     void changed();
+ 
+ private:
+-    QString m_name;
+-    QSettings *m_config;
++    std::shared_ptr<DeviceInfo> m_info;
+ 
+-    QStringList readOrientationsFromConfig(const QString &key) const;
+-    QString readOrientationFromConfig(const QString &key) const;
+-    Qt::ScreenOrientation stringToOrientation(const QString &orientationString, Qt::ScreenOrientation defaultValue) const;
+-    bool readBoolFromConfig(const QString &key, bool defaultValue) const;
++    Qt::ScreenOrientation stringToOrientation(const std::string &orientationString, Qt::ScreenOrientation defaultValue) const;
+ };
+-
+-#endif
+diff --git a/plugins/Utils/deviceconfigparser.cpp b/plugins/Utils/deviceconfigparser.cpp
+deleted file mode 100644
+index 8514712dc..000000000
+--- a/plugins/Utils/deviceconfigparser.cpp
++++ /dev/null
+@@ -1,176 +0,0 @@
+-/*
+- * Copyright 2016 Canonical Ltd.
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU Lesser General Public License as published by
+- * the Free Software Foundation; version 3.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+- * GNU Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public License
+- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+- */
+-
+-#include "deviceconfigparser.h"
+-
+-#include <QSettings>
+-#include <QFileInfo>
+-#include <QDebug>
+-#include <QStandardPaths>
+-
+-DeviceConfigParser::DeviceConfigParser(QObject *parent): QObject(parent)
+-{
+-    // Local files have highest priority
+-    QString path;
+-    Q_FOREACH (const QString &standardPath, QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation)) {
+-        if (QFileInfo::exists(standardPath + "/devices.conf")) {
+-            path = standardPath + "/devices.conf";
+-            break;
+-        }
+-    }
+-
+-    // Check if there is an override in the device tarball (/system/etc/)
+-    if (path.isEmpty() && QFileInfo::exists("/system/etc/lomiri/devices.conf")) {
+-        path = "/system/etc/lomiri/devices.conf";
+-    }
+-
+-    // No higher priority files found. Use standard of /etc/
+-    if (path.isEmpty()) {
+-        path = "/etc/lomiri/devices.conf";
+-    }
+-
+-    qDebug() << "Using" << path << "as device configuration file";
+-    m_config = new QSettings(path, QSettings::IniFormat, this);
+-}
+-
+-QString DeviceConfigParser::name() const
+-{
+-    return m_name;
+-}
+-
+-void DeviceConfigParser::setName(const QString &name)
+-{
+-    if (m_name == name) {
+-        return;
+-    }
+-    m_name = name;
+-    Q_EMIT changed();
+-}
+-
+-Qt::ScreenOrientation DeviceConfigParser::primaryOrientation() const
+-{
+-    return stringToOrientation(readOrientationFromConfig("PrimaryOrientation"), Qt::PrimaryOrientation);
+-}
+-
+-Qt::ScreenOrientations DeviceConfigParser::supportedOrientations() const
+-{
+-    QStringList values = readOrientationsFromConfig("SupportedOrientations");
+-    if (values.isEmpty()) {
+-        return Qt::PortraitOrientation
+-                | Qt::InvertedPortraitOrientation
+-                | Qt::LandscapeOrientation
+-                | Qt::InvertedLandscapeOrientation;
+-    }
+-
+-    Qt::ScreenOrientations ret = Qt::PrimaryOrientation;
+-    Q_FOREACH(const QString &orientationString, values) {
+-        ret |= stringToOrientation(orientationString, Qt::PrimaryOrientation);
+-    }
+-    return ret;
+-}
+-
+-Qt::ScreenOrientation DeviceConfigParser::landscapeOrientation() const
+-{
+-    return stringToOrientation(readOrientationFromConfig("LandscapeOrientation"), Qt::LandscapeOrientation);
+-}
+-
+-Qt::ScreenOrientation DeviceConfigParser::invertedLandscapeOrientation() const
+-{
+-    return stringToOrientation(readOrientationFromConfig("InvertedLandscapeOrientation"), Qt::InvertedLandscapeOrientation);
+-}
+-
+-Qt::ScreenOrientation DeviceConfigParser::portraitOrientation() const
+-{
+-    return stringToOrientation(readOrientationFromConfig("PortraitOrientation"), Qt::PortraitOrientation);
+-}
+-
+-Qt::ScreenOrientation DeviceConfigParser::invertedPortraitOrientation() const
+-{
+-    return stringToOrientation(readOrientationFromConfig("InvertedPortraitOrientation"), Qt::InvertedPortraitOrientation);
+-}
+-
+-QString DeviceConfigParser::category() const
+-{
+-    QStringList supportedValues = {"phone", "tablet", "desktop"};
+-    m_config->beginGroup(m_name);
+-    QString value = m_config->value("Category", "phone").toString();
+-    if (!supportedValues.contains(value)) {
+-        qWarning().nospace().noquote() << "Unknown option \"" << value << "\" in " << m_config->fileName()
+-                    << ". Supported options are: " << supportedValues.join(", ") << ".";
+-        return "phone";
+-    }
+-    m_config->endGroup();
+-    return value;
+-}
+-
+-bool DeviceConfigParser::supportsMultiColorLed() const
+-{
+-    return readBoolFromConfig("SupportsMultiColorLed", true);
+-}
+-
+-bool DeviceConfigParser::readBoolFromConfig(const QString &key, bool defaultValue) const
+-{
+-    m_config->beginGroup(m_name);
+-
+-    bool ret = defaultValue;
+-    if (m_config->contains(key)) {
+-        ret = m_config->value(key).toBool();
+-    }
+-
+-    m_config->endGroup();
+-    return ret;
+-}
+-
+-QStringList DeviceConfigParser::readOrientationsFromConfig(const QString &key) const
+-{
+-    m_config->beginGroup(m_name);
+-
+-    QStringList ret;
+-    if (m_config->contains(key)) {
+-        ret = m_config->value(key).toStringList();
+-    }
+-
+-    m_config->endGroup();
+-    return ret;
+-}
+-
+-QString DeviceConfigParser::readOrientationFromConfig(const QString &key) const
+-{
+-    QStringList ret = readOrientationsFromConfig(key);
+-    return ret.count() > 0 ? ret.first() : QString();
+-}
+-
+-Qt::ScreenOrientation DeviceConfigParser::stringToOrientation(const QString &orientationString, Qt::ScreenOrientation defaultValue) const
+-{
+-    if (orientationString == "Landscape") {
+-        return Qt::LandscapeOrientation;
+-    }
+-    if (orientationString == "InvertedLandscape") {
+-        return Qt::InvertedLandscapeOrientation;
+-    }
+-    if (orientationString == "Portrait") {
+-        return Qt::PortraitOrientation;
+-    }
+-    if (orientationString == "InvertedPortrait") {
+-        return Qt::InvertedPortraitOrientation;
+-    }
+-    if (!orientationString.isEmpty()) {
+-        // Some option we don't know. Give some hint on what went wrong.
+-        qWarning().nospace().noquote() << "Unknown option \"" << orientationString << "\" in " << m_config->fileName()
+-                    << ". Supported options are: Landscape, InvertedLandscape, Portrait and InvertedPortrait.";
+-    }
+-    return defaultValue;
+-}
+diff --git a/plugins/Utils/plugin.cpp b/plugins/Utils/plugin.cpp
+index b61f7b20e..677ea7619 100644
+--- a/plugins/Utils/plugin.cpp
++++ b/plugins/Utils/plugin.cpp
+@@ -36,7 +36,7 @@
+ #include "timezoneFormatter.h"
+ #include "applicationsfiltermodel.h"
+ #include "inputeventgenerator.h"
+-#include "deviceconfigparser.h"
++#include "deviceconfig.h"
+ #include "globalfunctions.h"
+ #include "URLDispatcher.h"
+ #include "appdrawerproxymodel.h"
+@@ -83,7 +83,7 @@ void UtilsPlugin::registerTypes(const char *uri)
+     qmlRegisterType<ActiveFocusLogger>(uri, 0, 1, "ActiveFocusLogger");
+     qmlRegisterType<ApplicationsFilterModel>(uri, 0, 1, "ApplicationsFilterModel");
+     qmlRegisterType<InputEventGenerator>(uri, 0, 1, "InputEventGenerator");
+-    qmlRegisterType<DeviceConfigParser>(uri, 0, 1, "DeviceConfigParser");
++    qmlRegisterType<DeviceConfig>(uri, 0, 1, "DeviceConfig");
+     qmlRegisterSingletonType<GlobalFunctions>(uri, 0, 1, "Functions", createGlobalFunctions);
+     qmlRegisterType<URLDispatcher>(uri, 0, 1, "URLDispatcher");
+     qmlRegisterType<AppDrawerProxyModel>(uri, 0, 1, "AppDrawerProxyModel");
+diff --git a/qml/DeviceConfiguration.qml b/qml/DeviceConfiguration.qml
+index c73f43a91..0b95744e9 100644
+--- a/qml/DeviceConfiguration.qml
++++ b/qml/DeviceConfiguration.qml
+@@ -20,11 +20,13 @@ import Utils 0.1
+ QtObject {
+     id: root
+ 
++    // This allows to override device name, used for convergence
++    // to set screens to desktop "mode"
++    property var overrideName: false
++
+     readonly property int useNativeOrientation: -1
+ 
+-    // The only writable property in the API
+-    // all other properties are set according to the device name
+-    property alias name: priv.state
++    readonly property alias name: priv.name;
+ 
+     readonly property alias primaryOrientation: priv.primaryOrientation
+     readonly property alias supportedOrientations: priv.supportedOrientations
+@@ -35,26 +37,29 @@ QtObject {
+ 
+     readonly property alias category: priv.category
+ 
+-    readonly property alias supportsMultiColorLed: priv.supportsMultiColorLed
++    readonly property var deviceConfig: DeviceConfig {}
+ 
+-    readonly property var deviceConfigParser: DeviceConfigParser {
+-        name: root.name
++    readonly property var binding: Binding {
++        target: priv
++        property: "state"
++        value: root.overrideName ? overrideName : deviceConfig.name
+     }
+ 
+     readonly property var priv: StateGroup {
+         id: priv
+ 
+-        property int primaryOrientation: deviceConfigParser.primaryOrientation == Qt.PrimaryOrientation ?
+-                                             root.useNativeOrientation : deviceConfigParser.primaryOrientation
++        property int primaryOrientation: deviceConfig.primaryOrientation == Qt.PrimaryOrientation ?
++                                             root.useNativeOrientation : deviceConfig.primaryOrientation
+ 
+-        property int supportedOrientations: deviceConfigParser.supportedOrientations
++        property int supportedOrientations: deviceConfig.supportedOrientations
+ 
+-        property int landscapeOrientation: deviceConfigParser.landscapeOrientation
+-        property int invertedLandscapeOrientation: deviceConfigParser.invertedLandscapeOrientation
+-        property int portraitOrientation: deviceConfigParser.portraitOrientation
+-        property int invertedPortraitOrientation: deviceConfigParser.invertedPortraitOrientation
+-        property string category: deviceConfigParser.category
+-        property bool supportsMultiColorLed: deviceConfigParser.supportsMultiColorLed
++        property int landscapeOrientation: deviceConfig.landscapeOrientation
++        property int invertedLandscapeOrientation: deviceConfig.invertedLandscapeOrientation
++        property int portraitOrientation: deviceConfig.portraitOrientation
++        property int invertedPortraitOrientation: deviceConfig.invertedPortraitOrientation
++        property string category: deviceConfig.category
++        property string name: deviceConfig.name
++        property bool supportsMultiColorLed: deviceConfig.supportsMultiColorLed
+ 
+         states: [
+             State {
+@@ -70,6 +75,7 @@ QtObject {
+                     portraitOrientation: Qt.PortraitOrientation
+                     invertedPortraitOrientation: Qt.InvertedPortraitOrientation
+                     category: "phone"
++                    name: "mako"
+                 }
+             },
+             State {
+@@ -85,6 +91,7 @@ QtObject {
+                     portraitOrientation: Qt.PortraitOrientation
+                     invertedPortraitOrientation: Qt.InvertedPortraitOrientation
+                     category: "phone"
++                    name: "krillin"
+                 }
+             },
+             State {
+@@ -102,6 +109,7 @@ QtObject {
+                     invertedPortraitOrientation: Qt.InvertedPortraitOrientation
+                     supportsMultiColorLed: false
+                     category: "phone"
++                    name: "arale"
+                 }
+             },
+             State {
+@@ -118,6 +126,7 @@ QtObject {
+                     portraitOrientation: Qt.PortraitOrientation
+                     invertedPortraitOrientation: Qt.InvertedPortraitOrientation
+                     category: "tablet"
++                    name: "manta"
+                 }
+             },
+             State {
+@@ -134,6 +143,7 @@ QtObject {
+                     portraitOrientation: Qt.PortraitOrientation
+                     invertedPortraitOrientation: Qt.InvertedPortraitOrientation
+                     category: "tablet"
++                    name: "flo"
+                 }
+             },
+             State {
+@@ -147,6 +157,7 @@ QtObject {
+                     portraitOrientation: Qt.PortraitOrientation
+                     invertedPortraitOrientation: Qt.InvertedPortraitOrientation
+                     category: "desktop"
++                    name: "desktop"
+                 }
+             },
+             State {
+diff --git a/qml/DisabledScreenNotice.qml b/qml/DisabledScreenNotice.qml
+index 0e9d7c698..14fa7656b 100644
+--- a/qml/DisabledScreenNotice.qml
++++ b/qml/DisabledScreenNotice.qml
+@@ -27,13 +27,13 @@ Item {
+     // For testing
+     property var screen: Screen
+     property var orientationLock: OrientationLock
++    property alias overrideDeviceName: deviceConfiguration.overrideName
+ 
+     property bool oskEnabled: false
+ 
+     property alias deviceConfiguration: _deviceConfiguration
+     DeviceConfiguration {
+         id: _deviceConfiguration
+-        name: applicationArguments.deviceName
+     }
+ 
+     Item {
+diff --git a/qml/OrientedShell.qml b/qml/OrientedShell.qml
+index f37051275..78a4bb464 100644
+--- a/qml/OrientedShell.qml
++++ b/qml/OrientedShell.qml
+@@ -37,10 +37,13 @@ Item {
+     property bool lightIndicators: false
+ 
+     onWidthChanged: calculateUsageMode();
++    property var overrideDeviceName: screens.count > 1 ? "desktop" : false
+ 
+     DeviceConfiguration {
+         id: _deviceConfiguration
+-        name: applicationArguments.deviceName
++
++        // Override for convergence to set scale etc for second monitor
++        overrideName: root.overrideDeviceName
+     }
+ 
+     Item {
+diff --git a/src/ApplicationArguments.cpp b/src/ApplicationArguments.cpp
+index 3e64a68d9..b0e7e85bb 100644
+--- a/src/ApplicationArguments.cpp
++++ b/src/ApplicationArguments.cpp
+@@ -21,11 +21,3 @@ ApplicationArguments::ApplicationArguments(QCoreApplication *app)
+     , LomiriCommandLineParser(*app)
+ {
+ }
+-
+-void ApplicationArguments::setDeviceName(const QString &deviceName)
+-{
+-    if (deviceName != m_deviceName) {
+-        m_deviceName = deviceName;
+-        Q_EMIT deviceNameChanged(m_deviceName);
+-    }
+-}
+diff --git a/src/ApplicationArguments.h b/src/ApplicationArguments.h
+index 90a853a23..40a781c2d 100644
+--- a/src/ApplicationArguments.h
++++ b/src/ApplicationArguments.h
+@@ -29,7 +29,6 @@ class ApplicationArguments : public QObject,
+                              public LomiriCommandLineParser
+ {
+     Q_OBJECT
+-    Q_PROPERTY(QString deviceName READ deviceName NOTIFY deviceNameChanged)
+     Q_PROPERTY(QString mode READ mode CONSTANT)
+ 
+     Q_PROPERTY(bool hasGeometry READ hasGeometry CONSTANT)
+@@ -44,12 +43,7 @@ class ApplicationArguments : public QObject,
+ public:
+     ApplicationArguments(QCoreApplication *app);
+ 
+-    void setDeviceName(const QString &deviceName);
+-
+     bool hasGeometry() const { return m_windowGeometry.isValid(); }
+-
+-Q_SIGNALS:
+-    void deviceNameChanged(const QString&);
+ };
+ 
+ #endif // APPLICATION_ARGUMENTS_H
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 920d86ea1..ac03204b6 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -43,7 +43,6 @@ if (ENABLE_TOUCH_EMULATION)
+     set(SOURCE_FILES ${SOURCE_FILES} MouseTouchAdaptor.cpp)
+ endif()
+ 
+-pkg_check_modules(ANDROID_PROPERTIES REQUIRED libandroid-properties)
+ pkg_check_modules(SYSTEMD REQUIRED libsystemd)
+ 
+ include_directories(
+@@ -52,12 +51,8 @@ include_directories(
+ 
+ add_executable(${SHELL_APP} ${SOURCE_FILES})
+ 
+-if (NOT "${ANDROID_PROPERTIES_INCLUDE_DIRS}" STREQUAL "")
+-    set_target_properties(${SHELL_APP} PROPERTIES INCLUDE_DIRECTORIES ${ANDROID_PROPERTIES_INCLUDE_DIRS})
+-endif()
+ target_link_libraries(${SHELL_APP}
+     Qt5::DBus Qt5::Gui Qt5::Qml Qt5::Quick Qt5::Test
+-    ${ANDROID_PROPERTIES_LDFLAGS}
+     ${GSETTINGS_QT_LDFLAGS}
+     ${QTMIRSERVER_LDFLAGS}
+     ${SYSTEMD_LDFLAGS}
+diff --git a/src/LomiriApplication.cpp b/src/LomiriApplication.cpp
+index f9e3ecb4b..cad035755 100644
+--- a/src/LomiriApplication.cpp
++++ b/src/LomiriApplication.cpp
+@@ -27,9 +27,6 @@
+ 
+ #include <libintl.h>
+ 
+-// libandroid-properties
+-#include <hybris/properties/properties.h>
+-
+ // qtmir
+ #include <qtmir/displayconfigurationstorage.h>
+ 
+@@ -55,12 +52,6 @@ LomiriApplication::LomiriApplication(int & argc, char ** argv)
+ 
+     setupQmlEngine();
+ 
+-    if (m_qmlArgs.deviceName().isEmpty()) {
+-        char buffer[200];
+-        property_get("ro.product.device", buffer /* value */, "desktop" /* default_value*/);
+-        m_qmlArgs.setDeviceName(QString(buffer));
+-    }
+-
+     // The testability driver is only loaded by QApplication but not by QGuiApplication.
+     // However, QApplication depends on QWidget which would add some unneeded overhead => Let's load the testability driver on our own.
+     if (m_qmlArgs.hasTestability() || getenv("QT_LOAD_TESTABILITY")) {
+diff --git a/src/LomiriCommandLineParser.cpp b/src/LomiriCommandLineParser.cpp
+index 50cbce76c..0a932af52 100644
+--- a/src/LomiriCommandLineParser.cpp
++++ b/src/LomiriCommandLineParser.cpp
+@@ -52,10 +52,6 @@ LomiriCommandLineParser::LomiriCommandLineParser(const QCoreApplication &app)
+         QStringLiteral("DISCOURAGED: Please set QT_LOAD_TESTABILITY instead.\nLoad the testability driver"));
+     parser.addOption(testabilityOption);
+ 
+-    QCommandLineOption devicenameOption(QStringList() << QStringLiteral("devicename"),
+-            QStringLiteral("Specify the device name instead of letting Lomiri 8 find it out"), QStringLiteral("devicename"), QLatin1String(""));
+-    parser.addOption(devicenameOption);
+-
+     QCommandLineOption modeOption(QStringLiteral("mode"),
+         QStringLiteral("Whether to run greeter and/or shell [full-greeter, full-shell, greeter, shell]"),
+         QStringLiteral("mode"), QStringLiteral("full-greeter"));
+@@ -89,7 +85,6 @@ LomiriCommandLineParser::LomiriCommandLineParser(const QCoreApplication &app)
+     #endif
+ 
+     m_hasFullscreen = parser.isSet(fullscreenOption);
+-    m_deviceName = parser.value(devicenameOption);
+     resolveMode(parser, modeOption);
+ 
+     m_qmlfile = parser.value(qmlfileOption);
+diff --git a/src/LomiriCommandLineParser.h b/src/LomiriCommandLineParser.h
+index 42cd37eee..983f4f09b 100644
+--- a/src/LomiriCommandLineParser.h
++++ b/src/LomiriCommandLineParser.h
+@@ -34,7 +34,6 @@ public:
+     #endif
+ 
+     bool hasFullscreen() const { return m_hasFullscreen; }
+-    QString deviceName() const { return m_deviceName; }
+     QString mode() const { return m_mode; }
+ 
+     QString qmlfie() const { return m_qmlfile; }
+@@ -55,7 +54,6 @@ protected:
+     #endif
+ 
+     bool m_hasFullscreen;
+-    QString m_deviceName;
+     QString m_mode;
+     QString m_qmlfile;
+ };
+diff --git a/tests/mocks/Utils/CMakeLists.txt b/tests/mocks/Utils/CMakeLists.txt
+index dc8a3770c..9e3b88857 100644
+--- a/tests/mocks/Utils/CMakeLists.txt
++++ b/tests/mocks/Utils/CMakeLists.txt
+@@ -9,6 +9,7 @@ include_directories(
+     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+     ${Qt5Quick_PRIVATE_INCLUDE_DIRS}
+     ${GIO_INCLUDE_DIRS}
++    ${DEVICEINFO_INCLUDE_DIRS}
+ )
+ 
+ set(QMLPLUGIN_SRC
+@@ -22,7 +23,7 @@ set(QMLPLUGIN_SRC
+     ${CMAKE_SOURCE_DIR}/plugins/Utils/timezoneFormatter.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Utils/applicationsfiltermodel.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Utils/inputeventgenerator.cpp
+-    ${CMAKE_SOURCE_DIR}/plugins/Utils/deviceconfigparser.cpp
++    ${CMAKE_SOURCE_DIR}/plugins/Utils/deviceconfig.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Utils/globalfunctions.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Utils/appdrawerproxymodel.cpp
+     ${CMAKE_SOURCE_DIR}/plugins/Utils/tabfocusfence.cpp
+@@ -50,7 +51,8 @@ add_library(FakeUtils-qml SHARED
+ target_link_libraries(FakeUtils-qml
+     ${GIO_LDFLAGS}
+     Qt5::Qml Qt5::Quick Qt5::DBus Qt5::Network Qt5::Gui
+-    )
++    ${DEVICEINFO_LDFLAGS}
++)
+ 
+ # Because this is an internal support library, we want
+ # to expose all symbols in it. Consider changing this
+diff --git a/tests/mocks/Utils/plugin.cpp b/tests/mocks/Utils/plugin.cpp
+index b9e48f386..5d11f266c 100644
+--- a/tests/mocks/Utils/plugin.cpp
++++ b/tests/mocks/Utils/plugin.cpp
+@@ -38,7 +38,7 @@
+ #include <timezoneFormatter.h>
+ #include <applicationsfiltermodel.h>
+ #include <inputeventgenerator.h>
+-#include <deviceconfigparser.h>
++#include <deviceconfig.h>
+ #include <globalfunctions.h>
+ #include <appdrawerproxymodel.h>
+ #include <tabfocusfence.h>
+@@ -83,7 +83,7 @@ void FakeUtilsPlugin::registerTypes(const char *uri)
+     qmlRegisterType<ActiveFocusLogger>(uri, 0, 1, "ActiveFocusLogger");
+     qmlRegisterType<ApplicationsFilterModel>(uri, 0, 1, "ApplicationsFilterModel");
+     qmlRegisterType<InputEventGenerator>(uri, 0, 1, "InputEventGenerator");
+-    qmlRegisterType<DeviceConfigParser>(uri, 0, 1, "DeviceConfigParser");
++    qmlRegisterType<DeviceConfig>(uri, 0, 1, "DeviceConfig");
+     qmlRegisterSingletonType<GlobalFunctions>(uri, 0, 1, "Functions", createGlobalFunctions);
+     qmlRegisterType<URLDispatcher>(uri, 0, 1, "URLDispatcher");
+     qmlRegisterType<AppDrawerProxyModel>(uri, 0, 1, "AppDrawerProxyModel");
+diff --git a/tests/plugins/Utils/CMakeLists.txt b/tests/plugins/Utils/CMakeLists.txt
+index 4f64ab1b5..ea1fa4e83 100644
+--- a/tests/plugins/Utils/CMakeLists.txt
++++ b/tests/plugins/Utils/CMakeLists.txt
+@@ -12,7 +12,6 @@ foreach(util_test
+     QLimitProxyModel
+     LomiriSortFilterProxyModel
+     WindowInputMonitor
+-    DeviceConfigParser
+     WindowStateStorage
+ )
+     add_executable(${util_test}TestExec ${util_test}Test.cpp ModelTest.cpp)
+diff --git a/tests/plugins/Utils/DeviceConfigParserTest.cpp b/tests/plugins/Utils/DeviceConfigParserTest.cpp
+deleted file mode 100644
+index bc8b0cdba..000000000
+--- a/tests/plugins/Utils/DeviceConfigParserTest.cpp
++++ /dev/null
+@@ -1,76 +0,0 @@
+-/*
+- * Copyright (C) 2016 Canonical, Ltd.
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; version 3.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+- */
+-
+-// local
+-#include "deviceconfigparser.h"
+-
+-// Qt
+-#include <QTest>
+-#include <QDebug>
+-#include <QSettings>
+-#include <QTemporaryDir>
+-
+-class DeviceConfigParserTest : public QObject
+-{
+-    Q_OBJECT
+-
+-private Q_SLOTS:
+-
+-    void initTestCase() {
+-    }
+-
+-    void testDefaults()
+-    {
+-        DeviceConfigParser p;
+-        p.setName("nonexistent");
+-
+-        QCOMPARE(p.supportedOrientations(), Qt::PortraitOrientation | Qt::InvertedPortraitOrientation | Qt::LandscapeOrientation | Qt::InvertedLandscapeOrientation);
+-        QCOMPARE(p.primaryOrientation(), Qt::PrimaryOrientation);
+-        QCOMPARE(p.portraitOrientation(), Qt::PortraitOrientation);
+-        QCOMPARE(p.invertedPortraitOrientation(), Qt::InvertedPortraitOrientation);
+-        QCOMPARE(p.landscapeOrientation(), Qt::LandscapeOrientation);
+-        QCOMPARE(p.invertedLandscapeOrientation(), Qt::InvertedLandscapeOrientation);
+-        QCOMPARE(p.supportsMultiColorLed(), true);
+-    }
+-
+-    void testCustomFile() {
+-        QTemporaryDir dir;
+-        QSettings s(dir.path() + "/devices.conf", QSettings::IniFormat);
+-        s.beginGroup("fakedevice");
+-
+-        s.setValue("SupportedOrientations", QStringList() << "Portrait" << "Landscape" << "InvertedLandscape");
+-        s.setValue("PrimaryOrientation", "InvertedLandscape");
+-        s.setValue("SupportsMultiColorLed", false);
+-        s.sync();
+-
+-        qputenv("XDG_CONFIG_HOME", dir.path().toUtf8());
+-        DeviceConfigParser p;
+-        p.setName("fakedevice");
+-
+-        QCOMPARE(p.supportedOrientations(), Qt::PortraitOrientation | Qt::LandscapeOrientation | Qt::InvertedLandscapeOrientation);
+-        QCOMPARE(p.primaryOrientation(), Qt::InvertedLandscapeOrientation);
+-        QCOMPARE(p.portraitOrientation(), Qt::PortraitOrientation);
+-        QCOMPARE(p.invertedPortraitOrientation(), Qt::InvertedPortraitOrientation);
+-        QCOMPARE(p.landscapeOrientation(), Qt::LandscapeOrientation);
+-        QCOMPARE(p.invertedLandscapeOrientation(), Qt::InvertedLandscapeOrientation);
+-        QCOMPARE(p.supportsMultiColorLed(), false);
+-    }
+-
+-};
+-
+-QTEST_GUILESS_MAIN(DeviceConfigParserTest)
+-
+-#include "DeviceConfigParserTest.moc"
+diff --git a/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml b/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml
+index 52b38aa64..089d2b702 100644
+--- a/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml
++++ b/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml
+@@ -257,13 +257,13 @@ Item {
+                 // Support for Multicolor LED
+                 //
+                 { tag: "Powerd.Off with New Message & no support for multicolor led",
+-                  expectedLightsState: Lights.On,
++                  expectedLightsState: Leds.On,
+                       powerd: Powerd.Off, actionData: newMessage, supportsMultiColorLed: false },
+                 { tag: "Powerd.Off while charging & support for multicolor led",
+-                  expectedLightsState: Lights.On,
++                  expectedLightsState: Leds.On,
+                       powerd: Powerd.Off, actionData: deviceStateDBusSignals.charging, supportsMultiColorLed: true },
+                 { tag: "Powerd.Off while charging & no support for multicolor led",
+-                  expectedLightsState: Lights.Off,
++                  expectedLightsState: Leds.Off,
+                       powerd: Powerd.Off, actionData: deviceStateDBusSignals.charging, supportsMultiColorLed: false },
+             ]
+         }
+diff --git a/tests/qmltests/tst_DeviceConfiguration.qml b/tests/qmltests/tst_DeviceConfiguration.qml
+index ab028aa87..414257ddd 100644
+--- a/tests/qmltests/tst_DeviceConfiguration.qml
++++ b/tests/qmltests/tst_DeviceConfiguration.qml
+@@ -34,8 +34,9 @@ Item {
+         when: windowShown
+ 
+         function test_defaults() {
+-            deviceConfiguration.name = "nonexisting"
+-            compare(deviceConfiguration.primaryOrientation, -1)
++            compare(deviceConfiguration.name, "generic");
++            compare(deviceConfiguration.category, "desktop");
++            compare(deviceConfiguration.primaryOrientation, Qt.LandscapeOrientation)
+             compare(deviceConfiguration.landscapeOrientation, Qt.LandscapeOrientation)
+             compare(deviceConfiguration.portraitOrientation, Qt.PortraitOrientation)
+             compare(deviceConfiguration.invertedLandscapeOrientation, Qt.InvertedLandscapeOrientation)
+@@ -45,5 +46,25 @@ Item {
+                     | Qt.LandscapeOrientation
+                     | Qt.InvertedLandscapeOrientation)
+         }
++
++        function test_nameOverride() {
++            deviceConfiguration.overrideName = "flo";
++            compare(deviceConfiguration.name, "flo");
++            compare(deviceConfiguration.category, "tablet");
++            compare(deviceConfiguration.primaryOrientation, Qt.InvertedLandscapeOrientation)
++            compare(deviceConfiguration.landscapeOrientation, Qt.InvertedLandscapeOrientation)
++            compare(deviceConfiguration.portraitOrientation, Qt.PortraitOrientation)
++            compare(deviceConfiguration.invertedLandscapeOrientation, Qt.LandscapeOrientation)
++            compare(deviceConfiguration.invertedPortraitOrientation, Qt.InvertedPortraitOrientation)
++            compare(deviceConfiguration.supportedOrientations, Qt.PortraitOrientation
++                    | Qt.InvertedPortraitOrientation
++                    | Qt.LandscapeOrientation
++                    | Qt.InvertedLandscapeOrientation)
++
++            // Also try reseting override
++            deviceConfiguration.overrideName = false;
++            compare(deviceConfiguration.name, "generic");
++            compare(deviceConfiguration.category, "desktop");
++        }
+     }
+ }
+diff --git a/tests/qmltests/tst_DisabledScreenNotice.qml b/tests/qmltests/tst_DisabledScreenNotice.qml
+index 84f151423..ad54c6db8 100644
+--- a/tests/qmltests/tst_DisabledScreenNotice.qml
++++ b/tests/qmltests/tst_DisabledScreenNotice.qml
+@@ -31,12 +31,10 @@ Item {
+         id: touchScreenPad
+         anchors.fill: parent
+         anchors.rightMargin: units.gu(40)
++        overrideDeviceName: "mako"
+ 
+         // Mock some things here
+         property int internalGu: units.gu(1)
+-        property var applicationArguments: QtObject {
+-            property string deviceName: "mako"
+-        }
+ 
+         screen: QtObject {
+             property int orientation: {
+diff --git a/tests/qmltests/tst_OrientedShell.qml b/tests/qmltests/tst_OrientedShell.qml
+index 9e417f4ee..a926cacfc 100644
+--- a/tests/qmltests/tst_OrientedShell.qml
++++ b/tests/qmltests/tst_OrientedShell.qml
+@@ -171,6 +171,7 @@ Rectangle {
+             orientationLocked: orientationLockedCheckBox.checked
+             orientationLock: mockOrientationLock
+             lightIndicators: true
++            overrideDeviceName: applicationArguments.deviceName
+         }
+     }
+ 
+-- 
+2.32.0
+

@@ -1,0 +1,90 @@
+From 27da5417fdb6c7746b9094fcc5bac2bff37d7493 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sun, 15 Aug 2021 16:52:09 +0200
+Subject: [PATCH 8/8] fixups
+
+---
+ plugins/Utils/deviceconfig.h             | 3 ++-
+ qml/DisabledScreenNotice.qml             | 2 +-
+ qml/OrientedShell.qml                    | 2 +-
+ qml/Panel/Indicators/IndicatorsLight.qml | 2 +-
+ qml/ShellScreen.qml                      | 3 +--
+ 5 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/plugins/Utils/deviceconfig.h b/plugins/Utils/deviceconfig.h
+index 3e7615122..c7afceff4 100644
+--- a/plugins/Utils/deviceconfig.h
++++ b/plugins/Utils/deviceconfig.h
+@@ -33,7 +33,8 @@ class DeviceConfig: public QObject
+     Q_PROPERTY(Qt::ScreenOrientation portraitOrientation READ portraitOrientation NOTIFY changed)
+     Q_PROPERTY(Qt::ScreenOrientation invertedPortraitOrientation READ invertedPortraitOrientation NOTIFY changed)
+     Q_PROPERTY(QString category READ category NOTIFY changed)
+-    Q_PROPERTY(bool supportsMultiColorLed READ supportsMultiColorLed)
++    Q_PROPERTY(bool supportsMultiColorLed READ supportsMultiColorLed NOTIFY changed)
++    // TODO: The properties above could be "CONSTANT" instead of dummy "NOTIFY changed"?
+ 
+ public:
+     DeviceConfig(QObject *parent = nullptr);
+diff --git a/qml/DisabledScreenNotice.qml b/qml/DisabledScreenNotice.qml
+index 14fa7656b..7062b0752 100644
+--- a/qml/DisabledScreenNotice.qml
++++ b/qml/DisabledScreenNotice.qml
+@@ -27,7 +27,7 @@ Item {
+     // For testing
+     property var screen: Screen
+     property var orientationLock: OrientationLock
+-    property alias overrideDeviceName: deviceConfiguration.overrideName
++    property alias overrideDeviceName: _deviceConfiguration.overrideName
+ 
+     property bool oskEnabled: false
+ 
+diff --git a/qml/OrientedShell.qml b/qml/OrientedShell.qml
+index 78a4bb464..783fd1439 100644
+--- a/qml/OrientedShell.qml
++++ b/qml/OrientedShell.qml
+@@ -37,7 +37,7 @@ Item {
+     property bool lightIndicators: false
+ 
+     onWidthChanged: calculateUsageMode();
+-    property var overrideDeviceName: screens.count > 1 ? "desktop" : false
++    property var overrideDeviceName: Screens.count > 1 ? "desktop" : false
+ 
+     DeviceConfiguration {
+         id: _deviceConfiguration
+diff --git a/qml/Panel/Indicators/IndicatorsLight.qml b/qml/Panel/Indicators/IndicatorsLight.qml
+index 41178c1de..788243569 100644
+--- a/qml/Panel/Indicators/IndicatorsLight.qml
++++ b/qml/Panel/Indicators/IndicatorsLight.qml
+@@ -211,7 +211,7 @@ console.log("no support for Multicolor LED. " + indicatorState)
+         }
+     }
+ 
+-    Component.onCompleted: Leds.state = Lights.Off
++    Component.onCompleted: Leds.state = Leds.Off
+     Component.onDestruction: Leds.state = Leds.Off
+ 
+     property var _colorBinding: Binding {
+diff --git a/qml/ShellScreen.qml b/qml/ShellScreen.qml
+index 8e6d8408d..2eab41cde 100644
+--- a/qml/ShellScreen.qml
++++ b/qml/ShellScreen.qml
+@@ -29,7 +29,6 @@ ScreenWindow {
+ 
+     DeviceConfiguration {
+         id: deviceConfiguration
+-        name: applicationArguments.deviceName
+     }
+ 
+     Loader {
+@@ -52,7 +51,7 @@ ScreenWindow {
+             implicitHeight: screenWindow.height
+ 
+             deviceConfiguration {
+-                name: Screens.count > 1 ? "desktop" : applicationArguments.deviceName
++                overrideName: Screens.count > 1 ? "desktop" : applicationArguments.deviceName
+             }
+         }
+     }
+-- 
+2.32.0
+

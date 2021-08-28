@@ -13,12 +13,14 @@ depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev lomiri-api-dev geonames-dev qm
 makedepends="$depends_dev cmake cmake-extras dbus-test-runner doxygen graphviz lomiri-system-settings lomiri-deviceinfo-dev elogind-dev qtmir-dev"
 checkdepends="py3-dbusmock"
 source="https://gitlab.com/ubports/core/lomiri/-/archive/$_commit/lomiri-$_commit.tar.gz
-	0001-NoDpkgParse.patch
-	0002-Add-missing-includes.patch
-	0003-Add-qt5-suffix-to-search-for-Qt-tools.patch
-	0004-Link-against-libintl.patch
-	0005-We-do-not-have-Android-stuff.patch
-	0006-No-systemd.patch
+	0001-Replace-own-lights-plugin-with-hfd-leds.patch
+	0002-Replace-own-config-parser-with-libdeviceinfo.patch
+	0003-NoDpkgParse.patch
+	0004-Add-missing-includes.patch
+	0005-Add-qt5-suffix-to-search-for-Qt-tools.patch
+	0006-Link-against-libintl.patch
+	0007-No-systemd.patch
+	0008-fixups.patch
 	"
 subpackages="$pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
@@ -49,10 +51,12 @@ package() {
 
 sha512sums="
 bd1bfff9abfa7b589e43e9e36e9f3981ad42463693eb606c380cf0f5fb87b2254e39f2ec5629daf5bf1f09be17b94109eee118c332aa2bf39475961f86aa26bc  lomiri-d34a00c1e83e348e21b97e12deff911288e38b97.tar.gz
-ca82517720e33e348d95636622be7e5c19a0eacd39065f2205cf320ba1da02745bc1c135552236d83a20882281a353df819b54810b7ccc0089e7fed5f041304c  0001-NoDpkgParse.patch
-99ba3b5cfe5b5b8bad200336028c7c5fd61e1a863f653e84ab433a6062ada7c1f14148044f387f75c98a0539399d5b77ff6640091f1a1b236514e90d84b70376  0002-Add-missing-includes.patch
-9480cb038086282196e8fb1380de4b65c20d84ac43cb00672858bd88cf173c645bb56210639dc13d58d5118679e4e985ea9f66632282bfc4ef6a052db8c716be  0003-Add-qt5-suffix-to-search-for-Qt-tools.patch
-f818d084565f16fb6fef5d46f1a78eb9cf1beb839010705d602ddda5935637293dac9d7b1cf4f9c668c6823a2dcc6d2b082a8f71fb03b79ca1291916fbfd0006  0004-Link-against-libintl.patch
-2a5e4977db5f8cf83ef34230d53f80c958ed54883f6902c2678d8198a0a6d0e8359051e0129818430c1b7663423e066800618f522b64f1deac630becc28ec088  0005-We-do-not-have-Android-stuff.patch
-9cb18aba8c71de7baf6355228f41cce4025dae813e8fc7a20996ccc310062be52b030c5c78eb4820c4e352ebe1b3df5ff74212d8328aee1e8b5dcbd91b3f6382  0006-No-systemd.patch
+dab1152ced9f881704f05ee47709e7bfaa22634d054e27bc820cafbdc3736ac2897fd07a8b2e736977a68f55c4cc211b0d72a7a1e1835a4db314a75b2e7133ab  0001-Replace-own-lights-plugin-with-hfd-leds.patch
+676f20bd34389820932332f94c296756d632c2c36dea543f59ef7eba308461cd0d81ca9a725081c3e4a66e12bb67387db40716955aca64e2dd242f84bc9c785d  0002-Replace-own-config-parser-with-libdeviceinfo.patch
+bc985880f564cccb3c00a2d492b336fa3486ca1fcf4846fd8cbd47db3d0785e83e091bb67040e7131b3ef100e5f4cdbef86471cc76f98ea5e0d0030962f22ee6  0003-NoDpkgParse.patch
+a09ceeab5f3293877b0aed95c6547263e05c514affc73f29a4e951d23b815359ebbde37570416b03fecd32b08af6631d0903adc320181affbc49c2a5175424b0  0004-Add-missing-includes.patch
+abbf4d5347968b55f373cce457d6a7b50f8af1107ad2481262f4bdbf0e0b9ad873a7322cbedef58ce2126dd7750ce05f48cc1cd64ba23f6197dfac3a26fe4414  0005-Add-qt5-suffix-to-search-for-Qt-tools.patch
+f8154d545da5aed2cbb62c8bca68a64bd60c39eb6fa5aa735167fc058f350076e092c3708f6d2b26f144a3abae9be82a935d9c43cb0f164bb87591067e897286  0006-Link-against-libintl.patch
+20e3b18ceda6366447b42fa5e0eb8d94f01d6dbb41d229a636825589a6267cbbd9f63eee4236e5b98ae79d6a4ce367e235b8d20b87b137a2149b70fc78fad146  0007-No-systemd.patch
+9a5652d92921508754a53ee8e756d4e5fec6fb1c6658c9d577adbeef956fa37b0d9d710cab336f0f0947705428090a83ffd642997a8a6554efdb6c458a7a3fba  0008-fixups.patch
 "
