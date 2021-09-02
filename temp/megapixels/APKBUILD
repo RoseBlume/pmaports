@@ -1,0 +1,31 @@
+# Forked from Alpine for stable backports
+
+pkgname=megapixels
+pkgver=1.2.0
+pkgrel=0
+pkgdesc="GTK+4 camera app for mobile devices"
+url="https://git.sr.ht/~martijnbraam/megapixels"
+# s390x and mips64 blocked by gtk4.0
+arch="all !s390x !mips64"
+license="GPL-3.0-only"
+# Required by postprocess.sh
+# depends="cmd:dcraw_emu cmd:convert cmd:exiftool"
+depends="libraw-tools imagemagick exiftool"
+makedepends="glib-dev gtk4.0-dev tiff-dev zbar-dev meson"
+source="
+	$pkgname-$pkgver.tar.gz::https://git.sr.ht/~martijnbraam/megapixels/archive/$pkgver.tar.gz
+"
+options="!check" # There's no testsuite
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+0ae734b7e82186725022d092a70a439fe29e44916556cbb35334d37bd93dd14c50372460806239ac1b09589761c754acf50694050c3eae0546f1938441a74571  megapixels-1.2.0.tar.gz
+"
