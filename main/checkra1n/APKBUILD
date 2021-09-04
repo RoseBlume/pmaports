@@ -1,0 +1,17 @@
+# Maintainer: Jonas Heinrich <onny@project-insanity.org>
+pkgname=checkra1n
+pkgver=0.12.4
+pkgrel=0
+pkgdesc="Semi-tethered jailbreak based on the checkm8 bootrom exploit"
+url="https://checkra.in"
+arch="x86_64"
+license="unknown"
+source="checkra1n.sh"
+options="!check" # No test suite
+
+package() {
+	install -Dm755 checkra1n.sh "$pkgdir"/usr/bin/checkra1n
+}
+
+
+sha512sums="06bdfe03edf2a1a99b48174c191729968768786062c90f24872aae20e6cfbb080db21a067eed7fbb11d1c66558b6a41a05c996f54bfd8b529745636c9a3c0b9e  checkra1n.sh"
