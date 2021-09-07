@@ -2,7 +2,7 @@
 # Contributor: Danct12 <danct12@disroot.org>
 # Maintainer: Rasmus Thomsen <oss@cogitri.dev>
 pkgname=chatty
-pkgver=0.4.0_git20210901
+pkgver=0.4.0_git20210906
 pkgrel=0
 pkgdesc="A phone dialer and call handler"
 arch="aarch64"
@@ -19,7 +19,7 @@ makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
 	evolution-data-server-dev libgee-dev folks-dev feedbackd-dev libphonenumber-dev
 	olm-dev modemmanager-dev gspell-dev"
 checkdepends="appstream-glib desktop-file-utils"
-_commit="f1e4fb84c10276656000ea898113fb92d3f42608"
+_commit="d5259967821f96b454a2e367950309ea07f2a1c0"
 # source="https://source.puri.sm/Librem5/chatty/-/archive/v$pkgver/chatty-v$pkgver.tar.gz"
 source="http://source.puri.sm/kop316/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
 subpackages="$pkgname-lang $pkgname-bash-completion $pkgname-dbg"
@@ -35,5 +35,5 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 sha512sums="
-c3e3849a62b621ad8829d5a3f5a48bf4ce75c2e66a787a2a82e836eab08531b1d4b605a4b304bc35cfaf6f3ba1f816121146c8c02b8edbba6044b8eb33bc9326  chatty-f1e4fb84c10276656000ea898113fb92d3f42608.tar.gz
+4fdb11528a47d5a5cc2248b427f8957faff686218acfe54c706a67feb2496c50ada92cd9371bea9474507c595cd2f02ff3262d99e77b43c26c1982c363dfdbf8  chatty-d5259967821f96b454a2e367950309ea07f2a1c0.tar.gz
 "
