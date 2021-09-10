@@ -1,7 +1,7 @@
 # Forked from Alpine for stable backports
 
 pkgname=megapixels
-pkgver=1.2.0
+pkgver=1.3.0
 pkgrel=0
 pkgdesc="GTK+4 camera app for mobile devices"
 url="https://git.sr.ht/~martijnbraam/megapixels"
@@ -27,5 +27,5 @@ package() {
 }
 
 sha512sums="
-0ae734b7e82186725022d092a70a439fe29e44916556cbb35334d37bd93dd14c50372460806239ac1b09589761c754acf50694050c3eae0546f1938441a74571  megapixels-1.2.0.tar.gz
+334c20078b47a6df1cc4047269ab18e76c4490c401826ecf3e3b778aa451098068db5a8872fc7275c159a288afa94788cff32157e9c466dd72699125e94b24d8  megapixels-1.3.0.tar.gz
 "
