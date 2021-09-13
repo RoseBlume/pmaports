@@ -7,10 +7,15 @@ url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base mkbootimg linux-postmarketos-qcom-msm8916 soc-qcom-msm8916"
+depends="postmarketos-base mkbootimg soc-qcom-msm8916"
 makedepends="devicepkg-dev"
 source="deviceinfo"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+subpackages="
+	$pkgname-kernel-mainline:kernel_mainline
+	$pkgname-kernel-mainline-modem:kernel_mainline_modem
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-nonfree-firmware-modem:nonfree_firmware_modem
+"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -20,6 +25,18 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
+kernel_mainline() {
+	pkgdesc="Close to mainline kernel (no modem, audio routed directly)"
+	depends="linux-postmarketos-qcom-msm8916"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_mainline_modem() {
+	pkgdesc="Close to mainline kernel (non-free modem, audio routed through ADSP)"
+	depends="linux-postmarketos-qcom-msm8916 soc-qcom-msm8916-modem"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
 nonfree_firmware() {
 	pkgdesc="GPU/WiFi/BT/Video firmware"
 	depends="linux-firmware-qcom firmware-oppo-a51f-venus
@@ -27,4 +44,13 @@ nonfree_firmware() {
 
 	mkdir "$subpkgdir"
 }
-sha512sums="1db537a1d7f04dabd55912593070eac900a5fd07fb20d840f9fe5b4871e4e878a0423c7c17096f8c64375835fc55a7526304f6d8f986f74820494d252857a922  deviceinfo"
+
+nonfree_firmware_modem() {
+	pkgdesc="Modem firmware"
+	depends="firmware-oppo-a51f-modem"
+	install_if="$pkgname-nonfree-firmware $pkgname-kernel-mainline-modem"
+
+	mkdir "$subpkgdir"
+}
+
+sha512sums="87f98aa748c0460b4494d254a24cf199d2c92e53b4422bf448c8ee9111d459fdea5a59310e6ce4db15d6b44ce88f7a9c4d0fbf52a8e5bf998c0fb95b1686cf48  deviceinfo"
