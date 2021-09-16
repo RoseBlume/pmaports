@@ -1,0 +1,30 @@
+# Forked from Alpine for https://gitlab.com/mobian1/callaudiod/-/merge_requests/8
+pkgname=callaudiod
+pkgver=0.2.0_git20210907
+_commit="004f72e01c6b7e1ac9cf826171c7e6729564a3c8"
+pkgrel=0
+pkgdesc="Call audio routing daemon"
+url="https://gitlab.com/mobian1/callaudiod"
+arch="all"
+license="LGPL-3.0-or-later"
+makedepends="meson alsa-lib-dev glib-dev pulseaudio-dev"
+source="https://gitlab.com/mobian1/callaudiod/-/archive/$_commit/callaudiod-$_commit.tar.gz"
+subpackages="$pkgname-dev $pkgname-libs"
+builddir="$srcdir/callaudiod-$_commit"
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+check() {
+	meson test --no-rebuild -v -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+d7a41d5647138712e35087266a05ef9769b24b21215ac2c9bc993e01d4f1fdc5c6b0ada01b322bacd62e5d1994ca94bfe3fae7ac486e579334bf45b53f9e2406  callaudiod-004f72e01c6b7e1ac9cf826171c7e6729564a3c8.tar.gz
+"
