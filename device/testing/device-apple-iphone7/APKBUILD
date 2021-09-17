@@ -2,7 +2,7 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-apple-iphone7
 pkgdesc="Apple iPhone 7"
-pkgver=0.1
+pkgver=0.2
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -21,5 +21,5 @@ package() {
 }
 
 sha512sums="
-9952d3ee16b580ea1bbf3faef7de0a284d49694bca3dedb44cf89403ff5753163192500ee0d48c83a46544870f4a5408d662d7fa1598e8e67f388ef1745143e2  deviceinfo
+7bc420cda2a1e8d978965eedc18e0acf52b0ff3eb80039d728e22f726afe2d79d7cc588c8eab7e81be46d6ca877455d22b64b424536812dd6dc4fa9a1a827544  deviceinfo
 "
