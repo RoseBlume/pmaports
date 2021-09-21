@@ -1,8 +1,8 @@
 # Forked from Alpine to apply Purism's mobile patches
 pkgname=gnome-control-center
-pkgver=9999_git20210710
+pkgver=9999_git20210831
 pkgrel=0
-_commit="30480740e4e5c0ab2920dc21859c34cbd41df278"
+_commit="d2c36cb86195d75a6975bc3ad369ee7a0a8f1352"
 pkgdesc="GNOME control center"
 url="https://gitlab.gnome.org/GNOME/gnome-control-center"
 # limited by gnome-online-accounts
@@ -90,7 +90,7 @@ package() {
 }
 
 sha512sums="
-02a1fc03c1c4aaba74e49e0d59ef8ff4307ebd70e605164deed55cb6ba2c2d2c795dfdf6d4dcd8cc9da5e9dbbafac4ecf951faff43843b753c0bc7fc289ecd95  gnome-control-center-30480740e4e5c0ab2920dc21859c34cbd41df278.tar.gz
+b9cf676eb4c45d7a6d543fac69ef20d0e52e9d10be2cfe01ded3ddf439a3727b40847306175d726a5966bb29f53d8d878a1550a03478ac5b612635d573b2e6bc  gnome-control-center-d2c36cb86195d75a6975bc3ad369ee7a0a8f1352.tar.gz
 b8954191d454e92386c42c9adacfdbb5126e347f5cb7014a2000112662f3af6a9b78219b575121f165377aef76be72389cdf5c5bb8b209878c16a18bddcc6732  0001-Hide-and-disable-building-printer-panel.patch
 350aa443149c71851ad4de0976c7fc5cb626ba0c57a8d41e6ef80da1c65ed84a4dfa2483ae92630a3b611c4bfa9360ded82b55e8cd0e3907294c025e4f6b1671  README.alpine
 "
