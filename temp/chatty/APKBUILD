@@ -2,7 +2,7 @@
 # Contributor: Danct12 <danct12@disroot.org>
 # Maintainer: Rasmus Thomsen <oss@cogitri.dev>
 pkgname=chatty
-pkgver=0.4.0_git20210911
+pkgver=0.4.0_git20210921
 pkgrel=0
 pkgdesc="A phone dialer and call handler"
 arch="aarch64"
@@ -19,7 +19,7 @@ makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
 	evolution-data-server-dev libgee-dev folks-dev feedbackd-dev libphonenumber-dev
 	olm-dev modemmanager-dev gspell-dev"
 checkdepends="appstream-glib desktop-file-utils"
-_commit="d1fd772122cb529973417addd0ecb100e7252f74"
+_commit="0fbe816030768145a80950d31886971b223bbb54"
 # source="https://source.puri.sm/Librem5/chatty/-/archive/v$pkgver/chatty-v$pkgver.tar.gz"
 source="http://source.puri.sm/kop316/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
 subpackages="$pkgname-lang $pkgname-bash-completion $pkgname-dbg"
@@ -27,6 +27,8 @@ options="!check" # Requires running Wayland compositor
 builddir="$srcdir/$pkgname-$_commit"
 
 build() {
+	wget --no-check-certificate -c http://gitlab.gnome.org/GNOME/libgd/-/archive/master/libgd-master.tar.gz -O - | tar -xz -C $builddir/subprojects/
+	mv $builddir/subprojects/libgd-master/* $builddir/subprojects/libgd/
 	abuild-meson . output
 	meson compile ${JOBS:+-j ${JOBS}} -C output
 }
@@ -35,5 +37,5 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 sha512sums="
-962e9ede6789abf1f7d5778fc4eb0face5af39e9f0ec78581db3398898522f800a4504c1b423fc284ecea02be0baaf838504adbed83942de04a117c418a1d5cd  chatty-d1fd772122cb529973417addd0ecb100e7252f74.tar.gz
+69707c8e56b3eac9a5103192aa9507891a05a117c7415a30c9cfdefd140b27bfefda50f1a3d8f25bd5b24f73ec64c8bd7b9d1c1e777c3bba1912281eb835813b  chatty-0fbe816030768145a80950d31886971b223bbb54.tar.gz
 "
