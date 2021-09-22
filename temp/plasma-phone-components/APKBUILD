@@ -1,0 +1,85 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=plasma-phone-components
+pkgver=5.22.90
+pkgrel=0
+pkgdesc="Modules providing phone functionality for Plasma"
+# armhf blocked by extra-cmake-modules
+# s390x, mips64 and riscv64 blocked by polkit -> kio
+arch="all !armhf !s390x !mips64 !riscv64"
+url="https://www.plasma-mobile.org/"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+depends="
+	breeze-icons
+	dbus-x11
+	kactivities
+	maliit-keyboard
+	plasma-nano
+	plasma-nm-mobile
+	plasma-pa
+	plasma-settings
+	plasma-workspace
+	qqc2-breeze-style
+	qt5-qtquickcontrols2
+	"
+makedepends="
+	extra-cmake-modules
+	kactivities-dev
+	kauth-dev
+	kbookmarks-dev
+	kcodecs-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	kio-dev
+	kitemviews-dev
+	kjobwidgets-dev
+	knotifications-dev
+	kpackage-dev
+	kpeople-dev
+	kservice-dev
+	kwayland-dev
+	kwidgetsaddons-dev
+	kwin-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	libphonenumber-dev
+	modemmanager-qt-dev
+	plasma-framework-dev
+	qt5-qtdeclarative-dev
+	solid-dev
+	telepathy-qt-dev
+	"
+subpackages="$pkgname-lang"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/plasma-phone-components-$pkgver.tar.xz"
+options="!check" # No tests
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+d42f2800a90008795bb62a141de824476af584f8b40c170dde3e8af9af656ecc74c0f52f94141ee4beb1c2ae9c64821ecd8702ae9e7aef3e54f59b149d0a2f53  plasma-phone-components-5.22.90.tar.xz
+"

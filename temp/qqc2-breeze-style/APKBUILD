@@ -1,0 +1,54 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=qqc2-breeze-style
+pkgver=5.22.90
+pkgrel=0
+pkgdesc="Breeze inspired QQC2 style"
+# armhf blocked by extra-cmake-modules
+# s390x and mips64 blocked by kconfigwidgets
+# riscv64 disabled due to missing rust in recursive dependency
+arch="all !armhf !s390x !mips64 !riscv64"
+url="https://www.plasma-mobile.org/"
+license="LicenseRef-KDE-Accepted-LGPL AND LicenseRef-KFQF-Accepted-GPL"
+depends="kirigami2"
+makedepends="
+	extra-cmake-modules
+	kconfig-dev
+	kconfigwidgets-dev
+	kguiaddons-dev
+	kiconthemes-dev
+	kirigami2-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	qt5-qtquickcontrols2-dev
+	qt5-qtx11extras-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/qqc2-breeze-style-$pkgver.tar.xz"
+subpackages="$pkgname-dev"
+options="!check" # No tests
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+7c9127693ff7d4ce44abf3f0a7bb1f3ed1c77d7d3429b1c8de9e7936d70209181bd68a4089328cc38e60ea01a99fe9a3706da076b3cae92581f18d8c44388b3d  qqc2-breeze-style-5.22.90.tar.xz
+"

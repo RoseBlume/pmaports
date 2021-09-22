@@ -1,0 +1,60 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=oxygen
+pkgver=5.22.90
+pkgrel=0
+pkgdesc="Artwork, styles and assets for the Oxygen visual style for the Plasma Desktop"
+# armhf blocked by extra-cmake-modules
+# s390x, mips64 and riscv64 blocked by polkit -> kcmutils
+arch="all !armhf !s390x !mips64 !riscv64"
+url="https://kde.org/plasma-desktop/"
+license="LGPL-2.1-or-later"
+makedepends="
+	extra-cmake-modules
+	frameworkintegration-dev
+	kcmutils-dev
+	kcompletion-dev
+	kconfig-dev
+	kdecoration-dev
+	kguiaddons-dev
+	ki18n-dev
+	kservice-dev
+	kwayland-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	qt5-qtbase-dev
+	xcb-util-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/oxygen-$pkgver.tar.xz"
+subpackages="$pkgname-lang $pkgname-sounds::noarch"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sounds() {
+	pkgdesc="$pkgdesc (sounds)"
+
+	amove usr/share/sounds
+}
+sha512sums="
+81c1e71ed820e2998d546d108e62d269d61f542e2fa5cced839721723ae222e219797ad26622a9b84493100b898078e910e5b5c6bcae03f48c41ae9be170729d  oxygen-5.22.90.tar.xz
+"

@@ -1,0 +1,73 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=powerdevil
+pkgver=5.22.90
+pkgrel=0
+pkgdesc="Manages the power consumption settings of a Plasma Shell"
+# armhf blocked by extra-cmake-modules
+# s390x, mips64 and riscv64 blocked by polkit -> kio
+arch="all !armhf !s390x !mips64 !riscv64"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND LGPL-2.0-or-later AND (LGPL-2.1-only OR LGPL-3.0-only)"
+depends="upower"
+depends_dev="
+	bluez-qt-dev
+	eudev-dev
+	kactivities-dev
+	kauth-dev
+	kconfig-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kidletime-dev
+	kio-dev
+	knotifications-dev
+	knotifyconfig-dev
+	kwayland-dev
+	libkscreen-dev
+	networkmanager-qt-dev
+	plasma-workspace-dev
+	qt5-qtbase-dev
+	qt5-qtx11extras-dev
+	solid-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	kdoctools-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/powerdevil-$pkgver.tar.xz"
+subpackages="$pkgname-dev $pkgname-libs $pkgname-doc $pkgname-lang"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	# We don't ship systemd
+	rm -r "$pkgdir"/usr/lib/systemd
+
+	# org_kde_powerdevil has CAP_WAKE_ALARM set and this breaks dbus
+	# Remove CAP_WAKE_ALARM from org_kde_powerdevil to make it work again
+	setcap -r "$pkgdir"/usr/lib/libexec/org_kde_powerdevil
+}
+
+sha512sums="
+9a70a76e3ca5454c27c6926fe8e387445d0f09ae8a8ba7a5ffc029f614e6edd0fe8ec53fc3ef33df63311f8ad8c55bba4aff5ad621c30e5bf7cc01207961d599  powerdevil-5.22.90.tar.xz
+"

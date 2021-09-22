@@ -1,0 +1,53 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=plasma-firewall
+pkgver=5.22.90
+pkgrel=0
+pkgdesc="Control Panel for your system firewall"
+# armhf blocked by qt5-qtdeclarative
+# s390x, mips64 and riscv64 blocked by polkit -> kcmutils
+arch="all !armhf !s390x !mips64 !riscv64"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later"
+depends="
+	python3
+	kirigami2
+	"
+makedepends="
+	extra-cmake-modules
+	kcmutils-dev
+	kcoreaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	plasma-framework-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	qt5-qtx11extras-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/plasma-firewall-$pkgver.tar.xz"
+subpackages="$pkgname-lang"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+9f4b3142e93472e6926cac394f7710cebba547b951ebefeb3ad33292c5910c66fc4406b0401f007e178ef02c9b0af57841b503949e29f4e93c8be640587ba2eb  plasma-firewall-5.22.90.tar.xz
+"

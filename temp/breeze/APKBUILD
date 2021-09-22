@@ -1,0 +1,50 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=breeze
+pkgver=5.22.90
+pkgrel=0
+pkgdesc="Artwork, styles and assets for the Breeze visual style for the Plasma Desktop"
+# armhf blocked by qt5-qtdeclarative
+# mips64, s390x and riscv64 blocked by polkit -> kconfigwidgets
+arch="all !armhf !s390x !mips64 !riscv64"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later"
+depends_dev="
+	kconfigwidgets-dev
+	kdecoration-dev
+	kguiaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kpackage-dev
+	kwindowsystem-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/breeze-$pkgver.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+98f7fc6dd5e84df5a5ce9a47e3b357064583cfa21a3d6a971a0dc285cdde02ba272f72a16cbc8d9e457e9cd27549b35d4b68bffad2dd420d27f16aa4ea428c7f  breeze-5.22.90.tar.xz
+"

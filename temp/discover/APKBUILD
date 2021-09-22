@@ -1,0 +1,134 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=discover
+pkgver=5.22.90
+pkgrel=0
+# armhf blocked by qt5-qtdeclarative
+# s390x, mips64 and riscv64 blocked by polkit -> kio
+arch="all !armhf !s390x !mips64 !riscv64"
+url="https://userbase.kde.org/Discover"
+pkgdesc="KDE Plasma resources management GUI"
+license="LGPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND GFDL-1.2-only"
+depends="kirigami2"
+makedepends="
+	appstream-dev
+	attica-dev
+	extra-cmake-modules
+	flatpak-dev
+	karchive-dev
+	kauth-dev
+	kcmutils-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	kidletime-dev
+	kio-dev
+	kitemmodels-dev
+	knewstuff-dev
+	kuserfeedback-dev
+	kxmlgui-dev
+	libapk-qt-dev
+	plasma-framework-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	"
+checkdepends="xvfb-run"
+
+# secfixes:
+#   5.21.3-r0:
+#     - CVE-2021-28117
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="
+	https://download.kde.org/$_rel/plasma/$pkgver/discover-$pkgver.tar.xz
+	0001-Add-support-for-Alpine-Linux-apk-backend.patch
+	alpine-appstream-data.json
+	alpine-linux-logo-icon.png
+	"
+subpackages="
+	$pkgname-backend-apk:backend_apk
+	$pkgname-backend-flatpak:backend_flatpak
+	$pkgname-lang
+	"
+
+case "$CARCH" in
+	x86|x86_64)
+		makedepends="$makedepends fwupd-dev"
+		subpackages="$subpackages $pkgname-backend-fwupd:backend_fwupd"
+		;;
+	*) ;;
+esac
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_DISABLE_FIND_PACKAGE_Snapd=ON \
+		-DWITH_KCM=OFF
+	cmake --build build
+}
+
+check() {
+	cd build
+	# knsbackendtest and flatpaktest fail to find their required executables
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "(knsbackend|flatpak)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+backend_flatpak() {
+	pkgdesc="Flatpak backend for $pkgname"
+	depends=""
+	install_if="$pkgname flatpak"
+
+	amove usr/lib/qt5/plugins/discover/flatpak-backend.so
+	amove usr/share/libdiscover/categories/flatpak-backend-categories.xml
+	amove usr/lib/qt5/plugins/discover-notifier/FlatpakNotifier.so
+	amove usr/share/applications/org.kde.discover-flatpak.desktop
+	amove usr/share/metainfo/org.kde.discover.flatpak.appdata.xml
+	amove usr/share/icons/hicolor/scalable/apps/flatpak-discover.svg
+}
+
+backend_apk() {
+	pkgdesc="Apk backend for $pkgname"
+	depends=""
+	install_if="$pkgname apk-tools"
+
+	amove usr/lib/qt5/plugins/discover/alpineapk-backend.so
+	amove usr/lib/libexec/kauth/alpineapk_kauth_helper
+	amove usr/share/polkit-1/actions/org.kde.discover.alpineapkbackend.policy
+	amove usr/share/dbus-1/system.d/org.kde.discover.alpineapkbackend.conf
+	amove usr/share/dbus-1/system-services/org.kde.discover.alpineapkbackend.service
+
+	# JSON file contains placeholder for replacement - @CARCH@
+	sed -i "s/@CARCH@/$CARCH/g" "$srcdir"/alpine-appstream-data.json
+	install -Dm644 "$srcdir"/alpine-appstream-data.json \
+		"$subpkgdir"/usr/share/libdiscover/external-appstream-urls/alpine-appstream-data.json
+
+	install -Dm644 -t "$subpkgdir"/usr/share/icons/hicolor/32x32/apps/ \
+		"$srcdir"/alpine-linux-logo-icon.png
+}
+
+backend_fwupd() {
+	pkgdesc="fwupd backend for $pkgname"
+	depends=""
+	install_if="$pkgname fwupd"
+
+	amove usr/lib/qt5/plugins/discover/fwupd-backend.so
+}
+
+sha512sums="
+12e235d52464132ecc4d0d483e5ba5d967db4659ee5785db1bbb35c8ad8ff78ad4f2697beace0d26228a552b765ef4bacfac7ba413e8b9b3340415fc6b68d41a  discover-5.22.90.tar.xz
+40019b59c8ad5523ccf64313bf03efb354e8c81074733e62b6a778a3c0dbb699f5d6ba3ee8c950b484fee40bf21c82a5608aa2b0e30bad989fdcf557aa68b583  0001-Add-support-for-Alpine-Linux-apk-backend.patch
+f9f73888f8e20b317987da55028bd578de854fb34293466d1bc5deb82e32dc164916f724411de64a42235ecda37205d3f1ba26621ed7ab710b94273acce34aa3  alpine-appstream-data.json
+0766668630cb14f58c840ebdda8b76bd1dec98b4dd61469677d4ad6eb4966809a25dbec2a846502cad0391df5b6ca9d692bb857a6fa203b61a52e6ac044cfbf4  alpine-linux-logo-icon.png
+"

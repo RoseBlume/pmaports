@@ -1,0 +1,54 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=plasma-pa
+pkgver=5.22.90
+pkgrel=0
+pkgdesc="Plasma applet for audio volume management using PulseAudio"
+# armhf blocked by qt5-qtdeclarative
+# s390x, mips64 and riscv64 blocked by polkit -> plasma-workspace
+arch="all !armhf !s390x !mips64 !riscv64"
+url="https://kde.org/plasma-desktop/"
+license="LGPL-2.1-only OR LGPL-3.0-only AND GPL-2.0-only"
+depends="pulseaudio kirigami2"
+makedepends="
+	extra-cmake-modules
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	kcoreaddons-dev
+	kdeclarative-dev
+	kdoctools-dev
+	kglobalaccel-dev
+	knotifications-dev
+	ki18n-dev
+	plasma-workspace-dev
+	pulseaudio-dev
+	libcanberra-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/plasma-pa-$pkgver.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DUSE_GCONF=OFF
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+67abbaafcd3b990630b2cb773fe86764b2a6f7343ebc9c93041cc417c78e72d79fdc3c98d486260ee8cd65344cb33c3a20acae09b9b7d5ad9e9efd5e6012fb9c  plasma-pa-5.22.90.tar.xz
+"

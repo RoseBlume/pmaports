@@ -1,0 +1,68 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=libksysguard
+pkgver=5.22.90
+pkgrel=0
+pkgdesc="KDE system monitor library"
+# armhf blocked by extra-cmake-modules
+# mips64, s390x and riscv64 blocked by polkit -> kauth
+arch="all !armhf !mips64 !s390x !riscv64"
+url="https://kde.org/plasma-desktop/"
+license="LGPL-2.1-or-later AND (GPL-2.0-only OR GPL-3.0-only)"
+depends_dev="
+	kauth-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	knewstuff-dev
+	kservice-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	libcap-dev
+	libnl3-dev
+	libpcap-dev
+	lm-sensors-dev
+	plasma-framework-dev
+	qt5-qttools-dev
+	qt5-qtwebchannel-dev
+	zlib-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/libksysguard-$pkgver.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+replaces="ksysguard<5.22"
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	# processtest requires working OpenGL
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "processtest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+5c586c24a64ebd05b4768ae3713e852ec8cbb9517b799b37bed56284cf4f6daafcb9ea9f9c0f53392f56645c80ccb1763bbac1c43cdc8344239a2da38fd550a9  libksysguard-5.22.90.tar.xz
+"

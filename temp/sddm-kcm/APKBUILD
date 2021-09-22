@@ -1,0 +1,56 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=sddm-kcm
+pkgver=5.22.90
+pkgrel=0
+pkgdesc="Config module for SDDM"
+# armhf blocked by extra-cmake-modules
+# s390x, mips64 and riscv64 blocked by polkit -> kio
+arch="all !armhf !s390x !mips64 !riscv64"
+url="https://www.kde.org"
+license="GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND LGPL-2.1-or-later AND GPL-2.0-only"
+depends="
+	sddm
+	systemsettings
+	"
+makedepends="
+	extra-cmake-modules
+	karchive-dev
+	kauth-dev
+	kcmutils-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	kio-dev
+	knewstuff-dev
+	kxmlgui-dev
+	libxcursor-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	qt5-qtx11extras-dev
+	xcb-util-image-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+source="https://download.kde.org/$_rel/plasma/$pkgver/sddm-kcm-$pkgver.tar.xz"
+subpackages="$pkgname-lang"
+options="!check" # No tests
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+1079c5ea9fb0676999d17ffa9b4df1ca14a4cf0e397a9f91ccb71dc2d449e86cd0afde288546312e7a9145fe6940eb48d8ce0e29ca124a53df8c750bd15289d7  sddm-kcm-5.22.90.tar.xz
+"
