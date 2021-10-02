@@ -2,14 +2,12 @@
 # Please use double quotes only. You can source this file in shell scripts.
 
 deviceinfo_format_version="0"
-deviceinfo_name="Samsung Galaxy SIII"
+deviceinfo_name="Samsung Galaxy S III LTE"
 deviceinfo_manufacturer="Samsung"
-deviceinfo_codename="samsung-i9300"
+deviceinfo_codename="samsung-m3"
 deviceinfo_year="2012"
-deviceinfo_append_dtb_mainline_i9300="true"
-deviceinfo_append_dtb_mainline_i9305="true"
-deviceinfo_dtb_mainline_i9300="exynos4412-i9300"
-deviceinfo_dtb_mainline_i9305="exynos4412-i9305"
+deviceinfo_append_dtb="true"
+deviceinfo_dtb="exynos4412-i9305"
 deviceinfo_arch="armv7"
 
 # Device related
