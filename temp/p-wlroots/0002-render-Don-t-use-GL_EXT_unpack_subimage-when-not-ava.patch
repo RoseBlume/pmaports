@@ -1,0 +1,149 @@
+From 6d113753151cf557132b090805bbbe12c6b43fd8 Mon Sep 17 00:00:00 2001
+From: Jonathan Bakker <xc-racer2@live.ca>
+Date: Sat, 2 Jan 2021 12:33:20 -0800
+Subject: [PATCH] render: Don't use GL_EXT_unpack_subimage when not available
+
+We can work around drivers that don't expose GL_EXT_unpack_subimage
+in software.
+
+TODO: Determine why GL_CLAMP_TO_EDGE change is necessary for PowerVR
+drivers, and if this is related to having the image backed by a
+KHR EGLImage.
+
+Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+---
+ include/render/gles2.h  |  1 +
+ render/gles2/renderer.c |  3 ++
+ render/gles2/texture.c  | 83 +++++++++++++++++++++++++++++++++--------
+ 3 files changed, 71 insertions(+), 16 deletions(-)
+
+diff --git a/include/render/gles2.h b/include/render/gles2.h
+index a64aa77c..fc4940be 100644
+--- a/include/render/gles2.h
++++ b/include/render/gles2.h
+@@ -42,6 +42,7 @@ struct wlr_gles2_renderer {
+ 		bool debug_khr;
+ 		bool egl_image_external_oes;
+ 		bool egl_image_oes;
++		bool unpack_subimage;
+ 	} exts;
+
+ 	struct {
+diff --git a/render/gles2/renderer.c b/render/gles2/renderer.c
+index 9ec87293..e32c8672 100644
+--- a/render/gles2/renderer.c
++++ b/render/gles2/renderer.c
+@@ -685,6 +685,9 @@ struct wlr_renderer *wlr_gles2_renderer_create(struct wlr_egl *egl) {
+ 	renderer->exts.read_format_bgra_ext =
+ 		check_gl_ext(exts_str, "GL_EXT_read_format_bgra");
+
++	renderer->exts.unpack_subimage =
++		check_gl_ext(exts_str, "GL_EXT_unpack_subimage");
++
+ 	if (check_gl_ext(exts_str, "GL_KHR_debug")) {
+ 		renderer->exts.debug_khr = true;
+ 		load_gl_proc(&renderer->procs.glDebugMessageCallbackKHR,
+diff --git a/render/gles2/texture.c b/render/gles2/texture.c
+index 179bfd89..67180d4f 100644
+--- a/render/gles2/texture.c
++++ b/render/gles2/texture.c
+@@ -60,17 +60,37 @@ static bool gles2_texture_write_pixels(struct wlr_texture *wlr_texture,
+
+ 	glBindTexture(GL_TEXTURE_2D, texture->tex);
+
+-	glPixelStorei(GL_UNPACK_ROW_LENGTH_EXT, stride / (fmt->bpp / 8));
+-	glPixelStorei(GL_UNPACK_SKIP_PIXELS_EXT, src_x);
+-	glPixelStorei(GL_UNPACK_SKIP_ROWS_EXT, src_y);
+-
+-	glTexSubImage2D(GL_TEXTURE_2D, 0, dst_x, dst_y, width, height,
+-		fmt->gl_format, fmt->gl_type, data);
+-
+-	glPixelStorei(GL_UNPACK_ROW_LENGTH_EXT, 0);
+-	glPixelStorei(GL_UNPACK_SKIP_PIXELS_EXT, 0);
+-	glPixelStorei(GL_UNPACK_SKIP_ROWS_EXT, 0);
+-
++	if (texture->renderer->exts.unpack_subimage) {
++		glPixelStorei(GL_UNPACK_ROW_LENGTH_EXT, stride / (fmt->bpp / 8));
++		glPixelStorei(GL_UNPACK_SKIP_PIXELS_EXT, src_x);
++		glPixelStorei(GL_UNPACK_SKIP_ROWS_EXT, src_y);
++
++		glTexSubImage2D(GL_TEXTURE_2D, 0, dst_x, dst_y, width, height,
++			fmt->gl_format, fmt->gl_type, data);
++
++		glPixelStorei(GL_UNPACK_ROW_LENGTH_EXT, 0);
++		glPixelStorei(GL_UNPACK_SKIP_PIXELS_EXT, 0);
++		glPixelStorei(GL_UNPACK_SKIP_ROWS_EXT, 0);
++	} else if (stride == width * fmt->bpp / 8) {
++		const uint8_t *pixels;
++
++		pixels = data;
++		pixels += src_x * fmt->bpp / 8;
++		pixels += src_y * stride;
++		glTexSubImage2D(GL_TEXTURE_2D, 0, dst_x, dst_y, width, height,
++			fmt->gl_format, fmt->gl_type, pixels);
++	} else {
++		const uint8_t *pixels;
++
++		pixels = data;
++		pixels += src_x * fmt->bpp / 8;
++		pixels += src_y * stride;
++
++		for (size_t y = 0; y < height; ++y, pixels += stride) {
++			glTexSubImage2D(GL_TEXTURE_2D, 0, dst_x, dst_y + y, width, 1,
++				fmt->gl_format, fmt->gl_type, pixels);
++		}
++	}
+ 	glBindTexture(GL_TEXTURE_2D, 0);
+
+ 	pop_gles2_debug(texture->renderer);
+@@ -164,12 +184,43 @@ struct wlr_texture *gles2_texture_from_pixels(struct wlr_renderer *wlr_renderer,
+ 	glGenTextures(1, &texture->tex);
+ 	glBindTexture(GL_TEXTURE_2D, texture->tex);
+
+-	glPixelStorei(GL_UNPACK_ROW_LENGTH_EXT, stride / (fmt->bpp / 8));
+-	glTexImage2D(GL_TEXTURE_2D, 0, fmt->gl_format, width, height, 0,
+-		fmt->gl_format, fmt->gl_type, data);
+-	glPixelStorei(GL_UNPACK_ROW_LENGTH_EXT, 0);
++	if (texture->renderer->exts.unpack_subimage) {
++		glPixelStorei(GL_UNPACK_ROW_LENGTH_EXT, stride / (fmt->bpp / 8));
++		glTexImage2D(GL_TEXTURE_2D, 0, fmt->gl_format, width, height, 0,
++			fmt->gl_format, fmt->gl_type, data);
++		glPixelStorei(GL_UNPACK_ROW_LENGTH_EXT, 0);
+
+-	glBindTexture(GL_TEXTURE_2D, 0);
++		glBindTexture(GL_TEXTURE_2D, 0);
++	} else if (stride == width * (fmt->bpp / 8)) {
++		glTexImage2D(GL_TEXTURE_2D, 0, fmt->gl_format, width, height, 0,
++			fmt->gl_format, fmt->gl_type, data);
++
++		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
++		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
++
++		glBindTexture(GL_TEXTURE_2D, 0);
++
++		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
++		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
++	} else {
++		const uint8_t *pixels = data;
++
++		glTexImage2D(GL_TEXTURE_2D, 0, fmt->gl_format, width, height, 0,
++			fmt->gl_format, fmt->gl_type, NULL);
++
++		for (size_t y = 0; y < height; y++, pixels += stride) {
++			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, width, height,
++				fmt->gl_format, fmt->gl_type, pixels);
++		}
++
++		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
++		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
++
++		glBindTexture(GL_TEXTURE_2D, 0);
++
++		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
++		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
++	}
+
+ 	pop_gles2_debug(renderer);
+
+--
+2.20.1

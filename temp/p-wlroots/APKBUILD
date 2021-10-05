@@ -1,0 +1,51 @@
+pkgname=p-wlroots
+pkgver=0.12.0
+pkgrel=0
+pkgdesc="modular Wayland compositor library"
+url="https://github.com/swaywm/wlroots"
+arch="all"
+license="MIT"
+replaces="wlroots0.12"
+options="!tracedeps !check" # contains no test suite
+makedepends="
+	elogind-dev
+	eudev-dev
+	libcap-dev
+	libinput-dev
+	libxcb-dev
+	libxkbcommon-dev
+	mesa-dev
+	meson
+	ninja
+	pixman-dev
+	wayland-dev
+	wayland-protocols
+	xcb-util-image-dev
+	xcb-util-wm-dev
+	xkeyboard-config
+	"
+source="wlroots-$pkgver.tar.gz::https://github.com/swaywm/wlroots/archive/$pkgver.tar.gz
+	0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch
+	0002-render-Don-t-use-GL_EXT_unpack_subimage-when-not-ava.patch
+	"
+builddir="$srcdir/wlroots-$pkgver"
+
+build() {
+	abuild-meson \
+		-Dlogind=enabled \
+		-Dlogind-provider=elogind \
+		-Dexamples=false \
+		. build
+	meson compile ${JOBS:+-j ${JOBS}} -C build
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C build
+}
+
+
+sha512sums="
+560eae30932b777c1f07fb44592d5601c5d10ef74b31b6b9e4166a14caadab2bfa88d39282f159785d4c7f22f78d204f9bb7fab65d58afaf14b72a8486f9b415  wlroots-0.12.0.tar.gz
+5039fa4697f599fcbe69268546b2b5ae528449fe358d8937a001b188c59110473edfae16264731ef932e5fdc924170b509e68b701e8e87566188286dcdd452c4  0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch
+4aaf117115ab892d021e6fa9c88e704171b8fce1dd8d6a3a4fc68731ccbb4ab67f7c5cc64d7718b7b3343eb9b52a5180c813118016b5a24c41d20f4927392994  0002-render-Don-t-use-GL_EXT_unpack_subimage-when-not-ava.patch
+"
