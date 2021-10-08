@@ -1,7 +1,7 @@
 # Maintainer: David Heidelberg <david@ixit.cz>
 pkgname=device-asus-tilapia
 pkgdesc="Google Nexus 7 2012 (tilapia)"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -12,6 +12,7 @@ makedepends="devicepkg-dev"
 subpackages="$pkgname-phosh
 	     $pkgname-nonfree-firmware:nonfree_firmware"
 source="deviceinfo
+	pointercal
 	rootston.ini"
 
 build() {
@@ -20,6 +21,8 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+	install -D -m644 "$srcdir"/pointercal \
+	                "$pkgdir"/etc/pointercal
 }
 
 phosh() {
@@ -35,6 +38,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-0b167d0ee03200eabc9fb509359d9266cd562c118790e3dec576deec8b5422d98e1c8cb76ca87399049497b2fcb34862c7e0de20ee75087ff430815af9a727df  deviceinfo
+f21f78dfab6aa5571ab1bd29f7c75a86c6e1da95021a49a9ac40f75e128b38007187184ae03a6ac26f82def95bb0c9bd290be4e2a977f5e3e93c714222686a42  deviceinfo
+1f9d77df433c7199a9f07d6fd1d90cdf1ab40021bf1970be9400e5f32155d92f7fa338162a0ca95d441d1701eff0f5e0cbb64a0555de48740a62e8ff59fe11e5  pointercal
 6ec993e278d2a73c72fb96f001716ded63543d99183847d22d172cd81ac410791c79370ecf391d0c24822c975d91b84dc1db296e1b28dbf66d5c227bff8d4011  rootston.ini
 "

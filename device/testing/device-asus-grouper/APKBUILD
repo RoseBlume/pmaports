@@ -1,7 +1,7 @@
 # Maintainer: David Heidelberg <david@ixit.cz>
 pkgname=device-asus-grouper
 pkgdesc="Google Nexus 7 2012 (grouper)"
-pkgver=4
+pkgver=5
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -14,6 +14,7 @@ subpackages="$pkgname-phosh
 	$pkgname-kernel-pm269:kernel_pm269
 	$pkgname-nonfree-firmware:nonfree_firmware"
 source="deviceinfo
+	pointercal
 	rootston.ini"
 
 build() {
@@ -22,6 +23,8 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+	install -D -m644 "$srcdir"/pointercal \
+	                "$pkgdir"/etc/pointercal
 }
 
 phosh() {
@@ -49,6 +52,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-b589bdebfd4c0510dabd5009a86af1549b4e6d137bfdf62d1e77e3a5a58c89cdd5cacac80a674cd0cd984f57bfdd44f21fb357c4ca48ebebcfad4176d38af541  deviceinfo
+68949a0cb52769cf871c57c0249a09a519eabcdb9502b43126002a0123ae8269f3732590523737b8c34c03f707e2358272f06cdb61a8c27fe10dbaacb8c76a8a  deviceinfo
+1f9d77df433c7199a9f07d6fd1d90cdf1ab40021bf1970be9400e5f32155d92f7fa338162a0ca95d441d1701eff0f5e0cbb64a0555de48740a62e8ff59fe11e5  pointercal
 6ec993e278d2a73c72fb96f001716ded63543d99183847d22d172cd81ac410791c79370ecf391d0c24822c975d91b84dc1db296e1b28dbf66d5c227bff8d4011  rootston.ini
 "
