@@ -1,0 +1,37 @@
+# forked from Alpine Edge (sxmo 1.5.2)
+# Maintainer: Anjandev Momi <anjan@momi.ca>
+pkgname=sxmo-dmenu
+pkgver=5.0.10
+pkgrel=0
+pkgdesc="Dmenu fork for Sxmo UI; supports highlight, centering, volume-key navigation and more"
+url="https://git.sr.ht/~mil/sxmo-dmenu"
+arch="all"
+license="MIT"
+makedepends="libx11-dev libxinerama-dev libxft-dev"
+options="!check" # has no tests
+subpackages="$pkgname-doc"
+provides="dmenu"
+source="$pkgname-$pkgver.tar.gz::https://git.sr.ht/~mil/sxmo-dmenu/archive/$pkgver.tar.gz"
+
+prepare() {
+	default_prepare
+	sed -i -e '/CFLAGS/{s/-Os//;s/=/+=/}' \
+		-e '/LDFLAGS/{s/=/+=/}' \
+		"$builddir"/config.mk
+}
+
+build() {
+	make X11INC=/usr/include/X11 \
+		X11LIB=/usr/lib/X11 \
+		FREETYPEINC=/usr/include/freetype2 \
+		-C "$builddir"
+}
+
+package() {
+	make DESTDIR=$pkgdir PREFIX=/usr \
+		-C "$builddir" install
+}
+
+sha512sums="
+16ad23bd2192cfd37e9446e191cf6e4a4a3ee2894751d531864f313b0b749dae18ff1156e5ba7445522cf90cac1a1dc03755ae5bd3b801ea29f3d779a9c8d2a7  sxmo-dmenu-5.0.10.tar.gz
+"
