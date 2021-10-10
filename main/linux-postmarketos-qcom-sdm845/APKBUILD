@@ -17,7 +17,7 @@ options="!strip !check !tracedeps
 	pmb:kconfigcheck-nftables
 	pmb:kconfigcheck-containers
 	pmb:kconfigcheck-zram
-	pmb:kconfigcheck-anbox"
+	"
 makedepends="bison findutils flex installkernel openssl-dev perl"
 
 _repo="linux"
