@@ -2,7 +2,7 @@
 
 pkgname=mesa
 pkgver=21.3.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Mesa DRI OpenGL library"
 url="https://www.mesa3d.org"
 arch="all"
@@ -64,6 +64,7 @@ source="
 	add-use-elf-tls.patch
 	disable-rgb10-by-default.patch
 	0001-radeonsi-On-Aarch64-force-persistent-buffers-to-GTT.patch
+	0001-freedreno-Enable-A619.patch
 	"
 replaces="mesa-dricore"
 options="!check" # we skip tests intentionally
@@ -334,4 +335,5 @@ sha512sums="
 de7c6fec14476539c564afa4bf59a3c8d5f34a687ffdbacfe94403e3ad4e78773222b2b74b08a1fd16b7dc9504decca1429273c179ad702c02a140e1dff15205  add-use-elf-tls.patch
 ae5ffb9259efc339a868c778186889fa1a6eacb4dc4b2452f31f9c65e1a6273e856665300d2982fb2680b4d182aae574ceda258e15c00d7ae16960ba09240ef1  disable-rgb10-by-default.patch
 fdbc13888f09d157feae6ce3b8a63cc606d7ed19e364cdb89ccce25a367255b498bbe82862a487c29d8f98d5e31980ef1f0879b06823cedb54801fd54cd461ad  0001-radeonsi-On-Aarch64-force-persistent-buffers-to-GTT.patch
+cbc662dc4c5da70c752029c7aff76596532e9e4ba8bbd7b97ad9e39faa1b404e81e22a4118a7aa73a90ef1ae8df9fce74c5e90ddcf979e50082ff033cded02e2  0001-freedreno-Enable-A619.patch
 "
