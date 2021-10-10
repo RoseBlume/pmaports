@@ -13,7 +13,6 @@ url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
-	pmb:kconfigcheck-anbox
 	pmb:kconfigcheck-nftables
 	"
 makedepends="bison busybox-static-$arch findutils flex gmp-dev installkernel mpc1-dev mpfr-dev openssl-dev perl xz"

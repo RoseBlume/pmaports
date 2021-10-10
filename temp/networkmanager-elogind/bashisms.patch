@@ -1,0 +1,24 @@
+diff --git a/tools/create-exports-NetworkManager.sh b/tools/create-exports-NetworkManager.sh
+index 21ba369a41..34f8e7a557 100755
+--- a/tools/create-exports-NetworkManager.sh
++++ b/tools/create-exports-NetworkManager.sh
+@@ -59,6 +59,8 @@ EOF
+ }
+ 
+ get_symbols_missing() {
++    get_symbols_explicit > /tmp/nm_explicit
++    get_symbols_nm > /tmp/nm_symbols
+     (for f in $(find ./src/core/settings/plugins/*/${libs} \
+                      ./src/core/devices/*/${libs} \
+                      ./src/core/ppp/${libs} -name '*.so' 2>/dev/null); do
+@@ -66,8 +68,8 @@ get_symbols_missing() {
+             sed -n 's/^\([U]\) \(\(nm_\|nmp_\|_nm\|NM\|_NM\|nmtst_\|c_siphash_\|c_list_\).*\)$/\2/p'
+     done) |
+         _sort |
+-        grep -Fx -f <(get_symbols_explicit) -v |
+-        grep -Fx -f <(get_symbols_nm)
++	grep -Fx _IO_stdin_used -v |
++        grep -Fx -f /tmp/nm_symbols
+ }
+ 
+ pretty() {

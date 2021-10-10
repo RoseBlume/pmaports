@@ -11,7 +11,6 @@ url="https://github.com/msm8953-mainline/linux"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
-	pmb:kconfigcheck-anbox
 	pmb:kconfigcheck-nftables
 	"
 makedepends="bison findutils flex installkernel openssl-dev perl"
