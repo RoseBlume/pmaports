@@ -1,6 +1,9 @@
-pkgname=device-lenovo-a6000
-pkgdesc="Lenovo A6000"
-pkgver=2
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Jenneron <jenneron@protonmail.com>
+# Co-Maintainer: Minecrell <minecrell@minecrell.net>
+pkgname=device-lenovo-a6010
+pkgdesc="Lenovo A6010"
+pkgver=3
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -8,11 +11,12 @@ arch="aarch64"
 options="!check !archcheck"
 depends="postmarketos-base mkbootimg soc-qcom-msm8916"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo rootston.ini"
 subpackages="
 	$pkgname-kernel-mainline:kernel_mainline
 	$pkgname-kernel-mainline-modem:kernel_mainline_modem
 	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-phosh
 "
 
 build() {
@@ -37,10 +41,17 @@ kernel_mainline_modem() {
 
 nonfree_firmware() {
 	pkgdesc="GPU/WiFi/BT/Video(/Modem) firmware"
-	depends="linux-firmware-qcom msm-firmware-loader firmware-qcom-msm8916-wcnss firmware-lenovo-a6000-wcnss-nv"
+	depends="linux-firmware-qcom msm-firmware-loader firmware-qcom-msm8916-wcnss firmware-lenovo-a6010-wcnss-nv"
 	mkdir "$subpkgdir"
 }
 
+phosh() {
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-ui-phosh"
+	install -Dm644 "$srcdir"/rootston.ini \
+		"$subpkgdir"/etc/phosh/rootston.ini
+}
+
 sha512sums="
-bc19a19e3f386f3c455de39808bb2b398b487a30b405cdfff7e118f7d5dbb528684abd609a50ce90ff4f9f239064fba462bb0bcfe1392bdc56fa8723e7863be0  deviceinfo
+d02f0712741ef173022c61d6cf981c2742b6ce69bd124e2220dc041ab490b444eb1b4e82c56e44aabcf0cca85e54e82ded0d732b2ddf21f532fcb1db85c120c2  deviceinfo
+cd1402fcd7133c9364de8bd4e32f0d9e890f35d5d57fe92bd65736e23df1af428f091c9e5275fced111a6887ef562c46c5c19157b84a63955f8a1805b04d9951  rootston.ini
 "
