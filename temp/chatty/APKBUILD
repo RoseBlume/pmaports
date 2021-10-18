@@ -19,13 +19,13 @@ makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
 checkdepends="appstream-glib desktop-file-utils"
 _commit="91eeb45b546e898353a8b7507fc56c085995a5cf"
 # source="https://source.puri.sm/Librem5/chatty/-/archive/v$pkgver/chatty-v$pkgver.tar.gz"
-source="http://source.puri.sm/Librem5/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
+source="https://source.puri.sm/Librem5/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
 subpackages="$pkgname-lang $pkgname-bash-completion $pkgname-dbg"
 options="!check" # Requires running Wayland compositor
 builddir="$srcdir/$pkgname-$_commit"
 
 build() {
-	wget --no-check-certificate -c http://gitlab.gnome.org/GNOME/libgd/-/archive/master/libgd-master.tar.gz -O - | tar -xz -C $builddir/subprojects/
+	wget -c https://gitlab.gnome.org/GNOME/libgd/-/archive/master/libgd-master.tar.gz -O - | tar -xz -C $builddir/subprojects/
 	mv $builddir/subprojects/libgd-master/* $builddir/subprojects/libgd/
 	abuild-meson . output
 	meson compile ${JOBS:+-j ${JOBS}} -C output
