@@ -1,0 +1,15 @@
+diff -ru webkitgtk-2.34.0/Source/cmake/FindSystemd.cmake webkitgtk-2.34.0-copy/Source/cmake/FindSystemd.cmake
+--- webkitgtk-2.34.0/Source/cmake/FindSystemd.cmake	2021-10-18 15:48:40.521809731 +0200
++++ webkitgtk-2.34.0-copy/Source/cmake/FindSystemd.cmake	2021-10-18 01:58:33.951954042 +0200
+@@ -68,6 +68,11 @@
+     HINTS ${PC_SYSTEMD_LIBDIR} ${PC_SYSTEMD_LIBRARY_DIRS}
+ )
+
++find_library(Systemd_LIBRARY
++    NAMES ${Systemd_NAMES} elogind
++    HINTS ${PC_SYSTEMD_LIBDIR} ${PC_SYSTEMD_LIBRARY_DIRS}
++)
++
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(Systemd
+     FOUND_VAR Systemd_FOUND
