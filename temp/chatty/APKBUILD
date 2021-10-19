@@ -18,15 +18,22 @@ makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
 	olm-dev modemmanager-dev gspell-dev"
 checkdepends="appstream-glib desktop-file-utils"
 _commit="91eeb45b546e898353a8b7507fc56c085995a5cf"
-# source="https://source.puri.sm/Librem5/chatty/-/archive/v$pkgver/chatty-v$pkgver.tar.gz"
-source="https://source.puri.sm/Librem5/chatty/-/archive/$_commit/chatty-$_commit.tar.gz"
+_libgd_commit="c7c7ff4e05d3fe82854219091cf116cce6b19de0"
+source="https://source.puri.sm/Librem5/chatty/-/archive/$_commit/chatty-$_commit.tar.gz
+	https://gitlab.gnome.org/GNOME/libgd/-/archive/$_libgd_commit/libgd-$_libgd_commit.tar.gz
+	"
 subpackages="$pkgname-lang $pkgname-bash-completion $pkgname-dbg"
 options="!check" # Requires running Wayland compositor
 builddir="$srcdir/$pkgname-$_commit"
 
+prepare() {
+	default_prepare
+
+	rm -rf "$builddir/subprojects/libgd"
+	ln -sf "$srcdir/libgd-$_libgd_commit" "$builddir/subprojects/libgd"
+}
+
 build() {
-	wget -c https://gitlab.gnome.org/GNOME/libgd/-/archive/master/libgd-master.tar.gz -O - | tar -xz -C $builddir/subprojects/
-	mv $builddir/subprojects/libgd-master/* $builddir/subprojects/libgd/
 	abuild-meson . output
 	meson compile ${JOBS:+-j ${JOBS}} -C output
 }
@@ -36,4 +43,5 @@ package() {
 }
 sha512sums="
 970a25b5035b63d985def4bd64fa9719274e9a46b59a64302ca0a8214a78cec51b46dc5d3bc2ffd636c1e74ee527a7e4e1c22e4eb76054af3f66b33580a859d2  chatty-91eeb45b546e898353a8b7507fc56c085995a5cf.tar.gz
+681cc23b5a33df88a92e3aac33d0dba1c6ebb69a2bd6f15b6ae31f0b444c108f7bfd1391e604433be58d82c0032028b112652d3d0c473abe4db02d66c55cdef3  libgd-c7c7ff4e05d3fe82854219091cf116cce6b19de0.tar.gz
 "
