@@ -24,4 +24,6 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
-sha512sums="(run 'pmbootstrap checksum device-nokia-ple' to fill)"
+sha512sums="
+574f776e624dcc7bf0efaa550910844baa42dcc7e9b1dcee24dd25fb1b1722e603d8882e759667ba54b3f48712c911f56b918ded3940e2a8de1e8661ee3ebb8f  deviceinfo
+"
