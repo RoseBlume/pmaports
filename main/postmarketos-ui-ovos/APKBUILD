@@ -1,0 +1,44 @@
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=postmarketos-ui-ovos
+pkgver=0.1
+pkgrel=0
+pkgdesc="OVOS"
+url="https://wiki.postmarketos.org/wiki/OVOS"
+arch="noarch"
+license="GPL-3.0-or-later"
+depends="
+	elogind
+	mycroft-core
+	mycroft-embedded-shell
+	networkmanager
+	postmarketos-base-ui
+	pulseaudio
+	"
+# Required to launch
+depends="$depends
+	tinydm
+	tinydm-openrc
+	"
+install="$pkgname.post-install $pkgname.post-upgrade"
+source="
+	ovos-launcher-wrapper.sh
+	ovos.desktop
+	qtlogging.ini
+	"
+options="!check pmb:gpu-accel"
+
+package() {
+	install -Dm755 "$srcdir"/ovos-launcher-wrapper.sh \
+		"$pkgdir"/usr/bin/ovos-launcher-wrapper	
+	install -Dm644 -t "$pkgdir"/usr/share/wayland-sessions \
+		"$srcdir"/ovos.desktop
+
+	install -Dm644 -t "$pkgdir"/etc/xdg/QtProject \
+		"$srcdir"/qtlogging.ini
+}
+
+sha512sums="
+c28a79bca095c46587cceb5118404af2f13fa2c065da4203bb23a72bf1ca1efed6b8dfdd03d1011353104a6c85d46c435c910baf4c03c89f7f85f57c101df286  ovos-launcher-wrapper.sh
+083383fb611d43bf47a617c43149dba6ca428f78674225a3708213d95ae18801de7a879b83d50a1768784243a2622fb6f6f14269ce0c02989f3dac9d069b3b58  ovos.desktop
+341f0b866c315f37868ef3e7137cce8b53a0e8e6164e5af71b3e8e2fa68321afbf0652d76124ef84bade1393f701748852ac939aef9daff7e272a0df827780eb  qtlogging.ini
+"
