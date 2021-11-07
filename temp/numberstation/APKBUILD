@@ -1,0 +1,25 @@
+# Maintainer: Martijn Braam <martijn@brixit.nl>
+pkgname=numberstation
+pkgver=1.0.0
+pkgrel=0
+pkgdesc="TOTP Authentication application for mobile"
+url="https://git.sr.ht/~martijnbraam/numberstation"
+# riscv64, s390x and mips64 blocked by libhandy1, ppc64le blocked by py3-keyring
+arch="noarch !s390x !mips64 !ppc64le !riscv64"
+license="GPL-3.0-or-later"
+depends="python3 py3-gobject3 py3-otp py3-keyring gtk+3.0 libhandy1"
+makedepends="py3-setuptools glib-dev libhandy1-dev meson ninja"
+source="$pkgname-$pkgver.tar.gz::https://git.sr.ht/~martijnbraam/numberstation/archive/$pkgver.tar.gz"
+options="!check" # There's no testsuite
+
+build() {
+	abuild-meson . output
+	ninja -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" ninja -C output install
+}
+sha512sums="
+515fd0e66318afdedc61acee544ba817e1ba1b265370cd2e177a79083dd4737e2eb91046a597c1c44378ce37df394afe0ee299d8802d8731f029bcb76f08608b  numberstation-1.0.0.tar.gz
+"
