@@ -1,0 +1,33 @@
+pkgname=fractal-next
+pkgver=0.0.1
+pkgrel=0
+pkgdesc="Matrix group messaging app"
+url="https://wiki.gnome.org/Apps/Fractal"
+arch="x86_64 x86 armhf armv7 aarch64 ppc64le" # limited by Rust
+license="GPL-3.0-or-later"
+depends="dbus:org.freedesktop.Secrets xdg-utils"
+makedepends="meson gtk4.0-dev libadwaita-dev gtksourceview5-dev dbus-dev openssl1.1-compat-dev gspell-dev libhandy-dev
+	glib-dev cargo gmp-dev gst-plugins-good-gtk cmake desktop-file-utils appstream-glib"
+options="!check" # no tests
+subpackages="$pkgname-lang"
+_commit="c3a9b63b0088aeadcebe3f774d443edaf6c33894"
+source="fractal-$_commit.tar.gz::https://gitlab.gnome.org/GNOME/fractal/-/archive/$_commit/fractal-$_commit.tar.gz"
+builddir="$srcdir/fractal-$_commit"
+
+case "$CARCH" in
+	x86)
+		export CFLAGS="$CFLAGS -fno-stack-protector"
+		;;
+esac
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+sha512sums="
+5b0a9533a47093bf6172cc57b0a0c17e083b851009a2b3dae72ca34f170f45659c64d0966106a165125b72636dd3b31949b9d449450c2595a8adfbbf66070ee2  fractal-c3a9b63b0088aeadcebe3f774d443edaf6c33894.tar.gz
+"
