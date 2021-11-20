@@ -1,0 +1,56 @@
+From 92fd252fea8ce9729a42768f501ba3a7e089e038 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sat, 20 Nov 2021 13:31:26 +0100
+Subject: [PATCH] Add missing includes
+
+In file included from /foo/3rd_party/xdg/xdg.cpp:16:
+/foo/3rd_party/xdg/./xdg.h:94:17: error: 'shared_ptr' in namespace 'std' does not name a template type
+   94 |     static std::shared_ptr<BaseDirSpecification> create();
+      |                 ^~~~~~~~~~
+/foo/3rd_party/xdg/./xdg.h:19:1: note: 'std::shared_ptr' is defined in header '<memory>'; did you forget to '#include <memory>'?
+   18 | #include <boost/filesystem.hpp>
+  +++ |+#include <memory>
+   19 |
+
+and
+
+In file included from /foo/src/core/trust/remote/posix.cpp:19:
+/foo/src/core/trust/remote/posix.h:116:18: error: 'map' in namespace 'std' does not name a template type
+  116 |             std::map<core::trust::Uid, Session::Ptr> sessions;
+      |                  ^~~
+/foo/src/core/trust/remote/posix.h:35:1: note: 'std::map' is defined in header '<map>'; did you forget to '#include <map>'?
+   34 | #include <fstream>
+  +++ |+#include <map>
+   35 | #include <functional>
+---
+ 3rd_party/xdg/xdg.h           | 1 +
+ src/core/trust/remote/posix.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/3rd_party/xdg/xdg.h b/3rd_party/xdg/xdg.h
+index 379f0ff..a5fb7ac 100644
+--- a/3rd_party/xdg/xdg.h
++++ b/3rd_party/xdg/xdg.h
+@@ -17,6 +17,7 @@
+ 
+ #include <boost/filesystem.hpp>
+ 
++#include <memory>
+ #include <string>
+ #include <vector>
+ 
+diff --git a/src/core/trust/remote/posix.h b/src/core/trust/remote/posix.h
+index b7c5e2b..914760f 100644
+--- a/src/core/trust/remote/posix.h
++++ b/src/core/trust/remote/posix.h
+@@ -33,6 +33,7 @@
+ 
+ #include <fstream>
+ #include <functional>
++#include <map>
+ #include <mutex>
+ 
+ namespace core
+-- 
+2.34.0
+

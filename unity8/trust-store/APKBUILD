@@ -1,16 +1,17 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=trust-store
-pkgver=0_git20210514
-_commit="bc8c434686d79aaeeb94da63716439363528f76b"
+pkgver=0_git20210802
+_commit="2b816cf860d9f98fe37157c0a9b8ac84758cb0f2"
 pkgrel=0
 pkgdesc="An API for creating, reading, updating and deleting trust requests answered by users."
-url="https://github.com/ubports/trust-store"
+url="https://gitlab.com/ubports/core/trust-store"
 arch="all"
 license="LGPL-3.0-only"
 makedepends="cmake cmake-extras mir-dev boost-dev process-cpp-dev dbus-cpp-dev properties-cpp-dev libapparmor-dev libapparmor qt5-qtdeclarative-dev gtest-dev gmock"
 checkdepends="coreutils"
-source="$pkgname-$_commit.tar.gz::https://github.com/ubports/$pkgname/archive/$_commit.tar.gz
-	no_werror.patch"
+source="https://gitlab.com/ubports/core/trust-store/-/archive/$_commit/trust-store-$_commit.tar.gz
+	no_werror.patch
+	0001-Add-missing-includes.patch"
 subpackages="$pkgname-dev $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # 62% tests passed, 5 tests failed out of 13
@@ -32,6 +33,7 @@ package() {
 }
 
 sha512sums="
-db67fa953e54798faa5e749edfc027a87328b41f017b897ac99fee4fdfbc980124a39601017ead34a5536335811970757ebffcfaeae1d59e3f7227c2954965d7  trust-store-bc8c434686d79aaeeb94da63716439363528f76b.tar.gz
+f7a4de1644dedf67977f22ebc8dfa8c14d32af0d84c7d30ad078b2aee282863dff7a87b2d927e6c042b6b31806693b7807a9200b747285624baa7a62ce4b0f07  trust-store-2b816cf860d9f98fe37157c0a9b8ac84758cb0f2.tar.gz
 b839985eaedbab84240a619f5775b4b1d4a22cb38aec3314d125665550889cde845ba86f065346dc83aac8a03900feae62c69db69e4cb2983b9f20128c373ffb  no_werror.patch
+2d5ebcce0bf372d9b7b5b3e5086c499e616a33bd1591420d9d1c77c572c3527b5faa8439bd792614579622e8ce67c7e99d2e2b6bbaecc89ba33eff98022b9f39  0001-Add-missing-includes.patch
 "
