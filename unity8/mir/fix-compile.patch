@@ -1,0 +1,12 @@
+diff --git a/src/common/sharedlibrary/shared_library_prober.cpp b/src/common/sharedlibrary/shared_library_prober.cpp
+index 8284b63e59..7209e82a6b 100644
+--- a/src/common/sharedlibrary/shared_library_prober.cpp
++++ b/src/common/sharedlibrary/shared_library_prober.cpp
+@@ -23,6 +23,7 @@
+ 
+ #include <system_error>
+ #include <cstring>
++#include <algorithm>
+ 
+ namespace
+ {
