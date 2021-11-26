@@ -18,7 +18,7 @@ stages:
 # https://docs.gitlab.com/ee/ci/merge_request_pipelines/index.html#excluding-certain-jobs
 .only-default: &only-default
   only:
-    - master
+    - v21.12
     - merge_requests
     - tags
 
@@ -108,7 +108,7 @@ kernel-kconfig:
   stage: lint
   only:
     refs:
-      - master
+      - v21.12
       - merge_requests
     changes:
       - device/*/linux-*/config-*
