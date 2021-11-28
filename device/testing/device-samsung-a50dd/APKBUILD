@@ -1,0 +1,28 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-a50dd
+pkgdesc="Samsung A50"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-samsung-a50dd
+	mesa-dri-gallium
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+635cf6d66f0bb754f20ad4c22682a2dc9025f3cae29b1e15e2382ec007ee5ed1aa000451e9a771ebfdb62e4e904d5387c6a12f361dc0df5678c765eff37b7865  deviceinfo
+"
