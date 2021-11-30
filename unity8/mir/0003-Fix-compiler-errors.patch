@@ -1,8 +1,9 @@
-From 0f06a760676b9e5aa8320d0cb8e9c23a3419286d Mon Sep 17 00:00:00 2001
+From f4d04fb358d5e354f9023f7a51c57beb4fb73152 Mon Sep 17 00:00:00 2001
 From: Alan Griffiths <alan@octopull.co.uk>
 Date: Mon, 22 Jun 2020 17:20:22 +0100
-Subject: [PATCH] Fix compiler errors
+Subject: [PATCH 03/10] Fix compiler errors
 
+(cherry picked from commit 0f06a760676b9e5aa8320d0cb8e9c23a3419286d)
 ---
  src/miral/display_configuration_option.cpp | 2 ++
  src/miral/external_client.cpp              | 1 +
@@ -23,7 +24,7 @@ index 864b4e7122..0ca6a1b1e0 100644
  
  namespace
 diff --git a/src/miral/external_client.cpp b/src/miral/external_client.cpp
-index af628fbe99..68200c253a 100644
+index b8a88e5506..66efe6af90 100644
 --- a/src/miral/external_client.cpp
 +++ b/src/miral/external_client.cpp
 @@ -23,6 +23,7 @@
@@ -35,7 +36,7 @@ index af628fbe99..68200c253a 100644
  #include <stdexcept>
  
 diff --git a/src/miral/runner.cpp b/src/miral/runner.cpp
-index 7bad02f808..389a53cf69 100644
+index 3583fdb818..45a92e6ea7 100644
 --- a/src/miral/runner.cpp
 +++ b/src/miral/runner.cpp
 @@ -26,6 +26,7 @@
@@ -47,5 +48,5 @@ index 7bad02f808..389a53cf69 100644
  #include <mutex>
  #include <thread>
 -- 
-2.30.1
+2.34.1
 

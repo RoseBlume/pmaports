@@ -1,0 +1,71 @@
+From 2a7165a07d65c40ad21db12213878be2d49e6734 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Tue, 30 Nov 2021 18:45:45 +0100
+Subject: [PATCH 10/10] Work around capnproto incompatibility
+
+For some reason including capnproto before X11 header makes the compiler
+happy.
+
+See https://github.com/capnproto/capnproto/issues/1393
+---
+ src/platforms/mesa/server/x11/graphics/egl_helper.h  | 2 ++
+ src/platforms/mesa/server/x11/graphics/platform.h    | 2 ++
+ src/platforms/mesa/server/x11/input/input_platform.h | 2 ++
+ tests/include/mir/test/doubles/mock_x11.h            | 2 ++
+ 4 files changed, 8 insertions(+)
+
+diff --git a/src/platforms/mesa/server/x11/graphics/egl_helper.h b/src/platforms/mesa/server/x11/graphics/egl_helper.h
+index 28f89f9ba6..f563e72ad1 100644
+--- a/src/platforms/mesa/server/x11/graphics/egl_helper.h
++++ b/src/platforms/mesa/server/x11/graphics/egl_helper.h
+@@ -19,6 +19,8 @@
+ #ifndef MIR_GRAPHICS_X11_EGL_HELPER_H_
+ #define MIR_GRAPHICS_X11_EGL_HELPER_H_
+ 
++#include <kj/one-of.h> // HACK for https://github.com/capnproto/capnproto/issues/1393
++
+ #include <memory>
+ #include <functional>
+ 
+diff --git a/src/platforms/mesa/server/x11/graphics/platform.h b/src/platforms/mesa/server/x11/graphics/platform.h
+index 8a1cef1498..123be4f0b5 100644
+--- a/src/platforms/mesa/server/x11/graphics/platform.h
++++ b/src/platforms/mesa/server/x11/graphics/platform.h
+@@ -19,6 +19,8 @@
+ #ifndef MIR_GRAPHICS_X_PLATFORM_H_
+ #define MIR_GRAPHICS_X_PLATFORM_H_
+ 
++#include <kj/one-of.h> // HACK for https://github.com/capnproto/capnproto/issues/1393
++
+ #include "mir/graphics/display_report.h"
+ #include "mir/graphics/platform.h"
+ #include "display_helpers.h"
+diff --git a/src/platforms/mesa/server/x11/input/input_platform.h b/src/platforms/mesa/server/x11/input/input_platform.h
+index b4c9178c40..03d16477c3 100644
+--- a/src/platforms/mesa/server/x11/input/input_platform.h
++++ b/src/platforms/mesa/server/x11/input/input_platform.h
+@@ -18,6 +18,8 @@
+ #ifndef MIR_INPUT_X_INPUT_PLATFORM_H_
+ #define MIR_INPUT_X_INPUT_PLATFORM_H_
+ 
++#include <kj/one-of.h> // HACK for https://github.com/capnproto/capnproto/issues/1393
++
+ #include "mir/input/platform.h"
+ #include <memory>
+ #include <X11/Xlib.h>
+diff --git a/tests/include/mir/test/doubles/mock_x11.h b/tests/include/mir/test/doubles/mock_x11.h
+index d9ae65b432..60ac569e84 100644
+--- a/tests/include/mir/test/doubles/mock_x11.h
++++ b/tests/include/mir/test/doubles/mock_x11.h
+@@ -19,6 +19,8 @@
+ #ifndef MIR_TEST_DOUBLES_MOCK_X11_H_
+ #define MIR_TEST_DOUBLES_MOCK_X11_H_
+ 
++#include <kj/one-of.h> // HACK for https://github.com/capnproto/capnproto/issues/1393
++
+ #include <gmock/gmock.h>
+ 
+ #include <X11/Xlib.h>
+-- 
+2.34.1
+

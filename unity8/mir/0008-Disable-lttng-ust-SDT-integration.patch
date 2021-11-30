@@ -1,8 +1,18 @@
+From f1df492d8e8640f39b04b918afbc8bc49be44fa1 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Mon, 29 Nov 2021 21:15:32 +0100
+Subject: [PATCH 08/10] Disable lttng-ust SDT integration
+
+SystemTap isn't available on Alpine
+---
+ CMakeLists.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c897b20056..7e28adf3e8 100644
+index f6002581a6..70cdbf517d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -300,9 +300,9 @@ check_cxx_symbol_exists("drmIsMaster" "xf86drm.h" MIR_LIBDRM_HAS_IS_MASTER)
+@@ -308,9 +308,9 @@ check_cxx_symbol_exists("drmIsMaster" "xf86drm.h" MIR_LIBDRM_HAS_IS_MASTER)
  # USDT integration. The integration only involves #include-ing a
  # SystemTap header and calling a macro from it in the LTTNG macro,
  # but there aren't guarantees this won't change in future.
@@ -15,3 +25,6 @@ index c897b20056..7e28adf3e8 100644
  
  #
  # Full OpenGL support is possibly complete but not yet perfect. So is
+-- 
+2.34.1
+

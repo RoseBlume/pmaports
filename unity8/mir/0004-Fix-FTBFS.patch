@@ -1,8 +1,9 @@
-From cbbf0b199fafa0956d6047b1201be131e75793cd Mon Sep 17 00:00:00 2001
+From 1614484e91e50650f5c548e3c68ff3833aa263ac Mon Sep 17 00:00:00 2001
 From: Alan Griffiths <alan@octopull.co.uk>
 Date: Thu, 3 Dec 2020 15:40:17 +0000
-Subject: [PATCH] Fix FTBFS
+Subject: [PATCH 04/10] Fix FTBFS
 
+(cherry picked from commit cbbf0b199fafa0956d6047b1201be131e75793cd)
 ---
  tests/unit-tests/dispatch/test_threaded_dispatcher.cpp | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -21,5 +22,5 @@ index 382699ab35..d96184fb59 100644
  
      auto dispatchable = std::make_shared<mt::TestDispatchable>([dispatched, &dispatch_count]()
 -- 
-2.32.0
+2.34.1
 

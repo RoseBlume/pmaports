@@ -1,0 +1,38 @@
+From 9b35f42739bcb9c056bd3418196207a83dee6adb Mon Sep 17 00:00:00 2001
+From: Jeff Law <law@redhat.com>
+Date: Mon, 19 Oct 2020 11:56:48 -0600
+Subject: [PATCH 05/10] Fix missing #includes for GCC 11
+
+(cherry picked from commit 49663290bc11fe699b1f21fd120cfbbd5ba2b172)
+---
+ src/core/geometry/rectangles.cpp       | 1 +
+ src/platform/graphics/gamma_curves.cpp | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/src/core/geometry/rectangles.cpp b/src/core/geometry/rectangles.cpp
+index 28c4fc46ac..6bb81b7fcd 100644
+--- a/src/core/geometry/rectangles.cpp
++++ b/src/core/geometry/rectangles.cpp
+@@ -19,6 +19,7 @@
+ #include "mir/geometry/rectangles.h"
+ #include "mir/geometry/displacement.h"
+ #include <algorithm>
++#include <limits>
+ 
+ namespace geom = mir::geometry;
+ 
+diff --git a/src/platform/graphics/gamma_curves.cpp b/src/platform/graphics/gamma_curves.cpp
+index 55c024ec94..b5423e6a77 100644
+--- a/src/platform/graphics/gamma_curves.cpp
++++ b/src/platform/graphics/gamma_curves.cpp
+@@ -20,6 +20,7 @@
+ 
+ #include <boost/throw_exception.hpp>
+ 
++#include <limits>
+ #include <algorithm>
+ #include <stdexcept>
+ 
+-- 
+2.34.1
+

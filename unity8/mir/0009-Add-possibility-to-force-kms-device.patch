@@ -1,5 +1,16 @@
+From 1d41934c78b0a8f5fa6a80a17bb5f5c2daf504c8 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Mon, 29 Nov 2021 21:16:20 +0100
+Subject: [PATCH 09/10] Add possibility to force kms device
+
+Useful on PinePhone as it has two graphics devices, one for gpu and one
+for display.
+---
+ src/platforms/mesa/server/display_helpers.cpp | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
 diff --git a/src/platforms/mesa/server/display_helpers.cpp b/src/platforms/mesa/server/display_helpers.cpp
-index 502441e0b8..7cef8af0f9 100644
+index b357f6c67b..5b8eb2b3e1 100644
 --- a/src/platforms/mesa/server/display_helpers.cpp
 +++ b/src/platforms/mesa/server/display_helpers.cpp
 @@ -57,9 +57,15 @@ mgmh::DRMHelper::open_all_devices(
@@ -19,3 +30,6 @@ index 502441e0b8..7cef8af0f9 100644
  
      devices.scan_devices();
  
+-- 
+2.34.1
+
