@@ -4,13 +4,13 @@
 _flavor="postmarketos-qcom-msm8996"
 pkgname=linux-$_flavor
 pkgver=5.15.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Kernel close to mainline with extra patches for Qualcomm MSM8996 devices"
 arch="aarch64"
 _carch="arm64"
 url="https://gitlab.com/msm8996-mainline/linux"
 license="GPL-2.0-only"
-options="!strip !check !tracedeps pmb:cross-native pmb:kconfigcheck-nftables pmb:kconfigcheck-anbox"
+options="!strip !check !tracedeps pmb:cross-native pmb:kconfigcheck-nftables pmb:kconfigcheck-containers pmb:kconfigcheck-anbox pmb:kconfigcheck-zram"
 makedepends="bison findutils flex installkernel openssl-dev perl"
 
 # Source
@@ -48,5 +48,5 @@ package() {
 }
 sha512sums="
 13a9903e7d0d8ed27ad210457e671fab0f9cb70b0952c3b857e65bbaf5883a77114b41eae4ca2a105ecdceae1c978ae86e1d42db4c203ebdda64403ccbc856e2  linux-v5.15.0-msm8996.tar.gz
-31ed5ec7806e53a0cc950ce0a07c71008e60274427ca7f2686caa3782ace468ced6fb3ed1dc96bae9146392f3b2539d8cf401bce884e822dc3b84a49c7e3e28e  config-postmarketos-qcom-msm8996.aarch64
+e65676006292f703d0321a24d9cd25d1871848f25e57cb245ee38c106fe309d69b7510000f69498d1554bdd2f38f879babcbeb12e906b812ae537abed51d4ca1  config-postmarketos-qcom-msm8996.aarch64
 "
