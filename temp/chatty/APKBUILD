@@ -1,5 +1,5 @@
 pkgname=chatty
-pkgver=0.5.0_git20211202
+pkgver=0.5.0_git20211210
 pkgrel=0
 pkgdesc="A phone dialer and call handler"
 arch="aarch64"
@@ -17,7 +17,7 @@ makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
 	evolution-data-server-dev libgee-dev folks-dev feedbackd-dev libphonenumber-dev
 	olm-dev modemmanager-dev gspell-dev"
 checkdepends="appstream-glib desktop-file-utils"
-_commit="8c5c6db192742e8d5428cc7c5ae63388467367b7"
+_commit="e1502ae56f0a769cad0b71d67944c6ac984b4dbc"
 _libgd_commit="c7c7ff4e05d3fe82854219091cf116cce6b19de0"
 source="https://source.puri.sm/Librem5/chatty/-/archive/$_commit/chatty-$_commit.tar.gz
 	https://gitlab.gnome.org/GNOME/libgd/-/archive/$_libgd_commit/libgd-$_libgd_commit.tar.gz
@@ -42,6 +42,6 @@ package() {
 	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 sha512sums="
-15e032403349cbc6b1b4ca2903e4392758f57aa60e4838431699a06881c19a23fb671669923f45acf7ce858a764c8fa99eb5064032a8a44721a4bfb4bd494615  chatty-8c5c6db192742e8d5428cc7c5ae63388467367b7.tar.gz
+3816f24b21ced8072f1e2ba0ce49451c0ff72c7a13d0b21359b9bb98a2aabfde315dadaaadd8a28da4a51934fc402aa8c009d22bc8730d65f287424be95ea564  chatty-e1502ae56f0a769cad0b71d67944c6ac984b4dbc.tar.gz
 681cc23b5a33df88a92e3aac33d0dba1c6ebb69a2bd6f15b6ae31f0b444c108f7bfd1391e604433be58d82c0032028b112652d3d0c473abe4db02d66c55cdef3  libgd-c7c7ff4e05d3fe82854219091cf116cce6b19de0.tar.gz
 "
