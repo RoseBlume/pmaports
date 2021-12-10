@@ -149,14 +149,8 @@ mr-settings:
 build-x86_64:
   extends: .build
 
-build-x86:
-  extends: .build
-
 build-aarch64:
   extends: .build
 
 build-armv7:
-  extends: .build
-
-build-armhf:
   extends: .build
