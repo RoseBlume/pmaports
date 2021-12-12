@@ -8,6 +8,7 @@ license="MIT"
 arch="armhf"
 options="!check !archcheck"
 depends="postmarketos-base linux-samsung-serranodsdd mkbootimg"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 makedepends="devicepkg-dev"
 source="deviceinfo"
 
@@ -19,6 +20,12 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
+nonfree_firmware() {
+	pkgdesc="Firmware for Modem and WiFi"
+	# Non-firmware packages placed here, because they aren't useful without firmware
+	depends="firmware-samsung-serranodsdd-modem firmware-samsung-serranodsdd-wlan msm-modem-downstream"
+	mkdir "$subpkgdir"
+}
 
 sha512sums="
 ee1a1445aa2abcff2f471bd052337917f5509192e20e70053f22cf93304986412ab37787e56b76666fc49a6c15d0db5120527f26dbeeab1885051c11c3872d18  deviceinfo

@@ -1,0 +1,51 @@
+pkgname=firmware-samsung-serranodsdd
+# XDA post explains the meaning of the firmware version, which has been translated into the $pkgver
+pkgver=1.0.0
+_ver=I9192XXUCOA2
+pkgrel=0
+_commit="fb69a737df5f13c2975fd385a15908389fe5d5bd"
+pkgdesc="Samsung Galaxy S 4 Mini Duos firmware"
+subpackages="$pkgname-modem $pkgname-wlan"
+url="https://forum.xda-developers.com/t/modem-odin-stopped-samsung-galaxy-s4-mini-duos-i9192.2768593/"
+arch="armhf"
+license="proprietary"
+source="$pkgname-$_ver.zip::https://drive.google.com/uc?export=download&id=1s4Cer5KJf0Qum5kFSYyBdZqHk0-bNrlC
+	$pkgname-$pkgver.tar.gz::https://github.com/LineageOS/android_device_samsung_serrano-common/archive/$_commit.tar.gz"
+options="!check !strip !archcheck !spdx"
+
+_files="wcnss.b00 wcnss.b01 wcnss.b02 wcnss.b04 wcnss.b05 wcnss.b06 wcnss.mdt"
+_files_2="WCNSS_cfg.dat WCNSS_qcom_cfg.ini WCNSS_qcom_wlan_nv.bin"
+
+package() {
+	# parent package is empty
+	mkdir -p "$pkgdir"
+}
+
+modem() {
+	pkgdesc="Samsung Galaxy S 4 Mini Duos modem firmware"
+
+	cd "$srcdir"/firmware
+	for _i in *.b?? *.mdt; do
+		install -Dm644 "$_i" "$subpkgdir"/lib/firmware/postmarketos/"$_i"
+	done
+}
+
+wlan() {
+	pkgdesc="Samsung Galaxy S4 Mini Duos wifi firmware"
+	depends="wcnss-wlan"
+
+	cd "$srcdir"/firmware
+	for _i in $_files; do
+		install -Dm644 "$_i" \
+			"$subpkgdir"/lib/firmware/postmarketos/"$_i"
+	done
+
+	cd "$srcdir"/android_device_samsung_serrano-common-"$_commit"
+	for _i in $_files_2; do
+		install -Dm644 prima/"$_i" \
+			"$subpkgdir"/lib/firmware/postmarketos/wlan/prima/"$_i"
+	done
+}
+
+sha512sums="1229319578be9724bbebaf4a464c16fe34fceed43aa2bd9f1c4b31ba50466e0741d44467d5087f4d057736b83af14aad916df24dd63bb47c694f1e6922d7dd34  firmware-samsung-serranodsdd-I9192XXUCOA2.zip
+8ac342f7a332512a4d04cd1c38937abd8634937a1b975b29290a265daf8cb37e0b1d739442e5b50e6c85ab14475f2837373d6994ebd9e6fc1f7fbac3204cc733  firmware-samsung-serranodsdd-1.0.0.tar.gz"
