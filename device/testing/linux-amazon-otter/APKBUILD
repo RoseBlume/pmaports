@@ -1,0 +1,76 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Maintainer: Hansem Ro <hansemro@outlook.com>
+
+pkgname=linux-amazon-otter
+pkgver=5.11.0
+pkgrel=0
+pkgdesc="Mainline kernel for Amazon Kindle Fire"
+arch="armv7"
+_carch="arm"
+_flavor="amazon-otter"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="
+	mpfr-dev
+	mpc1-dev
+	gmp-dev
+	bc
+	bison
+	flex
+	installkernel
+	openssl-dev
+	perl
+"
+_config="config-$_flavor.armv7"
+case $pkgver in
+	*.*.*)	_kernver=${pkgver%.*};;
+	*.*) _kernver=$pkgver;;
+esac
+source="
+	https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/linux-$_kernver.tar.xz
+	$_config
+	0001-Update-device-tree-for-omap4-kc1.patch
+	0002-Input-ili210x-Fix-ili210x-touchdata-coordinates-endianness.patch
+	0003-Input-ili210x-add-missing-negation-for-touch-indicat.patch
+	0005-HACK-ili210x-Reduce-poll-period-to-1.patch
+	0006-Add-clk32kg-to-twl6030.patch
+"
+if [ "${pkgver%.0}" = "$pkgver" ]; then
+	source="$source
+	linux-$pkgver.patch.xz::https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/patch-$pkgver.xz"
+fi
+builddir="$srcdir/linux-$_kernver"
+
+prepare() {
+	default_prepare
+	cp -v "$srcdir"/$_config .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+	make zinstall modules_install dtbs_install \
+		ARCH="$_carch" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_DTBS_PATH="$pkgdir/usr/share/dtb"
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
+}
+sha512sums="
+a567ec133018bb5ec00c60281479b466c26e02137a93a9c690e83997947df02b6fd94e76e8df748f6d70ceb58a19bacc3b1467de10b7a1fad2763db32b3f1330  linux-5.11.tar.xz
+40a016dbab200bd238b0e0c98c0edac395a60f07d47c7b58b09c3a3f17c29f2cdd68e7c5170dfacb7db87b6d0df208186fdb5e2b47280c54490a89850da91ce2  config-amazon-otter.armv7
+99712f827c6fa0955b6542384472ea97451f182c3ffa43f5bd27a617fc640a97cba126c32488f30ab19bb7b3003c19ed56312fb1748eb0a9e398a7a82b70f0a0  0001-Update-device-tree-for-omap4-kc1.patch
+f513b104d1e0abe139681944a8c69de807d5d66a9915d4bd99f459387e0f07146d2c7a39240f739e4b00d0a2ef44a6323a5b74b2be1c60eea26ba2ae0640fbfa  0002-Input-ili210x-Fix-ili210x-touchdata-coordinates-endianness.patch
+0651d0c46afc64bf262b2a9d7c0c249434869921a9a7d79f76d8007dc29ac2e679ae5b818e1279a08379925b56365ad055adae2789ef89c837a2014c75cf63d4  0003-Input-ili210x-add-missing-negation-for-touch-indicat.patch
+fca42413ec1dd40454faa62f9cb061f19bf554d8a37fb45bb034384064d97bdd81de73e76f08e85136182eaaa580cfca6d57be29cb3f0946409206f70a07fa38  0005-HACK-ili210x-Reduce-poll-period-to-1.patch
+559799525ea1668d23f0157078a36fbc8ba128031193e18dcac293e76c4c709fdc88a66984bf2376498d83bc28865d768ffd534f4394d94f0ec3a0355b9901bf  0006-Add-clk32kg-to-twl6030.patch
+"
