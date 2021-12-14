@@ -62,7 +62,20 @@ start() {
 		return 2
 	fi
 
+
+	# Check if SIM Card is present
+	# May appear after a few seconds
+	count = 0
+	while [ -z $($QMICLI_MODEM --uim-get-card-status | grep "Card state: 'present'") ] && [ "$count" -lt "30" ]
+	do
+		sleep 1
+		count=$((count+1))
+	done
+	veinfo "Waited $count seconds for SIM card to be present"
+
+
 	QMI_CARDS=$($QMICLI_MODEM --uim-get-card-status)
+	
 
 	# Fail if all slots are empty but wait a bit for the sim to appear.
 	count=0
