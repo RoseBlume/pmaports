@@ -2,7 +2,7 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-phosh
 pkgver=12
-pkgrel=2
+pkgrel=3
 pkgdesc="(Wayland) Mobile UI developed for the Librem 5 (works only with numeric passwords!)"
 url="https://puri.sm"
 arch="noarch !armhf"
@@ -46,6 +46,7 @@ _pmb_recommends="calls
 	postmarketos-welcome-gtk3
 	xdg-user-dirs
 	xwayland
+	ttyescape
 	"
 _pmb_groups="feedbackd"
 subpackages="$pkgname-qt_tweaks"
