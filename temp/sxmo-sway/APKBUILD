@@ -1,0 +1,60 @@
+# Maintainer: Stacy Harper <contact@stacyharper.net>
+pkgname=sxmo-sway
+pkgver=9999
+_pkgver=1.6.0.1
+pkgrel=0
+pkgdesc="i3 compatible window manager for Wayland - Sxmo version"
+url="https://swaywm.org"
+arch="all !ppc64le !mips64" # blocked by wlroots
+license="MIT"
+options="!check" # no test suite
+provides="sway"
+depends="swaybg"
+makedepends="cairo-dev
+	gdk-pixbuf-dev
+	json-c-dev
+	libevdev-dev
+	libinput-dev
+	libxkbcommon-dev
+	linux-pam-dev
+	meson
+	ninja
+	pango-dev
+	pcre2-dev
+	scdoc
+	wayland-dev
+	wayland-protocols
+	sxmo-wlroots-dev
+	eudev-dev
+	"
+subpackages="
+	$pkgname-dbg
+	$pkgname-doc
+	$pkgname-bash-completion
+	$pkgname-zsh-completion
+	$pkgname-fish-completion
+	"
+source="$pkgname-$_pkgver.tar.gz::https://git.sr.ht/~stacyharper/sway/archive/$_pkgver.tar.gz
+	sway.desktop
+	"
+builddir="$srcdir"/sway-$_pkgver
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+
+	install -D -m644 "$srcdir"/sway.desktop \
+		"$pkgdir"/usr/share/wayland-sessions/sway.desktop
+
+	# move fish completion files where they are expected
+	mv "$pkgdir"/usr/share/fish/vendor_completions.d "$pkgdir"/usr/share/fish/completions
+}
+
+sha512sums="
+b3b064d97fddb65c3cdee8c75452d501acbbad7c19618d92f5f7140f20f18022dd8fed8523ff5382a6906b877ffb1dfb9766cd0f93c209aa7b802aa41c6f6ab2  sxmo-sway-1.6.0.1.tar.gz
+c9bc08fbd9d059c037ad1e3b7ab5e91bcde27dce248cc558c1f126b01c85b1d0d4ed4bb10e3f27bc818a06e60a81f19478b95529d4eeb32036e2c6ea9f29db36  sway.desktop
+"
