@@ -3,14 +3,14 @@
 
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
-pkgver=0.1
+pkgver=0.2
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
-	linux-shift-axolotl
+	linux-postmarketos-qcom-sdm845
 	mkbootimg
 	postmarketos-base
 	postmarketos-update-kernel
@@ -18,7 +18,14 @@ depends="
 	soc-qcom-sdm845-ucm
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="
+	deviceinfo
+	rootston.ini
+"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-phosh
+"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -28,6 +35,19 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
+nonfree_firmware() {
+	pkgdesc="Modem, GPU and WiFi Firmware, also needed for osk-sdl"
+	depends="firmware-shift-sdm845 firmware-shift-sdm845-initramfs"
+	mkdir "$subpkgdir"
+}
+
+phosh() {
+	install_if="$pkgname=$pkgver-r$pkgrel phosh"
+	install -Dm644 "$srcdir"/rootston.ini \
+		"$subpkgdir"/etc/phosh/rootston.ini
+}
+
 sha512sums="
-7312a14ef9c99e2452e1161bf0bca03857714eb367aa32d50de5c665ade3dd9e3e488a129b1946ca14f83c56f067f867b7c584497b62800490789982ddebe894  deviceinfo
+c66a98e6946fad467aa1f70394eda7883c56fae716330afe2d904a9f840c67deb6f7bfa997f89d08b857b4e3fc3e0ce96a474c4844eb58641addd11740b9a908  deviceinfo
+9fef488a655fcbad4fb28c11d7d6cbe385096e766cd99ca59802f1dbc4e3c99dac0ff682549e02fac0b73f7e95db953f3a87c453d1b19b229785e4ffeec515ed  rootston.ini
 "
