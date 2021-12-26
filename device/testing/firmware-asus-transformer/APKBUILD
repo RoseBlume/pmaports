@@ -3,7 +3,7 @@
 
 pkgname=firmware-asus-transformer
 pkgver=3
-pkgrel=0
+pkgrel=1
 pkgdesc="Firmware files for Asus Transformers"
 url="https://github.com/clamor-s/linux-firmware"
 arch="armv7"
@@ -30,30 +30,30 @@ source="
 package() {
 	# Bluetooth
 	install -D -m644 "$srcdir"/$pkgname-$_commit-BCM4329B1_002.002.023.0797.0879.hcd \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/BCM4329B1.hcd
+		"$pkgdir"/lib/firmware/brcm/BCM4329B1.hcd
 	install -D -m644 "$srcdir"/$pkgname-$_commit-BCM4330B1_002.001.003.0967.0970.hcd \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/BCM4330B1.hcd
+		"$pkgdir"/lib/firmware/brcm/BCM4330B1.hcd
 	install -D -m644 "$srcdir"/$pkgname-$_commit-BCM43341B0.0097.hcd \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/BCM43341B0.hcd
+		"$pkgdir"/lib/firmware/brcm/BCM43341B0.hcd
 
 	# Wi-Fi NVRAM
 	install -D -m644 "$srcdir"/$pkgname-$_commit-brcmfmac4329-sdio.asus,tf201.txt \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4329-sdio.asus,tf201.txt
+		"$pkgdir"/lib/firmware/brcm/brcmfmac4329-sdio.asus,tf201.txt
 	install -D -m644 "$srcdir"/$pkgname-$_commit-brcmfmac4329-sdio.asus,tf300t.txt \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4329-sdio.asus,tf300t.txt
+		"$pkgdir"/lib/firmware/brcm/brcmfmac4329-sdio.asus,tf300t.txt
 	install -D -m644 "$srcdir"/$pkgname-$_commit-brcmfmac4330-sdio.asus,tf700t.txt \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4330-sdio.asus,tf700t.txt
+		"$pkgdir"/lib/firmware/brcm/brcmfmac4330-sdio.asus,tf700t.txt
 	install -D -m644 "$srcdir"/$pkgname-$_commit-brcmfmac43340-sdio.asus,tf701t.txt \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac43340-sdio.asus,tf701t.txt
+		"$pkgdir"/lib/firmware/brcm/brcmfmac43340-sdio.asus,tf701t.txt
 
 	# Wi-Fi SDIO
 	install -D -m644 "$srcdir"/$pkgname-$_commit-brcmfmac4329-sdio.bin \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4329-sdio.asus,tf201.bin
+		"$pkgdir"/lib/firmware/brcm/brcmfmac4329-sdio.asus,tf201.bin
 	install -D -m644 "$srcdir"/$pkgname-$_commit-brcmfmac4330-sdio.bin \
-		"$pkgdir"/lib/firmware/postmarketos/brcm/brcmfmac4330-sdio.asus,tf700t.bin
+		"$pkgdir"/lib/firmware/brcm/brcmfmac4330-sdio.asus,tf700t.bin
 
 	# Symbolic links
-	cd "$pkgdir"/lib/firmware/postmarketos/brcm
+	cd "$pkgdir"/lib/firmware/brcm
 	ln -s brcmfmac4329-sdio.asus,tf201.txt brcmfmac4329-sdio.asus,tf101.txt
 	ln -s brcmfmac4329-sdio.asus,tf300t.txt brcmfmac4329-sdio.asus,tf300tg.txt
 	ln -s brcmfmac4329-sdio.asus,tf300t.txt brcmfmac4329-sdio.asus,tf300tl.txt
