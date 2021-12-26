@@ -1,7 +1,7 @@
 # Forked from Alpine testing for v21.12 stable
 
 pkgname=hkdm
-pkgver=0.1.6
+pkgver=0.1.7
 pkgrel=0
 pkgdesc="Lighter-weight hotkey daemon"
 url="https://gitlab.com/postmarketOS/hkdm"
@@ -16,8 +16,22 @@ makedepends="cargo libevdev-dev"
 _cargo_opts="--frozen --no-default-features --offline"
 export CARGO_HOME="$srcdir/.cargo"
 
+prepare() {
+	default_prepare
+
+	mkdir -p "$CARGO_HOME"
+	cat <<EOF > "$CARGO_HOME"/config.toml
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "$pkgname-$pkgver/third-party"
+EOF
+}
+
 build() {
-	cargo build $_cargo_opts --release
+	# -vv: prevent timeout caused by no output for too long
+	cargo build $_cargo_opts --release -vv
 }
 
 check() {
@@ -32,7 +46,7 @@ package() {
 }
 
 sha512sums="
-10eaa8d7482e94b77f55aa28ba3a8b93100bd21640631d4af851968fcbfd3106269133788dfd4133c8d50916e88dda99e1363d239515ce64b0a8772fdf92299c  hkdm-0.1.6.tar.gz
+7613d5afe425a3c6fe87420eaf502dde3c4be945e948450fe7b7c1844362452df739f6be8ff6ac522ee1bed474a2e5a4981a8374b8ab6beba0f5a2358ad8899c  hkdm-0.1.7.tar.gz
 be538eeebeccc2454817a1df11b8ce6063f51df888c852f2e361aa2ebd9ad94b9c82c7c71fa1215be426aa5fa59993e1bb6132c9b2ff352cadc1e2b4125cb392  hkdm.openrc
 8dac666f468bc27fc9b8083f61a6bc0cac493784cd74ac1103fd44daa00103676ea836c48c82bd8cb5772cae07cc42f283b7ff326172cd40e7f91191577788ad  hkdm.conf
 "
