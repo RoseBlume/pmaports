@@ -4,7 +4,7 @@ pkgver=1
 pkgrel=33
 pkgdesc="Samsung Galaxy S Advance"
 url="https://postmarketos.org"
-arch="armhf"
+arch="armv7"
 license="MIT"
 depends="postmarketos-base linux-samsung-i9070 mesa-dri-swrast"
 makedepends="devicepkg-dev"
@@ -32,7 +32,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-35ced13758b09fcdbd256da6b5c2b82cc08069d9e889e242560fec2c42932a6550305006469fd458975ef34566bbbfc185677f089a2b006b42e1762ecfb9a8d5  deviceinfo
+dc64e6c9bbe12f083a623d8f924e20c6446cdd02da297f45934c10d3940c8fff8eb8878f7fe39cb6312f11cb62e5800c6d0994399386ea29f04b6f8fd9a774c1  deviceinfo
 449e5047f9c15d536233fe2836cf10ae3dd2bf46f1c12ad0423f098bd54bff357438747a3c23aec9b1d8826146f87ff39d657c2b48247fb5ac4ebdeed65634fa  initfs-hook.sh
 61e8becbf6fa7c1c6c42e481083f5981ae7af33a48cbc53e817d8ac2c6a8e4f67a54b32ae3b8f5f25f7b412165a849dc93a629110dc47b0d16927bf2a12eb7e1  modules-load.conf
 "
