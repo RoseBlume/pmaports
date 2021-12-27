@@ -9,39 +9,33 @@ arch="all"
 license="LGPL-3.0"
 depends="mauikit"
 makedepends="
-kconfig-dev
-kcoreaddons-dev
-ki18n-dev
-kio-dev
-knotifications-dev
-qt5-qtsvg-dev
-qt5-qtwayland-dev
-qt5-qtbase-dev
-qt5-qtdeclarative-dev
-qt5-qtquickcontrols2-dev
-mauikit-dev
-cmake
-extra-cmake-modules
+    kconfig-dev
+    kcoreaddons-dev
+    ki18n-dev
+    kio-dev
+    kidletime-dev
+    knotifications-dev
+    qt5-qtsvg-dev
+    qt5-qtwayland-dev
+    qt5-qtbase-dev
+    qt5-qtdeclarative-dev
+    qt5-qtquickcontrols2-dev
+    mauikit-dev
+    mauikit-filebrowsing-dev
+    cmake
+    extra-cmake-modules
 "
 install=""
 subpackages=""
-source="${pkgname}-master.tar.gz::https://github.com/Nitrux/maui-shell/archive/refs/heads/master.tar.gz"
+source="${pkgname}-master.tar.gz::https://github.com/Nitrux/maui-shell/archive/refs/heads/master.tar.gz
+"
 builddir="$srcdir/${pkgname}-master"
 
 build() {
     cmake -B build \
         -DCMAKE_INSTALL_PREFIX=/usr \
-        -DENABLE_BSYMBOLICFUNCTIONS=OFF \
-        -DQUICK_COMPILER=ON \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_SYSCONFDIR=/etc \
-        -DCMAKE_INSTALL_LOCALSTATEDIR=/var \
-        -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON \
-        -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON \
-        -DCMAKE_INSTALL_RUNSTATEDIR=/run "-GUnix Makefiles" \
-        -DCMAKE_VERBOSE_MAKEFILE=ON \
         -DCMAKE_INSTALL_LIBDIR=lib \
-        .
+        -DCMAKE_PREFIX_PATH="/usr/lib/cmake/MauiKit;/usr/lib/cmake/MauiKitFileBrowsing" .
     make -C build
 }
 
@@ -50,5 +44,5 @@ package() {
 }
 
 sha512sums="
-f790bd9489fa4a7dba5c59e4b32cf52b2224e21807d35beba025ad6267de3aa7e568763955bf02c4dc5b33ec04fea8f9b6c8b322794027a7656ea444ba30f03c  maui-shell-master.tar.gz
+4062c1942cfca5a3590f5f07986c6ff4a430dcf4b796931b9416c8dc2d29e36a90b71e8d1d62894a7132364d521e251ea3544c7951b76f91af7f01ca5d8ee14f  maui-shell-master.tar.gz
 "
