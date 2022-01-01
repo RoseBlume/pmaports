@@ -1,0 +1,44 @@
+diff --git a/liblomiri-app-launch/app-store-click.cpp b/liblomiri-app-launch/app-store-click.cpp
+index 524df80..9161b71 100644
+--- a/liblomiri-app-launch/app-store-click.cpp
++++ b/liblomiri-app-launch/app-store-click.cpp
+@@ -130,11 +130,11 @@ bool Click::hasAppId(const AppID& appid)
+     if (G_LIKELY(link_farm_dir == nullptr))
+     {
+         click_link =
+-            g_build_filename(g_get_user_cache_dir(), "lomiri-app-launch", "desktop", appiddesktop.c_str(), NULL);
++            g_build_filename(g_get_user_cache_dir(), "lomiri-app-launch", "desktop", appiddesktop.c_str(), (gchar *)NULL);
+     }
+     else
+     {
+-        click_link = g_build_filename(link_farm_dir, appiddesktop.c_str(), NULL);
++        click_link = g_build_filename(link_farm_dir, appiddesktop.c_str(), (gchar *)NULL);
+     }
+ 
+     bool click = g_file_test(click_link, G_FILE_TEST_EXISTS);
+diff --git a/tests/libual-cpp-test.cc b/tests/libual-cpp-test.cc
+index c3543a2..3215218 100644
+--- a/tests/libual-cpp-test.cc
++++ b/tests/libual-cpp-test.cc
+@@ -162,7 +162,7 @@ protected:
+         g_setenv("TEST_CLICK_DB", CMAKE_BINARY_DIR "/click-db-dir", TRUE);
+         g_setenv("TEST_CLICK_USER", "test-user", TRUE);
+ 
+-        gchar* linkfarmpath = g_build_filename(CMAKE_SOURCE_DIR, "link-farm", NULL);
++        gchar* linkfarmpath = g_build_filename(CMAKE_SOURCE_DIR, "link-farm", (gchar *)NULL);
+         g_setenv("LOMIRI_APP_LAUNCH_LINK_FARM", linkfarmpath, TRUE);
+         g_free(linkfarmpath);
+ 
+diff --git a/tests/libual-test.cc b/tests/libual-test.cc
+index 154081b..3bb69cb 100644
+--- a/tests/libual-test.cc
++++ b/tests/libual-test.cc
+@@ -103,7 +103,7 @@ protected:
+         g_setenv("TEST_CLICK_DB", "click-db-dir", TRUE);
+         g_setenv("TEST_CLICK_USER", "test-user", TRUE);
+ 
+-        gchar * linkfarmpath = g_build_filename(CMAKE_SOURCE_DIR, "link-farm", NULL);
++        gchar * linkfarmpath = g_build_filename(CMAKE_SOURCE_DIR, "link-farm", (gchar *)NULL);
+         g_setenv("LOMIRI_APP_LAUNCH_LINK_FARM", linkfarmpath, TRUE);
+         g_free(linkfarmpath);
+ 

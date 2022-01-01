@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=qtmir
-pkgver=0_git20210622
-_commit="25de4e690ef9dabe2f3b3e3766eb0bb391276cbd"
+pkgver=0_git20211204
+_commit="cde69ffa84d1e8172f151765a782340a6b5d7381"
 pkgrel=0
 pkgdesc="QPA plugin to make Qt a Mir server"
 arch="all"
@@ -33,5 +33,5 @@ package() {
 }
 
 sha512sums="
-a74046d9733ee56d8354461cbbf7f8749879803d47b3252cd8463f85d13dd92546055f2f8002fbc3d327d80da55bd669e4ac6874e76ae179dfadfca21e79a241  qtmir-25de4e690ef9dabe2f3b3e3766eb0bb391276cbd.tar.gz
+f4c525ca9b2616c57c5c15f3c7203a95ecbcdcda161d421e0d81f5d13beab88b3854da05a09b32da34324454b2f3c7d567ac606ba894c6b693504e8f1167f18f  qtmir-cde69ffa84d1e8172f151765a782340a6b5d7381.tar.gz
 "

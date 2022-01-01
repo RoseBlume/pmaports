@@ -1,9 +1,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-settings-components
-pkgver=0_git20210412
+pkgver=0_git20211124
 pkgrel=0
-_commit="0fb4718e5b0bad65c41bdeb1f4af8ee54ac9be1c"
+_commit="7b2746f059aec12ccb717a621d1271ab73f3305f"
 pkgdesc="Ubuntu settings components for Unity8"
 arch="all"
 url="https://gitlab.com/ubports/core/lomiri-settings-components"
@@ -32,6 +32,6 @@ package() {
 }
 
 sha512sums="
-7c06e938e88a523b69fca17a96a3dd9d2194b6a49351b35de39889fa4190916fdd4ea946a73eff07c1963cfa8bbeef461dd306e120d0048ccfd5d6fd06ac4481  lomiri-settings-components-0fb4718e5b0bad65c41bdeb1f4af8ee54ac9be1c.tar.gz
+7817a7f49f5d768095f05f5fabe7f9efd9283552a2fd00002433e7766cdb10e68ffdf16ff8d635a916cf0b3b147ef946de57dd98a1355fa395f51b160a7cf9d0  lomiri-settings-components-7b2746f059aec12ccb717a621d1271ab73f3305f.tar.gz
 0cbe24ba24468ccfae80b6d6b49c68b55e44561ac7914645746af15ee252c12341f2b401390cffbed520963d1cb7da6980f99520ee820528de964b8a714b87b4  qmltestrunner.patch
 "

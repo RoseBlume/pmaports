@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri
-pkgver=0_git20210728
-_commit="d34a00c1e83e348e21b97e12deff911288e38b97"
+pkgver=0_git20211216
+_commit="405c3a6ebc802e30536595b63184c0781312207c"
 pkgrel=0
 pkgdesc="A convergent desktop environment"
 arch="all"
@@ -50,7 +50,7 @@ package() {
 }
 
 sha512sums="
-bd1bfff9abfa7b589e43e9e36e9f3981ad42463693eb606c380cf0f5fb87b2254e39f2ec5629daf5bf1f09be17b94109eee118c332aa2bf39475961f86aa26bc  lomiri-d34a00c1e83e348e21b97e12deff911288e38b97.tar.gz
+031a54d6251d234b53126939b14e6643e692755bc8a49c298a6a2c8988b060119a88615dcdf8ad25a6d6a8b1f5c751ae90bbd9c5301e0c8faf2920028fbff889  lomiri-405c3a6ebc802e30536595b63184c0781312207c.tar.gz
 dab1152ced9f881704f05ee47709e7bfaa22634d054e27bc820cafbdc3736ac2897fd07a8b2e736977a68f55c4cc211b0d72a7a1e1835a4db314a75b2e7133ab  0001-Replace-own-lights-plugin-with-hfd-leds.patch
 676f20bd34389820932332f94c296756d632c2c36dea543f59ef7eba308461cd0d81ca9a725081c3e4a66e12bb67387db40716955aca64e2dd242f84bc9c785d  0002-Replace-own-config-parser-with-libdeviceinfo.patch
 bc985880f564cccb3c00a2d492b336fa3486ca1fcf4846fd8cbd47db3d0785e83e091bb67040e7131b3ef100e5f4cdbef86471cc76f98ea5e0d0030962f22ee6  0003-NoDpkgParse.patch
