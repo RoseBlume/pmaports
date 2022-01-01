@@ -1,4 +1,4 @@
-From b8bdd667f93b0fbb0119793f67288d0629d6b8d4 Mon Sep 17 00:00:00 2001
+From 4dfe92f7c18c3f302bfeaaeab1f8a14f0b9736fb Mon Sep 17 00:00:00 2001
 From: Marius Gripsgard <marius@ubports.com>
 Date: Wed, 18 Sep 2019 01:36:31 +0200
 Subject: [PATCH 2/8] Replace own config parser with libdeviceinfo
@@ -50,13 +50,13 @@ index d9b1a62eb..849974d4b 100644
  pkg_check_modules(QTMIRSERVER REQUIRED qtmirserver>=0.6.0)
  pkg_check_modules(GEONAMES REQUIRED geonames>=0.2)
 diff --git a/debian/control b/debian/control
-index 07b613132..7eafc021c 100644
+index 9c3f64e0d..e7211148d 100644
 --- a/debian/control
 +++ b/debian/control
 @@ -15,7 +15,7 @@ Build-Depends:
   gdb,
   graphviz,
-  gsettings-ubuntu-schemas (>= 0.0.2+14.10.20140815),
+  lomiri-schemas,
 - libandroid-properties-dev,
 + libdeviceinfo-dev,
   libevdev-dev,
@@ -910,7 +910,7 @@ index bc8b0cdba..000000000
 -
 -#include "DeviceConfigParserTest.moc"
 diff --git a/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml b/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml
-index 52b38aa64..089d2b702 100644
+index f0bd19e14..14f51fe5a 100644
 --- a/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml
 +++ b/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml
 @@ -257,13 +257,13 @@ Item {
@@ -1003,5 +1003,5 @@ index 9e417f4ee..a926cacfc 100644
      }
  
 -- 
-2.32.0
+2.34.1
 

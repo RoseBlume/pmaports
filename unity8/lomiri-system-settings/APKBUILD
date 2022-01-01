@@ -12,7 +12,6 @@ depends="lomiri-ui-toolkit lomiri-settings-components"
 makedepends="cmake cmake-extras qt5-qtbase-dev upower-dev networkmanager-dev accountsservice-ubuntu-dev geonames-dev icu-dev libqtdbusmock gsettings-qt-dev click-dev gnome-desktop-dev trust-store-dev qt5-qtdeclarative-dev qt5-qtdeclarative intltool"
 checkdepends="xvfb-run py3-xdg py3-dbusmock"
 source="https://gitlab.com/ubports/core/lomiri-system-settings/-/archive/$_commit/lomiri-system-settings-$_commit.tar.gz
-	0002-Don-t-build-update-components.patch
 	0003-Use-qmltestrunner-qt5.patch"
 builddir="$srcdir/$pkgname-$_commit"
 options="pmb:strict !check" # 67% tests passed, 5 tests failed out of 15
@@ -35,6 +34,5 @@ package() {
 
 sha512sums="
 ea3ffe94c4bd717a9dafc45d0a8275f3b5e3a56020a6d0496d73aac835312eb2d3641057ec685a13d1d41fdf97ce6e27822936b2c3044390ee26302f26cae8c4  lomiri-system-settings-2c650635ed84eccd0bf033f9569cb4993bb7fa82.tar.gz
-5be4bef564fc19bdbab435b06ce9e515d38c47a3cf2f1a9aa5da12e2204f0994a5da8d2d7f3f6dfd400376dc1b801d7e302da48a49ea57416ec31c7702d7c282  0002-Don-t-build-update-components.patch
 11a1003ac08ba5b8739c371b8d2d953f31c666c7a9f6926420f7aab94665298ce8ca0782979a3ea48bc67d800b48b4eeba030f2fc86e422b0cafae7319b7db98  0003-Use-qmltestrunner-qt5.patch
 "

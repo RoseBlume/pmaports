@@ -1,4 +1,4 @@
-From 1b8796a670824987d3965b17e46773de3571f3d9 Mon Sep 17 00:00:00 2001
+From c65cac6cf478f3be23b06fc8874f0e647ed3d4b1 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Tue, 29 Jan 2019 19:23:11 +0100
 Subject: [PATCH 3/8] NoDpkgParse
@@ -8,21 +8,20 @@ Subject: [PATCH 3/8] NoDpkgParse
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/data/CMakeLists.txt b/data/CMakeLists.txt
-index bef557df2..4d66d898e 100644
+index 06abd21f9..610628ab9 100644
 --- a/data/CMakeLists.txt
 +++ b/data/CMakeLists.txt
-@@ -20,9 +20,9 @@ install(FILES
+@@ -20,8 +20,8 @@ install(FILES
      DESTINATION ${CMAKE_INSTALL_DATADIR}/lightdm/lightdm.conf.d
      )
  
 -add_custom_target(pkgversion ALL COMMAND dpkg-parsechangelog -l${CMAKE_SOURCE_DIR}/debian/changelog --show-field version > ${CMAKE_CURRENT_BINARY_DIR}/version)
 +#add_custom_target(pkgversion ALL COMMAND dpkg-parsechangelog -l${CMAKE_SOURCE_DIR}/debian/changelog --show-field version > ${CMAKE_CURRENT_BINARY_DIR}/version)
  
- install(FILES com.lomiri.Shell.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 -install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version DESTINATION ${CMAKE_INSTALL_LOCALSTATEDIR}/lib/lomiri)
 +#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version DESTINATION ${CMAKE_INSTALL_LOCALSTATEDIR}/lib/lomiri)
  
  add_subdirectory(systemd-user)
 -- 
-2.32.0
+2.34.1
 

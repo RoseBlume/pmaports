@@ -1,4 +1,4 @@
-From 27da5417fdb6c7746b9094fcc5bac2bff37d7493 Mon Sep 17 00:00:00 2001
+From 4dd4dd3a4b2cc489f5093f4dd4d2314a42f04446 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Sun, 15 Aug 2021 16:52:09 +0200
 Subject: [PATCH 8/8] fixups
@@ -52,7 +52,7 @@ index 78a4bb464..783fd1439 100644
      DeviceConfiguration {
          id: _deviceConfiguration
 diff --git a/qml/Panel/Indicators/IndicatorsLight.qml b/qml/Panel/Indicators/IndicatorsLight.qml
-index 41178c1de..788243569 100644
+index bd07f5e81..da32410da 100644
 --- a/qml/Panel/Indicators/IndicatorsLight.qml
 +++ b/qml/Panel/Indicators/IndicatorsLight.qml
 @@ -211,7 +211,7 @@ console.log("no support for Multicolor LED. " + indicatorState)
@@ -86,5 +86,5 @@ index 8e6d8408d..2eab41cde 100644
          }
      }
 -- 
-2.32.0
+2.34.1
 

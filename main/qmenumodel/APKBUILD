@@ -1,7 +1,7 @@
 # Contributor: Luca Weiss <luca@z3ntu.xyz>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=qmenumodel
-pkgver=0.8.0
+pkgver=0.9.0
 pkgrel=0
 pkgdesc="Qt5 renderer for Ayatana Indicators"
 url="https://github.com/AyatanaIndicators/qmenumodel"
@@ -11,9 +11,7 @@ depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev"
 makedepends="$depends_dev cmake cmake-extras"
 checkdepends="dbus-test-runner py3-dbus py3-gobject3"
 subpackages="$pkgname-dev"
-source="https://github.com/AyatanaIndicators/qmenumodel/archive/$pkgver/qmenumodel-$pkgver.tar.gz
-	0001-Move-glib-includes-outside-of-extern-C.patch
-	"
+source="https://github.com/AyatanaIndicators/qmenumodel/archive/$pkgver/qmenumodel-$pkgver.tar.gz"
 options="!check" # Tests fail under QEMU
 
 build() {
@@ -38,5 +36,6 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 
-sha512sums="bf5c44aab1b52c418bbf4c21bd99bc4d50251c10c749a31656a516afaa48c1ff2fb853d30ed62df25545c6af408c0ed6f9fbaa952935fb81dcb6774f0d329a3a  qmenumodel-0.8.0.tar.gz
-cf2bd6618b7dd7c096f1d109fd5ab1ae97fd9e5582c9dafa616f7a57a3658f92d7c37bf4f395b7be655c5462bf609dbadfb467376b05b1256e52dd23123c5f25  0001-Move-glib-includes-outside-of-extern-C.patch"
+sha512sums="
+ba5d4cadf34873bf711b67d0e35b36c2480c47a977bb40f14d8f2a1d497e04ffd8c104c9bd42785da98d7f19fa2a33d22baa68f80a8c918d4c19d28df2cbb2ae  qmenumodel-0.9.0.tar.gz
+"

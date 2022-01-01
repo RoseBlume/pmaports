@@ -1,4 +1,4 @@
-From f41b51e134e53f5be99dabb897d21a72f2c8edbb Mon Sep 17 00:00:00 2001
+From a940e70e25ffb9b6a433d29bba640ea1abfa043e Mon Sep 17 00:00:00 2001
 From: Marius Gripsgard <marius@ubports.com>
 Date: Sat, 21 Mar 2020 02:29:03 +0100
 Subject: [PATCH 1/8] Replace own lights plugin with hfd leds
@@ -43,7 +43,7 @@ Subject: [PATCH 1/8] Replace own lights plugin with hfd leds
  delete mode 100644 tests/mocks/Lights/qmldir
 
 diff --git a/debian/control b/debian/control
-index d05ed6f29..07b613132 100644
+index 22b05d85f..9c3f64e0d 100644
 --- a/debian/control
 +++ b/debian/control
 @@ -3,7 +3,6 @@ Section: x11
@@ -62,7 +62,7 @@ index d05ed6f29..07b613132 100644
   liblightdm-qt5-3-dev,
   liblomiri-connectivity-qt1-dev,
   libpam0g-dev,
-@@ -125,6 +123,7 @@ Depends:
+@@ -126,6 +124,7 @@ Depends:
   libglib2.0-bin,
   qmenumodel-qml (>= 0.2.11),
   qml-module-biometryd,
@@ -70,10 +70,10 @@ index d05ed6f29..07b613132 100644
   qml-module-lomiri-components,
   qml-module-lomiri-layouts,
   qml-module-lomiri-settings-menus,
-@@ -240,7 +239,6 @@ Pre-Depends:
+@@ -241,7 +240,6 @@ Pre-Depends:
  Depends:
   accountsservice-ubuntu-schemas (>= 0.0.7),
-  gsettings-ubuntu-schemas (>= 0.0.2+14.10.20140815),
+  lomiri-schemas,
 - libhardware2,
   qml-module-gsettings1.0,
   qml-module-qtmultimedia,
@@ -496,7 +496,7 @@ index dbe6aa496..000000000
 -plugin Lights-qml
 -typeinfo Lights.qmltypes
 diff --git a/qml/Panel/Indicators/IndicatorsLight.qml b/qml/Panel/Indicators/IndicatorsLight.qml
-index eb6d5f32b..41178c1de 100644
+index 9a5e87da3..bd07f5e81 100644
 --- a/qml/Panel/Indicators/IndicatorsLight.qml
 +++ b/qml/Panel/Indicators/IndicatorsLight.qml
 @@ -20,7 +20,7 @@
@@ -505,7 +505,7 @@ index eb6d5f32b..41178c1de 100644
  import Powerd 0.1
 -import Lights 0.1
 +import Hfd 0.1
- import QMenuModel 0.1 as QMenuModel
+ import QMenuModel 1.0 as QMenuModel
  import Lomiri.Indicators 0.1 as Indicators
  import Wizard 0.1
 @@ -171,9 +171,9 @@ console.log("no support for Multicolor LED. " + indicatorState)
@@ -792,7 +792,7 @@ index 68da5e1b3..000000000
 -plugin MockLights-qml
 -typeinfo Lights.qmltypes
 diff --git a/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml b/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml
-index ea2e90113..52b38aa64 100644
+index 88f32ac6a..f0bd19e14 100644
 --- a/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml
 +++ b/tests/qmltests/Panel/Indicators/tst_IndicatorsLight.qml
 @@ -20,7 +20,7 @@ import Lomiri.SelfTest 0.1 as UT
@@ -801,7 +801,7 @@ index ea2e90113..52b38aa64 100644
  import Powerd 0.1
 -import Lights 0.1
 +import Hfd 0.1
- import QMenuModel 0.1
+ import QMenuModel 1.0
  import "../../../../qml/Panel/Indicators"
  
 @@ -75,7 +75,7 @@ Item {
@@ -943,5 +943,5 @@ index ea2e90113..52b38aa64 100644
      }
  }
 -- 
-2.32.0
+2.34.1
 

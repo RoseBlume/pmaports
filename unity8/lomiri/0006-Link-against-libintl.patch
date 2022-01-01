@@ -1,4 +1,4 @@
-From 00ccddfaec0204fe9c606431df544f19ba10d6a1 Mon Sep 17 00:00:00 2001
+From eeae8fa7981250bb6a86a7bab2ff7ecf167bb79d Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Tue, 29 Jan 2019 22:19:51 +0100
 Subject: [PATCH 6/8] Link against libintl
@@ -75,5 +75,5 @@ index 1a5643824..ee32d54d5 100644
  target_include_directories(GreeterPromptsModelTestExec PUBLIC
      ${CMAKE_SOURCE_DIR}/plugins/LightDM
 -- 
-2.32.0
+2.34.1
 

@@ -1,17 +1,17 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
-pkgname=indicator-network
-pkgver=0_git20210623
-_commit="ff8985a09c53a420d7d464a9540512b640dffdff"
+pkgname=lomiri-indicator-network
+pkgver=0_git20211202
+_commit="ea27f1169099f2f124ed5cf9d24a2475ce8e42d4"
 pkgrel=0
 pkgdesc="The 'Network' indicator for Ubuntu Touch"
 arch="all"
-url="https://gitlab.com/ubports/core/indicator-network"
+url="https://gitlab.com/ubports/core/lomiri-indicator-network"
 license="GPL-3.0"
 depends_dev="glib-dev lomiri-api-dev ofono-dev networkmanager-dev libsecret-dev lomiri-url-dispatcher-dev qt5-qtdeclarative-dev libqofono-dev"
 makedepends="$depends_dev cmake-extras gtest-dev gmock libqtdbustest libqtdbusmock gmenuharness-dev intltool"
 checkdepends="py3-dbusmock"
-source="https://gitlab.com/ubports/core/indicator-network/-/archive/$_commit/indicator-network-$_commit.tar.gz
+source="https://gitlab.com/ubports/core/lomiri-indicator-network/-/archive/$_commit/lomiri-indicator-network-$_commit.tar.gz
 	libintl.patch"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
@@ -35,6 +35,6 @@ package() {
 }
 
 sha512sums="
-08a6aa218eeb5f3f8d25d48475cf4bca9dfd6186bee98a396e868db15ca43342270d0ec1526c037ebdb1a9a555243aa0f0a513fa632938c67f8ed09603b66d73  indicator-network-ff8985a09c53a420d7d464a9540512b640dffdff.tar.gz
+a9f1c4814c7b73255441781065c5016fc0baa17b3328729b22ad7536772a0f64657ac88e58a4b2db7df3f9c0c93e2090e0b4951d03e5676b814667cc2ed54d77  lomiri-indicator-network-ea27f1169099f2f124ed5cf9d24a2475ce8e42d4.tar.gz
 262045cb91898d0135a6fc09d3091aae369e4af34c0c89d741336a75ea43fce82835c054f3c8b9c44a1ddc707c6039dc586b6761c0c54f30b5464c1b8e70eefa  libintl.patch
 "
