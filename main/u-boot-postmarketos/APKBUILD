@@ -1,0 +1,68 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Contributor: Dzmitry Sankouski <dsankouski@gmail.com>
+pkgname=u-boot-postmarketos
+pkgver=2022.01_rc3
+pkgrel=0
+pkgdesc="U-Boot"
+arch="aarch64"
+_carch="arm64"
+license="GPL-2.0-only"
+url="https://github.com/u-boot"
+options="!check"
+makedepends="bison flex openssl-dev"
+
+subpackages="
+	$pkgname-a5y17lte
+"
+
+_repository="u-boot"
+_commit="ade37460a944aed36ae6ee634c4d4a9a22690461"
+source="
+$pkgname-$_commit.tar.gz::$url/$_repository/archive/$_commit.tar.gz
+a5y17lte_config
+"
+devices="a5y17lte"
+
+builddir="$srcdir/$_repository-$_commit"
+
+prepare() {
+	default_prepare
+}
+
+build() {
+	unset LDFLAGS
+	for device in $devices;
+	do
+		build_subpackage "$device"
+	done
+}
+
+build_subpackage() {
+	device=$1
+	cp "$srcdir"/"${device}"_config "$builddir/configs/${device}_defconfig"
+    make ${device}_defconfig
+    make u-boot.bin
+    mv u-boot.bin "$builddir/u-boot-${device}.bin"
+}
+
+install_subpackage() {
+	device=$1
+	install -Dm644 "$builddir"/u-boot-${device}.bin "$subpkgdir"/boot/u-boot.bin
+}
+
+package() {
+	# main package is empty
+	mkdir -p "$pkgdir"
+	touch u-boot
+    install -Dm644 u-boot \
+    	"$pkgdir"/usr/share/postmarketos-mkinitfs-triggers/u-boot
+}
+
+a5y17lte() {
+	install_subpackage a5y17lte
+}
+
+sha512sums="
+d17a40c88bb7d2b70f582e6f6bdf5a67610f0a71cbaf80bc3aa436957dca32775d3c277b415ed12ddf587b996d7bab738e54ef70888e6b5fb00cdfc2f137bb8e  u-boot-postmarketos-ade37460a944aed36ae6ee634c4d4a9a22690461.tar.gz
+3a351096f7a5a8bea87af6e03c6eb2099a0fe1da771584354d96241eaa3c14fbf9b5cf758bad98a0aea232c8c9f638530c655ff37198b93c683aac7bd9df9342  a5y17lte_config
+"
