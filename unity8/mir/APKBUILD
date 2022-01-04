@@ -1,7 +1,7 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=mir
-pkgver=1.8.1
+pkgver=1.8.2
 pkgrel=0
 pkgdesc="Canonical's display server"
 url="https://mir-server.io"
@@ -14,13 +14,6 @@ makedepends="$depends_dev cmake lttng-ust-tools libxkbcommon-dev gtest-dev gmock
 checkdepends="wlcs grep bash"
 source="
 	$pkgname-$pkgver.tar.gz::https://github.com/MirServer/mir/archive/v$pkgver.tar.gz
-	0001-Add-missing-include.patch
-	0002-Delete-obsolete-gmock-hack.patch
-	0003-Fix-compiler-errors.patch
-	0004-Fix-FTBFS.patch
-	0005-Fix-missing-includes-for-GCC-11.patch
-	0006-Fix-FTBFS.patch
-	0007-Add-missing-headers.patch
 	0008-Disable-lttng-ust-SDT-integration.patch
 	0009-Add-possibility-to-force-kms-device.patch
 	0010-Work-around-capnproto-incompatibility.patch
@@ -47,14 +40,7 @@ package() {
 }
 
 sha512sums="
-1e205afa1495b28189ca72e5e573b410df6f7e01476764e1981ae93bb3a88172272727e74701787b6ea4b7b1797db4ba45ec803c7c0198f3bbe9788eb7b4fd79  mir-1.8.1.tar.gz
-c242067d310325938ad59a7b295175e5e6b5bf766bf40764e39ae2b29b12fe7876ee8d5aa5cd86df8667733d25d3272a762fd5c502d5d6362e98e6b009207a47  0001-Add-missing-include.patch
-e078e0cfdfd3eb0a8ba154741e844fc8b85b0d29322221925066e3c89977029fc8e4622a485f533cddea62860f77df3db318c9dcd774dad236e9027597d6dcea  0002-Delete-obsolete-gmock-hack.patch
-901e469d9a38c0656fa623cfb19c70b48a89408265aa33acce97a699853ecb8c2250bd87bdde276bf5bff8df56649b69a6a59cc2b0cdab265ea63b6087746182  0003-Fix-compiler-errors.patch
-f2dac48d221820ff9fc8a8373bcabfcf36886c3d79e551cb0ad9491f6d887751d39db3f3f1a825d0a780acb34816d121f046a2ae7db051efb4526388ee30490b  0004-Fix-FTBFS.patch
-31d1aced52a76888e9a6f86ab8b9cf328d1fe2669ec17cd33fe2ab311b3fb6eea528c5201cde48b5db387b65c2d946e32e6aeadaa6afa7da8c2acacc226b25e4  0005-Fix-missing-includes-for-GCC-11.patch
-7f72d9757457a1909c4f27d14e5157b189cf8d0fde00905257d4719757c0fb8d166b61da9c22e6f0bb496b77e5badd692b5f65ffd9b9342feb5f82c6973ecab0  0006-Fix-FTBFS.patch
-77416ba6c3d6a8be4c39f584c3908920f2d5a944972ed6590b0f9c2abb919981f41b4863084e8f115bfcf34824c5c2f2699106382a92f468440105e9c29fb39b  0007-Add-missing-headers.patch
+7d2da696b77a9fe470ea726cfe3788c192ecc81921ce355f68ca37616bbaad8f4f3402ad7320fab371ff944f5f27bc210d5e640a00c15e3651f1d1e084715bae  mir-1.8.2.tar.gz
 4be871adc90c69504333edf789f0a6765aaa6640b5d46fc345246f5dfcc475c3b72ee716961ebbff92150486d77c69c23b2ef4c91c936864f511b3ac78728670  0008-Disable-lttng-ust-SDT-integration.patch
 b26cfb1144a8007e0bbf44ee0095cef4269c47c48641b94615f6fe9e2b4867bac9c22a0ffb28be138638ace3f0fdc416eca6a3885908a67ea83eb303cdfbc764  0009-Add-possibility-to-force-kms-device.patch
 908055ddbc82b0c1a4e3a2319bba969e6c11fec8a2304ac70377869ab2a9ef9987a69bccf87ede066c1a6ac8250c7b252273b659910efa5b59b4bc921e37c02e  0010-Work-around-capnproto-incompatibility.patch
