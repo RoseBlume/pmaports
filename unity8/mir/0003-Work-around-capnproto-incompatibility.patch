@@ -1,7 +1,7 @@
-From 2a7165a07d65c40ad21db12213878be2d49e6734 Mon Sep 17 00:00:00 2001
+From 28ddc996e3a9adfd4e5ab46561791bcf80462dbc Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Tue, 30 Nov 2021 18:45:45 +0100
-Subject: [PATCH 10/10] Work around capnproto incompatibility
+Subject: [PATCH 3/3] Work around capnproto incompatibility
 
 For some reason including capnproto before X11 header makes the compiler
 happy.
