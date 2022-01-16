@@ -1,8 +1,8 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 5.15.3 Kernel Configuration
+# Linux/arm64 5.15.13 Kernel Configuration
 #
-CONFIG_CC_VERSION_TEXT="aarch64-alpine-linux-musl-gcc (Alpine 11.2.1_git20211128) 11.2.1 20211128"
+CONFIG_CC_VERSION_TEXT="aarch64-alpine-linux-musl-gcc (Alpine 11.2.1_git20220106) 11.2.1 20220106"
 CONFIG_CC_IS_GCC=y
 CONFIG_GCC_VERSION=110201
 CONFIG_CLANG_VERSION=0
@@ -1981,7 +1981,7 @@ CONFIG_KEYBOARD_GPIO=y
 # CONFIG_KEYBOARD_GPIO_POLLED is not set
 # CONFIG_KEYBOARD_TCA6416 is not set
 # CONFIG_KEYBOARD_TCA8418 is not set
-# CONFIG_KEYBOARD_MATRIX is not set
+CONFIG_KEYBOARD_MATRIX=y
 CONFIG_KEYBOARD_KB151=y
 # CONFIG_KEYBOARD_LM8323 is not set
 # CONFIG_KEYBOARD_LM8333 is not set
