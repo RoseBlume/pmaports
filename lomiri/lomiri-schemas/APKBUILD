@@ -1,0 +1,31 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
+pkgname=lomiri-schemas
+pkgver=0_git20211118
+pkgrel=0
+_commit="866474c8c54bbe6e1209625b98c538f50e4ef7b6"
+pkgdesc='GSettings / AccountsService schema files for Lomiri'
+arch="noarch"
+url="https://gitlab.com/ubports/core/lomiri-schemas"
+license="LGPL-2.1"
+makedepends="cmake cmake-extras glib-dev intltool"
+source="https://gitlab.com/ubports/core/lomiri-schemas/-/archive/$_commit/lomiri-schemas-$_commit.tar.gz"
+builddir="$srcdir/$pkgname-$_commit"
+options="!check" # No tests
+
+build() {
+	cmake -B build \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LOCALSTATEDIR=/var
+	make -C build
+}
+
+package() {
+	make -C build DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+8260daee3994cc17ad09d114c459fdb4953202bbba7679c032c099a474e64ec4c928ea457a9f3ea2909ee0ca197da3820dab1f698122d80c5124d2d1f98dde00  lomiri-schemas-866474c8c54bbe6e1209625b98c538f50e4ef7b6.tar.gz
+"
