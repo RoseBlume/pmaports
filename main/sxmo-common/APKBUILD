@@ -1,7 +1,7 @@
 # Reference: https://postmarketos.org/uipkg
 # Maintainer: Miles Alan <m@milesalan.com>
 pkgname=sxmo-common
-pkgver=1.6.1
+pkgver=1.7.1
 pkgrel=0
 pkgdesc="Simple Mobile: Core package to build custom SXMO desktop environments"
 url="http://sr.ht/~mil/Sxmo"
@@ -42,6 +42,7 @@ depends="
 	v4l-utils
 	vis
 	youtube-dl
+	vvmd
 	"
 install="$pkgname.post-install $pkgname.post-upgrade $pkgname.pre-deinstall"
 subpackages="$pkgname-qt_tweaks $pkgname-bluetooth"
