@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri
-pkgver=0_git20211216
-_commit="405c3a6ebc802e30536595b63184c0781312207c"
+pkgver=0_git20220112
+_commit="decf11e1dfb2c089f8ab9076117558aa3ed4266b"
 pkgrel=0
 pkgdesc="A convergent desktop environment"
 arch="all"
@@ -46,11 +46,11 @@ package() {
 	make -C build DESTDIR="$pkgdir" install
 	# Remove this mock as apk thinks, it conflicts with the qmenumodel package
 	# conflicts: qmenumodel-0_git20180727-r0[so:libqmenumodel.so.0=0]
-	rm -r "$pkgdir"/usr/lib/lomiri/qml/mocks/QMenuModel/
+	rm -r "$pkgdir"/usr/lib/lomiri/qml/mocks/QMenuModel.1/
 }
 
 sha512sums="
-031a54d6251d234b53126939b14e6643e692755bc8a49c298a6a2c8988b060119a88615dcdf8ad25a6d6a8b1f5c751ae90bbd9c5301e0c8faf2920028fbff889  lomiri-405c3a6ebc802e30536595b63184c0781312207c.tar.gz
+347667236aa35182b1cba110e6257c669656f68c103b65f8a49697f9845a2079792af72e981ea77601525e3e08816137bd118b4ecb0ef1efdee0e7c7d67b157a  lomiri-decf11e1dfb2c089f8ab9076117558aa3ed4266b.tar.gz
 cb0b2f4098e854b6208dc41a7594dcb82ea7e349fabbf9c4a10c107ad75bb10f230a1e6ef6c2236a5d44537f830f57921917c05446260be869c13fc1d6f2a74e  0001-Replace-own-lights-plugin-with-hfd-leds.patch
 8c9b9e0640b36f94c1e665c67bbd2870db00c25b1f691aee483cbdd7ccec2c2d3defd2a1172c659137817cf02f261534f80a73df67880b473a666cbdee517106  0002-Replace-own-config-parser-with-libdeviceinfo.patch
 96cce92bfacc07227204c698418ea72592324d2d1b7bff606b39304dbec44612e5611a26e58f1ce54f320544b0505d2046ff3da489cb848fe555522124474fe7  0003-NoDpkgParse.patch
