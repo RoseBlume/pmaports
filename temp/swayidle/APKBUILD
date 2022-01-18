@@ -1,0 +1,44 @@
+# Forked from Alpine, to support upgrading sxmo with sxmo-build from pmOS stable
+pkgname=swayidle
+pkgver=1.7.1
+pkgrel=0
+pkgdesc="Idle management daemon for Wayland"
+url="https://swaywm.org"
+license="MIT"
+arch="all"
+options="!check" # no test suite
+makedepends="
+	meson
+	scdoc
+	elogind-dev
+	wayland-dev
+	wayland-protocols
+	"
+subpackages="
+	$pkgname-doc
+	$pkgname-bash-completion
+	$pkgname-fish-completion
+	$pkgname-zsh-completion
+	"
+source="https://github.com/swaywm/swayidle/archive/$pkgver/swayidle-$pkgver.tar.gz
+	0001-Fix-printf-using-size_t-lineno-variable.patch
+	"
+
+build() {
+	abuild-meson \
+		-Dlogind=enabled \
+		-Dlogind-provider=elogind \
+		. output
+	meson compile -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+
+	mv "$pkgdir"/usr/share/fish/vendor_completions.d "$pkgdir"/usr/share/fish/completions
+}
+
+sha512sums="
+6e0a6eb3b99a415414cac04299392ede9a8263fa5f4a75815742f5fcd4a5badb3021a7ff699a476c04ca2256b85f4149f8c8dda0484306636ffbaccff615d9da  swayidle-1.7.1.tar.gz
+768dae9b6bd72637fee0820919e88ff0d045a8175fb24fda61aca2778981c989c21a1d789ee1bdc16b1ed3ae3fee8032a800b67589098fa8bf95ae3468541c49  0001-Fix-printf-using-size_t-lineno-variable.patch
+"
