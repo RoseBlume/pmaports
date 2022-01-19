@@ -1,0 +1,104 @@
+# Maintainer: Henrik Grimler <henrik@grimler.se>
+# Kernel config based on: arch/arm/configs/exynos_defconfig
+# and Hardkernel's odroidxu4_defconfig
+
+pkgname=linux-postmarketos-exynos5
+pkgver=5.16.1
+pkgrel=0
+pkgdesc="Mainline kernel fork for Samsung Exynos5 devices"
+arch="armv7"
+_carch="arm"
+_flavor="${pkgname#linux-}"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-anbox
+	pmb:kconfigcheck-nftables
+"
+makedepends="
+	bison
+	findutils
+	flex
+	installkernel
+	openssl-dev
+	perl
+	gmp-dev
+	mpc1-dev
+	mpfr-dev
+	xz
+"
+
+# Source
+_config="config-$_flavor.$arch"
+case $pkgver in
+	*.*.*)	_kernver=${pkgver%.0};;
+	*.*)	_kernver=$pkgver;;
+esac
+source="
+	https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-${pkgver//_/-}.tar.xz
+	$_config
+	0001-ODROID-COMMON-gpu-drm-Add-Hardkernel-3.2-LCD-driver-.patch
+	0002-ODROID-COMMON-gpu-drm-Add-new-Tiny-DRM-driver-with-I.patch
+	0003-ODROID-COMMON-hwmon-pwm-fan-fix-to-add-pwm1_enable-t.patch
+	0004-ODROID-COMMON-gpu-drm-add-new-display-resolution-256.patch
+	0005-ODROID-COMMON-Revert-drm-dbi-Print-errors-for-mipi_d.patch
+	0006-ODROID-COMMON-add-symbol-to-device-tree-compiler.patch
+	0007-ODROID-COMMON-phy-realtek-add-Wake-on-Lan-to-Realtek.patch
+	0008-ARM-exynos-add-machine-description-for-ODROID-XU3-4.patch
+	0009-ARM-decompressor-Flush-tlb-before-swiching-domain-0-.patch
+	0010-dt-bindings-arm-samsung-document-Chagall-WiFi-board-.patch
+	0011-ARM-exynos-only-do-SMC_CMD_CPU1BOOT-call-on-Exynos4.patch
+	0012-ARM-dts-Add-support-for-Samsung-Chagall-WiFi.patch
+	0013-dt-bindings-arm-samsung-document-Klimt-WiFi-board-bi.patch
+	0014-ARM-dts-Add-support-for-Samsung-Klimt-WiFi.patch
+	0015-dt-bindings-arm-samsung-document-Klimt-LTE-board-bin.patch
+	0016-ARM-dts-Add-support-for-Samsung-Klimt-LTE.patch
+"
+builddir="$srcdir/linux-${_kernver//_/-}"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/config-$_flavor.$CARCH" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+	make zinstall modules_install dtbs_install \
+		ARCH="$_carch" \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/usr/share/dtb
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+f47cf92065c7445518452052566251642f701089494c8b5eb7d5b0e147d7177b016957481e0b98050840d79e2b838cfb088aeee1941fd41b75b681972f2fec5d  linux-5.16.1.tar.xz
+0f8a3c7a1aec868f60405e723b44107f66f6518a25fe5e64ace50c9ec4d89b533a7b63775236b81a84017791a569a49a18698f72bb8bf71aacffedafca8f2ecf  config-postmarketos-exynos5.armv7
+8818dee159da213314d21affb33873217a9c281b01598776c46bc26fcde790675e157fc5c604ec432f22d2ee780e703e8590f268a57e54fd0f74fe6d4ad6f315  0001-ODROID-COMMON-gpu-drm-Add-Hardkernel-3.2-LCD-driver-.patch
+1e460183a1e34f25ff615f8e1ead274dc224fb2b337924a799fca3807d382870dbcfc3418f0ff203ce6533fe416e56541a0f93a2e4ff6bc072ae2fbb7245de39  0002-ODROID-COMMON-gpu-drm-Add-new-Tiny-DRM-driver-with-I.patch
+7f4771e6fc701223f5e693e694385daede79e854231c94054179520f5f6b0e21d668554082143ae28048e4a6c2cdfc0608db46d9938a02cde1d9d3a9628be60a  0003-ODROID-COMMON-hwmon-pwm-fan-fix-to-add-pwm1_enable-t.patch
+e540e3be0d0d45135f394f07bf8c9769654bf4c7d79a4558593ade87e02c21ab5cf66c3ff6672dabdb220ea7149ac24b23136efb0cf16c00ef9b0385bd47a245  0004-ODROID-COMMON-gpu-drm-add-new-display-resolution-256.patch
+3c23bf916dfb227bc8fb35efd9753bb378c694e2836a1a9ea642e4030ec77f81d1003b72a261b6106d62f63027a66b247700f6e3e88eba33216a458ead48639e  0005-ODROID-COMMON-Revert-drm-dbi-Print-errors-for-mipi_d.patch
+0272dc43b9218e38ce329c7a358eb869fd7ccdf70c9aae0e5cc3e0a029ba8f9616d3260b247650277376a1c1a3ec160f1ec8bc3df642b6f6cf7e60ba99e828e7  0006-ODROID-COMMON-add-symbol-to-device-tree-compiler.patch
+622f1f90ecc63a3cac32e8dafcfbe265a175031307af0a99088301bb2631bb55f6e6194e889f453d6f06239a5217e52c1b4ee9905570a06e975ce7aa1bb35434  0007-ODROID-COMMON-phy-realtek-add-Wake-on-Lan-to-Realtek.patch
+36b00ee94045b8dce002f55b91e0970dde59f9fa75ec4df7043930532991bfb59a0504256b056cd3f801bab05f5c23b2765e55c6ffbafe706a3e62bcd1ff71b9  0008-ARM-exynos-add-machine-description-for-ODROID-XU3-4.patch
+f031b887181d645075c7e4b2d93d60f0b0932e256f6b292850bab4b7480b4289f4a89f43f7e4a6d951eb0c7cd1a5cafff119c433573bb188a9960bab0685d189  0009-ARM-decompressor-Flush-tlb-before-swiching-domain-0-.patch
+b0595d89a559c14e016f0ef65f526240ab2a85a0397fed1b9a304aca2d7a946496891aad33dcd0fae77fc9d4f33baba58503595f97132af90efdaf9de8d78e4c  0010-dt-bindings-arm-samsung-document-Chagall-WiFi-board-.patch
+8d8be7677e67c41a3eafbf5fff13edeb6be88056a45ab55347544ab883fd3e50d15e77a929f53bd2a1917c9d51cec3d5a78205b3fade0d682081bb5e0317ee81  0011-ARM-exynos-only-do-SMC_CMD_CPU1BOOT-call-on-Exynos4.patch
+d552e78c7a7c029274766200dba88a9af3b22e60f393e1fcd345a527de26c203222308ecce0b212ea8f55a5287737b6ee8730c69680d585f8ce4b45faebf3d20  0012-ARM-dts-Add-support-for-Samsung-Chagall-WiFi.patch
+024b32657af97fce4dc6c524972c9f0e247a7b897f3842d60e9c91a4eb90d41a1c4019e6a5a188f535c3857d6d5b629d7b1f48fc71a445e17a5fb1be77bd48f9  0013-dt-bindings-arm-samsung-document-Klimt-WiFi-board-bi.patch
+36a175f5c6775e5b03a521ac8c57b1dafb565de78bbe46d4a77141f362eeb76f5872b6cb380401f2987c6dd480affbc08954ec9b9adfb4ea21ef0d670f3e858f  0014-ARM-dts-Add-support-for-Samsung-Klimt-WiFi.patch
+a0d5bf1292155da056b07a2384885ca11a4602e1ade3f0672c92e537cce6f5bd631ef1e0389418f5259468f637577ed1335293cb70764e5de23ad134a0725752  0015-dt-bindings-arm-samsung-document-Klimt-LTE-board-bin.patch
+70111f8591a1a566473dbb04a4dcfded110789196922d166719604afcfc6c6d5d5fd66d75c1e020be055c86c2c7b3deac59a13f593d37620027fc75bcfaad7af  0016-ARM-dts-Add-support-for-Samsung-Klimt-LTE.patch
+"
