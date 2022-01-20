@@ -1,0 +1,23 @@
+# Forked from Alpine testing for v21.12 service pack 1 to support sxmo 1.7.1
+pkgname=wvkbd
+pkgver=0.7
+pkgrel=0
+pkgdesc="On-screen keyboard for wlroots that sucks less"
+url="https://github.com/jjsullivan5196/wvkbd"
+arch="all"
+license="GPL-3.0-or-later"
+options="!check" # has no tests
+makedepends="fontconfig wayland-dev libxkbcommon-dev pango-dev"
+source="$pkgname-$pkgver.tar.gz::https://github.com/jjsullivan5196/wvkbd/archive/v$pkgver.tar.gz"
+
+build() {
+	make
+}
+
+package() {
+	make PREFIX=/usr DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+06959b7de5f760d73e69429c04103a12698b75b6b8a4a49d3899ad27aa12575fea6a03492f338b2eb544ad5379bd1816ec977723c36cfe6827d06360a68fe8c7  wvkbd-0.7.tar.gz
+"
