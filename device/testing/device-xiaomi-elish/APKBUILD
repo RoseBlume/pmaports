@@ -1,0 +1,29 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-xiaomi-elish
+pkgdesc="XiaoMi Xiami Pad 5 Pro"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-xiaomi-elish
+	mesa-dri-gallium
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+489046317b23596e36faa81efe3f6679c4016b163778dfbea5cc067d0d00db005bccb147ac97d3f55bf3b9e665687354e535d5814eeba7b9f45fe7ebbc3e789c  deviceinfo
+"
