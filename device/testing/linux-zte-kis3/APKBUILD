@@ -67,7 +67,7 @@ package() {
 	unset LDFLAGS
 	make ARCH="$_carch" CC="${CC:-gcc}" \
 		CONFIG_NO_ERROR_ON_MISMATCH=y \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1))-postmarketOS" 
+		KBUILD_BUILD_VERSION="$((pkgrel + 1))-postmarketOS"
 }
 
 sha512sums="
