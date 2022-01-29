@@ -2,14 +2,15 @@
 pkgname=device-zte-kis3
 pkgdesc="ZTE Open C / Kis 3"
 pkgver=0.1
-pkgrel=9
+pkgrel=10
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
 options="!check !archcheck"
 depends="postmarketos-base linux-zte-kis3 mkbootimg mesa-dri-swrast"
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="deviceinfo initfs-hook.sh"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -19,7 +20,13 @@ package() {
 	devicepkg_package $startdir $pkgname
 }
 
+nonfree_firmware() {
+	pkgdesc="Wifi firmware"
+	depends="firmware-zte-kis3"
+	mkdir "$subpkgdir"
+}
 
 sha512sums="
 f6ae0e72809ffdfcfeb87b9aded8ad9056c477c278c3c634868c82fb8698bb3459b9ea8ab334104a1c31a2e14376c8ba3447279f3551a6557072299802ba2972  deviceinfo
+b6e2391056d7d2da3ebaa41df210f27d2d975f3758689296f2b78d1254a1aa8c3069988baa3e08249c3a96a16ed67c64822e534a0f0f4512387d9a80d95eb2e9  initfs-hook.sh
 "
