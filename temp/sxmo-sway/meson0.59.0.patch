@@ -1,0 +1,41 @@
+commit 78a18260695d3209b320758fe17de74bcfa78c41
+Author: Anjandev Momi <anjan@momi.ca>
+Date:   Sat Feb 5 12:13:41 2022 -0500
+
+    Revert "build: use list for sdbus dep" - Use meson 0.59.0
+    
+    This reverts commit 02b412a3d4e930237a1d16554af6e1e7d1855c89.
+
+diff --git a/meson.build b/meson.build
+index 5e4de87f..8bbafed4 100644
+--- a/meson.build
++++ b/meson.build
+@@ -3,7 +3,7 @@ project(
+ 	'c',
+ 	version: '1.7',
+ 	license: 'MIT',
+-	meson_version: '>=0.60.0',
++	meson_version: '>=0.59.0',
+ 	default_options: [
+ 		'c_std=c11',
+ 		'warning_level=2',
+@@ -92,10 +92,18 @@ if get_option('sd-bus-provider') == 'auto'
+ 	if not get_option('tray').disabled()
+ 		assert(get_option('auto_features').auto(), 'sd-bus-provider must not be set to auto since auto_features != auto')
+ 	endif
+-	sdbus = dependency(['libsystemd', 'libelogind'],
++	sdbus = dependency('libsystemd',
+ 		required: false,
+ 		version: '>=239',
++		not_found_message: 'libsystemd not found, trying libelogind',
+ 	)
++	if not sdbus.found()
++		sdbus = dependency('libelogind',
++			required: false,
++			version: '>=239',
++			not_found_message: 'libelogind not found, trying basu',
++		)
++	endif
+ 	if not sdbus.found()
+ 		sdbus = dependency('basu', required: false)
+ 	endif
