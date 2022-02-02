@@ -12,13 +12,14 @@ depends="
 	postmarketos-mkinitfs
 	postmarketos-mvcfg
 	postmarketos-keys
-	sudo
 	"
 install="$pkgname.post-install $pkgname.pre-upgrade $pkgname.post-upgrade"
 triggers="$pkgname.trigger=/etc"
 subpackages="
 	$pkgname-nftables
 	$pkgname-nofde
+	postmarketos-root-sudo:root_sudo
+	postmarketos-root-doas:root_doas
 	"
 options="!check"
 replaces="
@@ -30,9 +31,8 @@ replaces="
 	"
 replaces_priority=100  # leave plenty for alpine
 
-_source440="
-	etc/sudoers
-	"
+_pmb_select="postmarketos-root"
+
 _source644="
 	etc/conf.d/bootmisc
 	etc/conf.d/swapfile
@@ -61,7 +61,10 @@ flatpath() {
 	done
 }
 
-source="$(flatpath $_source440 $_source644 $_source755)"
+source="$(flatpath $_source644 $_source755)
+	rootfs-etc-sudoers
+	rootfs-etc-doas.d-pmos.conf
+	"
 
 prepare() {
 	default_prepare
@@ -71,10 +74,11 @@ prepare() {
 }
 
 package() {
+	# Cannot have this at top-level or pmbootstrap gets confused
+	# (postmarketos-root cannot be built directly, it's provided by -sudo/-doas)
+	depends="$depends postmarketos-root"
+
 	local i
-	for i in $_source440; do
-		install -Dm440 "$srcdir/$(flatpath "$i")" "$pkgdir/$i"
-	done
 	for i in $_source644; do
 		install -Dm644 "$srcdir/$(flatpath "$i")" "$pkgdir/$i"
 	done
@@ -83,6 +87,29 @@ package() {
 	done
 
 	postmarketos-mvcfg-package "$pkgdir" "$pkgname"
+}
+
+root_sudo() {
+	pkgdesc="Use sudo to run root commands"
+	depends="sudo"
+	replaces="sudo postmarketos-base"
+
+	provides="postmarketos-root"
+	provider_priority=100
+
+	install -Dm440 "$srcdir/rootfs-etc-sudoers" "$subpkgdir"/etc/sudoers
+}
+
+root_doas() {
+	pkgdesc="Use doas (minimal replacement for sudo) to run root commands"
+	pkgdesc="$pkgdesc (Note: Does not support all functionality of sudo)"
+	depends="doas"
+	replaces=""
+
+	provides="postmarketos-root"
+
+	install -Dm440 "$srcdir/rootfs-etc-doas.d-pmos.conf" \
+		"$subpkgdir"/etc/doas.d/pmos.conf
 }
 
 nftables() {
@@ -101,7 +128,6 @@ nofde() {
 }
 
 sha512sums="
-e529f5cef1f31481b577f99b8917704f2cfefb963d98bf40a14b017938e55a00134d2033f81d2cb0b8489c5e9b4a92fdc0a788013f1adb4cd46d9580c9988186  rootfs-etc-sudoers
 a5c6bfaf6ee41f9623f463b64dab95924453d7b70bdd114cc441be9fc68fb6b0e042ae3163ec357d0dd6db93767232224b8c03df29f2cadf3ac2c6e2c998784f  rootfs-etc-conf.d-bootmisc
 e0d2d48b82a03239a4c0a00acaf83e00d397c23a8d7c71053d4e2a383357c22dcedef9e81b0e12a1d7514e1fdbe0bb3eb82613d18b29034a7ce5447f13c84a53  rootfs-etc-conf.d-swapfile
 e4576c58c35f80bedddb1e89e186f37d31a186d3e9eb046581b8c5d7b7d435e18924539e851d3e67dc0ede80f9d44d16bd9ef52e73350d3f13224edc31d73a34  rootfs-etc-conf.d-syslog
@@ -116,4 +142,6 @@ de4d8f258cb2ce654be15abe0188caa6ca9cc163fd45350f2025e7e9d043878e3f1202ef9033b1b1
 f5cc0f1265955d2646e5f099dd4b5d4c287945bfc18c16044db57670d456f55c678fc11cc59e6dab3fa340832ce869d516302a3a35c13518539ed0cedca51819  rootfs-etc-init.d-swapfile
 3ceeee37f558e7c95ad973692b6a437f997e6b46c3d1c2257ddfb1529a5633477373aa123c7f08164e818daae50acb203d151379f27ca11bd458809e6a0d4de7  rootfs-sbin-swapfile
 38dc75c0ed32b76dccd3d8e7e8173e8b7d91847cf2b07123f376b95af46b4f89798b24f45302a0726fdc1cf253aecaac140f431735ac5c6511553f790badd0af  rootfs-usr-lib-firmwareload.sh
+e529f5cef1f31481b577f99b8917704f2cfefb963d98bf40a14b017938e55a00134d2033f81d2cb0b8489c5e9b4a92fdc0a788013f1adb4cd46d9580c9988186  rootfs-etc-sudoers
+948679f32ece0883e2cfc38022c45afdadcb1cab6e1cc8b32cf7df7a212c6c85a2020ef3c61b128bb4f7cab9e046989c840d5b30d9b539376c52fb5e8cf85b4e  rootfs-etc-doas.d-pmos.conf
 "
