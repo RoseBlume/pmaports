@@ -1,0 +1,48 @@
+# Forked from Alpine Edge for v21.12 service pack 2
+
+pkgname=phoc
+pkgver=0.10.0
+pkgrel=0
+pkgdesc="wlroots based Phone compositor for the Phosh shell"
+arch="all !s390x" # blocked by gnome-desktop
+url="https://gitlab.gnome.org/World/Phosh/phoc"
+license="GPL-3.0-only"
+makedepends="
+	glib-dev
+	gnome-desktop-dev
+	gsettings-desktop-schemas
+	libdrm-dev
+	libinput-dev
+	libxkbcommon-dev
+	mesa-dev
+	meson
+	pixman-dev
+	wayland-dev
+	wayland-protocols
+	wlroots0.12-dev
+	"
+checkdepends="xvfb-run"
+options="!check" # Needs fullblown EGL
+source="https://gitlab.gnome.org/World/Phosh/phoc/-/archive/v$pkgver/phoc-v$pkgver.tar.gz"
+
+builddir="$srcdir/$pkgname-v$pkgver"
+
+build() {
+	abuild-meson \
+		-Dembed-wlroots=disabled \
+		. output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+check() {
+	xvfb-run meson test --no-rebuild -v -C output
+}
+
+package() {
+	DESTDIR="$pkgdir/" meson install --no-rebuild -C output
+	install -Dm755 helpers/scale-to-fit \
+		-t "$pkgdir"/usr/bin
+}
+sha512sums="
+9cdb3b95307c486f97603e22505cc2fad729d358fd1ceead3732d1800a09a6c74e50261ff1881402962e5bfad2a1b8e24745a89466b849df9319bd8fc381b595  phoc-v0.10.0.tar.gz
+"
