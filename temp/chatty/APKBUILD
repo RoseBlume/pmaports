@@ -1,0 +1,51 @@
+# Forked from Alpine Edge for v21.12 service pack 2 to support MMS, bug fixes
+
+pkgname=chatty
+pkgver=0.6.0
+pkgrel=0
+pkgdesc="A phone dialer and call handler"
+# s390x, mips64 and riscv64 blocked by purple-mm-sms
+# ppc64le lacks the libphonenumber / libphonenumber-dev
+arch="all !s390x !mips64 !riscv64 !ppc64le"
+url="https://source.puri.sm/Librem5/chatty"
+license="GPL-3.0-or-later"
+depends="
+	cyrus-sasl
+	libpurple-xmpp
+	mmsd-tng
+	purple-carbons
+	purple-lurch
+	purple-xmpp-http-upload
+	"
+makedepends="meson ninja gtk+3.0-dev pidgin-dev libhandy1-dev evolution-dev
+	evolution-data-server-dev libgee-dev folks-dev feedbackd-dev libphonenumber-dev
+	olm-dev modemmanager-dev gspell-dev"
+checkdepends="appstream-glib desktop-file-utils"
+_libgd_commit="c7c7ff4e05d3fe82854219091cf116cce6b19de0"
+source="https://source.puri.sm/Librem5/chatty/-/archive/v$pkgver/chatty-v$pkgver.tar.gz
+	https://gitlab.gnome.org/GNOME/libgd/-/archive/$_libgd_commit/libgd-$_libgd_commit.tar.gz
+	"
+
+subpackages="$pkgname-lang $pkgname-bash-completion $pkgname-dbg"
+options="!check" # Requires running Wayland compositor
+builddir="$srcdir/$pkgname-v$pkgver"
+
+prepare() {
+	default_prepare
+
+	rm -rf "$builddir/subprojects/libgd"
+	ln -sf "$srcdir/libgd-$_libgd_commit" "$builddir/subprojects/libgd"
+}
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+sha512sums="
+8e72aa0293b1074d36e982d952ecc026832b73f8d8c1a12d32794752063d477b8fbf8c1779434fe60fc49e585bc0f985f16042cebbc6c0e85807e399457d7d0d  chatty-v0.6.0.tar.gz
+681cc23b5a33df88a92e3aac33d0dba1c6ebb69a2bd6f15b6ae31f0b444c108f7bfd1391e604433be58d82c0032028b112652d3d0c473abe4db02d66c55cdef3  libgd-c7c7ff4e05d3fe82854219091cf116cce6b19de0.tar.gz
+"
