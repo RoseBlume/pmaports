@@ -1,0 +1,30 @@
+# Reference: <https://postmarketos.org/deviceinfo>
+# Please use double quotes only. You can source this file in shell
+# scripts.
+
+deviceinfo_format_version="0"
+deviceinfo_name="Pine64 PineNote"
+deviceinfo_manufacturer="Pine64"
+deviceinfo_codename="pine64-pinenote"
+deviceinfo_year="2021"
+deviceinfo_dtb="rockchip/rk3566-pinenote"
+deviceinfo_arch="aarch64"
+deviceinfo_gpu_accelerated="true"
+
+# Device related
+deviceinfo_chassis="tablet"
+deviceinfo_keyboard="false"
+deviceinfo_external_storage="false"
+deviceinfo_screen_width="1872"
+deviceinfo_screen_height="1404"
+deviceinfo_getty="ttyS2;1500000"
+
+# initfs
+deviceinfo_modules_initfs="tps65185-regulator rockchip_ebc drm_kms_helper drm_shmem_helper pvi_waveform"
+
+# Bootloader related
+deviceinfo_flash_method="rkdeveloptool"
+deviceinfo_flash_sparse="true"
+
+deviceinfo_flash_rk_partition_kernel="cache"
+deviceinfo_flash_rk_partition_system="userdata"

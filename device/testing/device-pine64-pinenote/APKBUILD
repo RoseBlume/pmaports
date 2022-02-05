@@ -1,0 +1,52 @@
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+pkgname=device-pine64-pinenote
+pkgdesc="Pine64 PineNote"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-pine64-pinenote
+	mesa-dri-gallium
+	postmarketos-base
+"
+# jankily depend on the firmware package to overwrite
+# the postmarketos-splash config
+makedepends="devicepkg-dev"
+source="deviceinfo
+	extlinux.conf
+	rootston.ini
+"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware $pkgname-phosh"
+
+build() {
+	SPLASH_CONFIG="$startdir"/splash.ini devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/extlinux.conf "$pkgdir"/boot/extlinux.conf
+}
+
+nonfree_firmware() {
+	pkgdesc="WiFi, Bluetooth and display firmware"
+	depends="firmware-pine64-pinenote"
+	mkdir "$subpkgdir"
+}
+
+phosh() {
+	install_if="$pkgname=$pkgver-r$pkgrel phosh"
+	depends="postmarketos-theme"
+
+	install -Dm644 "$srcdir"/rootston.ini \
+		"$subpkgdir"/etc/phosh/rootston.ini
+}
+
+sha512sums="
+3e1e22c875f52fb28282b1256f21cc2a83d52f5e2bdf74ec7b9ee0c746d2361b286843d21704ac1e2a4b1a32292535deb581b64c40f75d9d0ec6c66706acd190  deviceinfo
+2aa3851b6a176cda5fd04a48e0ba2284c53e44f176cb3ee6dd382b590772d3decbf2eae8a87ed70f3f94caf11670a3ffdfa216381dbd37665cd81869af0cf5c9  extlinux.conf
+20f50e7e786a35583ee1652ba3a0d250c169f7cc434adb679370593099362a956d6ee7bbc8c932c713eefd51a503c701ece19b536dc1cf56c2975595f049d153  rootston.ini
+"
