@@ -1,7 +1,7 @@
 # Reference: https://postmarketos.org/uipkg
 # Maintainer: Miles Alan <m@milesalan.com>
 pkgname=sxmo-common
-pkgver=1.7.1
+pkgver=1.8.2
 pkgrel=0
 pkgdesc="Simple Mobile: Core package to build custom SXMO desktop environments"
 url="http://sr.ht/~mil/Sxmo"
@@ -13,6 +13,7 @@ depends="
 	dnsmasq
 	dunstify
 	ffmpeg
+	file
 	font-fira-mono-nerd
 	font-terminus-nerd
 	geoclue
@@ -29,6 +30,7 @@ depends="
 	ncurses
 	networkmanager
 	networkmanager-openrc
+	pamixer
 	pn
 	polkit
 	polkit-openrc
@@ -40,9 +42,9 @@ depends="
 	tinydm-openrc
 	tzdata
 	v4l-utils
-	vis
-	youtube-dl
+	vim
 	vvmd
+	yt-dlp
 	"
 install="$pkgname.post-install $pkgname.post-upgrade $pkgname.pre-deinstall"
 subpackages="$pkgname-qt_tweaks $pkgname-bluetooth"
