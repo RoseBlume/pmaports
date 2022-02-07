@@ -1,15 +1,14 @@
-# Forked from Alpine: needed for sxmo
-# https://builds.sr.ht/~postmarketos/job/635955#task-pmbootstrap_build-63
-
+# Forked from Alpine testing for v21.12 service pack 2
 pkgname=wayout
-pkgver=0.1
+pkgver=0.1.2
 pkgrel=0
 pkgdesc="Outputs text to a wayland desktop (e.g. OSD or desktop widget)"
 url="https://git.sr.ht/~proycon/wayout"
 arch="all"
 license="GPL-3.0-or-later"
 options="!check" # has no tests
-makedepends="meson ninja wayland-protocols wayland-dev pango-dev cairo-dev"
+makedepends="meson ninja wayland-protocols wayland-dev pango-dev cairo-dev scdoc"
+subpackages="$pkgname-doc"
 source="$pkgname-$pkgver.tar.gz::https://git.sr.ht/~proycon/wayout/archive/$pkgver.tar.gz"
 
 build() {
@@ -22,5 +21,5 @@ package() {
 }
 
 sha512sums="
-f4346c554fe6cbe8589d12d07780cf3d2802167ad50b01c4d94d739c872b00f02e73a9480de55ea9b3551845feaef62209addfb7e7e903ed7a0032f7e5cf479b  wayout-0.1.tar.gz
+002874ceb8b91c1541a5f0be402ff4fb702160119624c1f4c0c2a2eeba87d5a2d24d91715c692cb88c2a24a8cf8820f1487c7c74485ab08d4a1febb478d33593  wayout-0.1.2.tar.gz
 "
