@@ -1,0 +1,97 @@
+pkgname=firmware-xiaomi-latte
+pkgver=0.1
+pkgrel=2
+arch="x86_64"
+pkgdesc="Firmware for Xiaomi Mi Pad 2(latte)"
+url="https://gitlab.com/maverickpuss/coffee-with-milk/-/archive/v0.3/coffee-with-milk-v0.3.tar.gz"
+license="unknown"
+options="!check !strip !archcheck"
+source="$url"
+
+# proprietary dir
+_fwdir="/lib/firmware/postmarketos"
+_proprietary_dir="$srcdir/coffee-with-milk-v0.3/proprietary"
+
+# other brcm(WiFi files)
+_brcm_other_files="
+  bcm94356wlpagbl.bin
+  fw_bcmdhd_4356a2_pcie_apsta.bin
+"
+
+# camera files
+_camera_files="
+  00imx135-0-0x2-0x1.drvb
+  00imx135-0-0x4-0.drvb
+  00imx135-0-0x8-0.drvb
+  00imx135-0-0x8-0x1.drvb
+  00imx135-0-0x8-0x2.drvb
+  00imx135-0-0x8-0x5.drvb
+  00ov8830-0-0x2-0.drvb
+  01s5k8aay.drvb
+"
+
+# i915(Graphics file)
+_i915_file="huc_gen8.bin"
+
+# misc(Other files)
+# theoretically BIOS files(BIOSUPDATE.fv) should be ignored since we use boot.img
+_misc_files="
+  BIOSUPDATE.fv
+  dfw_sst.wprd.bin
+  fw_sst_22a8.wprd.bin
+  isp_acc_chromaproc_css21_2401.bin
+  isp_acc_deghosting_v2_css21_2401.bin
+  isp_acc_lumaproc_css21_2401.bin
+  isp_acc_mfnr_em_css21_2401.bin
+  isp_acc_multires_v2_css21_2401.bin
+  isp_acc_sce_em_css21_2401.bin
+  isp_acc_warping_v2_css21_2401.bin
+  isp_acc_warping_v2_em_css21_2401.bin
+  maxtouch.cfg
+  maxtouch.fw
+  shisp_2400b0_v21.bin
+  shisp_2401a0_v21.bin
+  tfa98xx.cnt
+"
+
+package() {
+  # the root of the unpacked folder from .tar.gz
+  # note that the actual files are located in it's subfolder,
+  # named: coffee-with-milk-v0.3
+  cd "$srcdir"
+
+  # install other brcm files
+  for _i in $_brcm_other_files; do
+    install -Dm644 "$_proprietary_dir/vendor/firmware/brcm/$_i" "$pkgdir/$_fwdir/brcm/$_i"
+  done
+
+  # install camera files
+  for _i in $_camera_files; do
+    install -Dm644 "$_proprietary_dir/vendor/firmware/$_i" "$pkgdir/$_fwdir/$_i"
+  done
+
+  # install i915 file
+  install -Dm644 "$_proprietary_dir/vendor/firmware/i915/$_i915_file" "$pkgdir/$_fwdir/i915/$_i915_file"
+
+  # install misc files
+  for _i in $_misc_files; do
+    install -Dm644 "$_proprietary_dir/etc/firmware/$_i" "$pkgdir/$_fwdir/$_i"
+  done
+
+  # install special named files
+  # brcm
+  install -Dm644 "$_proprietary_dir/vendor/firmware/brcm/fw_bcmdhd_4356a2_pcie.bin" "$pkgdir/$_fwdir/brcm/fw_bcmdhd.bin"
+  # not sure if this is the correct name to be used
+  install -Dm644 "$_proprietary_dir/vendor/firmware/brcm/nvram_pcie_4356_a2.cal" "$pkgdir/$_fwdir/brcm/fw_bcmdhd.txt"
+
+  # sound
+  install -Dm644 "$_proprietary_dir/etc/firmware/dfw_sst.fortemedia.bin" "$pkgdir/$_fwdir/dfw_sst.bin"
+  install -Dm644 "$_proprietary_dir/etc/firmware/fw_sst_22a8.fortemedia.bin" "$pkgdir/$_fwdir/fw_sst_22a8.bin"
+
+  # bt(Bluetooth file)
+  install -Dm644 "$_proprietary_dir/etc/firmware/fw_sst_22a8.fortemedia.bin" "$pkgdir/$_fwdir/fw_sst_22a8.bin"
+  # not sure if it should be renamed like so
+  install -Dm644 "$_proprietary_dir/etc/firmware/bt/BCM4356A2_001.003.015.0084.0268_ORC.hcd" "$pkgdir/$_fwdir/bt/BCM4356A2.hcd"
+}
+
+sha512sums="dc22f90c8a6c181dc6a9a75b783c3e9094ec07d3d4f5d4c872bdb14c75c09fe7dff4d9cfc65891a1d855798ed6301e9cb9cdb96a6eb54974d11421b29693d594  coffee-with-milk-v0.3.tar.gz"
