@@ -1,0 +1,22 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-lg-f320
+pkgdesc="LG G2 (Korean)"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="postmarketos-base linux-lg-f320 mkbootimg mesa-dri-gallium"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="e162afeecab6fb4e49e34d9244b4cefcafdc1636c63cfd62c5d1717e8f40e166f05f5e5e2bf2c4d65a068d934cd22d5681a4983e29ddb0d66c16567e786d6622  deviceinfo"

@@ -1,0 +1,46 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-tre3calte
+pkgdesc="Samsung Galaxy Note 4 S-LTE"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-samsung-tre3calte
+	mesa-dri-gallium
+	mesa-dri-swrast
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+source="deviceinfo
+    nvram_net.txt::https://raw.githubusercontent.com/HexagonWin/tre3calte_wifi/main/nvram_net.txt"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	# Disable v4l (video4linux), because without the camera firmware
+	# blobs this makes dev hang with the kernel this device uses (#1033)
+	mkdir -p "$pkgdir"/etc/udev/rules.d/
+	ln -s /dev/null "$pkgdir"/etc/udev/rules.d/60-persistent-v4l.rules
+
+}
+
+nonfree_firmware() {
+	pkgdesc="Wifi firmware"
+	depends="firmware-aosp-broadcom-wlan"
+	mkdir "$subpkgdir"
+	install -D -m644 "$srcdir"/nvram_net.txt \
+	    "$subpkgdir"/lib/firmware/postmarketos/nvram_net.txt
+}
+
+sha512sums="
+4953b760a46049d3043db082e5f193a93e442bf68ec2e9bfd8d39a730f55e1e3b4be13253d8c8279517495fef02d44dccdb10bc46c24ef945ae75305138a652a  deviceinfo
+ea5ed78b4e300274318c5f5db535df28693a67e5bc349253b34af2f49dd70d68ec6f48ba5df7bde673dc16af4c59780581f475e93da5f07a767240a431143c0e  nvram_net.txt
+"

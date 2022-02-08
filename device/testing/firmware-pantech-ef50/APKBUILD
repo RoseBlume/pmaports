@@ -1,0 +1,32 @@
+pkgname=firmware-pantech-ef50
+pkgver=1
+pkgrel=0
+pkgdesc="Firmware for Pantech VEGA R3 (IM-A850)"
+url="https://github.com/HexagonWin/firmware_pantech_ef50"
+subpackages="$pkgname-etc $pkgname-wcnss"
+arch="armv7"
+license="proprietary"
+options="!check !strip !archcheck"
+source="https://github.com/HexagonWin/firmware_pantech_ef50/raw/main/A850_WIFI.tar.gz"
+
+_fwdir="/lib/firmware/postmarketos"
+
+package() {
+	# parent package is empty
+	mkdir -p "$pkgdir"
+}
+
+etc() {
+	pkgdesc="Pantech VEGA R3 (IM-A850) etc Firmware"
+	echo "teat"
+	echo "$srcdir"
+	install -Dm644 "$srcdir"/q6.* -t "$subpkgdir/$_fwdir"
+}
+
+wcnss() {
+	pkgdesc="Pantech VEGA R3 (IM-A850) wcnss Firmware"
+	cd "$srcdir"
+	install -Dm644 "$srcdir"/wcnss.* -t "$subpkgdir/$_fwdir"
+	install -Dm644 "$srcdir"/WCNSS_* -t "$subpkgdir/$_fwdir"/wlan/prima
+}
+sha512sums="c08b108565f51c1b6a1357285854b4137a33f35888983a8b08470d6607029c8e121ca0673252b96244ab6aa506568ad2a82669c2e56bd24789331e49b7aa9975  A850_WIFI.tar.gz"

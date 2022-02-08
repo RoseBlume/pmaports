@@ -1,0 +1,38 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-pantech-ef50
+pkgdesc="Pantech VEGA R3"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-pantech-ef50
+	mesa-dri-gallium
+	mkbootimg
+	postmarketos-base
+	msm-fb-refresher
+	wcnss-wlan
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Wifi firmware"
+	depends="firmware-pantech-ef50-etc firmware-pantech-ef50-wcnss"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="3d9074be23bdd45eb56e1a9ee313c50f4f8902fcaabc48379dccfc1042bc1842ac5f05f78a951d0f5ef1b4a0b10c3c674f695e06fc3e3510ec421ce079d2010c  deviceinfo"
