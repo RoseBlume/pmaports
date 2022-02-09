@@ -1,0 +1,30 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Timothy Valldeperas <tvall43@gmail.com>
+pkgname=device-pine64-quartz64a
+pkgver=1
+pkgrel=0
+pkgdesc="PINE64 Quartz64 model A"
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="postmarketos-base linux-postmarketos-rockchip u-boot-quartz64 mesa-dri-gallium"
+makedepends="devicepkg-dev"
+source="deviceinfo
+	extlinux.conf
+	"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	install -D -m644 "$srcdir"/extlinux.conf \
+		"$pkgdir"/boot/extlinux/extlinux.conf
+}
+
+sha512sums="
+22197bde70c59e8294a4dcdb05c71900e20b202f43e5f7ecd10528ba1de3cc88f78a734cccf37f9281afa79e63a6c838c14240b4ca5e0d8fa40c05591ebbc861  deviceinfo
+e6091f92a5d2ac26d9cefda7895dc747a69a43ec1d27388b39f47c1b2ee0ab110029fcc45adb4ae7418ef51be68cb23206dcddcf48a3e0b31c1e66247e0dcc22  extlinux.conf
+"

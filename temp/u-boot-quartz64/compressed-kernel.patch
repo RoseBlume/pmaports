@@ -1,0 +1,15 @@
+diff --git a/include/configs/rk3568_common.h b/include/configs/rk3568_common.h
+index 8dd1b03301..f3c4b02d81 100644
+--- a/include/configs/rk3568_common.h
++++ b/include/configs/rk3568_common.h
+@@ -38,7 +38,9 @@
+ 	"pxefile_addr_r=0x00e00000\0"	\
+ 	"fdt_addr_r=0x0a100000\0"	\
+ 	"kernel_addr_r=0x02080000\0"	\
+-	"ramdisk_addr_r=0x0a200000\0"
++	"ramdisk_addr_r=0x0a200000\0"	\
++	"kernel_comp_addr_r=0x20000000\0"\
++	"kernel_comp_size=0x2000000\0"
+ 
+ #include <config_distro_bootcmd.h>
+ #define CONFIG_EXTRA_ENV_SETTINGS		\

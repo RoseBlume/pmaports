@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 5f681ca805..0cc6d5394d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1473,7 +1473,7 @@ idbloader.img: spl/u-boot-spl.bin FORCE
+ endif
+ else
+ MKIMAGEFLAGS_idbloader.img = -n $(CONFIG_SYS_SOC) -T rksd
+-COMBINED_FILE = ram_init.bin
++COMBINED_FILE ?= ram_init.bin
+ idbloader.img: spl/u-boot-spl.bin FORCE
+ 	$(call if_changed,mkimage_combined)
+ endif
