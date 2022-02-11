@@ -1,0 +1,21 @@
+# Forked from Alpine testing for v21.12 service pack 2
+pkgname=clickclack
+pkgver=0.2
+pkgrel=0
+pkgdesc="Haptic/audio feedback daemon for virtual keyboards like svkbd and wvkbd"
+url="https://git.sr.ht/~proycon/clickclack"
+arch="all"
+license="MIT"
+makedepends="sdl2-dev"
+options="!check" # has no tests
+source="$pkgname-$pkgver.tar.gz::https://git.sr.ht/~proycon/clickclack/archive/$pkgver.tar.gz"
+
+build() {
+	make
+}
+
+package() {
+	make PREFIX=/usr DESTDIR="$pkgdir" install
+}
+
+sha512sums="406dd46fa7ca31be1669f5d81f2b28f9acd5fd73003637699d10e2e1a7ead704dedc9d086e4f18544d7356c64a9dc6d2b9253c4db926bd66badfcd5bb35a2484  clickclack-0.2.tar.gz"
