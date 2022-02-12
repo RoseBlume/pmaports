@@ -1,7 +1,10 @@
 # Backported from alpine edge to support sxmo-sway
-# Make sure the contents of this file are copied to sxmo-wlroots on upgrades
-# Just change the builddir and pkgname. Rest should be the same
-pkgname=wlroots
+# Sxmo-sway will always use this package over wlroots because of this package in alpine 3.15 stable:
+# https://pkgs.alpinelinux.org/package/v3.15/community/x86_64/sxmo-wlroots
+# MAKE SURE THIS PACKAGE IS THE SAME AS wlroots PACKAGE IN PMAPORTS
+# EVERYTHING SHOULD BE THE SAME EXCEPT FOR THE pkgname VARIABLE AND builddir
+# REMOVE THIS PACKAGE FOR THE NEXT RELEASE OF PMOS
+pkgname=sxmo-wlroots
 pkgver=0.15.0
 pkgrel=0
 pkgdesc="Modular Wayland compositor library"
@@ -30,6 +33,7 @@ makedepends="
 subpackages="$pkgname-dbg $pkgname-dev"
 source="https://gitlab.freedesktop.org/wlroots/wlroots/-/archive/$pkgver/wlroots-$pkgver.tar.gz"
 options="!check" # no test suite
+builddir="$srcdir/wlroots-$pkgver"
 
 build() {
 	abuild-meson \
