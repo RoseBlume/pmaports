@@ -27,6 +27,11 @@ generate_splash_screens()
 	splash_width=${deviceinfo_screen_width:-720}
 	splash_height=${deviceinfo_screen_height:-1280}
 
+	if [ ! -f "$splash_config" ]; then
+		echo "ERROR: Can't find splash config \"$splash_config\""
+		exit 1
+	fi
+
 	# Overwrite $@ to easily iterate over the splash screens. Format:
 	# $1: splash_name
 	# $2: text
