@@ -1,0 +1,34 @@
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+pkgname=postmarketos-base-eink
+pkgver=1
+pkgrel=0
+pkgdesc="Base package with some opinionated default for e-ink devices"
+# It's worth emphasising the word "opinionated" here, e-ink has some
+# obvious differences compared to regular displays, there are cases
+# where it clearly makes sense to adjust default behaviour. However
+# not everyone may agree with these. It should be easy for the user to
+# override changes here easily, ideally without having to resort to a
+# terminal.
+url="https://postmarketos.org"
+arch="noarch"
+license="GPL-3.0-or-later"
+options="!check"
+source="
+	postmarketos-splash-eink.ini
+	001-eink-gschema.override
+"
+subpackages="$pkgname-phosh"
+builddir="$srcdir/"
+
+package() {
+	install -Dm644 "$srcdir/postmarketos-splash-eink.ini" \
+		-t "$pkgdir/etc/postmarketos/"
+}
+
+phosh() {
+# For now phosh hardcodes some colors (like making the quick settings white)
+# when using high contrast, so it's a better option than the postmarketOS-paper
+# theme for now
+	install -Dm644 "$srcdir"/001-eink-gschema.override \
+		"$pkgdir"/usr/share/glib-2.0/schemas/001-eink.gschema.override
+}
