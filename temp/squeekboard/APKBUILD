@@ -1,0 +1,31 @@
+# forked from Alpine aports for v21.12 stable
+
+pkgname=squeekboard
+pkgver=1.16.0
+pkgrel=0
+pkgdesc="The final Phosh keyboard"
+arch="all !s390x !ppc64le !riscv64" # Blocked by rust, fails to build on ppc64le
+url="https://gitlab.gnome.org/World/Phosh/squeekboard"
+license="GPL-3.0-or-later"
+makedepends="meson ninja rust cargo bash glib-dev wayland-protocols wayland-dev
+	gtk+3.0-dev gnome-desktop-dev feedbackd-dev"
+checkdepends="xvfb-run"
+options="net !pmb:crossdirect"
+source="https://gitlab.gnome.org/World/Phosh/squeekboard/-/archive/v$pkgver/squeekboard-v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-v$pkgver"
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+check() {
+	xvfb-run meson test --no-rebuild -v -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+sha512sums="
+5c9e3cb0e51c85afe4ec5ec67cf455f7b4856562ad8c4cdff7825233b6bc7bbf2c60d57b53232adb5f358f274a06ec8eb9461e21fc65921284da527584682084  squeekboard-v1.16.0.tar.gz
+"
