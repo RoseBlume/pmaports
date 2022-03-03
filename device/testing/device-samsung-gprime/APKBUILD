@@ -15,7 +15,10 @@ depends="
 	soc-qcom-msm8916-rproc
 "
 makedepends="devicepkg-dev"
-source="deviceinfo"
+source="
+	20-zinitix-input.rules
+	deviceinfo
+"
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 "
@@ -38,5 +41,6 @@ nonfree_firmware() {
 }
 
 sha512sums="
-d14ec5ffafd6f4caa3902e4c339326b667776cbd26e3978715b64435555ce9ed51b2de63182c5793fb67f5fdc06d3f58e66ce64b8768aa0ea0a5c71a4bc4ac18  deviceinfo
+b897d5102ec2f4c8515435fd2cd815aa5bcb0175db05ac55b9a63f814cee879581c104748d558ec1fb652e9cc6086b2545ba02c22460a69445947b87d07035e7  20-zinitix-input.rules
+f71dade54c754b066ad0c7cc22111869a0891a58b7766265d5cb1793888b9a26c8f3573ae37e318b98c0ccaa158d005de347f7f41e56b1476132dc58ac74978f  deviceinfo
 "
