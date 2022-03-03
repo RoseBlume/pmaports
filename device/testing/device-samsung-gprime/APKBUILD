@@ -1,33 +1,42 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-gprime
 pkgdesc="Samsung Galaxy Grand Prime"
-pkgver=2
-pkgrel=2
+pkgver=3
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base mkbootimg soc-qcom-msm8916"
+depends="
+	postmarketos-base
+	mkbootimg
+	linux-postmarketos-qcom-msm8916
+	soc-qcom-msm8916
+	soc-qcom-msm8916-rproc
+"
 makedepends="devicepkg-dev"
 source="deviceinfo"
 subpackages="
-	$pkgname-kernel-mainline:kernel_mainline
+	$pkgname-nonfree-firmware:nonfree_firmware
 "
+_pmb_select="soc-qcom-msm8916-rproc"
 
 build() {
 	devicepkg_build $startdir $pkgname
+	install -Dm644 "$srcdir"/20-zinitix-input.rules \
+		"$pkgdir"/lib/udev/rules.d/20-zinitix-input.rules
 }
 
 package() {
 	devicepkg_package $startdir $pkgname
 }
 
-kernel_mainline() {
-	pkgdesc="Mainline kernel (no charging, no modem, audio routed directly)"
-	depends="linux-postmarketos-qcom-msm8916"
-	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+nonfree_firmware() {
+	pkgdesc="WiFi/BT/Modem/Video firmware"
+	depends="msm-firmware-loader firmware-samsung-gprime-wcnss-nv"
+	mkdir "$subpkgdir"
 }
 
 sha512sums="
-1f335ef38b06b6c80b1f405cc0d6706b2a78501d47001c02021c72384587aa6a3546726137ec4795f5b0163cae8f4a858822135d5933c527e9b4504b47fb68be  deviceinfo
+d14ec5ffafd6f4caa3902e4c339326b667776cbd26e3978715b64435555ce9ed51b2de63182c5793fb67f5fdc06d3f58e66ce64b8768aa0ea0a5c71a4bc4ac18  deviceinfo
 "
