@@ -18,9 +18,11 @@ makedepends="devicepkg-dev"
 source="
 	20-zinitix-input.rules
 	deviceinfo
+	rootston.ini
 "
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-phosh
 "
 _pmb_select="soc-qcom-msm8916-rproc"
 
@@ -35,12 +37,19 @@ package() {
 }
 
 nonfree_firmware() {
-	pkgdesc="WiFi/BT/Modem/Video firmware"
-	depends="msm-firmware-loader firmware-samsung-gprime-wcnss-nv"
+	pkgdesc="GPU/WiFi/BT/Modem/Video firmware"
+	depends="firmware-qcom-adreno-a300 msm-firmware-loader firmware-samsung-gprime-wcnss-nv"
 	mkdir "$subpkgdir"
+}
+
+phosh() {
+	install_if="$pkgname postmarketos-ui-phosh"
+	install -Dm644 "$srcdir"/rootston.ini \
+		"$subpkgdir"/etc/phosh/rootston.ini
 }
 
 sha512sums="
 b897d5102ec2f4c8515435fd2cd815aa5bcb0175db05ac55b9a63f814cee879581c104748d558ec1fb652e9cc6086b2545ba02c22460a69445947b87d07035e7  20-zinitix-input.rules
 50a4668a92961dce64ef85d728f1138b455814ff35fcf07acab21a43e5919084c55b11f80dc4b281bd5ffe1fb2e3994eb038e1ced58f7d939e80a221e687c0a8  deviceinfo
+94c866b6583faadc4a96a4d737983ba7838ede52afa5e29e261ef0ad0f2afe29fd3b793c9208ae74c7d48db6b991ad21800b9e457fbba4c69ce9dec2cda268ea  rootston.ini
 "
