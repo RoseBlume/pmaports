@@ -1,0 +1,63 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-msi-ge60-2pe-apache-pro
+pkgdesc="GE60 2PE Apache Pro"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="x86_64"
+# pmb:strict: avoid grub-related install error during build with pmbootstrap
+options="!check !archcheck pmb:strict"
+depends="postmarketos-base linux-lts mesa-dri-swrast"
+makedepends="devicepkg-dev grub grub-efi"
+source="
+	deviceinfo
+	grub.cfg
+	grub_early.cfg
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+
+	grub-mkimage \
+		--config="$srcdir/grub_early.cfg" \
+		--prefix="" \
+		--output="bootx64.efi" \
+		--format="x86_64-efi" \
+		--compression="xz" \
+		\
+		all_video \
+		cat \
+		configfile \
+		disk \
+		echo \
+		efi_gop \
+		fat \
+		gzio \
+		help \
+		iso9660 \
+		linux \
+		ls \
+		normal \
+		part_gpt \
+		part_msdos \
+		search \
+		search_label \
+		test \
+		true
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+
+	install -Dm644 "$srcdir"/grub.cfg \
+		"$pkgdir"/boot/grub/grub.cfg
+	install -Dm644 "$srcdir"/bootx64.efi \
+		"$pkgdir"/boot/EFI/Boot/bootx64.efi
+}
+
+sha512sums="
+069127c0afe0eaf218d1e320622ecec953640cf84fa57b4db9a40efc51c966adcd732debefdd41ffcc35bbd033deb9ef7437c3fb8a5be66e3cdedd9660b91dbd  deviceinfo
+831d6dc237c7a5e50f0947be4ee3f6f25a6e89143d7ae9aaec835038e30007f2f2ac63bd1d5bc2a2610501714be58388e610711a77c3edb74ade4c352d436081  grub.cfg
+0f9357d4eea089628fbceb1e3e96d21a3f4329aeb6743158a6f877f967ef274506404eba949d5f01b7e1adea149f9a3aef992a5e8cd4181f93ab00909b1c5ecd  grub_early.cfg
+"
