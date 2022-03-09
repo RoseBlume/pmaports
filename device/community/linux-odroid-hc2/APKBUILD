@@ -4,7 +4,7 @@
 
 pkgname=linux-odroid-hc2
 pkgver=5.15.7
-pkgrel=1
+pkgrel=2
 pkgdesc="ODROID XU3/XU4/HC1/HC2/MC1 kernel fork"
 arch="armv7"
 _carch="arm"
@@ -32,6 +32,7 @@ _config="config-$_flavor.$arch"
 _pkgname="linux"
 _commit="77ebfca65d59167038ef5fcc62d2e8d49f47fa49"
 source="
+	9d2231c5d74e13b2a0546fee6737ee4446017903.patch::https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=9d2231c5d74e13b2a0546fee6737ee4446017903
 	$_pkgname-$pkgver.tar.gz::https://github.com/tobetter/linux/archive/$_commit.tar.gz
 	$_config
 	36dfdf11af49d3c009c711fb16f5c6e7a274505d.patch::https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/?id=36dfdf11af49d3c009c711fb16f5c6e7a274505d
@@ -75,6 +76,7 @@ dev() {
 }
 
 sha512sums="
+0bf30483afdb00deef68893e9965fa547b287e570cd102cbd12ad8b590760c26c989a59812e3ae2dc59a0f095b99b145c15e1e8b5b6afdb4da74754c3f68aee8  9d2231c5d74e13b2a0546fee6737ee4446017903.patch
 7a377c6afcb5d62f223c909709ab22644ee4345dafa348cc9293d58bd9251b5c77e4be894a2b6238c2cb3478d6430d0e45dd1de918468a9f038514e47f234197  linux-5.15.7.tar.gz
 bf3e599de30d88ab9c0df3e7a9487bf9aa0b511615208c82a1c7f2fc254839a896637effa3bb49a7081eded25168aa3aa5855feb516b935d33f106995cffbfba  config-odroid-hc2.armv7
 59d480b6379dcfff94d05b08e28c005d507f640dc0147841e7df4827fce8db01dab1d4d50fb45b2b3fff72cdeb219a8cd87a889078a6372aea4469c861c378b1  36dfdf11af49d3c009c711fb16f5c6e7a274505d.patch

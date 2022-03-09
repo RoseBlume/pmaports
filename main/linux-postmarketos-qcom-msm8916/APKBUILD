@@ -5,7 +5,7 @@
 _flavor="postmarketos-qcom-msm8916"
 pkgname=linux-$_flavor
 pkgver=5.15
-pkgrel=1
+pkgrel=2
 pkgdesc="Mainline kernel fork for Qualcomm MSM8916 devices"
 arch="aarch64 armv7"
 url="https://github.com/msm8916-mainline/linux"
@@ -40,6 +40,7 @@ esac
 # Source
 _tag=v${pkgver//_/-}-msm8916
 source="
+	9d2231c5d74e13b2a0546fee6737ee4446017903.patch::https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=9d2231c5d74e13b2a0546fee6737ee4446017903
 	$pkgname-$_tag.tar.gz::$url/archive/$_tag.tar.gz
 	36dfdf11af49d3c009c711fb16f5c6e7a274505d.patch::https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/?id=36dfdf11af49d3c009c711fb16f5c6e7a274505d
 	6eea4ace62fa6414432692ee44f0c0a3d541d97a.patch::https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/?id=6eea4ace62fa6414432692ee44f0c0a3d541d97a
@@ -74,6 +75,7 @@ package() {
 }
 
 sha512sums="
+0bf30483afdb00deef68893e9965fa547b287e570cd102cbd12ad8b590760c26c989a59812e3ae2dc59a0f095b99b145c15e1e8b5b6afdb4da74754c3f68aee8  9d2231c5d74e13b2a0546fee6737ee4446017903.patch
 734d958bb9fa64e667e089aec0066a58526ae38fbf6fbd223a7bce746fe3ce7443ffe087f365a44f6892479186f2c0eb33abacd38eb7b0b8d40949602812e441  linux-postmarketos-qcom-msm8916-v5.15-msm8916.tar.gz
 59d480b6379dcfff94d05b08e28c005d507f640dc0147841e7df4827fce8db01dab1d4d50fb45b2b3fff72cdeb219a8cd87a889078a6372aea4469c861c378b1  36dfdf11af49d3c009c711fb16f5c6e7a274505d.patch
 61f862cda24e7b14e55e9a9ce3a537adfc7a1c77e0670255dc485886e2c19156ddaf49fdd88b629ddde3cf25a83fd603678caebb96e18f59245917d3a2e51bb0  6eea4ace62fa6414432692ee44f0c0a3d541d97a.patch

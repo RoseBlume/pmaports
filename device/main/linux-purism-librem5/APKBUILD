@@ -3,7 +3,7 @@
 # Co-Maintainer: Bhushan Shah <bshah@kde.org>
 pkgname=linux-purism-librem5
 pkgver=5.13.19
-pkgrel=3
+pkgrel=4
 _purismrel=5
 # <kernel ver>.<purism kernel release>
 _purismver=${pkgver}pureos$_purismrel
@@ -32,11 +32,12 @@ subpackages="$pkgname-dev"
 install="$pkgname.post-upgrade"
 
 # Source
-_repository="linux-next"
+_repository="linux"
 # kconfig generated with: ARCH=arm64 make defconfig KBUILD_DEFCONFIG=librem5_defconfig
 _config="config-$_flavor.$arch"
 source="
-	$pkgname-$_purismver.tar.gz::https://source.puri.sm/Librem5/$_repository/-/archive/pureos/$_purismver/$_repository-pureos-$_purismver.tar.gz
+	9d2231c5d74e13b2a0546fee6737ee4446017903.patch::https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=9d2231c5d74e13b2a0546fee6737ee4446017903
+	$pkgname-$_purismver.tar.gz::https://source.puri.sm/Librem5/linux/-/archive/pureos/$_purismver/linux-pureos-$_purismver.tar.gz
 	0001-bq25890_charger-enter-ship-mode-on-power-off.patch
 	0002-arm64-dts-imx8mq-librem5.dtsi-adjust-the-usdhc-bus-s.patch
 	0003-imx8mq-librem5-r3-Set-the-CPU-voltage-to-1.0V-when-r.patch
@@ -81,7 +82,8 @@ dev() {
 		INSTALL_HDR_PATH="$subpkgdir"/usr
 }
 sha512sums="
-2b52c1f832b2df7ac449c6d055d9d7fddc7a7e68c8ee7ea5b3f89b2fb7da0486083386c21e82b0c394760fa4bf3fd3f62183f957dbe922a2403e5249fed0cc2e  linux-purism-librem5-5.13.19pureos5.tar.gz
+0bf30483afdb00deef68893e9965fa547b287e570cd102cbd12ad8b590760c26c989a59812e3ae2dc59a0f095b99b145c15e1e8b5b6afdb4da74754c3f68aee8  9d2231c5d74e13b2a0546fee6737ee4446017903.patch
+feb3ec40f6ef0d58cb040a61e875144b59ba9d3f4df64857c63251d6039b76242500c8c0cfc87bc49cd55a3c91b62f77e995a9cccc918089725824b381c9e5c2  linux-purism-librem5-5.13.19pureos5.tar.gz
 0e3caf6275247e31b874b94330dc4f991837a4b62f3c15a1f8ad39a7edd02ae499679bcd7ddc9463bb1c1a5073ea5980fa144a2ece804d72a6b2fc8c76c50766  0001-bq25890_charger-enter-ship-mode-on-power-off.patch
 1dbf2adaf097bcce3ee179cd6b0f10d2ebefdc82191d34fffea8cb336c9dcbc66b717bf97a2e264b8068f178c0254f2b1281a09ae72d4825fd7b4a39916c0461  0002-arm64-dts-imx8mq-librem5.dtsi-adjust-the-usdhc-bus-s.patch
 c52f9e7e17f876697000a0c3b959a0d571ca506ba55ee5158e30ac00e148372097c88951a354190f669137a955405c87042a925c1bbe3cd91df40721650d45d3  0003-imx8mq-librem5-r3-Set-the-CPU-voltage-to-1.0V-when-r.patch

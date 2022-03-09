@@ -11,7 +11,7 @@
 
 pkgname=linux-postmarketos-rockchip
 pkgver=5.14.9
-pkgrel=1
+pkgrel=2
 pkgdesc="Mainline kernel for rockchip devices"
 arch="aarch64 armv7"
 _flavor="${pkgname#linux-}"
@@ -53,6 +53,7 @@ case $pkgver in
 esac
 
 source="
+	9d2231c5d74e13b2a0546fee6737ee4446017903.patch::https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=9d2231c5d74e13b2a0546fee6737ee4446017903
 	https://cdn.kernel.org/pub/linux/kernel/v${_kernver%%.*}.x/linux-$_kernver.tar.xz
 	0001-phy-rockchip-typec-Set-extcon-capabilities.patch
 	0003-arm64-dts-rockchip-add-typec-extcon-hack.patch
@@ -101,6 +102,7 @@ package() {
 
 
 sha512sums="
+0bf30483afdb00deef68893e9965fa547b287e570cd102cbd12ad8b590760c26c989a59812e3ae2dc59a0f095b99b145c15e1e8b5b6afdb4da74754c3f68aee8  9d2231c5d74e13b2a0546fee6737ee4446017903.patch
 987ae9ceba83ba12e5e1962118831dbc47eaf26848cfd83b93db58f004dbc3c8d10d62a33cf449abddcfe996023dc705207c43a22aae665461eff9d7365bbc00  linux-5.14.9.tar.xz
 10949558a6e3316ea57497f377fd120d6704f3b81725317556e49d10b570a40edb06643b06738116abbe3096be485761d436f1a0d1861bd34fc18ea45068b6b0  0001-phy-rockchip-typec-Set-extcon-capabilities.patch
 b7291eecfddc7ebe9393eea864e0ee28960e8cc2f87dfc42d09426b5619f46ded97c38fb8bf26f4eea1f26bfe21396094505b3efb8676691f8751e2ffabe50ec  0003-arm64-dts-rockchip-add-typec-extcon-hack.patch
