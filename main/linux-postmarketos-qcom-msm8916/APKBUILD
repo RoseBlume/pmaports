@@ -40,10 +40,10 @@ esac
 # Source
 _tag=v${pkgver//_/-}-msm8916
 source="
-	9d2231c5d74e13b2a0546fee6737ee4446017903.patch::https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=9d2231c5d74e13b2a0546fee6737ee4446017903
 	$pkgname-$_tag.tar.gz::$url/archive/$_tag.tar.gz
-	36dfdf11af49d3c009c711fb16f5c6e7a274505d.patch::https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/?id=36dfdf11af49d3c009c711fb16f5c6e7a274505d
-	6eea4ace62fa6414432692ee44f0c0a3d541d97a.patch::https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/?id=6eea4ace62fa6414432692ee44f0c0a3d541d97a
+	cve-2021-39685-usb-gadget-buffer-overflow-fix-1.patch
+	cve-2021-39685-usb-gadget-buffer-overflow-fix-2.patch
+	cve-2022-0847-dirty-pipe.patch
 	config-$_flavor.aarch64
 	config-$_flavor.armv7
 "
@@ -75,10 +75,10 @@ package() {
 }
 
 sha512sums="
-0bf30483afdb00deef68893e9965fa547b287e570cd102cbd12ad8b590760c26c989a59812e3ae2dc59a0f095b99b145c15e1e8b5b6afdb4da74754c3f68aee8  9d2231c5d74e13b2a0546fee6737ee4446017903.patch
 734d958bb9fa64e667e089aec0066a58526ae38fbf6fbd223a7bce746fe3ce7443ffe087f365a44f6892479186f2c0eb33abacd38eb7b0b8d40949602812e441  linux-postmarketos-qcom-msm8916-v5.15-msm8916.tar.gz
-59d480b6379dcfff94d05b08e28c005d507f640dc0147841e7df4827fce8db01dab1d4d50fb45b2b3fff72cdeb219a8cd87a889078a6372aea4469c861c378b1  36dfdf11af49d3c009c711fb16f5c6e7a274505d.patch
-61f862cda24e7b14e55e9a9ce3a537adfc7a1c77e0670255dc485886e2c19156ddaf49fdd88b629ddde3cf25a83fd603678caebb96e18f59245917d3a2e51bb0  6eea4ace62fa6414432692ee44f0c0a3d541d97a.patch
+ec2afe591b78adbecbd8eb3de08d0601136849d98a3ef14e748a086970810d33a6e11f3ae6e4e501a6c9915b17d957f3827611527151a78faec9de04dfa1b365  cve-2021-39685-usb-gadget-buffer-overflow-fix-1.patch
+b3bc4d99479f943c09c93ad2662f9ffc8bb852a668562704538403a9a7326cde73c146521ab7e76a3f565eab8f6c88820189d8ba677373e62dce31f1e43141c8  cve-2021-39685-usb-gadget-buffer-overflow-fix-2.patch
+bfba2e4a4ac9639dc1a3aa0d4779748b62c8efaf8a533e30a4431571115d4356e6e54e00d2508928405ce3607e63aba61a9bad7a0f1712b46ff5706589ccbbfa  cve-2022-0847-dirty-pipe.patch
 8468e559679019d7a74483beb5f94f9ac75e43aea24aa39303e513258e30c02dead1681472f60ff6ae812b70c24ebe95e597ba75a85d78595b6bb144cbdfd441  config-postmarketos-qcom-msm8916.aarch64
 712efefdddfeda5d6e1f200a6973fe5c5a13c70db3d6c3070a856de2682dc3c15b23c199b2232dafd70b25eb1429ce86cb021f47a0390b2c295dd4e135c2aa50  config-postmarketos-qcom-msm8916.armv7
 "
