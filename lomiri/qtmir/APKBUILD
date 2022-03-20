@@ -10,7 +10,9 @@ url="https://gitlab.com/ubports/core/qtmir"
 license="LGPL-3.0-only"
 makedepends="cmake cmake-extras gtest-dev mir-dev process-cpp-dev qt5-qtdeclarative-dev qt5-qtsensors-dev lomiri-app-launch-dev gsettings-qt-dev libqtdbustest libqtdbusmock content-hub-dev valgrind-dev lomiri-url-dispatcher-dev cgmanager-dev lttng-ust-tools"
 checkdepends="py3-dbusmock dbus"
-source="https://gitlab.com/ubports/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz"
+source="https://gitlab.com/ubports/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz
+	0001-Replace-usage-of-GTEST_DISALLOW_ASSIGN_.patch
+	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
@@ -34,4 +36,5 @@ package() {
 
 sha512sums="
 f4c525ca9b2616c57c5c15f3c7203a95ecbcdcda161d421e0d81f5d13beab88b3854da05a09b32da34324454b2f3c7d567ac606ba894c6b693504e8f1167f18f  qtmir-cde69ffa84d1e8172f151765a782340a6b5d7381.tar.gz
+e45a59f8c3a1fa59e0d198db960486bff90db28381f906fa4746d775786e56087237b105e6463a72e31f3525ceb941952b31390d52a179da87a97e2b13c4c074  0001-Replace-usage-of-GTEST_DISALLOW_ASSIGN_.patch
 "
