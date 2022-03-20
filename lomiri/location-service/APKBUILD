@@ -12,7 +12,8 @@ depends_dev="boost-dev dbus-dev net-cpp-dev process-cpp-dev properties-cpp-dev j
 makedepends="$depends_dev cmake-extras gettext gtest-dev gmock dbus-cpp-dev"
 checkdepends="coreutils"
 source="$pkgname-$_commit.tar.gz::https://github.com/ubports/location-service/archive/$_commit.tar.gz
-	boost.patch"
+	0001-Add-missing-header-for-boost.patch
+	"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Several failures
@@ -37,5 +38,5 @@ package() {
 
 sha512sums="
 a3c6688a922e65ed35d5641f8ef9b27ed7423cbbc82382b822cd0490a5f2258918889869f56f17d86b1a28681599f62c18da438d457e793c74696071b71c8a2c  location-service-7dc0ae2c146ed5887405bd63ded75da4e5a2f0ea.tar.gz
-221fedc01b5ef1709807599e623168b3b04e7727646ed081e9f0a8fed8a1e4cc8fbca5f3b50718609275bd7c9a11aed0ada2c9e7edf6882029e305cefbb8831c  boost.patch
+ae793d2b93d135963509a375e0ac36be1985b03835e71071621d3aa92df9363932bdd31426f641071535e5ab57961a467d570ca3a6c6de6c02861c152f043a1b  0001-Add-missing-header-for-boost.patch
 "

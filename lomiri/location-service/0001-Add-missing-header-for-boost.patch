@@ -1,0 +1,31 @@
+From f2fe00ba7fc94371474059fd65730274d5fe8623 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sun, 20 Mar 2022 18:02:47 +0100
+Subject: [PATCH] Add missing header for boost
+
+Fixes the following error:
+
+/src/tests/time_based_update_policy_test.cpp:71:5:   required from here
+/usr/include/boost/optional/optional.hpp:1596:3: error: static assertion failed: If you want to output boost::optional, include header <boost/optional/optional_io.hpp>
+ 1596 |   BOOST_STATIC_ASSERT_MSG(sizeof(CharType) == 0, "If you want to output boost::optional, include header <boost/optional/optional_io.hpp>");
+      |   ^~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/boost/optional/optional.hpp:1596:3: note: '(sizeof (char) == 0)' evaluates to false
+---
+ include/location_service/com/ubuntu/location/optional.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/location_service/com/ubuntu/location/optional.h b/include/location_service/com/ubuntu/location/optional.h
+index a4d917b..0b2a163 100644
+--- a/include/location_service/com/ubuntu/location/optional.h
++++ b/include/location_service/com/ubuntu/location/optional.h
+@@ -19,6 +19,7 @@
+ #define LOCATION_SERVICE_COM_UBUNTU_LOCATION_OPTIONAL_H_
+ 
+ #include <boost/optional.hpp>
++#include <boost/optional/optional_io.hpp>
+ 
+ namespace com
+ {
+-- 
+2.35.1
+
