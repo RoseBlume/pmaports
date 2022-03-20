@@ -17,6 +17,7 @@ source="
 	0001-Stop-forcing-systemtap-integration.patch
 	0002-Add-possibility-to-force-kms-device.patch
 	0003-Work-around-capnproto-incompatibility.patch
+	0004-Fix-Alpine-edge-by-not-using-internal-GTEST-macros-f.patch
 "
 subpackages="$pkgname-dev"
 options="!check" # Some tests fail
@@ -44,4 +45,5 @@ sha512sums="
 1dd1aa3aef4db3b55a39ff0ff44163a4d08335c5d23d47dd902ee7cb7af64896d4e5ca25c84790e6c912bbac73e18efcc8d2b8b5721ba8eee89613023418e766  0001-Stop-forcing-systemtap-integration.patch
 2b3925c1c4f1cdefe4ef8b5919dadac947e35e10cffa4f69fb999a374101811a18796aeebc5852ea384c55b97fa9550844a880e8704213578b659b12306634f9  0002-Add-possibility-to-force-kms-device.patch
 91b2cdb8488f9d2aaa029e949b9e9f52d277457e75d2c4ce6c2c06b9ae4af042ad95d01e34bfd4e036404cb19c68e875467a7a0607a418b08720da12e60d4604  0003-Work-around-capnproto-incompatibility.patch
+ccffec73cce48f1a210110f9af4d3ca7cb4efde22940ae14317782615137d74a90bd9dbcf42d4142f00109eff6f1f71982c32f86b87374f38c0660b5b07ecb63  0004-Fix-Alpine-edge-by-not-using-internal-GTEST-macros-f.patch
 "

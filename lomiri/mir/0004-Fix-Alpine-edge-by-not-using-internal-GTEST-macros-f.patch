@@ -1,0 +1,26 @@
+From 08671a33714b6dc196d093e962a473730bd8bb5a Mon Sep 17 00:00:00 2001
+From: Alan Griffiths <alan@octopull.co.uk>
+Date: Mon, 7 Feb 2022 12:48:20 +0000
+Subject: [PATCH] Fix Alpine/edge (by not using internal GTEST macros for
+ trivial stuff)
+
+---
+ tests/include/mir/test/input_config_matchers.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/include/mir/test/input_config_matchers.h b/tests/include/mir/test/input_config_matchers.h
+index 75d88f591f..83a6d68587 100644
+--- a/tests/include/mir/test/input_config_matchers.h
++++ b/tests/include/mir/test/input_config_matchers.h
+@@ -116,7 +116,7 @@ private:
+ 
+     MatcherVec matchers_;
+ 
+-    GTEST_DISALLOW_ASSIGN_(InputConfigElementsMatcher);
++    void operator=(InputConfigElementsMatcher const&) = delete;
+ };
+ 
+ // Multiple specializations because gmock does not decay the parameter type to the
+-- 
+2.35.1
+
