@@ -1,0 +1,33 @@
+From 84907128608af473af22d3fd5c308049ee3fac94 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sun, 20 Mar 2022 18:22:01 +0100
+Subject: [PATCH] Add missing include for libintl.h
+
+Fixes the following error:
+
+/src/tests/utils/main.cpp: In function 'int main(int, char**)':
+/src/tests/utils/main.cpp:50:5: error: 'bindtextdomain' was not declared in this scope
+   50 |     bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
+      |     ^~~~~~~~~~~~~~
+/src/tests/utils/main.cpp:51:5: error: 'textdomain' was not declared in this scope
+   51 |     textdomain(GETTEXT_PACKAGE);
+      |     ^~~~~~~~~~
+---
+ tests/utils/main.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tests/utils/main.cpp b/tests/utils/main.cpp
+index 48661a94..75769232 100644
+--- a/tests/utils/main.cpp
++++ b/tests/utils/main.cpp
+@@ -20,6 +20,7 @@
+ #include <QCoreApplication>
+ #include <QTimer>
+ #include <gtest/gtest.h>
++#include <libintl.h>
+ 
+ #include <libqtdbusmock/DBusMock.h>
+ 
+-- 
+2.35.1
+
