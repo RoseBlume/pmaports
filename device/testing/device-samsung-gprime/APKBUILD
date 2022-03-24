@@ -1,33 +1,55 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-gprime
 pkgdesc="Samsung Galaxy Grand Prime"
-pkgver=2
-pkgrel=2
+pkgver=3
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base mkbootimg soc-qcom-msm8916"
-makedepends="devicepkg-dev"
-source="deviceinfo"
-subpackages="
-	$pkgname-kernel-mainline:kernel_mainline
+depends="
+	postmarketos-base
+	mkbootimg
+	linux-postmarketos-qcom-msm8916
+	soc-qcom-msm8916
+	soc-qcom-msm8916-rproc
 "
+makedepends="devicepkg-dev"
+source="
+	20-zinitix-input.rules
+	deviceinfo
+	rootston.ini
+"
+subpackages="
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-phosh
+"
+_pmb_select="soc-qcom-msm8916-rproc"
 
 build() {
 	devicepkg_build $startdir $pkgname
+	install -Dm644 "$srcdir"/20-zinitix-input.rules \
+		"$pkgdir"/lib/udev/rules.d/20-zinitix-input.rules
 }
 
 package() {
 	devicepkg_package $startdir $pkgname
 }
 
-kernel_mainline() {
-	pkgdesc="Mainline kernel (no charging, no modem, audio routed directly)"
-	depends="linux-postmarketos-qcom-msm8916"
-	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+nonfree_firmware() {
+	pkgdesc="GPU/WiFi/BT/Modem/Video firmware"
+	depends="firmware-qcom-adreno-a300 msm-firmware-loader firmware-samsung-gprime-wcnss-nv"
+	mkdir "$subpkgdir"
+}
+
+phosh() {
+	install_if="$pkgname postmarketos-ui-phosh"
+	install -Dm644 "$srcdir"/rootston.ini \
+		"$subpkgdir"/etc/phosh/rootston.ini
 }
 
 sha512sums="
-1f335ef38b06b6c80b1f405cc0d6706b2a78501d47001c02021c72384587aa6a3546726137ec4795f5b0163cae8f4a858822135d5933c527e9b4504b47fb68be  deviceinfo
+b897d5102ec2f4c8515435fd2cd815aa5bcb0175db05ac55b9a63f814cee879581c104748d558ec1fb652e9cc6086b2545ba02c22460a69445947b87d07035e7  20-zinitix-input.rules
+50a4668a92961dce64ef85d728f1138b455814ff35fcf07acab21a43e5919084c55b11f80dc4b281bd5ffe1fb2e3994eb038e1ced58f7d939e80a221e687c0a8  deviceinfo
+94c866b6583faadc4a96a4d737983ba7838ede52afa5e29e261ef0ad0f2afe29fd3b793c9208ae74c7d48db6b991ad21800b9e457fbba4c69ce9dec2cda268ea  rootston.ini
 "

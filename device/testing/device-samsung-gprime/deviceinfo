@@ -6,20 +6,19 @@ deviceinfo_name="Samsung Galaxy Grand Prime"
 deviceinfo_manufacturer="Samsung"
 deviceinfo_codename="samsung-gprime"
 deviceinfo_year="2014"
-deviceinfo_dtb_mainline="qcom/msm8916-samsung-gprime"
+deviceinfo_dtb="qcom/msm8916-samsung-gprime"
 deviceinfo_append_dtb="true"
 deviceinfo_arch="aarch64"
+deviceinfo_modules_initfs="panel-samsung-hx8389c msm zinitix"
 
 # Device related
+deviceinfo_gpu_accelerated="true"
 deviceinfo_chassis="handset"
 deviceinfo_keyboard="false"
 deviceinfo_external_storage="true"
 deviceinfo_screen_width="540"
 deviceinfo_screen_height="960"
 deviceinfo_getty="ttyMSM0;115200"
-
-# MSM DRM cannot take over the framebuffer from the bootloader at the moment
-deviceinfo_no_framebuffer="true"
 
 # Bootloader related
 deviceinfo_flash_method="fastboot"
