@@ -6,9 +6,9 @@
 _flavor=postmarketos-allwinner
 _config="config-$_flavor.$CARCH"
 pkgname=linux-$_flavor
-pkgver=5.17.0_git20220313
-pkgrel=1
-_tag="orange-pi-5.17-20220313-2345"
+pkgver=5.17.2_git20220409
+pkgrel=0
+_tag="orange-pi-5.17-20220409-0454"
 pkgdesc="Kernel fork with Pine64 patches (megi's tree, slightly patched)"
 arch="aarch64 armv7"
 url="https://megous.com/git/linux/"
@@ -97,7 +97,7 @@ dev() {
 		INSTALL_HDR_PATH="$subpkgdir"/usr
 }
 sha512sums="
-b24b34e9a8ef66d37891c1d21eb71f9de83e0fde167ac08d776ac3e7b6262e9911908b453b598eb2e01658ec141d4d08337e4cc20f77af298e639ef9119edb61  linux-postmarketos-allwinner-orange-pi-5.17-20220313-2345.tar.gz
+a2d8f509d995c9b13b0cae3466ba35942821e1082c533e6187048ce3b4ca855a71f4f90831897298117c22d6bb3d498ae05fb3540dfb87bb40ef134fa7a144f5  linux-postmarketos-allwinner-orange-pi-5.17-20220409-0454.tar.gz
 049a18de2758e390368450073dee9bf7d3a7aa6099901d128818c49d2bb2bba13ebcfe0458597c68b0fc350e7d1f30b531a66de4590e8308482a1e458f56a61a  config-postmarketos-allwinner.aarch64
 18738214275280f45375de9ccff83df7c9f37eb66dfd0834780e6b155d95a7d39c55f00fd66be4dde4a8b85accd285b6ef10285b41f75618ad7f44ddcdd0b9a9  config-postmarketos-allwinner.armv7
 244d2c1356f5de77a5d05ba16d10e0d19915f634b3b1b96259857b1a3d57a023027a94622ffb56d5c72aeaeb7a9a220d629d51cfbb24225a7eca0140eb1ba19b  0001-dts-add-dontbeevil-pinephone-devkit.patch
