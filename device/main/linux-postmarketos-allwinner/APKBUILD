@@ -7,7 +7,7 @@ _flavor=postmarketos-allwinner
 _config="config-$_flavor.$CARCH"
 pkgname=linux-$_flavor
 pkgver=5.17.2_git20220409
-pkgrel=0
+pkgrel=1
 _tag="orange-pi-5.17-20220409-0454"
 pkgdesc="Kernel fork with Pine64 patches (megi's tree, slightly patched)"
 arch="aarch64 armv7"
@@ -50,6 +50,8 @@ source="$pkgname-$_tag.tar.gz::https://github.com/megous/linux/archive/$_tag.tar
 	0010-ARM-dts-sun6i-Add-Lark-FreeMe-70.2S-tablet.patch
 	0011-eMMC-workaround.patch
 	0012-arm64-dts-allwinner-orangepi-3-fix-ethernet.patch
+	0013-usb-musb-add-loop-blocker.patch
+	0014-usb-musb-direct-musb-debug-output-to-kernel-log.patch
 	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/linux-$_tag"
@@ -112,4 +114,6 @@ e9897068210edd3295fb813390b263ccc146541f4bc89e66fea4a48ce9114ac0ac0b2ef584943fbc
 f1e4658bc699cfb3f0e0eba7833a7e09da266b8817c427de6312c270379d9d8c6cc55d4a270984c5b95cd04cf3be85c36f0d1127abe513698f874b8cde0b1a95  0010-ARM-dts-sun6i-Add-Lark-FreeMe-70.2S-tablet.patch
 6235d08a6a90ca2234cee4d092a4314cb8efdbe7d68fb9c954abe9a6921c93e160db3f680a408210755ed71c429171919320592ea1f6769f74f55b70b7dbf22e  0011-eMMC-workaround.patch
 9ac8d531fe25365c6d1d1bf2903febc573746abde80b54852f31160a98bd31bb8ac29f6a0b7883706ef0bafbd4e0696a0a9f30bede5b211fae98cd93f453e8a3  0012-arm64-dts-allwinner-orangepi-3-fix-ethernet.patch
+fea99629725d6388f095f6c34dcf7a5f01acc2ddfff68912363ade32d4b07148039218cce085ba44e489e3a569fbb2225eeae82d053668cf050243724cc372a4  0013-usb-musb-add-loop-blocker.patch
+9560bcf1f1be5f715d5733312f3aadac60426d76c00c2bb9019708f9e2e77f4f21836c5cc28a04f9382e480eb23d32d2a85bec97c97cabd84a9d1eed9c7a634b  0014-usb-musb-direct-musb-debug-output-to-kernel-log.patch
 "
