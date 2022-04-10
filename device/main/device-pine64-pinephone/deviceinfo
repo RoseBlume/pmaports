@@ -22,8 +22,3 @@ deviceinfo_getty="ttyS0;115200"
 deviceinfo_mesa_driver="sun4i-drm"
 deviceinfo_dev_internal_storage="/dev/mmcblk2"
 deviceinfo_dev_internal_storage_repartition="true"
-
-# Bootloader related
-deviceinfo_flash_method="none"
-deviceinfo_sd_embed_firmware="u-boot/pine64-pinephone/u-boot-sunxi-with-spl-528.bin:8"
-
