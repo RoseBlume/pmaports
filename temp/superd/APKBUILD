@@ -1,0 +1,29 @@
+# Forked from Alpine testing to support sxmo-build (sxmo 1.9.0). Note: sxmo-utils 1.9.0 WILL NOT BE in v21.12
+pkgname=superd
+pkgver=0.3.2
+pkgrel=0
+pkgdesc="lightweight user service supervising daemon"
+url="https://sr.ht/~craftyguy/superd"
+arch="all"
+options="net"
+license="GPL-3.0-or-later"
+makedepends="go make scdoc"
+subpackages="$pkgname-doc"
+source="$pkgname-$pkgver.tar.gz::https://git.sr.ht/~craftyguy/superd/archive/$pkgver.tar.gz"
+
+build() {
+	unset LDFLAGS # passed as go linker flags and invalid
+	make PREFIX="/usr" VERSION="$pkgver"
+}
+
+check() {
+	go test ./...
+}
+
+package() {
+	make PREFIX=/usr DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+dafb26b991525922b0fec1b721cc593ca79726ba6c56a210f203db35155ce46ec03cf06d96601828adb68178c0dccfdfa5c1e3cb0d7329f231bddbe2e9781bd3  superd-0.3.2.tar.gz
+"
