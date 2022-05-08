@@ -2,7 +2,7 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-weston
 pkgver=6
-pkgrel=3
+pkgrel=4
 pkgdesc="(Wayland) Reference compositor (demo, not a phone interface)"
 url="https://postmarketos.org"
 arch="noarch"
@@ -12,7 +12,6 @@ depends="
 	elogind
 	networkmanager
 	networkmanager-cli
-	networkmanager-openrc
 	networkmanager-tui
 	networkmanager-wifi
 	networkmanager-wwan
