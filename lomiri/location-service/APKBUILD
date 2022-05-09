@@ -1,17 +1,19 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=location-service
 pkgver=0_git20200818
 pkgrel=0
 _commit="7dc0ae2c146ed5887405bd63ded75da4e5a2f0ea"
 pkgdesc="Location service aggregating position/velocity/heading updates and exporting them over dbus"
 arch="all"
-url="https://github.com/ubports/location-service"
+url="https://gitlab.com/ubports/development/core/location-service"
 license="GPL-3.0 LGPL-3.0"
 depends_dev="boost-dev dbus-dev net-cpp-dev process-cpp-dev properties-cpp-dev json-c-dev libapparmor-dev gflags-dev glog-dev trust-store-dev"
 makedepends="$depends_dev cmake-extras gettext gtest-dev gmock dbus-cpp-dev"
 checkdepends="coreutils"
-source="$pkgname-$_commit.tar.gz::https://github.com/ubports/location-service/archive/$_commit.tar.gz
+source="
+	https://gitlab.com/ubports/development/core/location-service/-/archive/$_commit/location-service-$_commit.tar.gz
 	0001-Add-missing-header-for-boost.patch
 	"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
@@ -24,7 +26,7 @@ build() {
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DLOCATION_SERVICE_ENABLE_GPS_PROVIDER=OFF
-	make -C build
+	cmake --build build
 }
 
 check() {
@@ -33,7 +35,7 @@ check() {
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 }
 
 sha512sums="
