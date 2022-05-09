@@ -1,16 +1,19 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=lomiri-settings-components
-pkgver=0_git20211124
+pkgver=1.0.0_git20220122
 pkgrel=0
-_commit="7b2746f059aec12ccb717a621d1271ab73f3305f"
-pkgdesc="Ubuntu settings components for Unity8"
+_commit="41d8ca765a278c3cbe11a9ffb9a3c4232f075a09"
+pkgdesc="Ubuntu settings components for Lomiri"
 arch="all"
 url="https://gitlab.com/ubports/core/lomiri-settings-components"
 license="GPL-3.0-only AND LGPL-3.0-only"
 makedepends="cmake cmake-extras qt5-qtdeclarative-dev"
-source="https://gitlab.com/ubports/core/lomiri-settings-components/-/archive/$_commit/lomiri-settings-components-$_commit.tar.gz
-	qmltestrunner.patch"
+source="
+	https://gitlab.com/ubports/core/lomiri-settings-components/-/archive/$_commit/lomiri-settings-components-$_commit.tar.gz
+	qmltestrunner.patch
+	"
 subpackages="$pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -19,7 +22,7 @@ build() {
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
-	make -C build
+	cmake --build build
 }
 
 check() {
@@ -28,10 +31,10 @@ check() {
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 }
 
 sha512sums="
-7817a7f49f5d768095f05f5fabe7f9efd9283552a2fd00002433e7766cdb10e68ffdf16ff8d635a916cf0b3b147ef946de57dd98a1355fa395f51b160a7cf9d0  lomiri-settings-components-7b2746f059aec12ccb717a621d1271ab73f3305f.tar.gz
+7893f9fc7d60bb0612aff6452f94fd4894ee4c4632e6cf1b45f40bb12b9720be1b96e8e1bddb7e9d3bdd0e97edd06ab8c48a17932737e6951fe7ea8e788d2a3f  lomiri-settings-components-41d8ca765a278c3cbe11a9ffb9a3c4232f075a09.tar.gz
 0cbe24ba24468ccfae80b6d6b49c68b55e44561ac7914645746af15ee252c12341f2b401390cffbed520963d1cb7da6980f99520ee820528de964b8a714b87b4  qmltestrunner.patch
 "
