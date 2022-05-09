@@ -3,7 +3,7 @@ pkgname=ubuntu-themes
 pkgver=0_git20210402
 _commit="8d2f6187f4da40cf524962edfa584c0e5acd77a5"
 pkgrel=0
-pkgdesc="Theme files for Unity 8"
+pkgdesc="Theme files for Lomiri"
 arch="noarch"
 url="https://github.com/ubports/ubuntu-themes"
 license="GPL-3.0-only"
@@ -51,4 +51,6 @@ ubuntu_mono() {
 	cp -r ubuntu-mono-dark ubuntu-mono-light LoginIcons "$subpkgdir"/usr/share/icons
 }
 
-sha512sums="d48e8ab487fe62e273102ea20f55f82fcb026af8de37dfb71e8dabeaaf48b7db1d0c90a6568e765ee9ae7332be72c7f674b95bd3590fc71842a9a7189cb97b0c  ubuntu-themes-8d2f6187f4da40cf524962edfa584c0e5acd77a5.tar.gz"
+sha512sums="
+d48e8ab487fe62e273102ea20f55f82fcb026af8de37dfb71e8dabeaaf48b7db1d0c90a6568e765ee9ae7332be72c7f674b95bd3590fc71842a9a7189cb97b0c  ubuntu-themes-8d2f6187f4da40cf524962edfa584c0e5acd77a5.tar.gz
+"
