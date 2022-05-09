@@ -1,20 +1,19 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
+# Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=content-hub
-pkgver=0_git20211222
-_commit="231c08135511189d9dc74f7ef83c96a0001021a6"
+pkgver=1.0.0_git20220503
 pkgrel=0
+_commit="3f6cfa4a2043889a54d66ffd9ec4b7668a4a3dec"
 pkgdesc="Content sharing/picking infrastructure and service, designed to allow apps to securely and efficiently exchange content"
-url="https://gitlab.com/ubports/core/content-hub"
+url="https://gitlab.com/ubports/development/core/content-hub"
 arch="all"
 license="GPL-3.0 LGPL-3.0"
 depends_dev="qt5-qtdeclarative-dev lomiri-app-launch-dev gsettings-qt-dev libnih-dev lomiri-download-manager-dev libnotify-dev libapparmor-dev lomiri-ui-toolkit-dev"
-makedepends="$depends_dev cmake cmake-extras libapparmor gtest-dev"
+makedepends="$depends_dev cmake cmake-extras libapparmor gtest-dev qtchooser qt5-qttools-dev doxygen graphviz"
 checkdepends="gmock dbus-test-runner xvfb-run"
 options="!check" # 92% tests passed, 1 tests failed out of 12
-source="https://gitlab.com/ubports/core/content-hub/-/archive/$_commit/content-hub-$_commit.tar.gz
-	0001-Use-qmlplugindump-qt5.patch
-	"
-subpackages="$pkgname-dev $pkgname-lang"
+source="https://gitlab.com/ubports/development/core/content-hub/-/archive/$_commit/content-hub-$_commit.tar.gz"
+subpackages="$pkgname-dev $pkgname-lang $pkgname-doc"
 builddir="$srcdir/$pkgname-$_commit"
 
 build() {
@@ -22,7 +21,7 @@ build() {
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DWerror=OFF
-	make -C build
+	cmake --build build
 }
 
 check() {
@@ -31,10 +30,9 @@ check() {
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 }
 
 sha512sums="
-eb404ea246675f67c114e5080aac8e3c22e083c8fb7c77754dc5f9b0abf3b3ed612404fa600410f232fac7ba83f964f2d46c50904c45b3d84fa92e7a33b2399b  content-hub-231c08135511189d9dc74f7ef83c96a0001021a6.tar.gz
-2ee8dbc957b22c123c3116ab7540a28c01fcab2664a2fa9707aabdaeff952900e96f7b8121338acfea2c2bd5a0b806f61835e2bcd8e3f17ed757841587365b0f  0001-Use-qmlplugindump-qt5.patch
+8092a288cd132e4520578d26664817c8b2440c6fbd31a40001fb9f528a8617ceca94106fd447f594b8e0c951272b22962506bd6a2855d2d6d8db44e258f24641  content-hub-3f6cfa4a2043889a54d66ffd9ec4b7668a4a3dec.tar.gz
 "
