@@ -1,4 +1,5 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
+# Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=gmenuharness
 pkgver=0_git20210407
 _commit="e39664917c09c3d8580a041182d6fce41de29863"
@@ -18,7 +19,7 @@ build() {
 	cmake -B build \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
-	make -C build
+	cmake --build build
 }
 
 check() {
@@ -27,7 +28,7 @@ check() {
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 }
 
 sha512sums="2014f385f13b755bf82a76db2f0f2a22f542cf9e7129d0019b4a0f55cd2506fe110ac8509f81a02541c61dbd61ff8b945348fc8eb21abc2933133aed29f20a0f  gmenuharness-e39664917c09c3d8580a041182d6fce41de29863.tar.gz"
