@@ -1,19 +1,20 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=lomiri-download-manager
-pkgver=0_git20210414
-_commit="423f39835e8cf4fc6788870d51ac2fa50c108d85"
+pkgver=0_git20220125
 pkgrel=0
+_commit="d928ac3b372719200afad1c802075090d3be6c82"
 pkgdesc="Provides a service for downloading files while an application is suspended"
 arch="all"
 url="https://gitlab.com/ubports/core/lomiri-download-manager"
 license="LGPL-3.0-only"
 depends_dev="qt5-qtdeclarative-dev boost-dev glog-dev lomiri-api-dev"
-makedepends="$depends_dev cmake cmake-extras gtest-dev gmock"
+makedepends="$depends_dev cmake cmake-extras gtest-dev gmock doxygen"
 checkdepends="dbus-test-runner xvfb-run"
 source="https://gitlab.com/ubports/core/lomiri-download-manager/-/archive/$_commit/lomiri-download-manager-$_commit.tar.gz
 	0001-Disable-Werror.patch"
-subpackages="$pkgname-dev"
+subpackages="$pkgname-dev $pkgname-doc"
 builddir="$srcdir/$pkgname-$_commit"
 
 build() {
@@ -22,7 +23,7 @@ build() {
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBEXECDIR=/usr/lib \
 		-DCMAKE_INSTALL_LIBDIR=lib
-	make -C build
+	cmake --build build
 }
 
 check() {
@@ -32,10 +33,10 @@ check() {
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 }
 
 sha512sums="
-cfe18b192bd635c16b90aac92e7ba6748b44fe14361e6fe1ce7f29bb4a86192248afcd9266dc489434595cb9f858aa9b5e74dc0b949c5d8804f97bb743b912bb  lomiri-download-manager-423f39835e8cf4fc6788870d51ac2fa50c108d85.tar.gz
+93dbd05ecfd6fbf688814c833fe706c1b12561b7aff3c72f864a0641394234d3e59129c9fe76a149836ac904d92f71eea298732ef28578a603e803ec649a74d6  lomiri-download-manager-d928ac3b372719200afad1c802075090d3be6c82.tar.gz
 2f7465955e0aeb583a2b1c13b4faa34f1dbeb251d87a476639f36198218ace071239447ee3e137c023bb1a9ea304f6c9331eff5aeb54e0d5e660a50a5326cbc4  0001-Disable-Werror.patch
 "
