@@ -1,16 +1,23 @@
 # Contributor:
 # Maintainer:
 pkgname=maui-shell
-pkgver=0.1
+pkgver=2.1.2
+_commit="92b3352454753503105d4361c28f5efdc6abea0d"
 pkgrel=0
 pkgdesc="Maui Shell is a convergent shell for desktops, tablets, and phones"
 url="https://nxos.org/maui"
 arch="all"
 license="LGPL-3.0"
-depends="mauikit"
+# Probably don't need all of "plasma"
+depends="mauikit plasma plasma-pa plasma-nm bluedevil"
+# plasma-workspace-dev is temporary, need to figure out what of it we actually need...
 makedepends="
     kconfig-dev
     kcoreaddons-dev
+    kunitconversion-dev
+    kitemmodels-dev
+    plasma-workspace-dev
+    kded
     ki18n-dev
     kio-dev
     kidletime-dev
@@ -27,9 +34,9 @@ makedepends="
 "
 install=""
 subpackages=""
-source="${pkgname}-master.tar.gz::https://github.com/Nitrux/maui-shell/archive/refs/heads/master.tar.gz
+source="${pkgname}-$_commit.tar.gz::https://github.com/Nitrux/maui-shell/archive/$_commit.tar.gz
 "
-builddir="$srcdir/${pkgname}-master"
+builddir="$srcdir/${pkgname}-$_commit"
 
 build() {
     cmake -B build \
@@ -44,5 +51,5 @@ package() {
 }
 
 sha512sums="
-4062c1942cfca5a3590f5f07986c6ff4a430dcf4b796931b9416c8dc2d29e36a90b71e8d1d62894a7132364d521e251ea3544c7951b76f91af7f01ca5d8ee14f  maui-shell-master.tar.gz
+b600558ff29e13a012c5c8b96890a48bca52f1204c60fb69d224019b3c2719948f3254f5bd4c1654640905686a16a78bfaf4a0d96ce0d8e660c3c739f388401c  maui-shell-92b3352454753503105d4361c28f5efdc6abea0d.tar.gz
 "
