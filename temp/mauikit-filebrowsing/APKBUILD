@@ -1,0 +1,46 @@
+# Forked from Alpine to upgrade to 2.1.2
+
+pkgname=mauikit-filebrowsing
+pkgver=2.1.2
+pkgrel=1
+pkgdesc="MauiKit File Browsing utilities and controls"
+# armhf blocked by extra-cmake-modules
+# s390x and riscv64 blocked by mauikit
+arch="all !armhf !s390x !riscv64"
+url="https://mauikit.org/"
+license="GPL-2.0-or-later"
+depends="
+	kirigami2
+	"
+depends_dev="
+	kio-dev
+	mauikit-dev
+	qt5-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+source="https://download.kde.org/stable/maui/mauikit-filebrowsing/$pkgver/mauikit-filebrowsing-$pkgver.tar.xz"
+subpackages="$pkgname-dev"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+ff1694ef0f15187a60df7bca3437af5c320976d79008a61b630ba8e985068ec446ed5aee94415b8fb8bd326660bc93438874a01a2011e7e0e9c5c18e4b20a6ec  mauikit-filebrowsing-2.1.2.tar.xz
+"
