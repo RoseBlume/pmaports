@@ -1,0 +1,57 @@
+# Forked from Alpine to upgrade to 2.1.2
+
+pkgname=mauikit
+pkgver=2.1.2
+pkgrel=1
+pkgdesc="Kit for developing MAUI Apps"
+# armhf blocked by qt5-qtdeclarative
+# s390x and riscv64 blocked by plasma-framework
+arch="all !armhf !s390x !riscv64"
+url="https://mauikit.org/"
+license="GPL-2.0-or-later"
+depends="kirigami2"
+depends_dev="
+	mauikit=$pkgver-r$pkgrel
+	kconfig-dev
+	kconfigwidgets-dev
+	kdeclarative-dev
+	kdecoration-dev
+	ki18n-dev
+	kio-dev
+	knotifications-dev
+	kservice-dev
+	plasma-framework-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	qt5-qtquickcontrols2-dev
+	qt5-qtsvg-dev
+	samurai
+	syntax-highlighting-dev
+	xcb-util-wm-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	"
+source="https://download.kde.org/stable/maui/mauikit/$pkgver/mauikit-$pkgver.tar.xz"
+subpackages="$pkgname-dev"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+5bf9d8fb784512c4136a2c9ab69345b916e92eb946fbc3fe71fee41d6463959b6074970d00131063ed24915b2c6f654020d6e52db904d28054fc32d0b85a7d5b  mauikit-2.1.2.tar.xz
+"
