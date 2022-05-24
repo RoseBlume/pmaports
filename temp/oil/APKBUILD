@@ -1,0 +1,28 @@
+# Forked from Alpine because the package is in the testing repository
+pkgname=oil
+pkgver=0.9.9
+pkgrel=0
+pkgdesc="Oil is a new POSIX & bash compatible shell"
+url="https://www.oilshell.org"
+arch="all"
+license="Apache-2.0"
+# !check as source has tests, but tagged releases don't
+# !strip as oil binary shows error message otherwise, see: https://github.com/oilshell/oil/issues/47
+options="!strip !check"
+makedepends="readline-dev bash"
+subpackages="$pkgname-doc"
+source="https://www.oilshell.org/download/oil-$pkgver.tar.gz"
+
+build() {
+	./configure --prefix /usr --with-readline # not a gnu-autoconf script
+	make
+}
+
+package() {
+	make install DESTDIR="$pkgdir"
+	install -Dm644 LICENSE.txt "$pkgdir"/usr/share/licenses/$pkgname/LICENSE.txt
+}
+
+sha512sums="
+b44359b17d82b1f3a6ecb35fe42541ca55cf068f6b35ef76aac65f602d0a15505e376ee4ac57e67fc748f08fb3b3bc732fa838519a1959c541882ff7e67387db  oil-0.9.9.tar.gz
+"
