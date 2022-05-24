@@ -14,11 +14,11 @@ stages:
 # merge request ID is not available. This means, we must set the "only"
 # variable accordingly - and if we only do it for one job, all other jobs will
 # not get executed. So have the defaults here, and use them in all jobs that
-# should run on both the master branch, and in merge requests.
+# should run on both the v22.06 branch, and in merge requests.
 # https://docs.gitlab.com/ee/ci/merge_request_pipelines/index.html#excluding-certain-jobs
 .only-default: &only-default
   only:
-    - master
+    - v22.06
     - merge_requests
     - tags
 
@@ -108,7 +108,7 @@ kernel-kconfig:
   stage: lint
   only:
     refs:
-      - master
+      - v22.06
       - merge_requests
     changes:
       - device/*/linux-*/config-*
