@@ -157,6 +157,3 @@ build-aarch64:
 
 build-armv7:
   extends: .build
-
-build-armhf:
-  extends: .build
