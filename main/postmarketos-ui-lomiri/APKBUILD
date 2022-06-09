@@ -9,8 +9,16 @@ license="GPL-3.0-or-later"
 depends="
 	lomiri
 	lomiri-system-settings
+	networkmanager
+	networkmanager-cli
+	networkmanager-openrc
+	networkmanager-tui
+	networkmanager-wifi
+	networkmanager-wwan
 	postmarketos-artwork-wallpapers
+	postmarketos-base-ui
 "
+install="$pkgname.post-install $pkgname.post-upgrade"
 source="
 	000-gschema.override
 "
