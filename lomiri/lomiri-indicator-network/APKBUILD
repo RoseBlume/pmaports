@@ -6,12 +6,12 @@ _commit="ea27f1169099f2f124ed5cf9d24a2475ce8e42d4"
 pkgrel=0
 pkgdesc="The 'Network' indicator for Ubuntu Touch"
 arch="all"
-url="https://gitlab.com/ubports/core/lomiri-indicator-network"
+url="https://gitlab.com/ubports/development/core/lomiri-indicator-network"
 license="GPL-3.0"
 depends_dev="glib-dev lomiri-api-dev ofono-dev networkmanager-dev libsecret-dev lomiri-url-dispatcher-dev qt5-qtdeclarative-dev libqofono-dev"
 makedepends="$depends_dev cmake-extras gtest-dev gmock libqtdbustest libqtdbusmock gmenuharness-dev intltool"
 checkdepends="py3-dbusmock"
-source="https://gitlab.com/ubports/core/lomiri-indicator-network/-/archive/$_commit/lomiri-indicator-network-$_commit.tar.gz
+source="https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/archive/$_commit/lomiri-indicator-network-$_commit.tar.gz
 	0001-Add-missing-include-for-libintl.h.patch"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"

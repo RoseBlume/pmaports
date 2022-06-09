@@ -7,13 +7,13 @@ pkgrel=0
 _commit="a2c78e65a577ea785c32f5de84dce20d0f24cba6"
 pkgdesc="Session init system job for Launching Applications"
 arch="all"
-url="https://gitlab.com/ubports/core/lomiri-app-launch"
+url="https://gitlab.com/ubports/development/core/lomiri-app-launch"
 license="GPL-3.0"
 depends_dev="gobject-introspection-dev lttng-ust-dev json-glib-dev zeitgeist-dev lomiri-api-dev curl-dev properties-cpp-dev"
 makedepends="$depends_dev cmake cmake-extras dbus-test-runner qt5-qtdeclarative gtest-dev glib-dev mir-dev dbus-test-runner-dev click-dev lttng-ust-tools"
 checkdepends="gtest-dev gmock py3-dbusmock"
 source="
-	https://gitlab.com/ubports/core/lomiri-app-launch/-/archive/$_commit/lomiri-app-launch-$_commit.tar.gz
+	https://gitlab.com/ubports/development/core/lomiri-app-launch/-/archive/$_commit/lomiri-app-launch-$_commit.tar.gz
 	posix-jobs.patch
 	"
 subpackages="$pkgname-dev"

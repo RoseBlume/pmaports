@@ -4,14 +4,14 @@ pkgver=0_git20200909
 _commit="ce56e46b67c11276ec5f44b6a3a1c3f5a46aafed"
 pkgrel=0
 pkgdesc="Library to access GSettings from Qt"
-url="https://gitlab.com/ubports/core/gsettings-qt"
+url="https://gitlab.com/ubports/development/core/gsettings-qt"
 arch="all"
 license="LGPL-3.0-only"
 depends_dev="qt5-qtdeclarative-dev"
 makedepends="$depends_dev qt5-qtbase-dev"
 checkdepends="xvfb-run"
 subpackages="$pkgname-dev"
-source="https://gitlab.com/ubports/core/gsettings-qt/-/archive/$_commit/gsettings-qt-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/gsettings-qt/-/archive/$_commit/gsettings-qt-$_commit.tar.gz"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Test fails under QEMU
 

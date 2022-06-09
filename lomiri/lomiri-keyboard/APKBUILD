@@ -4,13 +4,13 @@ pkgver=0_git20210815
 _commit="2a8204bfbe8b137cfd296b50d19e59386750fcbc"
 pkgrel=0
 pkgdesc="Ubuntu Touch keyboard as maliit plugin"
-url="https://gitlab.com/ubports/core/lomiri-keyboard"
+url="https://gitlab.com/ubports/development/core/lomiri-keyboard"
 arch="all"
 license="LGPL-3.0-only AND BSD-3-Clause"
 makedepends="qt5-qtbase-dev maliit-framework-dev libpinyin-dev gsettings-qt-dev hunspell-dev presage-dev anthy-dev libchewing-dev"
 checkdepends="xvfb-run bash"
 subpackages="$pkgname-dev $pkgname-lang"
-source="https://gitlab.com/ubports/core/lomiri-keyboard/-/archive/$_commit/lomiri-keyboard-$_commit.tar.gz
+source="https://gitlab.com/ubports/development/core/lomiri-keyboard/-/archive/$_commit/lomiri-keyboard-$_commit.tar.gz
 	0001-Prefix-MALIIT-variables-with-MALIIT_PREFIX.patch
 	0002-Fix-up-inputmethodhostprobe-methods-for-maliit-2.0.0.patch
 	"

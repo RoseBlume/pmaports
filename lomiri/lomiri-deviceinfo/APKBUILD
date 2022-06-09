@@ -5,10 +5,10 @@ _commit="aec13335ad4de0bf07ddce63fb51c07cf5381a83"
 pkgrel=0
 pkgdesc="Library to detect and configure devices"
 arch="all"
-url="https://gitlab.com/ubports/core/deviceinfo"
+url="https://gitlab.com/ubports/development/core/deviceinfo"
 license="GPL-3.0-only"
 makedepends="cmake cmake-extras gtest-dev yaml-cpp-dev"
-source="https://gitlab.com/ubports/core/deviceinfo/-/archive/$_commit/deviceinfo-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/deviceinfo/-/archive/$_commit/deviceinfo-$_commit.tar.gz"
 subpackages="$pkgname-dev"
 builddir="$srcdir/deviceinfo-$_commit"
 

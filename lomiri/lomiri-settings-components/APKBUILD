@@ -7,11 +7,11 @@ pkgrel=0
 _commit="41d8ca765a278c3cbe11a9ffb9a3c4232f075a09"
 pkgdesc="Ubuntu settings components for Lomiri"
 arch="all"
-url="https://gitlab.com/ubports/core/lomiri-settings-components"
+url="https://gitlab.com/ubports/development/core/lomiri-settings-components"
 license="GPL-3.0-only AND LGPL-3.0-only"
 makedepends="cmake cmake-extras qt5-qtdeclarative-dev"
 source="
-	https://gitlab.com/ubports/core/lomiri-settings-components/-/archive/$_commit/lomiri-settings-components-$_commit.tar.gz
+	https://gitlab.com/ubports/development/core/lomiri-settings-components/-/archive/$_commit/lomiri-settings-components-$_commit.tar.gz
 	qmltestrunner.patch
 	"
 subpackages="$pkgname-lang"

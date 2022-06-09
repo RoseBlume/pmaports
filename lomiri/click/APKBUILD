@@ -4,13 +4,13 @@ pkgver=0_git20210513
 _commit="00660eb4715398d403b0164fbe9304698e676f09"
 pkgrel=0
 pkgdesc="Click is a simplified packaging format"
-url="https://gitlab.com/ubports/core/click"
+url="https://gitlab.com/ubports/development/core/click"
 arch="all"
 license="GPL-3.0-only"
 depends_dev="libgee-dev gobject-introspection-dev"
 makedepends="$depends_dev cmake intltool vala gobject-introspection autoconf libtool automake json-glib-dev py3-setuptools"
 subpackages="$pkgname-dev $pkgname-doc"
-source="https://gitlab.com/ubports/core/click/-/archive/$_commit/click-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/click/-/archive/$_commit/click-$_commit.tar.gz"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Needs dpkg
 

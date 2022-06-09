@@ -6,13 +6,13 @@ _commit="7a596d16132cae5972fa4a4b1eac2ea7bbfda52c"
 pkgrel=0
 pkgdesc='The Ubuntu UI toolkit used in Ubuntu Touch'
 arch="all"
-url="https://gitlab.com/ubports/core/lomiri-ui-toolkit"
+url="https://gitlab.com/ubports/development/core/lomiri-ui-toolkit"
 license="LGPL-3.0-only"
 depends="qt5-qtfeedback qt5-qtgraphicaleffects"
 depends_dev="libnih-dev qt5-qtsvg-dev qt5-qtpim-dev qt5-qtsystems-dev lttng-ust-dev libxi-dev eudev-dev mir-dev libevdev-dev qt5-qtgraphicaleffects qt5-qtfeedback-dev"
 makedepends="$depends_dev qt5-qttools-dev qt5-qtdeclarative-dev"
 checkdepends="diffutils bash grep xvfb-run dbus-test-runner"
-source="https://gitlab.com/ubports/core/lomiri-ui-toolkit/-/archive/$_commit/lomiri-ui-toolkit-$_commit.tar.gz
+source="https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/archive/$_commit/lomiri-ui-toolkit-$_commit.tar.gz
 	0001-Remove-debian-isms-from-test-runner.patch
 	0002-Don-t-build-app-launch-profiler.patch
 	"

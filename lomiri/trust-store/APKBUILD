@@ -4,12 +4,12 @@ pkgver=0_git20220113
 _commit="be977ea7eb4760319ed9ee17a9043f0bfae933da"
 pkgrel=0
 pkgdesc="An API for creating, reading, updating and deleting trust requests answered by users."
-url="https://gitlab.com/ubports/core/trust-store"
+url="https://gitlab.com/ubports/development/core/trust-store"
 arch="all"
 license="LGPL-3.0-only"
 makedepends="cmake cmake-extras mir-dev boost-dev process-cpp-dev dbus-cpp-dev properties-cpp-dev libapparmor-dev libapparmor qt5-qtdeclarative-dev gtest-dev gmock"
 checkdepends="coreutils"
-source="https://gitlab.com/ubports/core/trust-store/-/archive/$_commit/trust-store-$_commit.tar.gz
+source="https://gitlab.com/ubports/development/core/trust-store/-/archive/$_commit/trust-store-$_commit.tar.gz
 	no_werror.patch"
 subpackages="$pkgname-dev $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"

@@ -6,11 +6,11 @@ _commit="218e419b38f7f1017dc1d37679ae658b01d1fef3"
 pkgrel=0
 pkgdesc="System compositor using the Mir display server"
 arch="all"
-url="https://gitlab.com/ubports/core/lomiri-system-compositor"
+url="https://gitlab.com/ubports/development/core/lomiri-system-compositor"
 license="GPL-3.0-only"
 makedepends="$depends_dev cmake cmake-extras gtest-dev gmock gdk-pixbuf-dev mir-dev dbus-dev lomiri-deviceinfo-dev"
 checkdepends="dbus"
-source="https://gitlab.com/ubports/core/lomiri-system-compositor/-/archive/$_commit/lomiri-system-compositor-$_commit.tar.gz
+source="https://gitlab.com/ubports/development/core/lomiri-system-compositor/-/archive/$_commit/lomiri-system-compositor-$_commit.tar.gz
 	0001-spinner-Add-support-for-wayland-backend.patch
 	0002-Add-missing-stdexcept-header-17.patch
 	"

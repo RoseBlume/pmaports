@@ -5,12 +5,12 @@ pkgver=0_git20211126
 _commit="105f7ec662ff40910fd74a86022f1c7772344497"
 pkgrel=0
 pkgdesc="API for Unity shell integration"
-url="https://gitlab.com/ubports/core/lomiri-api"
+url="https://gitlab.com/ubports/development/core/lomiri-api"
 arch="all"
 license="LGPL-3.0"
 makedepends="cmake cmake-extras qt5-qtdeclarative-dev libqtdbustest gtest-dev gmock"
 checkdepends="dbus"
-source="https://gitlab.com/ubports/core/lomiri-api/-/archive/$_commit/lomiri-api-$_commit.tar.gz
+source="https://gitlab.com/ubports/development/core/lomiri-api/-/archive/$_commit/lomiri-api-$_commit.tar.gz
 	qmltestrunner.patch"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
