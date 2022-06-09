@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri
-pkgver=0_git20220112
-_commit="decf11e1dfb2c089f8ab9076117558aa3ed4266b"
+pkgver=0_git20220531
+_commit="11f29d3ab1615e36ffb5d2e1efb2f394cc5a3500"
 pkgrel=0
 pkgdesc="A convergent desktop environment"
 arch="all"
@@ -13,14 +13,12 @@ depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev lomiri-api-dev geonames-dev qm
 makedepends="$depends_dev cmake cmake-extras dbus-test-runner doxygen graphviz lomiri-system-settings lomiri-deviceinfo-dev elogind-dev qtmir-dev"
 checkdepends="py3-dbusmock"
 source="https://gitlab.com/ubports/development/core/lomiri/-/archive/$_commit/lomiri-$_commit.tar.gz
-	0001-Replace-own-lights-plugin-with-hfd-leds.patch
-	0002-Replace-own-config-parser-with-libdeviceinfo.patch
-	0003-NoDpkgParse.patch
-	0004-Add-missing-includes.patch
-	0005-Add-qt5-suffix-to-search-for-Qt-tools.patch
-	0006-Link-against-libintl.patch
-	0007-No-systemd.patch
-	0008-fixups.patch
+	0001-NoDpkgParse.patch
+	0002-Add-missing-includes.patch
+	0003-Add-qt5-suffix-to-search-for-Qt-tools.patch
+	0004-Link-against-libintl.patch
+	0005-No-systemd.patch
+	0006-fixups.patch
 	"
 subpackages="$pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
@@ -50,13 +48,11 @@ package() {
 }
 
 sha512sums="
-347667236aa35182b1cba110e6257c669656f68c103b65f8a49697f9845a2079792af72e981ea77601525e3e08816137bd118b4ecb0ef1efdee0e7c7d67b157a  lomiri-decf11e1dfb2c089f8ab9076117558aa3ed4266b.tar.gz
-cb0b2f4098e854b6208dc41a7594dcb82ea7e349fabbf9c4a10c107ad75bb10f230a1e6ef6c2236a5d44537f830f57921917c05446260be869c13fc1d6f2a74e  0001-Replace-own-lights-plugin-with-hfd-leds.patch
-8c9b9e0640b36f94c1e665c67bbd2870db00c25b1f691aee483cbdd7ccec2c2d3defd2a1172c659137817cf02f261534f80a73df67880b473a666cbdee517106  0002-Replace-own-config-parser-with-libdeviceinfo.patch
-96cce92bfacc07227204c698418ea72592324d2d1b7bff606b39304dbec44612e5611a26e58f1ce54f320544b0505d2046ff3da489cb848fe555522124474fe7  0003-NoDpkgParse.patch
-709997032ef08cc2fb7b44e71eb4ccc038edb51e16c78fddec59309ef49a229c5eb27e57f495fd28d9c402f60723ae9be281917e3181692f928af38966d6b6d6  0004-Add-missing-includes.patch
-be50b5d83d2e63c35c8fdbb3eaa8bdbf370c8dab42d604bb0db52a8678b367a69956cac2920511f1b694a0d1f643126443f866ed881b31edc3d10410265edc18  0005-Add-qt5-suffix-to-search-for-Qt-tools.patch
-47cf610d9de5a4f574412a3d63d95a14bb92fb5ad7ee453f41c8e91d6375a6fb3b6e71521cc221a379c99fb093cf8b7df3b72f8e567bd375a329a060a0ee790f  0006-Link-against-libintl.patch
-8ea69f8bfb5e6f828ade8d1670b8a579fb47fa6cb68fe18684d8a552fa4f2c9b831c896606367581feb10a23432dde0f3be4ef2c8c7466c8197f0d0fd475e6e3  0007-No-systemd.patch
-cadf61d7679b316f54c4581738215e7dfe9752a79c4aa1f318ecbf66d6fe66aaa4e8621aa1c22a6c0456717b9dd7e4a6d784cf548e4345837caa68bd5a9a3897  0008-fixups.patch
+5995e5adfd71a6647b1c9788a8cb1326a036a53e5ea19b49e7df6ff57a089dd37bb82aedc91836c9d41bae2410da17b24a4a4873abf415ddcc297c7990b6d3e9  lomiri-11f29d3ab1615e36ffb5d2e1efb2f394cc5a3500.tar.gz
+628382be3a6679511abf2d3517c8b65ff212a2639fcaf5b695b5e030bc7ba6f78eb3c30754b78079d63a8280d43da09ddebad69bc941909c13ac28b7b88ea858  0001-NoDpkgParse.patch
+dca700689aa4b8abeb8280bea160b42c63ff86aefce73257b3ca3847d05217c92707fe85863292e77ddaf8d9bb9056c8959c3f2ada6802d633860109260c64ce  0002-Add-missing-includes.patch
+e795172037595cd70555550263a5128bb24b93e2be0bd9c3aa098dddc85ff724c26f8407d30ca1eaa435f2797b5e1a402848fd1745cbc722f3c83247190cd999  0003-Add-qt5-suffix-to-search-for-Qt-tools.patch
+b4d4e422de0297a9eb04550d54afa7a5bc945460d910c6bc212343d3ed792f555627593f26338c4db558bfa9018f683cee226581c4709f257884c5b70454e668  0004-Link-against-libintl.patch
+9250a3f652299300950dcaa16350e7dc40cba673a13da746e9ccae44b7a8bd9043a82bd1db78d656c3a7915c07bcff46a3d22bacf1d83e1fa9ff3c8ddfeb6d47  0005-No-systemd.patch
+eccb0d31fe9e88a9e04ffb1a2239abd0d561586090e9824a1c419461e3b6d69c6b2342ff6bc3242bd881c9fb7ac4ea9cb4317394b0c4aff88d379df45037a7da  0006-fixups.patch
 "

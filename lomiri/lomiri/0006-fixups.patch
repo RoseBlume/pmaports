@@ -1,0 +1,39 @@
+From 4fbf5ec1700ddd47df053d2006a2dc151a98bc1a Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sun, 15 Aug 2021 16:52:09 +0200
+Subject: [PATCH 6/6] fixups
+
+---
+ qml/OrientedShell.qml                    | 2 +-
+ qml/Panel/Indicators/IndicatorsLight.qml | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/qml/OrientedShell.qml b/qml/OrientedShell.qml
+index 78a4bb464..783fd1439 100644
+--- a/qml/OrientedShell.qml
++++ b/qml/OrientedShell.qml
+@@ -37,7 +37,7 @@ Item {
+     property bool lightIndicators: false
+ 
+     onWidthChanged: calculateUsageMode();
+-    property var overrideDeviceName: screens.count > 1 ? "desktop" : false
++    property var overrideDeviceName: Screens.count > 1 ? "desktop" : false
+ 
+     DeviceConfiguration {
+         id: _deviceConfiguration
+diff --git a/qml/Panel/Indicators/IndicatorsLight.qml b/qml/Panel/Indicators/IndicatorsLight.qml
+index cd9703038..2e2b1e617 100644
+--- a/qml/Panel/Indicators/IndicatorsLight.qml
++++ b/qml/Panel/Indicators/IndicatorsLight.qml
+@@ -211,7 +211,7 @@ console.log("no support for Multicolor LED. " + indicatorState)
+         }
+     }
+ 
+-    Component.onCompleted: Leds.state = Lights.Off
++    Component.onCompleted: Leds.state = Leds.Off
+     Component.onDestruction: Leds.state = Leds.Off
+ 
+     property var _colorBinding: Binding {
+-- 
+2.36.1
+
