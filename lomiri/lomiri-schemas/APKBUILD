@@ -1,9 +1,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-schemas
-pkgver=0_git20211118
+pkgver=0_git20220218
 pkgrel=0
-_commit="866474c8c54bbe6e1209625b98c538f50e4ef7b6"
+_commit="60e0cdbf4bd3eeb998ef649f4d3e6b0ea1e62b03"
 pkgdesc='GSettings / AccountsService schema files for Lomiri'
 arch="noarch"
 url="https://gitlab.com/ubports/development/core/lomiri-schemas"
@@ -27,5 +27,5 @@ package() {
 }
 
 sha512sums="
-8260daee3994cc17ad09d114c459fdb4953202bbba7679c032c099a474e64ec4c928ea457a9f3ea2909ee0ca197da3820dab1f698122d80c5124d2d1f98dde00  lomiri-schemas-866474c8c54bbe6e1209625b98c538f50e4ef7b6.tar.gz
+e42b2915ff0ceb93ceaab8ef66c57e3401804f70db4ed88ae8082df37c312b02a074020a6a7ee3bfe46bbcc4e10b8f4eb6be64c2f34dce0e1930d8229f9d050a  lomiri-schemas-60e0cdbf4bd3eeb998ef649f4d3e6b0ea1e62b03.tar.gz
 "
