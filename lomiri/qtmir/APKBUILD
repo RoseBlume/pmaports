@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=qtmir
-pkgver=0_git20211204
-_commit="cde69ffa84d1e8172f151765a782340a6b5d7381"
+pkgver=0_git20220422
+_commit="1e28b1d7cb55242e614a3e69168789fb55e186c3"
 pkgrel=0
 pkgdesc="QPA plugin to make Qt a Mir server"
 arch="all"
@@ -35,6 +35,6 @@ package() {
 }
 
 sha512sums="
-f4c525ca9b2616c57c5c15f3c7203a95ecbcdcda161d421e0d81f5d13beab88b3854da05a09b32da34324454b2f3c7d567ac606ba894c6b693504e8f1167f18f  qtmir-cde69ffa84d1e8172f151765a782340a6b5d7381.tar.gz
+117a7d22a94b2e0626a534f51c8783d431b9db1e3bd65b00d9f80a09f89542d42d5fa02174f9658de9ddbeeb2dfb1bb073f726276417bbca37455b95e0249e99  qtmir-1e28b1d7cb55242e614a3e69168789fb55e186c3.tar.gz
 e45a59f8c3a1fa59e0d198db960486bff90db28381f906fa4746d775786e56087237b105e6463a72e31f3525ceb941952b31390d52a179da87a97e2b13c4c074  0001-Replace-usage-of-GTEST_DISALLOW_ASSIGN_.patch
 "
