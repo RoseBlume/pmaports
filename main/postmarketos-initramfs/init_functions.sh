@@ -26,6 +26,8 @@ mount_proc_sys_dev() {
 	# mdev
 	mount -t proc -o nodev,noexec,nosuid proc /proc || echo "Couldn't mount /proc"
 	mount -t sysfs -o nodev,noexec,nosuid sysfs /sys || echo "Couldn't mount /sys"
+	mount -t devtmpfs dev /dev -o mode=0755,nosuid || echo "Couldn't mount /dev"
+	mount -t tmpfs run /run -o nosuid,nodev,mode=0755 || echo "Couldn't mount /run"
 
 	mkdir /config
 	mount -t configfs -o nodev,noexec,nosuid configfs /config
@@ -33,9 +35,6 @@ mount_proc_sys_dev() {
 	# /dev/pts (needed for telnet)
 	mkdir -p /dev/pts
 	mount -t devpts devpts /dev/pts
-
-	# /run (needed for cryptsetup)
-	mkdir /run
 }
 
 create_device_nodes() {
