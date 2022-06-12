@@ -8,10 +8,10 @@ fi
 
 pkgname=busybox-static-armv7
 pkgver=1.35.0
-pkgrel=13
+pkgrel=14
 
 _arch="armv7"
-_mirror="http://uk.alpinelinux.org/alpine/"
+_mirror="http://dl-4.alpinelinux.org/alpine/"
 
 url="http://busybox.net"
 license="GPL2"
@@ -21,16 +21,16 @@ pkgdesc="Statically linked Busybox for $_arch"
 _target="$(arch_to_hostspec $_arch)"
 
 source="
-	busybox-static-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/busybox-static-$pkgver-r$pkgrel.apk
+	busybox-static-$pkgver-r$pkgrel-$_arch-v3.16.apk::$_mirror/v3.16/main/$_arch/busybox-static-$pkgver-r$pkgrel.apk
 "
 
 package() {
 	mkdir -p "$pkgdir/usr/$_target"
 	cd "$pkgdir/usr/$_target"
-	tar -xf $srcdir/busybox-static-$pkgver-r$pkgrel-$_arch-edge.apk
+	tar -xf $srcdir/busybox-static-$pkgver-r$pkgrel-$_arch-v3.16.apk
 	rm .PKGINFO .SIGN.*
 }
 
 sha512sums="
-5b1bca1f7d8c0c331c7a2712a909507c1cab8710fb5cce7199e584dbbc67612850e8c87edbdd8a0ca2d901819d0eab343ca9bb537b824eb438fc1d3b1faaa32b  busybox-static-1.35.0-r13-armv7-edge.apk
+8fe3a2c6583c90907fdd09e0a54e60ca070a49b75d486d43606b674ba465f4dec63d404463db38427fe44eac1edc40ee41329cb7eb5fd3b1fb8ca400a94c1267  busybox-static-1.35.0-r14-armv7-v3.16.apk
 "
