@@ -31,10 +31,10 @@ pkgver=11.2.1_git20220219
 [ "$CHOST" != "$CTARGET" ] && _target="-$CTARGET_ARCH" || _target=""
 
 pkgname=gcc-armhf
-pkgrel=2
+pkgrel=3
 pkgdesc="Stage2 cross-compiler for armhf"
 url="https://gcc.gnu.org"
-arch="x86_64"
+arch="aarch64 x86_64"
 license="GPL-2.0-or-later LGPL-2.1-or-later"
 _gccrel=$pkgver-r$pkgrel
 depends="isl binutils-armhf mpc1"
