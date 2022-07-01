@@ -3,7 +3,7 @@
 # Co-Maintainer: Bhushan Shah <bshah@kde.org>
 pkgname=device-purism-librem5
 pkgdesc="Purism Librem 5 Phone"
-pkgver=1.32
+pkgver=1.33
 pkgrel=0
 _confver=49
 _purismrel=1
@@ -42,6 +42,7 @@ source="
 	xorg.conf
 	70-librem5-xwayland-accel.sh
 	0002-udev-cameras-use-correct-path-for-modprobe-on-Alpine.patch
+	0001-defaults-ucm2-Rework-ALSA-UCM-profiles.patch
 "
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
@@ -125,9 +126,15 @@ package() {
 	# Wifi / PM
 	install -Dm644 "$srcdir"/70-wifi-pm.rules -t "$pkgdir"/usr/lib/udev/rules.d/
 
-	# install audio config files from upstream Purism
-	mkdir -p "$pkgdir"/usr/share/alsa/ucm2
-	cp -r "$builddir"/default/audio/ucm2/ "$pkgdir"/usr/share/alsa/ucm2/conf.d/
+	# install audio config files from Purism
+
+	install -Dm644 "$builddir"/default/audio/ucm2/simple-card/Librem\ 5.conf \
+		"$pkgdir"/usr/share/alsa/ucm2/NXP/iMX8/Librem_5/Librem\ 5.conf
+	install -Dm644 "$builddir"/default/audio/ucm2/simple-card/HiFi.conf \
+		"$pkgdir"/usr/share/alsa/ucm2/NXP/iMX8/Librem_5/HiFi.conf
+	mkdir -p "$pkgdir"/usr/share/alsa/ucm2/conf.d/simple-card
+	ln -s /usr/share/alsa/ucm2/NXP/iMX8/Librem_5/Librem\ 5.conf \
+		"$pkgdir"/usr/share/alsa/ucm2/conf.d/simple-card/Librem\ 5.conf
 
 	# enable bq25890_charger ship_mode
 	install -Dm644 "$srcdir"/modprobe.d-ship_mode.conf \
@@ -158,4 +165,5 @@ a0740e405781ec6ef765fdc9f5700c95adbb241c45c97b9384ba68cdece662cb216ca5918640042f
 1cbc65cf2cb8fad4b0332d012a0256a266205b9b64371f5c0dae09dbb7f1e45b254e8c43993b896097e9d7035a72d547d9bce1ab2133addc56a5abdb80b44616  xorg.conf
 fad386071fc45f9880a94cc8004fabd5d98b3e6a12606c98d8e72e0208f22ab54f03b921f5967a959782507e2bff67d2fa92e46d8cd242011a3afcdbda529279  70-librem5-xwayland-accel.sh
 b45749fcddfd65a302b502bcabfa5828d1b63e45d844fd50e44009a756b919db20fe9526102947c0f0dfcdffe4a037e5050fe1b24fb915933ce0837f49759378  0002-udev-cameras-use-correct-path-for-modprobe-on-Alpine.patch
+6b45c86e2b67c21f55e84d5c36cb42086b1638a9caffde7477f8eb897d633d89864d3670c38e6c7cb039f43102413df1f2216a4cb80b05a918d3cb7108ba6d32  0001-defaults-ucm2-Rework-ALSA-UCM-profiles.patch
 "

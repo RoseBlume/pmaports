@@ -1,0 +1,350 @@
+From 3981385b7cc36846d5a5e1fb441af1e06cfbb1c0 Mon Sep 17 00:00:00 2001
+From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Date: Sun, 3 Apr 2022 17:02:27 +0200
+Subject: [PATCH] defaults: ucm2: Rework ALSA UCM profiles
+
+This is a bigger overhaul of the profiles inspired by studying WM8962
+datasheet and debugging issues with PulseAudio.
+
+Aside of a general cleanup, it changes several things aimed to improve
+audio quality on both inputs and outputs.
+
+The new profile:
+- allows PulseAudio to use hardware volume control and makes sure that
+  PGA gains are user-configurable
+- makes sure Zero-Cross feature is enabled for all relevant input and
+  output paths
+- enables High-Pass Filters to protect the speakers from potential damage,
+  get rid of DC offset and to improve input speech legibility
+- makes "Speaker" profile use both speakers, each with the same downmixed
+  mono signal, which improves volume and frequency response
+- minimizes the amount of gains used in various paths
+- uses HD Bass feature for improved lower frequency response of internal
+  speakers
+- uses only the bottom microphone by default and duplicates it into both
+  stereo channels (and creates a new "stereo microphones" device, so users
+  can still access both microphones when desired)
+- duplicates analog microphone signal into both stereo channels
+- enables High Performance modes for better signal to noise ratio
+- uses Dynamic Range Control for input path to control signal level
+  and attenuate background noise
+---
+ default/audio/ucm2/simple-card/HiFi.conf     | 170 ++++++++++++-------
+ default/audio/ucm2/simple-card/Librem 5.conf |  15 +-
+ 2 files changed, 124 insertions(+), 61 deletions(-)
+
+diff --git a/default/audio/ucm2/simple-card/HiFi.conf b/default/audio/ucm2/simple-card/HiFi.conf
+index 311ef42..591f669 100644
+--- a/default/audio/ucm2/simple-card/HiFi.conf
++++ b/default/audio/ucm2/simple-card/HiFi.conf
+@@ -1,32 +1,54 @@
+ SectionVerb {
+ 	EnableSequence [
+-		cset "name='Digital Playback Volume' 100,100"
+-		cset "name='MIXINL IN2L Switch' off"
+-		cset "name='MIXINL IN3L Switch' off"
+-		cset "name='MIXINR IN2R Switch' off"
+-		cset "name='MIXINR IN3R Switch' off"
+-		cset "name='INPGAR IN1R Switch' off"
+-		cset "name='INPGAR IN2R Switch' off"
+-		cset "name='INPGAR IN3R Switch' on"
+-		cset "name='INPGAR IN4R Switch' off"
++		cset "name='Speaker Mixer Switch' off,off"
++		cset "name='Speaker ZC Switch' on"
++		cset "name='Headphone Mixer Switch' off,off"
++		cset "name='Headphone ZC Switch' on"
++		cset "name='Capture HPF Switch' on"
++		cset "name='Capture ZC Switch' on"
++		cset "name='Capture HPF Mode' Hi-fi"
++		cset "name='DAC High Performance Switch' on"
++		cset "name='ADC High Performance Switch' on"
++		cset "name='DAC Monomix Switch' off"
++		cset "name='ADC Monomix Switch' off"
++		cset "name='DAC L/R Swap Switch' off"
++		cset "name='ADC L/R Swap Switch' off"
++		cset "name='HPF1 Switch' on"
++		cset "name='HPF2 Switch' on"
++		cset "name='DRC Switch' on"
++		# DRC1: noise gate, quick-release, anti-clip, ADC path
++		# DRC2: attack: 1.45ms, decay: 743ms, mingain: -18dB, maxgain: 18dB
++		# DRC3: NG mingain: -36dB, QR threshold: 12dB, QR decay: 0.725ms, NG slope: 1
++		#       comp slope upper: 1/16, comp slope lower: 1/8
++		# DRC4: knee input level: -3dB, knee output level: -8.25dB
++		# DRC5: NG knee2 input level: -36dB, NG knee2 output level: -30dB
++		cset "name='DRC Coefficients' 0x00,0x8d,0x09,0x29,0x00,0x23,0x00,0x8b,0x00,0x00"
+ 		cset "name='INPGAL IN1L Switch' off"
+ 		cset "name='INPGAL IN2L Switch' off"
+ 		cset "name='INPGAL IN3L Switch' off"
+ 		cset "name='INPGAL IN4L Switch' off"
+-		cset "name='Input Mixer Switch' off,on"
++		cset "name='INPGAR IN1R Switch' off"
++		cset "name='INPGAR IN2R Switch' off"
++		cset "name='INPGAR IN3R Switch' off"
++		cset "name='INPGAR IN4R Switch' off"
++		cset "name='MIXINL IN2L Switch' off"
++		cset "name='MIXINL IN3L Switch' off"
++		cset "name='MIXINL PGA Switch' off"
++		cset "name='MIXINR IN2R Switch' off"
++		cset "name='MIXINR IN3R Switch' off"
++		cset "name='MIXINR PGA Switch' off"
++		cset "name='Input Mixer Switch' off,off"
+ 		cset "name='SPKOUTL PGA' Mixer"
+ 		cset "name='SPKOUTR PGA' Mixer"
++		cset "name='HPOUTL PGA' Mixer"
++		cset "name='HPOUTR PGA' Mixer"
+ 	]
+ 
+ 	DisableSequence [
+-		cset "name='Digital Playback Volume' 0,0"
+ 	]
+-
+-	Value {
+-	}
+ }
+ 
+-SectionDevice."Handset" {
++SectionDevice."Handset1" {
+ 	Comment "Handset"
+ 
+ 	ConflictingDevice [
+@@ -35,26 +57,19 @@ SectionDevice."Handset" {
+ 	]
+ 
+ 	EnableSequence [
+-		cset "name='Speaker Switch' off,on"
+-		cset "name='DAC L/R Swap Switch' on"
+ 		cset "name='DAC Monomix Switch' on"
+ 		cset "name='SPKOUTR PGA' DAC"
+-		cset "name='Speaker Volume' 121,121"
+-		cset "name='Speaker Boost Volume' 2"
+ 	]
+ 
+ 	DisableSequence [
+-		cset "name='Speaker Switch' off,off"
+-		cset "name='DAC L/R Swap Switch' off"
+-		cset "name='DAC Monomix Switch' off"
+ 		cset "name='SPKOUTR PGA' Mixer"
++		cset "name='DAC Monomix Switch' off"
+ 	]
+ 
+ 	Value {
+ 		PlaybackChannels "2"
+ 		PlaybackPriority "100"
+-		PlaybackVolume "name='Speaker Volume'"
+-		PlaybackSwitch "name='Speaker Switch'"
++		PlaybackVolume "Speaker"
+ 		PlaybackPCM "hw:${CardId},0"
+ 	}
+ }
+@@ -63,29 +78,36 @@ SectionDevice."Speaker" {
+ 	Comment "Speaker"
+ 
+ 	ConflictingDevice [
+-		"Handset"
++		"Handset1"
+ 		"Headphones"
+ 	]
+ 
+ 	EnableSequence [
+-		cset "name='Speaker Switch' on,off"
+-		cset "name='DAC Monomix Switch' on"
+-		cset "name='SPKOUTL PGA' DAC"
+-		cset "name='Speaker Volume' 121,121"
+-		cset "name='Speaker Boost Volume' 6"
++		cset "name='SPKOUTL Mixer DACL Switch' on"
++		cset "name='SPKOUTL Mixer DACR Switch' on"
++		cset "name='SPKOUTR Mixer DACL Switch' on"
++		cset "name='SPKOUTR Mixer DACR Switch' on"
++		cset "name='SPKOUTL Mixer DACL Volume' 1" # -6dB
++		cset "name='SPKOUTL Mixer DACR Volume' 1" # -6dB
++		cset "name='SPKOUTR Mixer DACL Volume' 1" # -6dB
++		cset "name='SPKOUTR Mixer DACR Volume' 1" # -6dB
++		cset "name='HD Bass Switch' on"
++		cset "name='Speaker Mixer Switch' on,on"
+ 	]
+ 
+ 	DisableSequence [
+-		cset "name='Speaker Switch' off,off"
+-		cset "name='DAC Monomix Switch' off"
+-		cset "name='SPKOUTL PGA' Mixer"
++		cset "name='Speaker Mixer Switch' off,off"
++		cset "name='SPKOUTL Mixer DACL Switch' off"
++		cset "name='SPKOUTL Mixer DACR Switch' off"
++		cset "name='SPKOUTR Mixer DACL Switch' off"
++		cset "name='SPKOUTR Mixer DACR Switch' off"
++		cset "name='HD Bass Switch' off"
+ 	]
+ 
+ 	Value {
+ 		PlaybackChannels "2"
+ 		PlaybackPriority "500"
+-		PlaybackVolume "name='Speaker Volume'"
+-		PlaybackSwitch "name='Speaker Switch'"
++		PlaybackVolume "Speaker"
+ 		PlaybackPCM "hw:${CardId},0"
+ 	}
+ }
+@@ -94,56 +116,79 @@ SectionDevice."Headphones" {
+ 	Comment "Headphones"
+ 
+ 	ConflictingDevice [
+-		"Handset"
++		"Handset1"
+ 		"Speaker"
+ 	]
+ 
+ 	EnableSequence [
+-		cset "name='Headphone Switch' on,on"
+-		cset "name='HPOUTL PGA' 0 unmute"
+-		cset "name='HPOUTR PGA' 0 unmute"
+-		cset "name='Headphone Aux Volume' 0"
+-		cset "name='Headphone Volume' 121,121"
++		cset "name='HPOUTL PGA' DAC"
++		cset "name='HPOUTR PGA' DAC"
+ 	]
+ 
+ 	DisableSequence [
+-		cset "name='Headphone Switch' off off"
+-		cset "name='HPOUTL PGA' 0 mute"
+-		cset "name='HPOUTR PGA' 0 mute"
++		cset "name='HPOUTL PGA' Mixer"
++		cset "name='HPOUTR PGA' Mixer"
+ 	]
+ 
+ 	Value {
+ 		PlaybackPriority "1000"
+ 		PlaybackChannels "2"
+-		PlaybackVolume "name='Headphone Volume'"
+-		PlaybackSwitch "name='Headphone Switch'"
++		PlaybackVolume "Headphone"
+ 		PlaybackPCM "hw:${CardId},0"
+ 		JackControl "Headphones Jack"
+ 	}
+ }
+ 
++SectionDevice."Handset2" {
++	Comment "Handset Microphone"
++
++	ConflictingDevice [
++		"Mic"
++		"Headset"
++	]
++
++	EnableSequence [
++		cset "name='3D Switch' on"
++		cset "name='3D Coefficients' 0x00,0x00,0xf8,0x00,0x00,0x00,0x07,0xc0" # duplicates left channel
++		cset "name='Capture HPF Mode' Application"
++		cset "name='Capture HPF Cutoff' 3" # 240.5 Hz at 48kHz sample rate
++		cset "name='Input Mode' Digital"
++	]
++
++	DisableSequence [
++		cset "name='3D Switch' off"
++		cset "name='Capture HPF Mode' Hi-fi"
++	]
++
++	Value {
++		CapturePriority "500"
++		CaptureChannels "2"
++		CaptureVolume "Digital"
++		CapturePCM "hw:${CardId},0"
++	}
++}
++
+ SectionDevice."Mic" {
+-	Comment "Internal Microphone"
++	Comment "Stereo Microphones"
+ 
+ 	ConflictingDevice [
++		"Handset2"
+ 		"Headset"
+ 	]
+ 
+ 	EnableSequence [
+-		cset "name='Digital Capture Volume' 116,116"
+ 		cset "name='ADC L/R Swap Switch' on"
+ 		cset "name='Input Mode' Digital"
+ 	]
+ 
+ 	DisableSequence [
+-		cset "name='Digital Capture Volume' 0,0"
+ 		cset "name='ADC L/R Swap Switch' off"
+ 	]
+ 
+ 	Value {
+-		CapturePriority "500"
++		CapturePriority "100"
+ 		CaptureChannels "2"
+-		CaptureVolume "name='Digital Capture Volume'"
++		CaptureVolume "Digital"
+ 		CapturePCM "hw:${CardId},0"
+ 	}
+ }
+@@ -153,27 +198,32 @@ SectionDevice."Headset" {
+ 
+ 	ConflictingDevice [
+ 		"Mic"
++		"Handset2"
+ 	]
+ 
+ 	EnableSequence [
+-		cset "name='Digital Capture Volume' 116,116"
++		cset "name='Digital Capture Volume' 96,96" # 0dB
++		cset "name='INPGAR IN3R Switch' on"
++		cset "name='MIXINR PGA Switch' on"
++		cset "name='MIXINL IN3L Switch' on" # forces ADCL on, so 3D can work
++		cset "name='3D Switch' on"
++		cset "name='3D Coefficients' 0x00,0x00,0x07,0xc0,0x00,0x00,0xf8,0x00" # duplicates right channel
+ 		cset "name='Input Mode' Analog"
+-		cset "name='MIXINR PGA Volume' 1,1"
+-		cset "name='MIXINR PGA Switch' on,on"
+-		cset "name='Capture Volume' 39,39"
+-		cset "name='Capture Switch' on,on"
++		cset "name='Input Mixer Switch' off,on"
+ 	]
+ 
+ 	DisableSequence [
+-		cset "name='Capture Switch' off,off"
+-		cset "name='MIXINR PGA Switch' off,off"
+-		cset "name='Input Mode' Digital"
++		cset "name='Input Mixer Switch' off,off"
++		cset "name='MIXINL IN3L Switch' off"
++		cset "name='INPGAR IN3R Switch' off"
++		cset "name='MIXINR PGA Switch' off"
++		cset "name='3D Switch' off"
+ 	]
+ 
+ 	Value {
+ 		CapturePriority "100"
+ 		CaptureChannels "2"
+-		CaptureVolume "name='Capture Volume'"
++		CaptureVolume "Capture"
+ 		CapturePCM "hw:${CardId},0"
+ 		JackControl "Headphones Jack"
+ 	}
+diff --git a/default/audio/ucm2/simple-card/Librem 5.conf b/default/audio/ucm2/simple-card/Librem 5.conf
+index d672df2..bf8590a 100644
+--- a/default/audio/ucm2/simple-card/Librem 5.conf	
++++ b/default/audio/ucm2/simple-card/Librem 5.conf	
+@@ -1,4 +1,17 @@
+-Syntax 2
++Syntax 3
++
++Comment "Librem 5 Built-in Audio"
++
++BootSequence [
++	cset "name='Digital Playback Volume' 96,96" # 0dB
++	cset "name='Digital Capture Volume' 96,96" # 0dB
++	cset "name='Speaker Volume' 121,121" # 0dB
++	cset "name='Speaker Boost Volume' 2" # 3dB
++	cset "name='Headphone Volume' 121,121" # 0dB
++	cset "name='Headphone Aux Volume' 0" # -7dB
++	cset "name='Capture Volume' 31,31" # 0dB
++	cset "name='MIXINL PGA Volume' 0" # 0dB
++]
+ 
+ SectionUseCase."HiFi" {
+ 	File "HiFi.conf"
+-- 
+2.37.0
+
