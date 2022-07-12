@@ -1,0 +1,24 @@
+From 43615a06911e38ca09a8380d59376d4e74024a31 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Tue, 1 Jan 2019 19:49:58 +0100
+Subject: [PATCH 2/4] Add missing header include
+
+---
+ .../com/ubuntu/location/service/permission_manager.h             | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/location_service/com/ubuntu/location/service/permission_manager.h b/include/location_service/com/ubuntu/location/service/permission_manager.h
+index 73b79bd..045a83d 100644
+--- a/include/location_service/com/ubuntu/location/service/permission_manager.h
++++ b/include/location_service/com/ubuntu/location/service/permission_manager.h
+@@ -19,6 +19,7 @@
+ #define LOCATION_SERVICE_COM_UBUNTU_LOCATION_SERVICE_PERMISSION_MANAGER_H_
+ 
+ #include <memory>
++#include <sys/types.h>
+ 
+ namespace com
+ {
+-- 
+2.37.0
+

@@ -1,0 +1,24 @@
+From f0dbd508f91e871865a1af401744ea87b9226399 Mon Sep 17 00:00:00 2001
+From: filman230 <filman230@hotmail.fr>
+Date: Tue, 4 Aug 2020 19:23:00 +0200
+Subject: [PATCH 3/4] Add missing <string> header
+
+---
+ src/location_service/com/ubuntu/location/service/state.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/location_service/com/ubuntu/location/service/state.cpp b/src/location_service/com/ubuntu/location/service/state.cpp
+index 25e2093..296ef60 100644
+--- a/src/location_service/com/ubuntu/location/service/state.cpp
++++ b/src/location_service/com/ubuntu/location/service/state.cpp
+@@ -16,6 +16,7 @@
+  * Authored by: Thomas Voß <thomas.voss@canonical.com>
+  */
+ 
++#include <string>
+ #include <com/ubuntu/location/service/state.h>
+ 
+ #include <map>
+-- 
+2.37.0
+

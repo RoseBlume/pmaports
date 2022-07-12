@@ -1,0 +1,25 @@
+From 4e22631cb4ec5fc04751a26cd2e716c3ab5c7a20 Mon Sep 17 00:00:00 2001
+From: Ivan Semkin <ivan@semkin.ru>
+Date: Thu, 14 Jun 2018 01:43:47 +0300
+Subject: [PATCH 1/4] Fix lsb_release if expression failing with empty output
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 969a5a1..1972ffe 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,7 +18,7 @@ if (NOT DEFINED UBUNTU_LOCATION_SERVICE_VERSION_MAJOR)
+   #   - other distros
+   #   - errors
+   # we define the version to be 2.0.0
+-  if (${DISTRO_CODENAME} STREQUAL "vivid")
++  if (DISTRO_CODENAME STREQUAL "vivid")
+     set(UBUNTU_LOCATION_SERVICE_VERSION_MAJOR 2)
+     set(UBUNTU_LOCATION_SERVICE_VERSION_MINOR 0)
+     set(UBUNTU_LOCATION_SERVICE_VERSION_PATCH 0)
+-- 
+2.37.0
+

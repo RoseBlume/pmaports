@@ -2,9 +2,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=location-service
-pkgver=0_git20200818
+pkgver=0_git20220620
 pkgrel=0
-_commit="7dc0ae2c146ed5887405bd63ded75da4e5a2f0ea"
+_commit="aed184f49a7bb5df5fcaa0c8522d97702e65ff68"
 pkgdesc="Location service aggregating position/velocity/heading updates and exporting them over dbus"
 arch="all"
 url="https://gitlab.com/ubports/development/core/location-service"
@@ -14,7 +14,10 @@ makedepends="$depends_dev cmake-extras gettext gtest-dev gmock dbus-cpp-dev"
 checkdepends="coreutils"
 source="
 	https://gitlab.com/ubports/development/core/location-service/-/archive/$_commit/location-service-$_commit.tar.gz
-	0001-Add-missing-header-for-boost.patch
+	0001-Fix-lsb_release-if-expression-failing-with-empty-out.patch
+	0002-Add-missing-header-include.patch
+	0003-Add-missing-string-header.patch
+	0004-Add-missing-header-for-boost.patch
 	"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
@@ -39,6 +42,9 @@ package() {
 }
 
 sha512sums="
-a3c6688a922e65ed35d5641f8ef9b27ed7423cbbc82382b822cd0490a5f2258918889869f56f17d86b1a28681599f62c18da438d457e793c74696071b71c8a2c  location-service-7dc0ae2c146ed5887405bd63ded75da4e5a2f0ea.tar.gz
-ae793d2b93d135963509a375e0ac36be1985b03835e71071621d3aa92df9363932bdd31426f641071535e5ab57961a467d570ca3a6c6de6c02861c152f043a1b  0001-Add-missing-header-for-boost.patch
+fff27ae4c27f9acc1e83abbd41d5ea94c5ba2f1b3dd063bd088fe2b372d8ba6efbedc3ae37b5687db48350e936a1261f78fb75578c31a0252d194422a01b7862  location-service-aed184f49a7bb5df5fcaa0c8522d97702e65ff68.tar.gz
+e21b3249cb65c279122cb5cf0920148251e172094ecd644927e8994e0a714c7e5a9f8e8692fd6c58424ba7b1550a8901b0fc5fd5c7d5b58037c8943ee6038d0f  0001-Fix-lsb_release-if-expression-failing-with-empty-out.patch
+2ddaa754deaea80fede016750f33f1d19f09c73f128d4212e0331c223fae06fad75b9e880888bc19920bb210cb885a2b1b3fbede68593b8df06a9cfc2cf5eb61  0002-Add-missing-header-include.patch
+b59f147113be320be5b7363948b2fc3d4f9346ea07dc363a19a3c20114c6f23e2fe6d60ae62a58ca5c5058d434c3923d05965c09f1ce71b49e0d3c39ea5018c4  0003-Add-missing-string-header.patch
+edb665cd4acf81bb3f2ab24d5df460688e18d4f13a17129e50f69648e54a92083e2585c2c07e73b6bb2bbc64b6a1e4519b6bc16e9cd342eadd737e2b62e77167  0004-Add-missing-header-for-boost.patch
 "
