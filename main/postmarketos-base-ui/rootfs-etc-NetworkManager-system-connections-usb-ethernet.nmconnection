@@ -1,0 +1,20 @@
+[connection]
+id=USB Ethernet
+uuid=dde62d4c-55de-4740-88a2-8917f029ffdc
+type=ethernet
+autoconnect=false
+interface-name=usb0
+timestamp=1658307039
+
+[ethernet]
+mac-address=0A:61:2B:C6:70:59
+
+[ipv4]
+address1=172.16.42.1/16
+method=manual
+
+[ipv6]
+addr-gen-mode=stable-privacy
+method=link-local
+
+[proxy]

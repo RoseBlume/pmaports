@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+# Enable dnsmasq for DNS queries when USB tethering is enabled
+rc-update -q add dnsmasq default
+
+return 0
