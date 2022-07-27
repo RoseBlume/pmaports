@@ -7,6 +7,7 @@ url="https://lomiri.com/"
 arch="noarch"
 license="GPL-3.0-or-later"
 depends="
+	elogind
 	lomiri
 	lomiri-system-settings
 	networkmanager
@@ -17,16 +18,28 @@ depends="
 	networkmanager-wwan
 	postmarketos-artwork-wallpapers
 	postmarketos-base-ui
+	tinydm
+	tinydm-openrc
 "
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="
 	000-gschema.override
+	lomiri.desktop
+	start_lomiri.sh
 "
 options="!check"
 
 package() {
 	install -Dm644 "$srcdir"/000-gschema.override \
 		"$pkgdir"/usr/share/glib-2.0/schemas/000-postmarketos.gschema.override
+	install -Dm644 "$srcdir"/lomiri.desktop \
+		"$pkgdir"/usr/share/wayland-sessions/lomiri.desktop
+	install -Dm755 "$srcdir"/start_lomiri.sh \
+		"$pkgdir"/usr/bin/start_lomiri
 }
 
-sha512sums="f44d4e2544d44119ed1ab9fb454a20d1fc050925a029ce10df4d7c20da3d1f461b018cdd6129272e38e50179d1e5ff71b72d3cc4dbce28113fe1b3561a2e84b5  000-gschema.override"
+sha512sums="
+f44d4e2544d44119ed1ab9fb454a20d1fc050925a029ce10df4d7c20da3d1f461b018cdd6129272e38e50179d1e5ff71b72d3cc4dbce28113fe1b3561a2e84b5  000-gschema.override
+4736790a25b6c0331908a91fa89581b0fe248a56b7d34c3a26ec466fcb074be87c129595791d439cc0bb3100418ea956f9a4dd50fabb9e555c32252c5a8c2f8c  lomiri.desktop
+1d40fc0c67e3e98379c7ee98a7e749fa560309bd20a42dacce977f4010554b2c640e237f68904ee52e8da7ac23496558b5611f0de05dc913585ee9740a271fb4  start_lomiri.sh
+"
