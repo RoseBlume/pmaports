@@ -31,6 +31,14 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+
+	# Remove files for testing only
+	# https://gitlab.com/ubports/development/core/content-hub/-/blob/main/debian/content-hub-testability.install
+	rm "$pkgdir"/usr/bin/content-hub-test*
+	rm "$pkgdir"/usr/share/content-hub/peers/content-hub-test*
+	rm "$pkgdir"/usr/share/applications/content-hub-test*
+	rm -r "$pkgdir"/usr/share/content-hub/testability/data
+	rm "$pkgdir"/usr/share/icons/hicolor/512x512/apps/content-hub-test*
 }
 
 sha512sums="
