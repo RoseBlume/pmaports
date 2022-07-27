@@ -8,7 +8,18 @@ pkgdesc="A convergent desktop environment"
 arch="all"
 url="https://gitlab.com/ubports/development/core/lomiri"
 license="GPL-3.0 LGPL-2.1"
-depends="qt5-qtgraphicaleffects qt5-qtbase-sqlite lomiri-settings-components lomiri-schemas suru-icon-theme gsettings-desktop-schemas lomiri-system-compositor lomiri-keyboard"
+depends="
+	ayatana-indicator-keyboard
+	ayatana-indicator-session
+	gsettings-desktop-schemas
+	lomiri-keyboard
+	lomiri-schemas
+	lomiri-settings-components
+	lomiri-system-compositor
+	qt5-qtbase-sqlite
+	qt5-qtgraphicaleffects
+	suru-icon-theme
+	"
 depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev lomiri-api-dev geonames-dev qmenumodel-dev qmenumodel gnome-desktop-dev lomiri-app-launch-dev lomiri-ui-toolkit-dev libqtdbustest libqtdbusmock lomiri-indicator-network-dev gsettings-qt-dev libusermetrics-dev lightdm-qt5 lightdm-qt5-dev lomiri-download-manager-dev linux-pam-dev"
 makedepends="$depends_dev cmake cmake-extras dbus-test-runner doxygen graphviz lomiri-system-settings lomiri-deviceinfo-dev elogind-dev qtmir-dev"
 checkdepends="py3-dbusmock"
