@@ -11,7 +11,7 @@ license="LGPL-3.0-only"
 makedepends="cmake cmake-extras gtest-dev mir-dev process-cpp-dev qt5-qtdeclarative-dev qt5-qtsensors-dev lomiri-app-launch-dev gsettings-qt-dev libqtdbustest libqtdbusmock content-hub-dev valgrind-dev lomiri-url-dispatcher-dev cgmanager-dev lttng-ust-tools"
 checkdepends="py3-dbusmock dbus"
 source="https://gitlab.com/ubports/development/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz
-	0001-Replace-usage-of-GTEST_DISALLOW_ASSIGN_.patch
+	gmock_fixes.patch
 	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
@@ -36,5 +36,5 @@ package() {
 
 sha512sums="
 117a7d22a94b2e0626a534f51c8783d431b9db1e3bd65b00d9f80a09f89542d42d5fa02174f9658de9ddbeeb2dfb1bb073f726276417bbca37455b95e0249e99  qtmir-1e28b1d7cb55242e614a3e69168789fb55e186c3.tar.gz
-e45a59f8c3a1fa59e0d198db960486bff90db28381f906fa4746d775786e56087237b105e6463a72e31f3525ceb941952b31390d52a179da87a97e2b13c4c074  0001-Replace-usage-of-GTEST_DISALLOW_ASSIGN_.patch
+78ef13c7653f69dcfb05495e3e597bcf5af8dec82a4888ce4644368783f5fa3b4f4deec9452feb0dc76500185e1eb36a2d79b88bb9b7019355d516fa8e99b0d6  gmock_fixes.patch
 "
