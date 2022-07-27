@@ -1,0 +1,13 @@
+diff --git a/plugins/language/language-plugin.cpp b/plugins/language/language-plugin.cpp
+index 296e1a86..90e500cf 100644
+--- a/plugins/language/language-plugin.cpp
++++ b/plugins/language/language-plugin.cpp
+@@ -160,7 +160,7 @@ LanguagePlugin::updateLanguageNamesAndCodes()
+     m_languageCodes.clear();
+     m_indicesByLocale.clear();
+ 
+-    const QByteArray langpackRoot = qgetenv("SNAP") + "/usr/share/locale-langpack";
++    const QByteArray langpackRoot = qgetenv("SNAP") + "/usr/share/locale";
+     QDir langpackDir(langpackRoot);
+ 
+     if (!langpackDir.exists()) {

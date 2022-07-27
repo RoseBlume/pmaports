@@ -8,13 +8,14 @@ pkgdesc="System Settings application for Unity8"
 url="https://gitlab.com/ubports/development/core/lomiri-system-settings"
 arch="all"
 license="GPL-3.0-only"
-depends="lomiri-ui-toolkit lomiri-settings-components"
+depends="lomiri-ui-toolkit lomiri-settings-components accountsservice-ubuntu"
 makedepends="cmake cmake-extras qt5-qtbase-dev upower-dev networkmanager-dev accountsservice-ubuntu-dev geonames-dev icu-dev libqtdbusmock gsettings-qt-dev click-dev gnome-desktop-dev trust-store-dev qt5-qtdeclarative-dev qt5-qtdeclarative intltool"
 checkdepends="xvfb-run py3-xdg py3-dbusmock"
 source="https://gitlab.com/ubports/development/core/lomiri-system-settings/-/archive/$_commit/lomiri-system-settings-$_commit.tar.gz
-	0003-Use-qmltestrunner-qt5.patch"
+	0003-Use-qmltestrunner-qt5.patch
+	locale.patch"
 builddir="$srcdir/$pkgname-$_commit"
-options="pmb:strict !check" # 67% tests passed, 5 tests failed out of 15
+options="!check" # 67% tests passed, 5 tests failed out of 15
 
 build() {
 	cmake -B build \
@@ -35,4 +36,5 @@ package() {
 sha512sums="
 34e5f572500f60cf2b81ee39d74ba5ea8ae5a94d5212c73ecccffee7f70bfbf2b50f527fd5e86c6b8681517eb656d636afc731b628bbfb078676acd10dae4675  lomiri-system-settings-7f225d6b971fad629b35942645098acf00ba21d6.tar.gz
 11a1003ac08ba5b8739c371b8d2d953f31c666c7a9f6926420f7aab94665298ce8ca0782979a3ea48bc67d800b48b4eeba030f2fc86e422b0cafae7319b7db98  0003-Use-qmltestrunner-qt5.patch
+aa53c7dd1c87e9f07bbef951824ab90c130aae0b098ba847bec327e62830597a023c99ff7d5ec332d0ae785a2db75dcff4ba2d0fa9f265ca5e3b32e4154cc9ad  locale.patch
 "
