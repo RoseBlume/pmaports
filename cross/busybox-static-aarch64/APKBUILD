@@ -8,7 +8,7 @@ fi
 
 pkgname=busybox-static-aarch64
 pkgver=1.35.0
-pkgrel=15
+pkgrel=16
 
 _arch="aarch64"
 _mirror="http://dl-4.alpinelinux.org/alpine/"
@@ -32,5 +32,5 @@ package() {
 }
 
 sha512sums="
-1285df502a161ddf2be35d3c79926f14847dc551db45510bbe0e254e35314ee6be32f369eb11d0dbc0e7b7b6abc54cbb721abd81ce41a5be0cb7804ce092aca8  busybox-static-1.35.0-r15-aarch64-v3.16.apk
+81c7ad11d48e455bb7e329e9d001fcb3783a4a9bab6174e1e02180c340e7c8f3cfc500630c28a1a45593c863afd7841cfdf4b63f2b8e24631eb78a319c3f1a9a  busybox-static-1.35.0-r16-aarch64-v3.16.apk
 "
