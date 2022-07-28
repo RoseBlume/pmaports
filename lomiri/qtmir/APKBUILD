@@ -32,6 +32,17 @@ check() {
 
 package() {
 	make -C build DESTDIR="$pkgdir" install
+
+	# Remove files for testing only
+	# https://gitlab.com/ubports/development/core/qtmir/-/blob/main/debian/qtmir-tests.install
+	rm "$pkgdir"/usr/bin/qtmir-demo-client
+	rm "$pkgdir"/usr/bin/qtmir-demo-shell
+	rm "$pkgdir"/usr/share/applications/qtmir-demo-client.desktop
+	rmdir "$pkgdir"/usr/share/applications/
+	rm -r "$pkgdir"/usr/share/qtmir/benchmarks/
+	rm -r "$pkgdir"/usr/share/qtmir/qtmir-demo-client/
+	rm -r "$pkgdir"/usr/share/qtmir/qtmir-demo-shell/
+	rmdir "$pkgdir"/usr/share/qtmir/
 }
 
 sha512sums="
