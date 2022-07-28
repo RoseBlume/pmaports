@@ -3,7 +3,7 @@
 pkgname=mir
 pkgver=1.8.2
 pkgrel=0
-pkgdesc="Canonical's display server"
+pkgdesc="Mir Display Server"
 url="https://mir-server.io"
 arch="all"
 license="GPL-2.0-or-later AND LGPL-2.0-or-later"
@@ -19,7 +19,7 @@ source="
 	0003-Work-around-capnproto-incompatibility.patch
 	0004-Fix-Alpine-edge-by-not-using-internal-GTEST-macros-f.patch
 "
-subpackages="$pkgname-dev"
+subpackages="$pkgname-dev $pkgname-demos $pkgname-test-tools:test_tools"
 options="!check" # Some tests fail
 
 build() {
@@ -38,6 +38,35 @@ check() {
 
 package() {
 	make -C build DESTDIR="$pkgdir" install
+}
+
+demos() {
+	pkgdesc="$pkgdesc - demonstration programs"
+	amove usr/bin/miral-shell
+	amove usr/bin/miral-kiosk
+	amove usr/bin/miral-app
+	amove usr/bin/miral-terminal
+	amove usr/bin/mir-shell
+	amove usr/bin/miral-system-compositor
+	amove usr/share/applications/miral-shell.desktop
+	amove usr/share/wayland-sessions/mir-shell.desktop
+	amove usr/share/icons/hicolor/scalable/apps/ubuntu-logo.svg
+}
+
+test_tools() {
+	pkgdesc="$pkgdesc - stress tests and other test tools"
+	amove usr/bin/mir_stress
+	amove usr/bin/mir_performance_tests
+	amove usr/bin/mir-smoke-test-runner
+	amove usr/bin/mir_platform_graphics_test_harness
+	amove usr/lib/mir/tools/libmirclientlttng.so
+	amove usr/lib/mir/tools/libmirserverlttng.so
+	amove usr/bin/mir_demo_client_*
+	amove usr/bin/mir_demo_server
+	amove usr/lib/mir/server-platform/graphics-dummy.so
+	amove usr/lib/mir/server-platform/input-stub.so
+	amove usr/lib/mir/client-platform/dummy.so
+	amove usr/lib/mir/miral_wlcs_integration.so
 }
 
 sha512sums="
