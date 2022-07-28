@@ -31,7 +31,7 @@ source="https://gitlab.com/ubports/development/core/lomiri/-/archive/$_commit/lo
 	0005-No-systemd.patch
 	0006-fixups.patch
 	"
-subpackages="$pkgname-lang"
+subpackages="$pkgname-lang indicators-client:indicators_client"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail
 
@@ -56,6 +56,12 @@ package() {
 	# Remove this mock as apk thinks, it conflicts with the qmenumodel package
 	# conflicts: qmenumodel-0_git20180727-r0[so:libqmenumodel.so.0=0]
 	rm -r "$pkgdir"/usr/lib/lomiri/qml/mocks/QMenuModel.1/
+}
+
+indicators_client() {
+	pkgdesc="Indicators client test application"
+	amove usr/bin/indicators-client
+	amove usr/share/applications/indicators-client.desktop
 }
 
 sha512sums="
