@@ -1,0 +1,48 @@
+diff --git a/tests/adapter-tests/CMakeLists.txt b/tests/adapter-tests/CMakeLists.txt
+index d545d95..3e82d58 100644
+--- a/tests/adapter-tests/CMakeLists.txt
++++ b/tests/adapter-tests/CMakeLists.txt
+@@ -88,8 +88,7 @@ target_link_libraries(
+     repowerd-test-common
+ 
+     ${GTEST_LIBRARY}
+-    ${GMOCK_LIBRARY}
+-    ${GMOCK_MAIN_LIBRARY}
++    ${GMOCK_LIBRARIES}
+ )
+ 
+ if (REPOWERD_DISABLE_TIME_SENSITIVE_TESTS)
+@@ -109,5 +108,3 @@ add_test(
+     repowerd-adapter-tests
+     ${EXECUTABLE_OUTPUT_PATH}/repowerd-adapter-tests --gtest_filter=-${ADAPTER_TESTS_FILTER}
+ )
+-
+-add_dependencies(repowerd-adapter-tests GMock)
+diff --git a/tests/common/CMakeLists.txt b/tests/common/CMakeLists.txt
+index 165ac1b..80670b6 100644
+--- a/tests/common/CMakeLists.txt
++++ b/tests/common/CMakeLists.txt
+@@ -28,6 +28,5 @@ target_link_libraries(
+     repowerd-core
+ 
+     ${GTEST_LIBRARY}
+-    ${GMOCK_LIBRARY}
+-    ${GMOCK_MAIN_LIBRARY}
++    ${GMOCK_LIBRARIES}
+ )
+diff --git a/tests/core-tests/CMakeLists.txt b/tests/core-tests/CMakeLists.txt
+index ae2aa11..31d6af2 100644
+--- a/tests/core-tests/CMakeLists.txt
++++ b/tests/core-tests/CMakeLists.txt
+@@ -62,10 +62,7 @@ target_link_libraries(
+     repowerd-test-common
+ 
+     ${GTEST_LIBRARY}
+-    ${GMOCK_LIBRARY}
+-    ${GMOCK_MAIN_LIBRARY}
++    ${GMOCK_LIBRARIES}
+ )
+ 
+ add_test(repowerd-core-tests ${EXECUTABLE_OUTPUT_PATH}/repowerd-core-tests)
+-
+-add_dependencies(repowerd-core-tests GMock)

@@ -1,0 +1,43 @@
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
+pkgname=repowerd
+pkgver=2022.01_git123465
+pkgrel=0
+_commit="75048fc24d7192e8c0e0a12ce282182dc307512a"
+pkgdesc="Power daemon to monitor and control system power state"
+url="https://gitlab.com/ubports/development/core/repowerd"
+arch="all"
+license="LGPL-3.0-only"
+makedepends="cmake cmake-extras lomiri-deviceinfo-dev glib-dev gtest-dev gmock"
+checkdepends="dbus"
+source="https://gitlab.com/ubports/development/core/repowerd/-/archive/$_commit/repowerd-$_commit.tar.gz
+	gmock.patch
+	"
+builddir="$srcdir/repowerd-$_commit"
+
+build() {
+	if [ "$CBUILD" != "$CHOST" ]; then
+		CMAKE_CROSSOPTS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
+	fi
+	cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DREPOWERD_ENABLE_HYBRIS=False \
+		$CMAKE_CROSSOPTS
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+75c0d409c50f97759203956cac962893163ba5155ec29d50205f5c26d905ed324b085f5e4503d7bd27af9b50b42707ab1b3830deabd6548c9c23360931954ca5  repowerd-75048fc24d7192e8c0e0a12ce282182dc307512a.tar.gz
+9c402d3537d664402b32476f3d3c3940059d50f0d95d5538eb3e2ea3b8936ffb3d23f3dd4d4e000504da4d555f67ce1cc017aa13d31e68ea01c541ce21babf94  gmock.patch
+"
