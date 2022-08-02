@@ -20,6 +20,8 @@ depends="
 	postmarketos-base-ui
 	tinydm
 	tinydm-openrc
+	hfd-service
+	sensorfw
 "
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="

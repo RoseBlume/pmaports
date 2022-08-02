@@ -2,5 +2,7 @@
 
 rc-update add networkmanager default
 rc-update add tinydm default
+rc-update add hfd-service default
+rc-update add sensorfw default
 
 tinydm-set-session -s /usr/share/wayland-sessions/lomiri.desktop
