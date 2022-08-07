@@ -6,7 +6,7 @@
 _flavor="postmarketos-qcom-sdm845"
 pkgname=linux-$_flavor
 pkgver=5.18.3
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SDM845 devices"
 arch="aarch64"
 _carch="arm64"
@@ -63,5 +63,5 @@ package() {
 
 sha512sums="
 b35bb5dc9bd7bef8fdafd34cb34e7cb04a120f60b2310c67979f7431c584f1ed41da10e64165a1ae508474b918cdacc538ff0370aed21e7f55bb82ea237d9a47  linux-sdm845-5.18.3.tar.gz
-2e2cc1f3eeab99a9639be9d89be36616aa76e09278c16d4cad218c57c29ac05dca3e1599a8c9d1ed1bf0d895fc6d1cff9b5bf23da6e52f1522bc1ff2f38b014c  config-postmarketos-qcom-sdm845.aarch64
+df0ad69633dd54a399d1980c69096c7715d511134592ec400ba9adb39a71b437531cf53bcddc9a05e7a8e1b5d9ee4fbae4aac105859f5d9045604c8668af729d  config-postmarketos-qcom-sdm845.aarch64
 "
