@@ -22,6 +22,7 @@ depends="
 	tinydm-openrc
 	hfd-service
 	sensorfw
+	repowerd
 "
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="
