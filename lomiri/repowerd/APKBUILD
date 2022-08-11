@@ -1,16 +1,22 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=repowerd
-pkgver=2022.01_git123465
+pkgver=2022.01_git20220801
 pkgrel=0
 _commit="75048fc24d7192e8c0e0a12ce282182dc307512a"
 pkgdesc="Power daemon to monitor and control system power state"
 url="https://gitlab.com/ubports/development/core/repowerd"
 arch="all"
 license="LGPL-3.0-only"
-makedepends="cmake cmake-extras lomiri-deviceinfo-dev glib-dev gtest-dev gmock"
+makedepends="cmake cmake-extras lomiri-deviceinfo-dev glib-dev gtest-dev gmock qt5-qtbase-dev"
 checkdepends="dbus"
+subpackages="$pkgname-openrc"
 source="https://gitlab.com/ubports/development/core/repowerd/-/archive/$_commit/repowerd-$_commit.tar.gz
-	gmock.patch
+	repowerd.initd
+	0001-Add-sensorfw-code.patch
+	0002-Increase-the-wakeup-time.patch
+	0003-debian-control-Update-build-dependencies-needed-by-s.patch
+	0004-Drop-as-much-Qt-as-possible.patch
+	0005-Fix-gmock-target-usage.patch
 	"
 builddir="$srcdir/repowerd-$_commit"
 
@@ -35,9 +41,17 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
+
+	install -Dm755 "$srcdir"/$pkgname.initd \
+		"$pkgdir"/etc/init.d/$pkgname
 }
 
 sha512sums="
 75c0d409c50f97759203956cac962893163ba5155ec29d50205f5c26d905ed324b085f5e4503d7bd27af9b50b42707ab1b3830deabd6548c9c23360931954ca5  repowerd-75048fc24d7192e8c0e0a12ce282182dc307512a.tar.gz
-9c402d3537d664402b32476f3d3c3940059d50f0d95d5538eb3e2ea3b8936ffb3d23f3dd4d4e000504da4d555f67ce1cc017aa13d31e68ea01c541ce21babf94  gmock.patch
+d8c4dd351a7bf2bcc66b0eb8b0d17d602661f7defb857be5a28f694e4977b634b7d101f738058ce0ccaa313c4e316f7222c753610500ddbd68f8e42de7c57f29  repowerd.initd
+35fb523a942b6ffed75aa63fadc4c48b2524b9faf8e40998833ee035ab7b2f78ff23ab48b8581eb20f6a590483ed8e0d07a0e46f3c585a6414f2779014e4f563  0001-Add-sensorfw-code.patch
+1b3a6ff7b52b4a8e3bd0e4832fdcd51a9256e1d80557b4f96b470337ce893f3657cc77310cc8754bbb7c4fa7f1b04df5dbb326047edbbac7e797f20913adc647  0002-Increase-the-wakeup-time.patch
+a18cb67592ed929ec28a7aeb56f3278b823670c538e8ce62ff65d4042bf93b219570f5c805e7ad8b7ec278b4e7b8bb8428dbd39b324ae14fd97cea697ac3b23c  0003-debian-control-Update-build-dependencies-needed-by-s.patch
+326756df6e2481ddbfd4b22e0274485b45cc3b6812501ab1394faba249c82650c8b7949579692ba37b574caa95bb17cf7ee2d8fa0aedd7ea8f352663cdd7dbd0  0004-Drop-as-much-Qt-as-possible.patch
+12b921a4c33c234ad1da649859f1da104513ab92d7e00b35b5fbe195b1ea5b3ffcecdd3295b5a019dc5c87a1ece63e225c33d941b67b0d1ac382b92b98076a5e  0005-Fix-gmock-target-usage.patch
 "

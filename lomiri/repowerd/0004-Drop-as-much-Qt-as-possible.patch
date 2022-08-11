@@ -1,0 +1,70 @@
+From e87c92e4b0f6534f5c5f6297affc3cd1f6b167fc Mon Sep 17 00:00:00 2001
+From: Robert Tari <robert@tari.in>
+Date: Mon, 14 Mar 2022 10:23:10 +0100
+Subject: [PATCH 4/5] Drop as much Qt as possible
+
+---
+ src/adapters/sensorfw/sensorfw_light_sensor.cpp     | 2 +-
+ src/adapters/sensorfw/sensorfw_proximity_sensor.cpp | 2 +-
+ src/adapters/sensorfw/socketreader.h                | 5 ++---
+ 3 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/src/adapters/sensorfw/sensorfw_light_sensor.cpp b/src/adapters/sensorfw/sensorfw_light_sensor.cpp
+index 98f4b9d..aef66e3 100644
+--- a/src/adapters/sensorfw/sensorfw_light_sensor.cpp
++++ b/src/adapters/sensorfw/sensorfw_light_sensor.cpp
+@@ -65,7 +65,7 @@ void repowerd::SensorfwLightSensor::disable_light_events()
+ 
+ void repowerd::SensorfwLightSensor::data_recived_impl()
+ {
+-    QVector<TimedUnsigned> values;
++    std::vector<TimedUnsigned> values;
+     if(!m_socket->read<TimedUnsigned>(values))
+         return;
+ 
+diff --git a/src/adapters/sensorfw/sensorfw_proximity_sensor.cpp b/src/adapters/sensorfw/sensorfw_proximity_sensor.cpp
+index f004bf2..dba5d63 100644
+--- a/src/adapters/sensorfw/sensorfw_proximity_sensor.cpp
++++ b/src/adapters/sensorfw/sensorfw_proximity_sensor.cpp
+@@ -66,7 +66,7 @@ void repowerd::SensorfwProximitySensor::disable_proximity_events()
+ 
+ void repowerd::SensorfwProximitySensor::data_recived_impl()
+ {
+-    QVector<ProximityData> values;
++    std::vector<ProximityData> values;
+     if(m_socket->read<ProximityData>(values)) {
+         m_state = values[0].withinProximity_ ? ProximityState::near : ProximityState::far;
+     } else {
+diff --git a/src/adapters/sensorfw/socketreader.h b/src/adapters/sensorfw/socketreader.h
+index 65b54cd..db2e831 100644
+--- a/src/adapters/sensorfw/socketreader.h
++++ b/src/adapters/sensorfw/socketreader.h
+@@ -28,7 +28,6 @@
+ 
+ #include <QObject>
+ #include <QLocalSocket>
+-#include <QVector>
+ 
+ class TimedData
+ {
+@@ -154,7 +153,7 @@ public:
+      * @return true if atleast one object was read.
+      */
+     template<typename T>
+-    bool read(QVector<T>& values);
++    bool read(std::vector<T>& values);
+ 
+     /**
+      * Returns whether the socket is currently connected.
+@@ -180,7 +179,7 @@ private:
+ };
+ 
+ template<typename T>
+-bool SocketReader::read(QVector<T>& values)
++bool SocketReader::read(std::vector<T>& values)
+ {
+     if (!socket_) {
+         return false;
+-- 
+2.37.1
+

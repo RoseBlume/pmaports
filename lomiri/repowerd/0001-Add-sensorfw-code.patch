@@ -1,0 +1,1228 @@
+From d9693320b1b9cc8295a5e1789df1873524832da9 Mon Sep 17 00:00:00 2001
+From: Robert Tari <robert@tari.in>
+Date: Thu, 3 Mar 2022 11:23:10 +0100
+Subject: [PATCH 1/5] Add sensorfw code
+
+---
+ CMakeLists.txt                                |   2 +
+ src/adapters/CMakeLists.txt                   |   2 +
+ src/adapters/sensorfw/CMakeLists.txt          |  23 ++
+ src/adapters/sensorfw/sensorfw_common.cpp     | 277 ++++++++++++++++++
+ src/adapters/sensorfw/sensorfw_common.h       |  74 +++++
+ .../sensorfw/sensorfw_light_sensor.cpp        |  73 +++++
+ src/adapters/sensorfw/sensorfw_light_sensor.h |  43 +++
+ .../sensorfw/sensorfw_proximity_sensor.cpp    |  82 ++++++
+ .../sensorfw/sensorfw_proximity_sensor.h      |  47 +++
+ src/adapters/sensorfw/socketreader.cpp        | 133 +++++++++
+ src/adapters/sensorfw/socketreader.h          | 209 +++++++++++++
+ src/default_daemon_config.cpp                 |  37 ++-
+ tests/adapter-tests/CMakeLists.txt            |   1 -
+ tests/adapter-tests/fake_libhardware.cpp      |   1 +
+ .../test_backlight_brightness_control.cpp     |   1 +
+ tests/adapter-tests/test_lsc_power_button.cpp |   1 +
+ tests/adapter-tests/test_repowerd_service.cpp |   1 +
+ .../adapter-tests/unity_screen_dbus_client.h  |   3 +
+ 18 files changed, 1003 insertions(+), 7 deletions(-)
+ create mode 100644 src/adapters/sensorfw/CMakeLists.txt
+ create mode 100644 src/adapters/sensorfw/sensorfw_common.cpp
+ create mode 100644 src/adapters/sensorfw/sensorfw_common.h
+ create mode 100644 src/adapters/sensorfw/sensorfw_light_sensor.cpp
+ create mode 100644 src/adapters/sensorfw/sensorfw_light_sensor.h
+ create mode 100644 src/adapters/sensorfw/sensorfw_proximity_sensor.cpp
+ create mode 100644 src/adapters/sensorfw/sensorfw_proximity_sensor.h
+ create mode 100644 src/adapters/sensorfw/socketreader.cpp
+ create mode 100644 src/adapters/sensorfw/socketreader.h
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3de2ea9..ef6de20 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -48,6 +48,8 @@ if (REPOWERD_ENABLE_HYBRIS)
+     find_package(AndroidHeaders REQUIRED)
+ endif()
+ 
++set(CMAKE_CXX_STANDARD 14)
++
+ set(build_types "None;Debug;Release;RelWithDebInfo;MinSizeRel;AddressSanitizer;ThreadSanitizer")
+ # Change informational string for CMAKE_BUILD_TYPE
+ set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "${build_types}" FORCE)
+diff --git a/src/adapters/CMakeLists.txt b/src/adapters/CMakeLists.txt
+index 8c09352..47c69a2 100644
+--- a/src/adapters/CMakeLists.txt
++++ b/src/adapters/CMakeLists.txt
+@@ -15,6 +15,7 @@
+ # Authored by: Alexandros Frantzis <alexandros.frantzis@canonical.com>
+ 
+ add_subdirectory(libsuspend)
++add_subdirectory(sensorfw)
+ 
+ if (REPOWERD_ENABLE_HYBRIS)
+     set(REPOWERD_ADAPTER_HYBRIS_SRCS
+@@ -76,6 +77,7 @@ target_link_libraries(
+     repowerd-adapters
+ 
+     suspend
++    sensorfw-adapters
+     ${DEVICEINFO_LDFLAGS}
+     ${GIO_LDFLAGS} ${GIO_LIBRARIES}
+     ${GIO_UNIX_LDFLAGS} ${GIO_UNIX_LIBRARIES}
+diff --git a/src/adapters/sensorfw/CMakeLists.txt b/src/adapters/sensorfw/CMakeLists.txt
+new file mode 100644
+index 0000000..a9e31fe
+--- /dev/null
++++ b/src/adapters/sensorfw/CMakeLists.txt
+@@ -0,0 +1,23 @@
++set(CMAKE_AUTOMOC ON)
++set(CMAKE_INCLUDE_CURRENT_DIR ON)
++
++find_package(Qt5Core REQUIRED)
++find_package(Qt5Network REQUIRED)
++
++add_library(sensorfw-adapters STATIC
++    sensorfw_common.cpp
++    sensorfw_light_sensor.cpp
++    sensorfw_proximity_sensor.cpp
++
++    socketreader.cpp
++)
++
++target_link_libraries(sensorfw-adapters PUBLIC
++    Qt5::Core
++    Qt5::Network
++)
++
++target_include_directories(sensorfw-adapters PUBLIC
++    ${GIO_INCLUDE_DIRS}
++    "../"
++)
+diff --git a/src/adapters/sensorfw/sensorfw_common.cpp b/src/adapters/sensorfw/sensorfw_common.cpp
+new file mode 100644
+index 0000000..bead09c
+--- /dev/null
++++ b/src/adapters/sensorfw/sensorfw_common.cpp
+@@ -0,0 +1,277 @@
++/*
++ * Copyright © 2020 UBports foundation
++ *
++ * This program is free software: you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License version 3,
++ * as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Authored by: Marius Gripsgard <marius@ubports.com>
++ */
++
++#include "sensorfw_common.h"
++
++#include <QObject>
++
++#include "socketreader.h"
++
++namespace
++{
++char const* const log_tag = "Sensorfw";
++
++auto const null_handler = [](double){};
++char const* const dbus_sensorfw_name = "com.nokia.SensorService";
++char const* const dbus_sensorfw_path = "/SensorManager";
++char const* const dbus_sensorfw_interface = "local.SensorManager";
++}
++
++repowerd::Sensorfw::Sensorfw(
++    std::shared_ptr<Log> const& log,
++    std::string const& dbus_bus_address,
++    std::string const& name,
++    PluginType const& plugin)
++    : log{log},
++      dbus_connection{dbus_bus_address},
++      dbus_event_loop{name},
++      m_socket(std::make_shared<SocketReader>()),
++      m_plugin(plugin),
++      m_pid(getpid())
++{
++    if (!load_plugin())
++        throw std::runtime_error("Could not create sensorfw backend");
++
++    request_sensor();
++
++    log->log(log_tag, "Got plugin_string %s", plugin_string());
++    log->log(log_tag, "Got plugin_interface %s", plugin_interface());
++    log->log(log_tag, "Got plugin_path %s", plugin_path());
++
++    m_socket->initiateConnection(m_sessionid);
++}
++
++repowerd::Sensorfw::~Sensorfw()
++{
++    stop();
++    release_sensor();
++    m_socket->dropConnection();
++}
++
++const char* repowerd::Sensorfw::plugin_string() const
++{
++    switch (m_plugin) {
++        case PluginType::LIGHT: return "alssensor";
++        case PluginType::PROXIMITY: return "proximitysensor";
++    }
++
++    return "";
++}
++
++const char* repowerd::Sensorfw::plugin_interface() const
++{
++    switch (m_plugin) {
++        case PluginType::LIGHT: return "local.ALSSensor";
++        case PluginType::PROXIMITY: return "local.ProximitySensor";
++    }
++
++    return "";
++}
++
++const char* repowerd::Sensorfw::plugin_path() const
++{
++    char *new_str;
++    if (asprintf(&new_str,"%s/%s", dbus_sensorfw_path, plugin_string()) == -1)
++        return "";
++
++    return new_str;
++}
++
++bool repowerd::Sensorfw::load_plugin()
++{
++    int constexpr timeout_default = 1000;
++    g_autoptr(GError) err = NULL;
++    auto const result =  g_dbus_connection_call_sync(
++            dbus_connection,
++            dbus_sensorfw_name,
++            dbus_sensorfw_path,
++            dbus_sensorfw_interface,
++            "loadPlugin",
++            g_variant_new("(s)", plugin_string()),
++            G_VARIANT_TYPE("(b)"),
++            G_DBUS_CALL_FLAGS_NONE,
++            timeout_default,
++            NULL,
++            &err);
++
++    if (err != NULL)
++    {
++        log->log(log_tag, "failed to call load_plugin: %s", err->message);
++        g_variant_unref(result);
++        return false;
++    }
++
++    gboolean the_result;
++    g_variant_get(result, "(b)", &the_result);
++    g_variant_unref(result);
++
++    return the_result;
++}
++
++void repowerd::Sensorfw::request_sensor()
++{
++    int constexpr timeout_default = 100;
++    auto const result =  g_dbus_connection_call_sync(
++            dbus_connection,
++            dbus_sensorfw_name,
++            dbus_sensorfw_path,
++            dbus_sensorfw_interface,
++            "requestSensor",
++            g_variant_new("(sx)", plugin_string(), m_pid),
++            G_VARIANT_TYPE("(i)"),
++            G_DBUS_CALL_FLAGS_NONE,
++            timeout_default,
++            NULL,
++            NULL);
++
++    if (!result)
++    {
++        log->log(log_tag, "failed to call request_sensor");
++        return;
++    }
++
++    gint32 the_result;
++    g_variant_get(result, "(i)", &the_result);
++    g_variant_unref(result);
++
++    m_sessionid = the_result;
++
++    log->log(log_tag, "Got new plugin for %s with pid %i and session %i", plugin_string(), m_pid, m_sessionid);
++}
++
++bool repowerd::Sensorfw::release_sensor()
++{
++    int constexpr timeout_default = 100;
++    auto const result =  g_dbus_connection_call_sync(
++            dbus_connection,
++            dbus_sensorfw_name,
++            dbus_sensorfw_path,
++            dbus_sensorfw_interface,
++            "releaseSensor",
++            g_variant_new("(six)", plugin_string(), m_sessionid, m_pid),
++            G_VARIANT_TYPE("(b)"),
++            G_DBUS_CALL_FLAGS_NONE,
++            timeout_default,
++            NULL,
++            NULL);
++
++    if (!result)
++    {
++        log->log(log_tag, "failed to release SensorfwSensor");
++        return false;
++    }
++
++    gboolean the_result;
++    g_variant_get(result, "(b)", &the_result);
++    g_variant_unref(result);
++
++    return the_result;
++}
++
++void repowerd::Sensorfw::start()
++{
++    if (m_running)
++        return;
++
++    m_running = true;
++    read_loop = std::thread([this](){
++        log->log(log_tag, "Eventloop started");
++        while (m_running) {
++            if (m_socket->socket()->waitForReadyRead(10))
++                data_recived_impl();
++        }
++        m_running = false;
++        log->log(log_tag, "Eventloop stopped");
++    });
++
++    int constexpr timeout_default = 100;
++    auto const result =  g_dbus_connection_call_sync(
++            dbus_connection,
++            dbus_sensorfw_name,
++            plugin_path(),
++            plugin_interface(),
++            "start",
++            g_variant_new("(i)", m_sessionid),
++            NULL,
++            G_DBUS_CALL_FLAGS_NONE,
++            timeout_default,
++            NULL,
++            NULL);
++
++    if (!result)
++    {
++        log->log(log_tag, "failed to start SensorfwSensor");
++        return;
++    }
++    g_variant_unref(result);
++}
++
++void repowerd::Sensorfw::stop()
++{
++    if (!m_running)
++        return;
++
++    m_running = false;
++
++    int constexpr timeout_default = 100;
++    auto const result =  g_dbus_connection_call_sync(
++            dbus_connection,
++            dbus_sensorfw_name,
++            plugin_path(),
++            plugin_interface(),
++            "stop",
++            g_variant_new("(i)", m_sessionid),
++            NULL,
++            G_DBUS_CALL_FLAGS_NONE,
++            timeout_default,
++            NULL,
++            NULL);
++
++    if (!result)
++    {
++        log->log(log_tag, "failed to stop SensorfwSensor");
++    } else {
++        g_variant_unref(result);
++    }
++
++    read_loop.join();
++    read_loop = std::thread();
++}
++
++void repowerd::Sensorfw::set_interval(int interval) {
++    int constexpr timeout_default = 100;
++    auto const result =  g_dbus_connection_call_sync(
++            dbus_connection,
++            dbus_sensorfw_name,
++            plugin_path(),
++            plugin_interface(),
++            "setInterval",
++            g_variant_new("(ii)", m_sessionid, interval),
++            NULL,
++            G_DBUS_CALL_FLAGS_NONE,
++            timeout_default,
++            NULL,
++            NULL);
++
++    if (!result)
++    {
++        log->log(log_tag, "set_interval() failed to releaseSensor");
++        return;
++    }
++    g_variant_unref(result);
++}
+diff --git a/src/adapters/sensorfw/sensorfw_common.h b/src/adapters/sensorfw/sensorfw_common.h
+new file mode 100644
+index 0000000..19a8a02
+--- /dev/null
++++ b/src/adapters/sensorfw/sensorfw_common.h
+@@ -0,0 +1,74 @@
++/*
++ * Copyright © 2020 UBports foundation
++ *
++ * This program is free software: you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License version 3,
++ * as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Authored by: Marius Gripsgard <marius@ubports.com>
++ */
++
++#include <memory>
++#include <string>
++#include <thread>
++
++#include "dbus_connection_handle.h"
++#include "dbus_event_loop.h"
++
++#include "src/core/log.h"
++
++#pragma once
++
++class SocketReader;
++namespace repowerd {
++class Sensorfw {
++public:
++    enum PluginType {
++        LIGHT,
++        PROXIMITY
++    };
++
++    Sensorfw(
++        std::shared_ptr<Log> const& log,
++        std::string const& dbus_bus_address,
++        std::string const& name,
++        PluginType const& plugin);
++    virtual ~Sensorfw();
++
++protected:
++    virtual void data_recived_impl() = 0;
++
++    void set_interval(int interval = 10);
++    void start();
++    void stop();
++
++    std::shared_ptr<Log> const log;
++    DBusConnectionHandle dbus_connection;
++    DBusEventLoop dbus_event_loop;
++    std::shared_ptr<SocketReader> m_socket;
++
++private:
++    void request_sensor();
++    bool release_sensor();
++    bool load_plugin();
++
++    const char* plugin_string() const;
++    const char* plugin_interface() const;
++    const char* plugin_path() const;
++
++    std::thread read_loop;
++    HandlerRegistration dbus_signal_handler_registration;
++    PluginType m_plugin;
++    pid_t m_pid;
++    int m_sessionid;
++    bool m_running = false;
++};
++}
+diff --git a/src/adapters/sensorfw/sensorfw_light_sensor.cpp b/src/adapters/sensorfw/sensorfw_light_sensor.cpp
+new file mode 100644
+index 0000000..98f4b9d
+--- /dev/null
++++ b/src/adapters/sensorfw/sensorfw_light_sensor.cpp
+@@ -0,0 +1,73 @@
++/*
++ * Copyright © 2020 UBports foundation
++ *
++ * This program is free software: you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License version 3,
++ * as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Authored by: Marius Gripsgard <marius@ubports.com>
++ */
++
++#include "sensorfw_light_sensor.h"
++#include "event_loop_handler_registration.h"
++
++#include "socketreader.h"
++
++#include <stdexcept>
++
++namespace
++{
++auto const null_handler = [](double){};
++}
++
++repowerd::SensorfwLightSensor::SensorfwLightSensor(
++    std::shared_ptr<Log> const& log,
++    std::string const& dbus_bus_address)
++    : Sensorfw(log, dbus_bus_address, "Light", PluginType::LIGHT),
++      handler{null_handler}
++{
++}
++
++repowerd::HandlerRegistration repowerd::SensorfwLightSensor::register_light_handler(
++    LightHandler const& handler)
++{
++    return EventLoopHandlerRegistration{
++        dbus_event_loop,
++        [this, &handler]{ this->handler = handler; },
++        [this]{ this->handler = null_handler; }};
++}
++
++void repowerd::SensorfwLightSensor::enable_light_events()
++{
++    dbus_event_loop.enqueue(
++        [this]
++        {
++            start();
++        }).get();
++}
++
++void repowerd::SensorfwLightSensor::disable_light_events()
++{
++    dbus_event_loop.enqueue(
++        [this]
++        {
++            stop();
++        }).get();
++}
++
++void repowerd::SensorfwLightSensor::data_recived_impl()
++{
++    QVector<TimedUnsigned> values;
++    if(!m_socket->read<TimedUnsigned>(values))
++        return;
++
++    handler(values[0].value_);
++}
+diff --git a/src/adapters/sensorfw/sensorfw_light_sensor.h b/src/adapters/sensorfw/sensorfw_light_sensor.h
+new file mode 100644
+index 0000000..ed21947
+--- /dev/null
++++ b/src/adapters/sensorfw/sensorfw_light_sensor.h
+@@ -0,0 +1,43 @@
++/*
++ * Copyright © 2020 UBports foundation
++ *
++ * This program is free software: you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License version 3,
++ * as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Authored by: Marius Gripsgard <marius@ubports.com>
++ */
++
++#pragma once
++
++#include "light_sensor.h"
++#include "sensorfw_common.h"
++
++namespace repowerd
++{
++
++class SensorfwLightSensor : public LightSensor, public Sensorfw
++{
++public:
++    SensorfwLightSensor(std::shared_ptr<Log> const& log,
++                        std::string const& dbus_bus_address);
++
++    HandlerRegistration register_light_handler(LightHandler const& handler) override;
++
++    void enable_light_events() override;
++    void disable_light_events() override;
++private:
++    void data_recived_impl() override;
++
++    LightHandler handler;
++};
++
++}
+diff --git a/src/adapters/sensorfw/sensorfw_proximity_sensor.cpp b/src/adapters/sensorfw/sensorfw_proximity_sensor.cpp
+new file mode 100644
+index 0000000..f004bf2
+--- /dev/null
++++ b/src/adapters/sensorfw/sensorfw_proximity_sensor.cpp
+@@ -0,0 +1,82 @@
++/*
++ * Copyright © 2020 UBports foundation
++ *
++ * This program is free software: you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License version 3,
++ * as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Authored by: Marius Gripsgard <marius@ubports.com>
++ */
++
++#include "sensorfw_proximity_sensor.h"
++#include "event_loop_handler_registration.h"
++
++#include "socketreader.h"
++
++#include <stdexcept>
++
++namespace
++{
++auto const null_handler = [](repowerd::ProximityState){};
++}
++
++repowerd::SensorfwProximitySensor::SensorfwProximitySensor(
++    std::shared_ptr<Log> const& log,
++    std::string const& dbus_bus_address)
++    : Sensorfw(log, dbus_bus_address, "Proximity", PluginType::PROXIMITY),
++      m_handler{null_handler},
++      m_state{ProximityState::far}
++{
++}
++
++repowerd::HandlerRegistration repowerd::SensorfwProximitySensor::register_proximity_handler(
++    ProximityHandler const& handler)
++{
++    return EventLoopHandlerRegistration{
++        dbus_event_loop,
++        [this, &handler]{ this->m_handler = handler; },
++        [this]{ this->m_handler = null_handler; }};
++}
++
++void repowerd::SensorfwProximitySensor::enable_proximity_events()
++{
++    dbus_event_loop.enqueue(
++        [this]
++        {
++            start();
++        }).get();
++}
++
++void repowerd::SensorfwProximitySensor::disable_proximity_events()
++{
++    dbus_event_loop.enqueue(
++        [this]
++        {
++            stop();
++        }).get();
++}
++
++void repowerd::SensorfwProximitySensor::data_recived_impl()
++{
++    QVector<ProximityData> values;
++    if(m_socket->read<ProximityData>(values)) {
++        m_state = values[0].withinProximity_ ? ProximityState::near : ProximityState::far;
++    } else {
++        m_state = ProximityState::far;
++    }
++
++    m_handler(m_state);
++}
++
++repowerd::ProximityState repowerd::SensorfwProximitySensor::proximity_state()
++{
++    return m_state;
++}
+diff --git a/src/adapters/sensorfw/sensorfw_proximity_sensor.h b/src/adapters/sensorfw/sensorfw_proximity_sensor.h
+new file mode 100644
+index 0000000..0b09137
+--- /dev/null
++++ b/src/adapters/sensorfw/sensorfw_proximity_sensor.h
+@@ -0,0 +1,47 @@
++/*
++ * Copyright © 2020 UBports foundation
++ *
++ * This program is free software: you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License version 3,
++ * as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Authored by: Marius Gripsgard <marius@ubports.com>
++ */
++
++#pragma once
++
++#include "src/core/proximity_sensor.h"
++#include "sensorfw_common.h"
++
++namespace repowerd
++{
++
++class SensorfwProximitySensor : public ProximitySensor, public Sensorfw
++{
++public:
++    SensorfwProximitySensor(std::shared_ptr<Log> const& log,
++                        std::string const& dbus_bus_address);
++
++    HandlerRegistration register_proximity_handler(
++        ProximityHandler const& handler) override;
++    ProximityState proximity_state() override;
++
++    void enable_proximity_events() override;
++    void disable_proximity_events() override;
++
++private:
++    void data_recived_impl() override;
++
++    ProximityHandler m_handler;
++    repowerd::ProximityState m_state;
++};
++
++}
+diff --git a/src/adapters/sensorfw/socketreader.cpp b/src/adapters/sensorfw/socketreader.cpp
+new file mode 100644
+index 0000000..204f7c1
+--- /dev/null
++++ b/src/adapters/sensorfw/socketreader.cpp
+@@ -0,0 +1,133 @@
++/**
++   @file socketreader.cpp
++   @brief SocketReader helper class for sensor interface
++
++   <p>
++   Copyright (C) 2009-2010 Nokia Corporation
++
++   @author Timo Rongas <ext-timo.2.rongas@nokia.com>
++   @author Antti Virtanen <antti.i.virtanen@nokia.com>
++
++   This file is part of Sensord.
++
++   Sensord is free software; you can redistribute it and/or modify
++   it under the terms of the GNU Lesser General Public License
++   version 2.1 as published by the Free Software Foundation.
++
++   Sensord is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with Sensord.  If not, see <http://www.gnu.org/licenses/>.
++   </p>
++ */
++
++#include "socketreader.h"
++
++const char* SocketReader::channelIDString = "_SENSORCHANNEL_";
++
++SocketReader::SocketReader(QObject* parent) :
++    QObject(parent),
++    socket_(NULL),
++    tagRead_(false)
++{
++}
++
++SocketReader::~SocketReader()
++{
++    if (socket_) {
++        dropConnection();
++    }
++}
++
++bool SocketReader::initiateConnection(int sessionId)
++{
++    if (socket_ != NULL) {
++        qDebug() << "attempting to initiate connection on connected socket";
++        return false;
++    }
++
++    socket_ = new QLocalSocket(this);
++    const char* SOCKET_NAME = "/var/run/sensord.sock";
++    QByteArray env = qgetenv("SENSORFW_SOCKET_PATH");
++    if (!env.isEmpty()) {
++        env += SOCKET_NAME;
++        SOCKET_NAME = env;
++    }
++
++    socket_->connectToServer(SOCKET_NAME, QIODevice::ReadWrite);
++
++    if (!(socket_->serverName().size())) {
++        qDebug() << socket_->errorString();
++        return false;
++    }
++
++    if (socket_->write((const char*)&sessionId, sizeof(sessionId)) != sizeof(sessionId)) {
++        qDebug() << "[SOCKETREADER]: SessionId write failed: " << socket_->errorString();
++    }
++    socket_->flush();
++    readSocketTag();
++
++    return true;
++}
++
++bool SocketReader::dropConnection()
++{
++    if (!socket_)
++        return false;
++
++    socket_->disconnectFromServer();
++    if(socket_->state() != QLocalSocket::UnconnectedState)
++        socket_->waitForDisconnected();
++    delete socket_;
++    socket_ = NULL;
++
++    tagRead_ = false;
++
++    return true;
++}
++
++QLocalSocket* SocketReader::socket()
++{
++    return socket_;
++}
++
++bool SocketReader::readSocketTag()
++{
++    char foo;
++    socket_->waitForReadyRead();
++    tagRead_ = read(&foo, 1);
++    return true;
++}
++
++bool SocketReader::read(void* buffer, int size)
++{
++    int bytesRead = 0;
++    int retry = 100;
++    while(bytesRead < size)
++    {
++        int bytes = socket_->read((char *)buffer + bytesRead, size);
++        if(bytes == 0)
++        {
++            if(!retry)
++                return false;
++            struct timespec ts;
++            ts.tv_sec = 0;
++            ts.tv_nsec = 100000000;
++            nanosleep( &ts, NULL );
++            --retry;
++            continue;
++        }
++        if(bytes < 1)
++            return false;
++        bytesRead += bytes;
++    }
++    return (bytesRead > 0);
++}
++
++bool SocketReader::isConnected()
++{
++    return (socket_ && socket_->isValid() && socket_->state() == QLocalSocket::ConnectedState);
++}
+diff --git a/src/adapters/sensorfw/socketreader.h b/src/adapters/sensorfw/socketreader.h
+new file mode 100644
+index 0000000..65b54cd
+--- /dev/null
++++ b/src/adapters/sensorfw/socketreader.h
+@@ -0,0 +1,209 @@
++/**
++   @file socketreader.h
++   @brief SocketReader helper class for sensor interface
++
++   <p>
++   Copyright (C) 2009-2010 Nokia Corporation
++
++   @author Timo Rongas <ext-timo.2.rongas@nokia.com>
++   @author Antti Virtanen <antti.i.virtanen@nokia.com>
++
++   This file is part of Sensord.
++
++   Sensord is free software; you can redistribute it and/or modify
++   it under the terms of the GNU Lesser General Public License
++   version 2.1 as published by the Free Software Foundation.
++
++   Sensord is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with Sensord.  If not, see <http://www.gnu.org/licenses/>.
++   </p>
++ */
++
++#pragma once
++
++#include <QObject>
++#include <QLocalSocket>
++#include <QVector>
++
++class TimedData
++{
++public:
++
++    /**
++     * Constructor
++     *
++     * @param timestamp monotonic time (microsec)
++     */
++    TimedData(const quint64& timestamp) : timestamp_(timestamp) {}
++
++    quint64 timestamp_;  /**< monotonic time (microsec) */
++};
++
++class TimedUnsigned : public TimedData {
++public:
++    /**
++     * Default constructor.
++     */
++    TimedUnsigned() : TimedData(0), value_(0) {}
++
++    /**
++     * Constructor.
++     *
++     * @param timestamp timestamp as monotonic time (microsec).
++     * @param value value of the measurement.
++     */
++    TimedUnsigned(const quint64& timestamp, unsigned value) : TimedData(timestamp), value_(value) {}
++
++    unsigned value_; /**< Measurement value. */
++};
++
++class ProximityData : public TimedUnsigned
++{
++public:
++    /**
++     * Default constructor.
++     */
++    ProximityData() : TimedUnsigned(), withinProximity_(false) {}
++
++    /**
++     * Constructor
++     *
++     * @param timestamp timestamp as monotonic time (microsec).
++     * @param value raw proximity value.
++     * @param withinProximity is there an object within proximity.
++     */
++    ProximityData(const quint64& timestamp, unsigned int value, bool withinProximity) :
++        TimedUnsigned(timestamp, value), withinProximity_(withinProximity) {}
++
++    bool withinProximity_; /**< is an object within proximity or not */
++};
++
++
++
++/**
++ * @brief Helper class for reading socket datachannel from sensord
++ *
++ * SocketReader provides common handler for all sensors using socket
++ * data channel. It is used by AbstractSensorChannelInterface to maintain
++ * the socket connection to the server.
++ */
++class SocketReader : public QObject
++{
++    Q_OBJECT
++    Q_DISABLE_COPY(SocketReader)
++
++public:
++
++    /**
++     * Constructor.
++     *
++     * @param parent Parent QObject.
++     */
++    SocketReader(QObject* parent = 0);
++
++    /**
++     * Destructor.
++     */
++    ~SocketReader();
++
++    /**
++     * Initiates new data socket connection.
++     *
++     * @param sessionId ID for the current session.
++     * @return was the connection established successfully.
++     */
++    bool initiateConnection(int sessionId);
++
++    /**
++     * Drops socket connection.
++     * @return was the connection successfully closed.
++     */
++    bool dropConnection();
++
++    /**
++     * Provides access to the internal QLocalSocket for direct reading.
++     *
++     * @return Pointer to the internal QLocalSocket. Pointer can be \c NULL
++     *         if \c initiateConnection() has not been called successfully.
++     */
++    QLocalSocket* socket();
++
++    /**
++     * Attempt to read given number of bytes from the socket. As
++     * QLocalSocket is used, we are guaranteed that any number of bytes
++     * written in single operation are available for immediate reading
++     * with a single operation.
++     *
++     * @param size Number of bytes to read.
++     * @param buffer Location for storing the data.
++     * @return was given amount of bytes read succesfully.
++     */
++    bool read(void* buffer, int size);
++
++    /**
++     * Attempt to read objects from the sockets. The call blocks until
++     * there are minimum amount of expected bytes availabled in the socket.
++     *
++     * @param values Vector to which objects will be appended.
++     * @tparam T type of expected object in the stream.
++     * @return true if atleast one object was read.
++     */
++    template<typename T>
++    bool read(QVector<T>& values);
++
++    /**
++     * Returns whether the socket is currently connected.
++     *
++     * @return is socket connected.
++     */
++    bool isConnected();
++
++private:
++    /**
++     * Prefix text needed to be written to the sensor daemon socket connection
++     * when establishing new session.
++     */
++    static const char* channelIDString;
++
++    /**
++     * Reads initial magic byte from the fresh connection.
++     */
++    bool readSocketTag();
++
++    QLocalSocket* socket_; /**< socket data connection to sensord */
++    bool tagRead_; /**< is initial magic byte read from the socket */
++};
++
++template<typename T>
++bool SocketReader::read(QVector<T>& values)
++{
++    if (!socket_) {
++        return false;
++    }
++
++    unsigned int count;
++    if(!read((void*)&count, sizeof(unsigned int)))
++    {
++        socket_->readAll();
++        return false;
++    }
++    if(count > 1000)
++    {
++        qWarning() << "Too many samples waiting in socket. Flushing it to empty";
++        socket_->readAll();
++        return false;
++    }
++    values.resize(values.size() + count);
++    if(!read((void*)values.data(), sizeof(T) * count))
++    {
++        qWarning() << "Error occured while reading data from socket: " << socket_->errorString();
++        socket_->readAll();
++        return false;
++    }
++    return true;
++}
+diff --git a/src/default_daemon_config.cpp b/src/default_daemon_config.cpp
+index ac18c5e..e41b940 100644
+--- a/src/default_daemon_config.cpp
++++ b/src/default_daemon_config.cpp
+@@ -58,6 +58,9 @@
+ #include "adapters/ubuntu_performance_booster.h"
+ #include "adapters/ubuntu_proximity_sensor.h"
+ #endif
++// Sensorfw
++#include "adapters/sensorfw/sensorfw_light_sensor.h"
++#include "adapters/sensorfw/sensorfw_proximity_sensor.h"
+ 
+ namespace
+ {
+@@ -279,12 +282,23 @@ repowerd::DefaultDaemonConfig::the_proximity_sensor()
+     catch (std::exception const& e)
+     {
+         the_log()->log(log_tag, "Failed to create UbuntuProximitySensor: %s", e.what());
+-        the_log()->log(log_tag, "Falling back to NullProximitySensor");
++        the_log()->log(log_tag, "Trying SensorfwProximitySensor");
+     }
+-#else
+-    the_log()->log(log_tag, "Built without ProximitySensor, Falling back to NullProximitySensor");
+ #endif
+ 
++    try
++    {
++        proximity_sensor = std::make_shared<SensorfwProximitySensor>(
++            the_log(),
++            the_dbus_bus_address());
++        return proximity_sensor;
++    }
++    catch (std::exception const& e)
++    {
++        the_log()->log(log_tag, "Failed to create SensorfwProximitySensor: %s", e.what());
++        the_log()->log(log_tag, "Falling back to NullProximitySensor");
++    }
++
+     proximity_sensor = std::make_shared<NullProximitySensor>();
+     return proximity_sensor;
+ 
+@@ -548,12 +562,23 @@ repowerd::DefaultDaemonConfig::the_light_sensor()
+     catch (std::exception const& e)
+     {
+         the_log()->log(log_tag, "Failed to create UbuntuLightSensor: %s", e.what());
+-        the_log()->log(log_tag, "Falling back to NullLightSensor");
++        the_log()->log(log_tag, "Trying SensorfwLightSensor");
+     }
+-#else
+-    the_log()->log(log_tag, "Built without LightSensor, Falling back to NullLightSensor");
+ #endif
+ 
++    try
++    {
++        light_sensor = std::make_shared<SensorfwLightSensor>(
++            the_log(),
++            the_dbus_bus_address());
++        return light_sensor;
++    }
++    catch (std::exception const& e)
++    {
++        the_log()->log(log_tag, "Failed to create SensorfwLightSensor: %s", e.what());
++        the_log()->log(log_tag, "Falling back to NullLightSensor");
++    }
++
+     light_sensor = std::make_shared<NullLightSensor>();
+     return light_sensor;
+ }
+diff --git a/tests/adapter-tests/CMakeLists.txt b/tests/adapter-tests/CMakeLists.txt
+index d545d95..654ca36 100644
+--- a/tests/adapter-tests/CMakeLists.txt
++++ b/tests/adapter-tests/CMakeLists.txt
+@@ -47,7 +47,6 @@ add_executable(
+     temporary_environment_value.cpp
+     temporary_file.cpp
+     unity_screen_dbus_client.cpp
+-
+     test_android_autobrightness_algorithm.cpp
+     test_android_device_config.cpp
+     test_android_device_quirks.cpp
+diff --git a/tests/adapter-tests/fake_libhardware.cpp b/tests/adapter-tests/fake_libhardware.cpp
+index 9c94c7e..ac64954 100644
+--- a/tests/adapter-tests/fake_libhardware.cpp
++++ b/tests/adapter-tests/fake_libhardware.cpp
+@@ -17,6 +17,7 @@
+  */
+ 
+ #include "fake_libhardware.h"
++#include <functional>
+ #include <stdexcept>
+ 
+ namespace rt = repowerd::test;
+diff --git a/tests/adapter-tests/test_backlight_brightness_control.cpp b/tests/adapter-tests/test_backlight_brightness_control.cpp
+index 3ab212d..115a848 100644
+--- a/tests/adapter-tests/test_backlight_brightness_control.cpp
++++ b/tests/adapter-tests/test_backlight_brightness_control.cpp
+@@ -34,6 +34,7 @@
+ 
+ #include <thread>
+ #include <algorithm>
++#include <functional>
+ #include <numeric>
+ #include <cmath>
+ 
+diff --git a/tests/adapter-tests/test_lsc_power_button.cpp b/tests/adapter-tests/test_lsc_power_button.cpp
+index f29c7a8..e7c7612 100644
+--- a/tests/adapter-tests/test_lsc_power_button.cpp
++++ b/tests/adapter-tests/test_lsc_power_button.cpp
+@@ -26,6 +26,7 @@
+ #include <gmock/gmock.h>
+ 
+ #include <chrono>
++#include <functional>
+ 
+ namespace rt = repowerd::test;
+ using namespace std::chrono_literals;
+diff --git a/tests/adapter-tests/test_repowerd_service.cpp b/tests/adapter-tests/test_repowerd_service.cpp
+index b88700d..49f83c7 100644
+--- a/tests/adapter-tests/test_repowerd_service.cpp
++++ b/tests/adapter-tests/test_repowerd_service.cpp
+@@ -39,6 +39,7 @@
+ 
+ #include <chrono>
+ #include <cmath>
++#include <functional>
+ 
+ using namespace testing;
+ 
+diff --git a/tests/adapter-tests/unity_screen_dbus_client.h b/tests/adapter-tests/unity_screen_dbus_client.h
+index c7989c7..a70e35d 100644
+--- a/tests/adapter-tests/unity_screen_dbus_client.h
++++ b/tests/adapter-tests/unity_screen_dbus_client.h
+@@ -20,6 +20,9 @@
+ 
+ #include "dbus_client.h"
+ 
++#include <functional>
++#include <string>
++
+ namespace repowerd
+ {
+ namespace test
+-- 
+2.37.1
+

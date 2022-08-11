@@ -1,0 +1,39 @@
+From 974847c275800a22168c10d56b21fa5a9b66062e Mon Sep 17 00:00:00 2001
+From: Robert Tari <robert@tari.in>
+Date: Thu, 3 Mar 2022 11:26:56 +0100
+Subject: [PATCH 2/5] Increase the wakeup time
+
+---
+ src/adapters/unity_screen_service.cpp         | 2 +-
+ tests/adapter-tests/test_repowerd_service.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/adapters/unity_screen_service.cpp b/src/adapters/unity_screen_service.cpp
+index d496a39..a0a4d64 100644
+--- a/src/adapters/unity_screen_service.cpp
++++ b/src/adapters/unity_screen_service.cpp
+@@ -258,7 +258,7 @@ void repowerd::UnityScreenService::start_processing()
+         [this] (std::string const& cookie)
+         {
+             temporary_suspend_inhibition->inhibit_suspend_for(
+-                std::chrono::seconds{3}, "Wakeup_" + cookie);
++                std::chrono::seconds{10}, "Wakeup_" + cookie);
+ 
+             dbus_event_loop.enqueue([this] { dbus_emit_Wakeup(); });
+         });
+diff --git a/tests/adapter-tests/test_repowerd_service.cpp b/tests/adapter-tests/test_repowerd_service.cpp
+index 49f83c7..31a2eea 100644
+--- a/tests/adapter-tests/test_repowerd_service.cpp
++++ b/tests/adapter-tests/test_repowerd_service.cpp
+@@ -407,7 +407,7 @@ TEST_F(APowerdService, inhibits_suspend_temporarily_when_wakeup_is_triggered)
+ 
+     client.request_request_wakeup(tp).get();
+ 
+-    auto const inhibition_timeout = std::chrono::milliseconds{3000};
++    auto const inhibition_timeout = std::chrono::milliseconds{10000};
+     EXPECT_CALL(mock_temporary_suspend_inhibition,
+                 inhibit_suspend_for(inhibition_timeout, _));
+ 
+-- 
+2.37.1
+

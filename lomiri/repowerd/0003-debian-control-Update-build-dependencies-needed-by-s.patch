@@ -1,0 +1,27 @@
+From 9e2dfadb4b86abf88c38ae2380770f435bd7f8e3 Mon Sep 17 00:00:00 2001
+From: Robert Tari <robert@tari.in>
+Date: Thu, 3 Mar 2022 11:33:28 +0100
+Subject: [PATCH 3/5] debian/control: Update build dependencies needed by
+ sensorfw
+
+---
+ debian/control | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/debian/control b/debian/control
+index a4dd2aa..292ac7e 100644
+--- a/debian/control
++++ b/debian/control
+@@ -13,7 +13,8 @@ Build-Depends: debhelper (>= 9),
+                libdeviceinfo-dev,
+                libglib2.0-dev,
+                libgtest-dev,
+-               pkg-config
++               pkg-config,
++               qtbase5-dev
+ Standards-Version: 3.9.7
+ Homepage: https://launchpad.net/repowerd
+ Vcs-Git: https://git.launchpad.net/repowerd
+-- 
+2.37.1
+
