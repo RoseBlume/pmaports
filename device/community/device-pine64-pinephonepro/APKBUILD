@@ -3,7 +3,7 @@
 pkgname=device-pine64-pinephonepro
 pkgdesc="PINE64 PinePhone Pro"
 pkgver=3.3
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -17,7 +17,6 @@ depends="
 	postmarketos-base
 	fwupd
 	fwupd-plugin-fastboot
-	fwupd-plugin-logind
 	fwupd-plugin-modem_manager
 	fwupd-plugin-upower
 	"
