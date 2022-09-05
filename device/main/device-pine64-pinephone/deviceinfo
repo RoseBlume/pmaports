@@ -8,7 +8,7 @@ deviceinfo_codename="pine64-pinephone"
 deviceinfo_year="2019"
 deviceinfo_dtb="allwinner/sun50i-a64-pinephone-1.1 allwinner/sun50i-a64-pinephone-1.2"
 # gpio_vibra: needed for osk-sdl haptic feedback
-deviceinfo_modules_initfs="sun6i_mipi_dsi sun4i_drm pwm_sun4i sun8i_mixer anx7688 gpio_vibra pinephone_keyboard"
+deviceinfo_modules_initfs="sun6i_mipi_dsi sun4i_drm pwm_sun4i sun8i_mixer anx7688 gpio_vibra pinephone_keyboard vfat nls_cp437 nls_ascii"
 deviceinfo_arch="aarch64"
 
 # Device related
@@ -22,3 +22,8 @@ deviceinfo_getty="ttyS0;115200"
 deviceinfo_mesa_driver="sun4i-drm"
 deviceinfo_dev_internal_storage="/dev/mmcblk2"
 deviceinfo_dev_internal_storage_repartition="true"
+
+# Bootloader related
+deviceinfo_flash_method="none"
+deviceinfo_boot_filesystem="fat32"
+deviceinfo_partition_type="gpt"

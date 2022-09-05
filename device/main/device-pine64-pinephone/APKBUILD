@@ -4,13 +4,14 @@
 # Co-Maintainer: Luca Weiss <luca@z3ntu.xyz>
 # Co-Maintainer: Dylan Van Assche <me@dylanvanassche.be>
 pkgname=device-pine64-pinephone
-pkgver=0.43
+pkgver=0.44
 pkgrel=0
 pkgdesc="PINE64 PinePhone"
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
-options="!check !archcheck"
+# pmb:strict is required for grub
+options="!check !archcheck pmb:strict"
 subpackages="
 	$pkgname-gnome
 	$pkgname-nonfree-firmware:nonfree_firmware
@@ -31,6 +32,7 @@ depends="
 	mesa-dri-gallium
 	mesa-egl
 	postmarketos-base
+	u-boot-pinephone>=2021.01_git20201228-r2
 	u-boot-tools
 	fwupd
 	fwupd-plugin-fastboot
@@ -38,7 +40,12 @@ depends="
 	fwupd-plugin-modem_manager
 	fwupd-plugin-upower
 	"
-makedepends="devicepkg-dev dtc"
+makedepends="
+	devicepkg-dev
+	grub
+	grub-efi
+	dtc
+	"
 install="$pkgname.post-install $pkgname.post-upgrade $pkgname.pre-upgrade"
 source="
 	00_alsa_pinephone_dshare.conf
@@ -50,6 +57,8 @@ source="
 	90-modem-eg25.rules
 	UPower.conf
 	deviceinfo
+	grub.cfg
+	grub_early.cfg
 	gpsd_device-hook.sh
 	gpsd_pinephone.initd
 	hwtest.ini
@@ -72,6 +81,8 @@ provides="$pkgname-elogind=$pkgver-r$pkgrel"
 
 build() {
 	devicepkg_build $startdir $pkgname
+
+	# Legacy U-Boot script installs
 	mkimage \
 		-A arm \
 		-O linux \
@@ -82,7 +93,7 @@ build() {
 		-n postmarketos \
 		-d "$srcdir"/uboot-script.cmd \
 		"$srcdir"/boot.scr
-	# Build user U-boot script for vccq-mod
+	# Build legacy user U-boot script for vccq-mod
 	mkimage \
 		-A arm \
 		-O linux \
@@ -93,6 +104,36 @@ build() {
 		-n postmarketos-user \
 		-d "$srcdir"/uboot-user.cmd \
 		"$srcdir"/user.scr
+
+	# UEFI installs
+	grub-mkimage \
+		--config="$srcdir/grub_early.cfg" \
+		--prefix="" \
+		--output="bootaa64.efi" \
+		--format="arm64-efi" \
+		--compression="xz" \
+		\
+		all_video \
+		cat \
+		configfile \
+		disk \
+		echo \
+		efi_gop \
+		fat \
+		gzio \
+		help \
+		iso9660 \
+		linux \
+		ls \
+		normal \
+		part_gpt \
+		part_msdos \
+		search \
+		search_label \
+		test \
+		true
+
+
 	# Build Device Tree Overlay for vccq-mod
 	dtc \
 		-@ \
@@ -107,10 +148,10 @@ package() {
 	install -Dm644 "$srcdir"/boot.scr \
 		"$pkgdir"/boot/boot.scr
 
-	# Make /boot/allwinner/sun50i-a64-pine64-pinephone*.dtb resolve to
-	# /boot/sun50i-a64-pine64-pinephone*.dtb. This is because the device tree
-	# names in u-boot include the vendor and the one in postmarketOS doesn't.
-	ln -s .. "$pkgdir"/boot/allwinner
+	install -Dm644 -t "$pkgdir"/boot/grub \
+		"$srcdir"/grub.cfg
+	install -Dm644 -t "$pkgdir"/boot/EFI/Boot \
+		"$srcdir"/bootaa64.efi
 
 	install -Dm644 "$srcdir"/hwtest.ini \
 		"$pkgdir"/usr/share/hwtest.ini
@@ -198,6 +239,7 @@ vccq_mod() {
 	pkgdesc="Install only if you have done the Vccq hardware mod https://postmarketos.org/pp-vccq-mod"
 	install -Dm644 "$srcdir"/user.scr \
 		"$subpkgdir"/boot/user.scr
+
 	install -Dm644 "$srcdir"/pinephone-vccq-mod.dtbo \
 		"$subpkgdir"/boot/pinephone-vccq-mod.dtbo
 }
@@ -217,7 +259,9 @@ bac664c504d9a3adc6e3d25f24ac63cf7c449a82374544a5b56c259dc25af580897b9dc992865ac8
 8b6fa7b12c15f439c561901f3ffe24a1ef2a0c343401c0a79281060854ab29e08a1fb5e7adae8684b12aa9f535ed99e2dad993dce9724822cb0fbf2497dd86e5  70-wifi-pm.rules
 9cb52e3c5d63dde68296f4c1f9b691629182f82181a7f0877a72aad6870698ea9e7d628309970afbcce01041274054d304de1ee3faf8c1d101f7f8e988a43098  90-modem-eg25.rules
 ed0e03f7e1c0348c06be9a7922414469245604ce813bbf0c8910ef211cb993bbb0d0d4615c9c961d50712415f85d6b73e0cf02780ac784666aac56e4889341e4  UPower.conf
-c46b8a8df3bd51d88ef013c74a7353413569f6a59fa6a86fcee13a4084ad20d5c9f0eca751db3e7b8866dc9e14c7bf770dd554f8a51336b4a6ea1650a49311ab  deviceinfo
+132ae4325455bcd872fda2ae65ba4eb8b838dc693630327471864048d754ed88b6f8529750bd7ee579ddd51e460ad2c4e8006cd06cdae6e5e153bb10056780a9  deviceinfo
+029ae9f2495c6fdac47e86a9d9d53dbb948d91a359437a94a97fb19996fc736a57ac074a2fc0f0e25ba80e2a3c195f88426f055860be68c2958fb184869ce04f  grub.cfg
+0f9357d4eea089628fbceb1e3e96d21a3f4329aeb6743158a6f877f967ef274506404eba949d5f01b7e1adea149f9a3aef992a5e8cd4181f93ab00909b1c5ecd  grub_early.cfg
 ccbc83b84b5028bc2c8e526759004ce71b50b2675ecffee98f5676c70a3332197a231ff9d2fd46444dd3c0a637ec08ce6125b18240fe6bfc13f624a15192e648  gpsd_device-hook.sh
 1017fc3f325227da58c77abdc59e9735288d91a7ccc63ec784fe0241c523786b617a11ce8045dab2a74ca12a7dd70aaa334af91836418db1e96a3266fecaa4fd  gpsd_pinephone.initd
 3dd6d612c381cb0002049d1974d8fb5aa5a53a1eb4d6bcbf62eb2ad52cfdc45f0f6ad24a699716d3513b0371aa1316f25dc72afc10d7176cc3b99d0965c3f030  hwtest.ini
