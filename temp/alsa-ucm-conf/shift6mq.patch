@@ -1,0 +1,920 @@
+From f5eb576b3bb9f25a84ccf7a49d2ebf8029ee9925 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Mon, 16 May 2022 16:42:34 +0200
+Subject: [PATCH 1/9] ucm2: SHIFT: axolotl: add ALSA UCM config
+
+ALSA UCM config to enable the following output devices on SHIFT 6mq:
+- Speaker
+- Earpiece (breaks currently on switching)
+- Headphones
+- Microphone bottom
+- Microphone back
+- Headphones microphone
+
+Both use cases are supported: HiFi for playing music and VoiceCall to
+make phone calls. No audio works yet in voice calls, probably due to a
+kernel change.
+---
+ ucm2/SHIFT/axolotl/HiFi.conf                  | 141 ++++++++++++++++++
+ ucm2/SHIFT/axolotl/axolotl.conf               |  10 ++
+ ucm2/codecs/wcd934x/DefaultDisableSeq.conf    |   5 +-
+ ucm2/codecs/wcd934x/DefaultEnableSeq.conf     |  23 ++-
+ ucm2/codecs/wcd934x/HeadphoneDisableSeq.conf  |  15 +-
+ ucm2/codecs/wcd934x/HeadphoneEnableSeq.conf   |  15 +-
+ .../wcd934x/HeadphoneMicDisableSeq.conf       |   5 +-
+ .../codecs/wcd934x/HeadphoneMicEnableSeq.conf |   8 +-
+ ucm2/codecs/wcd934x/SpeakerDisableSeq.conf    |   7 +-
+ ucm2/codecs/wcd934x/SpeakerEnableSeq.conf     |   5 +-
+ ucm2/codecs/wcd934x/init.conf                 |  22 +++
+ ucm2/conf.d/sdm845/SHIFT6mq.conf              |   1 +
+ 12 files changed, 221 insertions(+), 36 deletions(-)
+ create mode 100644 ucm2/SHIFT/axolotl/HiFi.conf
+ create mode 100644 ucm2/SHIFT/axolotl/axolotl.conf
+ create mode 100644 ucm2/codecs/wcd934x/init.conf
+ create mode 120000 ucm2/conf.d/sdm845/SHIFT6mq.conf
+
+diff --git a/ucm2/SHIFT/axolotl/HiFi.conf b/ucm2/SHIFT/axolotl/HiFi.conf
+new file mode 100644
+index 0000000..846f941
+--- /dev/null
++++ b/ucm2/SHIFT/axolotl/HiFi.conf
+@@ -0,0 +1,141 @@
++# Use case configuration for SHIFT 6mq (axolotl).
++# Author: Dylan Van Assche <me@dylanvanassche.be>
++
++# OUTPUT DEVICES
++#  - Internal speaker: MultiMedia1, device 0 on card 0, TFA driver, QUAT_MI2S
++#  - Internal earpiece: MultiMedia3, device 1 on card 0, WCD934x driver, SLIMBUS, RX2 + RX3
++#  - Jack headphones: MultiMedia5, device 1 on card 0, WCD934x driver, SLIMBUS, RX0
++# INPUT DEVICES
++#  - Headphone microphone: MultiMedia2, device 1 on card 0, SLIMBUS, ADC2
++#  - Internal microphone bottom: MultiMedia4, device 1 on card 0, SLIMBUS, ADC1
++#  - Internal microphone back: MultiMedia6, device 1 on card 0, SLIMBUS, ADC3
++
++SectionVerb {
++
++	EnableSequence [
++		cset "name='QUAT_MI2S_RX Audio Mixer MultiMedia1' 1"
++		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia3' 1"
++		cset "name='SLIMBUS_1_RX Audio Mixer MultiMedia5' 1"
++		cset "name='MultiMedia2 Mixer SLIMBUS_0_TX' 1"
++		cset "name='MultiMedia4 Mixer SLIMBUS_1_TX' 1"
++		cset "name='MultiMedia6 Mixer SLIMBUS_2_TX' 1"
++	]
++
++	Include.wcde.File "/codecs/wcd934x/DefaultEnableSeq.conf"
++
++	Include.wcdd {
++		File "/codecs/wcd934x/DefaultDisableSeq.conf"
++		Before.DisableSequence "0"
++	}
++
++	DisableSequence [
++		cset "name='QUAT_MI2S_RX Audio Mixer MultiMedia1' 0"
++		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia3' 0"
++		cset "name='SLIMBUS_1_RX Audio Mixer MultiMedia5' 0"
++		cset "name='MultiMedia2 Mixer SLIMBUS_0_TX' 0"
++		cset "name='MultiMedia4 Mixer SLIMBUS_1_TX' 0"
++		cset "name='MultiMedia6 Mixer SLIMBUS_2_TX' 0"
++	]
++
++	Value {
++		TQ "HiFi"
++	}
++}
++
++SectionDevice."Speaker" {
++	Comment "Speaker playback"
++
++	Value {
++		PlaybackPriority 300
++		PlaybackPCM "hw:${CardId},0"
++	}
++}
++
++SectionDevice."Earpiece" {
++	Comment "Earpiece playback"
++
++	EnableSequence [
++		cset "name='RX INT0_1 MIX1 INP0' RX0"
++		cset "name='RX INT0 DEM MUX' CLSH_DSM_OUT"
++	]
++
++	DisableSequence [
++		cset "name='RX INT0_1 MIX1 INP0' ZERO"
++		cset "name='RX INT0 DEM MUX' NORMAL_DSM_OUT"
++	]
++
++	Value {
++		PlaybackPriority 100
++		PlaybackPCM "hw:${CardId},2"
++	}
++}
++
++SectionDevice."Headphones" {
++	Comment "Headphones playback"
++
++	Include.wcdhpe.File "/codecs/wcd934x/HeadphoneEnableSeq.conf"
++	Include.wcdhpd.File "/codecs/wcd934x/HeadphoneDisableSeq.conf"
++
++	Value {
++		PlaybackPriority 200
++		PlaybackPCM "hw:${CardId},4"
++		PlaybackMixer "default:${CardId}"
++		PlaybackMixerElem "HP Digital"
++	}
++}
++
++SectionDevice."Mic1" {
++	Comment "Mic headphones"
++
++	Include.wcdmice.File "/codecs/wcd934x/HeadphoneMicEnableSeq.conf"
++	Include.wcdmicd.File "/codecs/wcd934x/HeadphoneMicDisableSeq.conf"
++
++	DisableSequence [
++		cset "name='AMIC MUX0' ZERO"
++	]
++
++	Value {
++		CapturePriority 200
++		CapturePCM "hw:${CardId},1"
++		CaptureMixerElem "ADC2"
++	}
++}
++
++SectionDevice."Mic2" {
++	Comment "Mic bottom"
++
++	EnableSequence [
++		cset "name='AMIC MUX6' ADC1"
++		cset "name='ADC MUX6' AMIC"
++	]
++
++	DisableSequence [
++		cset "name='AMIC MUX6' ZERO"
++	]
++
++	Value {
++		CapturePriority 300
++		CapturePCM "hw:${CardId},3"
++		CaptureMixerElem "ADC1"
++	}
++}
++
++SectionDevice."Mic3" {
++	Comment "Mic back"
++
++	EnableSequence [
++		cset "name='AMIC MUX7' ADC3"
++		cset "name='ADC MUX7' AMIC"
++	]
++
++	DisableSequence [
++		cset "name='AMIC MUX7' ZERO"
++	]
++
++	Value {
++		CapturePriority 100
++		CapturePCM "hw:${CardId},5"
++		CaptureMixerElem "ADC3"
++	}
++}
++
+diff --git a/ucm2/SHIFT/axolotl/axolotl.conf b/ucm2/SHIFT/axolotl/axolotl.conf
+new file mode 100644
+index 0000000..ba8c21d
+--- /dev/null
++++ b/ucm2/SHIFT/axolotl/axolotl.conf
+@@ -0,0 +1,10 @@
++Syntax 3
++
++SectionUseCase."HiFi" {
++	File "/SHIFT/axolotl/HiFi.conf"
++	Comment "HiFi quality Music."
++}
++
++Include.card-init.File "/lib/card-init.conf"
++Include.ctl-remap.File "/lib/ctl-remap.conf"
++Include.codec-init.File "/codecs/wcd934x/init.conf"
+diff --git a/ucm2/codecs/wcd934x/DefaultDisableSeq.conf b/ucm2/codecs/wcd934x/DefaultDisableSeq.conf
+index 9df1664..2f77108 100644
+--- a/ucm2/codecs/wcd934x/DefaultDisableSeq.conf
++++ b/ucm2/codecs/wcd934x/DefaultDisableSeq.conf
+@@ -1,7 +1,8 @@
+ DisableSequence [
+-	cset "name='RX INT7_1 MIX1 INP0' ZERO"
+-	cset "name='RX INT8_1 MIX1 INP0' ZERO"
+ 	cset "name='RX INT1_2 MUX' ZERO"
+ 	cset "name='RX INT2_2 MUX' ZERO"
+ 	cset "name='CDC_IF TX0 MUX' ZERO"
++	cset "name='CDC_IF TX1 MUX' ZERO"
++	cset "name='CDC_IF TX2 MUX' ZERO"
+ ]
++
+diff --git a/ucm2/codecs/wcd934x/DefaultEnableSeq.conf b/ucm2/codecs/wcd934x/DefaultEnableSeq.conf
+index 4b6f3e7..a61ccf4 100644
+--- a/ucm2/codecs/wcd934x/DefaultEnableSeq.conf
++++ b/ucm2/codecs/wcd934x/DefaultEnableSeq.conf
+@@ -1,16 +1,15 @@
+ EnableSequence [
+-	cset "name='SLIM RX1 MUX' AIF1_PB"
+-	cset "name='SLIM RX2 MUX' AIF1_PB"
+-	cset "name='SLIM RX6 MUX' ZERO"
+-	cset "name='SLIM RX7 MUX' ZERO"
+-	cset "name='SLIM RX3 MUX' ZERO"
+-	cset "name='SLIM RX4 MUX' ZERO"
+-	cset "name='SLIM RX5 MUX' ZERO"
+-	cset "name='AIF1_CAP Mixer SLIM TX0' 1"
++	cset "name='SLIM RX0 MUX' AIF1_PB"
++	cset "name='SLIM RX2 MUX' AIF2_PB"
++	cset "name='SLIM RX3 MUX' AIF2_PB"
+ 
+-	cset "name='RX INT7_1 MIX1 INP0' RX1"
+-	cset "name='RX INT8_1 MIX1 INP0' RX2"
+-	cset "name='RX INT1_2 MUX' RX1"
+-	cset "name='RX INT2_2 MUX' RX2"
++	cset "name='AIF1_CAP Mixer SLIM TX0' 1"
+ 	cset "name='CDC_IF TX0 MUX' DEC0"
++
++	cset "name='AIF2_CAP Mixer SLIM TX6' 1"
++	cset "name='CDC_IF TX6 MUX' DEC6"
++
++	cset "name='AIF3_CAP Mixer SLIM TX7' 1"
++	cset "name='CDC_IF TX7 MUX' DEC7"
+ ]
++
+diff --git a/ucm2/codecs/wcd934x/HeadphoneDisableSeq.conf b/ucm2/codecs/wcd934x/HeadphoneDisableSeq.conf
+index 0206e87..3003ac0 100644
+--- a/ucm2/codecs/wcd934x/HeadphoneDisableSeq.conf
++++ b/ucm2/codecs/wcd934x/HeadphoneDisableSeq.conf
+@@ -1,6 +1,9 @@
+-cset "name='COMP1 Switch' 0"
+-cset "name='COMP2 Switch' 0"
+-cset "name='RX1 Digital Volume' 0"
+-cset "name='RX2 Digital Volume' 0"
+-cset "name='RX INT1 DEM MUX' ZERO"
+-cset "name='RX INT2 DEM MUX' ZERO"
++DisableSequence [
++	cset "name='COMP1 Switch' 0"
++	cset "name='COMP2 Switch' 0"
++	cset "name='RX INT1_1 MIX1 INP0' ZERO"
++	cset "name='RX INT2_1 MIX1 INP0' ZERO"
++	cset "name='RX INT1 DEM MUX' NORMAL_DSM_OUT"
++	cset "name='RX INT2 DEM MUX' NORMAL_DSM_OUT"
++]
++
+diff --git a/ucm2/codecs/wcd934x/HeadphoneEnableSeq.conf b/ucm2/codecs/wcd934x/HeadphoneEnableSeq.conf
+index 5ce7950..7ae2807 100644
+--- a/ucm2/codecs/wcd934x/HeadphoneEnableSeq.conf
++++ b/ucm2/codecs/wcd934x/HeadphoneEnableSeq.conf
+@@ -1,6 +1,9 @@
+-cset "name='COMP1 Switch' 1"
+-cset "name='COMP2 Switch' 1"
+-cset "name='RX INT1 DEM MUX' CLSH_DSM_OUT"
+-cset "name='RX INT2 DEM MUX' CLSH_DSM_OUT"
+-cset "name='RX1 Digital Volume' 68"
+-cset "name='RX2 Digital Volume' 68"
++EnableSequence [
++	cset "name='COMP1 Switch' 1"
++	cset "name='COMP2 Switch' 1"
++	cset "name='RX INT1_1 MIX1 INP0' RX2"
++	cset "name='RX INT2_1 MIX1 INP0' RX3"
++	cset "name='RX INT1 DEM MUX' CLSH_DSM_OUT"
++	cset "name='RX INT2 DEM MUX' CLSH_DSM_OUT"
++]
++
+diff --git a/ucm2/codecs/wcd934x/HeadphoneMicDisableSeq.conf b/ucm2/codecs/wcd934x/HeadphoneMicDisableSeq.conf
+index 5558446..591bf7e 100644
+--- a/ucm2/codecs/wcd934x/HeadphoneMicDisableSeq.conf
++++ b/ucm2/codecs/wcd934x/HeadphoneMicDisableSeq.conf
+@@ -1,2 +1,3 @@
+-cset "name='AMIC MUX0' ZERO"
+-cset "name='ADC2 Volume' 0"
++DisableSequence [
++	cset "name='AMIC MUX0' ZERO"
++]
+diff --git a/ucm2/codecs/wcd934x/HeadphoneMicEnableSeq.conf b/ucm2/codecs/wcd934x/HeadphoneMicEnableSeq.conf
+index ad43830..8eecdce 100644
+--- a/ucm2/codecs/wcd934x/HeadphoneMicEnableSeq.conf
++++ b/ucm2/codecs/wcd934x/HeadphoneMicEnableSeq.conf
+@@ -1,3 +1,5 @@
+-cset "name='AMIC MUX0' ADC2"
+-cset "name='ADC2 Volume' 12"
+-cset "name='ADC MUX0' AMIC"
++EnableSequence [
++	cset "name='AMIC MUX0' ADC2"
++	cset "name='ADC MUX0' AMIC"
++]
++
+diff --git a/ucm2/codecs/wcd934x/SpeakerDisableSeq.conf b/ucm2/codecs/wcd934x/SpeakerDisableSeq.conf
+index 92f9dea..5e3ffce 100644
+--- a/ucm2/codecs/wcd934x/SpeakerDisableSeq.conf
++++ b/ucm2/codecs/wcd934x/SpeakerDisableSeq.conf
+@@ -1,6 +1,7 @@
+ DisableSequence [
+-	cset "name='RX7 Digital Volume' 0"
+-	cset "name='RX8 Digital Volume' 0"
+ 	cset "name='COMP7 Switch' 0"
+ 	cset "name='COMP8 Switch' 0"
+-]
+\ No newline at end of file
++	cset "name='RX INT7_1 MIX1 INP0' ZERO"
++	cset "name='RX INT8_1 MIX1 INP0' ZERO"
++]
++
+diff --git a/ucm2/codecs/wcd934x/SpeakerEnableSeq.conf b/ucm2/codecs/wcd934x/SpeakerEnableSeq.conf
+index 2d8d01a..25802fa 100644
+--- a/ucm2/codecs/wcd934x/SpeakerEnableSeq.conf
++++ b/ucm2/codecs/wcd934x/SpeakerEnableSeq.conf
+@@ -1,6 +1,7 @@
+ EnableSequence [
+ 	cset "name='COMP7 Switch' 1"
+ 	cset "name='COMP8 Switch' 1"
+-	cset "name='RX7 Digital Volume' 80"
+-	cset "name='RX8 Digital Volume' 80"
++	cset "name='RX INT7_1 MIX1 INP0' RX0"
++	cset "name='RX INT8_1 MIX1 INP0' RX1"
+ ]
++
+diff --git a/ucm2/codecs/wcd934x/init.conf b/ucm2/codecs/wcd934x/init.conf
+new file mode 100644
+index 0000000..94ed7d3
+--- /dev/null
++++ b/ucm2/codecs/wcd934x/init.conf
+@@ -0,0 +1,22 @@
++# WCD934X specific volume control settings
++
++BootSequence [
++	cset "name='RX0 Digital Volume' 80"
++	cset "name='RX1 Digital Volume' 80"
++	cset "name='RX2 Digital Volume' 80"
++	cset "name='ADC1 Volume' 12"
++	cset "name='ADC2 Volume' 12"
++	cset "name='ADC3 Volume' 12"
++]
++
++LibraryConfig.remap.Config {
++
++	ctl.default.map {
++		# Merge two mono controls into one stereo
++		"name='HP Digital Volume'" {
++			"name='RX1 Digital Volume'".vindex.0 0
++			"name='RX2 Digital Volume'".vindex.1 0
++		}
++	}
++}
++
+diff --git a/ucm2/conf.d/sdm845/SHIFT6mq.conf b/ucm2/conf.d/sdm845/SHIFT6mq.conf
+new file mode 120000
+index 0000000..80c7254
+--- /dev/null
++++ b/ucm2/conf.d/sdm845/SHIFT6mq.conf
+@@ -0,0 +1 @@
++../../SHIFT/axolotl/axolotl.conf
+\ No newline at end of file
+-- 
+2.37.1
+
+
+From 909689b4295071f133bd3027838619afdbb32d8a Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Sat, 2 Jul 2022 19:07:42 +0200
+Subject: [PATCH 2/9] ucm2: SHIFT: axolotl: add headphone jack detection
+
+Add JackControl keyword to enable/disable the headphones on demand
+---
+ ucm2/SHIFT/axolotl/HiFi.conf | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/ucm2/SHIFT/axolotl/HiFi.conf b/ucm2/SHIFT/axolotl/HiFi.conf
+index 846f941..1900cb2 100644
+--- a/ucm2/SHIFT/axolotl/HiFi.conf
++++ b/ucm2/SHIFT/axolotl/HiFi.conf
+@@ -81,6 +81,7 @@ SectionDevice."Headphones" {
+ 		PlaybackPCM "hw:${CardId},4"
+ 		PlaybackMixer "default:${CardId}"
+ 		PlaybackMixerElem "HP Digital"
++		JackControl "Headset Jack"
+ 	}
+ }
+ 
+@@ -98,6 +99,7 @@ SectionDevice."Mic1" {
+ 		CapturePriority 200
+ 		CapturePCM "hw:${CardId},1"
+ 		CaptureMixerElem "ADC2"
++		JackControl "Headset Jack"
+ 	}
+ }
+ 
+-- 
+2.37.1
+
+
+From 8305ccf0a131c729c204774037d3c9c913967988 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Sun, 3 Jul 2022 16:28:10 +0200
+Subject: [PATCH 3/9] ucm2: SHIFT: axolotl: always pick bottom mic as default
+
+Back microphone is available but with a lower priority.
+Bottom microphone has the highest priority
+and needs to be the last microhpone as well in the UCM config
+to be parsed correctly
+---
+ ucm2/SHIFT/axolotl/HiFi.conf | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/ucm2/SHIFT/axolotl/HiFi.conf b/ucm2/SHIFT/axolotl/HiFi.conf
+index 1900cb2..8073beb 100644
+--- a/ucm2/SHIFT/axolotl/HiFi.conf
++++ b/ucm2/SHIFT/axolotl/HiFi.conf
+@@ -104,40 +104,40 @@ SectionDevice."Mic1" {
+ }
+ 
+ SectionDevice."Mic2" {
+-	Comment "Mic bottom"
++	Comment "Mic back"
+ 
+ 	EnableSequence [
+-		cset "name='AMIC MUX6' ADC1"
+-		cset "name='ADC MUX6' AMIC"
++		cset "name='AMIC MUX7' ADC3"
++		cset "name='ADC MUX7' AMIC"
+ 	]
+ 
+ 	DisableSequence [
+-		cset "name='AMIC MUX6' ZERO"
++		cset "name='AMIC MUX7' ZERO"
+ 	]
+ 
+ 	Value {
+-		CapturePriority 300
+-		CapturePCM "hw:${CardId},3"
+-		CaptureMixerElem "ADC1"
++		CapturePriority 100
++		CapturePCM "hw:${CardId},5"
++		CaptureMixerElem "ADC3"
+ 	}
+ }
+ 
+ SectionDevice."Mic3" {
+-	Comment "Mic back"
++	Comment "Mic bottom"
+ 
+ 	EnableSequence [
+-		cset "name='AMIC MUX7' ADC3"
+-		cset "name='ADC MUX7' AMIC"
++		cset "name='AMIC MUX6' ADC1"
++		cset "name='ADC MUX6' AMIC"
+ 	]
+ 
+ 	DisableSequence [
+-		cset "name='AMIC MUX7' ZERO"
++		cset "name='AMIC MUX6' ZERO"
+ 	]
+ 
+ 	Value {
+-		CapturePriority 100
+-		CapturePCM "hw:${CardId},5"
+-		CaptureMixerElem "ADC3"
++		CapturePriority 300
++		CapturePCM "hw:${CardId},3"
++		CaptureMixerElem "ADC1"
+ 	}
+ }
+ 
+-- 
+2.37.1
+
+
+From 7fe1e8ca243adcaf0a59400f22cce17e3f1fd5b3 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Sun, 3 Jul 2022 20:36:13 +0200
+Subject: [PATCH 4/9] ucm2: SHIFT: axolotl: use HW volume control
+
+Needs ignore_dB=true in PulseAudio config: load-module module-udev-detect ignore_dB=true since dB scale information is invalid
+---
+ ucm2/SHIFT/axolotl/HiFi.conf | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/ucm2/SHIFT/axolotl/HiFi.conf b/ucm2/SHIFT/axolotl/HiFi.conf
+index 8073beb..60e7e9b 100644
+--- a/ucm2/SHIFT/axolotl/HiFi.conf
++++ b/ucm2/SHIFT/axolotl/HiFi.conf
+@@ -67,6 +67,7 @@ SectionDevice."Earpiece" {
+ 	Value {
+ 		PlaybackPriority 100
+ 		PlaybackPCM "hw:${CardId},2"
++		PlaybackVolume "EAR PA Volume"
+ 	}
+ }
+ 
+@@ -82,6 +83,7 @@ SectionDevice."Headphones" {
+ 		PlaybackMixer "default:${CardId}"
+ 		PlaybackMixerElem "HP Digital"
+ 		JackControl "Headset Jack"
++		PlaybackVolume "HP Digital Volume"
+ 	}
+ }
+ 
+@@ -100,6 +102,7 @@ SectionDevice."Mic1" {
+ 		CapturePCM "hw:${CardId},1"
+ 		CaptureMixerElem "ADC2"
+ 		JackControl "Headset Jack"
++		CaptureVolume "ADC2 Volume"
+ 	}
+ }
+ 
+@@ -119,6 +122,7 @@ SectionDevice."Mic2" {
+ 		CapturePriority 100
+ 		CapturePCM "hw:${CardId},5"
+ 		CaptureMixerElem "ADC3"
++		CaptureVolume "ADC3 Volume"
+ 	}
+ }
+ 
+@@ -138,6 +142,6 @@ SectionDevice."Mic3" {
+ 		CapturePriority 300
+ 		CapturePCM "hw:${CardId},3"
+ 		CaptureMixerElem "ADC1"
++		CaptureVolume "ADC1 Volume"
+ 	}
+ }
+-
+-- 
+2.37.1
+
+
+From b98304045e5aed4662e9cf464966260d386e2f82 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Mon, 4 Jul 2022 16:08:46 +0200
+Subject: [PATCH 5/9] ucm2: SHIFT: axolotl: use bottom mic for voice calls
+
+q6voice driver expects mic for voice calls to be on SLIMBUS_0_TX
+---
+ ucm2/SHIFT/axolotl/HiFi.conf | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/ucm2/SHIFT/axolotl/HiFi.conf b/ucm2/SHIFT/axolotl/HiFi.conf
+index 60e7e9b..4fd3447 100644
+--- a/ucm2/SHIFT/axolotl/HiFi.conf
++++ b/ucm2/SHIFT/axolotl/HiFi.conf
+@@ -99,7 +99,7 @@ SectionDevice."Mic1" {
+ 
+ 	Value {
+ 		CapturePriority 200
+-		CapturePCM "hw:${CardId},1"
++		CapturePCM "hw:${CardId},3"
+ 		CaptureMixerElem "ADC2"
+ 		JackControl "Headset Jack"
+ 		CaptureVolume "ADC2 Volume"
+@@ -140,7 +140,7 @@ SectionDevice."Mic3" {
+ 
+ 	Value {
+ 		CapturePriority 300
+-		CapturePCM "hw:${CardId},3"
++		CapturePCM "hw:${CardId},1"
+ 		CaptureMixerElem "ADC1"
+ 		CaptureVolume "ADC1 Volume"
+ 	}
+-- 
+2.37.1
+
+
+From 38be6b2992b5b487f5a43601f298ef864715cb83 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Wed, 6 Jul 2022 18:34:59 +0200
+Subject: [PATCH 6/9] ucm2: SHIFT: axolotl: LibraryConfig is not supported in
+ syntax v3
+
+Maybe in higher versions of the ALSA UCM syntax, but upgrading breaks other things, let's keep it for now
+---
+ ucm2/SHIFT/axolotl/HiFi.conf    |  1 -
+ ucm2/SHIFT/axolotl/axolotl.conf |  1 -
+ ucm2/codecs/wcd934x/init.conf   | 12 ------------
+ 3 files changed, 14 deletions(-)
+
+diff --git a/ucm2/SHIFT/axolotl/HiFi.conf b/ucm2/SHIFT/axolotl/HiFi.conf
+index 4fd3447..0fd86c7 100644
+--- a/ucm2/SHIFT/axolotl/HiFi.conf
++++ b/ucm2/SHIFT/axolotl/HiFi.conf
+@@ -83,7 +83,6 @@ SectionDevice."Headphones" {
+ 		PlaybackMixer "default:${CardId}"
+ 		PlaybackMixerElem "HP Digital"
+ 		JackControl "Headset Jack"
+-		PlaybackVolume "HP Digital Volume"
+ 	}
+ }
+ 
+diff --git a/ucm2/SHIFT/axolotl/axolotl.conf b/ucm2/SHIFT/axolotl/axolotl.conf
+index ba8c21d..e54878b 100644
+--- a/ucm2/SHIFT/axolotl/axolotl.conf
++++ b/ucm2/SHIFT/axolotl/axolotl.conf
+@@ -6,5 +6,4 @@ SectionUseCase."HiFi" {
+ }
+ 
+ Include.card-init.File "/lib/card-init.conf"
+-Include.ctl-remap.File "/lib/ctl-remap.conf"
+ Include.codec-init.File "/codecs/wcd934x/init.conf"
+diff --git a/ucm2/codecs/wcd934x/init.conf b/ucm2/codecs/wcd934x/init.conf
+index 94ed7d3..d24a086 100644
+--- a/ucm2/codecs/wcd934x/init.conf
++++ b/ucm2/codecs/wcd934x/init.conf
+@@ -8,15 +8,3 @@ BootSequence [
+ 	cset "name='ADC2 Volume' 12"
+ 	cset "name='ADC3 Volume' 12"
+ ]
+-
+-LibraryConfig.remap.Config {
+-
+-	ctl.default.map {
+-		# Merge two mono controls into one stereo
+-		"name='HP Digital Volume'" {
+-			"name='RX1 Digital Volume'".vindex.0 0
+-			"name='RX2 Digital Volume'".vindex.1 0
+-		}
+-	}
+-}
+-
+-- 
+2.37.1
+
+
+From a6109c61022b89d76fb3f22771777296bc3a0dcf Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Wed, 6 Jul 2022 18:45:34 +0200
+Subject: [PATCH 7/9] ucm2: SHIFT: axolotl: improve headset support
+
+Set headset priority to highest so it automatically switches to it when plugged in and drop earpiece in HiFi
+---
+ ucm2/SHIFT/axolotl/HiFi.conf | 31 +++++--------------------------
+ 1 file changed, 5 insertions(+), 26 deletions(-)
+
+diff --git a/ucm2/SHIFT/axolotl/HiFi.conf b/ucm2/SHIFT/axolotl/HiFi.conf
+index 0fd86c7..fa06fdd 100644
+--- a/ucm2/SHIFT/axolotl/HiFi.conf
++++ b/ucm2/SHIFT/axolotl/HiFi.conf
+@@ -14,7 +14,6 @@ SectionVerb {
+ 
+ 	EnableSequence [
+ 		cset "name='QUAT_MI2S_RX Audio Mixer MultiMedia1' 1"
+-		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia3' 1"
+ 		cset "name='SLIMBUS_1_RX Audio Mixer MultiMedia5' 1"
+ 		cset "name='MultiMedia2 Mixer SLIMBUS_0_TX' 1"
+ 		cset "name='MultiMedia4 Mixer SLIMBUS_1_TX' 1"
+@@ -30,7 +29,6 @@ SectionVerb {
+ 
+ 	DisableSequence [
+ 		cset "name='QUAT_MI2S_RX Audio Mixer MultiMedia1' 0"
+-		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia3' 0"
+ 		cset "name='SLIMBUS_1_RX Audio Mixer MultiMedia5' 0"
+ 		cset "name='MultiMedia2 Mixer SLIMBUS_0_TX' 0"
+ 		cset "name='MultiMedia4 Mixer SLIMBUS_1_TX' 0"
+@@ -46,31 +44,11 @@ SectionDevice."Speaker" {
+ 	Comment "Speaker playback"
+ 
+ 	Value {
+-		PlaybackPriority 300
++		PlaybackPriority 200
+ 		PlaybackPCM "hw:${CardId},0"
+ 	}
+ }
+ 
+-SectionDevice."Earpiece" {
+-	Comment "Earpiece playback"
+-
+-	EnableSequence [
+-		cset "name='RX INT0_1 MIX1 INP0' RX0"
+-		cset "name='RX INT0 DEM MUX' CLSH_DSM_OUT"
+-	]
+-
+-	DisableSequence [
+-		cset "name='RX INT0_1 MIX1 INP0' ZERO"
+-		cset "name='RX INT0 DEM MUX' NORMAL_DSM_OUT"
+-	]
+-
+-	Value {
+-		PlaybackPriority 100
+-		PlaybackPCM "hw:${CardId},2"
+-		PlaybackVolume "EAR PA Volume"
+-	}
+-}
+-
+ SectionDevice."Headphones" {
+ 	Comment "Headphones playback"
+ 
+@@ -78,7 +56,7 @@ SectionDevice."Headphones" {
+ 	Include.wcdhpd.File "/codecs/wcd934x/HeadphoneDisableSeq.conf"
+ 
+ 	Value {
+-		PlaybackPriority 200
++		PlaybackPriority 300
+ 		PlaybackPCM "hw:${CardId},4"
+ 		PlaybackMixer "default:${CardId}"
+ 		PlaybackMixerElem "HP Digital"
+@@ -97,7 +75,7 @@ SectionDevice."Mic1" {
+ 	]
+ 
+ 	Value {
+-		CapturePriority 200
++		CapturePriority 300
+ 		CapturePCM "hw:${CardId},3"
+ 		CaptureMixerElem "ADC2"
+ 		JackControl "Headset Jack"
+@@ -138,9 +116,10 @@ SectionDevice."Mic3" {
+ 	]
+ 
+ 	Value {
+-		CapturePriority 300
++		CapturePriority 200
+ 		CapturePCM "hw:${CardId},1"
+ 		CaptureMixerElem "ADC1"
+ 		CaptureVolume "ADC1 Volume"
+ 	}
+ }
++
+-- 
+2.37.1
+
+
+From 0606ac876df1213ac22d072d7d619f772618bd78 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Thu, 7 Jul 2022 19:54:05 +0200
+Subject: [PATCH 8/9] ucm2: SHIFT: axolotl: use better names
+
+Use consistent device names for a nicer look in overlay UI for audio
+---
+ ucm2/SHIFT/axolotl/HiFi.conf | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/ucm2/SHIFT/axolotl/HiFi.conf b/ucm2/SHIFT/axolotl/HiFi.conf
+index fa06fdd..44cdacc 100644
+--- a/ucm2/SHIFT/axolotl/HiFi.conf
++++ b/ucm2/SHIFT/axolotl/HiFi.conf
+@@ -41,7 +41,7 @@ SectionVerb {
+ }
+ 
+ SectionDevice."Speaker" {
+-	Comment "Speaker playback"
++	Comment "Speaker"
+ 
+ 	Value {
+ 		PlaybackPriority 200
+@@ -50,7 +50,7 @@ SectionDevice."Speaker" {
+ }
+ 
+ SectionDevice."Headphones" {
+-	Comment "Headphones playback"
++	Comment "Headset"
+ 
+ 	Include.wcdhpe.File "/codecs/wcd934x/HeadphoneEnableSeq.conf"
+ 	Include.wcdhpd.File "/codecs/wcd934x/HeadphoneDisableSeq.conf"
+@@ -65,7 +65,7 @@ SectionDevice."Headphones" {
+ }
+ 
+ SectionDevice."Mic1" {
+-	Comment "Mic headphones"
++	Comment "Headset microphone"
+ 
+ 	Include.wcdmice.File "/codecs/wcd934x/HeadphoneMicEnableSeq.conf"
+ 	Include.wcdmicd.File "/codecs/wcd934x/HeadphoneMicDisableSeq.conf"
+@@ -84,7 +84,7 @@ SectionDevice."Mic1" {
+ }
+ 
+ SectionDevice."Mic2" {
+-	Comment "Mic back"
++	Comment "Microphone back"
+ 
+ 	EnableSequence [
+ 		cset "name='AMIC MUX7' ADC3"
+@@ -104,7 +104,7 @@ SectionDevice."Mic2" {
+ }
+ 
+ SectionDevice."Mic3" {
+-	Comment "Mic bottom"
++	Comment "Microphone bottom"
+ 
+ 	EnableSequence [
+ 		cset "name='AMIC MUX6' ADC1"
+-- 
+2.37.1
+
+
+From c3ac12d627f937a8289fb6dba827a9a3ce436e3e Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Thu, 7 Jul 2022 19:54:36 +0200
+Subject: [PATCH 9/9] ucm2: SHIFT: axolotl: add Voice Call use case
+
+Enable voice calls on SHIFT 6mq
+---
+ ucm2/SHIFT/axolotl/VoiceCall.conf | 82 +++++++++++++++++++++++++++++++
+ ucm2/SHIFT/axolotl/axolotl.conf   |  6 +++
+ 2 files changed, 88 insertions(+)
+ create mode 100644 ucm2/SHIFT/axolotl/VoiceCall.conf
+
+diff --git a/ucm2/SHIFT/axolotl/VoiceCall.conf b/ucm2/SHIFT/axolotl/VoiceCall.conf
+new file mode 100644
+index 0000000..8c5b03d
+--- /dev/null
++++ b/ucm2/SHIFT/axolotl/VoiceCall.conf
+@@ -0,0 +1,82 @@
++# Use case configuration for SHIFT 6mq (axolotl).
++# Author: Dylan Van Assche <me@dylanvanassche.be>
++
++# OUTPUT DEVICES
++#  - Internal speaker: MultiMedia1, device 0 on card 0, TFA driver, QUAT_MI2S
++#  - Internal earpiece: MultiMedia3, device 1 on card 0, WCD934x driver, SLIMBUS, RX2 + RX3
++#  - Jack headphones: MultiMedia5, device 1 on card 0, WCD934x driver, SLIMBUS, RX0
++# INPUT DEVICES
++#  - Headphone microphone: MultiMedia2, device 1 on card 0, SLIMBUS, ADC2
++#  - Internal microphone bottom: MultiMedia4, device 1 on card 0, SLIMBUS, ADC1
++#  - Internal microphone back: MultiMedia6, device 1 on card 0, SLIMBUS, ADC3
++
++SectionVerb {
++
++	EnableSequence [
++		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia3' 1"
++		cset "name='SLIMBUS_0_RX Voice Mixer VoiceMMode1' 1"
++		cset "name='MultiMedia2 Mixer SLIMBUS_0_TX' 1"
++		cset "name='VoiceMMode1 Capture Mixer SLIMBUS_0_TX' 1"
++	]
++
++	Include.wcde.File "/codecs/wcd934x/DefaultEnableSeq.conf"
++
++	Include.wcdd {
++		File "/codecs/wcd934x/DefaultDisableSeq.conf"
++		Before.DisableSequence "0"
++	}
++
++	DisableSequence [
++		cset "name='SLIMBUS_0_RX Audio Mixer MultiMedia3' 0"
++		cset "name='SLIMBUS_0_RX Voice Mixer VoiceMMode1' 0"
++		cset "name='MultiMedia2 Mixer SLIMBUS_0_TX' 1"
++		cset "name='VoiceMMode1 Capture Mixer SLIMBUS_0_TX' 0"
++	]
++
++	Value {
++		TQ "Voice"
++	}
++}
++
++SectionDevice."Earpiece" {
++	Comment "Earpiece"
++
++	EnableSequence [
++		cset "name='RX INT0_1 MIX1 INP0' RX0"
++		cset "name='RX INT0 DEM MUX' CLSH_DSM_OUT"
++	]
++
++	DisableSequence [
++		cset "name='RX INT0_1 MIX1 INP0' ZERO"
++		cset "name='RX INT0 DEM MUX' NORMAL_DSM_OUT"
++	]
++
++	Value {
++		PlaybackPriority 100
++		PlaybackPCM "hw:${CardId},2"
++		PlaybackVolume "EAR PA Volume"
++	}
++
++}
++
++SectionDevice."Mic" {
++	# Bottom microphone is used for calls
++	Comment "Microphone"
++
++	EnableSequence [
++		cset "name='AMIC MUX6' ADC1"
++		cset "name='ADC MUX6' AMIC"
++	]
++
++	DisableSequence [
++		cset "name='AMIC MUX6' ZERO"
++	]
++
++	Value {
++		CapturePriority 200
++		CapturePCM "hw:${CardId},1"
++		CaptureMixerElem "ADC1"
++		CaptureVolume "ADC1 Volume"
++	}
++}
++
+diff --git a/ucm2/SHIFT/axolotl/axolotl.conf b/ucm2/SHIFT/axolotl/axolotl.conf
+index e54878b..e8d21f6 100644
+--- a/ucm2/SHIFT/axolotl/axolotl.conf
++++ b/ucm2/SHIFT/axolotl/axolotl.conf
+@@ -5,5 +5,11 @@ SectionUseCase."HiFi" {
+ 	Comment "HiFi quality Music."
+ }
+ 
++SectionUseCase."Voice Call" {
++	File "/SHIFT/axolotl/VoiceCall.conf"
++	Comment "Make a phone call."
++}
++
+ Include.card-init.File "/lib/card-init.conf"
+ Include.codec-init.File "/codecs/wcd934x/init.conf"
++
+-- 
+2.37.1
+
