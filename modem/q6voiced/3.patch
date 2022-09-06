@@ -1,0 +1,35 @@
+From 5dfa30d0076f2be159d878f36da2a550dd8cfdd7 Mon Sep 17 00:00:00 2001
+From: Dylan Van Assche <me@dylanvanassche.be>
+Date: Fri, 8 Jul 2022 16:03:12 +0200
+Subject: [PATCH] q6voiced: use pcm_start instead of pcm_prepare
+
+Some drivers do their init and deinit in prepare and shutdown
+callbacks. For these drivers this daemon worked already.
+However, the proper way is to use the trigger callback according
+to the ALSA documentation in the kernel [1].
+Therefore, use pcm_start to trigger prepare, shutdown, and trigger callbacks.
+
+[1] https://www.kernel.org/doc/html/latest/sound/kernel-api/alsa-driver-api.html#c.snd_compr_ops
+---
+ q6voiced.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/q6voiced.c b/q6voiced.c
+index c8d6e13..e2bc383 100644
+--- a/q6voiced.c
++++ b/q6voiced.c
+@@ -29,9 +29,9 @@ static void q6voiced_open(struct q6voiced *v)
+ 	 */
+ 	v->tx = pcm_open(v->card, v->device, PCM_IN, &pcm_config_voice_call);
+ 	v->rx = pcm_open(v->card, v->device, PCM_OUT, &pcm_config_voice_call);
+-	if (!pcm_is_ready(v->tx) || pcm_prepare(v->tx))
++	if (!pcm_is_ready(v->tx) || pcm_start(v->tx))
+ 		perror("Failed to open tx");
+-	if (!pcm_is_ready(v->rx) || pcm_prepare(v->rx))
++	if (!pcm_is_ready(v->rx) || pcm_start(v->rx))
+ 		perror("Failed to open rx");
+ 
+ 	printf("PCM devices were opened.\n");
+-- 
+GitLab
+
