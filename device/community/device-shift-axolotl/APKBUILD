@@ -4,20 +4,20 @@
 
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
-pkgver=5
-pkgrel=1
+pkgver=9999
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
 depends="
+	alsa-ucm-conf
 	linux-postmarketos-qcom-sdm845
 	make-dynpart-mappings
 	mkbootimg
 	postmarketos-base
 	postmarketos-update-kernel
 	soc-qcom-sdm845
-	soc-qcom-sdm845-ucm
 	soc-qcom-sdm845-qbootctl
 "
 makedepends="devicepkg-dev"
