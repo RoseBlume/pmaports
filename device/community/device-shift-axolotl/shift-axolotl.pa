@@ -1,0 +1,5 @@
+unload-module module-suspend-on-idle
+
+# allows the full range of dB
+unload-module module-udev-detect
+load-module module-udev-detect ignore_dB=true
