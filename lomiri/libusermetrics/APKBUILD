@@ -8,8 +8,24 @@ pkgdesc='Library for exporting anonymous metrics about users'
 arch="all"
 url="https://gitlab.com/ubports/development/core/libusermetrics"
 license="GPL-3.0 LGPL-3.0 LGPL-2.1"
-depends_dev="qt5-qtxmlpatterns-dev libapparmor-dev gsettings-qt-dev qt5-qtdeclarative-dev click-dev qdjango-dev"
-makedepends="$depends_dev cmake-extras qt5-qtbase-dev libapparmor libqtdbustest intltool gtest-dev gmock"
+depends_dev="
+	click-dev
+	gsettings-qt-dev
+	libapparmor-dev
+	qdjango-dev
+	qt5-qtdeclarative-dev
+	qt5-qtxmlpatterns-dev
+	"
+makedepends="
+	$depends_dev
+	cmake-extras
+	gmock
+	gtest-dev
+	intltool
+	libapparmor
+	libqtdbustest
+	qt5-qtbase-dev
+	"
 checkdepends="dbus"
 source="https://gitlab.com/ubports/development/core/libusermetrics/-/archive/$_commit/libusermetrics-$_commit.tar.gz"
 subpackages="$pkgname-dev $pkgname-lang"
