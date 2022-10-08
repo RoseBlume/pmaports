@@ -8,7 +8,15 @@ pkgdesc="Library for mocking DBus interactions using Qt"
 url="https://github.com/ubports/libqtdbusmock"
 arch="all"
 license="LGPL-3.0-only"
-makedepends="cmake cmake-extras libqtdbustest networkmanager-dev qt5-qtbase-dev gtest-dev gmock"
+makedepends="
+	cmake
+	cmake-extras
+	gmock
+	gtest-dev
+	libqtdbustest
+	networkmanager-dev
+	qt5-qtbase-dev
+	"
 checkdepends="py3-dbusmock procps"
 source="$pkgname-$_commit.tar.gz::https://github.com/ubports/libqtdbusmock/archive/$_commit.tar.gz"
 builddir="$srcdir/$pkgname-$_commit"
@@ -29,4 +37,6 @@ check() {
 package() {
 	make -C build DESTDIR="$pkgdir" install
 }
-sha512sums="5726b78bee6fbc0b7dd3feecdcc0ac1611e4b73610ad55fc351a8b3a75d1df998854b6ecaacd8a25a632ebc3b2daf8053a607a00ddd4821d8dcf1ac01c971bea  libqtdbusmock-1e9fd84aa31c7b858b90e2bbbdcadf081549fa65.tar.gz"
+sha512sums="
+5726b78bee6fbc0b7dd3feecdcc0ac1611e4b73610ad55fc351a8b3a75d1df998854b6ecaacd8a25a632ebc3b2daf8053a607a00ddd4821d8dcf1ac01c971bea  libqtdbusmock-1e9fd84aa31c7b858b90e2bbbdcadf081549fa65.tar.gz
+"
