@@ -8,6 +8,7 @@ arch="noarch"
 license="GPL-3.0-or-later"
 depends="
 	elogind
+	hfd-service
 	lomiri
 	lomiri-system-settings
 	networkmanager
@@ -18,11 +19,10 @@ depends="
 	networkmanager-wwan
 	postmarketos-artwork-wallpapers
 	postmarketos-base-ui
+	repowerd
+	sensorfw
 	tinydm
 	tinydm-openrc
-	hfd-service
-	sensorfw
-	repowerd
 "
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="
