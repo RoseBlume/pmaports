@@ -10,6 +10,7 @@ expected_directories = [
     "device/main",
     "device/testing",
     "device/unmaintained",
+    "lomiri",
     "main",
     "modem",
     "non-free",
