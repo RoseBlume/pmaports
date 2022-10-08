@@ -8,7 +8,14 @@ pkgdesc="API for Unity shell integration"
 url="https://gitlab.com/ubports/development/core/lomiri-api"
 arch="all"
 license="LGPL-3.0"
-makedepends="cmake cmake-extras qt5-qtdeclarative-dev libqtdbustest gtest-dev gmock"
+makedepends="
+	cmake
+	cmake-extras
+	gmock
+	gtest-dev
+	libqtdbustest
+	qt5-qtdeclarative-dev
+	"
 checkdepends="dbus"
 source="https://gitlab.com/ubports/development/core/lomiri-api/-/archive/$_commit/lomiri-api-$_commit.tar.gz
 	qmltestrunner.patch"
