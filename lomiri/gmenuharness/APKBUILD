@@ -1,5 +1,4 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
-# Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=gmenuharness
 pkgver=0_git20210407
 _commit="e39664917c09c3d8580a041182d6fce41de29863"
@@ -8,7 +7,16 @@ pkgdesc="Library to test GMenuModel structures."
 url="https://gitlab.com/ubports/development/core/gmenuharness"
 arch="all"
 license="LGPL-3.0-only"
-makedepends="cmake cmake-extras qt5-qtbase-dev lomiri-api-dev glib-dev gtest-dev gmock libqtdbustest"
+makedepends="
+	cmake
+	cmake-extras
+	glib-dev
+	gmock
+	gtest-dev
+	libqtdbustest
+	lomiri-api-dev
+	qt5-qtbase-dev
+	"
 checkdepends="dbus"
 source="https://gitlab.com/ubports/development/core/gmenuharness/-/archive/$_commit/gmenuharness-$_commit.tar.gz"
 subpackages="$pkgname-dev"
@@ -31,4 +39,6 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 
-sha512sums="2014f385f13b755bf82a76db2f0f2a22f542cf9e7129d0019b4a0f55cd2506fe110ac8509f81a02541c61dbd61ff8b945348fc8eb21abc2933133aed29f20a0f  gmenuharness-e39664917c09c3d8580a041182d6fce41de29863.tar.gz"
+sha512sums="
+2014f385f13b755bf82a76db2f0f2a22f542cf9e7129d0019b4a0f55cd2506fe110ac8509f81a02541c61dbd61ff8b945348fc8eb21abc2933133aed29f20a0f  gmenuharness-e39664917c09c3d8580a041182d6fce41de29863.tar.gz
+"
