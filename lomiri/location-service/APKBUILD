@@ -1,6 +1,4 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
-# Contributor: Bart Ribbers <bribbers@disroot.org>
-# Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=location-service
 pkgver=0_git20221017
 pkgrel=0
@@ -9,8 +7,25 @@ pkgdesc="Location service aggregating position/velocity/heading updates and expo
 arch="all"
 url="https://gitlab.com/ubports/development/core/location-service"
 license="GPL-3.0 LGPL-3.0"
-depends_dev="boost-dev dbus-dev net-cpp-dev process-cpp-dev properties-cpp-dev json-c-dev libapparmor-dev gflags-dev glog-dev trust-store-dev"
-makedepends="$depends_dev cmake-extras gettext gtest-dev gmock dbus-cpp-dev"
+depends_dev="
+	boost-dev
+	dbus-dev
+	gflags-dev
+	glog-dev
+	json-c-dev
+	libapparmor-dev
+	net-cpp-dev
+	process-cpp-dev
+	properties-cpp-dev
+	trust-store-dev
+	"
+makedepends="$depends_dev
+	cmake-extras
+	dbus-cpp-dev
+	gettext
+	gmock
+	gtest-dev
+	"
 checkdepends="coreutils"
 source="
 	https://gitlab.com/ubports/development/core/location-service/-/archive/$_commit/location-service-$_commit.tar.gz
