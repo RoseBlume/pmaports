@@ -1,4 +1,3 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-system-compositor
 pkgver=0_git20221101
@@ -8,7 +7,17 @@ pkgdesc="System compositor using the Mir display server"
 arch="all"
 url="https://gitlab.com/ubports/development/core/lomiri-system-compositor"
 license="GPL-3.0-only"
-makedepends="$depends_dev cmake cmake-extras gtest-dev gmock gdk-pixbuf-dev mir-dev dbus-dev lomiri-deviceinfo-dev"
+makedepends="
+	$depends_dev
+	cmake
+	cmake-extras
+	dbus-dev
+	gdk-pixbuf-dev
+	gmock
+	gtest-dev
+	lomiri-deviceinfo-dev
+	mir-dev
+	"
 checkdepends="dbus"
 source="https://gitlab.com/ubports/development/core/lomiri-system-compositor/-/archive/$_commit/lomiri-system-compositor-$_commit.tar.gz
 	0001-spinner-Add-support-for-wayland-backend.patch
