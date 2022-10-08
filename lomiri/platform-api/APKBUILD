@@ -1,16 +1,26 @@
-# Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=platform-api
-pkgver=0_git20210824
+pkgver=0_git20220722
 pkgrel=0
-_commit="2af9d75c093c1c5728d630531f8c0b77b993aefb"
+_commit="125a53981248a9ffb341effab71e6e1b2a6a48ea"
 pkgdesc="Platform API for system level capabilities"
 arch="all"
-url='https://github.com/ubports/platform-api'
+url="https://gitlab.com/ubports/development/core/platform-api"
 license="GPL-3.0-only AND LGPL-3.0-only"
-depends_dev="process-cpp-dev lomiri-url-dispatcher-dev location-service-dev"
-makedepends="$depends_dev cmake cmake-extras dbus-cpp-dev gtest-dev gmock"
-source="$pkgname-$_commit.tar.gz::https://github.com/ubports/$pkgname/archive/$_commit.tar.gz"
+depends_dev="
+	location-service-dev
+	lomiri-url-dispatcher-dev
+	process-cpp-dev
+	"
+makedepends="
+	$depends_dev
+	cmake
+	cmake-extras
+	dbus-cpp-dev
+	gmock
+	gtest-dev
+	"
+source="https://gitlab.com/ubports/development/core/platform-api/-/archive/$_commit/platform-api-$_commit.tar.gz"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -31,5 +41,5 @@ package() {
 }
 
 sha512sums="
-3cf778a86c1ab0c9724c4534bdbfc2a35be61c6b87ca505a0bf2b7e7ee1db6459ce49744ba24472a205131095f4b4d3ab911f8d6eda872481212726992f96913  platform-api-2af9d75c093c1c5728d630531f8c0b77b993aefb.tar.gz
+c059d183e616a8416f9d0f5e55a1e96f10afbcf2bd5f2403d5be6c0d511569a086209a60082a47a76e439c18d6b1a288bb356cd32f6096f12758c654367158f4  platform-api-125a53981248a9ffb341effab71e6e1b2a6a48ea.tar.gz
 "
