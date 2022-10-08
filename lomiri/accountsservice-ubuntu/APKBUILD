@@ -4,12 +4,11 @@
 pkgname=accountsservice-ubuntu
 _pkgname=accountsservice
 pkgver=0.6.45
-pkgrel=1
+pkgrel=0
 pkgdesc="D-Bus interface for user account query and manipulation"
 url="http://www.freedesktop.org/software/accountsservice/"
 arch="all"
 license="GPL-3.0-or-later"
-depends=""
 depends_dev="glib-dev gobject-introspection-dev polkit-dev"
 makedepends="$depends_dev intltool gnome-doc-utils"
 provides="$_pkgname=$pkgver lib$_pkgname=$pkgver"
@@ -24,8 +23,8 @@ source="http://www.freedesktop.org/software/accountsservice/accountsservice-$pkg
 	0003-0011-add-background-file-support.patch.patch
 	0004-0016-add-input-sources-support.patch.patch"
 builddir="$srcdir"/$_pkgname-$pkgver
+
 build() {
-	cd "$builddir"
 	# Hack to check for /var/log/wtmp instead of /var/log/utx.log
 	sed -i configure -e "s;utx\.log;wtmp;g"
 	ac_cv_file__var_log_utx_log=yes ./configure \
@@ -42,12 +41,10 @@ build() {
 }
 
 check() {
-	cd "$builddir"
 	make check
 }
 
 package() {
-	cd "$builddir"
 	make DESTDIR="$pkgdir" install
 }
 
