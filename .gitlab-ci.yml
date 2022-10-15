@@ -104,6 +104,16 @@ aport-lint:
     - merge_requests
   allow_failure: true
 
+# check if nftable configs are valid
+nftables-check:
+  stage: lint
+  <<: *only-default
+  before_script:
+    - apk -q add nftables
+  script:
+    - find -iname "*.nft" -type f -exec mv {} /etc/nftables.d \;
+    - nft -c -f "/etc/nftables.nft"
+
 # kernel kconfig check
 kernel-kconfig:
   stage: lint
