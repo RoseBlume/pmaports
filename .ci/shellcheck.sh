@@ -1,10 +1,19 @@
 #!/bin/sh -e
+# Description: Run shellcheck on everything
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
+# https://postmarktos.org/pmb-ci
 
 set -e
 DIR="$(cd "$(dirname "$0")" && pwd -P)"
 cd "$DIR/.."
+
+if [ "$(id -u)" = 0 ]; then
+	set -x
+	apk -q add \
+		shellcheck
+	exec su "${TESTUSER:-build}" -c "sh -e $0"
+fi
 
 # Find CHANGEMEs in APKBUILDs
 if grep -qr '(CHANGEME!)' *; then

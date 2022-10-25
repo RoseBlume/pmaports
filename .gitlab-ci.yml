@@ -2,6 +2,8 @@
 
 # global settings
 image: alpine:latest
+variables:
+  TESTUSER: "root"
 after_script:
   - .ci/move_logs.sh $CI_PROJECT_DIR
 stages:
@@ -46,10 +48,8 @@ testcases-linting:
     changes:
       - .ci/*
       - .ci/*/*
-  before_script:
-    - apk -q add py-flake8
   script:
-    - flake8 --ignore E501,F401,E722,W504,W605
+    - .ci/flake8.sh
 
 # shellcheck
 shellcheck:
@@ -57,18 +57,14 @@ shellcheck:
   <<: *only-default
   image: alpine:edge
   before_script:
-    - apk -q add shellcheck
-  script:
     - .ci/shellcheck.sh
 
 editor-config:
   stage: lint
   <<: *only-default
   image: alpine:edge
-  before_script:
-    - apk -q add editorconfig-checker
   script:
-    - ec
+    - .ci/ec.sh
 
 # aports checks (generic)
 aports-static:
