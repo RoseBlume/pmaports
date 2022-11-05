@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=gsettings-qt
-pkgver=0_git20200909
-_commit="ce56e46b67c11276ec5f44b6a3a1c3f5a46aafed"
+pkgver=0_git20220807
+_commit="d5e002d7e0bce46c315bcc99a44a8bd51f49f488"
 pkgrel=0
 pkgdesc="Library to access GSettings from Qt"
 url="https://gitlab.com/ubports/development/core/gsettings-qt"
@@ -28,4 +28,6 @@ package() {
 	make INSTALL_ROOT="$pkgdir" install
 }
 
-sha512sums="7d4903cc5ff43a0da21f266c3e2b90574b38de382ef85e7dd2ca80b6d29abd3a72a073fac6fb79e3de0b6310e709576fa741a6ac0e2fff0c50817dc27e7720e2  gsettings-qt-ce56e46b67c11276ec5f44b6a3a1c3f5a46aafed.tar.gz"
+sha512sums="
+ead1c8fe4e050fe3b9a6f3881dbfda54e172b01948d59c52536ceb35e244222d75803849565d32e46bc80f9a1651abbeff545141a71545547252ce8786222175  gsettings-qt-d5e002d7e0bce46c315bcc99a44a8bd51f49f488.tar.gz
+"
