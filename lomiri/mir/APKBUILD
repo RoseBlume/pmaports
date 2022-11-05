@@ -18,6 +18,7 @@ source="
 	0002-Add-possibility-to-force-kms-device.patch
 	0003-Work-around-capnproto-incompatibility.patch
 	0004-Fix-Alpine-edge-by-not-using-internal-GTEST-macros-f.patch
+	0005-Fix-compilation-failure-with-GCC-12-missing-headers.patch
 "
 subpackages="$pkgname-dev $pkgname-demos $pkgname-test-tools:test_tools"
 options="!check" # Some tests fail
@@ -71,8 +72,9 @@ test_tools() {
 
 sha512sums="
 7d2da696b77a9fe470ea726cfe3788c192ecc81921ce355f68ca37616bbaad8f4f3402ad7320fab371ff944f5f27bc210d5e640a00c15e3651f1d1e084715bae  mir-1.8.2.tar.gz
-1dd1aa3aef4db3b55a39ff0ff44163a4d08335c5d23d47dd902ee7cb7af64896d4e5ca25c84790e6c912bbac73e18efcc8d2b8b5721ba8eee89613023418e766  0001-Stop-forcing-systemtap-integration.patch
-2b3925c1c4f1cdefe4ef8b5919dadac947e35e10cffa4f69fb999a374101811a18796aeebc5852ea384c55b97fa9550844a880e8704213578b659b12306634f9  0002-Add-possibility-to-force-kms-device.patch
-91b2cdb8488f9d2aaa029e949b9e9f52d277457e75d2c4ce6c2c06b9ae4af042ad95d01e34bfd4e036404cb19c68e875467a7a0607a418b08720da12e60d4604  0003-Work-around-capnproto-incompatibility.patch
-ccffec73cce48f1a210110f9af4d3ca7cb4efde22940ae14317782615137d74a90bd9dbcf42d4142f00109eff6f1f71982c32f86b87374f38c0660b5b07ecb63  0004-Fix-Alpine-edge-by-not-using-internal-GTEST-macros-f.patch
+404ed070e208f739f6fbaab773157ba6c1d26740a65ccaec4cec876b9f3a7ce2859fbc0b0e4603cd261fcd819bb555a2dec0f081114c38b777de88bf00867834  0001-Stop-forcing-systemtap-integration.patch
+c958376419af64c467e77e319a6938ccfcb3303c66c8ee26ca03e7afbccb26aa6d5bf8d5cff02e53aa40bbc748e164be3abb90a9f73f5dfedf7b3ffe1866aa3c  0002-Add-possibility-to-force-kms-device.patch
+fb7be3519f22badd55ca1b272cca4519264b7e46faac5fb9127dad991307fe5d01428d338208cf02405ccdf379534cce5e70ad27131ffea10d435a626bcf25b5  0003-Work-around-capnproto-incompatibility.patch
+750f37e37ab857c6ff864edd1fa6e82b8eaa8e47a9e1c989d696a35cc42c619f42234171e71cab55635848efafba88087fa0537c8a18432c98395db717bdbe51  0004-Fix-Alpine-edge-by-not-using-internal-GTEST-macros-f.patch
+354ddbdb2f48c244d3e82700cb9ca132d4266ee38abc5616afb6630e5c303ab1168293854088fc3252e58a64d365f6adfb7c8cc231c5c6f5420f01fbe37fe061  0005-Fix-compilation-failure-with-GCC-12-missing-headers.patch
 "
