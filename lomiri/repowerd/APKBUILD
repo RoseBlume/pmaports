@@ -1,8 +1,8 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=repowerd
-pkgver=2022.01_git20220801
+pkgver=2022.01_git20220815
 pkgrel=0
-_commit="75048fc24d7192e8c0e0a12ce282182dc307512a"
+_commit="0a01a972367815cf3ed711a17d4b948ac9ffcd99"
 pkgdesc="Power daemon to monitor and control system power state"
 url="https://gitlab.com/ubports/development/core/repowerd"
 arch="all"
@@ -47,7 +47,7 @@ package() {
 }
 
 sha512sums="
-75c0d409c50f97759203956cac962893163ba5155ec29d50205f5c26d905ed324b085f5e4503d7bd27af9b50b42707ab1b3830deabd6548c9c23360931954ca5  repowerd-75048fc24d7192e8c0e0a12ce282182dc307512a.tar.gz
+72ec1c061172ea7d121a90186f74078e736aefc3a9ba951c8ae399140ab7435bcf601f2fc19f3f8ef580216060682fc31d5ac42223cff8ccf275d4052ed1509a  repowerd-0a01a972367815cf3ed711a17d4b948ac9ffcd99.tar.gz
 d8c4dd351a7bf2bcc66b0eb8b0d17d602661f7defb857be5a28f694e4977b634b7d101f738058ce0ccaa313c4e316f7222c753610500ddbd68f8e42de7c57f29  repowerd.initd
 35fb523a942b6ffed75aa63fadc4c48b2524b9faf8e40998833ee035ab7b2f78ff23ab48b8581eb20f6a590483ed8e0d07a0e46f3c585a6414f2779014e4f563  0001-Add-sensorfw-code.patch
 1b3a6ff7b52b4a8e3bd0e4832fdcd51a9256e1d80557b4f96b470337ce893f3657cc77310cc8754bbb7c4fa7f1b04df5dbb326047edbbac7e797f20913adc647  0002-Increase-the-wakeup-time.patch
