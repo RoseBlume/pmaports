@@ -1,37 +1,41 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=geonames
-pkgver=0_git20180310
+pkgver=0_git20221003
 pkgrel=0
-_commit="5d77e827cd8800e9738f0e8ac2f865a59a9f68b2"
+_commit="298997bfc7504f3efd5a59f17f70fcd9a4da3eab"
 pkgdesc="Geonames"
 arch="all"
-url="https://github.com/ubports/geonames"
+url="https://gitlab.com/ubports/development/core/geonames"
 license="GPL-3.0-only"
-makedepends="gtk-doc autoconf automake libtool"
-# See https://github.com/ubports/geonames/issues/1
-source="$pkgname-$_commit.tar.gz::http://repo.ubports.com/pool/xenial/main/g/geonames/geonames_0.3+ubports1+0~20180310073020.3~1.gbp5d77e8.tar.gz"
+makedepends="cmake bash gtk-doc glib-dev"
+source="https://gitlab.com/ubports/development/core/geonames/-/archive/$_commit/geonames-$_commit.tar.gz"
 subpackages="$pkgname-dev $pkgname-lang"
-options="!check" # Tests fail
-builddir="$srcdir/source"
-
-prepare() {
-	./autogen.sh \
-		--build=$CBUILD \
-		--host=$CHOST \
-		--prefix=/usr
-}
+options="!check" # https://gitlab.com/ubports/development/core/geonames/-/issues/2
+builddir="$srcdir/geonames-$_commit"
 
 build() {
-	make
+	if [ "$CBUILD" != "$CHOST" ]; then
+		CMAKE_CROSSOPTS="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
+	fi
+	cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True \
+		-DCMAKE_BUILD_TYPE=None \
+		$CMAKE_CROSSOPTS .
+	cmake --build build
 }
 
 check() {
-	make check
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
 }
 
 package() {
-	make DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 }
 
-sha512sums="347976e251fa4a48760bae96f3f6326bee06fc799cd989237898a23fb72e49929b202dcd0fd33eaf06dc9a8966f47deedcf105ec402a3125bffdbfd14a4dc5b6  geonames-5d77e827cd8800e9738f0e8ac2f865a59a9f68b2.tar.gz"
+sha512sums="
+ca86ba9cc441212359815e4d4273e37a9754f720ca53cd7fb1d1dad4d5a9c5620764ed7f696e9015534d8139d1220b716dd61d68d0bcedd772c0826c96d16e9c  geonames-298997bfc7504f3efd5a59f17f70fcd9a4da3eab.tar.gz
+"
