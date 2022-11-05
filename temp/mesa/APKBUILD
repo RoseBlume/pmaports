@@ -21,7 +21,7 @@ subpackages="
 	$pkgname-dri-nouveau:_dri_deprecated
 	$pkgname-vulkan-layers:_vulkan_layers
 	"
-_llvmver=11
+_llvmver=15
 depends_dev="
 	libdrm-dev
 	libxext-dev
