@@ -1,7 +1,7 @@
 # Maintainer: Alexey Min <alexey.min@gmail.com>
 pkgname=avbtool
 pkgver=10.0.0_p29
-pkgrel=0
+pkgrel=1
 _commit="119251268c594d115a1eff31b3ec32108b88b593"
 pkgdesc="Tools and libraries for working with Android Verified Boot 2.0"
 arch="noarch"
@@ -12,8 +12,13 @@ source="
 	$pkgname-$_commit.tar.gz::https://source.codeaurora.org/quic/la/platform/external/avb/snapshot/$_commit.tar.gz
 	0001-Convert-to-python3.patch
 	"
-options="!check" # No tests available
+options="!check !tracedeps" # No tests available
 builddir="$srcdir/$_commit"
+
+# android-tools provides its own version of avbtool, but there was a report
+# that it doesn't work for a specific device.
+# FIXME: create issue with details and mention it here.
+replaces="android-tools"
 
 package() {
 	install -Dm755 "$builddir/avbtool" "$pkgdir/usr/bin/avbtool"
