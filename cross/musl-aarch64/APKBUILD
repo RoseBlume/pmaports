@@ -8,7 +8,7 @@ fi
 
 pkgname=musl-aarch64
 pkgver=1.2.3
-pkgrel=1
+pkgrel=2
 arch="x86_64"
 subpackages="musl-dev-aarch64:package_dev"
 
@@ -23,8 +23,8 @@ pkgdesc="the musl library (lib c) implementation for $_arch"
 _target="$(arch_to_hostspec $_arch)"
 
 source="
-	musl-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/v3.16/main/$_arch/musl-$pkgver-r$pkgrel.apk
-	musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/v3.16/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
+	musl-$pkgver-r$pkgrel-$_arch-v3.16.apk::$_mirror/v3.16/main/$_arch/musl-$pkgver-r$pkgrel.apk
+	musl-dev-$pkgver-r$pkgrel-$_arch-v3.16.apk::$_mirror/v3.16/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
 "
 
 package() {
@@ -32,7 +32,7 @@ package() {
 	cd "$pkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-v3.16.apk
 	rm .PKGINFO .SIGN.*
 }
 package_dev() {
@@ -40,7 +40,7 @@ package_dev() {
 	cd "$subpkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-v3.16.apk
 	rm .PKGINFO .SIGN.*
 
 	# symlink everything from /usr/$_target/usr/*
@@ -57,6 +57,6 @@ package_dev() {
 }
 
 sha512sums="
-d03bc574fabe04358a51cb06565770ed7a8731cc6f2e3c41e7c11d2acb971c8aa9ce67446107162c938665311147133330e232ad685f1f8a829931d8a0ba6042  musl-1.2.3-r1-aarch64-edge.apk
-36ce45d6877b0b3c292f98d1f47a6b5f207fd38e2ae44a621551e6d4953cbfbb0478aa4961ecda3dbb0bf62e5038e1648be2c461250d05632e2d2f32272cb4ad  musl-dev-1.2.3-r1-aarch64-edge.apk
+c2c08918dada35b720161fe934f8c52839c7d7b2ddde1a01f8a186b65e942fadc84a1b405433d6cc7d721f15fd77de9582b386089c85df3b226e4745f851fde9  musl-1.2.3-r2-aarch64-v3.16.apk
+ee53d9c2afeb87426a84c1abff9098c9c008e72b5bbbf726caf59030700a3e642aece09464f1a30444182e042479cbe758cf5f11a867a186182356c9136757e7  musl-dev-1.2.3-r2-aarch64-v3.16.apk
 "
