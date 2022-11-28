@@ -21,16 +21,16 @@ pkgdesc="Statically linked Busybox for $_arch"
 _target="$(arch_to_hostspec $_arch)"
 
 source="
-	busybox-static-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/busybox-static-$pkgver-r$pkgrel.apk
+	busybox-static-$pkgver-r$pkgrel-$_arch-v3.17.apk::$_mirror/v3.17/main/$_arch/busybox-static-$pkgver-r$pkgrel.apk
 "
 
 package() {
 	mkdir -p "$pkgdir/usr/$_target"
 	cd "$pkgdir/usr/$_target"
-	tar -xf $srcdir/busybox-static-$pkgver-r$pkgrel-$_arch-edge.apk
+	tar -xf $srcdir/busybox-static-$pkgver-r$pkgrel-$_arch-v3.17.apk
 	rm .PKGINFO .SIGN.*
 }
 
 sha512sums="
-c808618d9a3f8ae05846276982e06000211b725123d9118426854569a35506e03fa89d8a234994affb822dae7e03c1f50295c069716ac30294e1d137b6353ab1  busybox-static-1.35.0-r29-armv7-edge.apk
+b9ea4746ad9e0b1fd41c6112998deab350c6bb383ea60802608eba1e4997d2c7c5a37ef8bdb8307783f5dd5491885f2bcd8c6a467cd44f8d1e080b37f95bf16b  busybox-static-1.35.0-r29-armv7-v3.17.apk
 "
