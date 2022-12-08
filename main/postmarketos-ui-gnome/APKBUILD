@@ -15,7 +15,6 @@ depends="
 	!mutter-mobile-schemas
 	gdm
 	gnome
-	kgx
 	postmarketos-base-ui-gnome
 	"
 install="$pkgname.post-install $pkgname.post-upgrade"
