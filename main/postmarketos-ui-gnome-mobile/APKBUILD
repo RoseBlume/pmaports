@@ -2,7 +2,7 @@
 # Maintainer: Newbyte <newbyte@postmarketos.org>
 pkgname=postmarketos-ui-gnome-mobile
 pkgver=1
-pkgrel=0
+pkgrel=1
 pkgdesc="(Wayland) Gnome Shell patched to adapt better to phones (Experimental)"
 url="https://gnome.org/"
 arch="noarch !armhf !riscv64" # gnome-shell / riscv64: mutter-mobile
@@ -39,17 +39,7 @@ depends="
 _pmb_recommends="
 	calls
 	chatty
-	eog
-	firefox-esr
-	font-noto
-	font-noto-emoji
-	gnome-text-editor
-	gnome-calculator
-	gnome-clocks
-	gnome-contacts
-	gnome-software
 	karlender
-	lollypop
 	megapixels
 	mobile-config-firefox
 	portfolio

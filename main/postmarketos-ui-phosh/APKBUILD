@@ -2,7 +2,7 @@
 # Maintainer: Newbyte <newbyte@postmarketos.org>
 pkgname=postmarketos-ui-phosh
 pkgver=22.1
-pkgrel=0
+pkgrel=1
 pkgdesc="(Wayland) Mobile UI developed for the Librem 5"
 url="https://puri.sm"
 arch="noarch !armhf"
@@ -30,17 +30,7 @@ depends="
 _pmb_recommends="
 	calls
 	chatty
-	eog
-	firefox-esr
-	font-noto
-	font-noto-emoji
-	gnome-calculator
-	gnome-clocks
-	gnome-contacts
-	gnome-software
-	gnome-text-editor
 	karlender
-	lollypop
 	megapixels
 	mobile-config-firefox
 	phosh-mobile-settings
