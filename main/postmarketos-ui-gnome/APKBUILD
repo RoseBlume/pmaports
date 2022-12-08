@@ -17,6 +17,9 @@ depends="
 	gnome
 	postmarketos-base-ui-gnome
 	"
+_pmb_recommends="
+	nautilus
+	"
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="firefox-wayland.sh"
 options="!check"
