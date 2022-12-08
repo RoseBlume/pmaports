@@ -18,6 +18,10 @@ depends="
 	polkit-elogind
 	postmarketos-base-ui
 	pulseaudio
+	xwayland
+	"
+_pmb_recommends="
+	postmarketos-artwork-wallpapers
 	"
 source="
 	00_postmarketos-base-ui-gnome.gschema.override

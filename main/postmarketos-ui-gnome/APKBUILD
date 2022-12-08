@@ -16,9 +16,7 @@ depends="
 	gdm
 	gnome
 	kgx
-	postmarketos-artwork-wallpapers
 	postmarketos-base-ui-gnome
-	xwayland
 	"
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="firefox-wayland.sh"
