@@ -1,7 +1,7 @@
 # Reference: https://postmarketos.org/uipkg
 # Maintainer: Newbyte <newbyte@postmarketos.org>
 pkgname=postmarketos-ui-phosh
-pkgver=22.2
+pkgver=23.0
 pkgrel=0
 pkgdesc="(Wayland) Mobile UI developed for the Librem 5"
 url="https://puri.sm"
@@ -22,6 +22,8 @@ depends="
 	modemmanager-openrc
 	phosh
 	postmarketos-base-ui-gnome
+	superd
+	superd-services
 	tinydm
 	tinydm-openrc
 	udiskie
@@ -59,6 +61,7 @@ subpackages="$pkgname-qt_tweaks"
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="
 	01_postmarketos-ui-phosh.gschema.override
+	90-gnome-session-autostart.sh
 	mimeapps.list
 	phosh-qt-mobile-controls.sh
 	phosh-qt-wayland.sh
@@ -71,8 +74,16 @@ package() {
 		-t "$pkgdir"/usr/share/glib-2.0/schemas/
 	install -Dm644 "$srcdir"/mimeapps.list \
 		"$pkgdir"/usr/share/applications/mimeapps.list
-	install -Dm644 "$srcdir"/udiskie.desktop \
-		"$pkgdir"/etc/xdg/autostart/udiskie.desktop
+
+	install -Dm644 "$srcdir"/90-gnome-session-autostart.sh \
+		-t "$pkgdir"/etc/tinydm.d/env-wayland.d/
+
+	# configure default user services
+	mkdir -p "$pkgdir"/etc/superd/services/
+	for service in calls chatty mpris-proxy udiskie; do
+		ln -sf /usr/share/superd/services/$service.service \
+			"$pkgdir"/etc/superd/services/
+	done
 }
 
 qt_tweaks() {
@@ -85,6 +96,7 @@ qt_tweaks() {
 
 sha512sums="
 bfdef6d89015c34cbb9cf67f623f8d51f0b2d9665bca447c434ac14031ad13e8a5fe6fc63bdf52957bc6fd5404f2fe1321df8f5f2a9b945a2df09c741a2c672b  01_postmarketos-ui-phosh.gschema.override
+15170009514671d581d5c64526806b091cee9c709751bc0bcff9b91b3a1429433be1aee8507f44870012b54443677eddf6954ac82600fbeed74228b34e069507  90-gnome-session-autostart.sh
 d58379d4dcbcc8df68e20c4a2f45dc320db5e9c383b8ffe2f3ba3815ebff46e8c1c32d18195800ac8b37adfab23ef4f985be2bf5da7ed3f10d15c5e3915c2fd3  mimeapps.list
 bf8db527c49fa724e640a90269ba2648a2555f5867b2adbfbd88d1f685261f757339757c09ee08f590c76de4bd3d0c73a47dea9bd340644dd4707e76152cefd1  phosh-qt-mobile-controls.sh
 6e193eca3961a78d47b4656892eae34d019d9317a255a201f5ea61e3300caff04c526a27cd98d0edc072b36e3eaf3a1768f4cd27c5e2be8b19c167d535c820a6  phosh-qt-wayland.sh
