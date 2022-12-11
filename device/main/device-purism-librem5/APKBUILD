@@ -4,7 +4,7 @@
 # Co-Maintainer: Newbyte <newbyte@postmarketos.org>
 pkgname=device-purism-librem5
 pkgdesc="Purism Librem 5 Phone"
-pkgver=1.38
+pkgver=1.39
 pkgrel=1
 _confver=54
 _purismrel=1
@@ -79,9 +79,15 @@ phosh() {
 	install_if="$pkgname phosh"
 	depends="
 		wys
+		superd-services
 	"
 	install -D -m644 "$builddir"/default/org.freedesktop.ModemManager1.pkla \
 		"$subpkgdir"/var/lib/polkit-1/localauthority/10-vendor.d/org.freedesktop.ModemManager1.pkla
+
+	# configure wys to start by default
+	mkdir -p "$pkgdir"/etc/superd/services/
+	ln -sf /usr/share/superd/services/wys.service \
+		"$pkgdir"/etc/superd/services/
 }
 
 pulseaudio() {
