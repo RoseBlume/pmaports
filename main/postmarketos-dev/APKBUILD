@@ -1,0 +1,22 @@
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+pkgname=postmarketos-dev
+pkgver=
+pkgrel=0
+pkgdesc=""
+url=""
+arch="all"
+license=""
+depends=""
+makedepends=""
+checkdepends=""
+install="$pkgname.post-install $pkgname.post-upgrade"
+triggers="$pkgname.trigger=/etc/postmarketos-dev/hooks"
+subpackages=""
+source=""
+builddir="$srcdir/"
+
+package() {
+	# Replace with proper package command(s)
+	:
+}
+
