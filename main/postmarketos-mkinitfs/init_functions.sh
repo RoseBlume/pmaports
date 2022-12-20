@@ -80,6 +80,18 @@ get_uptime_seconds() {
 	awk -F '.' '{print $1}' /proc/uptime
 }
 
+# On A/B devices with bootloader cmdline ON this will return the slot suffix
+# if booting with an alternate method which erases the stock bootloader cmdline
+# this will be empty and the update will fail.
+# https://source.android.com/devices/bootloader/updating#slots
+# On non-A/B devices this will be empty
+ab_get_slot() {
+	# Add OTA-enable check
+	ab_slot_suffix=$(grep -o 'androidboot\.slot_suffix=..' /proc/cmdline |  cut -d "=" -f2) || :
+	echo "$ab_slot_suffix"
+}
+
+
 setup_dynamic_partitions() {
 	command -v make-dynpart-mappings > /dev/null || return
 	attempt_start=$(get_uptime_seconds)
@@ -112,9 +124,10 @@ mount_subpartitions() {
 			sed 's/\(\s\+[0-9]\+\)\+\s\+//;s/ .*//;s/^/\/dev\//')"
 		echo "$partitions" | while read -r partition; do
 			case "$(kpartx -l "$partition" 2>/dev/null | wc -l)" in
-				2)
+				2|7)
 					echo "Mount subpartitions of $partition"
 					kpartx -afs "$partition"
+					mount | grep "/dev/sda"
 					# Ensure that this was the *correct* subpartition
 					# Some devices have mmc partitions that appear to have
 					# subpartitions, but aren't our subpartition.
@@ -182,7 +195,7 @@ find_root_partition() {
 
 	# Try partitions in /dev/mapper and /dev/dm-* first
 	if [ -z "$DEVICE" ]; then
-		for id in pmOS_install pmOS_root crypto_LUKS; do
+		for id in pmOS_install pmOS_root$(ab_get_slot) crypto_LUKS; do
 			for path in /dev/mapper /dev/dm; do
 				DEVICE="$(blkid | grep "$path" | grep "$id" \
 					| cut -d ":" -f 1 | head -n 1)"
@@ -193,7 +206,7 @@ find_root_partition() {
 
 	# Then try all devices
 	if [ -z "$DEVICE" ]; then
-		for id in pmOS_install pmOS_root crypto_LUKS; do
+		for id in pmOS_install pmOS_root$(ab_get_slot) crypto_LUKS; do
 			DEVICE="$(blkid | grep "$id" | cut -d ":" -f 1 \
 				| head -n 1)"
 			[ -z "$DEVICE" ] || break
@@ -222,7 +235,7 @@ find_boot_partition() {
 	# * "pmOS_boot" boot partition after installation
 	findfs LABEL="pmOS_i_boot" \
 		|| findfs LABEL="pmOS_inst_boot" \
-		|| findfs LABEL="pmOS_boot"
+		|| findfs LABEL="pmOS_boot$(ab_get_slot)"
 }
 
 get_partition_type() {
@@ -446,6 +459,42 @@ mount_root_partition() {
 		show_splash /splash-mounterror.ppm.gz
 		loop_forever
 	fi
+}
+
+mount_ota_partitions() {
+	OVERLAYDIRS="var/lib/flatpak var/log var/cache/apk root opt"
+
+	# Mount home
+	partition=$(findfs LABEL="pmOS_home")
+	if [ -z "$partition" ]; then
+		echo "ERROR: unable to find home partition!"
+		show_splash /splash-mounterror.ppm.gz
+		loop_forever
+	fi
+
+	echo "Mount home partition ($partition) to /sysroot/home (read-write)"
+	mount "$partition" /sysroot/home
+
+	# Mount var
+	partition=$(findfs LABEL="pmOS_var$(ab_get_slot)")
+	if [ -z "$partition" ]; then
+		echo "ERROR: unable to find var partition!"
+		show_splash /splash-mounterror.ppm.gz
+		loop_forever
+	fi
+
+	echo "Mount var partition ($partition) to /sysroot/var (read-write)"
+	mount "$partition" /sysroot/var
+
+	for _i in $OVERLAYDIRS; do
+		echo "Mounting $_i"
+		# mkdir -p $DIR/home/.pmos/offload/$_i
+		# mkdir -p $DIR/$_i
+		mount --bind /sysroot/home/.pmos/offload/"$_i" /sysroot/"$_i"
+	done
+
+	# /etc is special
+	mount -t overlay -o workdir=/sysroot/var/lib/overlays/etc/work,upperdir=/sysroot/var/lib/overlays/etc/upper,lowerdir=/sysroot/etc overlay /sysroot/etc
 }
 
 setup_usb_network_android() {
@@ -690,6 +739,7 @@ setup_bootchart2() {
 }
 
 loop_forever() {
+	sh /etc/postmarketos-mkinitfs/hooks/20-debug-shell.sh
 	while true; do
 		sleep 1
 	done

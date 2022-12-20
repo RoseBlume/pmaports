@@ -24,10 +24,10 @@ mount_subpartitions
 setup_framebuffer
 
 # Hooks
-for hook in /etc/postmarketos-mkinitfs/hooks/*.sh; do
-	[ -e "$hook" ] || continue
-	sh "$hook"
-done
+# for hook in /etc/postmarketos-mkinitfs/hooks/*.sh; do
+# 	[ -e "$hook" ] || continue
+# 	sh "$hook"
+# done
 
 # Always run dhcp daemon/usb networking for now (later this should only
 # be enabled, when having the debug-shell hook installed for debugging,
@@ -43,7 +43,9 @@ extract_initramfs_extra /boot/initramfs-extra
 # start_charging_mode
 wait_root_partition
 delete_old_install_partition
-resize_root_partition
+
+# This breaks the partition table with OTA, disable for now.
+#resize_root_partition
 unlock_root_partition
 resize_root_filesystem
 mount_root_partition
@@ -51,6 +53,8 @@ mount_root_partition
 # Mount boot partition into sysroot, so OpenRC doesn't need to do it (#664)
 umount /boot
 mount_boot_partition /sysroot/boot "rw"
+echo "CA:: MOUNTING OTA PARTITIONS, SLOT: $(ab_get_slot)"
+mount_ota_partitions
 
 init="/sbin/init"
 setup_bootchart2
@@ -61,6 +65,9 @@ umount /proc
 umount /sys
 umount /dev/pts
 umount /dev
+
+# Not sure why this is needed...
+mount -t tmpfs tmpfs /sysroot/tmp
 
 # shellcheck disable=SC2093
 exec switch_root /sysroot "$init"
