@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-system-settings
-pkgver=0_git20221028
-_commit="ca6da85aa464e36e38ca7b88eaf61ff7076ed7b6"
+pkgver=0_git20230104
+_commit="61118689e8a8e8421ea13c771e8bd825a7032a42"
 pkgrel=0
 pkgdesc="System Settings application for Unity8"
 url="https://gitlab.com/ubports/development/core/lomiri-system-settings"
@@ -23,7 +23,8 @@ makedepends="cmake cmake-extras qt5-qtbase-dev upower-dev networkmanager-dev acc
 checkdepends="xvfb-run py3-xdg py3-dbusmock"
 source="https://gitlab.com/ubports/development/core/lomiri-system-settings/-/archive/$_commit/lomiri-system-settings-$_commit.tar.gz
 	0003-Use-qmltestrunner-qt5.patch
-	locale.patch"
+	hk.patch
+	"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # 67% tests passed, 5 tests failed out of 15
 
@@ -44,7 +45,7 @@ package() {
 }
 
 sha512sums="
-d90020144f7e36eff922a072a06fc23a3f888fbe480c8a46028854c5bcf407dfa4b49ec34a935156d12c762c04ce99e6eb2799b19ee41f2697c278842d2cfbf5  lomiri-system-settings-ca6da85aa464e36e38ca7b88eaf61ff7076ed7b6.tar.gz
+ab7e3684c945e73ca8eecdc00917ee08d8555448b6d97faf8b58ce34d6dc2746a7a0f5ecfb4cfd12f114b0a1445f514cb97b617606f4ff6881687133debb333c  lomiri-system-settings-61118689e8a8e8421ea13c771e8bd825a7032a42.tar.gz
 11a1003ac08ba5b8739c371b8d2d953f31c666c7a9f6926420f7aab94665298ce8ca0782979a3ea48bc67d800b48b4eeba030f2fc86e422b0cafae7319b7db98  0003-Use-qmltestrunner-qt5.patch
-aa53c7dd1c87e9f07bbef951824ab90c130aae0b098ba847bec327e62830597a023c99ff7d5ec332d0ae785a2db75dcff4ba2d0fa9f265ca5e3b32e4154cc9ad  locale.patch
+a185c6fb89d268b4a2d0566ef5344448f84de7f540d9b57e94a8b96c2334028a4aced2cdb41a63417ffd03fcaf72f4077e610e92b4d80a169f2de3f2bd249edf  hk.patch
 "
