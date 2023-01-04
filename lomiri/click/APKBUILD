@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=click
-pkgver=0_git20220722
-_commit="e41fec1f635b70a746fb3c6c1ed2b5c3980c01c3"
+pkgver=0_git20221224
+_commit="89338f9aa6f35d46c67cf67bbad11dab1c5dc609"
 pkgrel=0
 pkgdesc="Click is a simplified packaging format"
 url="https://gitlab.com/ubports/development/core/click"
@@ -37,5 +37,5 @@ package() {
 }
 
 sha512sums="
-6a9e62df2cfd5bba25810f32c6351cfb90b5938350e6d89763077bc4507b02fd28ba76bc247ab79f107c21bffc6e8bcb922012d7b509c964dd5d02bfbab118a5  click-e41fec1f635b70a746fb3c6c1ed2b5c3980c01c3.tar.gz
+7f1ddca888c82116381e55104f4f74603719ac225e88e55cd27b55a8c0cad29e2723a3ba2a1eb55fc585476afe7736b5f56f5ad751b4d94985f7051d30affd69  click-89338f9aa6f35d46c67cf67bbad11dab1c5dc609.tar.gz
 "
