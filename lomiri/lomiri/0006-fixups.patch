@@ -4,23 +4,9 @@ Date: Sun, 15 Aug 2021 16:52:09 +0200
 Subject: [PATCH 6/6] fixups
 
 ---
- qml/OrientedShell.qml                    | 2 +-
  qml/Panel/Indicators/IndicatorsLight.qml | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/qml/OrientedShell.qml b/qml/OrientedShell.qml
-index 78a4bb464..783fd1439 100644
---- a/qml/OrientedShell.qml
-+++ b/qml/OrientedShell.qml
-@@ -37,7 +37,7 @@ Item {
-     property bool lightIndicators: false
- 
-     onWidthChanged: calculateUsageMode();
--    property var overrideDeviceName: screens.count > 1 ? "desktop" : false
-+    property var overrideDeviceName: Screens.count > 1 ? "desktop" : false
- 
-     DeviceConfiguration {
-         id: _deviceConfiguration
 diff --git a/qml/Panel/Indicators/IndicatorsLight.qml b/qml/Panel/Indicators/IndicatorsLight.qml
 index cd9703038..2e2b1e617 100644
 --- a/qml/Panel/Indicators/IndicatorsLight.qml
