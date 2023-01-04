@@ -3,7 +3,7 @@
 pkgname=qtmir
 pkgver=0_git20230102
 _commit="11c4988cc0f7eb8aeb8ba974a5577fa009415e14"
-pkgrel=0
+pkgrel=1
 pkgdesc="QPA plugin to make Qt a Mir server"
 arch="all"
 url="https://gitlab.com/ubports/development/core/qtmir"
@@ -11,6 +11,7 @@ license="LGPL-3.0-only"
 makedepends="cmake cmake-extras gtest-dev mir-dev process-cpp-dev qt5-qtdeclarative-dev qt5-qtsensors-dev lomiri-app-launch-dev gsettings-qt-dev libqtdbustest libqtdbusmock content-hub-dev valgrind-dev lomiri-url-dispatcher-dev cgmanager-dev lttng-ust-tools"
 checkdepends="py3-dbusmock dbus"
 source="https://gitlab.com/ubports/development/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz
+	form-factor-mainline.patch
 	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
@@ -46,4 +47,5 @@ package() {
 
 sha512sums="
 da1e6fb97a6178351f9133a73b08a88d67ab8f03d7319dbbfd4a391e6fe178cd8ca9a06c6b84171a0f5a13d50ba9ae0342caef7993789a5b4c5d2e589cfaef96  qtmir-11c4988cc0f7eb8aeb8ba974a5577fa009415e14.tar.gz
+5822c8d57b5d6d20f67585e82344eb7fc9dc7fb46b5830ca94be9b8279b4fcfe1b6e041caab14f6ee1cf743abd62d9d4d141bc800e4ea7029afdd65790cd5b62  form-factor-mainline.patch
 "
