@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=gmenuharness
-pkgver=0_git20210407
-_commit="e39664917c09c3d8580a041182d6fce41de29863"
+pkgver=0_git20230102
+_commit="04e27ce98ca2d2b132b9bd0279a80bcb1ccbcc8c"
 pkgrel=0
 pkgdesc="Library to test GMenuModel structures."
 url="https://gitlab.com/ubports/development/core/gmenuharness"
@@ -40,5 +40,5 @@ package() {
 }
 
 sha512sums="
-2014f385f13b755bf82a76db2f0f2a22f542cf9e7129d0019b4a0f55cd2506fe110ac8509f81a02541c61dbd61ff8b945348fc8eb21abc2933133aed29f20a0f  gmenuharness-e39664917c09c3d8580a041182d6fce41de29863.tar.gz
+6a2660403a54eef86f716521989fb66dc7bccc08c980c639629d20021e2f848488cfc74349685140659120b8f44fb0a429d2c9bf8f327f17dec66bc6bb815dc0  gmenuharness-04e27ce98ca2d2b132b9bd0279a80bcb1ccbcc8c.tar.gz
 "
