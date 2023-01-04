@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 70310a2..282073d 100644
+index 7d9d00b..55e1e12 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -89,9 +89,6 @@ else()
+@@ -90,9 +90,6 @@ else()
  endif()
  message("Installing DBus interfaces to ${DBUSIFACEDIR}")
  
@@ -13,10 +13,10 @@ index 70310a2..282073d 100644
  include_directories(${CMAKE_CURRENT_BINARY_DIR})
  
 diff --git a/data/CMakeLists.txt b/data/CMakeLists.txt
-index 6da7ef5..8aaa011 100644
+index 79f7547..e7e0a76 100644
 --- a/data/CMakeLists.txt
 +++ b/data/CMakeLists.txt
-@@ -26,45 +26,6 @@ com.lomiri.URLDispatcher.xml
+@@ -27,45 +27,6 @@ com.lomiri.URLDispatcher.xml
  DESTINATION ${DBUSIFACEDIR}
  )
  
@@ -60,5 +60,5 @@ index 6da7ef5..8aaa011 100644
 -)
 -
  ###########################
- # QML
+ # Click Hook
  ###########################
