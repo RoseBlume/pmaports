@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=libusermetrics
-pkgver=0_git20220927
-_commit="db6d9837fa7da7a4fbaf2f93730fda8743e3ba24"
+pkgver=0_git20230104
+_commit="67f6358ecfb8728d111b62e7ba05a0ce8179adf8"
 pkgrel=0
 pkgdesc='Library for exporting anonymous metrics about users'
 arch="all"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-10b92657cbca68430d29a93e15cb991cb0f6e1fd39ca0afb21d619d3764103f87f245bc3149108ebaa2307e91a93c7193fb5f30c0be01a6368152027b8bd87aa  libusermetrics-db6d9837fa7da7a4fbaf2f93730fda8743e3ba24.tar.gz
+ce86fa135a2a9fdfa1c9f2132b717bce24a495e0d0fa5403f3d96be8ce51ebef6519ed5fd397186301d13106915caf5c2f3ab82dbfbcbcc2aa9cf3234cf299db  libusermetrics-67f6358ecfb8728d111b62e7ba05a0ce8179adf8.tar.gz
 "
