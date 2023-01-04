@@ -386,7 +386,7 @@ new file mode 100644
 index 0000000..2ca2b61
 --- /dev/null
 +++ b/spinner/wayland/waylandegl.cpp
-@@ -0,0 +1,442 @@
+@@ -0,0 +1,443 @@
 +/*
 + * Copyright © 2015-2018 Canonical Ltd.
 + *             2019 UBports Foundation
@@ -415,6 +415,7 @@ index 0000000..2ca2b61
 +
 +#include <chrono>
 +#include <algorithm>
++#include <stdexcept>
 +
 +static void new_global(
 +    void* data,

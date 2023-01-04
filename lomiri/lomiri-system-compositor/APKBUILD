@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-system-compositor
-pkgver=0_git20221101
-_commit="fdf75e20e5f2c69966fda8b3f5d685b01843b95c"
+pkgver=0_git20221231
+_commit="4e1afec55d3680541961682f2de3b9d114ee8f9c"
 pkgrel=0
 pkgdesc="System compositor using the Mir display server"
 arch="all"
@@ -21,7 +21,6 @@ makedepends="
 checkdepends="dbus"
 source="https://gitlab.com/ubports/development/core/lomiri-system-compositor/-/archive/$_commit/lomiri-system-compositor-$_commit.tar.gz
 	0001-spinner-Add-support-for-wayland-backend.patch
-	0002-Add-missing-stdexcept-header-17.patch
 	"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
@@ -47,7 +46,6 @@ package() {
 }
 
 sha512sums="
-3e82fcfc1adcba0c0af8e6a7d0f574856edc2fbddf51d351cc9e253bf9fc2fb5d8d4c2692d782b67120bf97675f6d7d0e1a311bc095d786c56461f1384055ec3  lomiri-system-compositor-fdf75e20e5f2c69966fda8b3f5d685b01843b95c.tar.gz
-93f02b1d138797561d14df697fe01afa56af454b6b8c0a5d317d6e62a2dd78d614bd64dfc57b5c16ef18ae42a4a7dadc64a2109ac87392feedc9373f682e05da  0001-spinner-Add-support-for-wayland-backend.patch
-d9921be03cacac1e891125852a38fbb1c3789d03dda635cc2f0d4d1f1e2f5e3423bdecf9f27d670dcda81c32fd827846c168d1bd476eb07580b48cb135095e28  0002-Add-missing-stdexcept-header-17.patch
+8f705a72429fa8645db95b996b6bb2c176dded00ee1b63acb922e0116827ae7ce6ffb5e51ef93e14412805d2f4a00c1e8b54f510b2b4e2a7e312056c5bef547f  lomiri-system-compositor-4e1afec55d3680541961682f2de3b9d114ee8f9c.tar.gz
+71e0858dc9cf216cd9f07902cc597340b66a3dbf4a25fff8685bfddd87c54ca9c7222ff906fe7bb860a1759f3ce42593a4757a4d8519073d24af401a8501a276  0001-spinner-Add-support-for-wayland-backend.patch
 "
