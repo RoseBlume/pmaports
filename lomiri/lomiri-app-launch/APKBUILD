@@ -2,9 +2,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=lomiri-app-launch
-pkgver=0.1.1_git20221012
+pkgver=0.1.1_git20230103
 pkgrel=0
-_commit="890c7784b4dec9cd1d06220f7a78e21456de01ab"
+_commit="3d3cd8d925fd5d089aecdaa57ef2122946ee16e5"
 pkgdesc="Session init system job for Launching Applications"
 arch="all"
 url="https://gitlab.com/ubports/development/core/lomiri-app-launch"
@@ -40,5 +40,5 @@ package() {
 }
 
 sha512sums="
-3353a92568c1c208ad953dffbe441775a91d97ef10e23224f5daaf5eed687d0bac8bfac8c12f957fef76fafcbf7e1c5156d3584b04ff7a01108ae9fce0ef2b69  lomiri-app-launch-890c7784b4dec9cd1d06220f7a78e21456de01ab.tar.gz
+e459b7117cc6bc9556d4750d43d73ee19677cc149d529ef09bc967b12beea547fac2d539733c4c2adaeb1f837eac4494a4657f2b592d587d14beb60514c831d1  lomiri-app-launch-3d3cd8d925fd5d089aecdaa57ef2122946ee16e5.tar.gz
 "
