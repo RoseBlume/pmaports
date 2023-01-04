@@ -1,8 +1,8 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=platform-api
-pkgver=0_git20220722
+pkgver=0_git20221212
 pkgrel=0
-_commit="125a53981248a9ffb341effab71e6e1b2a6a48ea"
+_commit="3ed3ec9de3831ef784e49996c65efdaf88f6d1a1"
 pkgdesc="Platform API for system level capabilities"
 arch="all"
 url="https://gitlab.com/ubports/development/core/platform-api"
@@ -20,7 +20,9 @@ makedepends="
 	gmock
 	gtest-dev
 	"
-source="https://gitlab.com/ubports/development/core/platform-api/-/archive/$_commit/platform-api-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/platform-api/-/archive/$_commit/platform-api-$_commit.tar.gz
+	url-dispatcher-rename.patch
+	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -41,5 +43,6 @@ package() {
 }
 
 sha512sums="
-c059d183e616a8416f9d0f5e55a1e96f10afbcf2bd5f2403d5be6c0d511569a086209a60082a47a76e439c18d6b1a288bb356cd32f6096f12758c654367158f4  platform-api-125a53981248a9ffb341effab71e6e1b2a6a48ea.tar.gz
+4ca505bdd1a74fa967dbc0338d17d668bffa5999c25ea39d863afd3607e75d32e393ea4a08a014f741a6a9987b55a957ded26990807e7b2e7b94ae1f0079a772  platform-api-3ed3ec9de3831ef784e49996c65efdaf88f6d1a1.tar.gz
+552f2838be6c8a52cfad1752846fb98249572fb560993dc64148258b2e19f082eca7d7330d6d1d7b953daf47f057469d706cec8d4bd5ac1d7687da7f99187ea9  url-dispatcher-rename.patch
 "
