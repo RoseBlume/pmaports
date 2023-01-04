@@ -1,9 +1,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=geonames
-pkgver=0_git20221003
+pkgver=0_git20230104
 pkgrel=0
-_commit="298997bfc7504f3efd5a59f17f70fcd9a4da3eab"
+_commit="73c5dfca7d5a8935f7a9f8fe2656d24f8f8fe00a"
 pkgdesc="Geonames"
 arch="all"
 url="https://gitlab.com/ubports/development/core/geonames"
@@ -37,5 +37,5 @@ package() {
 }
 
 sha512sums="
-ca86ba9cc441212359815e4d4273e37a9754f720ca53cd7fb1d1dad4d5a9c5620764ed7f696e9015534d8139d1220b716dd61d68d0bcedd772c0826c96d16e9c  geonames-298997bfc7504f3efd5a59f17f70fcd9a4da3eab.tar.gz
+bd7001c80f3025ffc780fde8a41ce967efaf1dcf822b691e9776416ac63b438af1b06fd3ef8a5b1acb008cda43d51c7615cd860c976fdaffa40ddcdc9e7c9855  geonames-73c5dfca7d5a8935f7a9f8fe2656d24f8f8fe00a.tar.gz
 "
