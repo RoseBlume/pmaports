@@ -1,9 +1,9 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 # Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=content-hub
-pkgver=1.0.0_git20221027
+pkgver=1.0.0_git20230104
 pkgrel=0
-_commit="0d90df214844f5fe698437b62b6ee07dee33d649"
+_commit="9ec8da16732f19cc6d096838d3ede21e8b3b58fb"
 pkgdesc="Content sharing/picking infrastructure and service, designed to allow apps to securely and efficiently exchange content"
 url="https://gitlab.com/ubports/development/core/content-hub"
 arch="all"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-7a56573377b4944aa4a6ffa55d2a710bf3cd67228a8ff481f04d69077d62cad585241499191672707d893cf431a4a05203a222903c7c68b0b11dc014c46ae839  content-hub-0d90df214844f5fe698437b62b6ee07dee33d649.tar.gz
+e664f82de6797e0906e6b428565d0802f5d9f55c30389ae1625e4c5713ec9ed64d4c4db70fc91970fbb63eb1cd39f149b0029bf023386c8b81fc3ebf642391d3  content-hub-9ec8da16732f19cc6d096838d3ede21e8b3b58fb.tar.gz
 "
