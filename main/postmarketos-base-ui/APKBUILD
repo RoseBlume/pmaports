@@ -1,7 +1,7 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-base-ui
-pkgver=6
-pkgrel=2
+pkgver=7
+pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -37,11 +37,13 @@ replaces_priority=100  # leave plenty for alpine
 
 _source644="
 	etc/NetworkManager/conf.d/hostname-mode.conf
+	etc/NetworkManager/conf.d/00-resolvconf.conf
 	etc/chrony/chrony.conf
 	etc/conf.d/tinydm
 	etc/conf.d/wpa_supplicant
 	etc/elogind/logind.conf
 	etc/pulse/default.pa.d/postmarketos.pa
+	etc/resolvconf.conf
 	etc/skel/.profile
 	etc/sleep-inhibitor.conf
 	etc/X11/Xwrapper.config
@@ -119,22 +121,31 @@ _obexd() {
 
 networkmanager() {
 	depends="
+		dnsane
+		openresolv
 		networkmanager
 		networkmanager-cli
 		networkmanager-openrc
 		networkmanager-tui
 		networkmanager-wifi
 		networkmanager-wwan"
+	replaces="openresolv"
+	install="$subpkgname.post-install $subpkgname.post-upgrade"
+
 	amove etc/NetworkManager/conf.d/hostname-mode.conf
+	amove etc/NetworkManager/conf.d/00-resolvconf.conf
+	amove etc/resolvconf.conf
 }
 
 sha512sums="
 3c9ae7415f4891bee8595166ed6a42cb577a837f741c6b5409d193558626348b41516888a01d0c4895282c5f4e9a1ff838c19712888750b2ef68429bb4b42ee3  rootfs-etc-NetworkManager-conf.d-hostname-mode.conf
+c5ecb3583f60938ccbf896458d9abe98439b80b0876c84b77bbb6454af83909d398c0d7b23c077fbeaf6298ef5aa8f48bfdbbe63052af106097e33e495576575  rootfs-etc-NetworkManager-conf.d-00-resolvconf.conf
 e5d049db1d82c510bab9246208b51b8ec2711d008d67792fc10d4c0b65ed4dece7b5ae3c3dd28a8539d177b6849c1f921cb9fef3d2c7bee0355451f7b4757ec6  rootfs-etc-chrony-chrony.conf
 44e4283c6f77de83915977dd3bc2d8e2d96b3ed6cc68d3cc156304359ae649b5a8b0bac843e517ec6faa2066dd43ba85e313899b1eda04862f864fb9eb508aa0  rootfs-etc-conf.d-tinydm
 fe0651904c1f40ffa67d83daca190af199f63247e53642a59a1e1147cd06776fcf20b7b2fcc5373783d50b8bd6ce8d1354c8e5f4d582d319727b9ceefd1e8e16  rootfs-etc-conf.d-wpa_supplicant
 8d2c54fe3ca62c62f8337fb6be28479d0e02ea63f32abae81907f2768631e65c9e17485f8bc0854a013377f729b06dd1873e2b75f86f657ece866d00aecbbdb4  rootfs-etc-elogind-logind.conf
 6c516635a61fbaa93102f02301a75070a91de837456b07a50e24a9e0ee5dac785087d4a8f78906807719ebf6f0124127383441cccf00475d9a91d3dbaf9d4d81  rootfs-etc-pulse-default.pa.d-postmarketos.pa
+0b0bd22b209b580c9dd178c68f328839ad5685c64c31c1dedde48c61c0e6ee4f873972bbe1ffa7965fad26a23ee8ed5c1a50405e35faadf0cd02a919122480d4  rootfs-etc-resolvconf.conf
 90b30cbea660ef6cd4c0461b6935de0cd63a84a1a40edb24348a83044c97935b974bd8bafda9cd558e92d3eb69e22c5ccf55483b80f839e24f0eb57ae2df6fe3  rootfs-etc-skel-.profile
 6b9c7bb73213187eb9ca8a94109b2b816f50c1158c90fec2e92b373864280d67741589e5bfbab8810945f031d2f4b535aad78a72e46e52ea50be5b85324da381  rootfs-etc-sleep-inhibitor.conf
 cac604e25c46e695dd30bd5a10cfd2d69595fcc3bc290096ac94b76b10834d591ea6576afb79c46b5da492a1dbf8660cf87b6110cd39937e15237bc74fa7a5c6  rootfs-etc-X11-Xwrapper.config
