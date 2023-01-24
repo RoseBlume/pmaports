@@ -2,7 +2,7 @@
 # Maintainer: Newbyte <newbyte@postmarketos.org>
 pkgname=postmarketos-ui-phosh
 pkgver=23.0
-pkgrel=1
+pkgrel=2
 pkgdesc="(Wayland) Mobile UI developed for the Librem 5"
 url="https://puri.sm"
 arch="noarch !armhf"
@@ -55,6 +55,8 @@ _pmb_recommends="
 	postmarketos-welcome
 	postprocessd
 	ttyescape
+	vvmd
+	vvmplayer
 	xdg-user-dirs
 	"
 _pmb_groups="feedbackd"
@@ -81,7 +83,7 @@ package() {
 
 	# configure default user services
 	mkdir -p "$pkgdir"/etc/superd/services/
-	for service in calls chatty mpris-proxy udiskie mmsd-tng; do
+	for service in calls chatty mpris-proxy udiskie mmsd-tng vvmd; do
 		ln -sf /usr/share/superd/services/$service.service \
 			"$pkgdir"/etc/superd/services/
 	done
