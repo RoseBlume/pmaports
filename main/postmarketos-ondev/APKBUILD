@@ -8,6 +8,7 @@ arch="all"
 license="GPL-3.0-or-later"
 depends="
 	$pkgname-lang
+	dosfstools
 	"
 subpackages="$pkgname-lang"
 source="https://gitlab.com/postmarketOS/ondev2/-/archive/$pkgver/ondev2-$pkgver.tar.gz"
