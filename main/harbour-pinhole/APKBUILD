@@ -1,0 +1,31 @@
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
+pkgname=harbour-pinhole
+pkgver=0_git20230131
+pkgrel=0
+pkgdesc="Camera application built ontop of libcamera"
+url="https://github.com/piggz/harbour-pinhole"
+arch="all !armhf" # blocked by kirigami2
+license="GPL-2.0-or-later"
+depends="kirigami2 qt5-qtsensors qt5-qtsvg libresource"
+makedepends="qt5-qtbase-dev qt5-qtquickcontrols2-dev qt5-qtmultimedia-dev libcamera-dev libexif-dev"
+_commit="263f91af55182ad6268e5e26a0a347dc51a319ec"
+source="https://github.com/piggz/harbour-pinhole/archive/$_commit/harbour-pinhole-$_commit.tar.gz
+	libresource-path.patch"
+builddir="$srcdir/harbour-pinhole-$_commit"
+options="!check" # No tests
+
+build() {
+	qmake-qt5 \
+		PREFIX=/usr \
+		FLAVOR=kirigami
+	make
+}
+
+package() {
+	INSTALL_ROOT="$pkgdir" make install
+}
+
+sha512sums="
+03872900e36d3517e69655b43cc4e02b28bd8e48418b38aa46eae84b5e15a9ee914c0680a9601d61ac452a7807f73312e6e2b5fe8636cb05eb932192f47718e5  harbour-pinhole-263f91af55182ad6268e5e26a0a347dc51a319ec.tar.gz
+6449484c3941663444c90031ac218af54ace58c92d8330addbaca23074809c2aee646bd799d2969076a2187fd016527da811b74866ba6de5434b0cfe858db51b  libresource-path.patch
+"
