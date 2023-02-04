@@ -1,8 +1,8 @@
 # Reference: https://postmarketos.org/uipkg
 # Maintainer: Miles Alan <m@milesalan.com>
 pkgname=sxmo-common
-pkgver=1.11.0
-pkgrel=1
+pkgver=1.12.0
+pkgrel=0
 pkgdesc="Simple Mobile: Core package to build custom SXMO desktop environments"
 url="http://sr.ht/~mil/Sxmo"
 arch="noarch !armhf"
@@ -58,7 +58,7 @@ depends="
 	yt-dlp
 	"
 install="$pkgname.post-install $pkgname.post-upgrade $pkgname.pre-deinstall"
-subpackages="$pkgname-qt_tweaks $pkgname-bluetooth"
+subpackages="$pkgname-qt_tweaks $pkgname-bluetooth $pkgname-bluetoothpulse"
 source="
 	sxmo-qt-mobile-controls.sh
 	postmarketos.conf
@@ -94,6 +94,18 @@ bluetooth() {
 	mkdir -p "$subpkgdir"/etc/modules-load.d
 	install="$subpkgname.post-install $subpkgname.pre-deinstall"
 	provides="postmarketos-ui-sxmo-bluetooth=$pkgver-r$pkgrel"
+}
+
+bluetoothpulse() {
+	depends="
+		bluez
+		pulseaudio-bluez
+		!sxmo-common-bluetooth
+		"
+	replaces="bluez" # Autoenable controllers
+	mkdir -p "$subpkgdir"/etc/bluetooth
+	install -Dm644 "$srcdir"/postmarketos.conf \
+		"$subpkgdir"/etc/bluetooth/main.conf
 }
 
 sha512sums="
