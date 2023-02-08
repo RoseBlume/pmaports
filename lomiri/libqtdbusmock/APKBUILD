@@ -18,7 +18,8 @@ makedepends="
 	qt5-qtbase-dev
 	"
 checkdepends="py3-dbusmock procps"
-source="$pkgname-$_commit.tar.gz::https://github.com/ubports/libqtdbusmock/archive/$_commit.tar.gz"
+source="$pkgname-$_commit.tar.gz::https://github.com/ubports/libqtdbusmock/archive/$_commit.tar.gz
+	googletest-1.13.0.patch"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
 
@@ -39,4 +40,5 @@ package() {
 }
 sha512sums="
 5726b78bee6fbc0b7dd3feecdcc0ac1611e4b73610ad55fc351a8b3a75d1df998854b6ecaacd8a25a632ebc3b2daf8053a607a00ddd4821d8dcf1ac01c971bea  libqtdbusmock-1e9fd84aa31c7b858b90e2bbbdcadf081549fa65.tar.gz
+0f7364488760bda8e06b9bee28f28aa0a01435fae353d746cf6cf3285e311ea9bbe2a843b130b9d185aea2bada7c186d185bbb19e1921e3107df47df011290f6  googletest-1.13.0.patch
 "
