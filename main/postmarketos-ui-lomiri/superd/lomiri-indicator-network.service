@@ -1,0 +1,13 @@
+[Unit]
+Description=Indicator Network Backend
+PartOf=graphical-session.target
+#After=indicators-pre.target
+Wants=lomiri-indicator-network-secret-agent.service
+
+[Service]
+ExecStart=/usr/libexec/lomiri-indicator-network/lomiri-indicator-network-service
+Restart=on-failure
+
+[Install]
+# FIXME: use the Ayatana's target once we're fully an Ayatana indicator
+WantedBy=indicators-pre.target

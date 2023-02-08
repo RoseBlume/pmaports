@@ -15,4 +15,6 @@ export UITK_ICON_THEME=suru # ?
 
 #export G_MESSAGES_DEBUG=all
 
+superd &
+
 lomiri
