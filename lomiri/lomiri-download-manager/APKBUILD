@@ -13,7 +13,9 @@ depends_dev="qt5-qtdeclarative-dev boost-dev glog-dev lomiri-api-dev"
 makedepends="$depends_dev cmake cmake-extras gtest-dev gmock doxygen qt5-qttools"
 checkdepends="dbus-test-runner xvfb-run"
 source="https://gitlab.com/ubports/development/core/lomiri-download-manager/-/archive/$_commit/lomiri-download-manager-$_commit.tar.gz
-	0001-Disable-Werror.patch"
+	0001-Upgrade-C-standard-to-C-17.patch
+	0002-Disable-Werror.patch
+	"
 subpackages="$pkgname-dev $pkgname-doc"
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -38,5 +40,6 @@ package() {
 
 sha512sums="
 9c9f8c59e2b50549547f104d9dcba76e77ea952543e84dc73735932683a4d8694d30aae7743ac903f4aed3dde3da8ffdbec0e144a351b815ce1cc85598829366  lomiri-download-manager-cbf6d941a2004c34c9048c9067ecfe10c1017353.tar.gz
-2f7465955e0aeb583a2b1c13b4faa34f1dbeb251d87a476639f36198218ace071239447ee3e137c023bb1a9ea304f6c9331eff5aeb54e0d5e660a50a5326cbc4  0001-Disable-Werror.patch
+14078416c0b8802683b35f5385d71e90a5bc66b68ab60e8ab283fbdf22a1b188d6460b8288c98056c292b893712ad47ff00677553c072b953eccd131b17c985e  0001-Upgrade-C-standard-to-C-17.patch
+faed9e3139c57c5b820024f606d2c58d7d1d11393d674dafe678919591d4351f15fd1ac134647fd88f9dc82e8c1ef7f690a586c1413aadf1641bb27426b22774  0002-Disable-Werror.patch
 "
