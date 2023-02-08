@@ -38,6 +38,7 @@ package() {
 	rm "$pkgdir"/usr/bin/qtmir-demo-client
 	rm "$pkgdir"/usr/bin/qtmir-demo-shell
 	rm "$pkgdir"/usr/share/applications/qtmir-demo-client.desktop
+	rm "$pkgdir"/usr/share/applications/xwayland.qtmir.desktop
 	rmdir "$pkgdir"/usr/share/applications/
 	rm -r "$pkgdir"/usr/share/qtmir/benchmarks/
 	rm -r "$pkgdir"/usr/share/qtmir/qtmir-demo-client/
