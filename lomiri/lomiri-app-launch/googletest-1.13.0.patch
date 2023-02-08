@@ -1,0 +1,23 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f825c3c..c88e591 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -66,7 +66,7 @@ add_compile_options(
+ )
+ 
+ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99")
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+ 
+ pkg_check_modules(GLIB2 REQUIRED glib-2.0)
+ include_directories(${GLIB2_INCLUDE_DIRS})
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index c698063..b2f5b50 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+ 
+ configure_file ("click-db-dir/test.conf.in" "${CMAKE_CURRENT_BINARY_DIR}/click-db-dir/test.conf" @ONLY)
+ set_directory_properties (PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${CMAKE_CURRENT_BINARY_DIR}/click-db-dir/test.conf")
