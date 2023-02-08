@@ -27,7 +27,8 @@ makedepends="
 	qt5-qtbase-dev
 	"
 checkdepends="dbus"
-source="https://gitlab.com/ubports/development/core/libusermetrics/-/archive/$_commit/libusermetrics-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/libusermetrics/-/archive/$_commit/libusermetrics-$_commit.tar.gz
+	googletest-1.13.0.patch"
 subpackages="$pkgname-dev $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
@@ -51,4 +52,5 @@ package() {
 
 sha512sums="
 f4ffc46fbd2b2902b61372544e43ddc6cbce11ec433a6f2c7e951bc5d0a18c7af93962f59424c583714e7c5ec06603378ffc039f5a22c82bd54eab7e706acd99  libusermetrics-5b447421cc0521e9e35c0dae9d2bfd85a57603e7.tar.gz
+db84e9052400d1c30c22f579d2fd4492eacc3ee208b5a39659a0052c2dfd5e2d8525972bd4adfff537bb7c9c97878b61b27ae8411d0235d0aefd46c63c8c304e  googletest-1.13.0.patch
 "
