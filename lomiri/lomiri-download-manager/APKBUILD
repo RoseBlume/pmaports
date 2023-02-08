@@ -10,7 +10,7 @@ arch="all"
 url="https://gitlab.com/ubports/development/core/lomiri-download-manager"
 license="LGPL-3.0-only"
 depends_dev="qt5-qtdeclarative-dev boost-dev glog-dev lomiri-api-dev"
-makedepends="$depends_dev cmake cmake-extras gtest-dev gmock doxygen"
+makedepends="$depends_dev cmake cmake-extras gtest-dev gmock doxygen qt5-qttools"
 checkdepends="dbus-test-runner xvfb-run"
 source="https://gitlab.com/ubports/development/core/lomiri-download-manager/-/archive/$_commit/lomiri-download-manager-$_commit.tar.gz
 	0001-Disable-Werror.patch"
