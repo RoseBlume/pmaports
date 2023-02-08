@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-system-compositor
-pkgver=0_git20221231
-_commit="4e1afec55d3680541961682f2de3b9d114ee8f9c"
+pkgver=0_git20230114
+_commit="11925da9c97de5220aded21299d6051503acb6fc"
 pkgrel=0
 pkgdesc="System compositor using the Mir display server"
 arch="all"
@@ -46,6 +46,6 @@ package() {
 }
 
 sha512sums="
-8f705a72429fa8645db95b996b6bb2c176dded00ee1b63acb922e0116827ae7ce6ffb5e51ef93e14412805d2f4a00c1e8b54f510b2b4e2a7e312056c5bef547f  lomiri-system-compositor-4e1afec55d3680541961682f2de3b9d114ee8f9c.tar.gz
+9bc91de4e32f5801b31ed1f12a451c5812cf1e76255b8b42d29ed0b0a590a64b1cf9c0788f5e19d730c3ad722620bb750ead4e949d48c5126020c116979a345c  lomiri-system-compositor-11925da9c97de5220aded21299d6051503acb6fc.tar.gz
 71e0858dc9cf216cd9f07902cc597340b66a3dbf4a25fff8685bfddd87c54ca9c7222ff906fe7bb860a1759f3ce42593a4757a4d8519073d24af401a8501a276  0001-spinner-Add-support-for-wayland-backend.patch
 "

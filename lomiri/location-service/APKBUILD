@@ -1,8 +1,8 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=location-service
-pkgver=0_git20221216
+pkgver=0_git20230114
 pkgrel=0
-_commit="46bbb1be517a0db273bb4728cf778e40083318bb"
+_commit="e67c05f98b8983fc633ce3b1eb1ab67d8ac4a185"
 pkgdesc="Location service aggregating position/velocity/heading updates and exporting them over dbus"
 arch="all"
 url="https://gitlab.com/ubports/development/core/location-service"
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-f4ee13e5481625be81bf20c3890eee99c2e86b67888e9f03a0e477007d985fe6417f0ab6950d5cbca9ffbde22cd4193e56220743be3aa5a2c0ab5ff390c61ba1  location-service-46bbb1be517a0db273bb4728cf778e40083318bb.tar.gz
+6b76167319e9ab25b0a0a824762164c6c354f042f7cdf711d266442e993c34d29520596165aa0403038530bad42131b2ff6be300e6030349c7990368e80e02a0  location-service-e67c05f98b8983fc633ce3b1eb1ab67d8ac4a185.tar.gz
 "

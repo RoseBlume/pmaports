@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-deviceinfo
-pkgver=0.1.0_git20221004
-_commit="90cac0db261a929e9de006b56441cf2df0f00d67"
+pkgver=0.1.0_git20230207
+_commit="fe939f071aafa47f631caec55a4e8420b3eb4a12"
 pkgrel=0
 pkgdesc="Library to detect and configure devices"
 arch="all"
@@ -31,5 +31,5 @@ package() {
 }
 
 sha512sums="
-e7d18129b2a9dad77ec5551457a7186b96bf7b1b5f683d077778bbb1051c240a8e9b28fd470c1b5f49bb4169bbf9b4e6bb5d58128f879bb785636ecaeb2a7a33  deviceinfo-90cac0db261a929e9de006b56441cf2df0f00d67.tar.gz
+35971ec2b0e19fcf6dd41cc36c8da271572aa8d5b80659e1ef6978ae035d5666cd2f650beb7dd5a5e707f49ecd3ef956b4d37c630e6ffc95dc349fbe7ac7cb85  deviceinfo-fe939f071aafa47f631caec55a4e8420b3eb4a12.tar.gz
 "

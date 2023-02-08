@@ -1,8 +1,8 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=platform-api
-pkgver=0_git20221212
+pkgver=0_git20230105
 pkgrel=0
-_commit="3ed3ec9de3831ef784e49996c65efdaf88f6d1a1"
+_commit="f56feee4b8bcbde4437c6763768c63fc2ff7911f"
 pkgdesc="Platform API for system level capabilities"
 arch="all"
 url="https://gitlab.com/ubports/development/core/platform-api"
@@ -43,6 +43,6 @@ package() {
 }
 
 sha512sums="
-4ca505bdd1a74fa967dbc0338d17d668bffa5999c25ea39d863afd3607e75d32e393ea4a08a014f741a6a9987b55a957ded26990807e7b2e7b94ae1f0079a772  platform-api-3ed3ec9de3831ef784e49996c65efdaf88f6d1a1.tar.gz
+39e605447c346f120cd6abfc9292c58c70c21e748f1f562c032c4ecc22f7a01b381a969c3d0802c83d5c3c3ff163ac2f38f370c04c09c962b1848f9ca74b156b  platform-api-f56feee4b8bcbde4437c6763768c63fc2ff7911f.tar.gz
 552f2838be6c8a52cfad1752846fb98249572fb560993dc64148258b2e19f082eca7d7330d6d1d7b953daf47f057469d706cec8d4bd5ac1d7687da7f99187ea9  url-dispatcher-rename.patch
 "

@@ -1,9 +1,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=qtmir
-pkgver=0_git20230102
-_commit="11c4988cc0f7eb8aeb8ba974a5577fa009415e14"
-pkgrel=1
+pkgver=0_git20230130
+_commit="9595a02194ad392ba224845a12c3bc25a6146934"
+pkgrel=0
 pkgdesc="QPA plugin to make Qt a Mir server"
 arch="all"
 url="https://gitlab.com/ubports/development/core/qtmir"
@@ -46,6 +46,6 @@ package() {
 }
 
 sha512sums="
-da1e6fb97a6178351f9133a73b08a88d67ab8f03d7319dbbfd4a391e6fe178cd8ca9a06c6b84171a0f5a13d50ba9ae0342caef7993789a5b4c5d2e589cfaef96  qtmir-11c4988cc0f7eb8aeb8ba974a5577fa009415e14.tar.gz
+b918be4f0794a68480ca194f845f7d482700d32c2559bbcc3be432ae2d7d327673298ec0bab8e8fba8873501ccad99f8227164bd97e8b550fa06bc2447ac1e73  qtmir-9595a02194ad392ba224845a12c3bc25a6146934.tar.gz
 5822c8d57b5d6d20f67585e82344eb7fc9dc7fb46b5830ca94be9b8279b4fcfe1b6e041caab14f6ee1cf743abd62d9d4d141bc800e4ea7029afdd65790cd5b62  form-factor-mainline.patch
 "

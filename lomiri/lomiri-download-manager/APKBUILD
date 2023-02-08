@@ -2,9 +2,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=lomiri-download-manager
-pkgver=0_git20230104
+pkgver=0_git20230205
 pkgrel=0
-_commit="f48099c8da66f71c2268f5a340e8799db5038b20"
+_commit="cbf6d941a2004c34c9048c9067ecfe10c1017353"
 pkgdesc="Provides a service for downloading files while an application is suspended"
 arch="all"
 url="https://gitlab.com/ubports/development/core/lomiri-download-manager"
@@ -37,6 +37,6 @@ package() {
 }
 
 sha512sums="
-771d8665aea6f255611503d3882a2d76faeedfe9e2e7a96ee3cae4f0480562a9d525c3b509a609b503e97b3cb454900cafc9154a08835ca35f59a3128bbcc54a  lomiri-download-manager-f48099c8da66f71c2268f5a340e8799db5038b20.tar.gz
+9c9f8c59e2b50549547f104d9dcba76e77ea952543e84dc73735932683a4d8694d30aae7743ac903f4aed3dde3da8ffdbec0e144a351b815ce1cc85598829366  lomiri-download-manager-cbf6d941a2004c34c9048c9067ecfe10c1017353.tar.gz
 2f7465955e0aeb583a2b1c13b4faa34f1dbeb251d87a476639f36198218ace071239447ee3e137c023bb1a9ea304f6c9331eff5aeb54e0d5e660a50a5326cbc4  0001-Disable-Werror.patch
 "

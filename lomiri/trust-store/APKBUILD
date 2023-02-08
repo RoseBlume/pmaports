@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=trust-store
-pkgver=0_git20230104
-_commit="527ba9b38eee6ff4d8ca033f1b37ddbbfaa86b17"
+pkgver=0_git20230105
+_commit="e47bb50ddfef140c4585ff4bc624dcb0d1b2b06e"
 pkgrel=0
 pkgdesc="An API for creating, reading, updating and deleting trust requests answered by users."
 url="https://gitlab.com/ubports/development/core/trust-store"
@@ -32,6 +32,6 @@ package() {
 }
 
 sha512sums="
-f5c9fbf8f550b2fae841ea2c069aee64a33fb366c0f9b89457c2a52878d350222a6a76549db4f3e1ca884dda0b393485ef20e99043d4e6d3910e7588912cc716  trust-store-527ba9b38eee6ff4d8ca033f1b37ddbbfaa86b17.tar.gz
+52a2bb7a4406942995105861cd1260f3703abceea5a26b8be0f1d390aab994512651218cea6533413929e5870e39a4268ac3956d16e8c2265dea6fef6f613a2d  trust-store-e47bb50ddfef140c4585ff4bc624dcb0d1b2b06e.tar.gz
 fecd9d4dde9723f13d856a757b79c1fd0aa6d679495728b9600ad1c2c3edb059313056f30015ed49755feb58eac1bfb59b41d3f887d829f88a403f54871679ae  no_werror.patch
 "
