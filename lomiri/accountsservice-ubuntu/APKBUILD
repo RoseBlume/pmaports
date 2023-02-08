@@ -10,7 +10,7 @@ url="http://www.freedesktop.org/software/accountsservice/"
 arch="all"
 license="GPL-3.0-or-later"
 depends_dev="glib-dev gobject-introspection-dev polkit-dev"
-makedepends="$depends_dev intltool gnome-doc-utils"
+makedepends="$depends_dev intltool"
 provides="$_pkgname=$pkgver-r$pkgrel lib$_pkgname=$pkgver-r$pkgrel"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 # Issues about "Ubuntu-specific" patches:
