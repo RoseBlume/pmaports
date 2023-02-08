@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 export MIR_SERVER_CURSOR=null
 export QT_QPA_PLATFORM=wayland
