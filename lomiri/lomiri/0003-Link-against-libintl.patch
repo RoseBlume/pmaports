@@ -1,7 +1,7 @@
-From 85efd6ae0754ad004743247274248090b5674efb Mon Sep 17 00:00:00 2001
+From 582f73773adb4f71d4dfcf2a230bbd4727c731ca Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Tue, 29 Jan 2019 22:19:51 +0100
-Subject: [PATCH 4/6] Link against libintl
+Subject: [PATCH 3/5] Link against libintl
 
 ---
  plugins/LightDM/FullLightDM/CMakeLists.txt             | 1 +
@@ -47,7 +47,7 @@ index 15ab27e0a..8b97868c0 100644
  
  add_lomiri_mock(AccountsService 0.1 AccountsService
 diff --git a/tests/plugins/LightDM/IntegratedLightDM/CMakeLists.txt b/tests/plugins/LightDM/IntegratedLightDM/CMakeLists.txt
-index 1a5643824..ee32d54d5 100644
+index 8d660ea8b..1372e5038 100644
 --- a/tests/plugins/LightDM/IntegratedLightDM/CMakeLists.txt
 +++ b/tests/plugins/LightDM/IntegratedLightDM/CMakeLists.txt
 @@ -15,6 +15,7 @@ add_dependencies(GreeterDBusTestExec MockLightDM)
@@ -75,5 +75,5 @@ index 1a5643824..ee32d54d5 100644
  target_include_directories(GreeterPromptsModelTestExec PUBLIC
      ${CMAKE_SOURCE_DIR}/plugins/LightDM
 -- 
-2.36.1
+2.39.1
 

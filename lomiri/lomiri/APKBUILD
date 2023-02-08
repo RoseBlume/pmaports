@@ -25,12 +25,11 @@ depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev lomiri-api-dev geonames-dev qm
 makedepends="$depends_dev cmake cmake-extras dbus-test-runner doxygen graphviz lomiri-system-settings lomiri-deviceinfo-dev elogind-dev qtmir-dev"
 checkdepends="py3-dbusmock"
 source="https://gitlab.com/ubports/development/core/lomiri/-/archive/$_commit/lomiri-$_commit.tar.gz
-	0001-NoDpkgParse.patch
-	0002-Add-missing-includes.patch
-	0003-Add-qt5-suffix-to-search-for-Qt-tools.patch
-	0004-Link-against-libintl.patch
-	0005-No-systemd.patch
-	0006-fixups.patch
+	0001-Add-missing-includes.patch
+	0002-Add-qt5-suffix-to-search-for-Qt-tools.patch
+	0003-Link-against-libintl.patch
+	0004-No-systemd.patch
+	0005-fixups.patch
 	"
 subpackages="$pkgname-lang indicators-client:indicators_client"
 builddir="$srcdir/$pkgname-$_commit"
@@ -67,10 +66,9 @@ indicators_client() {
 
 sha512sums="
 88661cff8898363bf33a263e26e6b26b8ef85b89a4b3d47d47371a58c6d2110f114511e58963f31c9f265adbe8b2f489be2811261ed9c47d68672de3b68e3d8c  lomiri-9e0c80b7039062e737f686ef7da884a37c02363c.tar.gz
-628382be3a6679511abf2d3517c8b65ff212a2639fcaf5b695b5e030bc7ba6f78eb3c30754b78079d63a8280d43da09ddebad69bc941909c13ac28b7b88ea858  0001-NoDpkgParse.patch
-dca700689aa4b8abeb8280bea160b42c63ff86aefce73257b3ca3847d05217c92707fe85863292e77ddaf8d9bb9056c8959c3f2ada6802d633860109260c64ce  0002-Add-missing-includes.patch
-e795172037595cd70555550263a5128bb24b93e2be0bd9c3aa098dddc85ff724c26f8407d30ca1eaa435f2797b5e1a402848fd1745cbc722f3c83247190cd999  0003-Add-qt5-suffix-to-search-for-Qt-tools.patch
-b4d4e422de0297a9eb04550d54afa7a5bc945460d910c6bc212343d3ed792f555627593f26338c4db558bfa9018f683cee226581c4709f257884c5b70454e668  0004-Link-against-libintl.patch
-9250a3f652299300950dcaa16350e7dc40cba673a13da746e9ccae44b7a8bd9043a82bd1db78d656c3a7915c07bcff46a3d22bacf1d83e1fa9ff3c8ddfeb6d47  0005-No-systemd.patch
-0dff3ae2c79a00f49b248f58ebe89293187486d66d5e5e4ec523525d91b6d267b217811456dde9c23baae5a02cda2d57e9fc3fc3df1f1a61ee4291fb5c7d40d0  0006-fixups.patch
+4786b0d23012a1dcb679d2b44ea843a0db8dfebc58fb45f5556bfb8ac5506e85ecb210678543ab0e62477769ee6cd0946edb4a536d343d9baca8e569b5707982  0001-Add-missing-includes.patch
+2894f254155b1b62369cbdeb3e48ce900a7fd67b63126a62633516c31f39d33348ca357509ec1722aa48f4b35f7f20654fbe45f8f59b324cb5c223957effd334  0002-Add-qt5-suffix-to-search-for-Qt-tools.patch
+5ad97ebb32c0df25c03ebc9245430f7bf84fd1d90f1aebbaaf0cc48dca7fe3bda6c4c86ed146366ab3fc653d7ddab66d645f06fba16fe25f86eeb880bb883d1d  0003-Link-against-libintl.patch
+198bab4c275f0397f67a3307aa71dc504378d3a54f2c98775ef450240c41b22b24d14fbd82df8ed902b24fe7d24a1b7cf8ca5f44fbf9f0a9575d9be5fdc4cd65  0004-No-systemd.patch
+d87826f163af0155b5fdbac0c93534430573dbcbbd294b6a71e36b4db2d93c87739d9d43fdb826f27b2469c767eaa2b491e7823cd449bc421e615d4ec997c36a  0005-fixups.patch
 "

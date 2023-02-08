@@ -1,14 +1,14 @@
-From 4fbf5ec1700ddd47df053d2006a2dc151a98bc1a Mon Sep 17 00:00:00 2001
+From 4854d238195f1ecf80f232ed6072c20d6f3d8716 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Sun, 15 Aug 2021 16:52:09 +0200
-Subject: [PATCH 6/6] fixups
+Subject: [PATCH 5/5] fixups
 
 ---
  qml/Panel/Indicators/IndicatorsLight.qml | 2 +-
- 1 file changed, 1 insertions(+), 1 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/qml/Panel/Indicators/IndicatorsLight.qml b/qml/Panel/Indicators/IndicatorsLight.qml
-index cd9703038..2e2b1e617 100644
+index 3ffab622e..681f0d8ee 100644
 --- a/qml/Panel/Indicators/IndicatorsLight.qml
 +++ b/qml/Panel/Indicators/IndicatorsLight.qml
 @@ -211,7 +211,7 @@ console.log("no support for Multicolor LED. " + indicatorState)
@@ -21,5 +21,5 @@ index cd9703038..2e2b1e617 100644
  
      property var _colorBinding: Binding {
 -- 
-2.36.1
+2.39.1
 
