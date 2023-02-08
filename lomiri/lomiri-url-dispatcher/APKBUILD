@@ -14,6 +14,7 @@ checkdepends="py3-dbusmock"
 source="
 	https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/archive/$_commit/lomiri-url-dispatcher-$_commit.tar.gz
 	0001-remove-systemd.patch
+	googletest-1.13.0.patch
 	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
@@ -40,4 +41,5 @@ package() {
 sha512sums="
 f019b51865ad289105a98c7125565e69bae312f41eb6e6d97411a145df90904552708fc2b058275ad3ad152afefbcb8cbb2ed3221e97abd8e5a730fc3387b4fa  lomiri-url-dispatcher-23c2172a1a823090eee205d386335f430aadf786.tar.gz
 586d24fd32f368b7f0404d4f5664bde8ed85e88e79f4532aa686ba0e4fc5c6c9c3c33832fded9f09bc5eba983b853a6be2204d9796a571e2dfecfa1afaf9f74f  0001-remove-systemd.patch
+f8babd265ffb0f04a5a2f9a8a217e6bab1a950fc4f7a25219495edfc638ba822cee0a6f366ece2e1906fc4eae7b341019aaec576b7ba087d8dc1d46898b8a07d  googletest-1.13.0.patch
 "
