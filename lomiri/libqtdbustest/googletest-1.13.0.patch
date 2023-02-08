@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0133877..26633be 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,7 +42,7 @@ set(DBUS_SESSION_CONFIG_FILE "${CMAKE_INSTALL_FULL_DATADIR}/libqtdbustest/sessio
+ set(QTDBUSTEST_WATCHDOG_BIN "${CMAKE_INSTALL_FULL_LIBEXECDIR}/libqtdbustest/watchdog")
+ 
+ add_definitions(
+-	-std=c++11
++	-std=c++17
+ 	-fno-permissive
+ 	-pedantic
+ 	-Wall
