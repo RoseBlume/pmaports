@@ -12,7 +12,10 @@ depends_dev="qt5-qtdeclarative-dev lomiri-app-launch-dev gsettings-qt-dev libnih
 makedepends="$depends_dev cmake cmake-extras libapparmor gtest-dev qtchooser qt5-qttools-dev doxygen graphviz"
 checkdepends="gmock dbus-test-runner xvfb-run"
 options="!check" # 92% tests passed, 1 tests failed out of 12
-source="https://gitlab.com/ubports/development/core/content-hub/-/archive/$_commit/content-hub-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/content-hub/-/archive/$_commit/content-hub-$_commit.tar.gz
+	qdoc.patch
+	qmlplugindump.patch
+	"
 subpackages="$pkgname-dev $pkgname-lang $pkgname-doc"
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -43,4 +46,6 @@ package() {
 
 sha512sums="
 54d64220b9469af362a1ea05463a9f5af5a761f8e2eb9b0da63f55b00078da75d430dc1e00dcde0ab52a782ba0e2d9358b04ef46c85ce16d311b47e6aea7ee04  content-hub-56e4d78a07a28e57dd456bd721393987111c5e3b.tar.gz
+ebf813527bb917d73948405b11f8fd6acad5278591027b10e2c327bdf90668e001d7de2ab074407609f647e776a115d25fd47f8abd47aef525f41b1cbaf0a5e8  qdoc.patch
+639a3b2ea44d436f0a5e61dae77a71e7650b8d5a0073e5f04d0af0ac3060675cf93c927f5cfddfabc09866a7b5ab36810a109597ae3cc43865e5b1680c5a9b28  qmlplugindump.patch
 "

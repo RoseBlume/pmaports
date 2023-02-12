@@ -1,0 +1,16 @@
+diff --git a/doc/qml/CMakeLists.txt b/doc/qml/CMakeLists.txt
+index 19b418f..14f933d 100644
+--- a/doc/qml/CMakeLists.txt
++++ b/doc/qml/CMakeLists.txt
+@@ -1,9 +1,9 @@
+ # add a target to generate API documentation with qdoc
+-FIND_PROGRAM(QDOC_EXECUTABLE qdoc)
++FIND_PROGRAM(QDOC_EXECUTABLE qdoc-qt5)
+ if(QDOC_EXECUTABLE)
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lomiri-content-hub.qdocconf.in ${CMAKE_CURRENT_BINARY_DIR}/lomiri-content-hub.qdocconf @ONLY)
+ add_custom_target(qmldoc
+-${QDOC_EXECUTABLE} -qt=qt5 ${CMAKE_CURRENT_BINARY_DIR}/lomiri-content-hub.qdocconf
++${QDOC_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/lomiri-content-hub.qdocconf
+ WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+ COMMENT "Generating QML API documentation with qdoc" VERBATIM
+ )
