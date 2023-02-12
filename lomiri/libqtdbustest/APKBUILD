@@ -1,10 +1,10 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=libqtdbustest
-pkgver=0_git20180611
-_commit="24e410ea77c9fa08894365c60bf08811a3b60bc0"
+pkgver=0_git20230208
+_commit="f204bb8d7e9a2ffcd159d2f51f47257a715bbd62"
 pkgrel=0
 pkgdesc='Library for testing DBus interactions using Qt'
-url='https://github.com/ubports/libqtdbustest'
+url='https://gitlab.com/ubports/development/core/libqtdbustest'
 arch="all"
 license="LGPL-3.0-only"
 makedepends="
@@ -15,8 +15,7 @@ makedepends="
 	qt5-qtbase-dev
 	"
 checkdepends="procps py3-dbusmock dbus-x11"
-source="$pkgname-$_commit.tar.gz::https://github.com/ubports/libqtdbustest/archive/$_commit.tar.gz
-	SuicidalSleep.patch
+source="https://gitlab.com/ubports/development/core/libqtdbustest/-/archive/$_commit/libqtdbustest-$_commit.tar.gz
 	googletest-1.13.0.patch"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Checks fail when being cross-compiled with QEMU
@@ -37,8 +36,8 @@ check() {
 package() {
 	make -C build DESTDIR="$pkgdir" install
 }
+
 sha512sums="
-e587a3342879cf11543529cf2e6ad9f6266963afdad29f91bcf2742086cb9f889eca36f335280a658ecbf9a5e5319154e0b7ea842a008b3d2fb7740488ed442e  libqtdbustest-24e410ea77c9fa08894365c60bf08811a3b60bc0.tar.gz
-4ce1c9a23784412b7e171129db2dc13e39a515249edc73bdbd835996d76670eeafead55dbaa197ec8614d560038f6bf9fa999be3e5989d4d7134172e9dcf25bb  SuicidalSleep.patch
+b26b4a32cbb63f087f0d41078dc59647431cbed19c76b0add11d10c058ed483b07a104fae6bf2534027a913aa1789ca042118e6b0c1e2d7cb1afb9a2d895ee2b  libqtdbustest-f204bb8d7e9a2ffcd159d2f51f47257a715bbd62.tar.gz
 e1d9dd28ce97877a25c44fa039f1ff0c81e19292dfc503d10a2722a2fd81f7997e0ff6b8f8d76a394339294707d9467572d8c3964de46ad1f423527db522a33d  googletest-1.13.0.patch
 "
