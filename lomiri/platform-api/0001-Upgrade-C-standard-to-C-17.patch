@@ -1,0 +1,191 @@
+From f42d2c80aac3f6de2c6ceaee0fbbd4ceae6001e4 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sun, 12 Feb 2023 16:03:31 +0100
+Subject: [PATCH] Upgrade C++ standard to C++17
+
+Googletest version 1.13.0 required C++14 at least, but let's already
+switch to C++17 since that's widely supported and also required by Qt6.
+---
+ examples/CMakeLists.txt                                         | 2 +-
+ src/ubuntu/application/CMakeLists.txt                           | 2 +-
+ .../application/common/application/location/CMakeLists.txt      | 2 +-
+ .../application/common/application/sensors/CMakeLists.txt       | 2 +-
+ .../common/application/url_dispatcher/CMakeLists.txt            | 2 +-
+ src/ubuntu/application/common/mirclient/CMakeLists.txt          | 2 +-
+ src/ubuntu/application/desktop/CMakeLists.txt                   | 2 +-
+ src/ubuntu/application/testbackend/CMakeLists.txt               | 2 +-
+ src/ubuntu/application/touch/CMakeLists.txt                     | 2 +-
+ src/ubuntu/application/touch/hybris/CMakeLists.txt              | 2 +-
+ src/ubuntu/hardware/CMakeLists.txt                              | 2 +-
+ src/ubuntu/hardware/alarms/CMakeLists.txt                       | 2 +-
+ src/ubuntu/hardware/tests/CMakeLists.txt                        | 2 +-
+ tests/CMakeLists.txt                                            | 2 +-
+ 14 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+index 492782a..b2e2e95 100644
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -2,7 +2,7 @@ include_directories(
+     ${CMAKE_BINARY_DIR}/include
+ )
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC -Wl,--no-as-needed -pthread")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC -Wl,--no-as-needed -pthread")
+ 
+ add_executable(test_android_sensors_api test_sensors_api.cpp)
+ target_link_libraries(test_android_sensors_api ubuntu_application_api)
+diff --git a/src/ubuntu/application/CMakeLists.txt b/src/ubuntu/application/CMakeLists.txt
+index 6db0633..62ec31f 100644
+--- a/src/ubuntu/application/CMakeLists.txt
++++ b/src/ubuntu/application/CMakeLists.txt
+@@ -19,7 +19,7 @@ if(Hybris)
+ endif()
+ add_subdirectory(testbackend)
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC")
+ 
+ add_library(
+   ubuntu_application_api SHARED
+diff --git a/src/ubuntu/application/common/application/location/CMakeLists.txt b/src/ubuntu/application/common/application/location/CMakeLists.txt
+index 4ecfc92..609001f 100644
+--- a/src/ubuntu/application/common/application/location/CMakeLists.txt
++++ b/src/ubuntu/application/common/application/location/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ find_package(PkgConfig)
+ find_package(Threads)
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC")
+ 
+ pkg_check_modules(DBUS_CPP REQUIRED dbus-cpp)
+ pkg_check_modules(LOCATION_SERVICE REQUIRED lomiri-location-service)
+diff --git a/src/ubuntu/application/common/application/sensors/CMakeLists.txt b/src/ubuntu/application/common/application/sensors/CMakeLists.txt
+index 78d1e82..049470a 100644
+--- a/src/ubuntu/application/common/application/sensors/CMakeLists.txt
++++ b/src/ubuntu/application/common/application/sensors/CMakeLists.txt
+@@ -2,7 +2,7 @@ find_package(PkgConfig)
+ find_package(Threads)
+ pkg_check_modules(DBUS_CPP REQUIRED dbus-cpp)
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC -pthread")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC -pthread")
+ 
+ include_directories(
+     ${DBUS_CPP_INCLUDE_DIRS}
+diff --git a/src/ubuntu/application/common/application/url_dispatcher/CMakeLists.txt b/src/ubuntu/application/common/application/url_dispatcher/CMakeLists.txt
+index b765b45..716267b 100644
+--- a/src/ubuntu/application/common/application/url_dispatcher/CMakeLists.txt
++++ b/src/ubuntu/application/common/application/url_dispatcher/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ find_package(PkgConfig)
+ pkg_check_modules(LIBURL_DISPATCHER REQUIRED lomiri-url-dispatcher)
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC")
+ 
+ include_directories(${LIBURL_DISPATCHER_INCLUDE_DIRS})
+ 
+diff --git a/src/ubuntu/application/common/mirclient/CMakeLists.txt b/src/ubuntu/application/common/mirclient/CMakeLists.txt
+index 3cbccb5..8ff8d91 100644
+--- a/src/ubuntu/application/common/mirclient/CMakeLists.txt
++++ b/src/ubuntu/application/common/mirclient/CMakeLists.txt
+@@ -7,7 +7,7 @@ set(SOURCES
+   lifecycle_delegate_mir.cpp
+ )
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC")
+ 
+ include_directories(
+     ${CMAKE_BINARY_DIR}/include
+diff --git a/src/ubuntu/application/desktop/CMakeLists.txt b/src/ubuntu/application/desktop/CMakeLists.txt
+index ca368cd..e5024bb 100644
+--- a/src/ubuntu/application/desktop/CMakeLists.txt
++++ b/src/ubuntu/application/desktop/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17")
+ 
+ add_library(
+   ubuntu_application_api_desktop_mirclient SHARED
+diff --git a/src/ubuntu/application/testbackend/CMakeLists.txt b/src/ubuntu/application/testbackend/CMakeLists.txt
+index b171f50..e0d8692 100644
+--- a/src/ubuntu/application/testbackend/CMakeLists.txt
++++ b/src/ubuntu/application/testbackend/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17")
+ 
+ add_library(
+   ubuntu_application_api_test SHARED
+diff --git a/src/ubuntu/application/touch/CMakeLists.txt b/src/ubuntu/application/touch/CMakeLists.txt
+index b0272cd..67fb9b4 100644
+--- a/src/ubuntu/application/touch/CMakeLists.txt
++++ b/src/ubuntu/application/touch/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17")
+ 
+ add_subdirectory(hybris)
+ 
+diff --git a/src/ubuntu/application/touch/hybris/CMakeLists.txt b/src/ubuntu/application/touch/hybris/CMakeLists.txt
+index 26a1c59..a89379f 100644
+--- a/src/ubuntu/application/touch/hybris/CMakeLists.txt
++++ b/src/ubuntu/application/touch/hybris/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC")
+ 
+ add_library(
+   ubuntu_application_api_hybris STATIC
+diff --git a/src/ubuntu/hardware/CMakeLists.txt b/src/ubuntu/hardware/CMakeLists.txt
+index df1f0d2..9d7a004 100644
+--- a/src/ubuntu/hardware/CMakeLists.txt
++++ b/src/ubuntu/hardware/CMakeLists.txt
+@@ -4,7 +4,7 @@ set(
+   ubuntu_hardware_alarm
+ )
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC")
+ 
+ include_directories(
+   ${CMAKE_BINARY_DIR}/include
+diff --git a/src/ubuntu/hardware/alarms/CMakeLists.txt b/src/ubuntu/hardware/alarms/CMakeLists.txt
+index 7aad549..8ede557 100644
+--- a/src/ubuntu/hardware/alarms/CMakeLists.txt
++++ b/src/ubuntu/hardware/alarms/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC")
+ 
+ include_directories(/usr/include/android)
+ 
+diff --git a/src/ubuntu/hardware/tests/CMakeLists.txt b/src/ubuntu/hardware/tests/CMakeLists.txt
+index cada7d9..3dffcba 100644
+--- a/src/ubuntu/hardware/tests/CMakeLists.txt
++++ b/src/ubuntu/hardware/tests/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -fPIC")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC")
+ 
+ include_directories(
+   ${CMAKE_BINARY_DIR}/include
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 1edab82..b7d8387 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -4,7 +4,7 @@ pkg_check_modules(PROCESS_CPP process-cpp REQUIRED)
+ find_package(GMock)
+ include_directories(${PROCESS_CPP_INCLUDE_DIRS})
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17")
+ 
+ add_executable(
+     test_ua_sensors_real
+-- 
+2.39.1
+

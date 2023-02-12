@@ -20,7 +20,8 @@ makedepends="
 	gmock
 	gtest-dev
 	"
-source="https://gitlab.com/ubports/development/core/platform-api/-/archive/$_commit/platform-api-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/platform-api/-/archive/$_commit/platform-api-$_commit.tar.gz
+	0001-Upgrade-C-standard-to-C-17.patch"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
 
@@ -42,4 +43,5 @@ package() {
 
 sha512sums="
 39e605447c346f120cd6abfc9292c58c70c21e748f1f562c032c4ecc22f7a01b381a969c3d0802c83d5c3c3ff163ac2f38f370c04c09c962b1848f9ca74b156b  platform-api-f56feee4b8bcbde4437c6763768c63fc2ff7911f.tar.gz
+9910498fbbe33c429317415143ccd9c9d9ee9aac7caf814a79c62b604e4e4d0b68cfbb5eb6c2b86a1a48ef1d17d036f7b9be7c31e5a1c8d8721de0870f9e85ec  0001-Upgrade-C-standard-to-C-17.patch
 "
