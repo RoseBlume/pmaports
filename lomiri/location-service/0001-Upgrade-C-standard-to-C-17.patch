@@ -1,0 +1,27 @@
+From 5310b1b3278951aa414ca6a9afe668ac3dc1ea26 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sun, 12 Feb 2023 15:55:29 +0100
+Subject: [PATCH] Upgrade C++ standard to C++17
+
+Googletest version 1.13.0 required C++14 at least, but let's already
+switch to C++17 since that's widely supported and also required by Qt6.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b92beae..ba0d05e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,7 +16,7 @@ message(STATUS "${CMAKE_PROJECT_NAME} ${LOMIRI_LOCATION_SERVICE_VERSION_MAJOR}.$
+ set(LOMIRI_LOCATION_SERVICE_TRUST_STORE_SERVICE_NAME "LomiriLocationService")
+ 
+ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -pedantic -Wextra -fPIC")
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -fno-strict-aliasing -pedantic -Wextra -fPIC -DBOOST_ASIO_DISABLE_EPOLL")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -fno-strict-aliasing -pedantic -Wextra -fPIC -DBOOST_ASIO_DISABLE_EPOLL")
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ 
+-- 
+2.39.1
+

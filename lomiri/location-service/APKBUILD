@@ -31,6 +31,7 @@ makedepends="$depends_dev
 checkdepends="coreutils"
 source="
 	https://gitlab.com/ubports/development/core/location-service/-/archive/$_commit/location-service-$_commit.tar.gz
+	0001-Upgrade-C-standard-to-C-17.patch
 	"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
@@ -56,4 +57,5 @@ package() {
 
 sha512sums="
 6b76167319e9ab25b0a0a824762164c6c354f042f7cdf711d266442e993c34d29520596165aa0403038530bad42131b2ff6be300e6030349c7990368e80e02a0  location-service-e67c05f98b8983fc633ce3b1eb1ab67d8ac4a185.tar.gz
+d87d1f49c8b8dcc77e0ce5f2dcc66fb11b23a2ff12a6d8f2cdd1edfcce8faa292633b1ff6c64dbcde195e28dbd167918dbba729abe62fc2a58449fa212d91bcd  0001-Upgrade-C-standard-to-C-17.patch
 "
