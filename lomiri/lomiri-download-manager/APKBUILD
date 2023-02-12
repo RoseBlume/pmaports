@@ -15,6 +15,7 @@ checkdepends="dbus-test-runner xvfb-run"
 source="https://gitlab.com/ubports/development/core/lomiri-download-manager/-/archive/$_commit/lomiri-download-manager-$_commit.tar.gz
 	0001-Upgrade-C-standard-to-C-17.patch
 	0002-Disable-Werror.patch
+	qdoc.patch
 	"
 subpackages="$pkgname-dev $pkgname-doc"
 builddir="$srcdir/$pkgname-$_commit"
@@ -42,4 +43,5 @@ sha512sums="
 9c9f8c59e2b50549547f104d9dcba76e77ea952543e84dc73735932683a4d8694d30aae7743ac903f4aed3dde3da8ffdbec0e144a351b815ce1cc85598829366  lomiri-download-manager-cbf6d941a2004c34c9048c9067ecfe10c1017353.tar.gz
 14078416c0b8802683b35f5385d71e90a5bc66b68ab60e8ab283fbdf22a1b188d6460b8288c98056c292b893712ad47ff00677553c072b953eccd131b17c985e  0001-Upgrade-C-standard-to-C-17.patch
 faed9e3139c57c5b820024f606d2c58d7d1d11393d674dafe678919591d4351f15fd1ac134647fd88f9dc82e8c1ef7f690a586c1413aadf1641bb27426b22774  0002-Disable-Werror.patch
+371b6e5099410ef63f0a7bedfff4ba6eeed9ef779da3d695ad3717778bf4d25179416dd46e79a8ddd05807248ee7503e5c676c8ca248fdbc0d0f9db7e5ce8ede  qdoc.patch
 "
