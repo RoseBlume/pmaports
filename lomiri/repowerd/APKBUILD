@@ -24,7 +24,7 @@ build() {
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DBUILD_SHARED_LIBS=True \
-		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_BUILD_TYPE=None \
 		-DREPOWERD_ENABLE_HYBRIS=False \
 		$CMAKE_CROSSOPTS
 	cmake --build build

@@ -19,7 +19,7 @@ builddir="$srcdir/$pkgname-$_commit"
 
 build() {
 	cmake -B build \
-		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_BUILD_TYPE=None \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build build

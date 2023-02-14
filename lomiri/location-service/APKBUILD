@@ -39,7 +39,7 @@ options="!check" # Several failures
 
 build() {
 	cmake -B build \
-		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_BUILD_TYPE=None \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DLOCATION_SERVICE_ENABLE_GPS_PROVIDER=OFF
