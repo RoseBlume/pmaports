@@ -1,7 +1,7 @@
-From 4f538663db01854c64111ffe3433118d0bf4c639 Mon Sep 17 00:00:00 2001
+From c06990876d0232d860a350d84b31f1b78281d4eb Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Mon, 1 Mar 2021 23:03:58 +0100
-Subject: [PATCH 1/5] Stop forcing systemtap integration
+Subject: [PATCH 1/8] Stop forcing systemtap integration
 
 This isn't available on Alpine (and other distros)
 
@@ -36,5 +36,5 @@ index f091c62d59..894a96b377 100644
  #
  # Full OpenGL support is possibly complete but not yet perfect. So is
 -- 
-2.38.1
+2.39.1
 
