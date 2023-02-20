@@ -1,5 +1,7 @@
 #!/bin/sh
 
+rc-update del lightdm default
+
 rc-update add bluetooth default
 rc-update add networkmanager default
 rc-update add tinydm default
