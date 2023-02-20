@@ -20,9 +20,8 @@ setup_firmware_path
 
 setup_mdev
 setup_dynamic_partitions "${deviceinfo_super_partitions:=}"
-setup_framebuffer
-show_splash "Loading..."
 mount_subpartitions
+setup_framebuffer
 run_hooks /etc/postmarketos-mkinitfs/hooks
 
 # Always run dhcp daemon/usb networking for now (later this should only
@@ -32,6 +31,7 @@ setup_usb_network
 start_unudhcpd
 
 mount_boot_partition /boot
+show_splash_loading
 extract_initramfs_extra /boot/initramfs-extra
 setup_udev
 run_hooks /etc/postmarketos-mkinitfs/hooks-extra

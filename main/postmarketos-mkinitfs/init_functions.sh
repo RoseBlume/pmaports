@@ -241,7 +241,7 @@ mount_boot_partition() {
 	partition=$(find_boot_partition)
 	if [ -z "$partition" ]; then
 		echo "ERROR: boot partition not found!"
-		show_splash "ERROR: Boot partition not found\\nhttps://postmarketos.org/troubleshooting"
+		show_splash /splash-noboot.ppm.gz
 		loop_forever
 	fi
 
@@ -278,7 +278,7 @@ extract_initramfs_extra() {
 	initramfs_extra="$1"
 	if [ ! -e "$initramfs_extra" ]; then
 		echo "ERROR: initramfs-extra not found!"
-		show_splash "ERROR: initramfs-extra not found\\nhttps://postmarketos.org/troubleshooting"
+		show_splash /splash-noinitramfsextra.ppm.gz
 		loop_forever
 	fi
 	echo "Extract $initramfs_extra"
@@ -287,7 +287,7 @@ extract_initramfs_extra() {
 
 wait_root_partition() {
 	while [ -z "$(find_root_partition)" ]; do
-		show_splash "ERROR: root partition not found\\nhttps://postmarketos.org/troubleshooting"
+		show_splash /splash-norootfs.ppm.gz
 		echo "Could not find the rootfs."
 		echo "Maybe you need to insert the sdcard, if your device has"
 		echo "any? Trying again in one second..."
@@ -378,8 +378,6 @@ resize_root_partition() {
 unlock_root_partition() {
 	partition="$(find_root_partition)"
 	if cryptsetup isLuks "$partition"; then
-		# Make sure the splash doesn't interfere
-		killall pbsplash 2>/dev/null
 		tried=0
 		until cryptsetup status root | grep -qwi active; do
 			fde-unlock "$partition" "$tried"
@@ -387,13 +385,13 @@ unlock_root_partition() {
 		done
 		ROOT_PARTITION_UNLOCKED=1
 		# Show again the loading splashscreen
-		show_splash "Loading..."
+		show_splash_loading
 	fi
 }
 
 resize_root_filesystem() {
 	if [ "$ROOT_PARTITION_RESIZED" = 1 ]; then
-		show_splash "Resizing filesystem during initial boot..."
+		show_splash /splash-resizefs.ppm.gz
 		partition="$(find_root_partition)"
 		touch /etc/mtab # see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=673323
 		type="$(get_partition_type "$partition")"
@@ -419,7 +417,7 @@ resize_root_filesystem() {
 				;;
 			*)	echo "WARNING: Can not resize '$type' filesystem ($partition)." ;;
 		esac
-		show_splash "Loading..."
+		show_splash_loading
 	fi
 }
 
@@ -447,7 +445,7 @@ mount_root_partition() {
 	esac
 	if ! [ -e /sysroot/usr ]; then
 		echo "ERROR: unable to mount root partition!"
-		show_splash "ERROR: unable to mount root partition\\nhttps://postmarketos.org/troubleshooting"
+		show_splash /splash-mounterror.ppm.gz
 		loop_forever
 	fi
 }
@@ -592,7 +590,7 @@ start_unudhcpd() {
 	) &
 }
 
-# $1: Message to show
+# $1: path to ppm.gz file
 show_splash() {
 	# Skip for non-framebuffer devices
 	# shellcheck disable=SC2154
@@ -600,20 +598,23 @@ show_splash() {
 		echo "NOTE: Skipping framebuffer splashscreen (deviceinfo_no_framebuffer)"
 		return
 	fi
-
 	# Disable splash
 	if grep -q PMOS_NOSPLASH /proc/cmdline; then
 		return
 	fi
+	echo "IMG_ALIGN=CM" >>/tmp/fbsplash.cfg
+	gzip -c -d "$1" >/tmp/splash.ppm
+	fbsplash -s /tmp/splash.ppm -i /tmp/fbsplash.cfg
+}
 
-	killall pbsplash 2>/dev/null
-
-	while pgrep pbsplash >/dev/null; do
-		sleep 0.01
-	done
-
-	# shellcheck disable=SC2154
-	/usr/bin/pbsplash -s /usr/share/pbsplash/pmos-logo-text.svg -b "Linux $(uname -r) | $deviceinfo_codename" -m "$1 " &
+show_splash_loading() {
+	# Allow overriding the default loading splash screen with a
+	# "splash.ppm.gz" file on the boot partition
+	if [ -e /boot/splash.ppm.gz ]; then
+		show_splash /boot/splash.ppm.gz
+	else
+		show_splash /splash-loading.ppm.gz
+	fi
 }
 
 set_framebuffer_mode() {
