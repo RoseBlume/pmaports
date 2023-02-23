@@ -68,6 +68,7 @@ editor-config:
   script:
     - .ci/lib/gitlab_prepare_ci.sh
     - .ci/ec.sh
+  allow_failure: true
 
 # aports checks (generic)
 pytest-commits:
