@@ -1,0 +1,27 @@
+# Forked from Alpine: backport to v22.12
+
+pkgname=feedbackd-device-themes
+pkgver=0.0.3
+pkgrel=0
+pkgdesc="Feedbackd device themes for different devices"
+url="https://source.puri.sm/Librem5/feedbackd-device-themes"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="meson json-glib-dev"
+source="https://storage.puri.sm/releases/feedbackd-device-themes/feedbackd-device-themes-$pkgver.tar.xz"
+
+build() {
+	abuild-meson . output
+}
+
+check() {
+	meson test --no-rebuild --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+eed41806d2d3d5f4d06ac296c25b14776ffbb167d267acc49f4ffaa049715ca5238c3c1d65993a4cc3bfb91f9f6e223399a5da0deae6586ae5dc01db39a64d07  feedbackd-device-themes-0.0.3.tar.xz
+"
