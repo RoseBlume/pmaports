@@ -1,0 +1,49 @@
+# Forked from Alpine: backport to v22.12
+
+pkgname=feedbackd
+pkgver=0.0.3
+pkgrel=0
+pkgdesc="Daemon to provide haptic, LED, and audio feedback triggered by application events"
+url="https://source.puri.sm/Librem5/feedbackd"
+arch="all"
+license="GPL-3.0-or-later"
+depends="dbus feedbackd-device-themes"
+makedepends="
+	gi-docgen
+	glib-dev
+	gobject-introspection-dev
+	gsound-dev
+	gtk-doc
+	json-glib-dev
+	libgudev-dev
+	meson
+	vala
+	"
+subpackages="$pkgname-dev $pkgname-doc"
+source="https://storage.puri.sm/releases/feedbackd/feedbackd-$pkgver.tar.xz"
+install="$pkgname.pre-install $pkgname.pre-upgrade"
+
+# doesn't pass when cross-compiling with pmbootstrap
+options="!check"
+
+build() {
+	abuild-meson \
+		-Db_lto=true \
+		-Dgtk_doc=true \
+		. output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+check() {
+	meson test --no-rebuild --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+	install -Dm644 "$builddir"/debian/feedbackd.udev \
+		"$pkgdir"/usr/lib/udev/rules.d/90-feedbackd.rules
+}
+
+sha512sums="
+27735caa3174f49feec0939853deea04a9e9ae5b442ef5d91b97411c1b05aa8eb597e446a4702d147fdff3be0f6ebb90e14add728efd6de417a4b9e6b2051330  feedbackd-0.0.3.tar.xz
+"
