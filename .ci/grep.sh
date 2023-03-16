@@ -9,9 +9,9 @@ if [ "$(id -u)" = 0 ]; then
 fi
 
 # Find CHANGEMEs in APKBUILDs
-if grep -qr '(CHANGEME!)' *; then
+if grep -qr '(CHANGEME!)' -- *; then
 	echo "ERROR: Please replace '(CHANGEME!)' in the following files:"
-	grep --color=always -r '(CHANGEME!)' *
+	grep --color=always -r '(CHANGEME!)' -- *
 	exit 1
 fi
 
