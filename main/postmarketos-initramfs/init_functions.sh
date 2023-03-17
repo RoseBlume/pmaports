@@ -468,6 +468,27 @@ run_hooks() {
 	done
 }
 
+# Runs hooks in the rootfs via chroot
+# The ramdisk is accessible as /ramdisk
+# $1: path to the hooks dir
+run_chroot_hooks() {
+	scriptsdir="$1"
+
+	if ! [ -d "$scriptsdir" ]; then
+		return
+	fi
+
+	mkdir -p /sysroot/ramdisk
+	mount --bind / /sysroot/ramdisk
+
+	for hook in "$scriptsdir"/*.sh; do
+		echo "Running chroot hook: $hook"
+		chroot /sysroot /bin/sh /ramdisk/"$hook"
+	done
+
+	umount /sysroot/ramdisk
+}
+
 setup_usb_network_android() {
 	# Only run, when we have the android usb driver
 	SYS=/sys/class/android_usb/android0
