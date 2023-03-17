@@ -1,0 +1,26 @@
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+pkgname=postmarketos-mkinitfs-hook-kernelmodules
+pkgver=1.0.0
+pkgrel=0
+pkgdesc="Includes all kernel modules in the initramfs and bind-mounts /lib/modules during boot"
+url="https://postmarketos.org"
+arch="noarch"
+license="GPL-2.0-or-later"
+options="!check" # No tests
+source="
+	install_kernel.sh
+	lib_modules.files
+"
+builddir="$srcdir/"
+
+package() {
+	install -Dm644 "$srcdir"/install_kernel.sh \
+		"$pkgdir"/usr/share/mkinitfs/hooks/sysroot/10-install_kernel.sh
+	install -Dm644 "$srcdir"/lib_modules.files \
+		"$pkgdir"/usr/share/mkinitfs/files/lib_modules.files
+}
+
+sha512sums="
+97d3e08415b3ee1425555d5fd11e123e4cbe9afff1624a1c28caa74c6592f9d29bb209693a3f42fef1a8f60d4373be0f9350ce8951ef462cea1faa3afcaac352  install_kernel.sh
+36d7a7e727a41c4dc6390a77a0ef7a08b5d3d34d605881d7128e1bdd34c6704dc4fa7b7d03e3646fc2c569afc9ef16a2da3671ca995be3835620338ae3f5e882  lib_modules.files
+"
