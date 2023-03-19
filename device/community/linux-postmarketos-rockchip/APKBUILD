@@ -11,7 +11,7 @@
 
 pkgname=linux-postmarketos-rockchip
 pkgver=6.0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Mainline kernel for rockchip devices"
 arch="aarch64"
 _carch="arm64"
@@ -82,5 +82,5 @@ package() {
 
 sha512sums="
 cee8ce158881ef84d475befec58f21f3e5e71e760b012db597204c5693501ec0de2904957ccbc6156bcc697125a44c45fdb0e9d11c844d245eab455b858944f0  linux-6.0.2.tar.xz
-0be53d02579848693fe98294d852efca9d996174726188fab1ff3173246930a7d8dfa20e03fc27afd67bac3c7c5ca9e7c2f5e80c582baceee84d5134f6fad1fe  config-postmarketos-rockchip.aarch64
+efbde7fa374852c0e920e027db40bc9f3e75413c2562d20640de74108fc0c76bc888ab580d15bf7e5a98d965e42347348bfa16cdd8bcc5cfb1e02f4d11a275f2  config-postmarketos-rockchip.aarch64
 "
