@@ -1,16 +1,18 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=boot-deploy
-pkgver=0.8.1
+pkgver=0.8.1_git20230506
 pkgrel=0
+_commit="9b8886b3957c89649ab8241573f05eb38a997482"
 pkgdesc="tool for finalizing and deploying boot related files"
 url="https://gitlab.com/postmarketos/boot-deploy"
 arch="noarch"
 license="GPL-2.0-or-later"
 source="
 	boot-deploy.config
-	https://gitlab.com/postmarketOS/boot-deploy/-/archive/$pkgver/boot-deploy-$pkgver.tar.gz
+	https://gitlab.com/postmarketOS/boot-deploy/-/archive/$_commit/boot-deploy-$_commit.tar.gz
 	"
 options="!check"
+builddir="$srcdir/$pkgname-$_commit"
 
 package() {
 	install -Dm755 boot-deploy "$pkgdir"/sbin/boot-deploy
@@ -25,5 +27,5 @@ package() {
 
 sha512sums="
 a243975b9850d9933e0f917f7eb38fc4a76ea658c3dcc56f035f60ee6c62d6740c1107143b8210bdc0231d4c9b6b2003e458120985604eb09649322d359ae89f  boot-deploy.config
-b5a2c182dd8786172f69100e6b62b95a02ba6e4f24bbf3b6aa8269287197f9d2546617c0631af9391b5052d5bd381d02e92ae39673311da2fd881df6045e79ed  boot-deploy-0.8.1.tar.gz
+9e195143220fe9857e1f0637cc7831950c5768bb77f55a122ca3fdef7336ea59fa8108d354451817573e88febb539ea5df3cabac8df0250273179f245e1e4abe  boot-deploy-9b8886b3957c89649ab8241573f05eb38a997482.tar.gz
 "
