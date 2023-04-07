@@ -1,0 +1,144 @@
+# Forked from Alpine: backport for SP2
+
+pkgname=libcamera
+pkgver=0.0.4
+pkgrel=3
+pkgdesc="Linux camera framework"
+url="https://libcamera.org/"
+arch="all"
+license="LGPL-2.1-or-later AND GPL-2.0-or-later"
+depends_dev="
+	eudev-dev
+	glib-dev
+	gnutls-dev
+	gst-plugins-bad-dev
+	qt5-qtbase-dev
+	sdl2-dev
+	"
+# upstream calls 'date' with a non-POSIX option so we pull in coreutils
+makedepends="$depends_dev
+	coreutils
+	doxygen
+	graphviz
+	gtest-dev
+	libevent-dev
+	libunwind-dev
+	linux-headers
+	meson
+	py3-jinja2
+	py3-ply
+	py3-sphinx
+	py3-yaml
+	qt5-qttools-dev
+	yaml-dev
+	"
+subpackages="
+	$pkgname-dbg
+	$pkgname-dev
+	$pkgname-doc
+	qcam
+	$pkgname-gstreamer
+	$pkgname-v4l2
+	$pkgname-tools
+	"
+source="$pkgname-$pkgver.tar.gz::https://github.com/libcamera-org/libcamera/archive/refs/tags/v$pkgver.tar.gz
+	0001-qcam-Decrease-minimum-width-of-selector-dialog.patch
+	0002-use-sensor-s-controls.patch
+	qcam.desktop
+	"
+# gstreamer tests fail
+# manual strip because ipa .sign files depend on the file contents- have to re-sign after strip
+options="!strip !check"
+
+case "$CARCH" in
+arm*|aarch64)
+	subpackages="$subpackages $pkgname-raspberrypi"
+	;;
+esac
+
+case "$CARCH" in
+ppc64le|s390x|riscv64)
+	# doesn't install any ipa
+	;;
+*)
+	depends="$pkgname-ipa=$pkgver-r$pkgrel"
+	subpackages="$subpackages $pkgname-ipa"
+	;;
+esac
+
+build() {
+	abuild-meson \
+		-Dv4l2=true \
+		-Dwerror=false \
+		. output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+check() {
+	meson test --no-rebuild -C output --print-errorlogs
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+	install -Dm644 -t "$pkgdir"/usr/share/applications "$srcdir"/qcam.desktop
+
+	# manual strip first..
+	scanelf --recursive \
+		--nobanner \
+		--etype "ET_DYN,ET_EXEC" \
+		--format "%F" \
+		"$pkgdir" \
+		| while read -r file; do
+			strip "$file"
+	done
+}
+
+ipa() {
+	depends=""
+	amove usr/lib/libcamera
+	# then sign ipa's
+	local ipa
+	for ipa in "$subpkgdir"/usr/lib/libcamera/ipa*.so; do
+		msg "signing $ipa"
+		"$builddir"/src/ipa/ipa-sign.sh \
+			"$(find "$builddir"/output -type f -iname "*ipa-priv-key.pem")" \
+			"$ipa" \
+			"$ipa".sign
+	done
+}
+
+qcam() {
+	depends=""
+	amove usr/bin/qcam
+
+	amove usr/share/applications/qcam.desktop
+}
+
+gstreamer() {
+	depends=""
+	amove usr/lib/gstreamer-1.0
+}
+
+v4l2() {
+	depends=""
+	amove usr/lib/v4l2-compat.so
+}
+
+raspberrypi() {
+	depends=""
+	amove usr/share/libcamera/ipa/raspberrypi
+	amove usr/libexec/libcamera/raspberrypi_ipa_proxy
+}
+
+tools() {
+	depends=""
+	amove usr/bin/cam
+	amove usr/bin/lc-compliance
+}
+
+sha512sums="
+1dbc468aedada902897ee19544db8946e4a49a27be1e779ac2738d0c9d99ee58b35fb67e45ba64a879f0d09db1da8626cf4d7e055a097c5aa26b78ad574d9927  libcamera-0.0.4.tar.gz
+69d6e29d764f752feed453b9c0f61c81cdb506eb14893d0d99d0d6834f369f1e816c2381dfab5ad1a744a3d11211af02d75dc041ecc87c7e4f73e2bd34c666c2  0001-qcam-Decrease-minimum-width-of-selector-dialog.patch
+999005a102be9ac777db06741db8f51e25558bd15fffea4873dcc17f272ed3e0d9d05dcaa10035c815d83febab06b2bc68f13ff4cb467e93b1ee132fd1ec189e  0002-use-sensor-s-controls.patch
+22167a4eceb6d1b40b0b7c45fdf116c71684f5340de7f767535cb8e160ad9d2ae0f00cb3d461f73a344520a48a4641cf46226841d78bee06bfbfd2a91337f754  qcam.desktop
+"
