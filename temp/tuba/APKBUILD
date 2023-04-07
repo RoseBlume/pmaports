@@ -1,0 +1,41 @@
+# Forked from Alpine for SP 2
+
+pkgname=tuba
+pkgver=0.2.0
+pkgrel=0
+pkgdesc="Browse the Fediverse"
+url="https://tuba.geopjr.dev/"
+arch="all"
+license="GPL-3.0-or-later"
+makedepends="
+	desktop-file-utils
+	glib-dev
+	gtk4.0-dev
+	gtksourceview5-dev
+	json-glib-dev
+	libadwaita-dev
+	libgee-dev
+	libsecret-dev
+	libsoup3-dev
+	libxml2-dev
+	meson
+	vala
+	"
+subpackages="$pkgname-lang"
+options="!check"
+source="tuba-v$pkgver.tar.gz::https://github.com/GeopJr/Tuba/archive/refs/tags/v$pkgver.tar.gz"
+builddir="$srcdir/Tuba-$pkgver"
+
+build() {
+	abuild-meson -Db_lto=true . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+	ln -s dev.geopjr.Tuba "$pkgdir"/usr/bin/tuba
+}
+
+sha512sums="
+c5e07199c950963ac6f398d36f2da760a6fa734e247ba1defc3b98f9aa53d1626cf519988a96c5c7e16f32b79d7f5ad6bec02d6eab84cc132f2f634176fdd2f5  tuba-v0.2.0.tar.gz
+"
