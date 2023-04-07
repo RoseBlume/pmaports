@@ -1,0 +1,42 @@
+# Forked from Alpine for SP2
+
+pkgname=millipixels
+pkgver=0.21.0
+pkgrel=0
+pkgdesc="Camera application for the Librem 5"
+url="https://source.puri.sm/Librem5/millipixels"
+arch="all"
+license="GPL-3.0-only"
+depends="
+	exiftool
+	graphicsmagick
+	libraw-tools
+	v4l-utils
+	"
+makedepends="
+	glib-dev
+	gtk+3.0-dev
+	libbsd-dev
+	libcamera-dev
+	meson
+	pulseaudio-dev
+	rust
+	tiff-dev
+	zbar-dev
+	"
+source="https://source.puri.sm/Librem5/millipixels/-/archive/v$pkgver/millipixels-v$pkgver.tar.gz"
+options="!check" # There's no testsuite
+builddir="$srcdir/millipixels-v$pkgver"
+
+build() {
+	abuild-meson . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+d76536ea3b5cb7532bfbfb2a7bcdcc85fba6eda7cd2228991b67b807c4d57bf7152288c64d141f702f681d0c61b536f38c4d7fb6a752d222fb178176972e3dd2  millipixels-v0.21.0.tar.gz
+"
