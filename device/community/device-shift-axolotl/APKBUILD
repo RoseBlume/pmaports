@@ -4,8 +4,8 @@
 
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
-pkgver=8
-pkgrel=0
+pkgver=9
+pkgrel=4
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -20,16 +20,20 @@ depends="
 	soc-qcom-sdm845-ucm
 	soc-qcom-sdm845-qbootctl
 	fwupd>=1.8.6
+	u-boot-starqltechn
+	u-boot-tools
+	dtc
 "
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
-	phoc.ini
 	q6voiced.conf
+	boot_image.its
+	payload_mock.dts
+	bootscript.sh
 "
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
-	$pkgname-phosh
 "
 
 build() {
@@ -38,6 +42,17 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+
+	mkdir -p "$pkgdir"/usr/share/u-boot/starqltechn/
+	mkdir "$builddir"
+	payload_mock_dtb="$builddir/payload_mock.dtb"
+	dtc -I dts -O dtb -o "$payload_mock_dtb" "$srcdir/payload_mock.dts"
+	install -D -m644 "$payload_mock_dtb" \
+		"$pkgdir"/usr/share/u-boot/starqltechn/payload_mock.dtb
+	install -D -m644 "$srcdir/"*.its \
+		"$pkgdir"/usr/share/u-boot/starqltechn/
+	install -D -m644 "$srcdir/"bootscript.sh \
+		"$pkgdir"/usr/share/u-boot/starqltechn/
 }
 
 nonfree_firmware() {
@@ -48,14 +63,10 @@ nonfree_firmware() {
 	install -Dm644 q6voiced.conf "$subpkgdir"/etc/conf.d/q6voiced
 }
 
-phosh() {
-	install_if="$pkgname=$pkgver-r$pkgrel phosh"
-	install -Dm644 "$srcdir"/phoc.ini \
-		"$subpkgdir"/etc/phosh/phoc.ini
-}
-
 sha512sums="
-a3e9ae292631233480b0fa60d90a7c0940162ea3876ae4bb8f2ad09ca4da94e9bcd6a0c690e8957ba4cd5d11ac50d3b32e7c89df5c44fd523aef6ea5e9c05c3d  deviceinfo
-65f74d29ab318b23f7ac8923a3661f2c4130049273a8c6be234ed2c8e00810b6a1254b54cf0932e42850a6d48f821dcd038900fbb836feeddfab2759afffae38  phoc.ini
+0d61585aaf2ab0ce11356e463fc03999463c480b5cb909d03a607d328f606ed835bbaf13eda312d678ab2ebf15d420c5e9730b3951a25d83350be47048d41aa5  deviceinfo
 2a3cbdad5aa91181d24a4e56e63986af6accf887c64fa4d1b6ddad1926e29050243c4b1e2fd892d38ca7c16e24dff8545a16552e5749ae31b6d01bf428468e51  q6voiced.conf
+4984ceb356bb2aab5a67222d7e8a6b8b881c09ce21084310214d95ce5c3666da8fd2cf3e249e270145049864ded72cb1d2efb5af702a82a3e132eedb1281b752  boot_image.its
+65f8a0f9ed2af6fe010d9027b3891378ccc212f9857eb147a2bd76f2442ce01c4b6f7f3775eb01b4c4d38f1983b6a52e94c114b550e85df73c500e696e6fbe6c  payload_mock.dts
+482ac045d2ba5bada985290a59d9bbc5224228bf0ca1e63f191e32e8c5e7ec8b12c17c93243049fe244780ac98169a60f2e821c87da37b56bc09da10f9b34b51  bootscript.sh
 "
