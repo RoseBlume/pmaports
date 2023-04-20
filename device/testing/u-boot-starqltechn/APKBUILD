@@ -1,7 +1,7 @@
 # U-boot with patches to make the Samsung S9 boot
 pkgname=u-boot-starqltechn
 pkgver=2023.01_rc2
-pkgrel=1
+pkgrel=5
 pkgdesc="U-Boot bootloader for the Samsung SM-G9600 starqltechn"
 url="https://source.denx.de/u-boot"
 arch="aarch64"
@@ -22,6 +22,7 @@ _ubootver=2023.01-rc2
 source="
 	http://source.denx.de/u-boot/u-boot/-/archive/v$_ubootver/u-boot-v$_ubootver.tar.gz
 	0001-starqltechn-enable-serial-console.patch
+	0001-sdm845-extend-starqltechn-to-support-axolotl.patch
 	0002-sdm845-save-relocaddr-to-env-variables.patch
 	0003-input-do-not-override-console-when-stdin-and-device-.patch
 	0004-wip-input-driver-for-gpio-buttons.patch
@@ -38,11 +39,17 @@ build() {
 package() {
 	install -D -m644 $builddir/"u-boot.bin" \
 		"$pkgdir/usr/share/u-boot/starqltechn/u-boot.bin"
+	
+	cat $builddir/"u-boot-nodtb.bin" $builddir/"arch/arm/dts/axolotl.dtb" > \
+		$builddir/"u-boot-axolotl.bin"
+	install -D -m644 $builddir/"u-boot-axolotl.bin" \
+		"$pkgdir/usr/share/u-boot/starqltechn/u-boot-axolotl.bin"
 }
 
 sha512sums="
 5e570a0070cd31bb4d9541542532229dbe15e28955428e8a6659de5e4140c89f82d635045d5594e6b9cc6b4bb3037ea4e2c6236433d65a7c814a0ec9c0f32004  u-boot-v2023.01-rc2.tar.gz
-068453a2eb3e2e6a950a31cd014f1dd4eed99f327f09aae69f4e4e55edf99cbef640d2361ada5844c5a02b2242c5668800d6b88599886c257764378615b351f8  0001-starqltechn-enable-serial-console.patch
+a6afb1fa9cf7447a6a381e05402e0c4ce3a4bcd963b4fdf0b018087b81c77fda38c1ff9c9a05d59f9350f2c0f987a31878c5a4f6138e877976fbff8a14c86a20  0001-starqltechn-enable-serial-console.patch
+46d13a4482f6497c893c34ef51f19cc6a4c14cbe50c14475d1aaa953dcdbf1dd9f3f1f1f811674c95d32e50e63b5d2963b704ae9f9dccd9829c65f5c82477fc6  0001-sdm845-extend-starqltechn-to-support-axolotl.patch
 5e0dbe9a99c3931aba8d67510453058722f028ca3dbaeb8f12523b76b60349d2394175ffc25a6ea2395f5f65c5e86f563cd4db3794e17986c1085ca444613b0b  0002-sdm845-save-relocaddr-to-env-variables.patch
 ea3e3c270d04da74a7ab993802467631af7c47a14b78dcb3e185b234ceec804841eb4b6c0919d6bdd30157126fdb44a99e829712f3b44c60dd794a2a3acb812c  0003-input-do-not-override-console-when-stdin-and-device-.patch
 72b78a26737d9ee21854b71036ec5e31206be7cfe70e11ba583eb3e699da674db0db45ce9e51c30f1935aa8bcfa8ed6157899f129de55fb5966892490e6e7eb3  0004-wip-input-driver-for-gpio-buttons.patch

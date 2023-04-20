@@ -1,0 +1,90 @@
+From 36468baa5e66fbc7eaf82e3d9aaa54943250c6be Mon Sep 17 00:00:00 2001
+From: Caleb Connolly <caleb@connolly.tech>
+Date: Thu, 20 Apr 2023 15:29:23 +0100
+Subject: [PATCH] sdm845: extend starqltechn to support axolotl
+
+Something better will be needed long-term for this...
+---
+ arch/arm/dts/Makefile    |  3 ++-
+ arch/arm/dts/axolotl.dts | 54 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 56 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/dts/axolotl.dts
+
+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
+index 337bee7e1ec6..db421bd62a0e 100644
+--- a/arch/arm/dts/Makefile
++++ b/arch/arm/dts/Makefile
+@@ -532,7 +532,8 @@ dtb-$(CONFIG_TARGET_TEN64) += fsl-ls1088a-ten64.dtb
+ 
+ dtb-$(CONFIG_TARGET_DRAGONBOARD410C) += dragonboard410c.dtb
+ dtb-$(CONFIG_TARGET_DRAGONBOARD820C) += dragonboard820c.dtb
+-dtb-$(CONFIG_TARGET_STARQLTECHN) += starqltechn.dtb
++dtb-$(CONFIG_TARGET_STARQLTECHN) += starqltechn.dtb \
++	axolotl.dtb
+ dtb-$(CONFIG_TARGET_QCS404EVB) += qcs404-evb.dtb
+ 
+ dtb-$(CONFIG_TARGET_STEMMY) += ste-ux500-samsung-stemmy.dtb
+diff --git a/arch/arm/dts/axolotl.dts b/arch/arm/dts/axolotl.dts
+new file mode 100644
+index 000000000000..252d798f1748
+--- /dev/null
++++ b/arch/arm/dts/axolotl.dts
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Samsung S9 SM-G9600 (starqltechn) board device tree source
++ *
++ * (C) Copyright 2021 Dzmitry Sankouski <dsankouski@gmail.com>
++ *
++ */
++
++/dts-v1/;
++
++#include "sdm845.dtsi"
++
++/ {
++	model = "SHIFT SHIFT6mq";
++	compatible = "shift,axolotl", "qcom,sdm845", "qcom,mtp";
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	aliases {
++		serial0 = &debug_uart;
++	};
++
++	memory {
++		device_type = "memory";
++		reg = <0 0x80000000 1 0x00000000
++		       1 0x80000000 0 0xfc7a0000>;
++	};
++
++	psci {
++		compatible = "arm,psci-1.0";
++		method = "smc";
++	};
++
++	framebuffer: framebuffer@9D400000 {
++		compatible = "simple-framebuffer";
++		reg = <0 0x9D400000 0 (2160 * 1080 * 4)>;
++		width = <1080>;
++		height = <2160>;
++		stride = <(1080 * 4)>;
++		format = "a8r8g8b8";
++	};
++
++	soc: soc {
++		serial@a84000 {
++			status = "okay";
++		};
++
++		pinctrl_north@3900000 {
++		};
++	};
++};
++
++#include "starqltechn-uboot.dtsi"
+-- 
+2.40.0
+
