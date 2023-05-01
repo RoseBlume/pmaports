@@ -1,0 +1,71 @@
+# Forked from Alpine to support QRTR-only services
+
+pkgname=libqmi
+pkgver=9999_git20230324
+pkgrel=0
+pkgdesc="QMI modem protocol helper library"
+url="https://www.freedesktop.org/wiki/Software/libqmi"
+arch="all"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+makedepends="
+	bash-completion
+	glib-dev
+	gobject-introspection-dev
+	help2man
+	libgudev-dev
+	libmbim-dev
+	libqrtr-glib-dev
+	linux-headers
+	meson
+	python3
+	"
+subpackages="
+	$pkgname-dev
+	$pkgname-doc
+	$pkgname-bash-completion
+	qmi-utils
+	"
+_commit="0d1980eef16cc0f1357d555b70606f852db2dc97"
+source="https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$_commit/libqmi-$_commit.tar.gz
+	0001-data-qmi-service-ssc-add-SSC-service.patch
+	0002-libqmi-glib-message-handle-QMUX-and-QRTR-messages.patch
+	0003-libqmi-glib-proxy-handle-QMUX-and-QRTR-messages.patch
+	0004-libqmi-glib-endpoint-handle-QMUX-and-QRTR-messages.patch
+	0005-libqmi-glib-device-handle-QMUX-and-QRTR-messages.patch
+	0006-libqmi-glib-endpoint-qrtr-handle-QMUX-and-QRTR-messa.patch
+	0007-libqmi-glib-port-context-handle-QMUX-and-QRTR-messag.patch
+	"
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	abuild-meson \
+		-Db_lto=true \
+		. output
+	meson compile -C output
+}
+
+check() {
+	meson test --no-rebuild --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+utils() {
+	pkgdesc="$pkgdesc (CLI utilities)"
+
+	amove usr/bin
+}
+
+
+sha512sums="
+c1faffbb8d26023c06e3ab3aab8e0b394232da13eaa84bedc7c9e30f95cffe6116160c6fd943c9dad4114dfd73a48e9e586991080fb077bc0b216d1d9f89e5bf  libqmi-0d1980eef16cc0f1357d555b70606f852db2dc97.tar.gz
+3cc7e723119905d01d47852334c4a4cb6523a9f027b5524cddb8d9b7433522c49978ff7a2b1172517585e5576beeae7ab3f835d72a26ca41f16721b791b0859b  0001-data-qmi-service-ssc-add-SSC-service.patch
+88bf3673bea0906beecbfea93a577b8bf80019b9c53ba95c8e8a0242a085271f695100032624a38ec82be43796bc3bf90d16fed34cd10691ca45a8b9d59aac04  0002-libqmi-glib-message-handle-QMUX-and-QRTR-messages.patch
+b320d9d28d862c486104cf91b4fef45bb0e3931551af0603f7e1823f4884a0b3a9095b33449fed11b4637883b731ebf949129a46a79f98925031ebbf034217dc  0003-libqmi-glib-proxy-handle-QMUX-and-QRTR-messages.patch
+f217c49925fd7206ffc6767ae106b3e52a59c563f63e1512dfe374087013d7ab4aa128d834e9ca69e6d0b6e4c544fa3ff991275f3b05191a0af4c9de9ec78a21  0004-libqmi-glib-endpoint-handle-QMUX-and-QRTR-messages.patch
+8e82a9f029aebb48cced514d2760cfca9d7afdb3bb8e9d1bafa24b1af20a9f41c7dacee8892c99cdb4d92b74997557681fad4d78367bd969fdaed5026b753b9a  0005-libqmi-glib-device-handle-QMUX-and-QRTR-messages.patch
+b6cf531de814d2cf0c9c6039978f5ba5f904fe09252da7724d1f018cdbe8793a99634818ec9ec68041d8b4bccfa47397d2cb59bbbb2ad7518be55366e2a5f211  0006-libqmi-glib-endpoint-qrtr-handle-QMUX-and-QRTR-messa.patch
+e85f547291c38cf8cf457b72049f6dd5809b9f1f7429572c8440465f762e8461dff96ed72a92d02f0ae155a476e74f9da94997a3d2cddaa58f6773803ac1ecc3  0007-libqmi-glib-port-context-handle-QMUX-and-QRTR-messag.patch
+"
