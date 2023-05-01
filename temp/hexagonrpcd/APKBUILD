@@ -1,0 +1,45 @@
+# Hexagonrpcd for SDM670/SDM845
+
+pkgname=hexagonrpcd
+pkgver=0.0.0_git20230325
+pkgrel=0
+pkgdesc="Qualcomm Hexagon RPC daemon"
+url="https://gitlab.com/flamingradian/sensh/"
+arch="all"
+license="GPL3-or-later"
+makedepends="linux-headers meson"
+subpackages="$pkgname-openrc"
+_commit="ae73e4b07b2afd59cc60e059761047b8dd19c673"
+source="https://gitlab.com/flamingradian/sensh/-/archive/$_commit/sensh-$_commit.tar.gz
+	$pkgname-adsp.initd
+	$pkgname-sdsp.initd
+	"
+options="!check"
+builddir="$srcdir/sensh-$_commit/fastrpc"
+
+build() {
+	abuild-meson \
+		. output
+	meson compile -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+openrc() {
+	pkgdesc="$pkgdesc (OpenRC init scripts)"
+	install_if="openrc $pkgname=$pkgver-r$pkgrel"
+
+	default_openrc
+
+	install -Dm755 "$srcdir"/$pkgname-adsp.initd "$subpkgdir"/etc/init.d/$pkgname-adsp
+	install -Dm755 "$srcdir"/$pkgname-sdsp.initd "$subpkgdir"/etc/init.d/$pkgname-sdsp
+}
+
+
+sha512sums="
+bfcca095b761b69dc0840ee062673448cb6905e22e519a00b36b8aa3aa0ea4b6e3966f4d93e854a1c624351b718497f2f10a4049de89bad73c889def66511014  sensh-ae73e4b07b2afd59cc60e059761047b8dd19c673.tar.gz
+627a443bdeb104cded634b759d8cce3dcbc033bb179004b173bf687759d5d306ddaaa80fa103c39aa5d36bd4041d254ff29993edad1b3166d6b51873ebe40677  hexagonrpcd-adsp.initd
+9f64b0bb926d12df0454c3367a6d83c30fff01a581852e89221ca90e396412c9c29e3b3968d4a2aba46279f21a9e0ab766228e36fb2e41221c1b0e2c5fff1630  hexagonrpcd-sdsp.initd
+"

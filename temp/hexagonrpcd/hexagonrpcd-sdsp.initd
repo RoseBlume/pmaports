@@ -1,0 +1,8 @@
+#!/sbin/openrc-run
+
+supervisor=supervise-daemon
+name="Hexagonrpcd SDSP"
+description="Daemon to support Qualcomm Hexagon SDSP virtual filesystem"
+
+command=/usr/sbin/hexagonrpcd
+command_args="-f /dev/fastrpc-sdsp -s"
