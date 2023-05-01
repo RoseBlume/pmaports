@@ -1,0 +1,9 @@
+# The IPA hardware on Qualcomm SoCs offloads network packet
+# filtering and routing between different SoC components.
+# It includes support for packet filtering, intended to allow
+# the CPUs to suspend but be woken up for specific messages
+# e.g. notifications from a notification push server.
+# Support for such filtering is not yet available in the upstream
+# driver, and all wakeups cause the display to turn on.
+# Upstream prefer not to disable this in the kernel, so do it here.
+ACTION="add", DRIVER=="ipa", ATTR{power/wakeup}="disabled"

@@ -3,7 +3,7 @@
 pkgname=soc-qcom-sdm845
 pkgdesc="Common package for Qualcomm SDM845 devices"
 pkgver=14
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
@@ -50,6 +50,7 @@ nonfree_firmware() {
 	q6voiced
 	q6voiced-openrc
 	msm-modem
+	msm-modem-ipa
 	msm-modem-uim-selection
 	bootmac
 	alsa-utils
