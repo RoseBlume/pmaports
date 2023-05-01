@@ -4,7 +4,7 @@
 
 pkgname=device-shift-axolotl
 pkgdesc="SHIFT6mq"
-pkgver=9
+pkgver=10
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
@@ -44,7 +44,8 @@ package() {
 nonfree_firmware() {
 	pkgdesc="Modem, GPU and WiFi Firmware, also needed for osk-sdl"
 	depends="firmware-shift-sdm845>=0.4 firmware-shift-sdm845-initramfs
-		 soc-qcom-sdm845-nonfree-firmware soc-qcom-sdm845-modem"
+		 soc-qcom-sdm845-nonfree-firmware soc-qcom-sdm845-modem hexagonrpcd"
+	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	mkdir "$subpkgdir"
 
 	install -Dm644 q6voiced.conf "$subpkgdir"/etc/conf.d/q6voiced
