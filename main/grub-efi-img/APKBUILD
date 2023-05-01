@@ -1,0 +1,87 @@
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=grub-efi-img
+pkgdesc="Grub EFI loader"
+# TODO: match upstream grub version?
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="all"
+options="!check !archcheck"
+depends=""
+makedepends="grub grub-efi grub-efi-x86"
+subpackages="
+	$pkgname-x86
+	$pkgname-x86_64
+	"
+source="grub_early.cfg"
+
+# Generates a grub efi app in $srcdir/out
+# $1: grub arch
+_mkimage() {
+
+	mkdir -p "$srcdir/out"
+
+	local _grub_arch="$1"
+	local _efi_arch=
+	case "$1" in
+		x86_64)
+			_efi_arch="x64"
+			;;
+		i386)
+			_efi_arch="ia32"
+			;;
+	esac
+
+	grub-mkimage \
+		--config="$srcdir/grub_early.cfg" \
+		--prefix="" \
+		--output="$srcdir/out/boot${_efi_arch}.efi" \
+		--format="${_grub_arch}-efi" \
+		--compression="xz" \
+		\
+		all_video \
+		cat \
+		configfile \
+		disk \
+		echo \
+		efi_gop \
+		fat \
+		gzio \
+		help \
+		iso9660 \
+		linux \
+		ls \
+		normal \
+		part_gpt \
+		part_msdos \
+		search \
+		search_label \
+		test \
+		true
+}
+
+build() {
+	for _arch in x86_64 i386; do
+		_mkimage "$_arch"
+	done
+}
+
+package() {
+	for f in $(find "$srcdir/out" -iname "*.efi"); do
+		install -Dm644 "$f" \
+			-t "$pkgdir"/usr/lib/grub/efi/
+	done
+}
+
+x86_64() {
+	amove usr/lib/grub/efi/bootx64.efi
+}
+
+x86() {
+	amove usr/lib/grub/efi/bootia32.efi
+}
+
+sha512sums="
+0f9357d4eea089628fbceb1e3e96d21a3f4329aeb6743158a6f877f967ef274506404eba949d5f01b7e1adea149f9a3aef992a5e8cd4181f93ab00909b1c5ecd  grub_early.cfg
+"
