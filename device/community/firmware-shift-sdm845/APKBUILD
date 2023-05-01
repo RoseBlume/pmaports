@@ -1,8 +1,8 @@
 # Maintainer: Alexander Martinz <amartinz@shiftphones.com>
 
 pkgname=firmware-shift-sdm845
-pkgver=0.3
-pkgrel=1
+pkgver=0.4
+pkgrel=0
 pkgdesc="Firmware for SHIFT sdm845 devices"
 url="https://gitlab.com/sdm845-mainline/firmware-shift-sdm845"
 arch="aarch64"
@@ -11,15 +11,18 @@ depends="
 	linux-firmware-qcom
 "
 license="proprietary"
-options="!check !strip !archcheck !tracedeps pmb:cross-native"
+# Textrels appear in DSP libraries which we cannot avoid
+options="!check !strip !archcheck !tracedeps textrels pmb:cross-native"
 
-_version="ce9d27bf03624cceeaa8e7466f2e6dc731f2ba5e"
+_version="7f957e47c3bad1f89bae6da07aa9adfcf76b8c6a"
 
 source="$pkgname.tar.gz::$url/-/archive/$_version/$pkgname-$_version.tar.gz
 	firmware.files
+	sensors.files
 	30-gpu-firmware.files"
 subpackages="
-	$pkgname-initramfs:firmware_initramfs"
+	$pkgname-initramfs:firmware_initramfs
+	$pkgname-sensors:firmware_sensors"
 
 package() {
 	cd "$srcdir/$pkgname-$_version/"
@@ -40,8 +43,23 @@ firmware_initramfs() {
 		"$subpkgdir/usr/share/mkinitfs/files/30-gpu-firmware.files"
 }
 
+firmware_sensors() {
+	pkgdesc="Firmware files of the sensor registry"
+	depends="$pkgname"
+	install_if="$pkgname-nonfree-firmware"
+	mkdir "$subpkgdir"
+
+	cd "$srcdir/$pkgname-$_version/"
+	while IFS="" read -r _i || [ -n "$_i" ]; do
+		[ ! -d $(dirname $_i) ] && mkdir -p $(dirname $_i)
+		echo $_i
+		install -Dm644 $_i "$pkgdir/$_i"
+	done < "$srcdir/sensors.files"
+}
+
 sha512sums="
-86c3813a9f43e8f5f5e0df1215e37090011d6c468aad1a23f944a202e9fa740240869ed7b0b11ad032d35afaee72e903e24ca8d0e1de2f992902692f8c5983f8  firmware-shift-sdm845.tar.gz
+6d9affb61e581e8752ed9293b5efec7a5940dca2d1e9ac12006daaae4b826ce7f1a9e1d588480a1cf90d70ab9d479daffb95a8bdd8a5c53c2d6cc95fd6d8be70  firmware-shift-sdm845.tar.gz
 0b547cd027a9760cf16d80e63ebfb89282cff260bd07cc0bfea364513be7a5a32202a5f0aedbeb52dc5ca8087595a2842442a59f77dc7c9bcf5f154e905ceb15  firmware.files
+be1aa0e7d1a5689d2f6b85d6244d0a2ec0729b92d3a165fc5162f039849ee2da49b311a4713cd11924ee70933dacb88c879b805504bb89709f10807d89207a15  sensors.files
 8695a37da5578fdae506f373131ce9481be3db1a86f329c19893e7360b9cb0fadd47b0b1318b2e74702c5e76a9be022f58610940ad17becab49788689f6ca3f8  30-gpu-firmware.files
 "
