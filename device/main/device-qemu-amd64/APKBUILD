@@ -3,12 +3,12 @@
 # Co-Maintainer: Daniele Debernardi <drebrez@gmail.com>
 pkgname=device-qemu-amd64
 pkgver=3
-pkgrel=3
+pkgrel=4
 pkgdesc="Simulated device in QEMU (x86_64)"
 url="https://postmarketos.org"
 arch="x86_64"
 license="MIT"
-depends="postmarketos-base"
+depends="postmarketos-base grub-efi-img-x86_64"
 makedepends="devicepkg-dev"
 subpackages="
 	$pkgname-kernel-lts:kernel_lts
@@ -71,7 +71,7 @@ kernel_edge() {
 }
 
 sha512sums="
-0c9b4b50073dc6bf6bfecb07370254f0dd8a277acbc1d90a605c7891e7d00c1c211545b296b7a1a7a6e00bce05a4197102fcfa449f113f2b500d8879ad29c6bf  deviceinfo
+58add3e805c4f0afbfcd436790df80a1f72fd6ca07cef3f862f3fee87a0b66ad1b1d0ad07fef9afa9453537cf85d2471b98af29c8722cfcae6f560fa3e4f4e5d  deviceinfo
 99d32eed6c5cda59e91516e982c5bd5165ff718133e2411a0dbba04e2057d1dfad49a75e5cc67140d0e0adcbe1383671bd2892335929b782a5b19f5472e635ad  mce-display-blanking.conf
 de794566118f1744d068a94e6a75b61d43f6749a4b0871a5270fa7a2048164d609c71fcffa61845c2a7dd4cb5fbeb72c0e4f8b73b382f36d6ff0bcc9b8a5ae25  weston.ini
 "
