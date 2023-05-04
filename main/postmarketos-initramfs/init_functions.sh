@@ -458,6 +458,8 @@ mount_root_partition() {
 run_hooks() {
 	scriptsdir="$1"
 
+	echo "run_hooks called for $scriptsdir"
+
 	if ! [ -d "$scriptsdir" ]; then
 		return
 	fi
@@ -466,27 +468,6 @@ run_hooks() {
 		echo "Running initramfs hook: $hook"
 		sh "$hook"
 	done
-}
-
-# Runs hooks in the rootfs via chroot
-# The ramdisk is accessible as /ramdisk
-# $1: path to the hooks dir
-run_chroot_hooks() {
-	scriptsdir="$1"
-
-	if ! [ -d "$scriptsdir" ]; then
-		return
-	fi
-
-	mkdir -p /sysroot/ramdisk
-	mount --bind / /sysroot/ramdisk
-
-	for hook in "$scriptsdir"/*.sh; do
-		echo "Running chroot hook: $hook"
-		chroot /sysroot /bin/sh /ramdisk/"$hook"
-	done
-
-	umount /sysroot/ramdisk
 }
 
 setup_usb_network_android() {
