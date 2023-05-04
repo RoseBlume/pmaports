@@ -5,7 +5,7 @@ _config="config-$_flavor.$CARCH"
 
 pkgname=linux-$_flavor
 pkgver=6.3.0
-pkgrel=0
+pkgrel=1
 _tag="v$pkgver-msm8974"
 pkgdesc="Kernel close to mainline with extra patches for Qualcomm MSM8974 devices"
 arch="armv7"
@@ -31,6 +31,7 @@ makedepends="
 source="
 	linux-$_tag.tar.gz::https://github.com/msm8974-mainline/linux/archive/refs/tags/$_tag.tar.gz
 	config-$_flavor.armv7
+	0001-leo-add-wifi.patch
 	"
 builddir="$srcdir/linux-$pkgver-msm8974"
 
@@ -62,4 +63,5 @@ package() {
 sha512sums="
 825b7c247dcfcb1d24543e4801360e439e9fa33980d456c394a21110abee38f773d33b856a1528b1f65708f0a69862e74be850ec184c037702f9668527818823  linux-v6.3.0-msm8974.tar.gz
 7fb5e74bb8e3beb31acedff1b9aea98d3370647833b93775aa7ba5edfeaeb3f49bd5db65741fcaf92cb2651f033b4bbeb3cdedff6ac6d7cca6493998f772d153  config-postmarketos-qcom-msm8974.armv7
+98ea71a63f3d00bedbe445bdc56706165a09fcc1463427682252d0aef0dae90ef81b756445637282a9370c1658aed416208e360af794630291b11d85c08cc373  0001-leo-add-wifi.patch
 "
