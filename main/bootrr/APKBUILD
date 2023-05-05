@@ -1,0 +1,26 @@
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+pkgname=bootrr
+pkgver=0.1
+_commit="6ac3e34d3471785621429ce39c3c3403a2da9820"
+pkgrel=0
+pkgdesc="A sanity checker for boards under automated test"
+url="https://github.com/andersson/bootrr"
+arch="noarch"
+license="BSD-3-Clause"
+source="
+	bootrr-$_commit.tar.gz::https://github.com/andersson/bootrr/archive/$_commit.tar.gz
+"
+builddir="$srcdir/bootrr-$_commit"
+options="!check"
+
+build() {
+	make prefix=/usr all
+}
+
+package() {
+	make prefix=/usr DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+65872ca5875439dd165648a9f2711f9d557ef1058be9f90c927c8364d732f06d98d302eb5d6d2c3c222005f6d4f39e0e85d31711149ac4e1b972a56f71cec8f2  bootrr-6ac3e34d3471785621429ce39c3c3403a2da9820.tar.gz
+"
