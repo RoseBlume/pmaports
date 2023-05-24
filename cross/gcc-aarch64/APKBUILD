@@ -24,15 +24,15 @@ CBUILDROOT="/"
 _cross_configure="--disable-bootstrap --with-sysroot=/usr/$CTARGET"
 
 pkgname=gcc-aarch64
-_pkgbase=13.1.1 # must match gcc/BASE-VER
-_pkgsnap=20230520
+_pkgbase=12.2.1 # must match gcc/BASE-VER
+_pkgsnap=20220924
 pkgver=${_pkgbase}_git$_pkgsnap
 [ "$BOOTSTRAP" = "nolibc" ] && pkgname="gcc-pass2"
 [ "$CBUILD" != "$CHOST" ] && _cross="-$CARCH" || _cross=""
 [ "$CHOST" != "$CTARGET" ] && _target="-$CTARGET_ARCH" || _target=""
 
 pkgname=gcc-aarch64
-pkgrel=0
+pkgrel=10
 pkgdesc="Stage2 cross-compiler for aarch64"
 url="https://gcc.gnu.org"
 arch="x86_64"
@@ -40,9 +40,10 @@ license="GPL-2.0-or-later AND LGPL-2.1-or-later"
 _gccrel=$pkgver-r$pkgrel
 depends="binutils-aarch64 mpc1"
 makedepends_build="gcc g++ bison flex texinfo gawk zip gmp-dev mpfr-dev mpc1-dev zlib-dev"
+# XXX: build hack to upgrade live on builders
 makedepends_host="linux-headers gmp-dev mpfr-dev mpc1-dev isl-dev zlib-dev musl-dev-aarch64 binutils-aarch64"
 subpackages="g++-aarch64:gpp libstdc++-dev-aarch64:libcxx_dev"
-[ "$CHOST" = "$CTARGET" ] && subpackages="gcc-gdb gcc-doc$_target"
+[ "$CHOST" = "$CTARGET" ] && subpackages="gcc-doc$_target"
 replaces="libstdc++ binutils"
 
 : "${LANG_CXX:=true}"
@@ -76,13 +77,12 @@ if [ "$CHOST" != "$CTARGET" ]; then
 	_libatomic=false
 	_libitm=false
 
-	# format-sec: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100431
-	CPPFLAGS="${CPPFLAGS/-Werror=format-security/}"
 	# reset target flags (should be set in crosscreate abuild)
 	# fixup flags. seems gcc treats CPPFLAGS as global without
 	# _FOR_xxx variants. wrap it in CFLAGS and CXXFLAGS.
-	export CFLAGS="$CPPFLAGS -g0 ${CFLAGS/-Werror=format-security/}"
-	export CXXFLAGS="$CPPFLAGS -g0 ${CXXFLAGS/-Werror=format-security/}"
+	# format-sec: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100431
+	export CFLAGS="$CPPFLAGS ${CFLAGS/-Werror=format-security/}"
+	export CXXFLAGS="$CPPFLAGS ${CXXFLAGS/-Werror=format-security/}"
 	unset CPPFLAGS
 	export CFLAGS_FOR_TARGET=" "
 	export CXXFLAGS_FOR_TARGET=" "
@@ -90,12 +90,10 @@ if [ "$CHOST" != "$CTARGET" ]; then
 
 	STRIP_FOR_TARGET="$CTARGET-strip"
 elif [ "$CBUILD" != "$CHOST" ]; then
-	# format-sec: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100431
-	CPPFLAGS="${CPPFLAGS/-Werror=format-security/}"
 	# fixup flags. seems gcc treats CPPFLAGS as global without
 	# _FOR_xxx variants. wrap it in CFLAGS and CXXFLAGS.
-	export CFLAGS="$CPPFLAGS -g0 ${CFLAGS/-Werror=format-security/}"
-	export CXXFLAGS="$CPPFLAGS -g0 ${CXXFLAGS/-Werror=format-security/}"
+	export CFLAGS="$CPPFLAGS $CFLAGS"
+	export CXXFLAGS="$CPPFLAGS $CXXFLAGS"
 	unset CPPFLAGS
 
 	# reset flags and cc for build
@@ -120,21 +118,6 @@ elif [ "$CBUILD" != "$CHOST" ]; then
 else
 	STRIP_FOR_TARGET=${CROSS_COMPILE}strip
 	_builddir="$srcdir/build"
-
-	# format-sec: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100431
-	CPPFLAGS="${CPPFLAGS/-Werror=format-security/}"
-	# pass -g0 by default to bypass -g, since we don't do debug
-	# if -dbg added, the -g is appended and overrides this
-	export CFLAGS="$CPPFLAGS -g0 ${CFLAGS/-Werror=format-security/} -O2"
-	export CXXFLAGS="$CPPFLAGS -g0 ${CXXFLAGS/-Werror=format-security/} -O2"
-	unset CPPFLAGS
-	# https://gcc.gnu.org/install/build.html
-	export CFLAGS_FOR_TARGET="$CFLAGS"
-	export CXXFLAGS_FOR_TARGET="$CXXFLAGS"
-	export LDFLAGS_FOR_TARGET="$LDFLAGS"
-	export BOOT_CFLAGS="$CFLAGS"
-	export BOOT_CXXFLAGS="$CXXFLAGS"
-	export BOOT_LDFLAGS="$LDFLAGS"
 fi
 
 case "$CARCH" in
@@ -166,7 +149,7 @@ esac
 # currently on x86, x86_64 and ia64
 _libquadmath=$LANG_FORTRAN
 case "$CTARGET_ARCH" in
-x86 | x86_64 | ppc64le)	_libquadmath=$LANG_FORTRAN ;;
+x86 | x86_64)	_libquadmath=$LANG_FORTRAN ;;
 *)		_libquadmath=false ;;
 esac
 
@@ -243,27 +226,41 @@ source="https://dev.alpinelinux.org/archive/gcc/${_pkgbase%%.*}-$_pkgsnap/gcc-${
 	0009-Ensure-that-msgfmt-doesn-t-encounter-problems-during.patch
 	0010-Don-t-declare-asprintf-if-defined-as-a-macro.patch
 	0011-libiberty-copy-PIC-objects-during-build-process.patch
-	0012-libgcc_s.patch
-	0013-nopie.patch
-	0014-ada-fix-shared-linking.patch
-	0015-build-fix-CXXFLAGS_FOR_BUILD-passing.patch
-	0016-add-fortify-headers-paths.patch
-	0017-Alpine-musl-package-provides-libssp_nonshared.a.-We-.patch
-	0018-DP-Use-push-state-pop-state-for-gold-as-well-when-li.patch
-	0019-aarch64-disable-multilib-support.patch
-	0020-s390x-disable-multilib-support.patch
-	0021-ppc64-le-disable-multilib-support.patch
-	0022-x86_64-disable-multilib-support.patch
-	0023-riscv-disable-multilib-support.patch
-	0024-always-build-libgcc_eh.a.patch
-	0025-ada-libgnarl-compatibility-for-musl.patch
-	0026-ada-musl-support-fixes.patch
-	0027-configure-Add-enable-autolink-libatomic-use-in-LINK_.patch
-	0028-configure-fix-detection-of-atomic-builtins-in-libato.patch
-	0029-libstdc-do-not-throw-exceptions-for-non-C-locales-on.patch
-	0030-gdc-unconditionally-link-libgphobos-against-libucont.patch
-	0031-druntime-link-against-libucontext-on-all-platforms.patch
-	0032-libgnat-time_t-is-always-64-bit-on-musl-libc.patch
+	0012-libitm-disable-FORTIFY.patch
+	0013-libgcc_s.patch
+	0014-nopie.patch
+	0015-dlang-use-libucontext-on-mips64.patch
+	0016-ada-fix-shared-linking.patch
+	0017-build-fix-CXXFLAGS_FOR_BUILD-passing.patch
+	0018-add-fortify-headers-paths.patch
+	0019-Alpine-musl-package-provides-libssp_nonshared.a.-We-.patch
+	0020-DP-Use-push-state-pop-state-for-gold-as-well-when-li.patch
+	0021-mips64-disable-multilib-support.patch
+	0022-aarch64-disable-multilib-support.patch
+	0023-s390x-disable-multilib-support.patch
+	0024-ppc64-le-disable-multilib-support.patch
+	0025-x86_64-disable-multilib-support.patch
+	0026-riscv-disable-multilib-support.patch
+	0027-always-build-libgcc_eh.a.patch
+	0028-ada-libgnarl-compatibility-for-musl.patch
+	0029-ada-musl-support-fixes.patch
+	0033-gcc-go-link-to-libucontext.patch
+	0034-Use-generic-errstr.go-implementation-on-musl.patch
+	0035-configure-Add-enable-autolink-libatomic-use-in-LINK_.patch
+	0036-configure-fix-detection-of-atomic-builtins-in-libato.patch
+	0037-libgo-Recognize-off64_t-and-loff_t-definitions-of-mu.patch
+	0039-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
+	0041-go-gospec-forcibly-disable-fsplit-stack-support.patch
+	0042-gcc-go-fix-build-error-with-SYS_SECCOMP.patch
+	0043-libstdc-do-not-throw-exceptions-for-non-C-locales-on.patch
+	0044-gdc-unconditionally-link-libgphobos-against-libucont.patch
+	0045-druntime-link-against-libucontext-on-all-platforms.patch
+	0049-libgo-adjust-name-of-union-in-sigevent-struct.patch
+	0050-libphobos-don-t-define-__mode_t-twice-on-musl-target.patch
+	0051-libgo-Explicitly-define-SYS_timer_settime-for-32-bit.patch
+	0052-libgnat-time_t-is-always-64-bit-on-musl-libc.patch
+	0053-libgo-make-match.sh-POSIX-shell-compatible.patch
+	0054-libphobos-fix-undefined-reference-to-__cmsg_nxthdr-w.patch
 	"
 
 # we build out-of-tree
@@ -307,7 +304,7 @@ build() {
 	case "$CTARGET" in
 	aarch64-*-*-*)		_arch_configure="--with-arch=armv8-a --with-abi=lp64";;
 	armv5-*-*-*eabi)	_arch_configure="--with-arch=armv5te --with-tune=arm926ej-s --with-float=soft --with-abi=aapcs-linux";;
-	armv6-*-*-*eabihf)	_arch_configure="--with-arch=armv6kz --with-tune=arm1176jzf-s --with-fpu=vfpv2 --with-float=hard --with-abi=aapcs-linux";;
+	armv6-*-*-*eabihf)	_arch_configure="--with-arch=armv6zk --with-tune=arm1176jzf-s --with-fpu=vfp --with-float=hard --with-abi=aapcs-linux";;
 	armv7-*-*-*eabihf)	_arch_configure="--with-arch=armv7-a --with-tune=generic-armv7-a --with-fpu=vfpv3-d16 --with-float=hard --with-abi=aapcs-linux --with-mode=thumb";;
 	mips-*-*-*)		_arch_configure="--with-arch=mips32 --with-mips-plt --with-float=soft --with-abi=32";;
 	mips64-*-*-*)		_arch_configure="--with-arch=mips3 --with-tune=mips64 --with-mips-plt --with-float=soft --with-abi=64";;
@@ -362,7 +359,12 @@ build() {
 	echo "  hash_style_configure=$_hash_style_configure"
 	echo ""
 
-	local version="Alpine $pkgver"
+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100431
+	export CFLAGS="${CFLAGS/-Werror=format-security/} -O2"
+	export CXXFLAGS="${CXXFLAGS/-Werror=format-security/} -O2"
+	export CPPFLAGS="${CPPFLAGS/-Werror=format-security/} -O2"
+
+	local version="Alpine $pkgver-r$pkgrel"
 	local gccconfiguration="
 		--prefix=/usr
 		--mandir=/usr/share/man
@@ -371,7 +373,6 @@ build() {
 		--host=$CHOST
 		--target=$CTARGET
 		--enable-checking=release
-		--disable-cet
 		--disable-fixed-point
 		--disable-libstdcxx-pch
 		--disable-multilib
@@ -382,8 +383,6 @@ build() {
 		--enable-default-pie
 		--enable-default-ssp
 		--enable-languages=$_languages
-		--enable-link-serialization=2
-		--enable-linker-build-id
 		$_arch_configure
 		$_libc_configure
 		$_cross_configure
@@ -556,7 +555,6 @@ libcxx_dev() {
 	replaces="g++"
 
 	amove usr/${_target:+$CTARGET/}lib/libstdc++.a \
-		usr/${_target:+$CTARGET/}lib/libstdc++exp.a \
 		usr/${_target:+$CTARGET/}lib/libstdc++.so \
 		usr/${_target:+$CTARGET/}lib/libstdc++fs.a \
 		usr/${_target:+$CTARGET/}lib/libsupc++.a \
@@ -767,47 +765,52 @@ gnat() {
 	mv "$pkgdir"/usr/bin/*gnat* "$subpkgdir"/usr/bin/
 }
 
-gdb() {
-	pkgdesc="$pkgdesc (gdb printers)"
-	install_if="$pkgname=$pkgver-r$pkgrel gdb"
-
-	amove \
-		usr/share/gdb/python/ \
-		usr/share/gcc-*/python/
-}
-
 sha512sums="
-d677cb9ca786128ecd0e3fd465e4ba7beb93244dcf174260e3d980f22807aa8df631954a403ff00bc1ed0597bfbd5475d8369c169c44ef1cb69166ed42bfa29e  gcc-13-20230520.tar.xz
-a39a2485fcffb05757e8a9100985a4c87cc472028ad756e1992747d3e737bd7526d2cc054f7f0e7c24708d2ba9e898eaebf3f2db424a1895daf796e126772e5e  0001-posix_memalign.patch
-a7bf2f69dc983c87dcc480b7c03d80d26128c89afbfea7f035694d7076aacf9361d39b734de5353b52e4e448e84aac68812006da42664bae661b66d4f8ea5098  0002-gcc-poison-system-directories.patch
-a0d4f99e0b3bc0c653d9e23b91c602d1e1ce22d67731aaf76ee267654fcffdfdfc2982b4e99ef6b5523def4cfd5a96e2a20aa5f9efa5256315e824dac3bab806  0003-specs-turn-on-Wl-z-now-by-default.patch
-ae94863ffecb30a40f3fd79f8b31106bbf8a17dbf13c6036847f1ba2726cc96f2a957f4694f3c880c06ee1dc8fbd990e957b9b55b0275e7d8cc7df10286942fa  0004-Turn-on-D_FORTIFY_SOURCE-2-by-default-for-C-C-ObjC-O.patch
-2356813aec1ff0a3e82fedfe5dbd0f8c6d442cf567851db40077f98d659b7d048a5349e1ac9c056384a663dad08782d80e29675a457c503200b274a50a6db72d  0005-On-linux-targets-pass-as-needed-by-default-to-the-li.patch
-c9ee725e69b20f15029920bc187178fbb1c6f0375f16ea1a1052187e591569618c93b108b0f4c387530d976e5daba607b9b76e5ec14a776799324ce7f7c3b11d  0006-Enable-Wformat-and-Wformat-security-by-default.patch
-70fe923321aa50bd4bf9b67d3bb872e03ecd5dd9669e783d7893513c0c86aaca6cac39c7dcc5818bfd4e5ba59f7e2b2e790ac87fcb0dc348c543c15bbb3f7064  0007-Enable-Wtrampolines-by-default.patch
-fa3106eb878ea48479f3145c837b4bb3e563edb9e0535b833f5d7006507af7427902b45c56751c8220eb828e02219e4c54835aa4c0c6eebf797bc29d3d9a7036  0008-Disable-ssp-on-nostdlib-nodefaultlibs-and-ffreestand.patch
-8054b3fb3b9e53000fb00229675b6408defac71f38fceff78372e154990540a23b1790cd7b30a61bfd2ae982cc7c9c8c0405398173abd5618e1814d3ccd85ce9  0009-Ensure-that-msgfmt-doesn-t-encounter-problems-during.patch
-1591ba8c8e873d3e38da61038df0b0da0594f15dd8659c1a2a3f834d55599fc7adab18713c26bcfe389a023dc12d7e00231c4b6b61f6b23ff602c8360d459115  0010-Don-t-declare-asprintf-if-defined-as-a-macro.patch
-4d03d0bcb31e7a9e171ad408514ec4b1f90783891345bfbf65e513798271b1bbca41a7da616a4ae947a6ba1343a0df9b95233fa202eec70e88fec485841f2413  0011-libiberty-copy-PIC-objects-during-build-process.patch
-62574f57043a24ebc644dd761aa46334071c6f0e721375a83f36099b2514dcc7df0b2900fcd52dee7754664e3f59f7686d8b39bf9df5c61893206f34f485cb49  0012-libgcc_s.patch
-342782bdaaed8107758345fddb01be3df9e880af235f40c598d46a35c9b1499b7ca10d968f381af168886500aca5a155175d1576f1c30a00555da7467b9d1ccc  0013-nopie.patch
-e65bae2cce0e17586384b100ef3dbde232d9f7809cfd40dedb466a24ff2d87b92d68b1a02fe29ec958561bad49658c6a474eae32dd2ee151715808cb5bbfd1a9  0014-ada-fix-shared-linking.patch
-d23962505d7bfa99180edfe727df80e4b5d101697537d818327d9e836e90305b16de95729c70268150b55268d01ad5f1d92b70a0a056884f70abf5c4d5870e27  0015-build-fix-CXXFLAGS_FOR_BUILD-passing.patch
-a4621dca1edb35e2648a348240bd6790e49b9db1fe7b9f81777222d4b1b241b3ee56a4fca9a02964a00ccc4bd291e37d5911fd142d55002424cd9b9e39f7f98f  0016-add-fortify-headers-paths.patch
-3ab96307b31a45e40e174986d13bba620f91954738d84f02ed024854a2cabebf5e6e62589c7006097eb4fb76d5ec526589a877cb8c01f90e5b24819fb191c182  0017-Alpine-musl-package-provides-libssp_nonshared.a.-We-.patch
-da8b091796740d315f2e23cc63820f1f5ed242f5ce04acf1603fa308b6f3e09088b6976a984180ff54cefdfa4b279706e1ef5df675c0644028fbf3c948ee6e37  0018-DP-Use-push-state-pop-state-for-gold-as-well-when-li.patch
-39fec69162c86160ee24030c9f14303dc8aac3341f1a8eabb23d1db58c63a3e7252b5b19172ace6730064a9bf1a848d83882f59b4ada319de46dc99ffbd30c83  0019-aarch64-disable-multilib-support.patch
-da2da38d118213567cfbe7c81a8c60deff8e77306b4d5e44d208dfcb6ebc7f29c3964106ebf3dd130edb8a343cc7ecddb3314c14488a429301dbf4750edc65ea  0020-s390x-disable-multilib-support.patch
-d74ba03a6da1bcc18e70f017616ab2a1b901e8d04dcb6ea994420aecd042378ec440652ba1168b05a40ddff431ae5b69a19148e928fa70e3e15ba91a03224fad  0021-ppc64-le-disable-multilib-support.patch
-828281a2e7404eedfd7a9a90a553ca7e4eab2a19d2a442faa69c3c2ecefe1a3750426bf5fe6d421dedbfba83feddbba04cb6938658d15110b4007813319713c0  0022-x86_64-disable-multilib-support.patch
-c7d76f6d987e51e488e404ca75a4c44ed35be6fda925cf0f4cfc9d85e71df6b034d514fdd2748e26d889f8ee30a252224096241348cd06516f2469a3ed6a6a35  0023-riscv-disable-multilib-support.patch
-42d9cce946d51d046a96930335915c927d2bb846d6cff685351f58a1006eb5f831b0fd928091df17ed5d4ac1efbbd359b54c325c40e70737d0302d22c8262606  0024-always-build-libgcc_eh.a.patch
-c45c449e5304a7483b1141f87a53ab4658402dec8fa5d5116fa7a5e4bebba322da3214cf85c9b25e1c6d040ec81c0094b56a1ed4eefbcde91235816aa0159c6e  0025-ada-libgnarl-compatibility-for-musl.patch
-e09ef88df90c4b484ab4172d7ac68c1defd9f1897fadfcb23572e2829e0f795f3eeb1e5ceeb6aac76cab938a0962371e99c168dcf1c2c4c31c8a8b4fa774dc3e  0026-ada-musl-support-fixes.patch
-0661fe9d2a61d4de8d9862d6d936bad8236f9ce679b5e40eea7d54b042a7f860f21103e489a8c7a2b12b1e368194ffeb9b4672d7086ebf4189c77f0a27f27a71  0027-configure-Add-enable-autolink-libatomic-use-in-LINK_.patch
-68da13272861a0b3f33022350135660af9a060d03529b610dddf540fb77050647934f1a463c681d1556fa0005b6c16fe76cad285667d1349d5be50ccc83c530e  0028-configure-fix-detection-of-atomic-builtins-in-libato.patch
-f638c4d7a3fb54d5fd76b7e9b49d8dd1041347409f842453bf862586e2770d595aa9e58f8c1ec45e3c37235d5e74b7327f4610a3cad81c0a757a1271e5a0e572  0029-libstdc-do-not-throw-exceptions-for-non-C-locales-on.patch
-f6f2971f4e1bc58c0aeb2a62d9ad551a0fe855b9086f308dce2bb713214415c9679e8e6547290b1514dfd3bc7296d3dfdb7c2964289bbec737984a7810e5ef5d  0030-gdc-unconditionally-link-libgphobos-against-libucont.patch
-ab26344341f5e75673e3a95590fb59fde3ee681949c3004e93ef04af9f1fe2d063c22fc21d14882808d3331ce9eeb135a33b87aeed4d3bf74cc9b087ac56610e  0031-druntime-link-against-libucontext-on-all-platforms.patch
-5dfdd7645ba5090ac46e025ce3ce629cbf612518654dced2159e0a621d0ef8e231514bad4746aa8863e544077502d4842486b978a0c3857c4ad48b20c49ef2d1  0032-libgnat-time_t-is-always-64-bit-on-musl-libc.patch
+ba4d9e73d108088da26fbefe18d9b245b76771ffe752c2b4b31bdf38a2d0b638fbc115c377526c27311d4d7ffd4e0d236a5af5016bd364ccaa11a4989d1401e8  gcc-12-20220924.tar.xz
+41cbb4d69218006cf9e0cdb6c86212ef451f8decd52a50a7dbb4d34726009da7a4e0261c852b46cb584db253a4bae2f31dc485c506cb545e64a7d26e0ba6c2b6  0001-posix_memalign.patch
+531155055cda7f119bcac6479bcae73af9201cd596af9cf1616850bbcf4393b91c5de9f2fbbc1cde6e158fb4df7237b033146f662dff5fa0ea12151cc514adb8  0002-gcc-poison-system-directories.patch
+c1275d77b5269386a2ec683933570810f5a2ba1208c161ed887797eb9aee3cb82ef08a8964635902614e6a6e83f3065ba0801c9355d85dd8d60cb1fa20bdf687  0003-specs-turn-on-Wl-z-now-by-default.patch
+a54e45bff4484a35d3826435a414d909281453f5605f4081cf3be1f15336cceed93a1d8a54e92e2fa97188623e3030ca1323d7749141e228a7db73795230d86a  0004-Turn-on-D_FORTIFY_SOURCE-2-by-default-for-C-C-ObjC-O.patch
+ad132ddbd0c33a3983e3de4f74d8fdb8cb1ddf53ef54de0a5c12efb49e42014ed117165d43f396bcf3455ecfe2c8620e0326e73b4160a370a4cc92d213329c34  0005-On-linux-targets-pass-as-needed-by-default-to-the-li.patch
+0b9ce0f130a7b797770f3d58a5200575f20e5663c86c0c5710718b7bffd3416cc2f05861613d9c258428e9541c6e0b9837d01f0c99d383e2c3de0503a988e861  0006-Enable-Wformat-and-Wformat-security-by-default.patch
+e7813acc7ead61373c212cefbe53eb020b4c5bd8f0f35ee972e0524060713f911624f5a1a871feada642e1f3f5e48c8508125ca2da09de351d544bedf1d44ada  0007-Enable-Wtrampolines-by-default.patch
+d0d0566a11e4828bdd6f53346a9a6b9841f3066d3f4a05ee2b6fe97aeb4552654170e7662318ea18fc777c3e75c88a067097478fc4e880a3f9c134b8a3af2277  0008-Disable-ssp-on-nostdlib-nodefaultlibs-and-ffreestand.patch
+f75e63d9d933874f18fb7f55b135c60dfa0377abafa8e0edb91b85d5f00f4f072d0a338ba5d9baec18494211dbbda8068782830dbafbb37068936f76aede270f  0009-Ensure-that-msgfmt-doesn-t-encounter-problems-during.patch
+afa4daba222a19569588736a8276dc7c12223a7c222f3dd3795dc3f1cd90f40b90518971ae27b358020354f89562c9680ec8b8e24e85e6d4f8e54e79d185359b  0010-Don-t-declare-asprintf-if-defined-as-a-macro.patch
+79dac82249fb573ec477e1451a33883302eb63a5110853faed117f5021221f2153e2ec845dd5a0043b1bf9f0e5736ef0c89743ff2d771774a281c8b24542803a  0011-libiberty-copy-PIC-objects-during-build-process.patch
+b035f85c1703b45d15c1d1ffe7d23400e01625e5d403504911cc92f740b02586447de2a9d66a9f80f12b9c227bc193e2a43942c8af2bdb42cdeff8272bbe6068  0012-libitm-disable-FORTIFY.patch
+9fb4d396a9493d2d68fe829ce075ba4c5df148b1d6aaab315a6f8ccbdd70d0e052a5dc50369adc2dab005b4a3becd1504b182faed6e82c86accb95f5bc2b9f50  0013-libgcc_s.patch
+f82ac22961d842c9f8e731a601bb255918cc160969888363ad2d83e2ccf08b19114a200d46bcf99d097bf530f470c2b1e71e46828bc1b9fff5469ff945f541d8  0014-nopie.patch
+6527dc9d250db48d56cf01e9299461bf22a838ffda96c40d448e18f457b206cec2322275d2d5abbbaf3c6573c5e7eba12724c9691b601f118ff7520e19726373  0015-dlang-use-libucontext-on-mips64.patch
+6c3ce0ccd68b19e2c76172d8f24b0747ee0af2b8de7af692f2f699848267d7fc42fec8e5c303102fe05be7e934b56f21eea17ce47c8aca20570590830d88e9b0  0016-ada-fix-shared-linking.patch
+7089a96aaec8e0b222cb3fa7301d71bb2e328a24dec33e15ea9e3e7695bcae919308249b9a3be5ea2f3b1f069f9fd1739066f31d12317fcdab0596dba9ca54a4  0017-build-fix-CXXFLAGS_FOR_BUILD-passing.patch
+b7ebdeee0b143052fdd6e3efa070ea8621d4fb729312cbc787d618e666b593990a20cd9044a786265970d8e09ec13da03b797009543d0b657b0fe924f2dcaa68  0018-add-fortify-headers-paths.patch
+8e682893d6367732ab8c490b915112a68d98855deec3bd8db91dc0d9bf486b8c044b13ee2b95c4806da7ac17c41034e081b7a66861018274cb33fdb2fd6df04a  0019-Alpine-musl-package-provides-libssp_nonshared.a.-We-.patch
+a14c5f98ade5af8cd6e3a0244752674d9c4f6dadb4260f98f1949bff51ac1211a3f8319e0f933f776e98998d2c7221004f92413f97ccc2e966f8462ed6d33597  0020-DP-Use-push-state-pop-state-for-gold-as-well-when-li.patch
+28c1d477da79aa212ac79e4b02cf865d8b9c31cec6c42f41b4268e3f3c49bf67fb51e54180abe543a54e550788bb472bfcf1b4bc38d072a792d7403dbbee178a  0021-mips64-disable-multilib-support.patch
+0920e31c46bf937b47a0602766f042d45adb71abf332ee84399c665c12298ef115cff945fe26d646b0276bfdfdd04913970e6f1f8784a11c26e15111c854643d  0022-aarch64-disable-multilib-support.patch
+e4c6bf7ec40f2798c8e5b40a543aecffd5591a2805546b3b97aaa4fbe4df6ce4330a60973a9ddfbca9890590606d5204e7f653ab2b6e4b2c13feeb595b68e63a  0023-s390x-disable-multilib-support.patch
+0e956d793c94283ce5af7fe84bfcbb655585a9573608e9bf497fa7b726e12daa391e44977d0a8c97fb460aba89b1773b91e036b0ee1ef4d6263a3943cb63d9cd  0024-ppc64-le-disable-multilib-support.patch
+95917fcb60dbc0a8134db9beb583f3c9ea61128499c214f594c434ec8246641ec41e245ce2d1d9b85ffd40ea0e5764f7a33c5522b2547145814245ac0fa25025  0025-x86_64-disable-multilib-support.patch
+b40d7e4712c035674c993bbb55475290ec14523b3f0fd05493514bac4e9adaa6641faf815fc40ffc00119d9fd64be28218ee874c289ec7430eeef05ab2fcae5e  0026-riscv-disable-multilib-support.patch
+674360ce2ee9f704d0632cc98756f9fe8dd8ca30064fb9d3423b437f7e679c1c51e765b15e535dcb278cd2769583690acb3395b91e4fd5f6f4e3b97879fcc313  0027-always-build-libgcc_eh.a.patch
+f060687adcd5297124e4000f1ba1e3fd5d7d124da04d948cbd0d4a6c69a90a2b29a4a0dbbe13a83ab6950724f434de012b681bdbcdf53c0100b40fe3d00f2f2f  0028-ada-libgnarl-compatibility-for-musl.patch
+5160bae68e20a1966c1f6d655ee98af759e9b9ee842718ae6007d467b418e1cf3b307528a0841477b5259671ce868521b06c0f2e947b7b8f3a398c53dd978252  0029-ada-musl-support-fixes.patch
+72631fbef4843d6ada52f3173b257e027605866a3faf1d8e34438cbf2581952f97bf6f9569ee44fcd7c4b3b337612eaeb0612fb2e6451903f219e4d99bf719db  0033-gcc-go-link-to-libucontext.patch
+141c0428f988cbd102000d4db8d4150485f6da5c064469493ea378cd579bed99330658f41fe106c0d07d1c1aa436ec3f864403ed1ba79f791a1d727b42d46910  0034-Use-generic-errstr.go-implementation-on-musl.patch
+d9ba710f770e053c8f212e821817c188091a829658050b9ab5906388553ec60fec37943ea43c270e92a9014902949f3c98fc4639032d92b8145b375bb29e193e  0035-configure-Add-enable-autolink-libatomic-use-in-LINK_.patch
+ab90d8fdd977d6cd3da096a1c76d77be3e89a020b2127247771711a32eb608cceed21834ef488ab4b69bb0f408b098fdfb61630819e3d1a1e57d5af67800ee74  0036-configure-fix-detection-of-atomic-builtins-in-libato.patch
+8bc6823f0b3c66f7b73d7ddb64ffa6930463285c2e9a14a2bc1882bcc4271144eaa1107d713294699caf9481648163cbf43921a2b8e4ac0d55c78a804bae8a3d  0037-libgo-Recognize-off64_t-and-loff_t-definitions-of-mu.patch
+f0744c01859e67deed404c97e1870b2876935fdc467e51980373744936574c314d5d21134734c5d515e7f3cd3483ef98045b9bbcd81c568c6038fac96ffb5fa0  0039-gcc-go-Use-int64-type-as-offset-argument-for-mmap.patch
+d6dc1bfb881a313d167aaa5658790b0f55eea4336c408cfc6613dd5783440dafd0d37c43031a5f3e69be40f632e38371cd4fb6e5f0494ac4ea4d7d5025d2ae02  0041-go-gospec-forcibly-disable-fsplit-stack-support.patch
+684c6a6d52512b973429b6e709966439ac1e174f9e79a33d4a638b452245b457b34752b4b4034ba983f6a712f86522e7adf715bab00a6603f64a12139c5b1e39  0042-gcc-go-fix-build-error-with-SYS_SECCOMP.patch
+25014dfa99d96ee70ce0ad22e9f7974f0a51cc50b3b9c2db49df50774c8cd29e497ceed120486bee50be83bfb07f2009ed310eb9b0543f2795bd7359b87eadd2  0043-libstdc-do-not-throw-exceptions-for-non-C-locales-on.patch
+75fd83ac05ab0a08d5f48547b08810f9934209bc78b5db59d65f33887b382af7ec24d8a29d40f86325c05af40c1ae1ec6466c839f646af90afc895a13073d07b  0044-gdc-unconditionally-link-libgphobos-against-libucont.patch
+13e047153076d6e1fc40c9f5b6bfe5699c0e5460248f3d2b35ae36677cb960525af7b0b025997e5000a8492cec5e77a86828d66b4058c0d7f89fde0ab3890142  0045-druntime-link-against-libucontext-on-all-platforms.patch
+c33ca2553642c2dbd1c65cd97046548f08775785a3db06d761e3bbe61398c37bc382fe132c0c3fa2101dfd4eea2a6d48bf4fae899a0ddb811c81abd7be35c122  0049-libgo-adjust-name-of-union-in-sigevent-struct.patch
+179cd15d629884a66e954fd76066675efa594686b970facbb12ad50769e5d70b5530d7f61e77120e26d1c3dfc701cfc5295f341f635db998df73c41bc8e62172  0050-libphobos-don-t-define-__mode_t-twice-on-musl-target.patch
+c82d7c8d340a76df3d796565a79b0ccc04ddffef39927620e1f3719bf2dc1db101ba13aef24b46c5bc95b7bf1e31c8bda4ab0936ba4c9c5e5047ba08826c982c  0051-libgo-Explicitly-define-SYS_timer_settime-for-32-bit.patch
+eb403d8ea665fd5dc2c11faf43b055e6a3bf480a397ceee3e0ca1e38ec7d2392315f2694ed9a34ffbc99e464f2873fbbf91be8646ea4dea5d3636e3ea22fefa0  0052-libgnat-time_t-is-always-64-bit-on-musl-libc.patch
+22fb6edf1ed0387e2b93839ffe6e82a7fee420950af90e91199c3488d966702fdeb1a3396d22be0c73a4051525da9349c93d070a0d83b724c83f2b268da6483f  0053-libgo-make-match.sh-POSIX-shell-compatible.patch
+9b74d0a0e4140b597708a295bcf51b93944782698470e2ba9bc0f0d4a830fc418da9624eccc85f3d65ff6d50b8ebf40cecd34d5b045db9e6c29614e981e93f92  0054-libphobos-fix-undefined-reference-to-__cmsg_nxthdr-w.patch
 "
