@@ -1,0 +1,21 @@
+# Forked from Alpine to upgrade to 0.6 to fix image building:
+# https://gitlab.com/pabloyoyoista/alpine-appstream-downloader/-/issues/5
+
+pkgname=alpine-appstream-downloader
+pkgver=0.6
+pkgrel=0
+pkgdesc="Sets up AppStream data according to the AppStream specification"
+url="https://gitlab.com/pabloyoyoista/alpine-appstream-downloader"
+arch="noarch"
+license="GPL-3.0-or-later"
+depends="appstream py3-requests python3"
+source="https://gitlab.com/pabloyoyoista/alpine-appstream-downloader/-/archive/$pkgver/alpine-appstream-downloader-$pkgver.tar.gz"
+options="!check"
+
+package() {
+	make PREFIX="/usr" DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+174269b54cce4d4e0143d5c5bf1b6f2bfbac29125fc83ec6313ec1486bf6bdef5040bc0cfe7e8485602dd164a54d318372b70e50c1dc9e8ed8f50c3b31ccefa8  alpine-appstream-downloader-0.6.tar.gz
+"
