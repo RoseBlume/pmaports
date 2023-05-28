@@ -7,7 +7,9 @@ _commit="f05e4021ed82bfbabf566398d0511b6745a5745e"
 pkgdesc="The GTK+ Toolkit (v3)"
 url="https://www.gtk.org/"
 install="$pkgname.post-install $pkgname.post-upgrade $pkgname.post-deinstall"
-arch="all"
+# armv7: fails with MemoryError in glib-mkenums
+# https://builds.sr.ht/~postmarketos/job/997210#task-pmbootstrap_build-1314
+arch="all !armv7"
 license="LGPL-2.1-or-later"
 options="!check" # Most glade tests fail :c
 subpackages="$pkgname-demo $pkgname-dev $pkgname-lang $pkgname-dbg"
