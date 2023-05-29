@@ -3,7 +3,7 @@
 # Co-Maintainer: Alistair Francis <alistair@alistair23.me>
 # Co-Maintainer: Newbyte <newbyte@postmarketos.org>
 pkgname=linux-purism-librem5
-pkgver=6.3.2
+pkgver=6.3.4
 pkgrel=0
 # NOTE: Don't forget to rebase the config! See prepare() for instructions.
 _purismrel=1
@@ -83,6 +83,6 @@ package() {
 }
 
 sha512sums="
-667b1273a6a40c7186d79027c408ab6129bebd7017cc226fc1b9167861d138d589af2018f3bdd660539b64b0531876a83b87121eb59f9dbb3e2fc0eb6aa41ff5  linux-purism-librem5-6.3.2pureos1.tar.gz
-86ed239e76c957b895ea6278dc76d143571f9c0479fce16d60bea00ba4c66d0ec88c5d4dc88450d5b118146e5530378488e387d716a65c98a02d412cc2406590  config-purism-librem5.aarch64
+633d8d6cf2d65e0e8b18a535b206dab009f8f488b404db6cc0c53699671081030bfcddaa8472143b49589db50d145c62acf8df39c94ee2a86466a2b8efba0f4c  linux-purism-librem5-6.3.4pureos1.tar.gz
+5decab944cfc4737cfda97c3d83e10a4c51efcedcccdbef0dc824e4ba9405ac4e0b5e85fbade978aae358c345c7592d30b8721fa47f3e4a061c2ba6a00bc5377  config-purism-librem5.aarch64
 "
