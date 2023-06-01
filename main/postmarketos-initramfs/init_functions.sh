@@ -458,6 +458,8 @@ mount_root_partition() {
 run_hooks() {
 	scriptsdir="$1"
 
+	echo "run_hooks called for $scriptsdir"
+
 	if ! [ -d "$scriptsdir" ]; then
 		return
 	fi

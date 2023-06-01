@@ -42,6 +42,7 @@ resize_root_partition
 unlock_root_partition
 resize_root_filesystem
 mount_root_partition
+run_hooks /hooks/sysroot
 
 # Mount boot partition into sysroot, so OpenRC doesn't need to do it (#664)
 umount /boot
