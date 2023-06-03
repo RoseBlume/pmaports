@@ -180,6 +180,11 @@ find_root_partition() {
 				DEVICE="$next"
 			fi
 		fi
+	else
+		# After unlocking the root partition, it should be here
+		if [ -e /dev/mapper/root ]; then
+			DEVICE="/dev/mapper/root"
+		fi
 	fi
 
 	# Try partitions in /dev/mapper and /dev/dm-* first
