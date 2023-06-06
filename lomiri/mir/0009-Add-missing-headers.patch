@@ -1,0 +1,183 @@
+From 80e64edb91cef6f0939cc3e0e74dd43845a29137 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Mon, 5 Jun 2023 22:05:53 +0200
+Subject: [PATCH 9/9] Add missing headers
+
+With gcc 13 we need to include more headers so that it still compiles.
+---
+ examples/miral-shell/spinner/eglspinner.cpp           | 1 +
+ src/client/buffer.cpp                                 | 1 +
+ src/client/screencast_stream.h                        | 1 +
+ src/common/dispatch/action_queue.cpp                  | 1 +
+ src/renderers/gl/program_family.cpp                   | 2 ++
+ src/server/compositor/dropping_schedule.cpp           | 2 ++
+ src/server/compositor/queueing_schedule.cpp           | 1 +
+ src/server/graphics/nested/host_buffer.cpp            | 1 +
+ src/server/shell/decoration/basic_manager.cpp         | 1 +
+ src/server/shell/default_persistent_surface_store.cpp | 1 +
+ tests/include/mir/test/barrier.h                      | 1 +
+ tests/include/mir/test/wait_object.h                  | 1 +
+ tests/mir_test_doubles/fake_alarm_factory.cpp         | 1 +
+ 13 files changed, 15 insertions(+)
+
+diff --git a/examples/miral-shell/spinner/eglspinner.cpp b/examples/miral-shell/spinner/eglspinner.cpp
+index 3fbd012811..dbd39ff1d4 100644
+--- a/examples/miral-shell/spinner/eglspinner.cpp
++++ b/examples/miral-shell/spinner/eglspinner.cpp
+@@ -33,6 +33,7 @@
+ #include <signal.h>
+ #include <atomic>
+ #include <mutex>
++#include <cstdio>
+ 
+ #include "spinner_glow.h"
+ #include "spinner_logo.h"
+diff --git a/src/client/buffer.cpp b/src/client/buffer.cpp
+index 9809abd9d7..d77d369da2 100644
+--- a/src/client/buffer.cpp
++++ b/src/client/buffer.cpp
+@@ -19,6 +19,7 @@
+ #include "mir/client/client_buffer.h"
+ #include "buffer.h"
+ #include <boost/throw_exception.hpp>
++#include <stdexcept>
+ 
+ namespace mcl = mir::client;
+ #pragma GCC diagnostic push
+diff --git a/src/client/screencast_stream.h b/src/client/screencast_stream.h
+index 86ce258936..298cb97db4 100644
+--- a/src/client/screencast_stream.h
++++ b/src/client/screencast_stream.h
+@@ -32,6 +32,7 @@
+ #include <queue>
+ #include <memory>
+ #include <mutex>
++#include <string>
+ 
+ namespace google
+ {
+diff --git a/src/common/dispatch/action_queue.cpp b/src/common/dispatch/action_queue.cpp
+index 1c6d5fe9f4..9e9d90362f 100644
+--- a/src/common/dispatch/action_queue.cpp
++++ b/src/common/dispatch/action_queue.cpp
+@@ -20,6 +20,7 @@
+ 
+ #include <boost/throw_exception.hpp>
+ #include <sys/eventfd.h>
++#include <system_error>
+ 
+ mir::dispatch::ActionQueue::ActionQueue()
+     : event_fd{eventfd(0, EFD_CLOEXEC|EFD_NONBLOCK|EFD_SEMAPHORE)}
+diff --git a/src/renderers/gl/program_family.cpp b/src/renderers/gl/program_family.cpp
+index a630210739..aa524c32b0 100644
+--- a/src/renderers/gl/program_family.cpp
++++ b/src/renderers/gl/program_family.cpp
+@@ -20,6 +20,8 @@
+ #include MIR_SERVER_GL_H
+ #include MIR_SERVER_GLEXT_H
+ #include <mutex>
++#include <stdexcept>
++#include <string>
+ 
+ namespace mir
+ {
+diff --git a/src/server/compositor/dropping_schedule.cpp b/src/server/compositor/dropping_schedule.cpp
+index 6491dc040d..d54f6aa4a2 100644
+--- a/src/server/compositor/dropping_schedule.cpp
++++ b/src/server/compositor/dropping_schedule.cpp
+@@ -20,6 +20,8 @@
+ #include "mir/graphics/buffer.h"
+ 
+ #include <boost/throw_exception.hpp>
++#include <stdexcept>
++
+ namespace mg = mir::graphics;
+ namespace mc = mir::compositor;
+ 
+diff --git a/src/server/compositor/queueing_schedule.cpp b/src/server/compositor/queueing_schedule.cpp
+index 95632a7429..a3c0c7e021 100644
+--- a/src/server/compositor/queueing_schedule.cpp
++++ b/src/server/compositor/queueing_schedule.cpp
+@@ -19,6 +19,7 @@
+ #include "queueing_schedule.h"
+ #include <boost/throw_exception.hpp>
+ #include <algorithm>
++#include <stdexcept>
+ 
+ namespace mc = mir::compositor;
+ namespace mg = mir::graphics;
+diff --git a/src/server/graphics/nested/host_buffer.cpp b/src/server/graphics/nested/host_buffer.cpp
+index b0c0b85c08..1fbaae419b 100644
+--- a/src/server/graphics/nested/host_buffer.cpp
++++ b/src/server/graphics/nested/host_buffer.cpp
+@@ -19,6 +19,7 @@
+ #include "host_buffer.h"
+ #include "mir_toolkit/mir_buffer_private.h"
+ #include <boost/throw_exception.hpp>
++#include <stdexcept>
+ 
+ namespace mg = mir::graphics;
+ namespace mgn = mir::graphics::nested;
+diff --git a/src/server/shell/decoration/basic_manager.cpp b/src/server/shell/decoration/basic_manager.cpp
+index 5fd900d237..b07db33493 100644
+--- a/src/server/shell/decoration/basic_manager.cpp
++++ b/src/server/shell/decoration/basic_manager.cpp
+@@ -21,6 +21,7 @@
+ 
+ #include <boost/throw_exception.hpp>
+ #include <vector>
++#include <stdexcept>
+ 
+ namespace ms = mir::scene;
+ namespace mg = mir::graphics;
+diff --git a/src/server/shell/default_persistent_surface_store.cpp b/src/server/shell/default_persistent_surface_store.cpp
+index 5591e73f44..20f42825a9 100644
+--- a/src/server/shell/default_persistent_surface_store.cpp
++++ b/src/server/shell/default_persistent_surface_store.cpp
+@@ -21,6 +21,7 @@
+ #include <algorithm>
+ #include <unordered_map>
+ #include <boost/throw_exception.hpp>
++#include <stdexcept>
+ 
+ namespace msh = mir::shell;
+ namespace ms = mir::scene;
+diff --git a/tests/include/mir/test/barrier.h b/tests/include/mir/test/barrier.h
+index 0cd9c2a809..1c0dd1b890 100644
+--- a/tests/include/mir/test/barrier.h
++++ b/tests/include/mir/test/barrier.h
+@@ -21,6 +21,7 @@
+ 
+ #include <mutex>
+ #include <condition_variable>
++#include <stdexcept>
+ 
+ namespace mir
+ {
+diff --git a/tests/include/mir/test/wait_object.h b/tests/include/mir/test/wait_object.h
+index a12da5d9eb..ab567d7e91 100644
+--- a/tests/include/mir/test/wait_object.h
++++ b/tests/include/mir/test/wait_object.h
+@@ -24,6 +24,7 @@
+ #include <condition_variable>
+ #include <chrono>
+ #include <boost/throw_exception.hpp>
++#include <stdexcept>
+ 
+ namespace mir
+ {
+diff --git a/tests/mir_test_doubles/fake_alarm_factory.cpp b/tests/mir_test_doubles/fake_alarm_factory.cpp
+index b6f885aaf2..05357c1367 100644
+--- a/tests/mir_test_doubles/fake_alarm_factory.cpp
++++ b/tests/mir_test_doubles/fake_alarm_factory.cpp
+@@ -20,6 +20,7 @@
+ 
+ #include <numeric>
+ #include <algorithm>
++#include <stdexcept>
+ 
+ namespace mtd = mir::test::doubles;
+ namespace mt = mir::time;
+-- 
+2.40.1
+

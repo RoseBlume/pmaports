@@ -1,7 +1,7 @@
 From 3be18e41c1df460a62fd5cb85014fbc84c5f04bb Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Mon, 29 Nov 2021 21:16:20 +0100
-Subject: [PATCH 2/8] Add possibility to force kms device
+Subject: [PATCH 2/9] Add possibility to force kms device
 
 Useful on PinePhone as it has two graphics devices, one for gpu and one
 for display.
@@ -31,5 +31,5 @@ index b357f6c67b..5b8eb2b3e1 100644
      devices.scan_devices();
  
 -- 
-2.39.1
+2.40.1
 
