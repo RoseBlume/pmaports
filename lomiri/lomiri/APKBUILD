@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri
-pkgver=0_git20230207
-_commit="9e0c80b7039062e737f686ef7da884a37c02363c"
+pkgver=0_git20230605
+_commit="8a2f908c306ec63a7a0f14c247fa1676c655c7ce"
 pkgrel=0
 pkgdesc="A convergent desktop environment"
 arch="all"
@@ -65,7 +65,7 @@ indicators_client() {
 }
 
 sha512sums="
-88661cff8898363bf33a263e26e6b26b8ef85b89a4b3d47d47371a58c6d2110f114511e58963f31c9f265adbe8b2f489be2811261ed9c47d68672de3b68e3d8c  lomiri-9e0c80b7039062e737f686ef7da884a37c02363c.tar.gz
+0fe3a78c386607c5d4f536b2af7c172275cabe568f7c229d3a622ea197a49da7c8c48ac2f293d593e43602326528e95b88d914cedb60ddd056942cda9d64504c  lomiri-8a2f908c306ec63a7a0f14c247fa1676c655c7ce.tar.gz
 4786b0d23012a1dcb679d2b44ea843a0db8dfebc58fb45f5556bfb8ac5506e85ecb210678543ab0e62477769ee6cd0946edb4a536d343d9baca8e569b5707982  0001-Add-missing-includes.patch
 2894f254155b1b62369cbdeb3e48ce900a7fd67b63126a62633516c31f39d33348ca357509ec1722aa48f4b35f7f20654fbe45f8f59b324cb5c223957effd334  0002-Add-qt5-suffix-to-search-for-Qt-tools.patch
 5ad97ebb32c0df25c03ebc9245430f7bf84fd1d90f1aebbaaf0cc48dca7fe3bda6c4c86ed146366ab3fc653d7ddab66d645f06fba16fe25f86eeb880bb883d1d  0003-Link-against-libintl.patch
