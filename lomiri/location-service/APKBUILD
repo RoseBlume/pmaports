@@ -1,8 +1,8 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=location-service
-pkgver=0_git20230114
+pkgver=0_git20230423
 pkgrel=0
-_commit="e67c05f98b8983fc633ce3b1eb1ab67d8ac4a185"
+_commit="9598d0cc77a04e759cfd8ae25f5aa11bbb38d323"
 pkgdesc="Location service aggregating position/velocity/heading updates and exporting them over dbus"
 arch="all"
 url="https://gitlab.com/ubports/development/core/location-service"
@@ -56,6 +56,6 @@ package() {
 }
 
 sha512sums="
-6b76167319e9ab25b0a0a824762164c6c354f042f7cdf711d266442e993c34d29520596165aa0403038530bad42131b2ff6be300e6030349c7990368e80e02a0  location-service-e67c05f98b8983fc633ce3b1eb1ab67d8ac4a185.tar.gz
+c796208894c95f520eb9e72ebbc8784b3daff1949618b419943a182ac0f65f61463ad437465078fb3f885cf9b301acc842d910a93e7223f8857cbff3495c67ad  location-service-9598d0cc77a04e759cfd8ae25f5aa11bbb38d323.tar.gz
 d87d1f49c8b8dcc77e0ce5f2dcc66fb11b23a2ff12a6d8f2cdd1edfcce8faa292633b1ff6c64dbcde195e28dbd167918dbba729abe62fc2a58449fa212d91bcd  0001-Upgrade-C-standard-to-C-17.patch
 "
