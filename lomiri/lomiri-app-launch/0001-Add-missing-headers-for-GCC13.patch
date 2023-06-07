@@ -1,0 +1,25 @@
+From c05610bc2b9759e6cac18133e588a1f489bca9b3 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Wed, 7 Jun 2023 09:30:35 +0200
+Subject: [PATCH] Add missing headers for GCC13
+
+---
+ liblomiri-app-launch/oom.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/liblomiri-app-launch/oom.h b/liblomiri-app-launch/oom.h
+index 697aebe..6e963cc 100644
+--- a/liblomiri-app-launch/oom.h
++++ b/liblomiri-app-launch/oom.h
+@@ -20,6 +20,8 @@
+ #pragma once
+ #pragma GCC visibility push(default)
+ 
++#include <cstdint>
++
+ namespace lomiri
+ {
+ namespace app_launch
+-- 
+2.41.0
+
