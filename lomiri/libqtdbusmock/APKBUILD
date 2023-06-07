@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=libqtdbusmock
-pkgver=0_git20230210
-_commit="fed65c64ef6876ad730b729390e365543f1ec0a1"
+pkgver=0_git20230215
+_commit="e875ddd9b79d87bffe6b10047e592b304bd62a47"
 pkgrel=0
 pkgdesc="Library for mocking DBus interactions using Qt"
 url='https://gitlab.com/ubports/development/core/libqtdbusmock'
@@ -18,8 +18,7 @@ makedepends="
 	qt5-qtbase-dev
 	"
 checkdepends="py3-dbusmock procps"
-source="https://gitlab.com/ubports/development/core/libqtdbusmock/-/archive/$_commit/libqtdbusmock-$_commit.tar.gz
-	googletest-1.13.0.patch"
+source="https://gitlab.com/ubports/development/core/libqtdbusmock/-/archive/$_commit/libqtdbusmock-$_commit.tar.gz"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
 
@@ -39,6 +38,5 @@ package() {
 	make -C build DESTDIR="$pkgdir" install
 }
 sha512sums="
-dec9ff98f3f66a3d8b238b362a9b46804922435a756ed087eb99f89280eb46015cfffb20734981e5d7c7253dcb9bcc78c5f4799a4db1277456a3416ed981b047  libqtdbusmock-fed65c64ef6876ad730b729390e365543f1ec0a1.tar.gz
-0f7364488760bda8e06b9bee28f28aa0a01435fae353d746cf6cf3285e311ea9bbe2a843b130b9d185aea2bada7c186d185bbb19e1921e3107df47df011290f6  googletest-1.13.0.patch
+56414e340122142b274751e8c8c63ef8fcba597c764a4a43b852585315dd4cfb21fea5c5f80809021784e4e7583b28a92c9b1013b72a2f0cf60750995020d37c  libqtdbusmock-e875ddd9b79d87bffe6b10047e592b304bd62a47.tar.gz
 "
