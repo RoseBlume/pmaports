@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-keyboard
-pkgver=0_git20230131
-_commit="9ee1c9cb4f123e4e04def79ef10c10c2a29eeb4d"
+pkgver=0_git20230421
+_commit="f8c368dd049ed5343a9d5c8e4c1a1abd89998e36"
 pkgrel=0
 pkgdesc="Ubuntu Touch keyboard as maliit plugin"
 url="https://gitlab.com/ubports/development/core/lomiri-keyboard"
@@ -30,6 +30,6 @@ package() {
 }
 
 sha512sums="
-be05a06d6289ba9a86110a3703e2732db0038da577d928b8bdb967f235c1d36f706a1e974774b85366f403ac6d2e4a5aa8baefc62667a7c45fafec0d173bc001  lomiri-keyboard-9ee1c9cb4f123e4e04def79ef10c10c2a29eeb4d.tar.gz
+e5fcaa3ee5a0ad6fb469323e529ffdf31a045a7fb7eb183e20e282e835b395c72ea891b266b0cd2bfe8d6cccc58a7c1ddaa462a3c95d587f6bc33afd3660be5e  lomiri-keyboard-f8c368dd049ed5343a9d5c8e4c1a1abd89998e36.tar.gz
 74082639d95838c1a2c60007160140c008e68086fd09e5e4b4b6b6ca63eaa2d8f58ce4b8a0a9c650664fb06bef698a1e64c5cbe499f619853c5eaca9e3807afd  0002-Fix-up-inputmethodhostprobe-methods-for-maliit-2.0.0.patch
 "
