@@ -22,6 +22,7 @@ checkdepends="dbus"
 source="https://gitlab.com/ubports/development/core/lomiri-system-compositor/-/archive/$_commit/lomiri-system-compositor-$_commit.tar.gz
 	0001-spinner-Add-support-for-wayland-backend.patch
 	gmock.patch
+	0001-Add-missing-headers-for-GCC13.patch
 	"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
@@ -50,4 +51,5 @@ sha512sums="
 9bc91de4e32f5801b31ed1f12a451c5812cf1e76255b8b42d29ed0b0a590a64b1cf9c0788f5e19d730c3ad722620bb750ead4e949d48c5126020c116979a345c  lomiri-system-compositor-11925da9c97de5220aded21299d6051503acb6fc.tar.gz
 71e0858dc9cf216cd9f07902cc597340b66a3dbf4a25fff8685bfddd87c54ca9c7222ff906fe7bb860a1759f3ce42593a4757a4d8519073d24af401a8501a276  0001-spinner-Add-support-for-wayland-backend.patch
 541a2c22f0abc6e8645d561aabe36277b8c218967fef6259cfd8103b6e954ad4a586c3a7100b5d3539388d99da906f65b966258b9b104fbd41595d8b6f01ed56  gmock.patch
+5e4d676178f6e25ba3264edbb12f4f0c89fb42d3f143eddef85813dd20980ce35dfa6bb8d4b7a624c0a3bf9a928e6a7cac4c2f1f858b257031bd5833e75a1193  0001-Add-missing-headers-for-GCC13.patch
 "

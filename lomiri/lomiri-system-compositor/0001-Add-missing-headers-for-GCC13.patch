@@ -1,0 +1,37 @@
+From 64abc57971e20ca5c6eadffc534ef28ea48c1121 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Wed, 7 Jun 2023 09:44:13 +0200
+Subject: [PATCH] Add missing headers for GCC13
+
+---
+ tests/integration-tests/dbus_client.cpp         | 1 +
+ tests/integration-tests/lsc_input_dbus_client.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/tests/integration-tests/dbus_client.cpp b/tests/integration-tests/dbus_client.cpp
+index 1f8c639..5b54108 100644
+--- a/tests/integration-tests/dbus_client.cpp
++++ b/tests/integration-tests/dbus_client.cpp
+@@ -21,6 +21,7 @@
+ #include "src/dbus_message_handle.h"
+ 
+ #include <stdexcept>
++#include <cstdint>
+ 
+ namespace lt = lsc::test;
+ 
+diff --git a/tests/integration-tests/lsc_input_dbus_client.h b/tests/integration-tests/lsc_input_dbus_client.h
+index 2bf09e4..04ee597 100644
+--- a/tests/integration-tests/lsc_input_dbus_client.h
++++ b/tests/integration-tests/lsc_input_dbus_client.h
+@@ -20,6 +20,7 @@
+ #define LSC_TEST_LSC_INPUT_DBUS_CLIENT_H_
+ 
+ #include "dbus_client.h"
++#include <cstdint>
+ 
+ namespace lsc
+ {
+-- 
+2.41.0
+
