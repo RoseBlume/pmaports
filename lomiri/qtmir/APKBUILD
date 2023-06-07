@@ -13,6 +13,7 @@ checkdepends="py3-dbusmock dbus"
 source="https://gitlab.com/ubports/development/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz
 	form-factor-mainline.patch
 	wayland-maliit.patch
+	0001-Add-missing-headers-for-GCC13.patch
 	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
@@ -51,4 +52,5 @@ sha512sums="
 b918be4f0794a68480ca194f845f7d482700d32c2559bbcc3be432ae2d7d327673298ec0bab8e8fba8873501ccad99f8227164bd97e8b550fa06bc2447ac1e73  qtmir-9595a02194ad392ba224845a12c3bc25a6146934.tar.gz
 5822c8d57b5d6d20f67585e82344eb7fc9dc7fb46b5830ca94be9b8279b4fcfe1b6e041caab14f6ee1cf743abd62d9d4d141bc800e4ea7029afdd65790cd5b62  form-factor-mainline.patch
 645becb871523a67424d27583a4c2f5f1a16c3be337d23acb44dfd57587835cb19d39a3791d80ffbb055809123d204de89b04e020f7d40ed3e0866eb17ead383  wayland-maliit.patch
+d4e026789be4078ae4c8d9ae512113083469fb3649a1b38688b7057ccac4797fb077ac1200274829d5ecd72659b0cb0966e7e0d1d53da2d8fb42371b5331066e  0001-Add-missing-headers-for-GCC13.patch
 "
