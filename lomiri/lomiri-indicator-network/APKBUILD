@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-indicator-network
-pkgver=0_git20230207
-_commit="1ce7123cad76d839fb428679e224315d256ea49b"
+pkgver=0_git20230605
+_commit="ac0ae8ec8968c934f81c2664879ab10f76ab0fc2"
 pkgrel=0
 pkgdesc="The 'Network' indicator for Ubuntu Touch"
 arch="all"
@@ -34,5 +34,5 @@ package() {
 }
 
 sha512sums="
-da3154a5991f44e34789fc9e70904b9edbd77ef85deec5462e46d86668ff59f74bd62a5893fdb786434a3bf58f47fd958e8ffe6b194fc1e214f8957e769e13d4  lomiri-indicator-network-1ce7123cad76d839fb428679e224315d256ea49b.tar.gz
+5b1325a16f372dd70b88c263b35a9a3ac2ebc6f5d2be491733f33809dfc6290366b35e0f9e611712b46dd88f89ca79567d582647bc36a7f1eb76432cf0566ade  lomiri-indicator-network-ac0ae8ec8968c934f81c2664879ab10f76ab0fc2.tar.gz
 "
