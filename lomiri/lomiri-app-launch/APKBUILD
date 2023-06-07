@@ -2,9 +2,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=lomiri-app-launch
-pkgver=0.1.1_git20230205
+pkgver=0.1.1_git20230606
 pkgrel=0
-_commit="ee37568fed33ea84660500091006d8b1877b360b"
+_commit="031cdd03d1a8bef3f6cf759d8d6fb1a90de94ad4"
 pkgdesc="Session init system job for Launching Applications"
 arch="all"
 url="https://gitlab.com/ubports/development/core/lomiri-app-launch"
@@ -14,7 +14,6 @@ makedepends="$depends_dev cmake cmake-extras dbus-test-runner qt5-qtdeclarative 
 checkdepends="gtest-dev gmock py3-dbusmock"
 source="
 	https://gitlab.com/ubports/development/core/lomiri-app-launch/-/archive/$_commit/lomiri-app-launch-$_commit.tar.gz
-	googletest-1.13.0.patch
 	0001-Add-missing-headers-for-GCC13.patch
 	"
 subpackages="$pkgname-dev"
@@ -42,7 +41,6 @@ package() {
 }
 
 sha512sums="
-443c1437cbf327bbad0f5f5032ffde559d01f2182537074cf678b5532cd5eac47d9ba983fbad4da65c6a393a02358ce5cccdb059ae29f49c2d85db005badc841  lomiri-app-launch-ee37568fed33ea84660500091006d8b1877b360b.tar.gz
-9c877820216543bc6be4e5ad43c4eb0da0f711539872795cc7255aca4dc63de6b2ef73cd3455842df66c7103041c1b824241ba5dc1e12404f9a57ebe3cca78b8  googletest-1.13.0.patch
+f2475531c7621ed6aa173b23876c32a0f7bbf40f609e2177d2bf0e0d7e81ff6fa3b1ce62dcbcd7b7ed6155e991891eb92726872ad79106906e5606806648f044  lomiri-app-launch-031cdd03d1a8bef3f6cf759d8d6fb1a90de94ad4.tar.gz
 3ff77d9d03dca7ea2de96694949c9cc5c9dea56da991d872d2e1c735c02d50e6fc0857383f6e9f6897de717436cd518467fb22c2c093bb166bb3276439b315d3  0001-Add-missing-headers-for-GCC13.patch
 "
