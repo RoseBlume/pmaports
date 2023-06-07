@@ -1,8 +1,8 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=repowerd
-pkgver=2022.01_git20221215
+pkgver=2022.01_git20230421
 pkgrel=0
-_commit="fb27f3b318949e23368d5edfba438e4515c9918d"
+_commit="d4368a08f78c797ecb48a99fd10493398ac8b02d"
 pkgdesc="Power daemon to monitor and control system power state"
 url="https://gitlab.com/ubports/development/core/repowerd"
 arch="all"
@@ -44,7 +44,7 @@ package() {
 }
 
 sha512sums="
-975a3a90adf2874bbd7de056499f21d6f561cfc446e76eaebef50bac957070e23491304b071d6a37747a25fd2718bddd024d90824d02111d83e80f250c59a07c  repowerd-fb27f3b318949e23368d5edfba438e4515c9918d.tar.gz
+a2e05f000a8a2fb1b52034932b83534d0268062eeeecbf6068ab537080993134abcc84012deec3c7953e13848a6e5a59b801de1a87479042276eb9e1e1365cf6  repowerd-d4368a08f78c797ecb48a99fd10493398ac8b02d.tar.gz
 d8c4dd351a7bf2bcc66b0eb8b0d17d602661f7defb857be5a28f694e4977b634b7d101f738058ce0ccaa313c4e316f7222c753610500ddbd68f8e42de7c57f29  repowerd.initd
 12b921a4c33c234ad1da649859f1da104513ab92d7e00b35b5fbe195b1ea5b3ffcecdd3295b5a019dc5c87a1ece63e225c33d941b67b0d1ac382b92b98076a5e  0005-Fix-gmock-target-usage.patch
 8a0ecb55bcc35a85899250853d81deba2d7ce3d5a8c047343898421d97bb798c981f3bf3b0bd3c034221999d9d71c83594bf82dbfbb7907973e7a76e43ca4356  0001-Add-missing-headers-for-GCC13.patch
