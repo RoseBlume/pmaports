@@ -11,7 +11,7 @@ makedepends="cmake cmake-extras mir-dev boost-dev process-cpp-dev dbus-cpp-dev p
 checkdepends="coreutils"
 source="https://gitlab.com/ubports/development/core/trust-store/-/archive/$_commit/trust-store-$_commit.tar.gz
 	no_werror.patch
-	googletest-1.13.0.patch"
+	"
 subpackages="$pkgname-dev $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # 62% tests passed, 5 tests failed out of 13
@@ -34,6 +34,5 @@ package() {
 
 sha512sums="
 27f8dab49c4aabbc1dca7039d2be183fd22dda3c3303cb742820f62da8f776885cc0a8446da00a7d903beb853b20c89bbd4b82c6efc0f880a1f11188cd0a270c  trust-store-6c37311698e8ab95e3567001a514903be2d8f039.tar.gz
-fecd9d4dde9723f13d856a757b79c1fd0aa6d679495728b9600ad1c2c3edb059313056f30015ed49755feb58eac1bfb59b41d3f887d829f88a403f54871679ae  no_werror.patch
-4c38ee63a9d996bca6f56f75d96c6e27a5cc207bf7a920cb70a8706ddab63417f4b208f74461b386a2c88e27c54818ed166f49b3d98f8ce6ab9e3dfb01f7da90  googletest-1.13.0.patch
+cb8d3c1bfaa6e13999fee7edda6418a6cf6a41d1ff356f1727ff390955c6230789af4b2585de85ba62f50d3f78f80d1b2cc659e2d291c8407393c76fa546c7f1  no_werror.patch
 "
