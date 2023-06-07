@@ -1,8 +1,8 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=platform-api
-pkgver=0_git20230105
+pkgver=0_git20230215
 pkgrel=0
-_commit="f56feee4b8bcbde4437c6763768c63fc2ff7911f"
+_commit="bfff6e8c13f6479313ee06607412656bdaadd63a"
 pkgdesc="Platform API for system level capabilities"
 arch="all"
 url="https://gitlab.com/ubports/development/core/platform-api"
@@ -42,6 +42,6 @@ package() {
 }
 
 sha512sums="
-39e605447c346f120cd6abfc9292c58c70c21e748f1f562c032c4ecc22f7a01b381a969c3d0802c83d5c3c3ff163ac2f38f370c04c09c962b1848f9ca74b156b  platform-api-f56feee4b8bcbde4437c6763768c63fc2ff7911f.tar.gz
+54c6dcc633aab381a4cb91303b4156748827b92f79598a2608e3edf44030da19152eb5846e7ea767c39fe8ead8a0ecb1d365ca61da61f4efd901de11eb62d1d8  platform-api-bfff6e8c13f6479313ee06607412656bdaadd63a.tar.gz
 9910498fbbe33c429317415143ccd9c9d9ee9aac7caf814a79c62b604e4e4d0b68cfbb5eb6c2b86a1a48ef1d17d036f7b9be7c31e5a1c8d8721de0870f9e85ec  0001-Upgrade-C-standard-to-C-17.patch
 "
