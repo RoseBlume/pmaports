@@ -1,0 +1,24 @@
+From 903b227482dced0f6c361fd41e9d8e8609f72bbc Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Wed, 7 Jun 2023 11:17:31 +0200
+Subject: [PATCH] Add missing headers for GCC13
+
+---
+ src/adapters/unique_random_pool.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/adapters/unique_random_pool.h b/src/adapters/unique_random_pool.h
+index 228327c..5e1c0e6 100644
+--- a/src/adapters/unique_random_pool.h
++++ b/src/adapters/unique_random_pool.h
+@@ -23,6 +23,7 @@
+ #include <unordered_set>
+ #include <cstddef>
+ #include <limits>
++#include <stdexcept>
+ 
+ namespace repowerd
+ {
+-- 
+2.41.0
+

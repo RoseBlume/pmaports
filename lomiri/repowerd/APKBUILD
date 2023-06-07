@@ -13,6 +13,7 @@ subpackages="$pkgname-openrc"
 source="https://gitlab.com/ubports/development/core/repowerd/-/archive/$_commit/repowerd-$_commit.tar.gz
 	repowerd.initd
 	0005-Fix-gmock-target-usage.patch
+	0001-Add-missing-headers-for-GCC13.patch
 	"
 builddir="$srcdir/repowerd-$_commit"
 
@@ -46,4 +47,5 @@ sha512sums="
 975a3a90adf2874bbd7de056499f21d6f561cfc446e76eaebef50bac957070e23491304b071d6a37747a25fd2718bddd024d90824d02111d83e80f250c59a07c  repowerd-fb27f3b318949e23368d5edfba438e4515c9918d.tar.gz
 d8c4dd351a7bf2bcc66b0eb8b0d17d602661f7defb857be5a28f694e4977b634b7d101f738058ce0ccaa313c4e316f7222c753610500ddbd68f8e42de7c57f29  repowerd.initd
 12b921a4c33c234ad1da649859f1da104513ab92d7e00b35b5fbe195b1ea5b3ffcecdd3295b5a019dc5c87a1ece63e225c33d941b67b0d1ac382b92b98076a5e  0005-Fix-gmock-target-usage.patch
+8a0ecb55bcc35a85899250853d81deba2d7ce3d5a8c047343898421d97bb798c981f3bf3b0bd3c034221999d9d71c83594bf82dbfbb7907973e7a76e43ca4356  0001-Add-missing-headers-for-GCC13.patch
 "
