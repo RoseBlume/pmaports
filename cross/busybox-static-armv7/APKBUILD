@@ -7,8 +7,8 @@ if [ -z "$(type -t arch_to_hostspec)" ]; then
 fi
 
 pkgname=busybox-static-armv7
-pkgver=1.36.0
-pkgrel=9
+pkgver=1.36.1
+pkgrel=0
 
 _arch="armv7"
 _mirror="http://dl-4.alpinelinux.org/alpine/"
@@ -32,5 +32,5 @@ package() {
 }
 
 sha512sums="
-eff2fb6eb64032039ab6b403ac3ddb595a5af1c10647b0615897d332e4ff59cbfaeb858ae14d0dc9b56739c0ad339f2e4680ca0b35b395e81b39c86361ae4ecb  busybox-static-1.36.0-r9-armv7-v3.18.apk
+9ed0411148977caa1198265a6e37eda22a57812d22b625e785c79e56baec79f00b8fda69431dcbb7c27aa24baf6abbe206ff7313fb80e78f3c30ed5e4e580924  busybox-static-1.36.1-r0-armv7-v3.18.apk
 "
