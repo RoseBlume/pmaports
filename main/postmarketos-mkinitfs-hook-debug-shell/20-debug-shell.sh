@@ -57,6 +57,8 @@ echo "This is a security hole! Only use it for debugging, and"
 echo "uninstall the debug-shell hook afterwards!"
 echo "---"
 
+reconfigure_logging "for debug-shell"
+
 if tty -s; then
 	echo "Exit the shell to continue booting:"
 	pmos_shell
