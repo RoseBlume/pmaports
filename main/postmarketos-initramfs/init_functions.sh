@@ -4,22 +4,34 @@ IP=172.16.42.1
 ROOT_PARTITION_UNLOCKED=0
 ROOT_PARTITION_RESIZED=0
 
-# Redirect stdout and stderr to logfile
 setup_log() {
-	# Bail out if PMOS_NO_OUTPUT_REDIRECT is set
-	echo "### postmarketOS initramfs ###"
-	grep -q PMOS_NO_OUTPUT_REDIRECT /proc/cmdline && return
+	# Save stdout/stderr for later
+	exec 6>&1
+	exec 7>&2
+	# Redirects all output to a subshell which prepends "PMOS: " to each line
+	# and then pipes to the logfile and the kernel logbuffer.
+	# shellcheck disable=SC3001
+	exec > >(awk '$0="PMOS: "$0' - | tee -a /pmOS_init.log /dev/kmsg >/dev/null)
+	exec 2>&1
 
-	# Print a message about what is going on to the normal output
-	echo "NOTE: All output from the initramfs gets redirected to:"
-	echo "/pmOS_init.log"
-	echo "If you want to disable this behavior (e.g. because you're"
-	echo "debugging over serial), please add this to your kernel"
-	echo "command line: PMOS_NO_OUTPUT_REDIRECT"
-
-	# Start redirect, print the first line again
-	exec >/pmOS_init.log 2>&1
 	echo "### postmarketOS initramfs ###"
+	echo "NOTE: All output from the initramfs gets redirected to"
+	echo "the kernel log buffer (dmesg) and /pmOS_init.log in the ramdisk"
+}
+
+# Reconfigure logging before switch_root
+reconfigure_logging() {
+	echo "Reconfiguring stdout/stderr $1"
+	# For debugging, allow logging to the console
+	if [ -n "$1" ] || grep -q PMOS_NO_OUTPUT_REDIRECT /proc/cmdline; then
+		exec 1>&6 6>&-
+		exec 2>&7 7>&-
+		return
+	fi
+
+	# Pipe to /dev/null and delete the original stdout/stderr
+	exec >/dev/null 6>&-
+	exec 2>/dev/null 7>&-
 }
 
 mount_proc_sys_dev() {
@@ -35,6 +47,12 @@ mount_proc_sys_dev() {
 	# /dev/pts (needed for telnet)
 	mkdir -p /dev/pts
 	mount -t devpts devpts /dev/pts
+
+	# Set up fd symlinks for I/O redirects
+	ln -s /proc/self/fd /dev/fd
+	ln -sf /proc/self/fd/0 /dev/stdin
+	ln -sf /proc/self/fd/1 /dev/stdout
+	ln -sf /proc/self/fd/2 /dev/stderr
 }
 
 create_device_nodes() {
