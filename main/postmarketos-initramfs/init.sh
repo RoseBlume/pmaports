@@ -12,7 +12,6 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
 # Mount everything, set up logging, modules, mdev
 mount_proc_sys_dev
-create_device_nodes
 setup_log
 setup_firmware_path
 # shellcheck disable=SC2154,SC2086
@@ -52,6 +51,7 @@ setup_bootchart2
 
 # Switch root
 killall telnetd mdev udevd msm-fb-refresher 2>/dev/null
+reconfigure_logging
 
 # shellcheck disable=SC2093
 exec switch_root /sysroot "$init"
