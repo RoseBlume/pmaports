@@ -1,6 +1,6 @@
 # Maintainer: Mark <clashclanacc2602@gmail.com>
 pkgname=postmarketos-mkinitfs-hook-netboot
-pkgver=4
+pkgver=4.0.2
 pkgrel=0
 pkgdesc="Netboot postmarketOS using nbd feature"
 url="https://postmarketos.org"
@@ -21,6 +21,6 @@ package() {
 }
 
 sha512sums="
-3f45ab2f59069224d4dea287dd0dadf5eb9813f7ad6b02aa561344589abf445d746ddf9b171bc9dae2dae18d268ed5c341387185cfa91b5caf4f5db37215bc10  netboot.sh
+6eec52076ebcaa27de7cbf9a0336c6e615924a18a7dad89fd49693256a698ebb5f0879ae748817c41806244971ecf488df5c6fd70579804b575d1a055ed8ba2a  netboot.sh
 3c9c812a6cd25640e6cf4d722cff6c6356d5666ec6009b4c65f89e62211cc406d2cd09e0fdda6b1c1906ee32c3854988ab701cee8811208e3ef666f09e638568  netboot.modules
 "
