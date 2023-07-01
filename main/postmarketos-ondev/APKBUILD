@@ -1,7 +1,7 @@
 # Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=postmarketos-ondev
 pkgver=2.0.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Next-gen on-device installer (pmOS specific build)"
 url="https://gitlab.com/postmarketOS/ondev2/"
 arch="all"
@@ -22,17 +22,20 @@ makedepends="
 	libinput-dev
 	libxkbcommon-dev
 	linux-headers
+	meson
 	musl-libintl
 	pkgconf
 	util-linux-dev
 "
+install="$pkgname.pre-install"
 
 build() {
-	make ${JOBS:+-j ${JOBS}}
+	abuild-meson -Ddistro=postmarketOS . output
+	meson compile ${JOBS:+-j ${JOBS}} -C output
 }
 
 package() {
-	make DESTDIR="$pkgdir" install-postmarketOS
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 
 sha512sums="
