@@ -1,0 +1,68 @@
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+# Kernel config based on: arch/x86/configs/neptune_defconfig and jupiter.config
+
+_flavor="valve-jupiter"
+pkgname=linux-$_flavor
+pkgver=6.4.0
+pkgrel=0
+pkgdesc="Mainline Kernel fork for SDM845 devices"
+arch="x86_64"
+_carch="x86_64"
+url="https://gitlab.com/calebccff/linux-jupiter"
+license="GPL-2.0-only"
+options="!check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community"
+makedepends="
+	bash
+	bison
+	diffutils
+	python3
+	elfutils-dev
+	linux-headers
+	findutils
+	flex
+	installkernel
+	openssl-dev
+	pahole
+	perl
+"
+
+_config="config-$_flavor.$arch"
+_tag="jupiter-6.4.0"
+
+# Source
+source="
+	linux-$_tag.tar.gz::https://gitlab.com/calebccff/linux-jupiter/-/archive/$_tag/linux-$_tag.tar.gz
+	$_config
+"
+builddir="$srcdir/linux-$_tag"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/config-$_flavor.$arch" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+}
+
+package() {
+	make modules_install install \
+		ARCH="$_carch" \
+		INSTALL_PATH="$pkgdir"/boot/ \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+3dde18598e08ec2dc40aaa97470808ea7d0b685bc180b304144b798126c3c7a47534afea1a1787498990fc7412558f1e98fb8f956565760990e0d11cacbdf9fe  linux-sdm845-6.3.4.tar.gz
+1942c3a25c72cdf1ae2789c25879398561db2c396ac7b5e8e27d7c075ce743c64827d519c04ddb57f0d42fa1b21950433a841541bef185d2e4a8fdc47029b182  config-valve-jupiter.aarch64
+"
