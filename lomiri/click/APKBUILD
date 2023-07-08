@@ -10,7 +10,8 @@ license="GPL-3.0-only"
 depends_dev="libgee-dev gobject-introspection-dev"
 makedepends="$depends_dev cmake intltool vala gobject-introspection autoconf libtool automake json-glib-dev py3-setuptools properties-cpp-dev gtest-dev process-cpp-dev dbus-test-runner-dev dbus-test-runner"
 subpackages="$pkgname-dev $pkgname-doc"
-source="https://gitlab.com/ubports/development/core/click/-/archive/$_commit/click-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/click/-/archive/$_commit/click-$_commit.tar.gz
+	0001-preload-clickpreload.c-define-_LARGEFILE64_SOURCE.patch"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Needs dpkg
 
@@ -38,4 +39,5 @@ package() {
 
 sha512sums="
 e24d2841c0af694f7ec95e73a8aae4cdaf8862117b7c5b1adaa6815148da0b82d69c5af28328a5c7814ab646062ff343b42af196f54ffdfa06ac255b1c75cc7b  click-0de0e0748ecfdf29997e6167f71fca0e2b03151b.tar.gz
+f6a631812dbdbf154336d1d0d7da3598b2d704210ad01c03227b0862beab6ee3a9d3ae4dced9d6efb02d23be60157a6f9373d54c9773e9e4dfe632562d45bc23  0001-preload-clickpreload.c-define-_LARGEFILE64_SOURCE.patch
 "
