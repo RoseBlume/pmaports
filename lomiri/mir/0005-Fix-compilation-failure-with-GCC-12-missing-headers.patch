@@ -1,7 +1,7 @@
 From b6fc9a6b33ec5abc72c76064737fef6c8c471bfb Mon Sep 17 00:00:00 2001
 From: Anton Gladky <gladk@debian.org>
 Date: Sun, 9 Oct 2022 07:42:09 +0200
-Subject: [PATCH 5/9] Fix compilation failure with GCC-12 (missing headers)
+Subject: [PATCH 05/11] Fix compilation failure with GCC-12 (missing headers)
 
 ---
  src/client/rpc/mir_protobuf_rpc_channel.cpp                | 1 +
@@ -137,5 +137,5 @@ index 463fde304e..de6abf8abc 100644
  #include <gtest/gtest.h>
  
 -- 
-2.40.1
+2.41.0
 

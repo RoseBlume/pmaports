@@ -1,7 +1,7 @@
 From fba879a85a6a1df1a60cb410d9eae9f40ba87244 Mon Sep 17 00:00:00 2001
 From: Alan Griffiths <alan@octopull.co.uk>
 Date: Tue, 14 Feb 2023 14:39:26 +0000
-Subject: [PATCH 8/9] Set the logind session type
+Subject: [PATCH 08/11] Set the logind session type
 
 ---
  src/server/console/logind_console_services.cpp | 5 +++++
@@ -24,5 +24,5 @@ index 9583f40031..15f127ab2c 100644
          G_OBJECT(session_proxy.get()),
          "notify::active",
 -- 
-2.40.1
+2.41.0
 

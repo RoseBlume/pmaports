@@ -1,0 +1,42 @@
+From bead3cd166f5539ec67df5105a83b21669fa9a6f Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sat, 8 Jul 2023 19:51:43 +0200
+Subject: [PATCH 10/11] Build with C++17 to fix protobuf error
+
+Appears some weird combination of compiler flags from protobuf and
+abseil-cpp makes compile fail when using c++ standard lower than c++17
+
+In file included from /usr/include/google/protobuf/stubs/common.h:44,
+                 from /home/pmos/build/src/mir-1.8.2/src/protobuf/google_protobuf_guard.cpp:19:
+/usr/include/absl/strings/string_view.h:52:26: error: 'string_view' in namespace 'std' does not name a type
+   52 | using string_view = std::string_view;
+      |                          ^~~~~~~~~~~
+/usr/include/absl/strings/string_view.h:52:21: note: 'std::string_view' is only available from C++17 onwards
+   52 | using string_view = std::string_view;
+      |                     ^~~
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 894a96b377..50289c0949 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -62,12 +62,12 @@ set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "${build_types}" FORCE)
+ set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${build_types}")
+ 
+ # Standard must be set both this way and in the flags below, to cover all cmake versions
+-set(CMAKE_CXX_STANDARD 14)
++set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_CXX_EXTENSIONS OFF)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -g -Wall -pedantic -Wextra -fPIC")
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -g -std=c++14 -Wall -fno-strict-aliasing -pedantic -Wnon-virtual-dtor -Wextra -fPIC")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -g -std=c++17 -Wall -fno-strict-aliasing -pedantic -Wnon-virtual-dtor -Wextra -fPIC")
+ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--as-needed")
+ set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--as-needed")
+ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
+-- 
+2.41.0
+

@@ -1,7 +1,7 @@
 From c164c2594bf2e7cef8bf0e945fa912e7d654d2cd Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca.weiss@fairphone.com>
 Date: Tue, 14 Feb 2023 08:59:42 +0100
-Subject: [PATCH 7/9] Regenerate logind-session.* files
+Subject: [PATCH 07/11] Regenerate logind-session.* files
 
 Based on latest xml with gdbus-codegen 2.74.5
 ---
@@ -3279,5 +3279,5 @@ index 1e4f5cbbcc..0aefd80fb1 100644
      GError **error);
  
 -- 
-2.40.1
+2.41.0
 

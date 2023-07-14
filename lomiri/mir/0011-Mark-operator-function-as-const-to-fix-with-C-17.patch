@@ -1,0 +1,28 @@
+From 1c983384f889bb350760233e1661e93e83fd2c79 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Fri, 14 Jul 2023 18:39:40 +0300
+Subject: [PATCH 11/11] Mark operator function as const to fix with C++17
+
+Doesn't appear to be a problem with older C++ standards.
+
+See https://stackoverflow.com/a/55450859
+---
+ tests/acceptance-tests/test_render_override.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/acceptance-tests/test_render_override.cpp b/tests/acceptance-tests/test_render_override.cpp
+index fa6bc163a1..e60a5d7b29 100644
+--- a/tests/acceptance-tests/test_render_override.cpp
++++ b/tests/acceptance-tests/test_render_override.cpp
+@@ -37,7 +37,7 @@ namespace
+ {
+ struct size_less
+ {
+-    bool operator() (geom::Size const& a, geom::Size const& b)
++    bool operator() (geom::Size const& a, geom::Size const& b) const
+     {
+         return a.width < b.width && a.height < b.height;
+     }
+-- 
+2.41.0
+

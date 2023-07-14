@@ -1,7 +1,7 @@
 From 4016e0fb90d3972e8fcb3f043db83f62c7b3dad2 Mon Sep 17 00:00:00 2001
 From: Alan Griffiths <alan@octopull.co.uk>
 Date: Tue, 14 Feb 2023 11:39:39 +0000
-Subject: [PATCH 6/9] Update logind-session.xml from latest systemd
+Subject: [PATCH 06/11] Update logind-session.xml from latest systemd
 
 ---
  src/server/console/logind-session.xml | 53 ++++++++++++++++-----------
@@ -109,5 +109,5 @@ index 560fcdd149..391e590849 100644
    <signal name="Lock">
    </signal>
 -- 
-2.40.1
+2.41.0
 
