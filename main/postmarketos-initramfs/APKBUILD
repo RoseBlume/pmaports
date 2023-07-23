@@ -1,7 +1,7 @@
 # Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 # Co-Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-initramfs
-pkgver=1.4.0
+pkgver=1.4.1
 pkgrel=0
 pkgdesc="Base files for the postmarketOS initramfs / initramfs-extra"
 url="https://postmarketos.org"
@@ -71,5 +71,5 @@ bed319179bcd0b894d6267c7e73f2890db07bc07df71542936947dfb3bdb17fade8a7b4e7b577f27
 77ee384c6b4a74f5c8cc901cebcfca1a60c98885354582ad18d932ae2736376ccd408a0e711f6ac5f043f63194d17b01119e736b8dddec96034cf4ec9e93c341  00-initramfs-base.files
 8a4adad3785af474b36a09a05f6a3b2c4b4f43aac331a53b903abfa51ea12be1e3d1d807b7a6e66a1346815f3b0044daf8cd62e21e2dc75d2db13ee265a72985  00-initramfs-extra-base.files
 073723e6116a9e03f3419d8b7ab918dbda13d710ec3bda9488f578d7e6f8cb4234b5b5659757650064bd8e3e7a6fc39e7567a511af8aeac7494c792b2840d519  init.sh
-472c6c4a49655dc27ff26b3a527f450541e47f038d35f6db527e6c613a20efc39d597e33486aa0cbf2d2be8b6928579efc768e5457ef8a89e2bc98eddfa4a4d8  init_functions.sh
+405c049d5bb1a09152c786036e9d755772ec376683d09c53b35f4f5ca36990518b86f7791e84801a2ce2166774092f46faf2129eb4e0d377785c22447fc43e45  init_functions.sh
 "
