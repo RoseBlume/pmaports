@@ -1,0 +1,81 @@
+
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+
+pkgname=device-generic-qcom-rbx
+pkgdesc="Generic device package for Qualcomm RB1/2/3/5 dev boards"
+pkgver=1
+pkgrel=6
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+# pmb:strict is required for grub
+options="!check !archcheck pmb:strict"
+depends="
+	linux-postmarketos-qcomlt
+	mkbootimg
+	postmarketos-base
+	soc-qcom-sdm845
+	soc-qcom-sdm845-ucm
+	soc-qcom-sdm845-qbootctl
+	fwupd>=1.8.6
+"
+makedepends="devicepkg-dev grub grub-efi"
+source="
+	deviceinfo
+	q6voiced.conf
+	modules-initfs
+"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+
+	grub-mkimage \
+		--prefix="/grub" \
+		--output="bootaa64.efi" \
+		--format="arm64-efi" \
+		--compression="xz" \
+		\
+		all_video \
+		cat \
+		configfile \
+		disk \
+		echo \
+		efi_gop \
+		fat \
+		gzio \
+		help \
+		iso9660 \
+		linux \
+		ls \
+		normal \
+		part_gpt \
+		part_msdos \
+		search \
+		search_label \
+		test \
+		true
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+
+	install -Dm644 -t "$pkgdir"/boot/EFI/Boot \
+		"$srcdir"/bootaa64.efi
+}
+
+nonfree_firmware() {
+	pkgdesc="Modem, GPU and WiFi Firmware, also needed for osk-sdl"
+	depends="soc-qcom-sdm845-nonfree-firmware linux-firmware-qcom
+		 linux-firmware-ath10k"
+	mkdir "$subpkgdir"
+
+	install -Dm644 q6voiced.conf "$subpkgdir"/etc/conf.d/q6voiced
+}
+
+sha512sums="
+f34bfce4f9fb8a8f476b4c22753ae54e1be920e7558422ab2c8eb5e62517a21f0f1b8cd784f6ae4540c08dfd70f98eaf4f72e21732794f8ceabd2bdce6593772  deviceinfo
+2131a6838a7af24ff91de24064d27b0e43706831701fff5e8d6827d808d3ddaa74cd68f9d6575204df86af237224807aadc014a43f5600f1adc95408da6f273a  q6voiced.conf
+0c156fff3bad1135bfbb6dac21aff9706b56d6e49d7c28e71a1f85648581bf84d0426d2bf7fc4c93ae445c2e74e8322c7e2ec360fc854800b8b6539c4b6cccf4  modules-initfs
+"
