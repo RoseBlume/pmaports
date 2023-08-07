@@ -1,0 +1,85 @@
+# U-boot with patches to make the Samsung S9 boot
+pkgname=u-boot-sdm845
+pkgver=2023.04_rc4
+pkgrel=0
+pkgdesc="U-Boot bootloader for sdm845 devices"
+url="https://source.denx.de/u-boot"
+arch="aarch64"
+license="GPL-2.0-or-later OFL-1.1 BSD-2-Clause BSD-3-Clause eCos-2.0 IBM-pibs
+	ISC LGPL-2.0-only LGPL-2.1-only X11"
+makedepends="
+	mkbootimg-osm0sis
+	bc
+	bison
+	dtc
+	flex
+	openssl-dev
+	py3-setuptools
+	python3-dev
+	swig
+	"
+options="!archcheck !check !tracedeps !strip pmb:cross-native"
+_ubootver="75558f95a2c24d6a99209e421c20e96ae21f3dec"
+source="
+	u-boot-$_ubootver.tar.gz::https://github.com/calebccff/u-boot/archive/$_ubootver.tar.gz
+	dummy_axolotl.dts
+	dummy_beryllium.dts
+	dummy_db845c.dts
+	dummy_enchilada.dts
+	dummy_fajita.dts
+	"
+builddir="$srcdir/u-boot-$_ubootver"
+
+# XXX: add beryllium DTS to u-boot
+# fajita shares the enchilada DTS in u-boot
+_boards_to_build="axolotl enchilada db845c"
+_boards="$_boards_to_build fajita"
+
+_build_board() {
+	board="$1"
+	echo "Building for $board"
+	make DEVICE_TREE="$board"
+	cp u-boot.bin u-boot-"$board".bin
+	gzip u-boot-"$board".bin
+}
+
+build() {
+	unset LDFLAGS
+	make HOSTCC=gcc ARCH=arm sdm845_defconfig
+	make
+
+	for board in $_boards_to_build; do
+		_build_board "$board"
+	done
+	cp u-boot-enchilada.bin.gz u-boot-fajita.bin.gz
+
+	for board in $_boards; do
+		echo "Generating image for $board"
+		dtc -I dts -O dtb -o dummy_"$board".dtb "$srcdir"/dummy_"$board".dts
+		cat u-boot-"$board".bin.gz dummy_"$board".dtb > u-boot-"$board".bin.gz-dtb
+		mkbootimg-osm0sis --base '0x00000000' \
+			--kernel_offset '0x00008000' \
+			--ramdisk_offset '0x01000000' \
+			--tags_offset '0x00000100' \
+			--pagesize '4096' \
+			--second_offset '0x00f00000' \
+			--kernel u-boot-"$board".bin.gz-dtb \
+			-o u-boot-"$board".img
+	done
+}
+
+package() {
+	for board in $_boards; do
+		install -D -m644 $builddir/"u-boot-$board.img" \
+			"$pkgdir/boot/u-boot-$board.img";
+	done
+}
+
+sha512sums="
+1ca69b4c4bc6a71872dca3633642e0211d7d7923731c03583f950f51ce63334b0dd1dbe8c6715a51627ed2c5c949d3ec6bc1d8c53add0561eb11badf0d096227  u-boot-75558f95a2c24d6a99209e421c20e96ae21f3dec.tar.gz
+65b8ab99a1cfd4fa2648018b4b9ad0e8aeeb526a8e50a098265872fd7dde08d99b3f91f0327bbc4fd5225a9760122306da48740f6c6f995b322fef162f4cf691  dummy_axolotl.dts
+82b18bd546f5f8eeef0bb228a52d9f6f9dd9642e6aff8c381ff0fe767eb21cab082498268228f19a948c0a96f84299ce833bb8d9ebd547eb8889a7ef58fe14eb  dummy_beryllium.dts
+65b8ab99a1cfd4fa2648018b4b9ad0e8aeeb526a8e50a098265872fd7dde08d99b3f91f0327bbc4fd5225a9760122306da48740f6c6f995b322fef162f4cf691  dummy_db845c.dts
+65b8ab99a1cfd4fa2648018b4b9ad0e8aeeb526a8e50a098265872fd7dde08d99b3f91f0327bbc4fd5225a9760122306da48740f6c6f995b322fef162f4cf691  dummy_enchilada.dts
+83bb511dc96b39c3b846b70a6cd975b15c03bb1b9856a3c02438d4b2073abae64f863b529705936de8c2f352c52aaf04aae268f3602a802ff1a03c838ea7081e  dummy_fajita.dts
+"

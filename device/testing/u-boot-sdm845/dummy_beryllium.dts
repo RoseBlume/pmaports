@@ -1,0 +1,13 @@
+/dts-v1/;
+/ {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        qcom,msm-id = <321 0x20001>;
+        qcom,board-id = <69 0>;
+        memory {
+                /* We expect the bootloader to fill in the size */
+                reg = <0 0 0 0>;
+        };
+
+        chosen { };
+};
