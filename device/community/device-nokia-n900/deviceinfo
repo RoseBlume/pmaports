@@ -9,7 +9,7 @@ deviceinfo_year="2009"
 deviceinfo_chassis="handset"
 deviceinfo_dtb="omap3-n900"
 deviceinfo_append_dtb="true"
-deviceinfo_modules_initfs="tsc2005 tsc200x-core omap_wdt twl4030_wdt omap-sham"
+deviceinfo_modules_initfs="matrix_keymap omap_wdt omap-sham tsc2005 tsc200x-core twl4030_keypad twl4030_wdt"
 deviceinfo_arch="armv7"
 
 # Device related
