@@ -1,0 +1,65 @@
+# Forked from Alpine for service pack 1.
+# In Alpine Edge, Phosh now depends on phosh-keyboard and doesn't ship a
+# sm.puri.OSK0.desktop file anymore. This is now in squeekboard and
+# phosh-osk-stub packages. Backport squeekboard from edge, so we can use the
+# phosh package without reverting this.
+pkgname=squeekboard
+pkgver=1.22.0
+pkgrel=8
+pkgdesc="The final Phosh keyboard"
+arch="all !s390x !ppc64le" # fails to build on ppc64le
+url="https://gitlab.gnome.org/World/Phosh/squeekboard"
+license="GPL-3.0-or-later"
+makedepends="
+	bash
+	cargo
+	feedbackd-dev
+	glib-dev
+	gnome-desktop-dev
+	gtk+3.0-dev
+	libbsd-dev
+	meson
+	ninja
+	rust
+	wayland-dev
+	wayland-protocols
+	"
+checkdepends="xvfb-run"
+options="net !check"
+subpackages="$pkgname-lang"
+source="https://gitlab.gnome.org/World/Phosh/squeekboard/-/archive/v$pkgver/squeekboard-v$pkgver.tar.gz
+	sm.puri.OSK0.desktop
+	"
+builddir="$srcdir/$pkgname-v$pkgver"
+
+provides="phosh-keyboard"
+provider_priority=10
+replaces="phosh phosh-osk-stub"
+
+build() {
+	abuild-meson \
+		-Db_lto=true \
+		-Dstrict=false \
+		. output
+	meson compile -C output
+}
+
+check() {
+	case "$CARCH" in
+		riscv64) xvfb-run -a meson test --no-rebuild --print-errorlogs -C output -t 10 ;;
+		*) xvfb-run -a meson test --no-rebuild --print-errorlogs -C output ;;
+	esac
+}
+
+package() {
+	depends="!phosh-osk-stub"
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+
+	install -D -m644 "$srcdir"/sm.puri.OSK0.desktop \
+		"$pkgdir"/usr/share/applications/sm.puri.OSK0.desktop
+}
+
+sha512sums="
+a9f211cdea43c20ced09630b5f28ef628a06e03b4ca561de8733e3646e7fc8bd9c421d0c7fc9cec07a7c0fcc9d2e5fe5f1d9f0e4a12dac6abd618d7455a15d67  squeekboard-v1.22.0.tar.gz
+39072909e750ba3a635b4245f45d969129e5e846aaa83af7530b265ccf31b5758f03520ebdb19dfe7a3494a6203d543addae1c9afba51ac5aafec044683e4172  sm.puri.OSK0.desktop
+"
