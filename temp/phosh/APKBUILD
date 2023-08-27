@@ -1,0 +1,92 @@
+# Forked from Alpine for service pack 1
+pkgname=phosh
+pkgver=0.30.0
+pkgrel=2
+pkgdesc="Shell PoC for the Librem5"
+# armhf: blocked by gnome-shell-schemas
+# Blocked on s390x by gnome-session, gnome-settings-daemon, squeekboard and libhandy
+# Blocked on ppc64le by gnome-session
+arch="all !armhf !s390x !ppc64le"
+url="https://gitlab.gnome.org/World/Phosh/phosh"
+license="GPL-3.0-only"
+triggers="$pkgname.trigger=/usr/lib/phosh/plugins/prefs"
+depends="
+	adwaita-icon-theme
+	bash
+	dbus-x11
+	dbus:org.freedesktop.Secrets
+	desktop-file-utils
+	font-adobe-source-code-pro
+	font-cantarell
+	gnome-control-center
+	gnome-session
+	gnome-settings-daemon
+	gnome-shell-schemas
+	gsettings-desktop-schemas
+	phoc
+	phosh-keyboard
+	xwayland
+	"
+makedepends="
+	callaudiod-dev
+	elogind-dev
+	evince-dev
+	evolution-data-server-dev
+	feedbackd-dev
+	gcr-dev
+	gettext-dev
+	glib-dev
+	gnome-desktop-dev
+	gtk+3.0-dev
+	libadwaita-dev
+	libgudev-dev
+	libhandy1-dev
+	libsecret-dev
+	linux-pam-dev
+	meson
+	networkmanager-dev
+	polkit-elogind-dev
+	pulseaudio-dev
+	py3-docutils
+	upower-dev
+	wayland-dev
+	wayland-protocols
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dbg $pkgname-lang $pkgname-dev $pkgname-doc $pkgname-portalsconf"
+source="https://download.gnome.org/sources/phosh/${pkgver%.*}/phosh-$pkgver.tar.xz
+	phosh.desktop
+	1301.patch
+	"
+
+build() {
+	# phoc tests need a running Wayland compositor
+	abuild-meson \
+		-Db_lto=true \
+		-Dphoc_tests=disabled \
+		-Dman=true \
+		. output
+	meson compile -C output
+}
+
+check() {
+	xvfb-run -a meson test --no-rebuild --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir/" meson install --no-rebuild -C output
+
+	install -D -m644 "$srcdir"/phosh.desktop \
+		"$pkgdir"/usr/share/wayland-sessions/phosh.desktop
+}
+
+portalsconf() {
+	install_if="$pkgname=$pkgver-r$pkgrel xdg-desktop-portal>=1.17.0"
+	amove etc/xdg-desktop-portal/phosh-portals.conf
+}
+
+sha512sums="
+d807b0aea0b1ac70eb918fe302629d422b9698ea30820dbb370aa602dc566c84f4e6c52541eed90454075960c5f58c9d3683100300582367ac1921d77e7055a3  phosh-0.30.0.tar.xz
+61d4755cbc78ce354c4793a6901942931f049b16a029aa2b96b271e146eade21f7313cf8c2c25bbc39579680736325c3d9e14d94fc62acddf8b4d2b36ca439df  phosh.desktop
+61cffb10f9dcfc6cfcd70544726167d6bee17a729c9a457f490b90ef79325ec74af0c0fa27ec0b7f4a71657bafa290ab1fdd0007efec2171b513726e7be07c78  1301.patch
+"
