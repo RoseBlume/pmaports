@@ -1,0 +1,81 @@
+# Forked from Alpine for service pack 1
+pkgname=phoc
+pkgver=0.30.0
+pkgrel=0
+pkgdesc="wlroots based Phone compositor for the Phosh shell"
+arch="all !s390x" # blocked by gnome-desktop
+url="https://gitlab.gnome.org/World/Phosh/phoc"
+license="GPL-3.0-only"
+depends="
+	dbus
+	mutter-schemas
+	gsettings-desktop-schemas
+	"
+_wlrootsmakedepends="
+	eudev-dev
+	hwdata-dev
+	libcap-dev
+	libseat-dev
+	libxcb-dev
+	xcb-util-image-dev
+	xcb-util-renderutil-dev
+	xcb-util-wm-dev
+	xkeyboard-config-dev
+	xwayland-dev
+	"
+makedepends="
+	glib-dev
+	gnome-desktop-dev
+	json-glib-dev
+	libdrm-dev
+	libinput-dev
+	libxkbcommon-dev
+	mesa-dev
+	meson
+	pixman-dev
+	wayland-dev
+	wayland-protocols
+	$_wlrootsmakedepends
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dbg"
+options="!check" # Needs fullblown EGL
+source="
+	https://storage.puri.sm/releases/phoc/phoc-$pkgver.tar.xz
+	"
+replaces="wlroots-phosh"
+
+prepare() {
+	default_prepare
+
+	patch -Np1 < subprojects/packagefiles/wlroots/0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch -d subprojects/wlroots
+}
+
+build() {
+	abuild-meson \
+		-Db_lto=true \
+		-Dembed-wlroots=enabled \
+		-Dtests="$(want_check && echo true || echo false)" \
+		--default-library=static \
+		. output
+	meson compile -C output
+}
+
+check() {
+	xvfb-run -a meson test --no-rebuild --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir/" meson install --no-rebuild -C output
+	install -Dm755 helpers/scale-to-fit \
+		-t "$pkgdir"/usr/bin
+
+	# remove unneeded wlroots dev. files
+	rm -r "$pkgdir"/usr/include
+	rm -r "$pkgdir"/usr/lib/libwlroots.a
+	rm -r "$pkgdir"/usr/lib/pkgconfig
+}
+
+sha512sums="
+ed95e9f62e198bcc87c82982fe1025d1af0449dae939b1803f2bdd362b229108eae3d131d0353151f1e33b8e80f05facae03b06ca5dbfdb29f2c534c8991fd20  phoc-0.30.0.tar.xz
+"
