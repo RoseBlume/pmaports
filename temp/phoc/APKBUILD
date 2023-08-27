@@ -11,7 +11,7 @@ depends="
 	mutter-schemas
 	gsettings-desktop-schemas
 	"
-_wlrootsmakedepends="
+makedepends="
 	eudev-dev
 	hwdata-dev
 	libcap-dev
@@ -22,8 +22,7 @@ _wlrootsmakedepends="
 	xcb-util-wm-dev
 	xkeyboard-config-dev
 	xwayland-dev
-	"
-makedepends="
+
 	glib-dev
 	gnome-desktop-dev
 	json-glib-dev
@@ -35,7 +34,6 @@ makedepends="
 	pixman-dev
 	wayland-dev
 	wayland-protocols
-	$_wlrootsmakedepends
 	"
 checkdepends="xvfb-run"
 subpackages="$pkgname-dbg"
