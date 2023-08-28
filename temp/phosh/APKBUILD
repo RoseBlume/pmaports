@@ -59,6 +59,9 @@ source="https://download.gnome.org/sources/phosh/${pkgver%.*}/phosh-$pkgver.tar.
 	1301.patch
 	"
 
+# Tests don't pass in QEMU for armv7
+options="!check"
+
 build() {
 	# phoc tests need a running Wayland compositor
 	abuild-meson \
