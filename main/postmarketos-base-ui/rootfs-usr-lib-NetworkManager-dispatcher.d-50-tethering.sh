@@ -20,6 +20,14 @@ if [ "$DEVICE_IFACE" != "$interface" ]; then
 	exit 0
 fi
 
+# Disable NetworkManager management for USB networking during netboot
+if [ "$(pgrep -f nbd-client)" ]; then
+	logger -t nm-tethering "netboot mode, disabling NetworkManager management"
+	nmcli device set $interface managed no
+	nmcli device reapply "$interface"
+	exit 0
+fi
+
 # Trigger a disconnect/connect event on the client side to request a new DHCP lease.
 reactivate_gadget() {
 	# Mount configFS
