@@ -2,8 +2,8 @@
 # Maintainer: Max Buchholz <max.buchholz@gmx.de>
 pkgname=device-sony-pioneer
 pkgdesc="Sony Xperia XA2"
-pkgver=0.1
-pkgrel=1
+pkgver=1
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -48,5 +48,5 @@ nonfree_firmware() {
 
 sha512sums="
 a6449c6668152c7ff0e998ecc910b8763f3cb8a40f05e049e78430b88770504da43cc193c6cdebadcfdacc373f3238588aa1a8707549817f9d31e78e6392402c  deviceinfo
-aad7cce10db5ec156585893c82932bd42f2c86e4d68208b5f3816ac7f5f80eb6ddf15157666e81de97d30b20897f88e1027545a87fe5c96c37b5e75e3e125ee4  phoc.ini
+2c80a3d2df72f2400122219520000ad055680d88745e0453f6d2e3f7d15dfdb39ddbabebc1b6c1d8ee58fa03c255a260d09dee0178b84cd44a672acee848e19e  phoc.ini
 "

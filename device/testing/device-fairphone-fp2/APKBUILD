@@ -1,8 +1,8 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-fairphone-fp2
 pkgdesc="Fairphone 2"
-pkgver=7
-pkgrel=4
+pkgver=8
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="armv7"
@@ -94,6 +94,6 @@ sha512sums="
 1a99953420a4068c6205dd90015e895909d39011dcc72fd73ac6880920fe4b95fe54377b9d4864a2d4fac56c4334e0c896ba8cc92dea61f93e9384de0998a910  modules-initfs.mainline
 55360b1ba4ddadea341c9edb13c32ba5f19aabf75ab28602f30cfb79b9df8834f115ef979c70569f23ec1293b1fcd408baf320d87803293ce7106bdc73a26c9f  FP2.conf
 b834461c6866bb0c473dd089dd5da641dd42a00f610aad6503117aa50fe6e200db9ad0a264bb609f12350d59faee1f772907bacd75439f702ea7d52f6f85e2b1  hifi
-cef2fd633cddbcf4ac9b4d2fa6bf3a1e3e8d810a2ea8050767fe649d289db753662821d5e41e2c8d20fb9c765c1babcb6a4d95e4c9345f5ea32d1b1d2b1e5126  phoc.ini
+290394a089dd7c5042bfda88eb299ba74f9b2423b93a1777e6598db98628be2838af7af33c83caaa6872058e17844c64aa816c86ac2c2b22eb7cdbf5bf7298a6  phoc.ini
 bbe6d6f530a9fa1934dd065dd4f6da48450e2115e4656b219d7f3aebc8b6a2775c02a2e5ffb5790950bb8183fca4677fbeaf9d8a267089c9f0d08461fc8ed45d  30-gpu-firmware.files
 "
