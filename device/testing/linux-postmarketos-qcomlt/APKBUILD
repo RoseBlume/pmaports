@@ -1,0 +1,60 @@
+# Maintainer: Caleb Connolly <caleb@connolly.tech>
+# Stable Linux kernel with patches for Qualcomm RBx boards
+# Kernel config based on: arch/arm64/configs/defconfig
+
+_flavor="postmarketos-qcomlt"
+pkgname="linux-$_flavor"
+pkgver=6.4.0
+pkgrel=0
+pkgdesc="Mainline Kernel fork for SDM845 devices"
+arch="aarch64"
+_carch="arm64"
+url="https://git.codelinaro.org/linaro/qcomlt/kernel"
+license="GPL-2.0-only"
+options="!check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community"
+makedepends="bash bison findutils flex installkernel openssl-dev perl zstd"
+
+_config="config-$_flavor.$arch"
+# HEAD of branch release/qcomlt-6.4
+_commit="5e91e727287e4de7abd20f1fe27cadaa54c8573a"
+
+# Source
+source="
+	kernel-$_commit.tar.gz::https://git.codelinaro.org/linaro/qcomlt/kernel/-/archive/$_commit/linux-$_commit.tar.gz
+	$_config
+"
+builddir="$srcdir/kernel-$_commit"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/$_config" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+}
+
+package() {
+	install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
+		"$pkgdir/boot/vmlinuz"
+
+	make modules_install dtbs_install \
+		ARCH="$_carch" \
+		INSTALL_PATH="$pkgdir"/boot/ \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+a877d6087970488912e6af223e1560c88cc2461768684fc28e9856ea74ae3fadf1a108683e2468ff58ebfd072b2201fe65b628fd50f02bf9b0090dab9e42a8ad  kernel-5e91e727287e4de7abd20f1fe27cadaa54c8573a.tar.gz
+e5606300077b289902e8f62da55f7bc78fbe9cf765db6cdeb7d63ee2a7af005a4154bb8ac303e25c22760d33e7d43cb89471b2b1d2b93967650f07d91058e14e  config-postmarketos-qcomlt.aarch64
+"
