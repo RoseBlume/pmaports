@@ -1,0 +1,63 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=libkgapi
+pkgver=9999_git20230922
+pkgrel=0
+_commit="0acd0ff6ec09b19511ebd2cae4368fd6b4dc2b2e"
+pkgdesc="LibKGAPI is a KDE-based library for accessing various Google services via their public API"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://community.kde.org/KDE_PIM"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev="
+	cyrus-sasl-dev
+	kcalendarcore-dev
+	kcontacts-dev
+	kio-dev
+	kwallet-dev
+	kwindowsystem-dev
+	qt6-qtbase-dev
+	qt6-qtwebengine-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/pim/libkgapi.git"
+source="http://localhost:8000/libkgapi-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/libkgapi-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	# calendar-freebusyqueryjobtest, contacts-contactfetchjobtest,
+	# contacts-contactcreatejobtest and contacts-contactmodifyjobtest are broken
+	# tasks-taskfetchjobtest fails on the builders
+	# contacts-contactfetchjobtest: https://gitlab.alpinelinux.org/alpine/aports/-/issues/11787
+	# calendar-event-*: UTC+02 != UTC+02:00
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "(tasks-taskfetchjob|calendar-freebusyqueryjob|contacts-contact(fetchjob|createjob|modifyjob)|calendar-event(createjob|modifyjob|fetchjob))test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+df4bf767fcc7a5bc68a31778639ed993a1a209df68c7ae56cb79e8ec574e87048b02263f1eeee518827cc40281c9929d9608a8fc50f4a97c2cab893c4e0f65f0  libkgapi-0acd0ff6ec09b19511ebd2cae4368fd6b4dc2b2e.tar.xz
+"

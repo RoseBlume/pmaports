@@ -1,0 +1,52 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kmime
+pkgver=9999_git20230922
+pkgrel=0
+_commit="9a4adacb896b98f87ddf7f7e3afcae6085df2aa3"
+pkgdesc="Library for handling mail messages and newsgroup articles"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/KDE_PIM"
+license="LGPL-2.0-or-later"
+depends_dev="
+	kcodecs-dev
+	ki18n-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+_repo_url="https://invent.kde.org/pim/kmime.git"
+source="http://localhost:8000/kmime-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kmime-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+
+	# kmime-headertest and kmime-messagetest are broken
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest -E "kmime-(header|message)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+21ddc61fe47914e0e0264b757ac8cfb1c07f5f380db13c15942431343f451cac4b043a8c7565b6b0ae1035e0f7f308e7d235cc86195223beecee4fc85ccf9c92  kmime-9a4adacb896b98f87ddf7f7e3afcae6085df2aa3.tar.xz
+"

@@ -1,0 +1,58 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kglobalaccel
+pkgver=9999_git20230917
+pkgrel=0
+_commit="1a908a5443d308493a3541bd2974df143bf01e94"
+pkgdesc="Add support for global workspace shortcuts"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-or-later"
+depends_dev="
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kwindowsystem-dev
+	qt6-qtdeclarative-dev
+
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	xcb-util-keysyms-dev
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/kglobalaccel.git"
+source="http://localhost:8000/kglobalaccel-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kglobalaccel-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+}
+
+sha512sums="
+b8e9ea20193598916d357a2fd720bb27357950ec239a36b4b241c75c0692f85d481e3d927fd270a51843f8b73cba7f63c080ff7834a27f3f4327a69afa7e1b61  kglobalaccel-1a908a5443d308493a3541bd2974df143bf01e94.tar.xz
+"

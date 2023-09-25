@@ -1,0 +1,41 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-other
+pkgname=plasma-wayland-protocols
+pkgver=9999_git20230922
+pkgrel=0
+_commit="d7fb5c066d8a4eb67b6af86a46073d4547e5a2b3"
+pkgdesc="Plasma Specific Protocols for Wayland"
+# armhf blocked by extra-cmake-modules
+arch="noarch !armhf"
+url="https://www.kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND LGPL-2.1-only"
+makedepends="
+	qt6-qttools-dev
+	extra-cmake-modules
+	samurai
+	"
+_repo_url="https://invent.kde.org/libraries/plasma-wayland-protocols.git"
+source="http://localhost:8000/plasma-wayland-protocols-$_commit.tar.xz"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/plasma-wayland-protocols-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+8c03b67ae6730950e334e110f592a6466bf3851b7db7d8f314f56912bbb285e4ad20ed30fbe12e792e75f5e8c315da8c245d843d818d522172b3461e1c9f5438  plasma-wayland-protocols-d7fb5c066d8a4eb67b6af86a46073d4547e5a2b3.tar.xz
+"

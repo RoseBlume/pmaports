@@ -1,0 +1,48 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=attica
+pkgver=9999_git20230829
+pkgrel=0
+_commit="4e09a15b47bc901af5c0839715aa6d7d3c331343"
+pkgdesc="Freedesktop OCS binding for Qt"
+url="https://www.kde.org/"
+arch="all !armhf" # Blocked by extra-cmake-modules
+license="LGPL-2.0-or-later"
+makedepends="
+	doxygen
+	extra-cmake-modules
+	qt6-qtbase-dev
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc"
+_repo_url="https://invent.kde.org/frameworks/attica.git"
+source="http://localhost:8000/attica-$_commit.tar.xz"
+
+options="!check"
+builddir="$srcdir/attica-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# providertest requires network access
+	ctest --test-dir build --output-on-failure -E "providertest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+6ad051e6f936ca348c36d4a6e0e6a2bb791fd36ec8b02950bda7a1d8795958d3a5b14b58a7f74e386c06484a3d788c678d5d6d2380685006a6bc56ac741ad0de  attica-4e09a15b47bc901af5c0839715aa6d7d3c331343.tar.xz
+"

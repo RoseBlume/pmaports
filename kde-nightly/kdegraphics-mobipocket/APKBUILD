@@ -1,0 +1,45 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kdegraphics-mobipocket
+pkgver=9999_git20230408
+pkgrel=0
+_commit="16b2e58f43f2cae7954efd82c254c170618f724b"
+pkgdesc="A collection of plugins to handle mobipocket files"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.kde.org/applications/graphics/"
+license="GPL-2.0-or-later"
+depends_dev="
+	qt6-qtbase-dev
+	kio-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+_repo_url="https://invent.kde.org/graphics/kdegraphics-mobipocket.git"
+source="http://localhost:8000/kdegraphics-mobipocket-$_commit.tar.xz"
+subpackages="$pkgname-dev"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/kdegraphics-mobipocket-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c6e274e9220a4d7d0d18a1e9312ab67a922345fa90ad5b693167d4d13742573a47801fad0e54f77af8784248bf6373a05303cfbc1e867e1823494b66627f0dd9  kdegraphics-mobipocket-16b2e58f43f2cae7954efd82c254c170618f724b.tar.xz
+"

@@ -1,0 +1,50 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=ktnef
+pkgver=9999_git20230925
+pkgrel=0
+_commit="cb8b0077d5c9b8502c85850326d5ac659784efe8"
+pkgdesc="API for handling TNEF data"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kontact.kde.org/"
+license="LGPL-2.0-or-later"
+depends_dev="
+	kcalendarcore-dev
+	kcalutils-dev
+	kcontacts-dev
+	ki18n-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+_repo_url="https://invent.kde.org/pim/ktnef.git"
+source="http://localhost:8000/ktnef-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/ktnef-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+faf212f85828cb30b93665037e9c16a1330de5cb80d15cb46a562297a7c84ef23ce51f9a95f329d340b6a6e28716c03a39cedbf22f91454d0bf1e443fd96ac46  ktnef-cb8b0077d5c9b8502c85850326d5ac659784efe8.tar.xz
+"

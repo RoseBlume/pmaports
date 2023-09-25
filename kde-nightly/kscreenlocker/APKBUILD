@@ -1,0 +1,89 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=kscreenlocker
+pkgver=9999_git20230918
+pkgrel=0
+_commit="6ab4e396e07399a474415c00db90958123511a6a"
+pkgdesc="Library and components for secure lock screen architecture"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)"
+depends="
+	elogind
+	linux-pam
+	"
+depends_dev="
+	plasma-framework-dev
+	ksvg-dev
+	elogind-dev
+	kcmutils-dev
+	kcrash-dev
+	kdeclarative-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kidletime-dev
+	knotifications-dev
+	libkscreen-dev
+	ktextwidgets-dev
+	kwayland-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	layer-shell-qt-dev
+	libseccomp-dev
+	linux-pam-dev
+	qt6-qtbase-dev
+
+	solid-dev
+	xcb-util-keysyms-dev
+	"
+makedepends="
+	$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/kscreenlocker.git"
+source="http://localhost:8000/kscreenlocker-$_commit.tar.xz
+	kde.pam
+	kde-np.pam
+	
+	"
+subpackages="$pkgname-dev $pkgname-lang"
+options="!check" # Requires running loginctl
+
+options="!check"
+builddir="$srcdir/kscreenlocker-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	install -D -m644 "$srcdir"/kde.pam "$pkgdir"/etc/pam.d/kde
+	install -m644 "$srcdir"/kde-np.pam "$pkgdir"/etc/pam.d/kde-np
+}
+
+sha512sums="
+d2877856d70587d602fcdb6cd8f3b3633bcd06115ba512768bf3b1bc8f373f52c0e2a8ad96382bebf556515516af09b0d2787375820a7e5b95843cead6ba062f  kscreenlocker-6ab4e396e07399a474415c00db90958123511a6a.tar.xz
+56e87d02d75c4a8cc4ed183faed416fb4972e7f223b8759959c0f5da32e11e657907a1df279d62a44a6a174f5aca8b2ac66a5f3325c5deb92011bcf71eed74c3  kde.pam
+565265485dd7466b77966d75a56766216b8bcc187c95a997e531e9481cf50ddbe576071eb0e334421202bcab19aa6de6b93e042447ca4797a24bf97e1d053ffd  kde-np.pam
+"

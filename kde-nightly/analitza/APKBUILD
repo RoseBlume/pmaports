@@ -1,0 +1,53 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=analitza
+pkgver=9999_git20230917
+pkgrel=0
+_commit="bb669d0afc8ea05ce3e041dfd302b18418a82a82"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://edu.kde.org/"
+pkgdesc="A library to add mathematical features to your program"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+depends_dev="
+	qt6-qt5compat-dev
+	eigen-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtsvg-dev
+	qt6-qttools-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/education/analitza.git"
+source="http://localhost:8000/analitza-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/analitza-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+9ad57a95618934744d2450194bef4625f29406e90cf8c5cae9c75e1c205053f3fcb39a4f48b645ddfa635399efce60fd77430d61581f0186eb43c2f7a90550b8  analitza-bb669d0afc8ea05ce3e041dfd302b18418a82a82.tar.xz
+"

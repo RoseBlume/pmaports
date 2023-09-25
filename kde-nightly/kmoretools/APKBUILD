@@ -1,0 +1,55 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+pkgname=kmoretools
+pkgver=9999_git20230917
+pkgrel=0
+_commit="06b6b6f744396aa4fab24c77677880ef3ff00b9b"
+pkgdesc="Support for downloading application assets from the network"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://invent.kde.org/libraries/kmoretools/"
+license="BSD-2-Clause AND LGPL-2.1-or-later AND LGPL-3.0-only"
+depends_dev="
+	kconfig-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kio-dev
+	kjobwidgets-dev
+	kservice-dev
+	kwidgetsaddons-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/libraries/kmoretools.git"
+source="http://localhost:8000/kmoretools-$_commit.tar.xz"
+
+options="!check"
+builddir="$srcdir/kmoretools-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_TESTING="$(want_check && echo ON || echo OFF)" \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+e98513f98e08f233d23ad4ba64fe4293f4a8bd1e3a1d6d3d532e04b1fbc41b19fc12ac099933fa81be271042f621e8b6d66d92e913c3cd4fd0a3696a48751d94  kmoretools-06b6b6f744396aa4fab24c77677880ef3ff00b9b.tar.xz
+"

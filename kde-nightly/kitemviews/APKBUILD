@@ -1,0 +1,49 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kitemviews
+pkgver=9999_git20230917
+pkgrel=0
+_commit="81e85e640ca862382e8b447c03f2c25bf9035b76"
+pkgdesc="Widget addons for Qt Model/View"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="GPL-2.0-only AND LGPL-2.1-only"
+depends_dev="qt6-qtbase-dev"
+makedepends="
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/kitemviews.git"
+source="http://localhost:8000/kitemviews-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kitemviews-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+e18a89abcb043746d5c0776534ecaf4bdb1bc262d08b082c6f04efa06a2578cb27348f2c426ae563bd3c1ee70876c8ef41f627e4c908edd1470a90979f842134  kitemviews-81e85e640ca862382e8b447c03f2c25bf9035b76.tar.xz
+"

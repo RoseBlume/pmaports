@@ -1,0 +1,58 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=purpose
+pkgver=9999_git20230924
+pkgrel=0
+_commit="0c2039ae5afda8f000fd3f1e467175ae640b52fa"
+pkgdesc="Framework for providing abstractions to get the developer's purposes fulfilled"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> kaccounts-integration
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-or-later"
+depends_dev="
+	
+	kconfig-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kio-dev
+	kirigami2-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/purpose.git"
+source="http://localhost:8000/purpose-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+options="!check" # fails on builders
+
+options="!check"
+builddir="$srcdir/purpose-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_TESTING=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure -E 'menutest'
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+a985e2a99e1635d314973c8d3f1e2cd807a1d652ddf9bb6893782f41170f1544e464375652f423f9a94efa8ef53d78de08665ccb494faf8da5f4fe85c52fa12c  purpose-0c2039ae5afda8f000fd3f1e467175ae640b52fa.tar.xz
+"

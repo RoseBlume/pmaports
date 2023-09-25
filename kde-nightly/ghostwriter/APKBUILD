@@ -1,0 +1,52 @@
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=ghostwriter
+pkgver=9999_git20230919
+pkgrel=0
+_commit="4f48ac610e977e4841c4429265b869bbcfae84bd"
+pkgdesc="Distraction-free markdown editor"
+url="https://invent.kde.org/office/ghostwriter/"
+arch="aarch64 x86_64"
+license="GPL-3.0-or-later"
+depends="qt6-qtsvg"
+makedepends="
+	qt6-qt5compat-dev
+	extra-cmake-modules
+	hunspell-dev
+	sonnet-dev
+	kcoreaddons-dev
+	kdoctools-dev
+	kxmlgui-dev
+	kconfigwidgets-dev
+	qt6-qtsvg-dev
+	qt6-qttools-dev
+	qt6-qtbase-dev
+	qt6-qtwebchannel-dev
+	qt6-qtwebengine-dev
+	samurai
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/office/ghostwriter.git"
+source="http://localhost:8000/ghostwriter-$_commit.tar.xz"
+options="!check" # no tests
+
+options="!check"
+builddir="$srcdir/ghostwriter-$_commit"
+
+build() {
+	CXXFLAGS="$CXXFLAGS -flto=auto" \
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja -Wno-dev \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c3e75e95a580e2c3283c239f0a5f264891ac987818c10de88205d6e79aa3326a0fa6b4836359bddd5465f6ab902c20b0c15b2af181a814d1beec0f1bc1e42661  ghostwriter-4f48ac610e977e4841c4429265b869bbcfae84bd.tar.xz
+"

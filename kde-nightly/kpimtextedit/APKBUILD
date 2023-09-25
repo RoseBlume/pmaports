@@ -1,0 +1,86 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kpimtextedit
+pkgver=9999_git20230925
+pkgrel=0
+_commit="b3ce2934d70f40c24e3193f144d46b9101530309"
+pkgdesc="Advanced text editor which provide advanced html feature"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://api.kde.org/kdepim/kpimtextedit/html"
+license="LGPL-2.0-or-later AND GPL-2.0-or-later"
+depends_dev="
+	ktextaddons-dev
+	grantlee-dev
+	kcodecs-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	kwidgetsaddons-dev
+	kxmlgui-dev
+	qt6-qtbase-dev
+	qt6-qtspeech-dev
+	sonnet-dev
+	syntax-highlighting-dev
+	"
+makedepends="
+	$depends_dev
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/pim/kpimtextedit.git"
+source="http://localhost:8000/kpimtextedit-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kpimtextedit-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_DESIGNERPLUGIN=ON
+	cmake --build build
+}
+
+check() {
+	cd build
+
+	# kpimtextedit-plaintext-textgotolinewidgettest,
+	# kpimtextedit-composerng-richtextcomposertest and
+	# kpimtextedit-composerng-richtextcomposercontrolertest require OpenGL
+	# kpimtextedit-texttospeech-texttospeechwidgettest requires texttospeech
+	# kpimtextedit-texttospeech-texttospeechactionstest and
+	# kpimtextedit-grantleebuilder-texthtmlbuildertest are broken
+	local skipped_tests="kpimtextedit-("
+	local tests="
+		plaintext-textgotolinewidget
+		texttospeech-texttospeechwidget
+		texttospeech-texttospeechactions
+		composerng-richtextcomposer
+		composerng-richtextcomposercontroler
+		grantleebuilder-texthtmlbuilder
+		"
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)test"
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+1afea76b91f68db4245b043dbc4e390ded4b54bc70c2fe836457b101f3d09967a314efad38927b7608bc97d957d756886f374346d9e1772d5e5a788775a1d25e  kpimtextedit-b3ce2934d70f40c24e3193f144d46b9101530309.tar.xz
+"

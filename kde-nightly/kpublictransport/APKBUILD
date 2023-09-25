@@ -1,0 +1,54 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kpublictransport
+pkgver=9999_git20230916
+pkgrel=0
+_commit="fc11c83a14b8bd2120e2153a1235b4d60fd13d08"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://invent.kde.org/libraries/kpublictransport"
+pkgdesc="Library to assist with accessing public transport timetables and other data"
+license="BSD-3-Clause AND LGPL-2.0-or-later AND MIT"
+depends_dev="
+	qt6-qt5compat-dev
+	ki18n-dev
+	networkmanager-qt-dev
+	protobuf-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	zlib-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+_repo_url="https://invent.kde.org/libraries/kpublictransport.git"
+source="http://localhost:8000/kpublictransport-$_commit.tar.xz"
+options="!check" # Broken for now
+subpackages="$pkgname-dev"
+
+options="!check"
+builddir="$srcdir/kpublictransport-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+f312dfb45f8bce9925b3517ba924844ae02dad28fc38626a5a6efd38d748e72bccb0bd973b860e274ebd19a70f57b4e9ddaffd230872c482a75fd84d5af36f11  kpublictransport-fc11c83a14b8bd2120e2153a1235b4d60fd13d08.tar.xz
+"

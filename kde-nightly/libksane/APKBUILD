@@ -1,0 +1,52 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=libksane
+pkgver=9999_git20230917
+pkgrel=0
+_commit="ee2c07a8ac778424b5f54c62bc5275067ebe062e"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.kde.org/applications/graphics/"
+pkgdesc="An image scanning library"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev="
+	ki18n-dev
+	ksanecore-dev
+	ktextwidgets-dev
+	kwallet-dev
+	kwidgetsaddons-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+_repo_url="https://invent.kde.org/graphics/libksane.git"
+source="http://localhost:8000/libksane-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/libksane-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+3c975fab548849455bde83f4f5e019592564a93f5a0eaf405ec96ba46a0d5cb3d6c9189378f6d3ce9b2c1328e8bec0aed46cd72e2659ba97d524860e06ef6569  libksane-ee2c07a8ac778424b5f54c62bc5275067ebe062e.tar.xz
+"

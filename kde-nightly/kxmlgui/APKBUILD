@@ -1,0 +1,65 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kxmlgui
+pkgver=9999_git20230925
+pkgrel=0
+_commit="64844f54a0987559faa39e75f15c406b733d8f88"
+pkgdesc="User configurable main windows"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only AND LGPL-2.1-or-later"
+depends_dev="
+	attica-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kiconthemes-dev
+	kitemviews-dev
+	ktextwidgets-dev
+	kwidgetsaddons-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="
+	mesa-dri-gallium
+	xvfb-run
+	"
+_repo_url="https://invent.kde.org/frameworks/kxmlgui.git"
+source="http://localhost:8000/kxmlgui-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kxmlgui-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# kxmlgui_unittest, ktoolbar_unittest and ktooltiphelper_unittest are broken
+	LC_ALL=C xvfb-run ctest --test-dir build --output-on-failure -E '(kxmlgui|ktoolbar|ktooltiphelper)_unittest'
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+58ab534a5b97613147fd38669c8a1a7025f1d9c1387bfd9fbb96789007f940862a6687de23eb2dceda4d86c021e52f87e81cb4efad91674cdceb12d3511f0d57  kxmlgui-64844f54a0987559faa39e75f15c406b733d8f88.tar.xz
+"

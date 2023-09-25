@@ -1,0 +1,56 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kompare
+pkgver=9999_git20230904
+pkgrel=0
+_commit="a2132dd36e494b17c5081947f5df73c66ef5512b"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/development/org.kde.kompare"
+pkgdesc="Graphical File Differences Tool"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kcodecs-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kdoctools-dev
+	kiconthemes-dev
+	kjobwidgets-dev
+	kparts-dev
+	ktexteditor-dev
+	kwidgetsaddons-dev
+	libkomparediff2-dev
+	qt6-qtbase-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/sdk/kompare.git"
+source="http://localhost:8000/kompare-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/kompare-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+73b5654c8901bc2b48f065b3ffb1d81139b4898e684d5034ae6142ea0e5b138b906148b1dd55feebb3e5850695acd3930b80a166e4d8406698280141f1623de0  kompare-a2132dd36e494b17c5081947f5df73c66ef5512b.tar.xz
+"

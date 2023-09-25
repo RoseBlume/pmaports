@@ -1,0 +1,70 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=kde-cli-tools
+pkgver=9999_git20230925
+pkgrel=0
+_commit="7f608e6577acb3a15d1e759ae5b735c903a931ac"
+pkgdesc="Tools based on KDE Frameworks 5 to better interact with the system"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://invent.kde.org/plasma/kde-cli-tools"
+license="(GPL-2.0-only OR GPL-3.0-only) AND GPL-2.0-or-later AND GPL-2.0-only AND LGPL-2.1-only"
+makedepends="
+	kparts-dev
+	extra-cmake-modules
+	kactivities-dev
+	kcmutils-dev
+	kconfig-dev
+	kdeclarative-dev
+	kdesu-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+
+	kio-dev
+	kservice-dev
+	kwindowsystem-dev
+
+	qt6-qtbase-dev
+	qt6-qtsvg-dev
+
+	samurai
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/kde-cli-tools.git"
+source="http://localhost:8000/kde-cli-tools-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+options="!check" # Broken
+
+# Workaround a circular dependency https://gitlab.alpinelinux.org/alpine/aports/-/issues/11785
+
+
+options="!check"
+builddir="$srcdir/kde-cli-tools-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+d8793deaf54658f011e76252e68b5e92e8fbecae04a16e3ada83c30b96b90a97bcfdb7c895a3c762db997c4b9cbb0cef2f542f97bc9c25b17c4ecc04752547dd  kde-cli-tools-7f608e6577acb3a15d1e759ae5b735c903a931ac.tar.xz
+"

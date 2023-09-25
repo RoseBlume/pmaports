@@ -1,0 +1,73 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=plasma-integration
+pkgver=9999_git20230917
+pkgrel=0
+_commit="7df261beef01e72e9f5d479b739f1be9b3af6771"
+pkgdesc="Qt Platform Theme integration plugins for the Plasma workspaces"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="(LGPL-2.1-only OR LGPL-3.0-only) AND LGPL-2.1-only AND ((LGPL-2.1-only WITH Nokia-Qt-exception-1.1) OR (GPL-3.0-only WITH Nokia-Qt-exception-1.1))"
+depends="
+	font-hack
+	font-noto
+	qqc2-desktop-style
+	"
+makedepends="
+	plasma-wayland-protocols
+	kstatusnotifieritem-dev
+	breeze-dev
+	extra-cmake-modules
+	kconfig-dev
+	kconfigwidgets-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	knotifications-dev
+	kwayland-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	libxcursor-dev
+	qt6-qtbase-dev
+
+
+	samurai
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/plasma-integration.git"
+source="http://localhost:8000/plasma-integration-$_commit.tar.xz"
+subpackages="$pkgname-lang"
+options="!check" # Broken
+
+options="!check"
+builddir="$srcdir/plasma-integration-$_commit"
+
+build() {
+	cmake -B build -DBUILD_QT5=OFF -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_DISABLE_FIND_PACKAGE_FontNotoSans=true \
+		-DCMAKE_DISABLE_FIND_PACKAGE_FontHack=true
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+e0e52f10e01abd3a3a0dcc6c2d113bb727442f3834dfe4483c68e823f03756eaa175abd9ef2afd9b0b7f74e57da381a3a72fe298e67317b06c2c84f9c212a0ae  plasma-integration-7df261beef01e72e9f5d479b739f1be9b3af6771.tar.xz
+"

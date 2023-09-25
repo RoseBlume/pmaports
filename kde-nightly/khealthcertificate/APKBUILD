@@ -1,0 +1,50 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-mobile
+pkgname=khealthcertificate
+pkgver=9999_git20230711
+pkgrel=0
+_commit="5abe43cf712e6a844748f27db5cc33e01d28bdb3"
+pkgdesc="Handling of digital vaccination, test and recovery certificates"
+url="https://invent.kde.org/pim/khealthcertificate"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+license="LGPL-2.0-or-later"
+depends_dev="
+	karchive-dev
+	kcodecs-dev
+	ki18n-dev
+	openssl-dev>3
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	zlib-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+_repo_url="https://invent.kde.org/pim/khealthcertificate.git"
+source="http://localhost:8000/khealthcertificate-$_commit.tar.xz"
+subpackages="$pkgname-dev"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/khealthcertificate-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+87802d74a632b3981faf3832c62e119bbf2ef9ba1fea8ab1b1273919728434422386b21beb625ed45195b5846a40af68b9b8f1a174aeab72c8733353f26d0a69  khealthcertificate-5abe43cf712e6a844748f27db5cc33e01d28bdb3.tar.xz
+"

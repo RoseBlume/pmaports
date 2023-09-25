@@ -1,0 +1,53 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=libkmahjongg
+pkgver=9999_git20230924
+pkgrel=0
+_commit="630edf53b9f872fecd255b7138526a136b21e8ec"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/games"
+pkgdesc="Common code, backgrounds and tile sets for games using Mahjongg tiles"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kwidgetsaddons-dev
+	qt6-qtbase-dev
+	qt6-qtsvg-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/games/libkmahjongg.git"
+source="http://localhost:8000/libkmahjongg-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+options="!check" # No tests found
+
+options="!check"
+builddir="$srcdir/libkmahjongg-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+045ab8c89fbf9f5e62ab5e3990b0815f9a7fceefdbee23fe190479659baeb424c3902ce52dd6e1b52ce9274356de52f33ba78bdc163dd45e135daba6954a25d9  libkmahjongg-630edf53b9f872fecd255b7138526a136b21e8ec.tar.xz
+"

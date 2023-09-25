@@ -1,0 +1,72 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=plasma-welcome
+pkgver=9999_git20230925
+pkgrel=0
+_commit="95fbb01878a84e9c3bb93448826cd1ba1e29990f"
+pkgdesc="A friendly onboarding wizard for Plasma"
+# armhf blocked by qt6-qtdeclarative
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> kaccounts-integration
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later"
+depends="kirigami2"
+makedepends="
+	kirigami-addons-dev
+	kcmutils-dev
+	ksvg-dev
+	extra-cmake-modules
+	
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	kio-dev
+	kirigami2-dev
+	knewstuff-dev
+	knotifications-dev
+	kservice-dev
+	kuserfeedback-dev
+	kwindowsystem-dev
+	plasma-framework-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+
+	qt6-qtsvg-dev
+	samurai
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/plasma-welcome.git"
+source="http://localhost:8000/plasma-welcome-$_commit.tar.xz"
+subpackages="$pkgname-lang"
+
+options="!check"
+builddir="$srcdir/plasma-welcome-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+63d08a4b1ff5ce5b0841f6ace2a7680e799e981b38c241d4ca3af598264ea3078485154f7cc3123f2b7721d088ba6aa949b78c00cfd07dc7173cfbd306c942cc  plasma-welcome-95fbb01878a84e9c3bb93448826cd1ba1e29990f.tar.xz
+"

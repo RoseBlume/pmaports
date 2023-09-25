@@ -1,0 +1,90 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=gwenview
+pkgver=9999_git20230922
+pkgrel=0
+_commit="2bd73e63998e5b612fd3145d317514424119c366"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> purpose
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kde.org/applications/graphics/org.kde.gwenview"
+pkgdesc="Fast and easy to use image viewer by KDE"
+license="GPL-2.0-only"
+depends="
+	kimageformats
+	qt6-qtimageformats
+	"
+makedepends="
+	baloo-dev
+	extra-cmake-modules
+	kactivities-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kimageannotator-dev
+	kio-dev
+	kitemmodels-dev
+	knotifications-dev
+	kparts-dev
+	kwindowsystem-dev
+	lcms2-dev
+	libjpeg-turbo-dev
+	libkdcraw-dev
+	libpng-dev
+	purpose-dev
+	qt6-qtbase-dev
+	qt6-qtsvg-dev
+
+	samurai
+	"
+checkdepends="
+	dbus
+
+	xvfb-run
+	"
+_repo_url="https://invent.kde.org/graphics/gwenview.git"
+source="http://localhost:8000/gwenview-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/gwenview-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	# urlutilstest and placetreemodeltest are broken
+	# recursivedirmodeltest and contextmanagertest requires running DBus
+	local skipped_tests="("
+	local tests="
+		contextmanager
+		documenttest
+		jpegcontenttest
+		placetreemodel
+		recursivedirmodel
+		urlutils
+		"
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)test"
+	CTEST_OUTPUT_ON_FAILURE=TRUE dbus-run-session xvfb-run ctest -E "$skipped_tests"
+
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+10b51e6acf97da633397da7a7b56fd0b0ca21c09ad809fcbc1cb8dc0108f163a8104a4414b3f351b9a227ceb97a10e992c3d799383867de3132770f9ac32eab4  gwenview-2bd73e63998e5b612fd3145d317514424119c366.tar.xz
+"

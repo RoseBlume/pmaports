@@ -1,0 +1,59 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=polkit-kde-agent-1
+pkgver=9999_git20230923
+pkgrel=0
+_commit="03b68760ef14b210abe4fb0801781ef3adac1e34"
+pkgdesc="Daemon providing a polkit authentication UI for KDE"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later"
+depends="polkit-elogind"
+makedepends="
+	extra-cmake-modules
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	polkit-qt-1-dev
+	qt6-qtbase-dev
+	samurai
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/polkit-kde-agent-1.git"
+source="http://localhost:8000/polkit-kde-agent-1-$_commit.tar.xz"
+subpackages="$pkgname-lang"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/polkit-kde-agent-1-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	# We don't ship systemd
+	rm -r "$pkgdir"/usr/lib/systemd
+}
+
+sha512sums="
+e77db1bb6cb50899bda100f29a1f6a3ba0be6c0d8cf88b8efd5ed8109075f3251f04b08048ecd2aab48e21f68607202f786965c15f09e048d050f455458b0fe5  polkit-kde-agent-1-03b68760ef14b210abe4fb0801781ef3adac1e34.tar.xz
+"

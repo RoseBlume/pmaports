@@ -1,0 +1,53 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-other
+pkgname=pulseaudio-qt
+pkgver=9999_git20230907
+pkgrel=0
+_commit="da98bd28a3994906df448b28f68230c755cf1c1e"
+arch="all !armhf" # armhf blocked by qt6-qtdeclarative
+url="https://invent.kde.org/libraries/pulseaudio-qt"
+pkgdesc="Pulseaudio bindings for Qt"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev="
+	glib-dev
+	pulseaudio-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qttools-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/libraries/pulseaudio-qt.git"
+source="http://localhost:8000/pulseaudio-qt-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc"
+
+options="!check"
+builddir="$srcdir/pulseaudio-qt-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+2cfd6a4a0bd46f8ef067b6651e80c703f20e8afed97394fa91fc64aa26aa2b549e64b15ac9218dbfc1a0dad7571660a063d980f7117b56e7ad4baf3dbdc1cd2b  pulseaudio-qt-da98bd28a3994906df448b28f68230c755cf1c1e.tar.xz
+"

@@ -1,0 +1,50 @@
+# Forked from Alpine INSERT-REASON-HERE (CHANGEME!)
+
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kcolorscheme
+pkgver=9999_git20230925
+pkgrel=0
+_commit="33789df0a9b71ea3fa9e0a7999a47dbbe15bd2be"
+pkgdesc="Classes to read and interact with KColorScheme"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.1-or-later"
+makedepends="
+	doxygen
+	extra-cmake-modules
+	graphviz
+	kconfig-dev
+	kguiaddons-dev
+	ki18n-dev
+	qt6-qtbase-dev
+	qt6-qttools-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/frameworks/kcolorscheme.git"
+source="http://localhost:8000/kcolorscheme-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kcolorscheme-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+37dd48f23b5195e6db131965420b0d0046fd4023d71ed8671790e4d6a9bbca79bc59fb75e4325b39cb07fd5330b00eaf0dcd0f851211c9532987446614ae7c86  kcolorscheme-33789df0a9b71ea3fa9e0a7999a47dbbe15bd2be.tar.xz
+"

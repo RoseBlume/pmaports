@@ -1,0 +1,54 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=kdecoration
+pkgver=9999_git20230917
+pkgrel=0
+_commit="88cca6c4d9931dc253f35f72753813be4d4a8900"
+pkgdesc="Plugin based library to create window decorations"
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev="
+	kcoreaddons-dev
+	ki18n-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/kdecoration.git"
+source="http://localhost:8000/kdecoration-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kdecoration-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run -a ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+2d5235ad05195c4193179956e23ceaa6df8ab1fb6c0d7746e6e7dd5253dc69da50f6a0f5e5c30ff97d7b26e35738eb8ed9fba61060688aa8ab648eced60a30b7  kdecoration-88cca6c4d9931dc253f35f72753813be4d4a8900.tar.xz
+"

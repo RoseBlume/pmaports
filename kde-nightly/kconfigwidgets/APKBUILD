@@ -1,0 +1,60 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kconfigwidgets
+pkgver=9999_git20230917
+pkgrel=0
+_commit="20d5ff2e82d9cb8626405ddd27035f3e63e4d69f"
+pkgdesc="Widgets for KConfig"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only AND LGPL-2.1-or-later"
+depends_dev="
+	kcolorscheme-dev
+	kauth-dev
+	kcodecs-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kguiaddons-dev
+	ki18n-dev
+	kwidgetsaddons-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	kdoctools-dev
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/kconfigwidgets.git"
+source="http://localhost:8000/kconfigwidgets-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kconfigwidgets-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure -E "kstandardactiontest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+e02a744c5c00d16434af671b8326db509f4280f45d3a7dc71f55bedda9e62bce01bc5ce3934ef229ef4c7ed93d6b27cd601ef36a668c582ee97121b2d40a8253  kconfigwidgets-20d5ff2e82d9cb8626405ddd27035f3e63e4d69f.tar.xz
+"

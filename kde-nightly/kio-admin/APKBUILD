@@ -1,0 +1,49 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kio-admin
+pkgver=9999_git20230917
+pkgrel=0
+_commit="ca9cec2cbef262b36fa5aa8829031ff89e6a879f"
+pkgdesc="Manage files as administrator using the admin:// KIO protocol"
+url="https://invent.kde.org/system/kio-admin"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+license="BSD-3-Clause AND (GPL-2.0-only OR GPL-3.0-only)"
+# zstd is purely used to unpack the source archive
+makedepends="
+	extra-cmake-modules
+	ki18n-dev
+	kio-dev
+	polkit-qt-1-dev
+	qt6-qtbase-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/system/kio-admin.git"
+source="http://localhost:8000/kio-admin-$_commit.tar.xz"
+
+options="!check"
+builddir="$srcdir/kio-admin-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+ff2a9abb029d19ce807335f572714de8b9a538274c0b71f9f5e0fbd47d6bde0d086b8c13b77bde13d4ef7ab96cee97eca697131b125f060a242f47126ec37717  kio-admin-ca9cec2cbef262b36fa5aa8829031ff89e6a879f.tar.xz
+"

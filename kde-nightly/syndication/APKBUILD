@@ -1,0 +1,51 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=syndication
+pkgver=9999_git20230829
+pkgrel=0
+_commit="3a284d46f86298cc7a076747582e67e1487e6b5c"
+pkgdesc="An RSS/Atom parser library"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.0-or-later AND BSD-3-Clause"
+depends_dev="
+	kcodecs-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	doxygen
+	graphviz
+	qt6-qttools-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/frameworks/syndication.git"
+source="http://localhost:8000/syndication-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc"
+
+options="!check"
+builddir="$srcdir/syndication-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+a3abfae5c623f20f6ed27aa5f553ef2ea9552a1b88710e5e8d76b9ebfccf63ea94ccfbbae8811ceb7da3503f18b8f900df4644f6d2df21595740785e1718b9e2  syndication-3a284d46f86298cc7a076747582e67e1487e6b5c.tar.xz
+"

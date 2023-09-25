@@ -1,0 +1,81 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=ark
+pkgver=9999_git20230920
+pkgrel=0
+_commit="69865809f8f68b1f2ab437bfdb561696434164a3"
+pkgdesc="Graphical file compression/decompression utility with support for multiple formats"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/utilities/org.kde.ark"
+license="GPL-2.0-only"
+depends="
+	7zip-virtual
+	lrzip
+	unzip
+	zip
+	zstd
+	"
+makedepends="
+	extra-cmake-modules
+	karchive-dev
+	kconfig-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	kitemmodels-dev
+	kparts-dev
+	kpty-dev
+	kservice-dev
+	kwidgetsaddons-dev
+	libarchive-dev
+	libzip-dev
+	qt6-qtbase-dev
+	samurai
+	shared-mime-info
+	xz-dev
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/utilities/ark.git"
+source="http://localhost:8000/ark-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+# secfixes:
+#   20.08.0-r1:
+#     - CVE-2020-24654
+#   20.04.3-r1:
+#     - CVE-2020-16116
+
+case "$CARCH" in
+	# FIXME: tests fail, see alpine/aports#14266
+	x86_64) options="!check";;
+esac
+
+options="!check"
+builddir="$srcdir/ark-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run -a ctest
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+85c5dce77c038d1b5bb2218745ccae6359e7404140703b7aaf051c9587bdebdc003629fb97fb10ee0ed303430e3f4d62ef6f923a6515631ab7e1d45d455bbe47  ark-69865809f8f68b1f2ab437bfdb561696434164a3.tar.xz
+"

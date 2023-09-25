@@ -1,0 +1,53 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kfind
+pkgver=9999_git20230925
+pkgrel=0
+_commit="de170a3a9d3fb4b2f84f6be2abc7766c2c80a2ff"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.kde.org/applications/utilities/kfind"
+pkgdesc="Find Files/Folders"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	karchive-dev
+	kcoreaddons-dev
+	kdoctools-dev
+	kfilemetadata-dev
+	ki18n-dev
+	kio-dev
+	ktextwidgets-dev
+	kwidgetsaddons-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/utilities/kfind.git"
+source="http://localhost:8000/kfind-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/kfind-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+6e88e22246ba936b63d22ec8a7f0aee54f9ef460373be45ef7a0d4dc7200d6e3a4de8fd36b0298bf5e0f228f49ef05b97a706941d933d433c7a3bc338b28156e  kfind-de170a3a9d3fb4b2f84f6be2abc7766c2c80a2ff.tar.xz
+"

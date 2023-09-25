@@ -1,0 +1,52 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=dolphin-plugins
+pkgver=9999_git20230802
+pkgrel=0
+_commit="f5d01b8f945e56c8752cc064d9573feb5f4018fc"
+pkgdesc="Extra Dolphin plugins"
+url="https://www.kde.org/applications/system/dolphin/"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+license="GPL-2.0-or-later"
+makedepends="
+	dolphin-dev
+	extra-cmake-modules
+	ki18n-dev
+	kio-dev
+	ktexteditor-dev
+	ktextwidgets-dev
+	kxmlgui-dev
+	qt6-qtbase-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/sdk/dolphin-plugins.git"
+source="http://localhost:8000/dolphin-plugins-$_commit.tar.xz"
+subpackages="$pkgname-lang"
+
+options="!check"
+builddir="$srcdir/dolphin-plugins-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_svn=OFF # Broken "error: expected unqualified-id before '(' token"
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+15dea87b01540e23c8510a3752837da0cb98c5ff50a4c2b82bc879db6e6340d7b27f3df953db37baef3fc8de3a2d0816fd2b3de8fb54961a9e3bbd63da1fcf86  dolphin-plugins-f5d01b8f945e56c8752cc064d9573feb5f4018fc.tar.xz
+"

@@ -1,0 +1,70 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kwindowsystem
+pkgver=9999_git20230917
+pkgrel=0
+_commit="55193320b58e0179d7c8fd056ff3d94805140bd5"
+pkgdesc="Access to the windowing system"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="MIT AND (LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev=""
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	libxrender-dev
+	qt6-qttools-dev
+	samurai
+	xcb-util-keysyms-dev
+	xcb-util-wm-dev
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/kwindowsystem.git"
+source="http://localhost:8000/kwindowsystem-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kwindowsystem-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# kwindowsystem-kwindowinfox11test hangs
+	# kwindowsystem-kwindowsystemx11test, kwindowsystem-kwindowsystem_threadtest and kwindowsystem-netrootinfotestwm are broken
+	# kwindowsystem-netwininfotestwm is broken on s390x
+	local skipped_tests="kwindowsystem-("
+	local tests="
+		kwindowinfox11test
+		kwindowsystemx11test
+		kwindowsystem_threadtest
+		netrootinfotestwm
+		"
+	case "$CARCH" in
+		s390x) tests="$tests
+			netwininfotestwm
+			"
+	esac
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)"
+	xvfb-run ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+11ba142d16e331b7b5705284b730d130c08dfcdcd9af179fa83090af56d709bf6ec4c7044c8356b9ad0f6d54063ae8358b44fbe7a23d1f222e941888b58ab4d1  kwindowsystem-55193320b58e0179d7c8fd056ff3d94805140bd5.tar.xz
+"

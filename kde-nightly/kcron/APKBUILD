@@ -1,0 +1,51 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kcron
+pkgver=9999_git20230925
+pkgrel=0
+_commit="14c939edc55a7facbb5564fc8c2ac24e8600a2fd"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/system/"
+pkgdesc="Configure and schedule tasks"
+license="GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	kcmutils-dev
+	kconfigwidgets-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	qt6-qtbase-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/system/kcron.git"
+source="http://localhost:8000/kcron-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kcron-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+03cb132031b8aa6305c4f632c42da410e76fc9da4df660e4adf3ec7aa88cb3c549875613ce1e7f48cbef0cb6f107c48aaef64a0137f751a25790aa4057a7ea48  kcron-14c939edc55a7facbb5564fc8c2ac24e8600a2fd.tar.xz
+"

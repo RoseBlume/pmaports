@@ -1,0 +1,89 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=dolphin
+pkgver=9999_git20230919
+pkgrel=0
+_commit="856716e8b6a1de36e85764f25be09f8d49f52d3e"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/system/dolphin"
+pkgdesc="KDE File Manager"
+license="GPL-2.0-only"
+depends="
+	udisks2
+	kio-extras
+	"
+depends_dev="
+	baloo-dev
+	baloo-widgets-dev
+	kactivities-dev
+	kbookmarks-dev
+	kcmutils-dev
+	kcompletion-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kfilemetadata-dev
+	ki18n-dev
+	kiconthemes-dev
+
+	kio-dev
+	knewstuff-dev
+	knotifications-dev
+	kparts-dev
+	ktextwidgets-dev
+	kuserfeedback-dev
+	kwindowsystem-dev
+	musl-fts-dev
+	phonon-dev
+	qt6-qtbase-dev
+	solid-dev
+	"
+makedepends="$depends_dev
+	kmoretools-dev
+	extra-cmake-modules
+	ruby-test-unit
+	samurai
+	"
+checkdepends="
+	xvfb-run
+	dbus
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang $pkgname-zsh-completion"
+_repo_url="https://invent.kde.org/system/dolphin.git"
+source="http://localhost:8000/dolphin-$_commit.tar.xz
+	
+	"
+
+options="!check"
+builddir="$srcdir/dolphin-$_commit"
+
+build() {
+	LDFLAGS="$LDFLAGS -Wl,-z,stack-size=0x100000" \
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# kfileitemmodeltest, placesitemmodeltest, dolphinmainwindowtest and kitemlistcontrollertest are broken
+	xvfb-run ctest --test-dir build --output-on-failure -E "(kfileitemmodel|placesitemmodel|dolphinmainwindow|kitemlistcontroller)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	# We don't ship systemd
+	rm -r "$pkgdir"/usr/lib/systemd
+}
+
+sha512sums="
+92c15bc8541d7bbe0e76ff766b6cfc02dff09033f9dacac366800cbc282382c88480ec6e68908d85f19fecbf3ca26415230ebedb65b092ea029018994566ed87  dolphin-856716e8b6a1de36e85764f25be09f8d49f52d3e.tar.xz
+"

@@ -1,0 +1,64 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=baloo-widgets
+pkgver=9999_git20230917
+pkgrel=0
+_commit="8de309d1608351504f35274bf7c7e2c5d256ac47"
+pkgdesc="Widgets for Baloo"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Baloo"
+license="LGPL-2.0-only AND LGPL-2.1-or-later"
+depends_dev="
+	baloo-dev
+	kconfig-dev
+	kfilemetadata-dev
+	ki18n-dev
+	kio-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/libraries/baloo-widgets.git"
+source="http://localhost:8000/baloo-widgets-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/baloo-widgets-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+	# filemetadatadatedisplaytest, filemetadatawidgettest and filemetadataitemcounttest
+	# require running dbus server
+	local skipped_tests="("
+	local tests="
+		filemetadatadatedisplay
+		filemetadatawidget
+		filemetadataitemcount"
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)|test"
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+5c8b00fdbacc5526b383d1438378ecd1618dc71ec59a7c469787a545108497885562b0ee09b590cb36559d94609f5d7b0d19414c991f345492bc7159d5cd25a8  baloo-widgets-8de309d1608351504f35274bf7c7e2c5d256ac47.tar.xz
+"

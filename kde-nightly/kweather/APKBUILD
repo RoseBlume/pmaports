@@ -1,0 +1,60 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kweather
+pkgver=9999_git20230621
+pkgrel=0
+_commit="1dfe7bb811ab56721d418af5a1a425021930f8bc"
+pkgdesc="Weather application for Plasma Mobile"
+url="https://invent.kde.org/plasma-mobile/kweather"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+license="GPL-2.0-or-later AND CC-BY-4.0"
+depends="
+	kirigami-addons
+	kirigami2
+	kquickcharts
+	"
+makedepends="
+	extra-cmake-modules
+	kconfig-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kirigami-addons-dev
+	kirigami2-dev
+	knotifications-dev
+	kquickcharts-dev
+	kweathercore-dev
+	plasma-framework-dev
+	qt6-qtbase-dev
+	qt6-qtcharts-dev
+	qt6-qtdeclarative-dev
+
+	qt6-qtsvg-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/utilities/kweather.git"
+source="http://localhost:8000/kweather-$_commit.tar.xz"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/kweather-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+106bbf4fa774650b0922b13040b3493e323a00555ee63d3f3e952e3447708f67daa887daf0f2434bac3cd4b4b0c8fd2a93cd12f6b08d46be9d59afb77f961f7f  kweather-1dfe7bb811ab56721d418af5a1a425021930f8bc.tar.xz
+"

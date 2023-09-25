@@ -1,0 +1,55 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this apkbuild by some scripts for automation
+# group=kde-frameworks
+pkgname=kguiaddons
+pkgver=9999_git20230925
+pkgrel=0
+_commit="ff96b0a30f3e230c8365369a287dc34f76367e28"
+pkgdesc="Addons to QtGui"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev="
+	plasma-wayland-protocols
+	qt6-qttools-dev
+	qt6-qtwayland-dev
+
+	wayland-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	doxygen
+	graphviz
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/kguiaddons.git"
+source="http://localhost:8000/kguiaddons-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc"
+
+options="!check"
+builddir="$srcdir/kguiaddons-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+fb58ca63e1670b993adee2796c57f7af7db37b6af58a56984d24901d0828a5b8e2b5177e7661ca639c1a8e6a296494ac72e36c012e7f70c9b0591280c216ac68  kguiaddons-ff96b0a30f3e230c8365369a287dc34f76367e28.tar.xz
+"

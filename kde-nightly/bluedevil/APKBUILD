@@ -1,0 +1,70 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=bluedevil
+pkgver=9999_git20230924
+pkgrel=0
+_commit="9cd5659740ce8437ff69c12c9778e58a4c14df13"
+pkgdesc="Integrate the Bluetooth technology within KDE workspace and applications"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND LGPL-2.0-or-later AND ( LGPL-2.1-only OR LGPL-3.0-only )"
+depends="
+	bluez
+	kded
+	obexd
+	"
+makedepends="
+	bluez-qt-dev
+	extra-cmake-modules
+	kcmutils-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	kded-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	knotifications-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	plasma-framework-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	samurai
+	shared-mime-info
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/bluedevil.git"
+source="http://localhost:8000/bluedevil-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/bluedevil-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+41f9841dc272fdcf97452859c2d04788af20d9c35699ac526dfa84ac35db97dcf21f92571e1ffb6e6d053e1cfc244ca8b1f5dfa16aed38b87a517c5bf8bf144b  bluedevil-9cd5659740ce8437ff69c12c9778e58a4c14df13.tar.xz
+"

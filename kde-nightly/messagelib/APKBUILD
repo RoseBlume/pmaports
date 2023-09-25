@@ -1,0 +1,89 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=messagelib
+pkgver=9999_git20230925
+pkgrel=0
+_commit="5ede130fac9feb1bbeb2185901ba976900f6e347"
+pkgdesc="KDE PIM messaging library"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kontact.kde.org/"
+license="LGPL-2.0-only OR LGPL-3.0-only AND GPL-2.0-or-later"
+depends_dev="
+	akonadi-contacts-dev
+	akonadi-dev
+	akonadi-mime-dev
+	akonadi-search-dev
+	gpgme-dev
+	grantlee-dev
+	grantleetheme-dev
+	karchive-dev
+	kcodecs-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcontacts-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kidentitymanagement-dev
+	kio-dev
+	kitemviews-dev
+	kjobwidgets-dev
+	kldap-dev
+	kmailtransport-dev
+	kmbox-dev
+	kmime-dev
+	knewstuff-dev
+	kpimtextedit-dev
+	kservice-dev
+	ktextwidgets-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	libgravatar-dev
+	libkdepim-dev
+	libkleo-dev
+	pimcommon-dev
+	qca-qt6-dev
+	qt6-qtbase-dev
+	qt6-qtwebengine-dev
+	sonnet-dev
+	syntax-highlighting-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/pim/messagelib.git"
+source="http://localhost:8000/messagelib-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+options="!check" # Requires OpenGL and running dbus server
+
+options="!check"
+builddir="$srcdir/messagelib-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+90fbc42608a4567ca5672665a015d7982b54b8f4b983f1bd7d8ba8db6ce35c5fb2f5327006ddac5a59688dc6e58f41e37b6cd3e739161a5c1c9be44d0c1db049  messagelib-5ede130fac9feb1bbeb2185901ba976900f6e347.tar.xz
+"

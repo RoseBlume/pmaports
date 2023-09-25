@@ -1,0 +1,52 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kcrash
+pkgver=9999_git20230829
+pkgrel=0
+_commit="5401330cac65066673535e231ab9379c8cb3ac14"
+pkgdesc="Support for application crash analysis and bug report from apps"
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-or-later"
+depends_dev="
+	kcoreaddons-dev
+	kwindowsystem-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/kcrash.git"
+source="http://localhost:8000/kcrash-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc"
+
+options="!check"
+builddir="$srcdir/kcrash-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# kcrashtest is broken
+	xvfb-run ctest --test-dir build --output-on-failure -E "kcrashtest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+be20899ff344b2e63d0289e2b17bd77ccf2c2e007d23c7f3c2844e923dc6eec284b8a109a978b474ed0b2dc2a8da6aa95d057ba50847e6745d163df2e494c66e  kcrash-5401330cac65066673535e231ab9379c8cb3ac14.tar.xz
+"

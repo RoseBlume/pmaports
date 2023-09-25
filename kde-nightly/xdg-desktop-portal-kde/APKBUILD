@@ -1,0 +1,63 @@
+# Contributor: Rasmus Thomsen <oss@cogitri.dev>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=xdg-desktop-portal-kde
+pkgver=9999_git20230919
+pkgrel=0
+_commit="7e16cded9ce721d86f40f8d2d0c5979de7e90d3c"
+pkgdesc="A backend implementation for xdg-desktop-portal that is using Qt/KDE"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://phabricator.kde.org/source/xdg-desktop-portal-kde"
+license="LGPL-2.0-or-later"
+depends="xdg-desktop-portal"
+makedepends="
+	kstatusnotifieritem-dev
+	cups-dev
+	extra-cmake-modules
+	glib-dev
+	kcoreaddons-dev
+	kdeclarative-dev
+	kio-dev
+	kirigami2-dev
+	kwayland-dev
+	libepoxy-dev
+	pipewire-dev
+	plasma-framework-dev
+	plasma-wayland-protocols
+	qt6-qtbase-dev
+	samurai
+	xdg-desktop-portal-dev
+	"
+subpackages="$pkgname-lang"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/xdg-desktop-portal-kde.git"
+source="http://localhost:8000/xdg-desktop-portal-kde-$_commit.tar.xz"
+
+options="!check"
+builddir="$srcdir/xdg-desktop-portal-kde-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DKDE_INSTALL_LIBEXECDIR=libexec
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	rm -rf "$pkgdir"/usr/lib/systemd
+}
+
+sha512sums="
+0a8dea7430ce0daefdcb386377c6fe6b6fcc2faa2af110b9c7d34a1d54482e5d663f188dfaf78b05d031960688c46fbb2e1d59110bb79c572ca6eea284e11d48  xdg-desktop-portal-kde-7e16cded9ce721d86f40f8d2d0c5979de7e90d3c.tar.xz
+"

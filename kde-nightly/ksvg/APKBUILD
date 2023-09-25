@@ -1,0 +1,54 @@
+# Forked from Alpine INSERT-REASON-HERE (CHANGEME!)
+
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=ksvg
+pkgver=9999_git20230925
+pkgrel=0
+_commit="7504d247b0e332a042497f68cab19a767368309a"
+pkgdesc="Configuration system"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.1-or-later"
+makedepends="
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qtdeclarative-dev
+	qt6-qttools-dev
+	karchive-dev
+	kconfig-dev
+	kcolorscheme-dev
+	kcoreaddons-dev
+	kguiaddons-dev
+	kirigami2-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/ksvg.git"
+source="http://localhost:8000/ksvg-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc"
+
+options="!check"
+builddir="$srcdir/ksvg-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure -E 'ksvg(core-(ksvgtest|kdesktopfiletest|test_kconf_update)|gui-kstandardshortcutwatchertest)'
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+5d617f96dc422dae9c6f4e7563f54da95bfa76a07d143463ec9f92e4c1b25586ccc3885e14d9406683c7f39fedc0c522a9624181ed5bdea531370be147437fcc  ksvg-7504d247b0e332a042497f68cab19a767368309a.tar.xz
+"

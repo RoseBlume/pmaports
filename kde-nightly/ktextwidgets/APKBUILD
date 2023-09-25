@@ -1,0 +1,59 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=ktextwidgets
+pkgver=9999_git20230917
+pkgrel=0
+_commit="c2ac5d136d6c86b889d42ada2ccc4ecc847e6aac"
+pkgdesc="Advanced text editing widgets"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-or-later"
+depends_dev="
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	ki18n-dev
+	kiconthemes-dev
+	kservice-dev
+	kwidgetsaddons-dev
+	qt6-qtspeech-dev
+	sonnet-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/ktextwidgets.git"
+source="http://localhost:8000/ktextwidgets-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/ktextwidgets-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+597cb94e478606ed693e651cce37ae8858921dab0f956cb46f11d6636a0c6bf467ea86ee103f367c87749138cdba441cbb7e36981bccac362ca9cc183a59b818  ktextwidgets-c2ac5d136d6c86b889d42ada2ccc4ecc847e6aac.tar.xz
+"

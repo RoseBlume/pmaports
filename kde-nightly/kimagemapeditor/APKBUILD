@@ -1,0 +1,61 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kimagemapeditor
+pkgver=9999_git20230917
+pkgrel=0
+_commit="6cf122857df0b532af7b7a8de93bd93030bbfe6c"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kde.org/applications/development/org.kde.kimagemapeditor"
+pkgdesc="An editor of image maps embedded inside HTML files, based on the <map> tag"
+license="GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kguiaddons-dev
+
+	ki18n-dev
+	kiconthemes-dev
+	kparts-dev
+	kwidgetsaddons-dev
+	kxmlgui-dev
+	qt6-qtbase-dev
+	qt6-qtwebengine-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/graphics/kimagemapeditor.git"
+source="http://localhost:8000/kimagemapeditor-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/kimagemapeditor-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+2bfca595e2260dd99fa5e461a74cd6baa313f0abd112f924c65c501ec6127883b625655f1f7248694ef98f37b5521ac1d4aefaea1bded3315624912ff88b26e3  kimagemapeditor-6cf122857df0b532af7b7a8de93bd93030bbfe6c.tar.xz
+"

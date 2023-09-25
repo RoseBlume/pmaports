@@ -1,0 +1,128 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=kwin
+pkgver=9999_git20230925
+pkgrel=0
+_commit="f24a0a5e17f9871a3b05d593afe430ca439f51ea"
+pkgdesc="An easy to use, but flexible, composited Window Manager"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND LGPL-2.1-only"
+depends="
+	hwdata
+	kirigami2
+	qt6-qtmultimedia
+	qt6-qtwayland
+	xwayland
+	"
+depends_dev="
+	ksvg-dev
+	breeze-dev
+	eudev-dev
+	fontconfig-dev
+	kactivities-dev
+	kcmutils-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdeclarative-dev
+	kdecoration-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kiconthemes-dev
+	kidletime-dev
+
+	kio-dev
+	knewstuff-dev
+	knotifications-dev
+	kpackage-dev
+	krunner-dev
+	kscreenlocker-dev
+	kservice-dev
+	ktextwidgets-dev
+	kwayland-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	lcms2-dev
+	libdrm-dev
+	libepoxy-dev
+	libinput-dev
+	libqaccessibilityclient-dev
+	libxcvt-dev
+	libxi-dev
+	libxkbcommon-dev
+	mesa-dev
+	mesa-gbm
+	pipewire-dev
+	plasma-framework-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+
+	qt6-qtsensors-dev
+
+	wayland-dev
+	xcb-util-cursor-dev
+	xcb-util-image-dev
+	xcb-util-wm-dev
+	"
+makedepends="$depends_dev
+	kglobalacceld-dev
+	kpipewire-dev
+	libdisplay-info-dev
+	plasma-wayland-protocols
+	extra-cmake-modules
+	kdoctools-dev
+	libcap-utils
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/kwin.git"
+source="http://localhost:8000/kwin-$_commit.tar.xz"
+subpackages="$pkgname-dbg $pkgname-dev $pkgname-doc $pkgname-lang"
+options="!check" # Broken
+
+options="!check"
+builddir="$srcdir/kwin-$_commit"
+
+build() {
+	# significantly reduce debug symbol size
+	# use None here to not make cmake pass bare -g (-g2)
+	CFLAGS="$CFLAGS -O2 -g1" CXXFLAGS="$CXXFLAGS -O2 -g1" \
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	# We don't ship systemd
+	rm -r "$pkgdir"/usr/lib/systemd
+
+	# kwin_wayland has CAP_SYS_NICE set. Because of this, libdbus doesn't trust the
+	# environment and ignores it, causing for example keyboard shortcuts to not work
+	# Remove CAP_SYS_NICE from kwin_wayland to make them work again
+	
+}
+sha512sums="
+a911ced72944623a001086813860c03610fad8492f6864e122c3a8b773cb95e5158626b43459221c17bd11645021d207a0acb6ec7001523b97a8da1d290d40a7  kwin-f24a0a5e17f9871a3b05d593afe430ca439f51ea.tar.xz
+"

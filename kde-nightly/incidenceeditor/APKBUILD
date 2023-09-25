@@ -1,0 +1,67 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=incidenceeditor
+pkgver=9999_git20230925
+pkgrel=0
+_commit="063efceec70e987b5f1907e869fd76f5814d1f94"
+pkgdesc="KDE PIM incidence editor"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kontact.kde.org/"
+license="LGPL-2.0-or-later AND GPL-2.0-or-later"
+depends_dev="
+	akonadi-dev
+	akonadi-mime-dev
+	calendarsupport-dev
+	eventviews-dev
+	kcalendarcore-dev
+	kcalutils-dev
+	kcodecs-dev
+	kdiagram-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	kldap-dev
+	kmailtransport-dev
+	kmime-dev
+	libkdepim-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/pim/incidenceeditor.git"
+source="http://localhost:8000/incidenceeditor-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/incidenceeditor-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+
+	# akonadi-sqlite-incidencedatetimetest and akonadi-mysql-incidencedatetimetest require running DBus
+	# ktimezonecomboboxtest is broken
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "(akonadi-(sqlite|mysql)-incidencedatetime|ktimezonecombobox)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+ba3c27b791e40b6b85c23554cc2ccd7279b38b5ed61ddd87510044b5543f7e4bda21a094ce5ca30a4ddefbfaae5c7901dd4757c060c4644163d33b300c7176c1  incidenceeditor-063efceec70e987b5f1907e869fd76f5814d1f94.tar.xz
+"

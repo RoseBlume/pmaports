@@ -1,0 +1,55 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=layer-shell-qt
+pkgver=9999_git20230906
+pkgrel=0
+_commit="721c0ae334554eb2396a2d4d3358f896b8c77412"
+pkgdesc="Qt component to allow applications to make use of the Wayland wl-layer-shell protocol"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)"
+depends_dev="
+	qt6-qtdeclarative-dev
+	qt6-qtwayland-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	wayland-protocols
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/layer-shell-qt.git"
+source="http://localhost:8000/layer-shell-qt-$_commit.tar.xz"
+subpackages="$pkgname-dev"
+
+options="!check"
+builddir="$srcdir/layer-shell-qt-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DENABLE_TESTING=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+bb22606145fa64035b4de2094f1496b0d823ab891fb22311133ab8d900dc5154bf3c8a0d4187c42cad5f72f92d52bad06cd3ad3150668bb52829a4ffdee51444  layer-shell-qt-721c0ae334554eb2396a2d4d3358f896b8c77412.tar.xz
+"

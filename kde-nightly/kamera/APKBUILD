@@ -1,0 +1,54 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kamera
+pkgver=9999_git20230921
+pkgrel=0
+_commit="05fb7232b11a4e5b52ea587adeb5a32d317180e9"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/graphics"
+pkgdesc="KDE integration for gphoto2 cameras"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kcmutils-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kdoctools-dev
+	ki18n-dev
+	kio-dev
+	kxmlgui-dev
+	libgphoto2-dev
+	qt6-qtbase-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/graphics/kamera.git"
+source="http://localhost:8000/kamera-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/kamera-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+ee3321534af286e75a5e45d0cdadc41819687bd97efc39011d0345c6352abf6126e8a2e5747cfff3f94e8887db6fb28cd8c08d8bc6e990456aa475ad68906d82  kamera-05fb7232b11a4e5b52ea587adeb5a32d317180e9.tar.xz
+"

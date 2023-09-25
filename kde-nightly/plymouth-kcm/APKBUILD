@@ -1,0 +1,61 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=plymouth-kcm
+pkgver=9999_git20230917
+pkgrel=0
+_commit="5c1650aa8dcd4df404fe2184eb09cd3a2869e641"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://invent.kde.org/plasma/plymouth-kcm"
+pkgdesc="KCM to manage the Plymouth (Boot) theme"
+license="GPL-2.0-or-later"
+depends="plymouth"
+makedepends="
+	extra-cmake-modules
+	karchive-dev
+	kcmutils-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kdeclarative-dev
+	ki18n-dev
+	kio-dev
+	knewstuff-dev
+	plymouth-dev
+	qt6-qtbase-dev
+	samurai
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/plymouth-kcm.git"
+source="http://localhost:8000/plymouth-kcm-$_commit.tar.xz"
+subpackages="$pkgname-lang"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/plymouth-kcm-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+aac7f8791f3394c75b567244e11233bbde9ba510500f65a02d7fa589b172b9d26fba1a1df10969367c09ea4224c58d095860aab394e0954d2fc70965692afbf7  plymouth-kcm-5c1650aa8dcd4df404fe2184eb09cd3a2869e641.tar.xz
+"

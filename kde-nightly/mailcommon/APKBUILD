@@ -1,0 +1,75 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=mailcommon
+pkgver=9999_git20230925
+pkgrel=0
+_commit="3e0067f738429d51db425f5ac231b991487f4130"
+pkgdesc="KDE PIM library providing support for mail applications"
+# riscv64 disabled due to missing rust in recursive dependency
+arch="all !ppc64le !s390x !armhf !riscv64" # Limited by messagelib -> qt6-qtwebengine
+url="https://kontact.kde.org/"
+license="GPL-2.0-or-later"
+# TODO: Consider replacing gnupg with specific gnupg subpackages that mailcommon really needs.
+depends="gnupg"
+depends_dev="
+	akonadi-dev
+	akonadi-mime-dev
+	karchive-dev
+	kcodecs-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	kitemmodels-dev
+	kitemviews-dev
+	kmailtransport-dev
+	ktextwidgets-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	libkdepim-dev
+	mailimporter-dev
+	messagelib-dev
+	qt6-qtbase-dev
+	qt6-qttools-dev
+	syntax-highlighting-dev
+	"
+makedepends="
+	$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/pim/mailcommon.git"
+source="http://localhost:8000/mailcommon-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+options="!check" # Requires running dbus server
+
+options="!check"
+builddir="$srcdir/mailcommon-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+17420e2eb7675e7cde1eac3242e7b1063e6311f7635a70efff2175281ea201fd946405ec865ca892700f72cb82a21ae6ba1bc9ffc4270c9b5de84144a87ead39  mailcommon-3e0067f738429d51db425f5ac231b991487f4130.tar.xz
+"

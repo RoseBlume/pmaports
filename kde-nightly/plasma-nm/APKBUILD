@@ -1,0 +1,87 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=plasma-nm
+pkgver=9999_git20230925
+pkgrel=0
+_commit="99f06e5228e0aa90444d98569c60c0c4943d907c"
+pkgdesc="Plasma applet written in QML for managing network connections"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="(LGPL-2.1-only OR LGPL-3.0-only) AND LGPL-2.0-or-later"
+depends="
+	kirigami2
+	networkmanager
+	"
+makedepends="
+	ksvg-dev
+	qcoro-dev
+	extra-cmake-modules
+	kcmutils-dev
+	kcompletion-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	knotifications-dev
+	kservice-dev
+	kwallet-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	mobile-broadband-provider-info
+	modemmanager-qt-dev
+	networkmanager-qt-dev
+	plasma-framework-dev
+	prison-dev
+	qca-qt6-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	samurai
+	solid-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/plasma-nm.git"
+source="http://localhost:8000/plasma-nm-$_commit.tar.xz"
+subpackages="$pkgname-lang "
+
+options="!check"
+builddir="$srcdir/plasma-nm-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_MOBILE=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+mobile() {
+	pkgdesc="$pkgdesc (mobile KCM's)"
+	depends="$depends $pkgname"
+
+	amove usr/share/kpackage
+	amove usr/lib/qt6/plugins/kcms
+}
+
+sha512sums="
+8b80333d664646be560e6d84b223f168f1753978a1c971d8fd1fc7cb7db94ee78fd0d070473b30c03a497f8879cab88d5c36495a49d1f4ed12e5eb036e9bae11  plasma-nm-99f06e5228e0aa90444d98569c60c0c4943d907c.tar.xz
+"

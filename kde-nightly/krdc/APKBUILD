@@ -1,0 +1,63 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=krdc
+pkgver=9999_git20230917
+pkgrel=0
+_commit="900c2c1fa6c8bd8e670cf6c8a850bc994a5f32f2"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/internet/krdc/"
+pkgdesc="Remote Desktop Client"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+depends="freerdp"
+makedepends="
+	kstatusnotifieritem-dev
+	extra-cmake-modules
+	kbookmarks-dev
+	kcmutils-dev
+	kcompletion-dev
+	kconfig-dev
+	kdnssd-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	knotifications-dev
+	knotifyconfig-dev
+	knotifyconfig-dev
+	kwallet-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	libssh-dev
+	libvncserver-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/network/krdc.git"
+source="http://localhost:8000/krdc-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/krdc-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c10cc4eb8ef74f258e59f21fd3e68bbe2007639f84443f6076bc1da981f9ca9ab0c1852f0a308b281bd6ee256c0b1d2ee61a8b5ca14f55511d8dd0ae4eae89d6  krdc-900c2c1fa6c8bd8e670cf6c8a850bc994a5f32f2.tar.xz
+"

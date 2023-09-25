@@ -1,0 +1,54 @@
+# Maintainer: team/kde <bribbers@disroot.org>
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kactivities-stats
+pkgver=9999_git20230924
+pkgrel=0
+_commit="25251da1b7596e130b2c562e53f77fa2e24739d5"
+arch="all !armhf" # armhf blocked by qt6-qtdeclarative
+pkgdesc="A library for accessing the usage data collected by the activities system"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev="
+	boost-dev
+	graphviz-dev
+	kactivities-dev
+	kconfig-dev
+	qt6-qtdeclarative-dev
+	qt6-qttools-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qtbase-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/frameworks/kactivities-stats.git"
+source="http://localhost:8000/kactivities-stats-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc"
+
+options="!check"
+builddir="$srcdir/kactivities-stats-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+b09fb40b0c16327a9d5b856fd9559956541874fba57b4eea909f29b50719784fe940e6a3a1d574c8f3ed2debce956891c5a1d04e03b4b762c1bfb384e83778e9  kactivities-stats-25251da1b7596e130b2c562e53f77fa2e24739d5.tar.xz
+"

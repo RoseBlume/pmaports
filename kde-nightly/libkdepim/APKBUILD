@@ -1,0 +1,67 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=libkdepim
+pkgver=9999_git20230922
+pkgrel=0
+_commit="8f956900cb723066a4d454b9b04790107d0c4136"
+pkgdesc="Lib for common KDEPim apps"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://community.kde.org/KDE_PIM"
+license="GPL-2.0-or-later AND LGPL-2.0-or-later"
+depends_dev="
+	akonadi-contacts-dev
+	akonadi-dev
+	akonadi-search-dev
+	kcmutils-dev
+	kcodecs-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	kitemviews-dev
+	kjobwidgets-dev
+	kldap-dev
+	kwallet-dev
+	kwidgetsaddons-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/pim/libkdepim.git"
+source="http://localhost:8000/libkdepim-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/libkdepim-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_DESIGNERPLUGIN=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+6b6acbb0b3621238b7bbf5ba3428501bc19ce1ef26cb1d1a98f493f226fe934c84efcd90f1f3ad5e8539945a9a17f04d215d955fe8db9c9513a3d59ed483d275  libkdepim-8f956900cb723066a4d454b9b04790107d0c4136.tar.xz
+"

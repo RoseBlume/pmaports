@@ -1,0 +1,55 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=klettres
+pkgver=9999_git20230921
+pkgrel=0
+_commit="94c8412831578e41c31a28f8976b2e10702393d0"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://edu.kde.org/klettres"
+pkgdesc="Learn the Alphabet"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kcompletion-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdoctools-dev
+	ki18n-dev
+	knewstuff-dev
+	kwidgetsaddons-dev
+	qt6-qtbase-dev
+	qt6-qtsvg-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/education/klettres.git"
+source="http://localhost:8000/klettres-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+options="!check" # No tests
+
+options="!check"
+builddir="$srcdir/klettres-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+343bcff716e98c122dc08a7991449ce35a3cc15abb70c950d786379418bdf196a09f16ec7242799009651327cef12180f3a3acc1b0cef206340ce0ee32ae076f  klettres-94c8412831578e41c31a28f8976b2e10702393d0.tar.xz
+"

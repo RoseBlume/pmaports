@@ -1,0 +1,56 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=breeze-icons
+pkgver=9999_git20230925
+pkgrel=0
+_commit="1523174c4249b36532dbe270042af05f516e7957"
+pkgdesc="Breeze icon themes"
+arch="noarch !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-3.0-or-later"
+makedepends="
+	extra-cmake-modules
+	py3-lxml
+	python3
+	qt6-qtbase-dev
+	samurai
+	"
+checkdepends="bash"
+subpackages="$pkgname-dev"
+_repo_url="https://invent.kde.org/frameworks/breeze-icons.git"
+source="http://localhost:8000/breeze-icons-$_commit.tar.xz"
+
+# Several KDE applications use icons not yet present in most themes
+# We want to keep the possibility for users to not use the KDE provided
+# breeze-icons theme however, as hopefully in the future this situation changes
+# Thus let any theme that provides these icons provide "kde-icons" so the user
+# retains their ability to choose their preferred theme
+provides="kde-icons"
+provider_priority=100
+
+options="!check"
+builddir="$srcdir/breeze-icons-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBINARY_ICONS_RESOURCE=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure -E '(dupe|symlink)'
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+a4ec69da2248a1ffcd93e8cb467c9fcf3fd5538715c0e53c5cbc91a28b5e40a48f42f39a5b11d851231bd05948d6936cbe3abce484a689fb8c284e757ddbac8e  breeze-icons-1523174c4249b36532dbe270042af05f516e7957.tar.xz
+"

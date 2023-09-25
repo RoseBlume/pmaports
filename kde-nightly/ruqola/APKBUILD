@@ -1,0 +1,85 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-other
+pkgname=ruqola
+pkgver=9999_git20230925
+pkgrel=0
+_commit="dda777382bba435bc99dc5f15b678436982f21d6"
+pkgdesc="A Qt client for Rocket Chat"
+url="https://invent.kde.org/network/ruqola"
+# armhf blocked by qt6-qtdeclarative-dev
+arch="all !armhf"
+license="GPL-2.0-only OR GPL-3.0-only"
+makedepends="
+	ktextaddons-dev
+	kstatusnotifieritem-dev
+	extra-cmake-modules
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kidletime-dev
+	kio-dev
+	knotifications-dev
+	knotifyconfig-dev
+	ktextwidgets-dev
+	kuserfeedback-dev
+	kxmlgui-dev
+	libsecret-dev
+	prison-dev
+	qt6-qtbase-dev
+	qtkeychain-dev
+	qt6-qtmultimedia-dev
+	qt6-qtnetworkauth-dev
+	qt6-qtwebsockets-dev
+	samurai
+	sonnet-dev
+	syntax-highlighting-dev
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/network/ruqola.git"
+source="http://localhost:8000/ruqola-$_commit.tar.xz"
+
+options="!check"
+builddir="$srcdir/ruqola-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# Skip broken tests
+	local skipped_tests="("
+	local tests="
+		roomscleanhistoryjob
+		roomsexportjob
+		user
+		channelcounterinfo
+		roomheaderwidget
+		messagelinewidget
+		messagelistdelegate
+		inviteuserswidget
+		showvideowidget
+		"
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)test"
+	xvfb-run ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+2ac5267f65d32ebfc1d3cbf9619b11fdaa5c18f6150c1fdf25c7849758c6a9f8b9cf3628bf421bac35f5b64b388eb67facc1e28b7ee4dbaa9c82e454a47a8ea5  ruqola-dda777382bba435bc99dc5f15b678436982f21d6.tar.xz
+"

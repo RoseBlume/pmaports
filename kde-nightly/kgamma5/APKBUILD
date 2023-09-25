@@ -1,0 +1,55 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=kgamma5
+pkgver=9999_git20230917
+pkgrel=0
+_commit="d27f4420f1a5f3a627ae58715f2770e75f3e30d8"
+pkgdesc="Adjust your monitor's gamma settings"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later"
+makedepends="
+	kcmutils-dev
+	extra-cmake-modules
+	kconfig-dev
+	kconfigwidgets-dev
+	kdoctools-dev
+	ki18n-dev
+	qt6-qtbase-dev
+	samurai
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/kgamma5.git"
+source="http://localhost:8000/kgamma5-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kgamma5-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+b2da26de2a09d1889dbb03feb61da2b4c0465f0be5f8c705bfa11ec86f982fdd7a2f89df1262f493b15f37f068b97806b70a1eb7007901ef62473e7921a79b05  kgamma5-d27f4420f1a5f3a627ae58715f2770e75f3e30d8.tar.xz
+"

@@ -1,0 +1,66 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=eventviews
+pkgver=9999_git20230925
+pkgrel=0
+_commit="5bbd7cf0a1491e5cfff6a9e34b6a8c440bdce48e"
+pkgdesc="Library for creating events"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kontact.kde.org/"
+license="GPL-2.0-or-later"
+depends_dev="
+	akonadi-calendar-dev
+	akonadi-dev
+	calendarsupport-dev
+	kcalendarcore-dev
+	kcalutils-dev
+	kcodecs-dev
+	kcompletion-dev
+	kdiagram-dev
+	kguiaddons-dev
+	kholidays-dev
+	ki18n-dev
+	kiconthemes-dev
+	kmime-dev
+	kservice-dev
+	libkdepim-dev
+	qt6-qtbase-dev
+	"
+checkdepends="xvfb-run"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	samurai
+	"
+_repo_url="https://invent.kde.org/pim/eventviews.git"
+source="http://localhost:8000/eventviews-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/eventviews-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+9bfe3d64b872b7ad699e891264a40fbe966bccaae2f2eb0f022c7b87f9283bea48f50124c86bb877ea4ab9e00573881b59270e363dbdc59f31c9e4b2d2d0c155  eventviews-5bbd7cf0a1491e5cfff6a9e34b6a8c440bdce48e.tar.xz
+"

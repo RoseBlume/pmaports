@@ -1,0 +1,79 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kio
+pkgver=9999_git20230925
+pkgrel=0
+_commit="d577939906d154cbf3cc5b0dfc4608eeb098b215"
+pkgdesc="Resource and network access abstraction"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only AND LGPL-2.1-or-later AND (LGPL-2.1-only OR LGPL-3.0-only)"
+depends_dev="
+	karchive-dev
+	kbookmarks-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kitemviews-dev
+	kjobwidgets-dev
+	knotifications-dev
+	kservice-dev
+	kwallet-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+
+	solid-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	kdoctools-dev
+	libxml2-dev
+	libxslt-dev
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/kio.git"
+source="http://localhost:8000/kio-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-dbg $pkgname-doc $pkgname-lang $pkgname-kwallet"
+options="!check" # Fails due to requiring physical devices not normally available and test 14 hangs
+
+options="!check"
+builddir="$srcdir/kio-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+kwallet() {
+	pkgdesc="$pkgname KWallet integration"
+
+	amove usr/lib/qt6/plugins/kf6/kiod/kpasswdserver.so
+}
+
+sha512sums="
+7894b6979d2803ab5fb732c76691c19e5e0444e7a0f9f4dbb8d69225f10c62d3ce85ca6b9587757fc5821f4f96a6398aa770522d7544e0527f763f8cd9f62ed0  kio-d577939906d154cbf3cc5b0dfc4608eeb098b215.tar.xz
+"

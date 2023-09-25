@@ -1,0 +1,64 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=yakuake
+pkgver=9999_git20230917
+pkgrel=0
+_commit="ca3b25d2ef8b60ce9f028b602530f87a71dd6b5e"
+arch="all !armhf"
+url="https://kde.org/applications/system/org.kde.yakuake"
+pkgdesc="A drop-down terminal emulator based on KDE Konsole technology"
+license="GPL-2.0-only OR GPL-3.0-only"
+depends="konsole"
+makedepends="
+	kstatusnotifieritem-dev
+	extra-cmake-modules
+	karchive-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	knewstuff-dev
+	knotifications-dev
+	knotifyconfig-dev
+	kparts-dev
+	kwayland-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	qt6-qtbase-dev
+	qt6-qtsvg-dev
+
+	samurai
+	"
+_repo_url="https://invent.kde.org/utilities/yakuake.git"
+source="http://localhost:8000/yakuake-$_commit.tar.xz"
+subpackages="$pkgname-lang"
+
+options="!check"
+builddir="$srcdir/yakuake-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+eb09bea333ddcdd7fe5e3b0cb9e8fc76c7c2fe49e0563e34193ff34a3e33c83a8e04bf2822e0c88e94ee32b1958b18d8a5d5902a95e05a3b9ba2ffedc7607da3  yakuake-ca3b25d2ef8b60ce9f028b602530f87a71dd6b5e.tar.xz
+"

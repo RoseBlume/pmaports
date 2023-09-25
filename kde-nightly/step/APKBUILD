@@ -1,0 +1,58 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=step
+pkgver=9999_git20230917
+pkgrel=0
+_commit="8b28298302597d03fdc28946286df8fecc3b5586"
+# armhf blocked by extra-cmake-modules
+# s390x blocked by 
+# riscv64 disabled due to missing rust in recursive dependency
+arch="all !armhf !s390x !riscv64"
+url="https://edu.kde.org/step/"
+pkgdesc="Interactive Physics Simulator"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	eigen-dev
+	extra-cmake-modules
+	kconfig-dev
+	kcrash-dev
+	kdoctools-dev
+
+	kiconthemes-dev
+	knewstuff-dev
+	kplotting-dev
+	qt6-qtbase-dev
+	qt6-qtsvg-dev
+	qt6-qttools-dev
+	samurai
+	shared-mime-info
+	"
+_repo_url="https://invent.kde.org/education/step.git"
+source="http://localhost:8000/step-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/step-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+27c561943a2acfb967711813a2cb2dc9c6e2d9bc607eeeb528a241425d0eb9bb8bb7c266c3f3f0f4a9a4fa196b50fc8c7aace343d53eb88beaa49ddbd2bc87d7  step-8b28298302597d03fdc28946286df8fecc3b5586.tar.xz
+"

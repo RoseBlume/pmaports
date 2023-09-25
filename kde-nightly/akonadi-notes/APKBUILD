@@ -1,0 +1,49 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=akonadi-notes
+pkgver=9999_git20230922
+pkgrel=0
+_commit="18c4b059cf8dfbe7489eb330c8c6452cdef95e04"
+pkgdesc="Libraries and daemons to implement management of notes"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/KDE_PIM"
+license="LGPL-2.0-or-later"
+depends_dev="
+	ki18n-dev
+	kmime-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+_repo_url="https://invent.kde.org/pim/akonadi-notes.git"
+source="http://localhost:8000/akonadi-notes-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/akonadi-notes-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c2246d153f171c5482c18c9c9a1318c328a80ad1680fc437f0557000a77b643ccc42dfba840820dbb5221636b39190032372381863764209989d38702415e66d  akonadi-notes-18c4b059cf8dfbe7489eb330c8c6452cdef95e04.tar.xz
+"

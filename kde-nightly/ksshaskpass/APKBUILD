@@ -1,0 +1,55 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=ksshaskpass
+pkgver=9999_git20230917
+pkgrel=0
+_commit="d4fcff76f9ccfb2beb0d8919cae422e84fef8c0c"
+pkgdesc="ssh-add helper that uses kwallet and kpassworddialog"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	kcoreaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kwallet-dev
+	kwidgetsaddons-dev
+	qt6-qtbase-dev
+	samurai
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/ksshaskpass.git"
+source="http://localhost:8000/ksshaskpass-$_commit.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/ksshaskpass-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+5ebd6e1d0a0794c2eca34c9740826b3bdbca2a899bfd58745e4ec84c7b4006baaadfe5d3e4b8b67b51ea967f5cf94e0748677f6aefb08db06b27c1fcbd0df01e  ksshaskpass-d4fcff76f9ccfb2beb0d8919cae422e84fef8c0c.tar.xz
+"

@@ -1,0 +1,61 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=akonadi-import-wizard
+pkgver=9999_git20230922
+pkgrel=0
+_commit="b013ee92e3ff55ea841db04e94c8ca4fb522de00"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by kmailtransport -> libkgapi -> qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kontact.kde.org/"
+pkgdesc="Import data from other mail clients to KMail"
+license="GPL-2.0-or-later AND LGPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	akonadi-dev
+	extra-cmake-modules
+	kauth-dev
+	kconfig-dev
+	kcontacts-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kidentitymanagement-dev
+	kio-dev
+	kmailtransport-dev
+	kwallet-dev
+	libkdepim-dev
+	mailcommon-dev
+	messagelib-dev
+	pimcommon-dev
+	qt6-qtbase-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/pim/akonadi-import-wizard.git"
+source="http://localhost:8000/akonadi-import-wizard-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/akonadi-import-wizard-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c2fec94fd44f23872d90541bd416ad9bef93a2cd2be27f28e5265fb707330630a85a8accc8b8c2a21bb224db1d69dd892a958c218b4f0adc87f43427ce80d340  akonadi-import-wizard-b013ee92e3ff55ea841db04e94c8ca4fb522de00.tar.xz
+"

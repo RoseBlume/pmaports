@@ -1,0 +1,63 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kimageformats
+pkgver=9999_git20230917
+pkgrel=0
+_commit="7899c27a804c655c37027721132d8eb07416fd17"
+pkgdesc="Image format plugins for Qt5"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-or-later"
+makedepends="
+	extra-cmake-modules
+	karchive-dev
+	libavif-dev
+	libheif-dev
+	libraw-dev
+	openexr-dev
+	qt6-qtbase-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/frameworks/kimageformats.git"
+source="http://localhost:8000/kimageformats-$_commit.tar.xz"
+
+case "$CARCH" in
+s390x)
+	;;
+*)
+	makedepends="$makedepends libjxl-dev"
+	;;
+esac
+
+options="!check"
+builddir="$srcdir/kimageformats-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DKIMAGEFORMATS_HEIF=ON
+	cmake --build build
+}
+
+check() {
+	case "$CARCH" in
+		armv7) xvfb-run ctest --test-dir build --output-on-failure -E "kimageformats-read-(psd|jxl|xcf)" ;;
+		s390x) xvfb-run ctest --test-dir build --output-on-failure -E "kimageformats-(read-psd|write-avif)" ;;
+		*) xvfb-run ctest --test-dir build --output-on-failure -E "kimageformats-read-psd" ;;
+	esac
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+faedcb954df74ed1a6d02ead9faed3f44674dd0a3b3e64444910b806c36b3c2dbaffaefa7a0200e6b8ea3e36909bbcbbe45e04df34243fb9557f9ad62d2853ee  kimageformats-7899c27a804c655c37027721132d8eb07416fd17.tar.xz
+"

@@ -1,0 +1,64 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=akonadi-calendar
+pkgver=9999_git20230925
+pkgrel=0
+_commit="f695bf2ace4a57cc51288f6144692972edf561f1"
+pkgdesc="Akonadi calendar integration"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by kmailtransport -> libkgapi -> qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://community.kde.org/KDE_PIM"
+license="LGPL-2.0-or-later"
+depends_dev="
+	akonadi-contacts-dev
+	akonadi-dev
+	kcalendarcore-dev
+	kcalutils-dev
+	kcodecs-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kidentitymanagement-dev
+	kio-dev
+	kmailtransport-dev
+	kwidgetsaddons-dev
+	kxmlgui-dev
+	messagelib-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/pim/akonadi-calendar.git"
+source="http://localhost:8000/akonadi-calendar-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-lang"
+options="!check" # Broken
+
+replaces="kalendar>1.0.0"
+
+options="!check"
+builddir="$srcdir/akonadi-calendar-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+77c0fbd82916a8dcefb14f35ee826603779c1e20bb0c53dd32d1dd9f8fe51fbaf3e7814f49c62a67f3a1a7ee4e4ed6400ead639107c8ecec27423438a8744a7a  akonadi-calendar-f695bf2ace4a57cc51288f6144692972edf561f1.tar.xz
+"

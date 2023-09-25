@@ -1,0 +1,63 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kaddressbook
+pkgver=9999_git20230924
+pkgrel=0
+_commit="3814e90b4e13ea3067558b6266edd4d5eb30e174"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://apps.kde.org/kaddressbook/"
+pkgdesc="Address Book application to manage your contacts"
+license="GPL-2.0-or-later AND LGPL-2.0-or-later"
+depends="kdepim-runtime"
+makedepends="
+	akonadi-dev
+	akonadi-search-dev
+	extra-cmake-modules
+	gpgme-dev
+	grantleetheme-dev
+	kcmutils-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kontactinterface-dev
+	kpimtextedit-dev
+	kuserfeedback-dev
+	kuserfeedback-dev
+	libkdepim-dev
+	libkleo-dev
+	pimcommon-dev
+	prison-dev
+	qt6-qtbase-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/pim/kaddressbook.git"
+source="http://localhost:8000/kaddressbook-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+
+options="!check"
+builddir="$srcdir/kaddressbook-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja\
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+af6fd49ca3805bf3f1fe7e2e9b6909794508fbb604026bc5ad6f9a2e2615ee96b8759deef2b606fd597b7f42e8ad82fc33370eb5cb67c2f7479beb245d83b147  kaddressbook-3814e90b4e13ea3067558b6266edd4d5eb30e174.tar.xz
+"

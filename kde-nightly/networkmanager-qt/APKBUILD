@@ -1,0 +1,50 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=networkmanager-qt
+pkgver=9999_git20230920
+pkgrel=0
+_commit="7f4e3a34bbe3c7db7f2d090e1bfc572a21f834a2"
+pkgdesc="Qt wrapper for NetworkManager API"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+depends="networkmanager"
+depends_dev="networkmanager-dev"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc"
+_repo_url="https://invent.kde.org/frameworks/networkmanager-qt.git"
+source="http://localhost:8000/networkmanager-qt-$_commit.tar.xz"
+
+options="!check"
+builddir="$srcdir/networkmanager-qt-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# The excluded tests currently fail
+	ctest --test-dir build --output-on-failure -E '(manager|settings|activeconnection)test'
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+ee7a91cdf85b062185f5d2745967da76e584ca906ef35b329466f39360b2eaed3d368b97182ba2d83cb1ca115a4a25ce55246252b8c2016b737e89e360d677ea  networkmanager-qt-7f4e3a34bbe3c7db7f2d090e1bfc572a21f834a2.tar.xz
+"
