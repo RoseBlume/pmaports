@@ -2,13 +2,12 @@
 # Maintainer: Jan Jasper de Kroon <jajadekroon@gmail.com>
 pkgname=device-pine64-pinephonepro
 pkgdesc="PINE64 PinePhone Pro"
-pkgver=3.8
-pkgrel=5
+pkgver=3.9
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
-# pmb:strict is required for grub
-options="!check !archcheck pmb:strict"
+options="!check !archcheck"
 depends="
 	alsa-ucm-conf>=1.2.6.2
 	eg25-manager>=0.4.2
@@ -16,12 +15,9 @@ depends="
 	postmarketos-base>=25-r1
 	fwupd>=1.8.6
 	soc-rockchip-rk3399
+	systemd-boot
 	"
-makedepends="
-	devicepkg-dev
-	grub
-	grub-efi
-	"
+makedepends="devicepkg-dev"
 subpackages="
 	$pkgname-nonfree-firmware:nonfree_firmware
 	$pkgname-gnome
@@ -49,40 +45,10 @@ source="
 
 build() {
 	devicepkg_build $startdir $pkgname
-
-	grub-mkimage \
-		--prefix="/grub" \
-		--output="bootaa64.efi" \
-		--format="arm64-efi" \
-		--compression="xz" \
-		\
-		all_video \
-		cat \
-		configfile \
-		disk \
-		echo \
-		efi_gop \
-		fat \
-		gzio \
-		help \
-		iso9660 \
-		linux \
-		ls \
-		normal \
-		part_gpt \
-		part_msdos \
-		search \
-		search_label \
-		test \
-		true
 }
 
 package() {
 	devicepkg_package $startdir $pkgname
-
-	# Grub / bootloader
-	install -Dm644 -t "$pkgdir"/boot/EFI/Boot \
-		"$srcdir"/bootaa64.efi
 
 	# Alsa usecase manager config
 	install -Dm644 -t "$pkgdir"/usr/share/alsa/ucm2/PinePhonePro \
@@ -138,7 +104,7 @@ x11() {
 sha512sums="
 2d68ffe143f633a86670f30e45dbad1cc313f219f22b7cd3319ab44bb7209c20cb29f2ff2c60c92390154af9c9a6815c4186be555364cf31552005eba024c0e7  51_keyboard.gschema.override
 98e9dcfb36dd5843ff441b148e3bffb70757c59601c5f01f55a584e8f017c7ca73f2275c1bff46e4236dd8174df36a43d10abf9b8dadee988b962036846dc6ed  90-modem-eg25.rules
-aa33c497b145f0e840ccf646814cc7f53c49e7472c013b3cb951614766d568e70578869305dfd5bbc87490927e2b5b5798437b5cf31efe7baca8089f0b7b7771  deviceinfo
+9745c850d50430b407c0374bb049853621147922d58a39c06ba5c72a9f801d249d1e2e9d294bf3e57dab72ceda12efd20de5bc76881009005bef0d726086ee79  deviceinfo
 3ab1a9482d97739b03299f9237d15cb1d1d76ca2298bc6c1b4d1214590464cb13139d1a9c98c3eb7761ef8a5db060d5e365b38efcac57ed9ae34a1d12657e3f5  modules-initfs
 c5006c38828eb519917d57756f7831c4552feffef2d4922a384073f6a551535f615ad397d784e313818e0b943e1f6212bcca0aff9ce37da60b29547b1631f24b  modemmanager.conf
 43f67e94491791685cdbb4874bb3034b1d297bdf3d23e7405c45ba8c58de72b4fb6a9943b79f46ef7b8f4dbc4d9db254ebec8eb3453d720a5a8fad277c6a9d88  ppkb.sh
