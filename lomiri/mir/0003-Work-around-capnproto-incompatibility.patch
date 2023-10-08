@@ -1,7 +1,7 @@
 From 00f7e77b131823b2a2c03906af0d074a0a762193 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Tue, 30 Nov 2021 18:45:45 +0100
-Subject: [PATCH 03/11] Work around capnproto incompatibility
+Subject: [PATCH 03/12] Work around capnproto incompatibility
 
 For some reason including capnproto before X11 header makes the compiler
 happy.
@@ -67,5 +67,5 @@ index d9ae65b432..60ac569e84 100644
  
  #include <X11/Xlib.h>
 -- 
-2.41.0
+2.42.0
 
