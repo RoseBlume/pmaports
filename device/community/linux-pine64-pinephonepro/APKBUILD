@@ -5,7 +5,7 @@ pkgname=linux-pine64-pinephonepro
 pkgver=6.4.7
 _pkgver=6.4
 _tagdate=20230801-1055
-pkgrel=1
+pkgrel=2
 pkgdesc="Mainline kernel for the pinephone pro"
 arch="aarch64"
 _flavor="${pkgname#linux-}"
@@ -14,6 +14,7 @@ license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
+	pmb:kconfigcheck-uefi
 	"
 makedepends="
 	bash
@@ -74,5 +75,5 @@ package() {
 
 sha512sums="
 bcf86ccbbf3f9f7e2e47c1d7d59c7da344fab58f9605c27af17864f3be30ca016318028ca9baec58e3ef72535e69854bd8a07ed14d925fe5a774db5595644768  linux-ppp-6.4-20230801-1055.tar.gz
-afa9c8a0ec00c4d8396de3c422eb1e4a9ef0a012e48e6ef49d9bfd5bdbf090bc1d3d7c7685ceef13c8cd6b3f48a255f286d65e13e7d6b83a5c24bb5408529817  config-pine64-pinephonepro.aarch64
+d671dbc40b9a498e90be1e8a82a4ea6979891774d4d474d3dac1ab5acee9130f77a2ba24e5fcfe701b2a2e5b69937755950befa4c897c294e5e1695f755b6a86  config-pine64-pinephonepro.aarch64
 "
