@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=qtmir
-pkgver=0_git20230428
-_commit="9342b2929c39edeb0f966c10e817a0c981915893"
+pkgver=0_git20230919
+_commit="c0609982372fde9962df414d433a629ad58a05b1"
 pkgrel=0
 pkgdesc="QPA plugin to make Qt a Mir server"
 arch="all"
@@ -11,9 +11,7 @@ license="LGPL-3.0-only"
 makedepends="cmake cmake-extras gtest-dev mir-dev process-cpp-dev qt5-qtdeclarative-dev qt5-qtsensors-dev lomiri-app-launch-dev gsettings-qt-dev libqtdbustest libqtdbusmock content-hub-dev valgrind-dev lomiri-url-dispatcher-dev cgmanager-dev lttng-ust-tools"
 checkdepends="py3-dbusmock dbus"
 source="https://gitlab.com/ubports/development/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz
-	form-factor-mainline.patch
 	wayland-maliit.patch
-	0001-Add-missing-headers-for-GCC13.patch
 	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
@@ -49,8 +47,6 @@ package() {
 }
 
 sha512sums="
-070f8dbfb429c7737bd2ed22a68c393dbfa0e4e6468fdf4ff18bcd8ae4bf9046a0ebf6048992eecceb1ed85062993e5836b2647356a7bf2441a3675675ab9a4a  qtmir-9342b2929c39edeb0f966c10e817a0c981915893.tar.gz
-5822c8d57b5d6d20f67585e82344eb7fc9dc7fb46b5830ca94be9b8279b4fcfe1b6e041caab14f6ee1cf743abd62d9d4d141bc800e4ea7029afdd65790cd5b62  form-factor-mainline.patch
+35a0a58c00ca7dbe5f492ba238678805ae1236ae5729622cf8b322c8f01908d989ebeee2dc7162961cbc7d4741ddf77771556fb46195332e327c40b2b872ce95  qtmir-c0609982372fde9962df414d433a629ad58a05b1.tar.gz
 645becb871523a67424d27583a4c2f5f1a16c3be337d23acb44dfd57587835cb19d39a3791d80ffbb055809123d204de89b04e020f7d40ed3e0866eb17ead383  wayland-maliit.patch
-d4e026789be4078ae4c8d9ae512113083469fb3649a1b38688b7057ccac4797fb077ac1200274829d5ecd72659b0cb0966e7e0d1d53da2d8fb42371b5331066e  0001-Add-missing-headers-for-GCC13.patch
 "
