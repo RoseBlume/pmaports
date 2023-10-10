@@ -8,10 +8,10 @@ license="MIT"
 arch="x86_64"
 options="!check !archcheck"
 depends="
-	gummiboot
 	linux-edge
 	linux-firmware-none
 	postmarketos-base
+	systemd-boot
 	"
 makedepends="devicepkg-dev"
 subpackages="
