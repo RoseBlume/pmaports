@@ -2,9 +2,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=lomiri-download-manager
-pkgver=0_git20230606
+pkgver=0_git20230819
 pkgrel=0
-_commit="2c7d6921ac56862c197958f4e5c31aa76a1a50e1"
+_commit="06039cba915bae04fc58d7ae2dcdfc715365ed63"
 pkgdesc="Provides a service for downloading files while an application is suspended"
 arch="all"
 url="https://gitlab.com/ubports/development/core/lomiri-download-manager"
@@ -39,7 +39,7 @@ package() {
 }
 
 sha512sums="
-e909e721fed3ad6fdc37601bee8b99b4d094ef1415a3dff74bfc4a2c0f2f82b0c5e8f025ad966df4b783d94c3fab9929b7f36ed69371b5e8e11424c493ef4154  lomiri-download-manager-2c7d6921ac56862c197958f4e5c31aa76a1a50e1.tar.gz
+a04c37a9ada8920af1405fc61b7c1162573de3337571d17d8f8e81d417b9497a37c34034c7a1360e785fd2455e8672d16884284b0e4eca6cd6a4a3fadc797f9d  lomiri-download-manager-06039cba915bae04fc58d7ae2dcdfc715365ed63.tar.gz
 e726055810256577abd6ee0b650c9258bceb00eb1b15ed1be8a04da377cd8b632a38aaf177808b05225ae2bdefb117b268ac7987c129fb774ab759b91da6c0e0  0001-Disable-Werror.patch
 a2b233f219f1d880f27b908a48f6b0cee11be481b91423e590531c1f951e0b3f81c237e89d60497d2c6b0244e150d8a349e2ed2d2cd7fad2d5f310cf831002e1  0002-docs-use-qdoc-qt5-directly-instead-of-qtswitcher.patch
 "
