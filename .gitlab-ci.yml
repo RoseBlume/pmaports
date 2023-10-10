@@ -22,19 +22,6 @@ stages:
     - merge_requests
     - tags
 
-# device documentation
-wiki:
-  stage: lint
-  <<: *only-default
-  only:
-    refs:
-      - merge_requests
-    changes:
-      - device/*/device-*/*
-  script:
-    - .ci/lib/gitlab_prepare_ci.sh
-    - .ci/wiki.sh
-
 # testcases linting
 flake8:
   stage: lint
