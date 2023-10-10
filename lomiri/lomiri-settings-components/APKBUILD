@@ -2,9 +2,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=lomiri-settings-components
-pkgver=1.0.0_git20230412
+pkgver=1.0.0_git20230907
 pkgrel=0
-_commit="5041243d56fb7aaab270b4d07284687ec33f75c6"
+_commit="2131e631f6bb167e11073077664265ca8e76a024"
 pkgdesc="Ubuntu settings components for Lomiri"
 arch="all"
 url="https://gitlab.com/ubports/development/core/lomiri-settings-components"
@@ -35,6 +35,6 @@ package() {
 }
 
 sha512sums="
-9543c4676a90406416a6e87a5323d8ea9ef99dd2ec527b18073e09629501d537b67f624f3e7884819a7899530980cc5a25b127dcf8da0bebe3822fc2083931f3  lomiri-settings-components-5041243d56fb7aaab270b4d07284687ec33f75c6.tar.gz
+0311e746362cf2c9eb06dfbd098bf66c3be2d2623410a9a04f4dd398920d7b6e7df7fc7c777f3a6d8a233980dde1140aeb330174da14e5b2e82bddf2aaffbe90  lomiri-settings-components-2131e631f6bb167e11073077664265ca8e76a024.tar.gz
 0cbe24ba24468ccfae80b6d6b49c68b55e44561ac7914645746af15ee252c12341f2b401390cffbed520963d1cb7da6980f99520ee820528de964b8a714b87b4  qmltestrunner.patch
 "
