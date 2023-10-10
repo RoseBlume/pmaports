@@ -1,0 +1,46 @@
+From bf49e93bd153b4463c839642ae9bf9e4f48d49bf Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca@z3ntu.xyz>
+Date: Sat, 14 Oct 2023 10:12:01 +0200
+Subject: [PATCH] Use pkg-config to link to hunspell in Bengali plugins
+
+Like in 54bee53d ("Link properly to hunspell") and 9f510530 ("Fix
+pkgconfig link of language plugins") use pkg-config to link to hunspell
+because new hunspell actually provides libhunspell-1.7.so.
+---
+ plugins/bn-probhat/src/src.pro | 4 +++-
+ plugins/bn/src/src.pro         | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/bn-probhat/src/src.pro b/plugins/bn-probhat/src/src.pro
+index 1efea7ae..88038bd3 100644
+--- a/plugins/bn-probhat/src/src.pro
++++ b/plugins/bn-probhat/src/src.pro
+@@ -27,7 +27,9 @@ EXAMPLE_FILES = bengaliplugin.json
+ OTHER_FILES += \
+     	bengaliplugin.json
+ 
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage -lhunspell
++CONFIG += link_pkgconfig
++PKGCONFIG += hunspell
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/bn/src/src.pro b/plugins/bn/src/src.pro
+index e0316a2b..5969578e 100644
+--- a/plugins/bn/src/src.pro
++++ b/plugins/bn/src/src.pro
+@@ -39,7 +39,9 @@ EXAMPLE_FILES = bengaliplugin.json
+ OTHER_FILES += \
+ 	bengaliplugin.json
+ 
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage -lhunspell
++CONFIG += link_pkgconfig
++PKGCONFIG += hunspell
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+-- 
+2.42.0
+

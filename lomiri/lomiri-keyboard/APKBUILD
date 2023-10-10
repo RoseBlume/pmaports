@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-keyboard
-pkgver=0_git20230421
-_commit="f8c368dd049ed5343a9d5c8e4c1a1abd89998e36"
+pkgver=0_git20231003
+_commit="2dfe1b3b23772345b91b3a937d02d7a4cb628fc8"
 pkgrel=0
 pkgdesc="Ubuntu Touch keyboard as maliit plugin"
 url="https://gitlab.com/ubports/development/core/lomiri-keyboard"
@@ -11,6 +11,7 @@ makedepends="qt5-qtbase-dev maliit-framework-dev libpinyin-dev gsettings-qt-dev 
 checkdepends="xvfb-run bash"
 subpackages="$pkgname-dev $pkgname-lang"
 source="https://gitlab.com/ubports/development/core/lomiri-keyboard/-/archive/$_commit/lomiri-keyboard-$_commit.tar.gz
+	0001-Use-pkg-config-to-link-to-hunspell-in-Bengali-plugin.patch
 	0002-Fix-up-inputmethodhostprobe-methods-for-maliit-2.0.0.patch
 	"
 builddir="$srcdir/$pkgname-$_commit"
@@ -30,6 +31,7 @@ package() {
 }
 
 sha512sums="
-e5fcaa3ee5a0ad6fb469323e529ffdf31a045a7fb7eb183e20e282e835b395c72ea891b266b0cd2bfe8d6cccc58a7c1ddaa462a3c95d587f6bc33afd3660be5e  lomiri-keyboard-f8c368dd049ed5343a9d5c8e4c1a1abd89998e36.tar.gz
+7b08f10da77d2d44cfa21fd32c3aa75c7e71cf263f6961f4dbc5261e0bcc3efb1317a00c4793f6f1e804d1e743f3457210adc37dbf67b05fc25ef2f06b2f003b  lomiri-keyboard-2dfe1b3b23772345b91b3a937d02d7a4cb628fc8.tar.gz
+d870a1ea0d4bad33e6d23bc04a7ee7afe27b35131304e9d7e5439079145ef1ee7649f6698fb59c2bd32ba404ceb8e948a630b700a9567c91b271e3123c26e21e  0001-Use-pkg-config-to-link-to-hunspell-in-Bengali-plugin.patch
 74082639d95838c1a2c60007160140c008e68086fd09e5e4b4b6b6ca63eaa2d8f58ce4b8a0a9c650664fb06bef698a1e64c5cbe499f619853c5eaca9e3807afd  0002-Fix-up-inputmethodhostprobe-methods-for-maliit-2.0.0.patch
 "
