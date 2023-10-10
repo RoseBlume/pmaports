@@ -1,7 +1,7 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=libqtdbustest
-pkgver=0_git20230605
-_commit="58990d63f2327d285d6ead430d03b02558257291"
+pkgver=0_git20230726
+_commit="382241367da7cbc1b3c482d8ae1ea0d5af5dad86"
 pkgrel=0
 pkgdesc='Library for testing DBus interactions using Qt'
 url='https://gitlab.com/ubports/development/core/libqtdbustest'
@@ -37,5 +37,5 @@ package() {
 }
 
 sha512sums="
-e1284677223967686facaa3977d67fbe6a1e5db1281932136ca327c0faf490e79a5df875ca8d2defb89aec5e6148a2fe86202db7204f203b06e376326b348985  libqtdbustest-58990d63f2327d285d6ead430d03b02558257291.tar.gz
+1ca9b05b7e2af7a9cdd35cfaed3e0a9834bb4f6ef4a414ac158f81551712b358f2267df12485a93361a5e5f432ceb31bc0ffdbdaf852d018306e972663e820c0  libqtdbustest-382241367da7cbc1b3c482d8ae1ea0d5af5dad86.tar.gz
 "
