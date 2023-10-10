@@ -2,9 +2,9 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Contributor: Antoni Aloy <aaloytorrens@gmail.com>
 pkgname=lomiri-app-launch
-pkgver=0.1.1_git20230606
+pkgver=0.1.1_git20230823
 pkgrel=0
-_commit="031cdd03d1a8bef3f6cf759d8d6fb1a90de94ad4"
+_commit="7550cae965e3ff62821cc68d8e042acae615543f"
 pkgdesc="Session init system job for Launching Applications"
 arch="all"
 url="https://gitlab.com/ubports/development/core/lomiri-app-launch"
@@ -12,10 +12,7 @@ license="GPL-3.0"
 depends_dev="gobject-introspection-dev lttng-ust-dev json-glib-dev zeitgeist-dev lomiri-api-dev curl-dev properties-cpp-dev"
 makedepends="$depends_dev cmake cmake-extras dbus-test-runner qt5-qtdeclarative gtest-dev glib-dev mir-dev dbus-test-runner-dev click-dev lttng-ust-tools"
 checkdepends="gtest-dev gmock py3-dbusmock"
-source="
-	https://gitlab.com/ubports/development/core/lomiri-app-launch/-/archive/$_commit/lomiri-app-launch-$_commit.tar.gz
-	0001-Add-missing-headers-for-GCC13.patch
-	"
+source="https://gitlab.com/ubports/development/core/lomiri-app-launch/-/archive/$_commit/lomiri-app-launch-$_commit.tar.gz"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
 # 23% tests passed, 10 tests failed out of 13
@@ -41,6 +38,5 @@ package() {
 }
 
 sha512sums="
-f2475531c7621ed6aa173b23876c32a0f7bbf40f609e2177d2bf0e0d7e81ff6fa3b1ce62dcbcd7b7ed6155e991891eb92726872ad79106906e5606806648f044  lomiri-app-launch-031cdd03d1a8bef3f6cf759d8d6fb1a90de94ad4.tar.gz
-3ff77d9d03dca7ea2de96694949c9cc5c9dea56da991d872d2e1c735c02d50e6fc0857383f6e9f6897de717436cd518467fb22c2c093bb166bb3276439b315d3  0001-Add-missing-headers-for-GCC13.patch
+4b2c057f9f8c0e9cf4ec31ac823c0c28f9eb3f60cdb00841e8c15f3088134412e105d5101180f0d4f16c37b92f9019e9e4719f207be191e6d251a8c7c26dbf6d  lomiri-app-launch-7550cae965e3ff62821cc68d8e042acae615543f.tar.gz
 "
