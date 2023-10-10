@@ -1,8 +1,8 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=location-service
-pkgver=0_git20230423
+pkgver=0_git20231003
 pkgrel=0
-_commit="9598d0cc77a04e759cfd8ae25f5aa11bbb38d323"
+_commit="9bf1c80486f61e50554320eb86a5a1580adcba77"
 pkgdesc="Location service aggregating position/velocity/heading updates and exporting them over dbus"
 arch="all"
 url="https://gitlab.com/ubports/development/core/location-service"
@@ -30,9 +30,7 @@ makedepends="$depends_dev
 	"
 checkdepends="coreutils"
 source="
-	https://gitlab.com/ubports/development/core/location-service/-/archive/$_commit/location-service-$_commit.tar.gz
-	0001-Upgrade-C-standard-to-C-17.patch
-	"
+	https://gitlab.com/ubports/development/core/location-service/-/archive/$_commit/location-service-$_commit.tar.gz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Several failures
@@ -56,6 +54,5 @@ package() {
 }
 
 sha512sums="
-c796208894c95f520eb9e72ebbc8784b3daff1949618b419943a182ac0f65f61463ad437465078fb3f885cf9b301acc842d910a93e7223f8857cbff3495c67ad  location-service-9598d0cc77a04e759cfd8ae25f5aa11bbb38d323.tar.gz
-d87d1f49c8b8dcc77e0ce5f2dcc66fb11b23a2ff12a6d8f2cdd1edfcce8faa292633b1ff6c64dbcde195e28dbd167918dbba729abe62fc2a58449fa212d91bcd  0001-Upgrade-C-standard-to-C-17.patch
+b20e7a9d6c6492187a5a85de92c0e2627c0f7553f8476458ab1075e8253c9c078687fcfbae078dbd8f839731a2e9fd6d6e77b4cab227c94d9fbe969386bcc950  location-service-9bf1c80486f61e50554320eb86a5a1580adcba77.tar.gz
 "
