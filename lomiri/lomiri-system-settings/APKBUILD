@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-system-settings
-pkgver=0_git20230606
-_commit="03df0e54468a2233cc64b4f6d780c84096bc8a97"
+pkgver=0_git20231003
+_commit="8b9442ced668b24565206830cf47c928b3b6af82"
 pkgrel=0
 pkgdesc="System Settings application for Unity8"
 url="https://gitlab.com/ubports/development/core/lomiri-system-settings"
@@ -44,6 +44,6 @@ package() {
 }
 
 sha512sums="
-e65ebb43954e32fb23d0409596da34ed2fee063e435cc05b9f056a13182dadf49dc69fabaed2ae2dc412d93c50798538c9e1eda544eb7d0909d295123bf84e96  lomiri-system-settings-03df0e54468a2233cc64b4f6d780c84096bc8a97.tar.gz
+929b1529c24530d3077331fdb3ad12ecb8bfa1bd4d752262590df5d9ea467ea0f6e69294d369bb5fe3e058564f12887e23e99adcfd3b4e0b61b57084640b7f9e  lomiri-system-settings-8b9442ced668b24565206830cf47c928b3b6af82.tar.gz
 11a1003ac08ba5b8739c371b8d2d953f31c666c7a9f6926420f7aab94665298ce8ca0782979a3ea48bc67d800b48b4eeba030f2fc86e422b0cafae7319b7db98  0003-Use-qmltestrunner-qt5.patch
 "
