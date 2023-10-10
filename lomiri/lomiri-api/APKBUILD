@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-api
-pkgver=0_git20230531
-_commit="bd128da2c2191c1a44eda9d8d1e113e26e7e88a7"
+pkgver=0_git20230608
+_commit="9e2618e1a68f114581dad9f624bd509d46c9d984"
 pkgrel=0
 pkgdesc="API for Unity shell integration"
 url="https://gitlab.com/ubports/development/core/lomiri-api"
@@ -19,7 +19,6 @@ makedepends="
 checkdepends="dbus"
 source="https://gitlab.com/ubports/development/core/lomiri-api/-/archive/$_commit/lomiri-api-$_commit.tar.gz
 	qmltestrunner.patch
-	0001-Add-missing-headers-for-GCC13.patch
 	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
@@ -43,7 +42,6 @@ package() {
 }
 
 sha512sums="
-4710459856f9ffcc559bc2004a4c09af9c29c727f7fa9bf4de54062e4c51380a86f7ed243f6d4a859b1e090b392393d9258fb7d1d06a877b0568c5052e3134b6  lomiri-api-bd128da2c2191c1a44eda9d8d1e113e26e7e88a7.tar.gz
+7557dd37e3326a4778671bf29380c98bc9da1b48e56be3c28ae8ff7cf8d96e8643f17c7913b3d592a04abb0d6986bb5a7591ae550ef2872f1070111e5063da4f  lomiri-api-9e2618e1a68f114581dad9f624bd509d46c9d984.tar.gz
 04c316667ed5892c55278b01377d4d9c1a6ae14a330bfa594e5e54371d37441747684ab553799cb5e7804f4c68d181e78caeb8279491b9f5302a4e70095c74af  qmltestrunner.patch
-7ee1fdc0912014439301c009b38609fd642b9fd754e95b2663f50bb9267f1591daeaf984cf3a9a70dfe1bd74ac944f4350ae3486bb8c86792ab6d6f7b0372c5e  0001-Add-missing-headers-for-GCC13.patch
 "
