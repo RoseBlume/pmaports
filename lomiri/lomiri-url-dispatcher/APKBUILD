@@ -1,8 +1,8 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-url-dispatcher
-pkgver=0.1.1_git20230411
-_commit="23c42355cfbb7ab2ad9702d0362ed5590cf994bd"
+pkgver=0.1.1_git20230907
+_commit="e5bae41a5ad7fda9474bebe2508347665fb77065"
 pkgrel=0
 pkgdesc="Service to allow sending of URLs and get handlers started"
 arch="all"
@@ -38,6 +38,6 @@ package() {
 }
 
 sha512sums="
-e672d21a46bee2bccd1501323a9c9740df7ec1caa4cf5dad79284b0dbe46f0cc89083faa5cc2a30993b34dfd03379d879db67322912c270c2ae5d9111555f4a7  lomiri-url-dispatcher-23c42355cfbb7ab2ad9702d0362ed5590cf994bd.tar.gz
+48b63e1434461abbdb995b3d76a62e00fb77303e8a3313c6d5a56d7601633235879748547ad484d3ff898d0eb04b3447617a1903fce248254307ecb972ed87d0  lomiri-url-dispatcher-e5bae41a5ad7fda9474bebe2508347665fb77065.tar.gz
 586d24fd32f368b7f0404d4f5664bde8ed85e88e79f4532aa686ba0e4fc5c6c9c3c33832fded9f09bc5eba983b853a6be2204d9796a571e2dfecfa1afaf9f74f  0001-remove-systemd.patch
 "
