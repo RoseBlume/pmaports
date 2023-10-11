@@ -2,8 +2,8 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=device-pine64-pinebookpro
 pkgdesc="PINE64 Pinebook Pro"
-pkgver=16
-pkgrel=4
+pkgver=17
+pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
@@ -11,12 +11,12 @@ options="!check !archcheck"
 depends="
 	alsa-ucm-conf>=1.2.7
 	eudev-hwids
+	iw
 	linux-postmarketos-rockchip>=5.14
 	nvme-cli
 	postmarketos-base>=25-r1
 	soc-rockchip-rk3399
-	u-boot-pinebookpro
-	iw
+	systemd-boot
 	"
 makedepends="devicepkg-dev"
 subpackages="$pkgname-nonfree-firmware:nonfree_firmware $pkgname-elogind"
@@ -60,7 +60,7 @@ nonfree_firmware() {
 	mkdir "$subpkgdir"
 }
 sha512sums="
-7ebb7e00ae1566fd4c176839c4cd6501f237b577e8db1180aa9934d70101807f8f9b513e529da3f0e96b73d682708b1f51a94430bc90d655f0d7ac059b076a04  deviceinfo
+2b983d10e276474e19e4a0f48bd4f6c2f5b8788552115835f7cc4cfdf6f9428afa6f24da7946f4524a2524ff415fb9fb46bc181485f3f67be5a7e7a7f4087f23  deviceinfo
 6e3d97855a1f898db46b87ae1eb190d23d841fcb72332fcac4d11cd27c8f7d50eb8fd73007ed0447f106d19ff2e0fc1f34da1baf890e1465135dd692d65df2ba  modules-initfs
 2abfa31fa56028339efc6d2b6cb838f310990d7110ac4dd996bc4cfcf90f0a8770e70f28f77f7b6929d110e494bc33731302f16b9717729f991c2732be0731d5  nvme-powersave.initd
 0fd7580e197e409978c219726af627cabe347404ee826e32892b61f3da1775b0fd81f8ed5e9a0f0bfaad87faa434d7a73ddaebf475ed0ad8fdcef6690cd692d3  wlan-powersave-off.start
