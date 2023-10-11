@@ -21,6 +21,7 @@ license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
+	pmb:kconfigcheck-uefi
 	"
 makedepends="
 	bash
@@ -73,14 +74,11 @@ package() {
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
 
-	gzip -v "$pkgdir"/boot/vmlinuz
-	mv "$pkgdir"/boot/vmlinuz.gz "$pkgdir"/boot/vmlinuz
-
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
 
 sha512sums="
 a01bee0b968b95183934fe3504516be7ef5811944a061f5aed05ecebaa27b5eb64e33232fd0a8dd622b3c8743bfe462ef7e464d381734d111a0ad6a6d9f66ddd  linux-6.2.tar.xz
-2d3ab1b09d34473cdf8a09c3490d0bfe252cad2fc5d94f03acca344b0ca95de6a8ca1e693a7c1f2a5f3e5d082ca2bef5c621aa1e8303934c1df62f0d6dfd44c2  config-postmarketos-rockchip.aarch64
+c526ab0200be7ae14a921e465fc31cd9bfbe817841640ebc1f6e532a9b9a907a062aa656dab3435e4bf6b7f47e3247b65913236e7b6351c01770e2be852acc51  config-postmarketos-rockchip.aarch64
 "
