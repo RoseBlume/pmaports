@@ -11,7 +11,7 @@
 
 pkgname=linux-postmarketos-rockchip
 pkgver=6.2
-pkgrel=8
+pkgrel=9
 pkgdesc="Mainline kernel for rockchip devices"
 arch="aarch64"
 _carch="arm64"
@@ -21,6 +21,7 @@ license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
+	pmb:kconfigcheck-uefi
 	"
 makedepends="
 	bash
@@ -73,14 +74,11 @@ package() {
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
 
-	gzip -v "$pkgdir"/boot/vmlinuz
-	mv "$pkgdir"/boot/vmlinuz.gz "$pkgdir"/boot/vmlinuz
-
 	install -D "$builddir"/include/config/kernel.release \
 		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
 }
 
 sha512sums="
 a01bee0b968b95183934fe3504516be7ef5811944a061f5aed05ecebaa27b5eb64e33232fd0a8dd622b3c8743bfe462ef7e464d381734d111a0ad6a6d9f66ddd  linux-6.2.tar.xz
-2a63dbb3caebed1375e025633fe3156eaeb9e61950ecc015ed76cc6cd7fb28644c9b24f716251d8d7393d7bf72392ff60ae3d097ebc10ee430d047e647968200  config-postmarketos-rockchip.aarch64
+a6672ee09d1be939a85307e5139af2d86220075cfc73e6869ec07bff6bc887923c25952c699c2b0cb243c5452d9ebbe6fcca79af8a60f0788b4d8b2a5a96e4b5  config-postmarketos-rockchip.aarch64
 "
