@@ -6,12 +6,9 @@
 # more modules built-in that are required for successfully booting on these
 # devices.
 
-# It's important that CONFIG_ROCKCHIP_CDN_DP is _disabled_ because it causes
-# boot failure
-
 pkgname=linux-postmarketos-rockchip
-pkgver=6.2
-pkgrel=8
+pkgver=6.5.7
+pkgrel=0
 pkgdesc="Mainline kernel for rockchip devices"
 arch="aarch64"
 _carch="arm64"
@@ -81,6 +78,6 @@ package() {
 }
 
 sha512sums="
-a01bee0b968b95183934fe3504516be7ef5811944a061f5aed05ecebaa27b5eb64e33232fd0a8dd622b3c8743bfe462ef7e464d381734d111a0ad6a6d9f66ddd  linux-6.2.tar.xz
-2a63dbb3caebed1375e025633fe3156eaeb9e61950ecc015ed76cc6cd7fb28644c9b24f716251d8d7393d7bf72392ff60ae3d097ebc10ee430d047e647968200  config-postmarketos-rockchip.aarch64
+38eeff75ad99f43cf230cc440e53988646b86a5f06c08b8390722fa765c12cb97bd51ef39d28d7c2fcd982712bf76aec41e8dab9c3774d148dd9f0a33de10c8d  linux-6.5.7.tar.xz
+51de8edd3da9efcad4ad3bd6a7420c191c78846836ac4244b2b98ea4d90e77c5b902b2a9ab4fc847a616df1ff8f11001db16de9c54e4ed254b4f6ba88cd5d69d  config-postmarketos-rockchip.aarch64
 "
