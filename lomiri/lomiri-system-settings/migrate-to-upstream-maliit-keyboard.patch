@@ -1,0 +1,131 @@
+From d55ffadad7b9c866954358e9976959c57b9e8b4e Mon Sep 17 00:00:00 2001
+From: Brandon Boese <brandonboese@protonmail.com>
+Date: Sat, 14 Oct 2023 02:35:10 -0400
+Subject: [PATCH] migrate to upstream maliit keyboard
+
+---
+ plugins/language/PageComponent.qml           | 12 ++++++------
+ plugins/language/SpellChecking.qml           |  2 +-
+ plugins/language/ThemeValues.qml             |  8 ++++----
+ plugins/language/onscreenkeyboard-plugin.cpp |  2 +-
+ plugins/sound/PageComponent.qml              |  2 +-
+ 5 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/plugins/language/PageComponent.qml b/plugins/language/PageComponent.qml
+index 02c0369e..da95edb8 100644
+--- a/plugins/language/PageComponent.qml
++++ b/plugins/language/PageComponent.qml
+@@ -106,7 +106,7 @@ ItemPage {
+     GSettings {
+         id: settings
+ 
+-        schema.id: "com.lomiri.keyboard.maliit"
++        schema.id: "org.maliit.keyboard.maliit"
+     }
+ 
+     GSettings {
+@@ -177,10 +177,10 @@ ItemPage {
+             }
+ 
+             ListItem.Divider {}
+-            
++
+             SettingsListItems.SingleValueProgression {
+                 objectName: "oskTheme"
+-                
++
+                 readonly property variant model: [{name: i18n.tr("Ambiance"), value: "Ambiance"}
+                         ,{name: i18n.tr("Suru Dark"), value: "SuruDark"}
+                         ,{name: i18n.tr("Suru Black"), value: "SuruBlack"}
+@@ -191,7 +191,7 @@ ItemPage {
+                         ,{name: i18n.tr("Bordered Black"), value: "BorderedBlack"}
+                         ,{name: i18n.tr("Bordered Grey"), value: "BorderedGrey"}
+                     ]
+-                    
++
+                 text: externalKeyboardPresent ? i18n.tr("On-screen keyboard theme") :
+                                                 i18n.tr("Keyboard theme")
+                 value: model.find(function(data){return data.value === settings.theme}).name
+@@ -200,7 +200,7 @@ ItemPage {
+                         Qt.resolvedUrl("ThemeValues.qml"),
+                         { title: text, themeModel: model } )
+             }
+-            
++
+             ListItem.Divider {}
+ 
+             SettingsListItems.SingleValueProgression {
+@@ -286,7 +286,7 @@ ItemPage {
+ 
+             ListItem.ThinDivider {
+             }
+-            
++
+             ListItem.Standard {
+                 text: i18n.tr("Key magnifier")
+ 
+diff --git a/plugins/language/SpellChecking.qml b/plugins/language/SpellChecking.qml
+index 0c184516..dc6f6980 100644
+--- a/plugins/language/SpellChecking.qml
++++ b/plugins/language/SpellChecking.qml
+@@ -36,7 +36,7 @@ ItemPage {
+     GSettings {
+         id: settings
+ 
+-        schema.id: "com.lomiri.keyboard.maliit"
++        schema.id: "org.maliit.keyboard.maliit"
+     }
+ 
+     ListItem.Standard {
+diff --git a/plugins/language/ThemeValues.qml b/plugins/language/ThemeValues.qml
+index d7da214d..e7e8df86 100644
+--- a/plugins/language/ThemeValues.qml
++++ b/plugins/language/ThemeValues.qml
+@@ -29,14 +29,14 @@ ItemPage {
+     id: root
+     objectName: "themeValues"
+     flickable: scrollWidget
+-    
++
+     property variant themeModel
+-    
++
+     GSettings {
+         id: settings
+ 
+-        schema.id: "com.lomiri.keyboard.maliit"
+-        
++        schema.id: "org.maliit.keyboard.maliit"
++
+         onChanged: {
+             var curIndex = themeModel.findIndex(function(data){return data.value === value})
+             if( curIndex != -1)
+diff --git a/plugins/language/onscreenkeyboard-plugin.cpp b/plugins/language/onscreenkeyboard-plugin.cpp
+index 9d96b1e4..a98b7010 100644
+--- a/plugins/language/onscreenkeyboard-plugin.cpp
++++ b/plugins/language/onscreenkeyboard-plugin.cpp
+@@ -24,7 +24,7 @@
+ #include "onscreenkeyboard-plugin.h"
+ #include "qstringliteral.h"
+ 
+-#define LOMIRI_KEYBOARD_SCHEMA_ID "com.lomiri.keyboard.maliit"
++#define LOMIRI_KEYBOARD_SCHEMA_ID "org.maliit.keyboard.maliit"
+ 
+ #define KEY_ENABLED_LAYOUTS "enabled-languages"
+ #define KEY_CURRENT_LAYOUT  "active-language"
+diff --git a/plugins/sound/PageComponent.qml b/plugins/sound/PageComponent.qml
+index 50e16bb1..ea15cbeb 100644
+--- a/plugins/sound/PageComponent.qml
++++ b/plugins/sound/PageComponent.qml
+@@ -44,7 +44,7 @@ ItemPage {
+     GSettings {
+         id: keyboardSettings
+ 
+-        schema.id: "com.lomiri.keyboard.maliit"
++        schema.id: "org.maliit.keyboard.maliit"
+     }
+ 
+     GSettings {
+-- 
+2.42.0
+
