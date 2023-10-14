@@ -1,0 +1,38 @@
+# Maintainer: Brandon Boese <brandonboese@protonmail.com>
+pkgname=lomiri-terminal-app
+pkgver=2.0.1_git20230608
+_commit="8b41a9da0442d5c2e53a7e0b9644cc85646468a7"
+pkgrel=0
+pkgdesc="A terminal app for desktop and mobile devices"
+url="https://gitlab.com/ubports/development/apps/lomiri-terminal-app"
+arch="all"
+license="GPL-3.0-only"
+depends="lomiri-ui-toolkit lomiri-ui-extras lomiri-qmltermwidget gsettings-qt"
+makedepends="cmake cmake-extras qt5-qtbase-dev click-dev gnome-desktop-dev trust-store-dev qt5-qtdeclarative-dev qt5-qtdeclarative"
+checkdepends="xvfb-run py3-xdg py3-dbusmock"
+subpackages="$pkgname-doc"
+source="$pkgname-$_commit.tar.gz::https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/archive/$_commit/lomiri-terminal-app-$_commit.tar.gz"
+builddir="$srcdir/$pkgname-$_commit"
+
+build() {
+	cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_SYSCONFDIR=/etc \
+		-DCMAKE_INSTALL_LOCALSTATEDIR=/var \
+		-DCLICK_MODE=off
+	make -C build
+}
+
+check() {
+	cd build
+	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+}
+
+package() {
+	make -C build DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+6d82e7fa7b151c4e8e9ec98ed7bdf6dc94826668e06c4688ec72904173cea0a2c0a00219b7776611a64a1f3347fd74af60c20458a07d56b3a13ed3bfade3468e  lomiri-terminal-app-8b41a9da0442d5c2e53a7e0b9644cc85646468a7.tar.gz
+"
