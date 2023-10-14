@@ -21,7 +21,7 @@ depends="
 	qt5-qtgraphicaleffects
 	suru-icon-theme
 	"
-depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev lomiri-api-dev geonames-dev qmenumodel-dev qmenumodel gnome-desktop-dev lomiri-app-launch-dev lomiri-ui-toolkit-dev libqtdbustest libqtdbusmock lomiri-indicator-network-dev gsettings-qt-dev libusermetrics-dev lightdm-qt5 lightdm-qt5-dev lomiri-download-manager-dev linux-pam-dev"
+depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev lomiri-api-dev geonames-dev qmenumodel-dev qmenumodel gnome-desktop-dev lomiri-app-launch-dev lomiri-ui-toolkit-dev libqtdbustest libqtdbusmock lomiri-indicator-network-dev gsettings-qt-dev libusermetrics-dev lomiri-download-manager-dev linux-pam-dev"
 makedepends="$depends_dev cmake cmake-extras dbus-test-runner doxygen graphviz lomiri-system-settings lomiri-deviceinfo-dev elogind-dev qtmir-dev"
 checkdepends="py3-dbusmock"
 source="https://gitlab.com/ubports/development/core/lomiri/-/archive/$_commit/lomiri-$_commit.tar.gz
@@ -30,6 +30,7 @@ source="https://gitlab.com/ubports/development/core/lomiri/-/archive/$_commit/lo
 	0003-Link-against-libintl.patch
 	0004-No-systemd.patch
 	0005-fixups.patch
+	no-lightdm.patch
 	"
 subpackages="$pkgname-lang indicators-client:indicators_client"
 builddir="$srcdir/$pkgname-$_commit"
@@ -71,4 +72,5 @@ sha512sums="
 5ad97ebb32c0df25c03ebc9245430f7bf84fd1d90f1aebbaaf0cc48dca7fe3bda6c4c86ed146366ab3fc653d7ddab66d645f06fba16fe25f86eeb880bb883d1d  0003-Link-against-libintl.patch
 198bab4c275f0397f67a3307aa71dc504378d3a54f2c98775ef450240c41b22b24d14fbd82df8ed902b24fe7d24a1b7cf8ca5f44fbf9f0a9575d9be5fdc4cd65  0004-No-systemd.patch
 d87826f163af0155b5fdbac0c93534430573dbcbbd294b6a71e36b4db2d93c87739d9d43fdb826f27b2469c767eaa2b491e7823cd449bc421e615d4ec997c36a  0005-fixups.patch
+66a3988aba71be523d1510a1d10eefd4d5c825715fcc762e98ca7f0cbb6492ec7b589a92c0601f542517abe726f809a4bd9e65cfb33791b34d8b4c7a7692e93a  no-lightdm.patch
 "

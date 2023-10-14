@@ -1,0 +1,26 @@
+diff --git a/plugins/CMakeLists.txt b/plugins/CMakeLists.txt
+index a8ad0859a..4bf657a5a 100644
+--- a/plugins/CMakeLists.txt
++++ b/plugins/CMakeLists.txt
+@@ -15,7 +15,7 @@ add_subdirectory(AccountsService)
+ add_subdirectory(Cursor)
+ add_subdirectory(GlobalShortcut)
+ add_subdirectory(Greeter)
+-add_subdirectory(LightDM)
++#add_subdirectory(LightDM)
+ add_subdirectory(Powerd)
+ add_subdirectory(ProcessControl)
+ add_subdirectory(ScreenshotDirectory)
+diff --git a/tests/plugins/CMakeLists.txt b/tests/plugins/CMakeLists.txt
+index 352beba17..5f6f5cc8c 100644
+--- a/tests/plugins/CMakeLists.txt
++++ b/tests/plugins/CMakeLists.txt
+@@ -2,7 +2,7 @@ add_subdirectory(AccountsService)
+ add_subdirectory(Cursor)
+ add_subdirectory(GlobalShortcut)
+ add_subdirectory(Greeter)
+-add_subdirectory(LightDM)
++#add_subdirectory(LightDM)
+ add_subdirectory(SessionBroadcast)
+ add_subdirectory(Lomiri)
+ add_subdirectory(Utils)
