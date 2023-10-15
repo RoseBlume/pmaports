@@ -332,7 +332,7 @@ resize_root_partition() {
 	# that the partition is stored as a subpartition inside another one.
 	# In this case we want to resize it to use all the unused space of the
 	# external partition.
-	if [ -z "${partition##"/dev/mapper/"*}" ]; then
+	if [ -z "${partition##"/dev/mapper/"*}" ] || [ -z "${partition##"/dev/dm-"*}" ]; then
 		# Get physical device
 		partition_dev=$(dmsetup deps -o blkdevname "$partition" | \
 			awk -F "[()]" '{print "/dev/"$2}')
