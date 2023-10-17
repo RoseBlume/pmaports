@@ -1,8 +1,10 @@
+# Contributor: Brandon Boese <brandonboese@protonmail.com>
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=qtmir
-pkgver=0_git20230919
-_commit="c0609982372fde9962df414d433a629ad58a05b1"
+pkgver=0_git20230628
+# branch: personal/mariogrip/desktop-development
+_commit="b7803c8a15d367e65f464f84c62c67b69ac4758a"
 pkgrel=0
 pkgdesc="QPA plugin to make Qt a Mir server"
 arch="all"
@@ -11,7 +13,10 @@ license="LGPL-3.0-only"
 makedepends="cmake cmake-extras gtest-dev mir-dev process-cpp-dev qt5-qtdeclarative-dev qt5-qtsensors-dev lomiri-app-launch-dev gsettings-qt-dev libqtdbustest libqtdbusmock content-hub-dev valgrind-dev lomiri-url-dispatcher-dev cgmanager-dev lttng-ust-tools"
 checkdepends="py3-dbusmock dbus"
 source="https://gitlab.com/ubports/development/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz
-	wayland-maliit.patch
+	0002-maliit-keyboard.patch
+	0003-require-miroil-in-pkgconfig-file.patch
+	0004-no-requires-provides-check.patch
+	0005-disable-benchmarks.patch
 	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
@@ -21,7 +26,8 @@ build() {
 	cmake -B build \
 		-DCMAKE_BUILD_TYPE=None \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DWITH_MIR2=ON
 	make -C build
 }
 
@@ -40,13 +46,15 @@ package() {
 	rm "$pkgdir"/usr/share/applications/qtmir-demo-client.desktop
 	rm "$pkgdir"/usr/share/applications/xwayland.qtmir.desktop
 	rmdir "$pkgdir"/usr/share/applications/
-	rm -r "$pkgdir"/usr/share/qtmir/benchmarks/
 	rm -r "$pkgdir"/usr/share/qtmir/qtmir-demo-client/
 	rm -r "$pkgdir"/usr/share/qtmir/qtmir-demo-shell/
 	rmdir "$pkgdir"/usr/share/qtmir/
 }
 
 sha512sums="
-35a0a58c00ca7dbe5f492ba238678805ae1236ae5729622cf8b322c8f01908d989ebeee2dc7162961cbc7d4741ddf77771556fb46195332e327c40b2b872ce95  qtmir-c0609982372fde9962df414d433a629ad58a05b1.tar.gz
-645becb871523a67424d27583a4c2f5f1a16c3be337d23acb44dfd57587835cb19d39a3791d80ffbb055809123d204de89b04e020f7d40ed3e0866eb17ead383  wayland-maliit.patch
+a4ba213184d5db1f8c6fb87bfcda5251df491d48e88e4ef5db728873c340c56425e7b9090822f5d78d97c142613edf4ef87988fe4dd20de8333ed891143b8b12  qtmir-b7803c8a15d367e65f464f84c62c67b69ac4758a.tar.gz
+eba1db9a2c7fceb711e3e716b6fce0406c59033b8b4169d0c57eb4c8adca75da38e75fae56ed156b427d0ecd153ebf758489255142a50d3ac04f2fcd74efc885  0002-maliit-keyboard.patch
+08bd345bb4a03212319049a46099e5ca38c47ae89f03bddb7c6e5a48886be3fd94f5f0e2500f57e0a6411491d3f6f4ab4ce4ccca559cb9c589bdc13e317ebacf  0003-require-miroil-in-pkgconfig-file.patch
+a648f30c3073fe59c8adc12d4eef3a7df7c61a992e9cee7d291eb6a1dc8c0a17d0ea12edef9074ce0ab2768a62deaeb15056d89104b290a00131d83d1c7ea787  0004-no-requires-provides-check.patch
+585587e918c3933e8d4233655d5b46fb678140f8253bbd23d015fa231dc22bdd7452bf5dca45f978256c81231b6f0826877a45fd6ac39e485cdcb7c98824babe  0005-disable-benchmarks.patch
 "

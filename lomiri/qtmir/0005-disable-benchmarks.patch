@@ -1,0 +1,12 @@
+Description: Debian lacks Canonical's autopilot toolchain, thus disabling benchmarks (which depends on it).
+Author: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -184,5 +184,5 @@
+ # add subdirectories to build
+ add_subdirectory(src)
+ add_subdirectory(demos)
+-add_subdirectory(benchmarks)
++#add_subdirectory(benchmarks)
+ add_subdirectory(data)
