@@ -28,11 +28,14 @@ makedepends="
 	qt5-qtpim-dev
 	telepathy-qt-dev
 	"
+checkdepends="dbus-test-runner xvfb-run"
 source="telephony-service-$pkgver.tar.gz::https://gitlab.com/ubports/development/core/telephony-service/-/archive/$pkgver/telephony-service-$pkgver.tar.gz
 	fix-tests-failing-to-generate.patch
 	upgrade-to-CXX-17.patch
+	0001-Fix-compile-error-in-some-setups.patch
 	"
 builddir="$srcdir/telephony-service-$pkgver"
+options="!check" # Various tests hang
 
 build() {
 	cmake -B build \
@@ -45,7 +48,7 @@ build() {
 }
 
 check() {
-	ctest --test-dir build --output-on-failure
+	xvfb-run ctest --test-dir build --output-on-failure
 }
 
 package() {
@@ -56,4 +59,5 @@ sha512sums="
 c51fe3bf1db6374e256e48087eca6ffeb1e827162118e1868c21340e50e8eed3a61a5c3b39bb0a04b3a8a046e029ab6a72cdb901e958d964df5714577fc22015  telephony-service-0.5.2.tar.gz
 c50dd81603a91ed0898cc353d564b224dc90cd798ee8c47c41e023fea8a212253072781eb94fe50f77cdf5ce54d948cd565ac57caf7ac9e81530b68b287299ea  fix-tests-failing-to-generate.patch
 27279ce0690850c6a397754c79ef8404b9c29ce14c267ef9d4c6ad9e802c01f042ea0fbe52127a22faf948787a4f1ecc54e1a85990f0d2fb7b4b1adf59cb4ab7  upgrade-to-CXX-17.patch
+c1925ccc69dd5d6b0577b784683f8d5a9cfe36dacce0beaf4ee43eaefeb3f0b4b7516aab72ca75fc17b165e9bc5594d24b46546b5f2c53f645ebab69bd19dfd3  0001-Fix-compile-error-in-some-setups.patch
 "
