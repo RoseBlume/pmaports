@@ -1,18 +1,17 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=geonames
-pkgver=0_git20230104
+pkgver=0.3.0
 pkgrel=0
-_commit="73c5dfca7d5a8935f7a9f8fe2656d24f8f8fe00a"
-pkgdesc="Geonames"
+pkgdesc="A library for parsing and querying a local copy of the geonames.org database"
 arch="all"
 url="https://gitlab.com/ubports/development/core/geonames"
 license="GPL-3.0-only"
 makedepends="cmake bash gtk-doc glib-dev"
-source="https://gitlab.com/ubports/development/core/geonames/-/archive/$_commit/geonames-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/geonames/-/archive/$pkgver/geonames-$pkgver.tar.gz"
 subpackages="$pkgname-dev $pkgname-lang"
 options="!check" # https://gitlab.com/ubports/development/core/geonames/-/issues/2
-builddir="$srcdir/geonames-$_commit"
+builddir="$srcdir/geonames-$pkgver"
 
 build() {
 	if [ "$CBUILD" != "$CHOST" ]; then
@@ -37,5 +36,5 @@ package() {
 }
 
 sha512sums="
-bd7001c80f3025ffc780fde8a41ce967efaf1dcf822b691e9776416ac63b438af1b06fd3ef8a5b1acb008cda43d51c7615cd860c976fdaffa40ddcdc9e7c9855  geonames-73c5dfca7d5a8935f7a9f8fe2656d24f8f8fe00a.tar.gz
+c3a397b424b3a458ec921e4d15d8ae6f3cf84b73e7e7508f3b5c6d900f2d629234dbc0be27262433b91c232b4c1fd7c930b45a523d18f05c5f62a6fb6f101d8f  geonames-0.3.0.tar.gz
 "
