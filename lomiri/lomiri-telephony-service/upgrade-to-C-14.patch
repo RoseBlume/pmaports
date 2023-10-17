@@ -1,0 +1,25 @@
+From d131755fb9df65473d2bd82d7add4d718fba5d1c Mon Sep 17 00:00:00 2001
+From: Brandon Boese <brandonboese@protonmail.com>
+Date: Tue, 17 Oct 2023 03:03:45 -0400
+Subject: [PATCH] upgrade to C++14
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 86d1311e..fded7cea 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -100,7 +100,7 @@ endfunction()
+ 
+ enable_testing()
+ 
+-add_definitions(-std=c++11)
++add_definitions(-std=c++14)
+ 
+ set(DATA_DIR "${CMAKE_SOURCE_DIR}/data")
+ # install assets
+-- 
+2.42.0
+
