@@ -13,22 +13,21 @@ depends_dev="
 	gsettings-qt-dev
 	libapparmor-dev
 	qdjango-dev
-	qt5-qtdeclarative-dev
+	qt5-qtbase-dev
 	qt5-qtxmlpatterns-dev
 	"
-makedepends="
-	$depends_dev
+makedepends="$depends_dev
 	cmake-extras
+	doxygen
 	gmock
 	gtest-dev
 	intltool
 	libapparmor
 	libqtdbustest
-	qt5-qtbase-dev
 	"
 checkdepends="dbus"
 source="https://gitlab.com/ubports/development/core/libusermetrics/-/archive/$_commit/libusermetrics-$_commit.tar.gz"
-subpackages="$pkgname-dev $pkgname-lang"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
 
@@ -37,16 +36,15 @@ build() {
 		-DCMAKE_BUILD_TYPE=None \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib
-	make -C build
+	cmake --build build
 }
 
 check() {
-	cd build
-	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+	ctest --test-dir build
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 }
 
 sha512sums="
