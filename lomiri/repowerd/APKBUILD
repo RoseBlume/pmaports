@@ -12,6 +12,7 @@ checkdepends="dbus"
 subpackages="$pkgname-openrc"
 source="https://gitlab.com/ubports/development/core/repowerd/-/archive/$_commit/repowerd-$_commit.tar.gz
 	repowerd.initd
+	0001-dbus-Remove-at_console-filtering.patch
 	"
 builddir="$srcdir/repowerd-$_commit"
 
@@ -44,4 +45,5 @@ package() {
 sha512sums="
 866c5d1754eaa4f97712c8416918fbb93f519db4f68759069bb4c213507b64e9c06b3e435fe77b33e24defbe1660572b59187a88e0b23c6f111ac90d09727ff7  repowerd-fe8c421fd0977c21c47de2ba4630952dc47fd47b.tar.gz
 d8c4dd351a7bf2bcc66b0eb8b0d17d602661f7defb857be5a28f694e4977b634b7d101f738058ce0ccaa313c4e316f7222c753610500ddbd68f8e42de7c57f29  repowerd.initd
+f6212991bd4ea6704a74f71615fa5d0b9b738144c2448f03d90a0d2c6dd320e17c3c070add7f7877ca3f6f4c2526d44dd5277f8cefbd05ad08d99204c61d6766  0001-dbus-Remove-at_console-filtering.patch
 "
