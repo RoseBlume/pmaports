@@ -45,6 +45,11 @@ start() {
 			# version that can't automatically detect the type yet.
 			QMICLI_MODEM="qmicli --silent -d /dev/wwan0qmi0 --device-open-qmi"
 			veinfo "Using /dev/wwan0qmi0"
+		# Check if the mbim device from wwan driver exists.
+		elif [ -e "/dev/wwan0mbim0" ]
+		then
+			QMICLI_MODEM="qmicli --silent -d /dev/wwan0mbim0 --device-open-mbim"
+			veinfo "Using /dev/wwan0mbim0"
 		# Check if QRTR is available for new devices.
 		elif qmicli --silent -pd qrtr://0 --uim-noop > /dev/null
 		then
