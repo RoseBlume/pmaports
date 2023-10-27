@@ -6,7 +6,7 @@ _commit="9e2618e1a68f114581dad9f624bd509d46c9d984"
 pkgrel=0
 pkgdesc="API for Unity shell integration"
 url="https://gitlab.com/ubports/development/core/lomiri-api"
-arch="all"
+arch="all !armhf"
 license="LGPL-3.0"
 makedepends="
 	cmake

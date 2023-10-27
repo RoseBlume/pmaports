@@ -5,7 +5,7 @@ _commit="189adf27d61eea3c54f80d5df6b0f6fa15a87d0a"
 pkgrel=0
 pkgdesc="Lightweight web browser tailored for Ubuntu Touch"
 url="https://gitlab.com/ubports/development/core/morph-browser"
-arch="all"
+arch="all !armhf"
 license="GPL-3.0-only"
 depends="
 	lomiri-ui-toolkit

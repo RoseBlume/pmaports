@@ -5,7 +5,7 @@ _commit="382241367da7cbc1b3c482d8ae1ea0d5af5dad86"
 pkgrel=0
 pkgdesc='Library for testing DBus interactions using Qt'
 url='https://gitlab.com/ubports/development/core/libqtdbustest'
-arch="all"
+arch="all !armhf"
 license="LGPL-3.0-only"
 makedepends="
 	cmake

@@ -6,7 +6,7 @@ _commit="e875ddd9b79d87bffe6b10047e592b304bd62a47"
 pkgrel=0
 pkgdesc="Library for mocking DBus interactions using Qt"
 url='https://gitlab.com/ubports/development/core/libqtdbusmock'
-arch="all"
+arch="all !armhf"
 license="LGPL-3.0-only"
 makedepends="
 	cmake
