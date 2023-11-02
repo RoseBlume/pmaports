@@ -3,13 +3,14 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-lenovo-21bx
 pkgdesc="Lenovo ThinkPad X13s"
-pkgver=1
+pkgver=2
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck !strip"
 depends="
+	alsa-ucm-conf
 	linux-lenovo-21bx
 	postmarketos-base
 	systemd-boot
