@@ -1,0 +1,9 @@
+# List of directories to trigger mkinitfs, used to generate "triggers=" in the
+# APKBUILD
+
+/usr/lib/systemd/boot
+/usr/libexec/pmos-tests-initramfs
+/usr/share/deviceinfo
+/usr/share/kernel/*
+/usr/share/mkinitfs-triggers
+/usr/share/mkinitfs/*
