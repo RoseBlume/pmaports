@@ -87,7 +87,7 @@ def test_aports_unreferenced_files(args):
                 subpackage_triggers += subpackage.get("triggers", [])
 
         # Collect trigger files
-        trigger_sources = []
+        trigger_sources = ["triggers"]
         for trigger in apkbuild["triggers"] + subpackage_triggers:
             trigger_sources.append(trigger.split("=")[0])
 
