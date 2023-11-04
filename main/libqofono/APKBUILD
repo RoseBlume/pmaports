@@ -1,10 +1,10 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=libqofono
-pkgver=0.114
+pkgver=0.120
 pkgrel=0
-pkgdesc="A library for accessing the ofono daemon, and a Qt declarative plugin for it"
-url="https://git.merproject.org/mer-core/libqofono/"
+pkgdesc="Library for accessing the ofono daemon, and a Qt declarative plugin for it"
+url="https://github.com/sailfishos/libqofono"
 # armhf blocked by qt5-qtdeclarative
 arch="all !armhf"
 license="LGPL-2.1-or-later"
@@ -15,7 +15,7 @@ depends_dev="
 makedepends="$depends_dev"
 subpackages="$pkgname-dev"
 source="https://github.com/sailfishos/libqofono/archive/$pkgver/libqofono-$pkgver.tar.gz"
-options="!check" # Requires running Ofono
+options="!check" # requires running ofono
 
 build() {
 	qmake-qt5
@@ -30,5 +30,5 @@ package() {
 }
 
 sha512sums="
-6da315e182c81fd06c80978952b5c8eda1a12a1c60de1d2063ff160f555c21e3a2c8bff8497c70ce5bb0af8a2e8e8e470ed6cb7e9c559925b0b3198812181f11  libqofono-0.114.tar.gz
+efc1967d18f545cfa19d4361a1e1d757abb134a2a2e06a413e77c3c1a01682fc05fe6433dda4fccccc1bcda00936048be0e87dcf1306ae52913b10cc9e381dba  libqofono-0.120.tar.gz
 "
