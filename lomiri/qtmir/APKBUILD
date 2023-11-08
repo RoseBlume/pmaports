@@ -2,7 +2,7 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=qtmir
-pkgver=0_git20230628
+pkgver=0.7.1_git20230628
 # branch: personal/mariogrip/desktop-development
 _commit="b7803c8a15d367e65f464f84c62c67b69ac4758a"
 pkgrel=0
@@ -13,10 +13,10 @@ license="LGPL-3.0-only"
 makedepends="cmake cmake-extras gtest-dev mir-dev process-cpp-dev qt5-qtdeclarative-dev qt5-qtsensors-dev lomiri-app-launch-dev gsettings-qt-dev libqtdbustest libqtdbusmock content-hub-dev valgrind-dev lomiri-url-dispatcher-dev cgmanager-dev lttng-ust-tools"
 checkdepends="py3-dbusmock dbus"
 source="https://gitlab.com/ubports/development/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz
-	0002-maliit-keyboard.patch
-	0003-require-miroil-in-pkgconfig-file.patch
-	0004-no-requires-provides-check.patch
-	0005-disable-benchmarks.patch
+	0001-Wayland-hack-set-maliit-server-to-inputmethod-type-W.patch
+	0002-Require-miroil-in-out-.pc-file.patch
+	0003-Disable-benchmarks.patch
+	0004-Update-for-Mir-2.15-removals.patch
 	"
 subpackages="$pkgname-dev"
 builddir="$srcdir/$pkgname-$_commit"
@@ -53,8 +53,8 @@ package() {
 
 sha512sums="
 a4ba213184d5db1f8c6fb87bfcda5251df491d48e88e4ef5db728873c340c56425e7b9090822f5d78d97c142613edf4ef87988fe4dd20de8333ed891143b8b12  qtmir-b7803c8a15d367e65f464f84c62c67b69ac4758a.tar.gz
-eba1db9a2c7fceb711e3e716b6fce0406c59033b8b4169d0c57eb4c8adca75da38e75fae56ed156b427d0ecd153ebf758489255142a50d3ac04f2fcd74efc885  0002-maliit-keyboard.patch
-08bd345bb4a03212319049a46099e5ca38c47ae89f03bddb7c6e5a48886be3fd94f5f0e2500f57e0a6411491d3f6f4ab4ce4ccca559cb9c589bdc13e317ebacf  0003-require-miroil-in-pkgconfig-file.patch
-a648f30c3073fe59c8adc12d4eef3a7df7c61a992e9cee7d291eb6a1dc8c0a17d0ea12edef9074ce0ab2768a62deaeb15056d89104b290a00131d83d1c7ea787  0004-no-requires-provides-check.patch
-585587e918c3933e8d4233655d5b46fb678140f8253bbd23d015fa231dc22bdd7452bf5dca45f978256c81231b6f0826877a45fd6ac39e485cdcb7c98824babe  0005-disable-benchmarks.patch
+ed4a937d689b46ea741ddf8f6ec5416cf6abd22b53565415adef8dfa7bb141145c7d61365b7a5fcac54a31fac047954d946db0c344aa6b9a4454fdc3fc170943  0001-Wayland-hack-set-maliit-server-to-inputmethod-type-W.patch
+8ab84f15e506b5e4f52315776ed6aa5f8ab44be26e84555d00346bbde945cdabfdb08cf83b420e561017cb0eb647fa6581d503ab0c1d84648e28d938b593f341  0002-Require-miroil-in-out-.pc-file.patch
+99443e282e5464ce9449cc99ba1c242a4f5e4672a64b19e62fd0437c52080264a37ac06b43d499f03cf31a48e9ffa02509885d7af7c152c14b962aa788b13a61  0003-Disable-benchmarks.patch
+97305babc7f034b4b5f646d5e9007ea065364abd3d4191cada3bf3930b4f907c35d988fb8f80047046e1f5d3baf949be9ee137676f27273cc887321b04213623  0004-Update-for-Mir-2.15-removals.patch
 "

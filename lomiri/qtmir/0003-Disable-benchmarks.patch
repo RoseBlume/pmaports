@@ -1,0 +1,25 @@
+From de3c791f752089e0cb544247218c8d7c6fe303ea Mon Sep 17 00:00:00 2001
+From: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
+Date: Wed, 16 Dec 2020 16:28:04 +0100
+Subject: [PATCH 3/4] Disable benchmarks
+
+No autopilot in Debian, so let's build qtmir without dependency on it
+(i.e. without benchmarks).
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 550d4447..403215e2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -184,5 +184,5 @@ endif()
+ # add subdirectories to build
+ add_subdirectory(src)
+ add_subdirectory(demos)
+-add_subdirectory(benchmarks)
++#add_subdirectory(benchmarks)
+ add_subdirectory(data)
+-- 
+2.42.1
+
