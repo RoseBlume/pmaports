@@ -20,7 +20,7 @@ depends="
 	qt5-qtgraphicaleffects
 	suru-icon-theme
 	"
-depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev lomiri-api-dev geonames-dev qmenumodel-dev qmenumodel gnome-desktop-dev lomiri-app-launch-dev lomiri-ui-toolkit-dev libqtdbustest libqtdbusmock lomiri-indicator-network-dev gsettings-qt-dev libusermetrics-dev lomiri-download-manager-dev linux-pam-dev"
+depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev lomiri-api-dev geonames-dev qmenumodel-dev qmenumodel gnome-desktop-dev lomiri-app-launch-dev lomiri-ui-toolkit-dev libqtdbustest libqtdbusmock lomiri-indicator-network-dev gsettings-qt-dev lomiri-libusermetrics-dev lomiri-download-manager-dev linux-pam-dev"
 makedepends="$depends_dev cmake cmake-extras dbus-test-runner doxygen graphviz lomiri-system-settings lomiri-deviceinfo-dev elogind-dev qtmir-dev"
 checkdepends="py3-dbusmock"
 source="https://gitlab.com/ubports/development/core/lomiri/-/archive/$_commit/lomiri-$_commit.tar.gz
