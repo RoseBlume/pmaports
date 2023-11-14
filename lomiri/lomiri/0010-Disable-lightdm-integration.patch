@@ -1,3 +1,14 @@
+From ed5248a7940e2b9944fc61a9896a43efb096d857 Mon Sep 17 00:00:00 2001
+From: Luca Weiss <luca.weiss@fairphone.com>
+Date: Tue, 14 Nov 2023 22:00:38 +0100
+Subject: [PATCH 10/10] Disable lightdm integration
+
+Not needed on postmarketOS
+---
+ plugins/CMakeLists.txt       | 2 +-
+ tests/plugins/CMakeLists.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
 diff --git a/plugins/CMakeLists.txt b/plugins/CMakeLists.txt
 index a8ad0859a..4bf657a5a 100644
 --- a/plugins/CMakeLists.txt
@@ -24,3 +35,6 @@ index 352beba17..5f6f5cc8c 100644
  add_subdirectory(SessionBroadcast)
  add_subdirectory(Lomiri)
  add_subdirectory(Utils)
+-- 
+2.42.1
+

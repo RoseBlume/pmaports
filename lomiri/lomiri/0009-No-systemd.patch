@@ -1,7 +1,7 @@
-From df744811e17d9f4870d8b33f583c904be5920414 Mon Sep 17 00:00:00 2001
+From afb2a925e2f20dffc9e7a2efa46ab799e0f6b44b Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Fri, 25 Jun 2021 10:16:19 +0200
-Subject: [PATCH 4/5] No systemd
+Subject: [PATCH 09/10] No systemd
 
 ---
  data/CMakeLists.txt | 2 +-
@@ -18,5 +18,5 @@ index 4bffd05dd..7b5bb8e4f 100644
 -add_subdirectory(systemd-user)
 +#add_subdirectory(systemd-user)
 -- 
-2.39.1
+2.42.1
 

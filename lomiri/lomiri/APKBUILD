@@ -1,13 +1,12 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri
-pkgver=0_git20230929
-_commit="ed5564cbba53d1c4a3acfb53024db3a912083f59"
+pkgver=0.1.4
 pkgrel=0
 pkgdesc="A convergent desktop environment"
 arch="all !armhf"
 url="https://gitlab.com/ubports/development/core/lomiri"
-license="GPL-3.0 LGPL-2.1"
+license="GPL-3.0-only AND LGPL-2.1-only"
 depends="
 	ayatana-indicator-keyboard
 	ayatana-indicator-session
@@ -19,39 +18,66 @@ depends="
 	qt5-qtgraphicaleffects
 	suru-icon-theme
 	"
-depends_dev="qt5-qtbase-dev qt5-qtdeclarative-dev lomiri-api-dev geonames-dev qmenumodel-dev qmenumodel gnome-desktop-dev lomiri-app-launch-dev lomiri-ui-toolkit-dev libqtdbustest libqtdbusmock lomiri-indicator-network-dev gsettings-qt-dev lomiri-libusermetrics-dev lomiri-download-manager-dev linux-pam-dev"
-makedepends="$depends_dev cmake cmake-extras dbus-test-runner doxygen graphviz lomiri-system-settings lomiri-deviceinfo-dev elogind-dev qtmir-dev"
+makedepends="
+	cmake
+	cmake-extras
+	dbus-test-runner
+	doxygen
+	elogind-dev
+	geonames-dev
+	gnome-desktop-dev
+	graphviz
+	gsettings-qt-dev
+	libqtdbusmock
+	libqtdbustest
+	linux-pam-dev
+	lomiri-api-dev
+	lomiri-app-launch-dev
+	lomiri-deviceinfo-dev
+	lomiri-download-manager-dev
+	lomiri-indicator-network-dev
+	lomiri-libusermetrics-dev
+	lomiri-system-settings
+	lomiri-ui-toolkit-dev
+	qmenumodel
+	qmenumodel-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative-dev
+	qtmir-dev
+	samurai
+	"
 checkdepends="py3-dbusmock"
-source="https://gitlab.com/ubports/development/core/lomiri/-/archive/$_commit/lomiri-$_commit.tar.gz
-	0001-Add-missing-includes.patch
-	0002-Add-qt5-suffix-to-search-for-Qt-tools.patch
-	0003-Link-against-libintl.patch
-	0004-No-systemd.patch
-	0005-fixups.patch
-	no-lightdm.patch
+source="https://gitlab.com/ubports/development/core/lomiri/-/archive/$pkgver/lomiri-$pkgver.tar.gz
+	0001-Add-support-for-both-older-qtmir-and-newer-qtmir-wit.patch
+	0002-cursor-Always-follow-cursor-position-from-mir.patch
+	0003-Add-missing-includes.patch
+	0004-Link-against-libintl.patch
+	0005-Compile-with-C-17.patch
+	0006-Use-correct-value-for-Leds.state.patch
+	0007-Disable-broken-tests-due-to-dropped-mocks-from-mir-2.patch
+	0008-Add-qt5-suffix-to-search-for-Qt-tools.patch
+	0009-No-systemd.patch
+	0010-Disable-lightdm-integration.patch
 	"
 subpackages="$pkgname-lang indicators-client:indicators_client"
-builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail
 
 build() {
-	cmake -B build \
-		-DCMAKE_BUILD_TYPE=None \
+	cmake -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DCMAKE_INSTALL_LOCALSTATEDIR=/var
-	make -C build
+		-DCMAKE_INSTALL_LOCALSTATEDIR=/var \
+		-DBUILD_SHARED_LIBS=ON \
+		-DCMAKE_BUILD_TYPE=None
+	cmake --build build
 }
 
 check() {
-	cd build
-	# testRootActionState: RootActionStateTest::testToQVariantIcons() 'serializedIcons[0] == "image://theme/testIcon0"' returned FALSE.
-	# testWindowStateStorage: https://github.com/ubports/unity8/issues/316
-	CTEST_OUTPUT_ON_FAILURE=TRUE ctest -E "testRootActionState|testWindowStateStorage"
+	ctest --test-dir build --output-on-failure
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 	# Remove this mock as apk thinks, it conflicts with the qmenumodel package
 	# conflicts: qmenumodel-0_git20180727-r0[so:libqmenumodel.so.0=0]
 	rm -r "$pkgdir"/usr/lib/lomiri/qml/mocks/QMenuModel.1/
@@ -64,11 +90,15 @@ indicators_client() {
 }
 
 sha512sums="
-5c8828e09e13f5b81c554a0b487ea878bfb3b45741f32fa335d143e3fca6f3bbb4df42c20c546702ea93392a832a409e209e6b429856a1319a55803a3a4950ac  lomiri-ed5564cbba53d1c4a3acfb53024db3a912083f59.tar.gz
-4786b0d23012a1dcb679d2b44ea843a0db8dfebc58fb45f5556bfb8ac5506e85ecb210678543ab0e62477769ee6cd0946edb4a536d343d9baca8e569b5707982  0001-Add-missing-includes.patch
-2894f254155b1b62369cbdeb3e48ce900a7fd67b63126a62633516c31f39d33348ca357509ec1722aa48f4b35f7f20654fbe45f8f59b324cb5c223957effd334  0002-Add-qt5-suffix-to-search-for-Qt-tools.patch
-5ad97ebb32c0df25c03ebc9245430f7bf84fd1d90f1aebbaaf0cc48dca7fe3bda6c4c86ed146366ab3fc653d7ddab66d645f06fba16fe25f86eeb880bb883d1d  0003-Link-against-libintl.patch
-198bab4c275f0397f67a3307aa71dc504378d3a54f2c98775ef450240c41b22b24d14fbd82df8ed902b24fe7d24a1b7cf8ca5f44fbf9f0a9575d9be5fdc4cd65  0004-No-systemd.patch
-d87826f163af0155b5fdbac0c93534430573dbcbbd294b6a71e36b4db2d93c87739d9d43fdb826f27b2469c767eaa2b491e7823cd449bc421e615d4ec997c36a  0005-fixups.patch
-66a3988aba71be523d1510a1d10eefd4d5c825715fcc762e98ca7f0cbb6492ec7b589a92c0601f542517abe726f809a4bd9e65cfb33791b34d8b4c7a7692e93a  no-lightdm.patch
+9a6991a1008a0679de16047e1e536466f863a63116de6948d89324b7ef309677c034d20250c5d6de70cf28e414ff0db792b54c47cb3f694b9dbf8828fedbedeb  lomiri-0.1.4.tar.gz
+95da99b4ccbfeea17e115be19b84da373067368ed3db54079e4be48f9c085172ac851538fcef73eaa66747597ce3603c18e99480c2ae14c030bee390f28c3921  0001-Add-support-for-both-older-qtmir-and-newer-qtmir-wit.patch
+cf5b6fe3fda6078f436b8b4bf937987b43271b197fade1d8791960cde81248b173ccc475a36aecec9dac600701c6d7366d8f44946aafbe837049861814811dbb  0002-cursor-Always-follow-cursor-position-from-mir.patch
+658557fe0fa873b7d075c5f83343047ee69b5552af2e6dfd544f30da8c4bc27d6dba1267f8d018c29263604be62a043f77f88ca689aefc21fbe5a7553f5ddf7c  0003-Add-missing-includes.patch
+8e38e442c62a2b8b77c28245ad22b2656dd09b6c2df58996841f19edc7ce94914c88cbee5e1028ea4f012810da9267d13494d1ab429448ebf8692b7a2a541106  0004-Link-against-libintl.patch
+e9ff7e74fa2641092b56b6f5c87eef71d15514be452ba2c8fa39acc3b6cc4c29105e1db6375d8add4dba9e0f5c9afeeab74b26f504955d929dcefa82c20fec7b  0005-Compile-with-C-17.patch
+7655f760c0a396d2a8f8c8e2b4f737f1452c93214e438a566f291389972c58be7e2b7f8710f3aadfd482d5b9d6705507beb5715989cacfea92f752e59afce6dd  0006-Use-correct-value-for-Leds.state.patch
+c8a2c169e79f0bd473273a5273ff06e9c8ec6f53d802dbc8a27f1c2d7a23d9d983df61fa0af387f5d6efc423e730326339a992740778c5227f06fe37d18008fb  0007-Disable-broken-tests-due-to-dropped-mocks-from-mir-2.patch
+ec43307cfe885efaddfd3d9a167ec4a0332bedbe49e5bc57801124c0eae24b1a067a4d12458ec8b129b7e7cf3a589683c6afae730c081ae55fe4c4714163cbc3  0008-Add-qt5-suffix-to-search-for-Qt-tools.patch
+b0194896788a8be4b105922e9a1ead6a1e7c828676c439baa23a4a7aacaa9756fccd383491a784629b7ee8bf0b9e0e0e46c482ca0da84317034142e71b4a760e  0009-No-systemd.patch
+2fd9be535b0b7784d8d850adb7cf98d4b5396ebf7aa8ca9832f7855f48b442eef7d25a2c9c07fb505e923ac246a1cc48fceaf1b004e691c1ad56e461a61471c3  0010-Disable-lightdm-integration.patch
 "
