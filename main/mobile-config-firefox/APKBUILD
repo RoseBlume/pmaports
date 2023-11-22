@@ -1,15 +1,15 @@
 # Maintainer: Oliver Smith <ollieparaoid@postmarketos.org>
 pkgname=mobile-config-firefox
 pkgver=4.2.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Firefox tweaks for mobile and privacy"
 url="https://gitlab.com/postmarketOS/mobile-config-firefox"
-source="
-	https://gitlab.com/postmarketOS/mobile-config-firefox/-/archive/$pkgver/mobile-config-firefox-$pkgver.tar.bz2
-"
+source="https://gitlab.com/postmarketOS/mobile-config-firefox/-/archive/$pkgver/mobile-config-firefox-$pkgver.tar.bz2"
 arch="noarch"
 license="GPL-3.0-or-later"
 options="!check" # No tests
+
+install_if="firefox"
 
 build() {
 	make
