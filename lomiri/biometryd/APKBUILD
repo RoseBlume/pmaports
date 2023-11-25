@@ -35,7 +35,6 @@ source="$pkgname-$pkgver.tar.gz::https://gitlab.com/ubports/development/core/bio
 	0005-add-missing-types-header.patch
 	0006-direct-path-to-qmlplugindump.patch
 	"
-builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
 	cmake -B build \
