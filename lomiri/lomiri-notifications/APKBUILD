@@ -10,7 +10,6 @@ depends="qt5-qtbase qt5-qtdeclarative"
 makedepends="cmake qt5-qtbase-dev qt5-qtdeclarative-dev qt5-qtdeclarative lomiri-api-dev libqtdbustest"
 checkdepends="qt5-qtbase-dev qt5-qtdeclarative-dev qt5-qtquickcontrols2-dev"
 source="$pkgname-$pkgver.tar.gz::https://gitlab.com/ubports/development/core/lomiri-notifications/-/archive/$pkgver/lomiri-notifications-$pkgver.tar.gz"
-builddir="$srcdir/$pkgname-$pkgver"
 options="!check" # tests fail
 
 build() {
