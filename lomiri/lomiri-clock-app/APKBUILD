@@ -1,39 +1,57 @@
 # Maintainer: Brandon Boese <brandonboese@protonmail.com>
 pkgname=lomiri-clock-app
-pkgver=4.0.3_git2023101
-_commit="0bb4ff5cf7553a00564b7ec6786c594694871d18"
+pkgver=4.0.3
 pkgrel=0
 pkgdesc="Clock App for Lomiri Operating Environment"
 url="https://gitlab.com/ubports/development/apps/lomiri-clock-app"
-arch="all !armhf !x86"
+arch="all"
 license="GPL-3.0-only"
-depends="lomiri-ui-toolkit lomiri-ui-extras gsettings-qt geonames"
-makedepends="cmake cmake-extras qt5-qtbase-dev click-dev gnome-desktop-dev trust-store-dev qt5-qtdeclarative-dev qt5-qtdeclarative geonames-dev"
-checkdepends="xvfb-run py3-xdg py3-dbusmock"
+depends="
+	geonames
+	gsettings-qt
+	lomiri-ui-extras
+	lomiri-ui-toolkit
+	"
+makedepends="
+	click-dev
+	cmake
+	cmake-extras
+	geonames-dev
+	gnome-desktop-dev
+	lomiri-trust-store-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative
+	qt5-qtdeclarative-dev
+	samurai
+	"
+checkdepends="
+	py3-dbusmock
+	py3-xdg
+	xvfb-run
+	"
 subpackages="$pkgname-lang"
-source="$pkgname-$_commit.tar.gz::https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/archive/$_commit/lomiri-clock-app-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/archive/v$pkgver/lomiri-clock-app-v$pkgver.tar.gz"
+builddir="$srcdir/$pkgname-v$pkgver"
 options="!check" # tests do not run
-builddir="$srcdir/$pkgname-$_commit"
 
 build() {
-	cmake -B build \
+	cmake -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DCMAKE_INSTALL_SYSCONFDIR=/etc \
-		-DCMAKE_INSTALL_LOCALSTATEDIR=/var \
-		-DCLICK_MODE=off
-	make -C build
+		-DBUILD_SHARED_LIBS=ON \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCLICK_MODE=OFF
+	cmake --build build
 }
 
 check() {
-	cd build
-	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+	ctest --test-dir build --output-on-failure
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 }
 
 sha512sums="
-622fd2b3883e3b6c12bf78eabdd6c7e32d73851854cf94d65e9941cb9c6a22978bbbf67507af766902859253009f9de450b1221cc0cd003e02cfbc092ea5f35f  lomiri-clock-app-0bb4ff5cf7553a00564b7ec6786c594694871d18.tar.gz
+d906a34e789dbd486af5c4837ab076485737217910d95bbe1e9b0b8453356c5d08373cd700dd768f41b2440e7c9a57fb7ca699a4fa73f80cf03e66bec3bc0cc4  lomiri-clock-app-v4.0.3.tar.gz
 "
