@@ -10,8 +10,29 @@ pkgdesc="QPA plugin to make Qt a Mir server"
 arch="all"
 url="https://gitlab.com/ubports/development/core/qtmir"
 license="LGPL-3.0-only"
-makedepends="cmake cmake-extras gtest-dev mir-dev process-cpp-dev qt5-qtdeclarative-dev qt5-qtsensors-dev lomiri-app-launch-dev gsettings-qt-dev libqtdbustest libqtdbusmock lomiri-content-hub-dev valgrind-dev lomiri-url-dispatcher-dev cgmanager-dev lttng-ust-tools"
-checkdepends="py3-dbusmock dbus"
+makedepends="
+	cgmanager-dev
+	cmake
+	cmake-extras
+	gsettings-qt-dev
+	gtest-dev
+	libqtdbusmock
+	libqtdbustest
+	lomiri-app-launch-dev
+	lomiri-content-hub-dev
+	lomiri-url-dispatcher-dev
+	lttng-ust-tools
+	mir-dev
+	process-cpp-dev
+	qt5-qtdeclarative-dev
+	qt5-qtsensors-dev
+	samurai
+	valgrind-dev
+	"
+checkdepends="
+	dbus
+	py3-dbusmock
+	"
 source="https://gitlab.com/ubports/development/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz
 	0001-Wayland-hack-set-maliit-server-to-inputmethod-type-W.patch
 	0002-Require-miroil-in-out-.pc-file.patch
@@ -23,21 +44,21 @@ builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
 
 build() {
-	cmake -B build \
-		-DCMAKE_BUILD_TYPE=None \
+	cmake -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=ON \
+		-DCMAKE_BUILD_TYPE=None \
 		-DWITH_MIR2=ON
-	make -C build
+	cmake --build build
 }
 
 check() {
-	cd build
-	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+	ctest --test-dir build --output-on-failure
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 
 	# Remove files for testing only
 	# https://gitlab.com/ubports/development/core/qtmir/-/blob/main/debian/qtmir-tests.install
