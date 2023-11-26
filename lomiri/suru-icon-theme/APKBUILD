@@ -1,19 +1,17 @@
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=suru-icon-theme
-pkgver=0_git20221222
+pkgver=20.05.1_git20221222
 _commit="2b832bd20443a45ea75d6da04236f687a5d0564a"
 pkgrel=0
 pkgdesc="Icon Theme for Lomiri Operating Environment"
 arch="noarch"
 url="https://gitlab.com/ubports/development/core/suru-icon-theme"
 license="CC-BY-SA-3.0"
-source="$pkgname-$_commit.tar.gz::https://gitlab.com/ubports/development/core/suru-icon-theme/-/archive/$_commit/suru-icon-theme-$_commit.tar.gz"
+source="https://gitlab.com/ubports/development/core/suru-icon-theme/-/archive/$_commit/suru-icon-theme-$_commit.tar.gz"
 builddir="$srcdir/$pkgname-$_commit"
 options="!check" # No tests
 
 package() {
-	mkdir -p "$pkgdir"
-	cd "$builddir"
 	mkdir -p "$pkgdir"/usr/share/icons
 	cp -r suru "$pkgdir"/usr/share/icons/suru
 }
