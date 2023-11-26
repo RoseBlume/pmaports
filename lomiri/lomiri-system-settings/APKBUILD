@@ -2,12 +2,11 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri-system-settings
-pkgver=0_git20231003
-_commit="8b9442ced668b24565206830cf47c928b3b6af82"
-pkgrel=1
-pkgdesc="System Settings application for Unity8"
+pkgver=1.0.2
+pkgrel=0
+pkgdesc="System Settings application for Lomiri"
 url="https://gitlab.com/ubports/development/core/lomiri-system-settings"
-arch="all !armhf"
+arch="all"
 license="GPL-3.0-only"
 depends="
 	accountsservice-ubuntu
@@ -20,34 +19,56 @@ depends="
 	lomiri-ui-toolkit
 	qt5-qtmultimedia
 	"
-makedepends="cmake cmake-extras qt5-qtbase-dev upower-dev networkmanager-dev accountsservice-ubuntu-dev geonames-dev icu-dev libqtdbusmock gsettings-qt-dev click-dev gnome-desktop-dev lomiri-trust-store-dev qt5-qtdeclarative-dev qt5-qtdeclarative intltool"
-checkdepends="xvfb-run py3-xdg py3-dbusmock"
+makedepends="
+	accountsservice-ubuntu-dev
+	click-dev
+	cmake
+	cmake-extras
+	geonames-dev
+	gnome-desktop-dev
+	gsettings-qt-dev
+	icu-dev
+	intltool
+	libqtdbusmock
+	lomiri-trust-store-dev
+	networkmanager-dev
+	qt5-qtbase-dev
+	qt5-qtdeclarative
+	qt5-qtdeclarative-dev
+	samurai
+	upower-dev
+	"
+checkdepends="
+	py3-dbusmock
+	py3-xdg
+	xvfb-run
+	"
 subpackages="$pkgname-lang"
-source="https://gitlab.com/ubports/development/core/lomiri-system-settings/-/archive/$_commit/lomiri-system-settings-$_commit.tar.gz
+source="https://gitlab.com/ubports/development/core/lomiri-system-settings/-/archive/$pkgver/lomiri-system-settings-$pkgver.tar.gz
 	0003-Use-qmltestrunner-qt5.patch
 	migrate-to-upstream-maliit-keyboard.patch
 	"
-builddir="$srcdir/$pkgname-$_commit"
 options="!check" # 67% tests passed, 5 tests failed out of 15
 
 build() {
-	cmake -B build \
+	cmake -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib
-	make -C build
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=ON \
+		-DCMAKE_BUILD_TYPE=None
+	cmake --build build
 }
 
 check() {
-	cd build
-	CTEST_OUTPUT_ON_FAILURE=TRUE ctest
+	ctest --test-dir build --output-on-failure
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+	DESTDIR="$pkgdir" cmake --install build
 }
 
 sha512sums="
-929b1529c24530d3077331fdb3ad12ecb8bfa1bd4d752262590df5d9ea467ea0f6e69294d369bb5fe3e058564f12887e23e99adcfd3b4e0b61b57084640b7f9e  lomiri-system-settings-8b9442ced668b24565206830cf47c928b3b6af82.tar.gz
+9cf51248dddf35e60cc42c761e173db25296061710390deb4fd5cb606e43591ec51d091b6af576ce3b8dc20c21733d0dc1ee86c4057b9f3e1e25a72f6d9debe9  lomiri-system-settings-1.0.2.tar.gz
 11a1003ac08ba5b8739c371b8d2d953f31c666c7a9f6926420f7aab94665298ce8ca0782979a3ea48bc67d800b48b4eeba030f2fc86e422b0cafae7319b7db98  0003-Use-qmltestrunner-qt5.patch
 f31e009ec2020fb6583d3f19f67ee2eae77661599150aad4e793026a320488615613495e6f11221975b12f2c547b2d6a66dbbc5ca5f98199e611df4a990adc2b  migrate-to-upstream-maliit-keyboard.patch
 "
