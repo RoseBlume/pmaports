@@ -2,9 +2,7 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=qtmir
-pkgver=0.7.1_git20230628
-# branch: personal/mariogrip/desktop-development
-_commit="b7803c8a15d367e65f464f84c62c67b69ac4758a"
+pkgver=0.7.2
 pkgrel=0
 pkgdesc="QPA plugin to make Qt a Mir server"
 arch="all"
@@ -33,14 +31,13 @@ checkdepends="
 	dbus
 	py3-dbusmock
 	"
-source="https://gitlab.com/ubports/development/core/qtmir/-/archive/$_commit/qtmir-$_commit.tar.gz
+source="https://gitlab.com/ubports/development/core/qtmir/-/archive/$pkgver/qtmir-$pkgver.tar.gz
 	0001-Wayland-hack-set-maliit-server-to-inputmethod-type-W.patch
-	0002-Require-miroil-in-out-.pc-file.patch
-	0003-Disable-benchmarks.patch
+	0002-Squash-of-miroil-patches.patch
+	0003-Require-miroil-in-out-.pc-file.patch
 	0004-Update-for-Mir-2.15-removals.patch
 	"
 subpackages="$pkgname-dev"
-builddir="$srcdir/$pkgname-$_commit"
 options="!check" # Tests fail under QEMU
 
 build() {
@@ -66,16 +63,21 @@ package() {
 	rm "$pkgdir"/usr/bin/qtmir-demo-shell
 	rm "$pkgdir"/usr/share/applications/qtmir-demo-client.desktop
 	rm "$pkgdir"/usr/share/applications/xwayland.qtmir.desktop
+	rm "$pkgdir"/usr/share/qtmir/benchmarks/common.py
+	rm "$pkgdir"/usr/share/qtmir/benchmarks/report_types.py
+	rm "$pkgdir"/usr/share/qtmir/benchmarks/touch_event_latency.py
+	rm "$pkgdir"/usr/share/qtmir/benchmarks/touch_event_latency.R
 	rmdir "$pkgdir"/usr/share/applications/
 	rm -r "$pkgdir"/usr/share/qtmir/qtmir-demo-client/
 	rm -r "$pkgdir"/usr/share/qtmir/qtmir-demo-shell/
+	rm -r "$pkgdir"/usr/share/qtmir/benchmarks/
 	rmdir "$pkgdir"/usr/share/qtmir/
 }
 
 sha512sums="
-a4ba213184d5db1f8c6fb87bfcda5251df491d48e88e4ef5db728873c340c56425e7b9090822f5d78d97c142613edf4ef87988fe4dd20de8333ed891143b8b12  qtmir-b7803c8a15d367e65f464f84c62c67b69ac4758a.tar.gz
-ed4a937d689b46ea741ddf8f6ec5416cf6abd22b53565415adef8dfa7bb141145c7d61365b7a5fcac54a31fac047954d946db0c344aa6b9a4454fdc3fc170943  0001-Wayland-hack-set-maliit-server-to-inputmethod-type-W.patch
-8ab84f15e506b5e4f52315776ed6aa5f8ab44be26e84555d00346bbde945cdabfdb08cf83b420e561017cb0eb647fa6581d503ab0c1d84648e28d938b593f341  0002-Require-miroil-in-out-.pc-file.patch
-99443e282e5464ce9449cc99ba1c242a4f5e4672a64b19e62fd0437c52080264a37ac06b43d499f03cf31a48e9ffa02509885d7af7c152c14b962aa788b13a61  0003-Disable-benchmarks.patch
-97305babc7f034b4b5f646d5e9007ea065364abd3d4191cada3bf3930b4f907c35d988fb8f80047046e1f5d3baf949be9ee137676f27273cc887321b04213623  0004-Update-for-Mir-2.15-removals.patch
+17b59f4056b3dd7509201a3d575c3c018f278e9e08fdef3d38049f95b48389f87a6154d569db242e705f68d6b09916319f4d9d6ee3b3e5faea0299a9d9770d83  qtmir-0.7.2.tar.gz
+f6481e3fff1b00066d2292e8273bd1dc5759d65e8eb5dba5e1400ba4570663933a8ed5e42bbf0207a96a9733b30256c1ee70055f25d93fcb862dff72e9bc0d1d  0001-Wayland-hack-set-maliit-server-to-inputmethod-type-W.patch
+bd783233deb19bb1feda66b30c57fa565482c809f161d2065da882fd497d3f8f8678e0414a181e2386c2b633a0099e0e80d4f1057623abfff817b6619100b724  0002-Squash-of-miroil-patches.patch
+b99d9c84921e8374e6596825de9b3ed120d461b2a2627cf98bb31b306db6f49a919e5a1f40eb0ffdb4986ea463d6e90a6bd3c29c5ed4147c6c6b1bd85628501d  0003-Require-miroil-in-out-.pc-file.patch
+d828204c95458d33ffd6364c3a25a8151fc1503ed81415655a86dbc1cd4d47a2ba5b0d6d30d9f17416a82901ec250b22e09fbbd367f3c63094b2d8a83cb3518a  0004-Update-for-Mir-2.15-removals.patch
 "

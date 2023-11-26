@@ -1,4 +1,4 @@
-From 6376713f75fb49336b6a6cad7211e118da3619f4 Mon Sep 17 00:00:00 2001
+From 56bb606298f8f0e64d565e8b664836f7241c59c3 Mon Sep 17 00:00:00 2001
 From: Marius Gripsgard <marius@ubports.com>
 Date: Sun, 8 Sep 2019 19:54:55 +0200
 Subject: [PATCH 1/4] Wayland hack, set maliit-server to inputmethod type (WIP)
@@ -8,12 +8,12 @@ Subject: [PATCH 1/4] Wayland hack, set maliit-server to inputmethod type (WIP)
  1 file changed, 6 insertions(+)
 
 diff --git a/src/platforms/mirserver/wrappedwindowmanagementpolicy.cpp b/src/platforms/mirserver/wrappedwindowmanagementpolicy.cpp
-index c72c1bd2..15168191 100644
+index d44e730b..6a4563b2 100644
 --- a/src/platforms/mirserver/wrappedwindowmanagementpolicy.cpp
 +++ b/src/platforms/mirserver/wrappedwindowmanagementpolicy.cpp
-@@ -139,6 +139,12 @@ namespace qtmir
-             if (initialSize.isValid() && surfaceType == mir_window_type_normal) {
+@@ -131,6 +131,12 @@ namespace qtmir
                  parameters.size() = toMirSize(initialSize);
+                 hasInitialSize = true;
              }
 +
 +            auto surfaceName = requestParameters.name().is_set() ? requestParameters.name().value() : "";
@@ -23,7 +23,7 @@ index c72c1bd2..15168191 100644
 +            }
          }
  
-         parameters.server_side_decorated() = false;
+         if (!hasInitialSize &&
 -- 
-2.42.1
+2.43.0
 

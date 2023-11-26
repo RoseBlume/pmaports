@@ -1,7 +1,7 @@
-From 8daee8c97ac06358193cc00460e4a2403a84c00b Mon Sep 17 00:00:00 2001
+From d91fba9fa4456c948cc53f97c6aadae5e513fb50 Mon Sep 17 00:00:00 2001
 From: Mike Gabriel <mike.gabriel@das-netzwerkteam.de>
 Date: Sun, 26 Feb 2023 22:35:32 +0100
-Subject: [PATCH 2/4] Require miroil in out .pc file
+Subject: [PATCH 3/4] Require miroil in out .pc file
 
 ---
  src/platforms/mirserver/qtmirserver.pc.in | 2 +-
@@ -20,5 +20,5 @@ index fa2d862a..12e09b92 100644
  Libs: -L${libdir} -lqtmirserver
  Cflags: -I${includedir}
 -- 
-2.42.1
+2.43.0
 
