@@ -1,10 +1,11 @@
-# Maintainer: Brandon Boese <brandonboese@protonmail.com>
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
+# Contributor: Brandon Boese <brandonboese@protonmail.com>
 pkgname=biometryd
 pkgver=0.3.0
 pkgrel=0
 pkgdesc="Mediates and multiplexes access to biometric devices"
 url="https://gitlab.com/ubports/development/core/biometryd"
-arch="all !armhf"
+arch="all"
 license="GPL-3.0-only"
 depends="qt5-qtbase-sqlite"
 makedepends="
@@ -23,11 +24,12 @@ makedepends="
 	process-cpp-dev
 	qt5-qtbase-dev
 	qt5-qtdeclarative-dev
+	samurai
 	telepathy-mission-control-dev
 	telepathy-qt-dev
 	"
 subpackages="$pkgname-dev"
-source="$pkgname-$pkgver.tar.gz::https://gitlab.com/ubports/development/core/biometryd/-/archive/$pkgver/biometryd-$pkgver.tar.gz
+source="https://gitlab.com/ubports/development/core/biometryd/-/archive/$pkgver/biometryd-$pkgver.tar.gz
 	0001-Add-missing-headers-for-gcc-13.patch
 	0002-no-lxc-android-config-service-in-Debian.patch
 	0003-disable_test_qml_plugin.patch
@@ -37,11 +39,11 @@ source="$pkgname-$pkgver.tar.gz::https://gitlab.com/ubports/development/core/bio
 	"
 
 build() {
-	cmake -B build \
+	cmake -B build -G Ninja \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DCMAKE_INSTALL_SYSCONFDIR=/etc \
-		-DCMAKE_INSTALL_LOCALSTATEDIR=/var
+		-DBUILD_SHARED_LIBS=ON \
+		-DCMAKE_BUILD_TYPE=None
 	cmake --build build
 }
 
