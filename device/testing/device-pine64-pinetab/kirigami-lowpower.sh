@@ -1,3 +1,0 @@
-#!/bin/sh
-
-export KIRIGAMI_LOWPOWER_HARDWARE=1
