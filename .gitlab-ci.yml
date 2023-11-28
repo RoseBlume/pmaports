@@ -18,7 +18,7 @@ stages:
 # https://docs.gitlab.com/ee/ci/merge_request_pipelines/index.html#excluding-certain-jobs
 .only-default: &only-default
   only:
-    - master
+    - v23.12
     - merge_requests
     - tags
 
@@ -100,7 +100,7 @@ kernel-kconfig:
   stage: lint
   only:
     refs:
-      - master
+      - v23.12
       - merge_requests
     changes:
       - device/*/linux-*/config-*
@@ -140,11 +140,6 @@ build-x86_64:
   script:
     - .ci/build-x86_64.sh
 
-build-x86:
-  extends: .build
-  script:
-    - .ci/build-x86.sh
-
 build-aarch64:
   extends: .build
   script:
@@ -154,13 +149,3 @@ build-armv7:
   extends: .build
   script:
     - .ci/build-armv7.sh
-
-build-armhf:
-  extends: .build
-  script:
-    - .ci/build-armhf.sh
-
-build-riscv64:
-  extends: .build
-  script:
-    - .ci/build-riscv64.sh
