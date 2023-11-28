@@ -29,6 +29,7 @@ checkdepends="
 	xvfb-run
 	"
 source="https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/archive/v$pkgver/lomiri-terminal-app-v$pkgver.tar.gz"
+subpackages="$pkgname-doc $pkgname-lang"
 builddir="$srcdir/$pkgname-v$pkgver"
 options="!check" # no tests
 
@@ -37,7 +38,9 @@ build() {
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DBUILD_SHARED_LIBS=ON \
-		-DCMAKE_BUILD_TYPE=None
+		-DCMAKE_BUILD_TYPE=None \
+		-DCLICK_MODE=OFF \
+		-DINSTALL_TESTS=OFF
 	cmake --build build
 }
 
