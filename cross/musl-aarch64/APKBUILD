@@ -23,8 +23,8 @@ pkgdesc="the musl library (lib c) implementation for $_arch"
 _target="$(arch_to_hostspec $_arch)"
 
 source="
-	musl-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/musl-$pkgver-r$pkgrel.apk
-	musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
+	musl-$pkgver-r$pkgrel-$_arch-v3.19.apk::$_mirror/v3.19/main/$_arch/musl-$pkgver-r$pkgrel.apk
+	musl-dev-$pkgver-r$pkgrel-$_arch-v3.19.apk::$_mirror/v3.19/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
 "
 
 package() {
@@ -32,7 +32,7 @@ package() {
 	cd "$pkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-v3.19.apk
 	rm .PKGINFO .SIGN.*
 }
 package_dev() {
@@ -40,7 +40,7 @@ package_dev() {
 	cd "$subpkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-v3.19.apk
 	rm .PKGINFO .SIGN.*
 
 	# symlink everything from /usr/$_target/usr/*
@@ -57,6 +57,6 @@ package_dev() {
 }
 
 sha512sums="
-dc2312748073a940f97cfa831395f417433abd761c7c4e770833ae887971ad0bfee449d3e3fafb4a7ebfa8e2fb61884a81c2e1c647e8c6df25fcdb026b4184d9  musl-1.2.4_git20230717-r4-aarch64-edge.apk
-60f429312d5a7780925f9f7a156cb049f9964bad1758cbdd91f7275bf73b22b9dfc39e1c38b9a8243b433f2a6777427deecf74a5f3f75fc3813559037455c2af  musl-dev-1.2.4_git20230717-r4-aarch64-edge.apk
+441ca83a92579f601765261eac4886d61141bb6ddeba6da86e342416743a6863fb5b0f384bae6b3e8bfa14b4b8ae0aab87bd92365b85a668d73bc9815905a472  musl-1.2.4_git20230717-r4-aarch64-v3.19.apk
+d68e1713ea9dbe040559099133d524ae996c00e762e1eac266487f1c1048c569463dfb2fb02462001d675ab4961a7b12f2767f405a4e456a14ec12c8ed97f2e4  musl-dev-1.2.4_git20230717-r4-aarch64-v3.19.apk
 "

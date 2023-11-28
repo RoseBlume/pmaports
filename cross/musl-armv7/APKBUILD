@@ -23,8 +23,8 @@ pkgdesc="the musl library (lib c) implementation for $_arch"
 _target="$(arch_to_hostspec $_arch)"
 
 source="
-	musl-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/musl-$pkgver-r$pkgrel.apk
-	musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
+	musl-$pkgver-r$pkgrel-$_arch-v3.19.apk::$_mirror/v3.19/main/$_arch/musl-$pkgver-r$pkgrel.apk
+	musl-dev-$pkgver-r$pkgrel-$_arch-v3.19.apk::$_mirror/v3.19/main/$_arch/musl-dev-$pkgver-r$pkgrel.apk
 "
 
 package() {
@@ -32,7 +32,7 @@ package() {
 	cd "$pkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-$pkgver-r$pkgrel-$_arch-v3.19.apk
 	rm .PKGINFO .SIGN.*
 }
 package_dev() {
@@ -40,7 +40,7 @@ package_dev() {
 	cd "$subpkgdir/usr/$_target"
 	# Use 'busybox tar' to avoid 'tar: Child returned status 141'
 	# on some machines (builds.sr.ht, gitlab-ci). See pmaports#26.
-	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-edge.apk
+	busybox tar -xf $srcdir/musl-dev-$pkgver-r$pkgrel-$_arch-v3.19.apk
 	rm .PKGINFO .SIGN.*
 
 	# symlink everything from /usr/$_target/usr/*
@@ -57,6 +57,6 @@ package_dev() {
 }
 
 sha512sums="
-a4ac608257e996f08654ace0d19973aada8a7c70b3663aa80cdba10edfea58a388611731cd47f3010c0a43f578d0a3ecf910c59f9ab94b43159ab331f656cd4b  musl-1.2.4_git20230717-r4-armv7-edge.apk
-1a7ed9f5f78e99dd470bf6ea8b6d4a4aaffd80571d466747450f1ba40a97d852b5f366f891e74199ed75039f7fb890b379b21cdefef400bea892a58de8919f6f  musl-dev-1.2.4_git20230717-r4-armv7-edge.apk
+a4ac608257e996f08654ace0d19973aada8a7c70b3663aa80cdba10edfea58a388611731cd47f3010c0a43f578d0a3ecf910c59f9ab94b43159ab331f656cd4b  musl-1.2.4_git20230717-r4-armv7-v3.19.apk
+1a7ed9f5f78e99dd470bf6ea8b6d4a4aaffd80571d466747450f1ba40a97d852b5f366f891e74199ed75039f7fb890b379b21cdefef400bea892a58de8919f6f  musl-dev-1.2.4_git20230717-r4-armv7-v3.19.apk
 "
