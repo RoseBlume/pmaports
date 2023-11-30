@@ -1,0 +1,50 @@
+# Forked from Alpine: still in testing, postmarketos-base-ui-gnome depends on
+# it. See https://gitlab.alpinelinux.org/alpine/aports/-/issues/14962.
+
+pkgname=power-profiles-daemon
+pkgver=0.13
+pkgrel=2
+pkgdesc="Makes power profiles handling available over D-Bus"
+url="https://gitlab.freedesktop.org/hadess/power-profiles-daemon"
+arch="all"
+license="GPL-3.0-or-later"
+depends="
+	glib
+	py3-gobject3
+	"
+makedepends="
+	glib-dev
+	libgudev-dev
+	meson
+	polkit-dev
+	upower-dev
+	"
+checkdepends="
+	py3-dbusmock
+	umockdev
+	"
+source="https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/archive/$pkgver/power-profiles-daemon-$pkgver.tar.gz
+	dbus_no_systemd.patch
+	"
+
+build() {
+	abuild-meson \
+		-Db_lto=true \
+		-Dsystemdsystemunitdir="" \
+		-Dtests="$(want_check && echo true || echo false)" \
+		. output
+	meson compile -C output
+}
+
+check() {
+	meson test --no-rebuild --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+97cf399efe489e6cdcafbc673bdab714ccb8551e3ce681078cd527bb91a77842d44bb92e1209c3bc7c39e91210a4ab2215607d8d1c079f254e1584a24c5880ee  power-profiles-daemon-0.13.tar.gz
+c33409d42125da771fdf9e0768560f7902c33b01d7c39304a5e53f691656ab4d9f9706a9c8f16006d25b6f3bef4913407a8caced075e78c593fdf1623adbcf6c  dbus_no_systemd.patch
+"
