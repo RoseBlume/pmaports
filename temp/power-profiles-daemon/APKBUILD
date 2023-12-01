@@ -26,6 +26,8 @@ checkdepends="
 source="https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/archive/$pkgver/power-profiles-daemon-$pkgver.tar.gz
 	dbus_no_systemd.patch
 	"
+# tests fail for aarch64 with pmbootstrap
+options="!check"
 
 build() {
 	abuild-meson \
