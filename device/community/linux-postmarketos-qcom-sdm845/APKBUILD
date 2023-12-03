@@ -6,7 +6,7 @@
 _flavor="postmarketos-qcom-sdm845"
 pkgname=linux-$_flavor
 pkgver=6.6.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Mainline Kernel fork for SDM845 devices"
 arch="aarch64"
 _carch="arm64"
@@ -41,8 +41,11 @@ build() {
 package() {
 	if [ -e "$builddir/arch/$_carch/boot/vmlinuz.efi" ]; then
 		# ZBOOT EFI decompressor for EFI booting
-		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
-			"$pkgdir/boot/linux.efi"
+		# FIXME: This results in /boot running out of space at the default
+		# 128M size. We should move the old /boot/vmlinuz out of /boot as
+		# it's already duplicated in the boot.img.
+		# install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
+		# 	"$pkgdir/boot/linux.efi"
 
 		# Old GZIP'd kernel image for boot.img compatibility
 		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz" \
