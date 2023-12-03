@@ -1,0 +1,65 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: JustSoup321 <brandonboese@protonmail.com>
+# Co-Maintainer: Alper Nebi Yasak <alpernebiyasak@gmail.com>
+pkgname=device-google-x64cros
+pkgdesc="Google Chromebooks with x64 CPU"
+pkgver=3
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="x86_64"
+options="!check !archcheck"
+depends="
+	alsa-ucm-conf
+	depthcharge-tools
+	postmarketos-base
+	postmarketos-cros-common
+	postmarketos-update-depthcharge-kernel
+	sof-bin
+	systemd-boot
+	"
+makedepends="devicepkg-dev"
+subpackages="
+	$pkgname-libva
+	$pkgname-kernel-lts:kernel_lts
+	$pkgname-kernel-edge:kernel_edge
+	$pkgname-vulkan
+	"
+source="deviceinfo modules-initfs"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+libva() {
+	install_if="$pkgname=$pkgver-r$pkgrel libva"
+	depends="intel-media-driver libva-intel-driver"
+	mkdir "$subpkgdir"
+}
+
+kernel_edge() {
+	pkgdesc="Alpine Edge kernel"
+	depends="linux-edge"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_lts() {
+	pkgdesc="Alpine LTS kernel"
+	depends="linux-lts"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+vulkan() {
+	install_if="$pkgname=$pkgver-r$pkgrel vulkan-loader"
+	depends="mesa-vulkan-intel"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+9260fe8df64e284f137f77844562d2f08e28d72d36a50772b0216cd7d68eeb41d0cdb650d0f0d1ad04c3906991aba0561c36813a2beb62cedf16f616c9ccedb9  deviceinfo
+9606a2f61bfd9e0a2ea04fbe45e25093b702fd5b5cccf9f4f50768ee3b501251d8d3e1605485e5ec8f485b4bff7e44fe20d488f80736837654a9951391a97789  modules-initfs
+"
