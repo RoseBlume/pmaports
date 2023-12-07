@@ -1,0 +1,48 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kidletime
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Monitoring user activity"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.0-only"
+makedepends="
+	doxygen
+	extra-cmake-modules
+	plasma-wayland-protocols
+	qt6-qttools-dev
+	qt6-qtwayland-dev
+	samurai
+	wayland-dev
+	wayland-protocols
+	"
+subpackages="$pkgname-dev $pkgname-doc"
+_repo_url="https://invent.kde.org/frameworks/kidletime.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kidletime-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# solidmttest is broken
+	ctest --test-dir build --output-on-failure -E "solidmttest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+4c90c78e9e588d7cd49ec076c646020c9fbd0f124d69fcafbb67aa2b47445f4eac4fadec50964956cc687c9def82f976415cf456495b1e959e1bdfbf3e85c863  kidletime-5.246.0.tar.xz
+"

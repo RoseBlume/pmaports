@@ -1,0 +1,49 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=karchive
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Qt addon providing access to numerous types of archives"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.0-or-later AND LGPL-2.1-or-later"
+depends_dev="
+	bzip2-dev
+	qt6-qtbase-dev
+	xz-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/karchive.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/karchive-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+ebf43c600a5e35585f4c70259cc2c57deab3e12b9fc45828a6f1e6892440c3909e33f9bd7e63b48d58008d62cc6d87ec18da50d80b0b6d1e8b4576848692beca  karchive-5.246.0.tar.xz
+"

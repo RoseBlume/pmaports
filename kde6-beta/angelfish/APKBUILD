@@ -1,0 +1,64 @@
+# Contributor: Jonah Brüchert <jbb@kaidan.im>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=angelfish
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="Small Webbrowser for Plasma Mobile"
+# armhf blocked by extra-cmake-modules
+# ppc64le and s390x blocked by qt6-qtwebengine
+# riscv64 disabled due to missing rust in recursive dependency
+arch="all !ppc64le !s390x !armhf !riscv64"
+url="https://phabricator.kde.org/source/plasma-angelfish/"
+license="GPL-3.0-or-later"
+depends="
+	kirigami-addons
+	kirigami
+	purpose
+	qt6-qtbase-sqlite
+	"
+makedepends="
+	corrosion
+	extra-cmake-modules
+	futuresql-dev
+	kdeclarative-dev
+	ki18n-dev
+	kio-dev
+	kirigami-addons-dev
+	kirigami-dev
+	libplasma-dev
+	purpose-dev
+	qqc2-desktop-style-dev
+	qt6-qtwebengine-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/network/angelfish.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/angelfish-$pkgver.tar.xz"
+options="net" # net required to download Rust dependencies
+
+provides="plasma-angelfish=$pkgver-r$pkgrel" # Backwards compatibility
+replaces="plasma-angelfish" # Backwards compatibility
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_SHARED_LIBS=True
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure -j1
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+45dd982ad6ce306c2b0e8f94491cb3d1a42f99ee3115b78e3d3ef02d547f513104eef2fb41bdfa61b8440d3e1435fd6a8593f47bc75e0a18d8373d8ab05eaadd  angelfish-24.01.80.tar.xz
+"

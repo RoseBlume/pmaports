@@ -1,0 +1,51 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=knotifications
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Abstraction for system notifications"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="BSD-3-Clause AND LGPL-2.0-or-later AND LGPL-2.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)"
+depends_dev="
+	kconfig-dev
+	kcoreaddons-dev
+	kwindowsystem-dev
+	libcanberra-dev
+	phonon-dev
+	qt6-qtbase-dev
+	qt6-qtspeech-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/frameworks/knotifications.git"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+source="https://download.kde.org/unstable/frameworks/$pkgver/knotifications-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+e68a5aa499f1f728c1d0dc80394441bcf3a5856d6474617f0b7da487d693359a490ef0efeca11d2a269c992a25534f8532796d736afebff9d51f08498b699f00  knotifications-5.246.0.tar.xz
+"

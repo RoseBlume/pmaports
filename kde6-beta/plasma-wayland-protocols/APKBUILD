@@ -1,0 +1,39 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-other
+pkgname=plasma-wayland-protocols
+pkgver=1.11.1
+pkgrel=1
+pkgdesc="Plasma Specific Protocols for Wayland"
+# armhf blocked by extra-cmake-modules
+arch="noarch !armhf"
+url="https://www.kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND LGPL-2.1-only"
+makedepends="
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/libraries/plasma-wayland-protocols.git"
+source="https://download.kde.org/stable/plasma-wayland-protocols/plasma-wayland-protocols-$pkgver.tar.xz
+	0001-$pkgname-add-more-HDR-settings.patch::https://invent.kde.org/libraries/plasma-wayland-protocols/-/commit/a95fc86fba3895308ce803876e0bc4f72e42e658.patch"
+options="!check" # No code to test
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+8a3b887c95c5991320f115911bba2691567c11ef4f9201729d469aa1ec02fc4225f37886f8e674c6953efea51aa24afbe59c613b9013632c918ce24f77f1979a  plasma-wayland-protocols-1.11.1.tar.xz
+054b57f835d04651e7f6abf9c5196a918192490082c374ac57f56dc35a424cc63f06fbe93110d36d16f705f25bad9c74e2bc4758140ddccca52f5021723c1c58  0001-plasma-wayland-protocols-add-more-HDR-settings.patch
+"

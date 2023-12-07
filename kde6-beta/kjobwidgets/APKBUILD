@@ -1,0 +1,48 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kjobwidgets
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Widgets for tracking KJob instances"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only AND (LGPL-2.1-only OR LGPL-3.0-only)"
+depends_dev="
+	kcoreaddons-dev
+	knotifications-dev
+	kwidgetsaddons-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kjobwidgets.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kjobwidgets-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c320fd01a67eef2a1ae5c06979629f2737bbc3122a23c0b80eb914da9bb422f7f9ea56ae6b69ac80414fd3771e5da638ac4cd91b7c8ca1021e528ad5371cf395  kjobwidgets-5.246.0.tar.xz
+"

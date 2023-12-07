@@ -1,0 +1,45 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kmime
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="Library for handling mail messages and newsgroup articles"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/KDE_PIM"
+license="LGPL-2.0-or-later"
+depends_dev="
+	kcodecs-dev
+	ki18n-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/kmime.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kmime-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure -E "kmime-(rfc2231|dateformatter|header|message)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+781a25da53bc70075c33832e712801d296e455767aa99ef90b9fe6a758fc848c033b97c49310cd0bdc5d0682b1b9cbf07add44d876a93b16a2bf7962ec766093  kmime-24.01.80.tar.xz
+"

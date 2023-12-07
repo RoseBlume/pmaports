@@ -1,0 +1,56 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kaccounts-integration
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+# s390x, ppc64le and riscv64 blocked by signon-ui -> qt5-qtwebengine
+arch="all !armhf !s390x !ppc64le !riscv64"
+url="https://kde.org/applications/internet/"
+pkgdesc="Small system to administer web accounts for the sites and services across the KDE desktop"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+depends="
+	accounts-qml-module
+	signon-ui
+	"
+depends_dev="
+	kcmutils-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	libaccounts-qt-dev
+	qcoro-dev
+	qt6-qtbase-dev
+	signond-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/network/kaccounts-integration.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kaccounts-integration-$pkgver.tar.xz
+	0001-$pkgname-Add-version-suffix-to-Qt6-build.patch::https://invent.kde.org/network/kaccounts-integration/-/commit/fe713c756d9f17713f017888492bbe989e923ac6.patch
+	"
+options="!check" # No tests available
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+5899ec18a380a4a441e64423f83f66df09e5526576a017b06c1e5213ed0b0f5c0dbb41ef50a8acd1d53abad323166a835a9891442f6aeb57f3f7562d7be15fdb  kaccounts-integration-24.01.80.tar.xz
+d868a24c124ad20d8a60e7995327318d330d8f51d800b40dd38825d77ca2bc9a9060facbd80fb767b3f728fa82273ff3b944e08de8eed15762ae97b1ac1563ca  0001-kaccounts-integration-Add-version-suffix-to-Qt6-build.patch
+"

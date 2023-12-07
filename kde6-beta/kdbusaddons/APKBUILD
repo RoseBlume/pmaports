@@ -1,0 +1,46 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kdbusaddons
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Addons to QtDBus"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+makedepends="
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qttools-dev
+	shared-mime-info
+	samurai
+	"
+checkdepends="dbus"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kdbusaddons.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kdbusaddons-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	dbus-run-session -- ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+bca55f2845ab5c0a8c79987f4e84b89f1205ae3e917f79cf8ee05819da719d014e6d6cb7606c3b6290d413089ca95e3ea6b6c8fb2868027f28ef8ddfcab60620  kdbusaddons-5.246.0.tar.xz
+"

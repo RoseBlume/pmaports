@@ -1,0 +1,43 @@
+# Contributor: Natanael Copa <ncopa@alpinelinux.org>
+# Maintainer: Natanael Copa <ncopa@alpinelinux.org>
+pkgname=xdg-utils
+pkgver=1.2.0_beta1
+pkgrel=0
+pkgdesc="Basic desktop integration functions"
+url="https://www.freedesktop.org/wiki/Software/xdg-utils/"
+arch="noarch"
+options="!check"  # No test suite.
+license="MIT"
+depends="
+	file
+	xprop
+	xset
+	"
+makedepends="
+	libxml2-utils
+	libxslt
+	lynx
+	xmlto
+	"
+subpackages="$pkgname-doc"
+source="https://gitlab.freedesktop.org/xdg/xdg-utils/-/archive/v${pkgver/_/-}/xdg-utils-v${pkgver/_/-}.tar.gz"
+builddir="$srcdir/$pkgname-v${pkgver/_/-}"
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info
+	make
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+ff6e033b681f75a149cfe19c094cafa1e010e5d1ec9ac1df63e7231c555294fc4adea41de4c4b0363ca9be71c1b7749847ab4dc8389c87db21f800004dbd1cff  xdg-utils-v1.2.0-beta1.tar.gz
+"

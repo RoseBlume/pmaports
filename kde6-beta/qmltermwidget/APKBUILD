@@ -1,0 +1,46 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+
+# group=3rdparty
+pkgname=qmltermwidget
+pkgver=9999_git20230322
+pkgrel=0
+_commit="299c27c07fdb3fe090bbd43626e22efe76712cf1"
+arch="all"
+url="https://github.com/swordfish90/qmltermwidget"
+license="GPL-2.0-or-later"
+pkgdesc="QML port of qtermwidget"
+makedepends="
+	extra-cmake-modules
+	kcoreaddons-dev
+	kpty-dev
+	qt6-qt5compat-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/jbbgameich/qmltermwidget.git"
+source="https://invent.kde.org/jbbgameich/qmltermwidget/-/archive/$_commit/qmltermwidget-$_commit.tar.gz"
+#options="!check" # Requires itself to be installed
+
+builddir="$srcdir/qmltermwidget-$_commit"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+65c9f8f07c854b560b9c9f0b819351521441b81ededea592451628adc3187443e8a55a74e91b96d88f21092c69dcb55502e95833134353347a340a3f4096a4b8  qmltermwidget-299c27c07fdb3fe090bbd43626e22efe76712cf1.tar.gz
+"

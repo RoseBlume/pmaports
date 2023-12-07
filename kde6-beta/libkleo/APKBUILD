@@ -1,0 +1,55 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=libkleo
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="KDE PIM cryptographic library"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kontact.kde.org"
+license="GPL-2.0-or-later"
+# TODO: Maybe replace gnupg with specific gnupg subpackages.
+depends="gnupg"
+makedepends="
+	boost-dev
+	extra-cmake-modules
+	gpgme-dev
+	kcodecs-dev
+	kcompletion-dev
+	kconfig-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kitemmodels-dev
+	kpimtextedit-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	qt6-qtbase-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/libkleo.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/libkleo-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure -E "newkeyapprovaldialogtest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+cf93a812f5664084584555f7b9d1236ce6e62dc079df68da2d90f5cab7c4bf211d4679451f3a3a7d927fc9201b96942c37f4c79c3e0b9779cc09d7e677ef2665  libkleo-24.01.80.tar.xz
+"

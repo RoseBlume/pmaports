@@ -1,0 +1,70 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kleopatra
+pkgver=24.01.80
+pkgrel=0
+arch="all !armhf !s390x"
+url="https://www.kde.org/applications/utilities/kleopatra/"
+pkgdesc="Certificate Manager and Unified Crypto GUI"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+depends="
+	gnupg
+	pinentry-qt
+	"
+makedepends="
+	boost-dev
+	extra-cmake-modules
+	gpgme-dev
+	kcmutils-dev
+	kcodecs-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kitemmodels-dev
+	kmbox-dev
+	kmime-dev
+	kstatusnotifieritem-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	libassuan-dev
+	libkleo-dev
+	mimetreeparser-dev
+	qgpgme
+	qt6-qtbase-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/kleopatra.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kleopatra-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# kuniqueservicetest requires running dbus
+	xvfb-run ctest --test-dir build --output-on-failure -E "kuniqueservicetest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+6cf3b65c0a9b5001bfee57251ab594f1e9d0a16377bbe17e5fc385113b3b0c475842ee37407d9bdf62d36e654e5005bfd40f354c736d80c420b63e2b74b56b10  kleopatra-24.01.80.tar.xz
+"

@@ -1,0 +1,66 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kservice
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Advanced plugin and service introspection"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only AND LGPL-2.1-or-later"
+depends_dev="
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	ki18n-dev
+	"
+makedepends="$depends_dev
+	bison
+	doxygen
+	extra-cmake-modules
+	flex-dev
+	kdoctools-dev
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kservice.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kservice-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# ksycoca_xdgdirstest, kmimeassociationstest kapplicationtradertest and ksycocathreadtest are broken
+	# ksycocatest requires running X
+	local skipped_tests="("
+	local tests="
+		kapplicationtrader
+		kmimeassociations
+		ksycoca
+		ksycoca_xdgdirs
+		ksyscocathread
+		"
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)test"
+	ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+167b94894be36ee91dcab14acfa076174af054b9d58364b90de640126893482e9aea983bdfa9f29d61b3432b06ad2180d1526b12c17a99122f7a55c481455cc1  kservice-5.246.0.tar.xz
+"

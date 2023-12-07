@@ -1,0 +1,52 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kigo
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="An open-source implementation of the popular Go game"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/games/kigo/"
+license="LicenseRef-KDE-Accepted-GPL AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kio-dev
+	knewstuff-dev
+	ktextwidgets-dev
+	kxmlgui-dev
+	libkdegames-dev
+	qt6-qtbase-dev
+	qt6-qtsvg-dev
+	samurai
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/games/kigo.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kigo-$pkgver.tar.xz"
+# No tests
+options="!check"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+a9d5770a503b756b80ddf4c8bc32a994451bce0a83a3d54e3b68f99aff0388d199fda29724c5980595bc7e38dd5334cfcdeb731ce67ad1902650cd0f20ae9f5e  kigo-24.01.80.tar.xz
+"

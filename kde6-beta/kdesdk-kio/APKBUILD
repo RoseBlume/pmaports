@@ -1,0 +1,44 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kdesdk-kio
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/development"
+pkgdesc="KIO-Slaves"
+license="GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	ki18n-dev
+	kio-dev
+	perl-dev
+	qt6-qtbase-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/sdk/kdesdk-kio.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kdesdk-kio-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+5217ab112a0a891e0d27856194abc7868b07e81b56d9eaf8fed5c42ee8021d05d004663cc0ac96e2b65ce4ade4dd455de8c9e8120368a506e644def38e756b7c  kdesdk-kio-24.01.80.tar.xz
+"

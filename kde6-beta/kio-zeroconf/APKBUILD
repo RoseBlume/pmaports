@@ -1,0 +1,45 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kio-zeroconf
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.kde.org/applications/internet/"
+pkgdesc="Network Monitor for DNS-SD services (Zeroconf)"
+license="GPL-2.0-or-later AND LGPL-2.0-only AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kdbusaddons-dev
+	kdnssd-dev
+	ki18n-dev
+	kio-dev
+	qt6-qtbase-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/network/kio-zeroconf.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kio-zeroconf-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+d9d30df2676b460457d937019f4aa0e37adc5bc583d105564c5eb5e08b3c57a7b50c2e626a1c9e30121d7c7a0f9778bc3e71c66142d163396e968e6bc1450bd5  kio-zeroconf-24.01.80.tar.xz
+"

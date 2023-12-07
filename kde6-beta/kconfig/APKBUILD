@@ -1,0 +1,51 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kconfig
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Configuration system"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.1-or-later"
+makedepends="
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qtdeclarative-dev
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kconfig.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kconfig-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	local _home="${srcdir:?}"/home
+	mkdir "$_home"
+	chmod 0700 "$_home"
+	XDG_RUNTIME_DIR="$_home" \
+		HOME="$_home" \
+		xvfb-run ctest --test-dir build --output-on-failure -E 'kconfig(core-(kconfigtest|kdesktopfiletest|test_kconf_update)|gui-kstandardshortcutwatchertest)'
+	rm -rf "$_home"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+51de21d322df2607942d350998f773f5b76501cc67b6a882611a851b89b700d1f84dfd68c3cf91b8ff9e4e06e1e5ac641fa44a7d12ca3f081fd9ab1698ac4aec  kconfig-5.246.0.tar.xz
+"

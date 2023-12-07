@@ -1,0 +1,70 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kwindowsystem
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Access to the windowing system"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="MIT AND (LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev="
+	libxrender-dev
+	plasma-wayland-protocols
+	qt6-qtwayland-dev
+	xcb-util-keysyms-dev
+	xcb-util-wm-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules	
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kwindowsystem.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kwindowsystem-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# kwindowsystem-kwindowinfox11test hangs
+	# kwindowsystem-kwindowsystemx11test, kwindowsystem-kwindowsystem_threadtest and kwindowsystem-netrootinfotestwm are broken
+	# kwindowsystem-netwininfotestwm is broken on s390x
+	local skipped_tests="kwindowsystem-("
+	local tests="
+		kwindowinfox11test
+		kwindowsystemx11test
+		kwindowsystem_threadtest
+		netrootinfotestwm
+		"
+	case "$CARCH" in
+		s390x) tests="$tests
+			netwininfotestwm
+			"
+	esac
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)"
+	xvfb-run ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+a8232fb2115a187e1f1c041709d6121b6ebae1e7d491544800bd64e1ca3080b23b71c7f13c524c773037178de1475bbfcd595d6166348a3b5d0d7d40f5cd3e2a  kwindowsystem-5.246.0.tar.xz
+"

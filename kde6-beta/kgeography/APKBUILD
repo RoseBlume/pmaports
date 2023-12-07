@@ -1,0 +1,50 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kgeography
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://edu.kde.org/kgeography"
+pkgdesc="Geography Trainer"
+license="GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kitemviews-dev
+	kwidgetsaddons-dev
+	kxmlgui-dev
+	qt6-qtbase-dev
+	samurai
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/education/kgeography.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kgeography-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+9eb85a3b91b76759141fbea6578481e96979d85f83b0b2ab13b89b2de92a76c2c2c8c1d23284a37e9e6cf2a4d92a10b99897562dc5b18b5adbb15a7e8fbb89c0  kgeography-24.01.80.tar.xz
+"

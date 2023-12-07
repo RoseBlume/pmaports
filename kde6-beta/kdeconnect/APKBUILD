@@ -1,0 +1,87 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kdeconnect
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="Adds communication between KDE and your smartphone"
+url="https://community.kde.org/KDEConnect"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+license="GPL-2.0-only OR GPL-3.0-only"
+depends="
+	kirigami
+	sshfs
+	"
+makedepends="
+	extra-cmake-modules
+	kcmutils-dev
+	kconfigwidgets-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	kirigami-addons-dev
+	kirigami-dev
+	knotifications-dev
+	kpeople-dev
+	kpeoplevcard-dev
+	kservice-dev
+	kstatusnotifieritem-dev
+	kwayland-dev
+	libfakekey-dev
+	modemmanager-qt-dev
+	pulseaudio-qt-dev
+	qca-qt6-dev
+	qqc2-desktop-style-dev
+	qt6-qtbase-dev
+	qt6-qtconnectivity-dev
+	qt6-qtmultimedia-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-doc $pkgname-lang $pkgname-nftables::noarch $pkgname-zsh-completion"
+_repo_url="https://invent.kde.org/network/kdeconnect-kde.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kdeconnect-kde-$pkgver.tar.xz
+	0001-$pkgname-Port-away-from-Kirigami-BasicListItem.patch::https://invent.kde.org/network/kdeconnect-kde/-/merge_requests/611.patch
+	60_kdeconnect.nft
+	"
+builddir="$srcdir/$pkgname-kde-$pkgver"
+
+# secfixes:
+#   20.08.2-r0:
+#     - CVE-2020-26164
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DCMAKE_INSTALL_LIBEXECDIR=lib
+	cmake --build build
+}
+
+check() {
+	# testsslsocketlinereader, testnotificationlistener and sendfiletest are broken
+	xvfb-run ctest --test-dir build --output-on-failure ctest -E "mdnstest" #"testsslsocketlinereader|testnotificationlistener|sendfiletest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+nftables() {
+	pkgdesc="$pkgdesc (nftables rules)"
+	install_if="$pkgname=$pkgver-r$pkgrel nftables"
+
+	install -Dm644 -t "$subpkgdir"/etc/nftables.d "$srcdir"/60_kdeconnect.nft
+}
+
+sha512sums="
+6b1194326bcd2b9a3c6dbf14c5d5b173b24e8d86abdd7203eba12fe5b7a21ab228881c8a7f2edab8befbbb179cdc3b0b4d45b0c8dfb73ff81d18133d3c7873fe  kdeconnect-kde-24.01.80.tar.xz
+ef16cc184a0cbe7665bfadc84fb2bc26c1d35acc720af8320ea6d9f79d0e47493a409fe6966472ced4fde9b71a519114c18a8a09e5623478e2cc3eb17f82d682  0001-kdeconnect-Port-away-from-Kirigami-BasicListItem.patch
+0ccc2cb0ffd3892698b45bcf723cfdd23ad98f0e2b0436cd0a91d9ed13c6992853e2c4092ee8a0edc6216f1f262151e99e344b8f16c52237e9ff8de62fd37cae  60_kdeconnect.nft
+"

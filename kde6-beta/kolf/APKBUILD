@@ -1,0 +1,52 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kolf
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="A miniature golf game with 2d top-down view"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/games/kolf/"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kio-dev
+	ktextwidgets-dev
+	kwidgetsaddons-dev
+	kxmlgui-dev
+	libkdegames-dev
+	qt6-qtbase-dev
+	samurai
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/games/kolf.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kolf-$pkgver.tar.xz"
+# No tests
+options="!check"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+4c6437c656b139cfa567770925a774a80114e31cd4b7db1dfc324f019c371bdd628b033f2123a15934fdc9b13ffebd1999c50bf0e313ef7b593df56c73141a83  kolf-24.01.80.tar.xz
+"

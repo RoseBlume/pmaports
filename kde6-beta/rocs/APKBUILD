@@ -1,0 +1,70 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=rocs
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/education/org.kde.rocs"
+pkgdesc="Graph Theory IDE"
+license="GPL-2.0-or-later AND (LGPL-2.1-only OR LGPL-3.0-only) AND GFDL-1.2-only"
+makedepends="
+	boost-dev
+	extra-cmake-modules
+	grantlee-dev
+	karchive5-dev
+	kconfig5-dev
+	kcoreaddons5-dev
+	kcrash5-dev
+	kdeclarative5-dev
+	kdoctools5-dev
+	ki18n5-dev
+	kitemviews5-dev
+	ktexteditor5-dev
+	kxmlgui5-dev
+	qt5-qtbase-dev
+	qt5-qtsvg-dev
+	qt5-qtxmlpatterns-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-doc $pkgname-lang $pkgname-dev"
+_repo_url="https://invent.kde.org/education/rocs.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/rocs-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# TestTgfFileFormat, TestRocs1FileFormat, TestRocs2FileFormat, and
+	# graphtheory-test_graphoperations are broken
+	# TestProject requires OpenGL
+	local skipped_tests="("
+	local tests="
+		TestTgfFileFormat
+		TestRocs1FileFormat
+		TestRocs2FileFormat
+		graphtheory-test_graphoperations
+		TestProject"
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)"
+	xvfb-run ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c428ce1d76733aeaff12a891e93c516114ab0e9d786e214d33e03e485ba299cc7dc0b709d28e41323ae943731e7bd97bdad3b83a076e85add9da2364185ed24e  rocs-24.01.80.tar.xz
+"

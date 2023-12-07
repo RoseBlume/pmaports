@@ -1,0 +1,61 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=libkscreen
+pkgver=5.90.0
+pkgrel=0
+pkgdesc="KDE screen management software"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://kde.org/plasma-desktop/"
+license="LGPL-2.1-or-later AND GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)"
+depends_dev="
+	kconfig-dev
+	kwayland-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	plasma-wayland-protocols
+	qt6-qtbase-dev
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="
+	dbus
+	dbus-x11
+	xvfb-run
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang $pkgname-zsh-completion"
+_repo_url="https://invent.kde.org/plasma/libkscreen.git"
+source="https://download.kde.org/unstable/plasma/$pkgver/libkscreen-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	dbus-run-session -- xvfb-run ctest --test-dir build --output-on-failure -E "kscreen-test(backendloader|edid|log)"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	rm -rf "$pkgdir"/usr/lib/systemd
+}
+
+sha512sums="
+f0ca30d7003a23754dd97551baeef74929c766aab44df5193a5d896fcf90bd53cc512914a71ae6bdf752a9ee7affcf421e9cb2be01e08d0cbc86c3c44718346a  libkscreen-5.90.0.tar.xz
+"

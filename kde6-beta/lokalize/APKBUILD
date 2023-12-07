@@ -1,0 +1,52 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=lokalize
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="Computer-Aided Translation System"
+url="https://apps.kde.org/lokalize/"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+license="(GPL-2.0-only OR GPL-3.0-only) AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	hunspell-dev
+	kconfig5-dev
+	kcoreaddons5-dev
+	kcrash5-dev
+	kdbusaddons5-dev
+	kdoctools5-dev
+	ki18n5-dev
+	kio5-dev
+	knotifications5-dev
+	kxmlgui5-dev
+	qt5-qtbase-dev
+	samurai
+	sonnet5-dev
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/sdk/lokalize.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/lokalize-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure -E "(tmjobs|gettextheader)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+7622ab23fa5174b111bd2f5b6ec2dc08c14c2f8f1b8a9fe350a1e96f68afc83dd72d5fa19234ceb6b8c306b18a5bd024f1f855d89fa06f27936e57b81ceabd4a  lokalize-24.01.80.tar.xz
+"

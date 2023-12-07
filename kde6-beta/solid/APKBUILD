@@ -1,0 +1,55 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=solid
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Hardware integration and detection"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev="qt6-qtdeclarative-dev"
+makedepends="$depends_dev
+	bison
+	doxygen
+	eudev-dev
+	extra-cmake-modules
+	flex-dev
+	qt6-qttools-dev
+	samurai
+	udisks2-dev
+	upower-dev
+	"
+subpackages="$pkgname-dev $pkgname-libs $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/solid.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/solid-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# solidmttest is broken
+	ctest --test-dir build --output-on-failure -E "solidmttest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+libs() {
+	default_libs
+
+	amove usr/lib/libKF6Solid.so.6
+}
+sha512sums="
+9bba9bf94348286c3b5f77fb16f86d470f7dd973d14fb81727487f59b7d3e18d9071ce9c42aad462737102d5cac9407e476fd74eb90179b8416de680654cd7ee  solid-5.246.0.tar.xz
+"

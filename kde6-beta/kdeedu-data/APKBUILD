@@ -1,0 +1,38 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kdeedu-data
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="noarch !armhf"
+url="https://kde.org/applications/education"
+pkgdesc="Common data for KDE Edu applications"
+license="GPL-2.0-only"
+makedepends="
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/education/kdeedu-data.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kdeedu-data-$pkgver.tar.xz"
+# No code to test
+options="!check"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+f56143dac2f89317998d16fbe040810f374526b797f61f35f83be554001aa433e9c40bf92f814a876fabd5ab1dc5f448fc45ae491aa104ba30aecef0bc3f654f  kdeedu-data-24.01.80.tar.xz
+"

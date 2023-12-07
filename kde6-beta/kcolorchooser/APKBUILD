@@ -1,0 +1,43 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kcolorchooser
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/graphics/org.kde.kcolorchooser"
+pkgdesc="A color palette tool, used to mix colors and create custom color palettes"
+license="MIT"
+makedepends="
+	extra-cmake-modules
+	ki18n-dev
+	kxmlgui-dev
+	qt6-qtbase-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/graphics/kcolorchooser.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kcolorchooser-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+ce23f5bfa76a0b6419587451b6dd117f947df2aa69121094c69fe07098229af61211b374b26d186256d8e445613d04882199864863b2b939146445729fd44106  kcolorchooser-24.01.80.tar.xz
+"

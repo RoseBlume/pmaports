@@ -1,0 +1,48 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=bovo
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="A Gomoku like game for two players"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/games/org.kde.bovo"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kxmlgui-dev
+	libkdegames-dev
+	qt6-qtbase-dev
+	qt6-qtsvg-dev
+	samurai
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/games/bovo.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/bovo-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+f320015979c55524d89726712fc507e1f2cede052eaf5736f46601a28203ba57a28d80f557ec2448d1e691a21a92a4abac06e320900f5ec57e093b5cdbd383a5  bovo-24.01.80.tar.xz
+"

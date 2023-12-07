@@ -1,0 +1,59 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=libkgapi
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="LibKGAPI is a KDE-based library for accessing various Google services via their public API"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://community.kde.org/KDE_PIM"
+license="LGPL-2.1-only OR LGPL-3.0-only"
+depends_dev="
+	cyrus-sasl-dev
+	kcalendarcore-dev
+	kcontacts-dev
+	kio-dev
+	kwallet-dev
+	kwindowsystem-dev
+	qt6-qtbase-dev
+	qt6-qtwebengine-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/libkgapi.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/libkgapi-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# calendar-freebusyqueryjobtest, contacts-contactfetchjobtest,
+	# contacts-contactcreatejobtest and contacts-contactmodifyjobtest are broken
+	# tasks-taskfetchjobtest fails on the builders
+	# contacts-contactfetchjobtest: https://gitlab.alpinelinux.org/alpine/aports/-/issues/11787
+	# calendar-event-*: UTC+02 != UTC+02:00
+	xvfb-run ctest --test-dir build --output-on-failure \
+		-E "(tasks-taskfetchjob|calendar-freebusyqueryjob|contacts-contact(fetchjob|createjob|modifyjob)|calendar-event(createjob|modifyjob|fetchjob))test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+4d0be5faa035d0275b674e2704f39865b53e94555eebc502c3bcd8be4d0d3a7d900c508e12b244c486cd5ff84def0bb2562b4fbbc693011d4808d4ad89899fa0  libkgapi-24.01.80.tar.xz
+"

@@ -1,0 +1,86 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kalarm
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="Personal alarm scheduler"
+url="https://kontact.kde.org/"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
+arch="all !armhf !ppc64le !s390x !riscv64"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+depends="kdepim-runtime"
+makedepends="
+	akonadi-contacts-dev
+	akonadi-dev
+	akonadi-mime-dev
+	extra-cmake-modules
+	kauth-dev
+	kcalendarcore-dev
+	kcalutils-dev
+	kcmutils-dev
+	kcodecs-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kglobalaccel-dev
+	kguiaddons-dev
+	kholidays-dev
+	ki18n-dev
+	kiconthemes-dev
+	kidentitymanagement-dev
+	kidletime-dev
+	kimap-dev
+	kio-dev
+	kjobwidgets-dev
+	kmailtransport-dev
+	kmime-dev
+	knotifications-dev
+	knotifyconfig-dev
+	kpimtextedit-dev
+	kservice-dev
+	kstatusnotifieritem-dev
+	ktextwidgets-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	libkdepim-dev
+	libxslt-dev
+	mailcommon-dev
+	phonon-dev
+	pimcommon-dev
+	qgpgme
+	qt6-qtbase-dev
+	samurai
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/kalarm.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kalarm-$pkgver.tar.xz
+	0001-$pkgname-Add-search-ktextwidgets.patch::https://invent.kde.org/pim/kalarm/-/commit/d0998827b0fd5ce761957d0c57296975bd383d97.patch
+	"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja\
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure -E "(kadatetime|kaevent)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+0ffc39a73a14d49572f80ebbacfc7954969425feed5880b298f71b1d99c2ac770d1437e2695437da47e57f49b05fc7639ab3af1bd93e11974356e46ceb985d80  kalarm-24.01.80.tar.xz
+326ea17e474e669602fc7fcbfa2d9d05b62a6307a6c999f311832702096fad4ad5bfc112649747f5dacf9753b913eed741209eff9d8d9fbeae76f3ecb5636d49  0001-kalarm-Add-search-ktextwidgets.patch
+"

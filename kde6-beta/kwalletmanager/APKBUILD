@@ -1,0 +1,62 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kwalletmanager
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/system/org.kde.kwalletmanager5"
+pkgdesc="A tool to manage the passwords on your KDE system"
+license="GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	karchive-dev
+	kauth-dev
+	kcmutils-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	kjobwidgets-dev
+	knotifications-dev
+	kservice-dev
+	kstatusnotifieritem-dev
+	ktextwidgets-dev
+	kwallet-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	qt6-qtbase-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/utilities/kwalletmanager.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kwalletmanager-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+4f7e4a8ef16d3c86e7937670ff156c4cc4b3e39e83ab6b0ff557bc6af14957b629e7a28b0861d447415cf6f7483b99d667a714be125e630bc39d52fc4570a305  kwalletmanager-24.01.80.tar.xz
+"

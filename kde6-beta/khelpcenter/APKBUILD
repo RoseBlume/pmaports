@@ -1,0 +1,56 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=khelpcenter
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="Application to show KDE Applications' documentation"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://userbase.kde.org/KHelpCenter"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	grantlee-dev
+	karchive-dev
+	kbookmarks-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kio-dev
+	kservice-dev
+	ktexttemplate-dev
+	kwindowsystem-dev
+	libxml2-dev
+	qt6-qtbase-dev
+	qt6-qtwebengine-dev
+	samurai
+	xapian-core-dev
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/system/khelpcenter.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/khelpcenter-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+2d322bfca8ac527e13e514f17e579d916fea1d59cf5338968bc4fe5a9caa0d1aa37b23b9818cfa712ebc68cfd93433497f406a716fc2751ad88ac76816891991  khelpcenter-24.01.80.tar.xz
+"

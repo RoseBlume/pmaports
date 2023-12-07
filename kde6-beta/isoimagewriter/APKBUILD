@@ -1,0 +1,50 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: Bart Ribbers <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=isoimagewriter
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/ISOImageWriter"
+pkgdesc="A program to write hybrid ISO files onto a USB disk"
+license="GPL-3.0-only"
+makedepends="
+	eudev-dev
+	extra-cmake-modules
+	gpgme-dev
+	kauth-dev
+	kcoreaddons-dev
+	kcrash-dev
+	ki18n-dev
+	kiconthemes-dev
+	kwidgetsaddons-dev
+	qt6-qtbase-dev
+	samurai
+	solid-dev
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/utilities/isoimagewriter.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/isoimagewriter-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+a50ee1b70572228af9dd706023e7f6f00de3540b1517398a80972a90682ddd94a337aeaa57287218324c8c80e8bbe9bd36e96e23672ebeb1e2b2de0d90923c72  isoimagewriter-24.01.80.tar.xz
+"

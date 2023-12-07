@@ -1,0 +1,58 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=dragon
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="A multimedia player where the focus is on simplicity, instead of features"
+url="https://kde.org/applications/multimedia/org.kde.dragonplayer"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+license="GPL-2.0-only OR GPL-3.0-only"
+depends="phonon-backend-vlc"
+makedepends="
+	extra-cmake-modules
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kio-dev
+	kjobwidgets-dev
+	knotifications-dev
+	kparts-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	phonon-dev
+	qt6-qtbase-dev
+	samurai
+	solid-dev
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/multimedia/dragon.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/dragon-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+5554877905bdf0cff18bb35671f108bec391f4640bdd5c0f1fcb27441c873c94de383a0eb5c326783a5a64dd5958a5df998634720b7c6332ad6699e28bf948f3  dragon-24.01.80.tar.xz
+"

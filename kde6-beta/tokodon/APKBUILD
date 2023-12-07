@@ -1,0 +1,60 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=tokodon
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="A Mastodon client for Plasma and Plasma Mobile"
+url="https://invent.kde.org/network/tokodon/"
+# armhf blocked by extra-cmake-modules
+# riscv64, ppc64le, s390x: blocked by proposals
+arch="all !armhf !riscv64 !ppc64le !s390x"
+license="GPL-3.0-only AND CC0-1.0"
+depends="
+	kirigami-addons
+	kirigami
+	purpose
+	"
+makedepends="
+	extra-cmake-modules
+	kconfig-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kio-dev
+	kirigami-addons-dev
+	kirigami-dev
+	knotifications-dev
+	mpvqt-dev
+	purpose-dev
+	qqc2-desktop-style-dev
+	qt6-qtbase-dev
+	qt6-qtmultimedia-dev
+	qt6-qtsvg-dev
+	qt6-qtwebsockets-dev
+	qt6-qtwebview-dev
+	qtkeychain-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/network/tokodon.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/tokodon-$pkgver.tar.xz"
+# No tests
+options="!check"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+5ddfab002931b44ccdfde39452989060cd810dc5472ebd9b68b7cb76e444967a1b48d6ce9575456f7ff982e92577a6b1b4a27bf2fd2850566e33a9562aa56ef6  tokodon-24.01.80.tar.xz
+"

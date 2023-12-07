@@ -1,0 +1,71 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=libksysguard
+pkgver=5.90.0
+pkgrel=0
+pkgdesc="KDE system monitor library"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="LGPL-2.1-or-later AND (GPL-2.0-only OR GPL-3.0-only)"
+depends_dev="
+	kauth-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	knewstuff-dev
+	kservice-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	libcap-dev
+	libnl3-dev
+	libpcap-dev
+	lm-sensors-dev
+	libplasma-dev
+	qt6-qttools-dev
+	qt6-qtwebchannel-dev
+	zlib-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/plasma/libksysguard.git"
+source="https://download.kde.org/unstable/plasma/$pkgver/libksysguard-$pkgver.tar.xz"
+
+replaces="ksysguard<5.22"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# processtest requires working OpenGL
+	xvfb-run ctest --test-dir build --output-on-failure -E "process(|datamodel)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+485fa673451caf686b4c54906485ebf49048794ecf887a5cb30b874ed6488c271aeaf7205445459bbdfdd827da850ba0144156d2ebeae3688bea212bf7abed27  libksysguard-5.90.0.tar.xz
+"

@@ -1,0 +1,83 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=konsole
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://kde.org/applications/system/konsole"
+pkgdesc="KDE's terminal emulator"
+license="GPL-2.0-only AND LGPL-2.1-or-later AND Unicode-DFS-2016"
+depends="ncurses-terminfo-base"
+makedepends="
+	extra-cmake-modules
+	kbookmarks-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kglobalaccel-dev
+	kguiaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	knewstuff-dev
+	knotifications-dev
+	knotifyconfig-dev
+	kparts-dev
+	kpty-dev
+	kservice-dev
+	ktextwidgets-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	qt6-qtbase-dev
+	qt6-qtmultimedia-dev
+	samurai
+	"
+checkdepends="mesa-dri-gallium xvfb-run"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/utilities/konsole.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/konsole-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DENABLE_PLUGIN_SSHMANAGER=ON
+	cmake --build build
+}
+
+check() {
+	# DBusTest requires running DBus
+	local skipped_tests="("
+	local tests="
+		DBus
+		History
+		"
+	case "$CARCH" in
+		armv7)
+			tests="$tests Part"
+			;;
+	esac
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)Test"
+	xvfb-run ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+d4803af149c6221abf157001594f5f939e2e5f496fe4172ec1803e08f19d4bdd37761edc2342cfec126efd466c6b64ed7632451fc7a3974a64eaa008c2955999  konsole-24.01.80.tar.xz
+"

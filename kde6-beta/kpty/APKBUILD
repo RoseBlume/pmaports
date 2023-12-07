@@ -1,0 +1,48 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kpty
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Pty abstraction"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-or-later"
+depends_dev="
+	kcoreaddons-dev
+	ki18n-dev
+	libutempter-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kpty.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kpty-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure -E "kptyprocesstest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+00f3bb9f4d24e218eb3fdfa4f9f537f3dd6d0a00477007e9e99d61a2b81b041bf8c2ef566488c97fde01b133e618cdf4a34d6b31f87e004b15cbe0f3c1f8ed8e  kpty-5.246.0.tar.xz
+"

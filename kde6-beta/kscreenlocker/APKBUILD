@@ -1,0 +1,86 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=kscreenlocker
+pkgver=5.90.0
+pkgrel=0
+pkgdesc="Library and components for secure lock screen architecture"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)"
+depends="
+	elogind
+	linux-pam
+	"
+depends_dev="
+	elogind-dev
+	kcmutils-dev
+	kcrash-dev
+	kdeclarative-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kidletime-dev
+	knotifications-dev
+	ksvg-dev
+	ktextwidgets-dev
+	kwayland-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	layer-shell-qt-dev
+	libkscreen-dev
+	libseccomp-dev
+	linux-pam-dev
+	libplasma-dev
+	qt6-qtbase-dev
+	solid-dev
+	xcb-util-keysyms-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/plasma/kscreenlocker.git"
+source="https://download.kde.org/unstable/plasma/$pkgver/kscreenlocker-$pkgver.tar.xz
+	kde.pam
+	kde-fingerprint.pam
+	kde-smartcard.pam
+	"
+# Requires running loginctl
+options="!check"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	install -D -m644 "$srcdir"/kde.pam "$pkgdir"/etc/pam.d/kde
+	install -m644 "$srcdir"/kde-fingerprint.pam "$pkgdir"/etc/pam.d/kde-fingerprint
+	install -m644 "$srcdir"/kde-smartcard.pam "$pkgdir"/etc/pam.d/kde-smartcard
+}
+
+sha512sums="
+8c8c6eeeed828c55b674ab04558a797427f872033f0e9bb552ac2ed0a7df22733e5b3b91e6b27a46cfa5295f2371a666471f57b4871f558557a51b1c89207ab8  kscreenlocker-5.90.0.tar.xz
+cdbc45fb74a3c43fb2302fe09bf2f9f644ca93693e0110cf748c403762236aaeea8284a8d21fc495014c69b6d5fe4789aaff7687ce9f03dda270490fa5042e2b  kde.pam
+fe2f244b73b5cccf4b7125b9e3cac0a35566840e4ba2f69937fd8053aa56af71ee43dcbfa9c0f79de9ebe31f656e98a5d38955f77560be5c3535b08215ad8789  kde-fingerprint.pam
+2ae866d25224ba345ea9d5ddb2fce668de5c51d1cfbb4d7a048c50107ccd6cffc3231a46855599c0ba3d62ff002a26e45b69d9029f88f4ab42661465a5e526c5  kde-smartcard.pam
+"

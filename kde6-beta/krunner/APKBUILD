@@ -1,0 +1,58 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=krunner
+pkgver=5.246.0
+pkgrel=0
+pkgdesc="Framework for providing different actions given a string query"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only AND LGPL-2.1-or-later"
+depends_dev="
+	kconfig-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kio-dev
+	kitemmodels-dev
+	kservice-dev
+	qt6-qtbase-dev
+	threadweaver-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="
+	dbus
+	xvfb-run
+	"
+subpackages="$pkgname-dev $pkgname-doc"
+_repo_url="https://invent.kde.org/frameworks/krunner.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/krunner-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# dbusrunnertest, runnermanagertest and threadingtest are broken
+	dbus-run-session -- xvfb-run ctest --test-dir build --output-on-failure -E "(dbusrunner|runnermanager|threading)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+0a6d4c4238c6553b010e668c625f47a2eace9d1505276c913225989e668a3f7d9f803a2a9ba7732680e0b353aa1d036ec802438bc373b825dfad2041ff85759f  krunner-5.246.0.tar.xz
+"

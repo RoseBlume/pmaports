@@ -1,0 +1,93 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kdepim-addons
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kontact.kde.org/"
+pkgdesc="Addons for KDE PIM applications"
+license="GPL-2.0-or-later AND LGPL-2.0-or-later"
+makedepends="
+	akonadi-calendar-dev
+	akonadi-contacts-dev
+	akonadi-dev
+	akonadi-import-wizard-dev
+	akonadi-notes-dev
+	discount-dev
+	extra-cmake-modules
+	gpgme-dev
+	grantlee-dev
+	grantleetheme-dev
+	incidenceeditor-dev
+	kaddressbook-dev
+	kcalendarcore-dev
+	kcalutils-dev
+	kconfig-dev
+	kcontacts-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	kholidays-dev
+	ki18n-dev
+	kiconthemes-dev
+	kidentitymanagement-dev
+	kimap-dev
+	kio-dev
+	kitinerary-dev
+	kmailtransport-dev
+	kontactinterface-dev
+	kparts-dev
+	kpimtextedit-dev
+	kpkpass-dev
+	ktnef-dev
+	kxmlgui-dev
+	libgravatar-dev
+	libkdepim-dev
+	libkleo-dev
+	libksieve-dev
+	mailcommon-dev
+	mailimporter-dev
+	messagelib-dev
+	pimcommon-dev
+	prison-dev
+	qt6-qtbase-dev
+	qt6-qtwebengine-dev
+	samurai
+	syntax-highlighting-dev
+	"
+checkdepends="
+	dbus
+	drkonqi
+	xvfb-run
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/pim/kdepim-addons.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kdepim-addons-$pkgver.tar.xz"
+# net required to download Rust crates
+# tests are broken and hang
+options="!check net"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DKDEPIMADDONS_BUILD_EXAMPLES=OFF
+	cmake --build build
+}
+
+check() {
+	dbus-run-session xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+867ca9dc887955f5985c48daf6f01681e586cc56bd81e1123388507a894c40f891ca844f9861af30ffe23f9708cea4b7d7d204c264fc92b8daea6f68324a747e  kdepim-addons-24.01.80.tar.xz
+"

@@ -1,0 +1,82 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=akonadi-search
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="Libraries and daemons to implement searching in Akonadi"
+# armhf blocked by extra-cmake-modules
+# riscv64 blocked by akonadi
+# s390x blocked by multiple KDE Frameworks
+# ppc64le blocked by qt6-qtwebengine -> akonadi
+arch="all !armhf !s390x !riscv64 !ppc64le"
+url="https://community.kde.org/KDE_PIM"
+license="( GPL-2.0-only OR GPL-3.0-only ) AND ( LGPL-2.1-only OR LGPL-3.0-only )"
+depends_dev="
+	akonadi-dev
+	akonadi-mime-dev
+	corrosion
+	kcalendarcore-dev
+	kcmutils-dev
+	kconfig-dev
+	kcontacts-dev
+	kcrash-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kio-dev
+	kmime-dev
+	krunner-dev
+	ktextaddons-dev
+	qt6-qtbase-dev
+	xapian-core-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/akonadi-search.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/akonadi-search-$pkgver.tar.xz"
+options="net" # Required to download Rust crates
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	cd build
+
+	# akonadi-sqlite-schedulertest, konadi-sqlite-collectionindexingjobtest,
+	# akonadi-mysql-schedulertest and akonadi-mysql-collectionindexingjobtest
+	# require running dbus server
+
+	# Prevent the lines using more than 80 characters by looping
+	local skipped_tests="("
+	local tests="
+		akonadi-sqlite-scheduler
+		akonadi-sqlite-collectionindexingjob
+		akonadi-mysql-scheduler
+		akonadi-mysql-collectionindexingjob"
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)test"
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+fb09797768d0e99e1b1ffa49ad627379ef7ea94a6cb166f456f43703585780ff3999ff5f796cf5d7b4ef92a7019df708d3b282f39e36d7b4eebeac2bdf60d0d6  akonadi-search-24.01.80.tar.xz
+"

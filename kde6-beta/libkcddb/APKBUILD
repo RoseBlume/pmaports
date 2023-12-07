@@ -1,0 +1,57 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=libkcddb
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.kde.org/applications/multimedia/"
+pkgdesc="KDE CDDB library"
+license="LGPL-2.0-or-later AND GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	kcmutils-dev
+	kcodecs-dev
+	kconfig-dev
+	kdoctools-dev
+	ki18n-dev
+	kio-dev
+	kwidgetsaddons-dev
+	libmusicbrainz-dev
+	qt6-qtbase-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/multimedia/libkcddb.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/libkcddb-$pkgver.tar.xz"
+options="net" # Required for tests
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_TESTING=ON
+	cmake --build build
+}
+
+check() {
+	# musicbrainztest-severaldiscs fails due to utf16/8 (?)
+	# synchttplookuptest hangs
+	# asyncmusicbrainztest http request
+	# utf8test seems to fail to start dbus-daemon
+	xvfb-run -a ctest --test-dir build --output-on-failure \
+		-E "(asyncmusicbrainztest|synchttplookuptest|musicbrainztest-severaldiscs|utf8test)"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+bbcc3767125e89abb3355e27377a4b891a688fdd3fb32dd1b96a7295d96f5bd7a157b222dfa6f696f04ea5984e0c25a8d3d4e5dab4271a98a43387bfcd2fee38  libkcddb-24.01.80.tar.xz
+"

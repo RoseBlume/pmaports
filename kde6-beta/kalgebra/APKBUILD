@@ -1,0 +1,53 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kalgebra
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://edu.kde.org/kalgebra/"
+pkgdesc="2D and 3D Graph Calculator"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	analitza-dev
+	extra-cmake-modules
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kio-dev
+	kwidgetsaddons-dev
+	libplasma-dev
+	ncurses-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtsvg-dev
+	readline-dev
+	samurai
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/education/kalgebra.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kalgebra-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+85be5b76a97f30a4b3b132b1d5a82e68056d26d166f1cda0664d5b7c5a719a850c3ea1f2a8e10d287407ee3f2eeff09e98bf8dc13e4319c81400919fcefd8c7c  kalgebra-24.01.80.tar.xz
+"

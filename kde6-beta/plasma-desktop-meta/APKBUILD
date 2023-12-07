@@ -1,0 +1,77 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=plasma-desktop-meta
+pkgver=5.90.0
+pkgrel=0
+pkgdesc="Plasma (Base) meta package"
+url="https://kde.org/plasma-desktop"
+# riscv64, ppc64le, s390x and armhf blocked by qt6-qtwebengine -> plasma-desktop
+arch="noarch !s390x !ppc64le !armhf !riscv64"
+license="GPL-3.0-or-later"
+depends="
+	bluedevil
+	breeze
+	breeze-gtk
+	breeze-icons
+	discover
+	drkonqi
+	font-noto
+	kde-cli-tools
+	kde-gtk-config
+	kdeplasma-addons
+	kinfocenter
+	kio-fuse
+	kmenuedit
+	kscreen
+	ksshaskpass
+	kwallet-pam
+	maliit-keyboard
+	oxygen-sounds
+	pinentry-qt
+	plasma-browser-integration
+	plasma-desktop
+	plasma-disks
+	plasma-firewall
+	plasma-nm
+	plasma-pa
+	plasma-systemmonitor
+	plasma-thunderbolt
+	plasma-vault
+	plasma-workspace-wallpapers
+	polkit-kde-agent-1
+	powerdevil
+	print-manager
+	sddm-breeze
+	sddm-kcm
+	systemsettings
+	udisks2
+	xdg-desktop-portal-kde
+	xdg-user-dirs
+	"
+subpackages="plasma-extras"
+_repo_url="https://invent.kde.org/plasma/plasma-desktop-meta.git"
+options="!check" # No tests for a metapkg
+
+provides="plasma=$pkgver-r$pkgrel"
+replaces="plasma"
+
+package() {
+	mkdir -p "$pkgdir"
+}
+
+extras() {
+	pkgdesc="Additional Plasma apps meta package"
+	depends="
+		breeze-grub
+		breeze-plymouth
+		oxygen
+		plasma-sdk
+		plymouth-kcm
+		"
+
+	mkdir -p "$subpkgdir"
+}
+

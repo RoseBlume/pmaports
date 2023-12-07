@@ -1,0 +1,45 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=libkcompactdisc
+pkgver=24.01.80
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.kde.org/applications/multimedia/"
+pkgdesc="Library for interfacing with CDs"
+license="GPL-2.0-or-later AND LGPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	kcoreaddons-dev
+	ki18n-dev
+	phonon-dev
+	qt6-qtbase-dev
+	samurai
+	solid-dev
+	"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/multimedia/libkcompactdisc.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/libkcompactdisc-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+a59e126d75797abc3c56790a11a5cd18fe6430dd8efa6535fcd2570de8b0fd5ac321643aac63b9e7cde9a5799a0878bec1e6df577d20d18f903afc4a605406dd  libkcompactdisc-24.01.80.tar.xz
+"

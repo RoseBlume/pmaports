@@ -1,0 +1,101 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kdepim-runtime
+pkgver=24.01.80
+pkgrel=0
+pkgdesc="Extends the functionality of kdepim"
+url="https://kontact.kde.org/"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
+arch="all !armhf !ppc64le !s390x !riscv64"
+license="LGPL-2.0-or-later"
+makedepends="
+	akonadi-calendar-dev
+	akonadi-contacts-dev
+	akonadi-dev
+	akonadi-mime-dev
+	akonadi-notes-dev
+	extra-cmake-modules
+	kcalendarcore-dev
+	kcalutils-dev
+	kcodecs-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcontacts-dev
+	kdav-dev
+	kdoctools-dev
+	kholidays-dev
+	kidentitymanagement-dev
+	kimap-dev
+	kio-dev
+	kitemmodels-dev
+	kmailtransport-dev
+	kmbox-dev
+	kmime-dev
+	knotifications-dev
+	knotifyconfig-dev
+	ktextwidgets-dev
+	kwindowsystem-dev
+	libkgapi-dev
+	libxslt-dev
+	pimcommon-dev
+	qca-qt6-dev
+	qt6-qtbase-dev
+	qt6-qtnetworkauth-dev
+	qt6-qtspeech-dev
+	samurai
+	shared-mime-info
+	"
+checkdepends="
+	dbus
+	xvfb-run
+	"
+subpackages="$pkgname-dbg $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/kdepim-runtime.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kdepim-runtime-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	local skipped_tests="("
+	local tests="
+		testresourcetask
+		testsessionpool
+		testaddcollectiontask
+		testadditemtask
+		testchangecollectiontask
+		testchangeitemtask
+		testexpungecollectiontask
+		testmoveitemstask
+		testretrievecollectionmetadatatask
+		testretrievecollectionstask
+		testretrieveitemtask
+		testretrieveitemstask
+		akonadi-mysql-synctest
+		akonadi-sqlite-synctest
+		akonadi-mysql-pop3test
+		akonadi-sqlite-pop3test
+		"
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)"
+	dbus-run-session -- xvfb-run ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c1b5fc2fda1cc7d24977574d1ed7fa37434e941549e63aedf297b12bb4868f94295c81be886844b3df5607f0c1ecb71fa3884ea7d029245b8e7af8b1aab7e965  kdepim-runtime-24.01.80.tar.xz
+"
