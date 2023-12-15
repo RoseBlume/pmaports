@@ -22,15 +22,20 @@ def get_pmaports_dir():
     return ret
 
 
-def run_git(parameters, check=True, stderr=None):
-    """ Run git in the pmaports dir and return the output """
-    cmd = ["git", "-C", get_pmaports_dir()] + parameters
+def run_cmd(cmd, check=True, stderr=None):
+    """ Run a command and return the output """
     try:
         return subprocess.check_output(cmd, stderr=stderr).decode()
     except subprocess.CalledProcessError:
         if check:
             raise
         return None
+
+
+def run_git(parameters, check=True, stderr=None):
+    """ Run git in the pmaports dir and return the output """
+    cmd = ["git", "-C", get_pmaports_dir()] + parameters
+    return run_cmd(cmd, check, stderr)
 
 
 def add_upstream_git_remote():
@@ -85,17 +90,21 @@ def get_upstream_branch():
     return ret
 
 
-def get_changed_files(removed=True):
+def get_changed_files(removed=True, print_info=True):
     """ Get all changed files and print them, as well as the branch and the
         commit that was used for the diff.
         :param removed: also return removed files (default: True)
         :returns: set of changed files
     """
+    def log_info(message):
+        if print_info:
+            print(message)
+
     branch_upstream = f"upstream/{get_upstream_branch()}"
     commit_head = run_git(["rev-parse", "HEAD"])[:-1]
     commit_upstream = run_git(["rev-parse", branch_upstream])[:-1]
-    print("commit HEAD: " + commit_head)
-    print(f"commit {branch_upstream}: f{commit_upstream}")
+    log_info("commit HEAD: " + commit_head)
+    log_info(f"commit {branch_upstream}: f{commit_upstream}")
 
     # Check if we are HEAD on the upstream branch
     if commit_head == commit_upstream:
@@ -104,11 +113,11 @@ def get_changed_files(removed=True):
     else:
         # otherwise compare with latest common ancestor
         commit = run_git(["merge-base", branch_upstream, "HEAD"])[:-1]
-    print("comparing HEAD with: " + commit)
+    log_info("comparing HEAD with: " + commit)
 
     # Changed files
     ret = set()
-    print("changed file(s):")
+    log_info("changed file(s):")
     for file in run_git(["diff", "--name-only", commit, "HEAD"]).splitlines():
         message = "  " + file
         if not os.path.exists(file):
@@ -117,7 +126,7 @@ def get_changed_files(removed=True):
                 ret.add(file)
         else:
             ret.add(file)
-        print(message)
+        log_info(message)
     return ret
 
 
@@ -155,9 +164,9 @@ def get_changed_packages_sanity_check(count):
     sys.exit(1)
 
 
-def get_changed_packages():
+def get_changed_packages_paths(print_info=False):
     ret = set()
-    for file in get_changed_files():
+    for file in get_changed_files(print_info=print_info):
         dirname, filename = os.path.split(file)
 
         # Skip files:
@@ -187,9 +196,13 @@ def get_changed_packages():
         elif not os.path.exists(file):
             continue  # APKBUILD was deleted
 
-        ret.add(os.path.basename(dirname))
+        ret.add(dirname)
 
     return ret
+
+
+def get_changed_packages():
+    return set(map(lambda p: os.path.basename(p), iter(get_changed_packages_paths(print_info=True))))
 
 
 def get_changed_kernels():
