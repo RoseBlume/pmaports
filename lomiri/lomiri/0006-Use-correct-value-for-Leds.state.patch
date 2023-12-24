@@ -1,7 +1,7 @@
-From 4b053032b831da639aee8f8c1bcfe628298d43fb Mon Sep 17 00:00:00 2001
+From 27cc8bf8d3d46f1aa04e39a81c1252c75d9e3c41 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca@z3ntu.xyz>
 Date: Sun, 15 Aug 2021 16:52:09 +0200
-Subject: [PATCH 06/10] Use correct value for Leds.state
+Subject: [PATCH 06/11] Use correct value for Leds.state
 
 ---
  qml/Panel/Indicators/IndicatorsLight.qml | 2 +-
@@ -21,5 +21,5 @@ index 3ffab622e..681f0d8ee 100644
  
      property var _colorBinding: Binding {
 -- 
-2.42.1
+2.43.0
 

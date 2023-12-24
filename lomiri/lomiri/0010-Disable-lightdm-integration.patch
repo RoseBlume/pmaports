@@ -1,7 +1,7 @@
-From ed5248a7940e2b9944fc61a9896a43efb096d857 Mon Sep 17 00:00:00 2001
+From 46757d9ed5b4661a3c97226abc92bf84fe7f9534 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca.weiss@fairphone.com>
 Date: Tue, 14 Nov 2023 22:00:38 +0100
-Subject: [PATCH 10/10] Disable lightdm integration
+Subject: [PATCH 10/11] Disable lightdm integration
 
 Not needed on postmarketOS
 ---
@@ -36,5 +36,5 @@ index 352beba17..5f6f5cc8c 100644
  add_subdirectory(Lomiri)
  add_subdirectory(Utils)
 -- 
-2.42.1
+2.43.0
 

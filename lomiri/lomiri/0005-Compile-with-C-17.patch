@@ -1,7 +1,7 @@
-From 4848f24f78e7b51e4b66ee9c71eb241c41fde39b Mon Sep 17 00:00:00 2001
+From b43d76f87394ea8fbb8d2fc48b94572dc34e9931 Mon Sep 17 00:00:00 2001
 From: Luca Weiss <luca.weiss@fairphone.com>
 Date: Tue, 14 Nov 2023 22:16:39 +0100
-Subject: [PATCH 05/10] Compile with C++17
+Subject: [PATCH 05/11] Compile with C++17
 
 Some headers in mir include C++17 types such as std::optional so we need
 to compile against C++17 also.
@@ -31,5 +31,5 @@ index 6a3b43d4d..ea32f07e6 100644
  if ("${CMAKE_BUILD_TYPE}" STREQUAL "release" OR "${CMAKE_BUILD_TYPE}" STREQUAL "relwithdebinfo")
      option(Werror "Treat warnings as errors" ON)
 -- 
-2.42.1
+2.43.0
 

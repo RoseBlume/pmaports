@@ -1,7 +1,7 @@
-From d3751786d2228070969dde94263961c024c49af8 Mon Sep 17 00:00:00 2001
+From cdf8af07534848fdd4279d6f7b05f48ca25b4166 Mon Sep 17 00:00:00 2001
 From: Marius Gripsgard <marius@ubports.com>
 Date: Wed, 11 Jan 2023 22:58:23 +0100
-Subject: [PATCH 01/10] Add support for both older qtmir and newer qtmir with
+Subject: [PATCH 01/11] Add support for both older qtmir and newer qtmir with
  miroil
 
 ---
@@ -192,5 +192,5 @@ index 35ab3f9df..e96b604e8 100644
          screen->m_name = QString("Monitor %1").arg(i);
          screen->m_position = QPoint(lastPoint.x(), lastPoint.y());
 -- 
-2.42.1
+2.43.0
 

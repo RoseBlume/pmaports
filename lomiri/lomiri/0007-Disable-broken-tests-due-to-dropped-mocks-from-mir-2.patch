@@ -1,7 +1,7 @@
-From 8e885223394373a7fae7dae0ccd050c143d9e1fe Mon Sep 17 00:00:00 2001
+From cdf842e5f2713c38f298652bdaded932d4b2aff9 Mon Sep 17 00:00:00 2001
 From: Marius Gripsgard <marius@ubports.com>
 Date: Thu, 12 Jan 2023 01:08:08 +0100
-Subject: [PATCH 07/10] Disable broken tests due to dropped mocks from mir 2.9
+Subject: [PATCH 07/11] Disable broken tests due to dropped mocks from mir 2.9
 
 ---
  tests/mocks/CMakeLists.txt | 3 ++-
@@ -22,5 +22,5 @@ index c9a93cf66..c49e8898f 100644
  add_subdirectory(WindowManager)
  add_subdirectory(Wizard)
 -- 
-2.42.1
+2.43.0
 
