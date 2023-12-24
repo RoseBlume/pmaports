@@ -2,50 +2,38 @@
 
 pkgname=linux-postmarketos-grate
 pkgver=6.6.9
-pkgrel=0
+pkgrel=1
 pkgdesc="Linux kernel with experimental patches for Tegra"
 arch="armv7"
 url="https://gitlab.com/grate-driver/linux"
 license="GPL-2.0-only"
-options="!strip !check !tracedeps pmb:cross-native pmb:kconfigcheck-community"
+options="!strip !check !tracedeps pmb:cross-native"
 makedepends="bash bison findutils flex postmarketos-installkernel openssl-dev
-	     perl gmp-dev mpc1-dev mpfr-dev xz"
+	     perl gmp-dev mpc1-dev mpfr-dev xz devicepkg-dev"
 
 # Source
 _flavor="${pkgname#linux-}"
 _tag="v${pkgver//_/-}-stable"
 _carch="arm"
-_config="config-$_flavor.$arch"
-source="$pkgname-$_tag.tar.bz2::$url/-/archive/$_tag/linux-$_tag.tar.bz2
-	$_config"
+source="$pkgname-$_tag.tar.bz2::$url/-/archive/$_tag/linux-$_tag.tar.bz2"
 builddir="$srcdir/linux-$_tag"
+
+_pmos_defconfig="grate_defconfig"
+_pmos_uefi="true" # for surface rt
 
 prepare() {
 	default_prepare
-	cp "$srcdir/config-$_flavor.$CARCH" .config
+	. kernel_prepare
 }
 
 build() {
-	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+	. kernel_build
 }
 
 package() {
-	mkdir -p "$pkgdir"/boot
-	make zinstall modules_install dtbs_install \
-		ARCH="$_carch" \
-		INSTALL_PATH="$pkgdir"/boot \
-		INSTALL_MOD_PATH="$pkgdir" \
-		INSTALL_MOD_STRIP=1 \
-		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
-
-	install -D "$builddir"/include/config/kernel.release \
-		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+	. kernel_package
 }
 
 sha512sums="
 c6f2e1d02cdb8193f07e84d2662bdfcd77b727882e9b82a36215b0793ef004315865af2d83f4af0c89c1db7809bdffa6eac523ff5e871e1370c6b3cea58c3395  linux-postmarketos-grate-v6.6.9-stable.tar.bz2
-e5b808df3565f9e8db3be2647df7e154777a43948482fc2d41bd33abb34e0bccfdb0b31f0d70bcc70c9e71adf68bbb950904d8ab4bd1271cb5a85356868ee78b  config-postmarketos-grate.armv7
 "
