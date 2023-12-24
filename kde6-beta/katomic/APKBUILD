@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=katomic
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-c60226fb25d452320018c9c9c30f0e3695e598c3bb8606ee8cbbac5505e4738a71d27cd204573c5af5004e67b3f5f7a2e1edc92ed9b576dd43dad7b1cc735933  katomic-24.01.80.tar.xz
+2d799d41e016191290cbaff5be9e6d3e33f6045303fe4538086c573547658d1cdf35157f99b05e81571b110d2870b6841ade8a9ff57ee8c520a969f77028c666  katomic-24.01.85.tar.xz
 "

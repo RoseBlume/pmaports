@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadiconsole
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # s390x, ppc64le and riscv64 blocked by akonadi
@@ -63,5 +63,5 @@ package() {
 }
 
 sha512sums="
-ff49449e9626de2b872eec6bf8272a486536c78e4e6c917512f0117cce2bf35ffe5121ef828eae42eb268af2f2fc236cb59d951f83539f8cb94a93f7db1f105f  akonadiconsole-24.01.80.tar.xz
+a0e123dbb929392d24004e94e2c4fa840639e0770b3d32b20448288ff090d99e0723841106f507b4d1040d2d25435f55a291e0f0f4e08b359ffc511a5a91a264  akonadiconsole-24.01.85.tar.xz
 "

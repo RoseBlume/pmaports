@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kpeople
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="A library that provides access to all contacts and the people who hold them"
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-cac3b00e54657259a4139ed31874f9a225abe279d49c56b1d70e1766c5922debf25070b8bc981726a5e94ab13fc9bd74e0ab56240d8a284fa59c91d9c7617cdf  kpeople-5.246.0.tar.xz
+cc590d45af5eb1b70971caa1812d6b36fa7a8dfa3fb9eef328b28580d9215c6777263e997f2316b884622d07063b996c2e18492768b8b99586c3a5c25aebaaa8  kpeople-5.247.0.tar.xz
 "

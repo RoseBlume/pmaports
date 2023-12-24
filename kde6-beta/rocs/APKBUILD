@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=rocs
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-c428ce1d76733aeaff12a891e93c516114ab0e9d786e214d33e03e485ba299cc7dc0b709d28e41323ae943731e7bd97bdad3b83a076e85add9da2364185ed24e  rocs-24.01.80.tar.xz
+13f16ba39d3b8d44eb8d66159c4c9be3c0a1f17d53a03e067a7a908a8bbf07871ebc2ca56f6911e283d20ed37559bee9c8de7ba560d48d453c12d4a1b59697d3  rocs-24.01.85.tar.xz
 "

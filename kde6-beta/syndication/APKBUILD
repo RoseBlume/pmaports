@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=syndication
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="An RSS/Atom parser library"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -43,5 +43,5 @@ package() {
 }
 
 sha512sums="
-b5f07d2f87470d6e5e05e8360f1b31f3a71a8e1b4feafa37d3bc19a6b5e9e7d533ebf4e107b1f8b85faee637a98c3251d723b93db8531bcd011b708f17b51b99  syndication-5.246.0.tar.xz
+dd2369bdff7556c902aa030be696b7de5257eb0a8eca8cd3e0682ec1a2f0221ec8db2c3c00e2471b8c6af86e90f209004dee0b7a664643c02f6ebac3907a5a5d  syndication-5.247.0.tar.xz
 "

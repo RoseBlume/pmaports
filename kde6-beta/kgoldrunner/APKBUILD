@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kgoldrunner
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-4fbc56791db6fbe261dbe703b3390abc3b2ee076620bae03ad8d3a479cbe12276728fe9fb8f99dfa0fea0c97d111a203e28125c3f6dc51464bf62ede779baa7e  kgoldrunner-24.01.80.tar.xz
+a24a67a620fc35e2af7ecae9ffa27d4994dfa98b394ff4403ecb2490d1ce3ccc3f850dc477f62c6b274f9541902d7603c9b19e96448e545aaca983ed1b988394  kgoldrunner-24.01.85.tar.xz
 "

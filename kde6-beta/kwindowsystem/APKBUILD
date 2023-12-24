@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kwindowsystem
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Access to the windowing system"
 # armhf blocked by extra-cmake-modules
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-a8232fb2115a187e1f1c041709d6121b6ebae1e7d491544800bd64e1ca3080b23b71c7f13c524c773037178de1475bbfcd595d6166348a3b5d0d7d40f5cd3e2a  kwindowsystem-5.246.0.tar.xz
+9c191ffda90ec90a17af78c572b333d464a18dfae313afa00408bf8ba8dccc8c56561a5774e359fb93a48c30eec296f9a347a70cb49792c94da072c5909e9c26  kwindowsystem-5.247.0.tar.xz
 "

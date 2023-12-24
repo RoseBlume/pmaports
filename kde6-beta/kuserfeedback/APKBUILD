@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kuserfeedback
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Framework for collecting user feedback for applications via telemetry and surveys"
 url="https://kde.org/products/frameworks/"
@@ -43,5 +43,5 @@ package() {
 }
 
 sha512sums="
-8b8f6a127f8636ef05cc7a2d45ae08edc38e1a3042f3d8919a86f1cfc2605b78ba332151def78187d22cb5e45a84663892159fc6e8226613105d3cbd41676e12  kuserfeedback-5.246.0.tar.xz
+7723942d143b480f3fcb5dd49d32b5b7eb0c50f07094d83e43a899d2e00db877bf28d07f961a67afb4c7df19e0638810597c78c57e72ebcc46611c5b198e20ce  kuserfeedback-5.247.0.tar.xz
 "

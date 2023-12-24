@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libgravatar
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="KDE PIM library providing Gravatar support"
 # armhf blocked by extra-cmake-modules
@@ -47,5 +47,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-f924328c3a7fc47373f2c81376e95d1d999c64a86ea731f1aae11cc3f29b39273a75c2ca581829e9945b43ad1346373da2bf3c06fc398bafb6c4897192d952fe  libgravatar-24.01.80.tar.xz
+8ab3c6cfac3b1ceaf370849a80b85d8be81d3120d64f4ea6837e52db8da2fa19ec2c0a1cf1a74edd7e3f75206c37f1ef86e115aeb10a76d520629bce0de79cbb  libgravatar-24.01.85.tar.xz
 "

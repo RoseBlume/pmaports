@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A cross-desktop storage service for PIM data and meta data providing concurrent read, write, and query access"
 # armhf blocked by extra-cmake-modules
@@ -96,5 +96,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-663dfb5ed7133991d086bbdc1a27b06d520d7f0e5e49adbd0e079f55a60d6b3281a81ec9b7eac5f4a7af76926cd1a10cb7b11a14a061f52c8c7c7346a46b3d88  akonadi-24.01.80.tar.xz
+bb9152ad4e743367869c30f769602a3a2c3f4c4232975d77ec001958f82f7de370bd3d5119bf71ee680d114b372b6ca17a638445e28d30a0126b504f3b4b2792  akonadi-24.01.85.tar.xz
 "

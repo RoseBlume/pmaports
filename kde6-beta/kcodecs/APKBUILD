@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kcodecs
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Provide a collection of methods to manipulate strings using various encodings"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -41,5 +41,5 @@ package() {
 }
 
 sha512sums="
-011b89a0351f315d7aed9b34bf0fff7bcc8bfe944bef8d7fca3ea67be8e3c563f8fc3971c1233e763364c0564eeae5c2d48b1b2556256dbab227c9e6453f4e11  kcodecs-5.246.0.tar.xz
+2e0566fd808584af2d7a5b1615246f2d033cdce54f0d40fccf8da1df8e80354766b0da5270fdf53b3eccd8367ff0078be53ad810ae31abd68a7e6b6ea786924d  kcodecs-5.247.0.tar.xz
 "

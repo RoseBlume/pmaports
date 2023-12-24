@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kweather
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Weather application for Plasma Mobile"
 url="https://invent.kde.org/plasma-mobile/kweather"
@@ -55,6 +55,6 @@ package() {
 }
 
 sha512sums="
-e4ee9306054375332023c8c02fac815033d0f638a4fa7ccb27c4c176821af0e41a5f6b7a69e26ef6245b029f1925ca960314589c29f341714c73720684d849ee  kweather-24.01.80.tar.xz
+c4f91e7437c32beb353d154e05f995ecdc6242503f0f0f3e6e85c4bb03621aa944f8ae0b1ead1eceafd0821440dd832c24139349ba8b280dd9b813da22cff989  kweather-24.01.85.tar.xz
 d6972700e019dd15826fc8ec87633e2bb665961ded02233995548c5fb8451273f9cce889effcdd74d39e72696440803d22618197bbf104051b0e30c06a327374  0001-kweather-Use-kweathercore-updated-for-kf6.patch
 "

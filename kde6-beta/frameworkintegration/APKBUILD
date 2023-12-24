@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=frameworkintegration
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Framework providing components to allow applications to integrate with a KDE Workspace"
 # armhf blocked by extra-cmake-modules
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-ac465136225007948e8dae3415d447f7f9e699faf566d53625c27cc37e7823c3cde4bc08942d6ccc6fcf4943af3fb62dc7b8dcde2d9f2c393a56ab9680e82cfb  frameworkintegration-5.246.0.tar.xz
+890d780a12a72edb359fe76cd2323eadcedfdd9485657f126bc42c29e8defdca525df90ff36fd53041d3e74d5afd5a39c2f7e306a292b022333381ed6bcff6c3  frameworkintegration-5.247.0.tar.xz
 "

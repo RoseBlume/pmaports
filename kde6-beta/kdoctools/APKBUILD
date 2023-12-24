@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kdoctools
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Documentation generation from docbook"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-baed1be21838e036452440cd3031e31b43830e5d61cd0133e4b3100872448d6c01bcb8890b659bbf5a4d272af415d0c92041eee7e1c3de53182cf9f77161b76e  kdoctools-5.246.0.tar.xz
+5158d5844fe1ad83c12db70d304d43eb38061e6d871329eb1ad919c4b7f39a7c64c921c9a572965faaff3b85ba0b6dc00c8d371546e7ecd66dfeec000fbfa08f  kdoctools-5.247.0.tar.xz
 "

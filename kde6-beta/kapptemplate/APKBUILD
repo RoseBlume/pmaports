@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kapptemplate
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-2c4b2a39bf5457d4e0f2b0d29f5d38d2dfef0906522dc3ba45999300b2a88e1f9a75a866b0d825cdbd0ce9f22bdef7a118d6cc023aea3d080cae0f365e7fc84b  kapptemplate-24.01.80.tar.xz
+6393297827b6e7dc4e1824de6446369f6c75ecad0206aa2a61e21e0d36b41ddd3b989da4581f6fe2582006873642a2bc98b9207ee1df15af0e83e3e6a2218fac  kapptemplate-24.01.85.tar.xz
 "

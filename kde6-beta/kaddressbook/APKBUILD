@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kaddressbook
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-dcc818fa7f35945e11fb325ae876b3d32e7fb23dbadea8a9fcb1cf19cc6c72c343537a5b008f4356daee57a5d207a00181d0af5b010a452c50b3e11252191398  kaddressbook-24.01.80.tar.xz
+d1e02720e17197b50fe5ec713696e38947f02e9c93d0c538115a239ed0afafc7038c09adf68c5f906cbdde84f42cb2cd5a278c179eb900d931b3685f4cac4547  kaddressbook-24.01.85.tar.xz
 "

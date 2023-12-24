@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=eventviews
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Library for creating events"
 # armhf blocked by extra-cmake-modules
@@ -39,9 +39,7 @@ makedepends="$depends_dev
 	"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/eventviews.git"
-source="https://download.kde.org/unstable/release-service/$pkgver/src/eventviews-$pkgver.tar.xz
-	0001-$pkgname-Use-renamed-kgantt.patch::https://invent.kde.org/pim/eventviews/-/commit/601f88f1d05f00e621976be58d170355caa29fdd.patch
-	"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/eventviews-$pkgver.tar.xz"
 
 build() {
 	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
@@ -60,6 +58,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-4c9cd9aa2281d3ae1c34c8439de4ceb02e88dba15eeb888cdec79f774aee3b8deb55a4b9ddbd5c877e837d021216cfd06acf1087a9e8a05f47f05295d24550b9  eventviews-24.01.80.tar.xz
-703330e01be6fbd3f759e450fbc7d5109b8db543a55f6d07d53f70994ddc98fd7d036ce4d5f750bff56de8c70e793a399efac5a1f399f9b264bcb267e9ffb9c5  0001-eventviews-Use-renamed-kgantt.patch
+821d7231c198bbd44eecd87fad50b40695eac84ec19e6332337a5de3ec0a45a779b1faa65ac4684817638a1c09b1b61957e518c2e0511e3edb1d51e9db944b8d  eventviews-24.01.85.tar.xz
 "

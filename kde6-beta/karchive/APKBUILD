@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=karchive
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Qt addon providing access to numerous types of archives"
 # armhf blocked by extra-cmake-modules
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-ebf43c600a5e35585f4c70259cc2c57deab3e12b9fc45828a6f1e6892440c3909e33f9bd7e63b48d58008d62cc6d87ec18da50d80b0b6d1e8b4576848692beca  karchive-5.246.0.tar.xz
+3f7521eaea870b72a829a78d00321e22e8dabd11b338640187f8992dfdecb0835baf677c34a9127a2a467d1950bebbef94ef882f22549d8d59b5c163fe6d4415  karchive-5.247.0.tar.xz
 "

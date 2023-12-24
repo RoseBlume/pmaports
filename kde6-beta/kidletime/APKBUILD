@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kidletime
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Monitoring user activity"
 # armhf blocked by extra-cmake-modules
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-4c90c78e9e588d7cd49ec076c646020c9fbd0f124d69fcafbb67aa2b47445f4eac4fadec50964956cc687c9def82f976415cf456495b1e959e1bdfbf3e85c863  kidletime-5.246.0.tar.xz
+c90f9f408d5d4ef6ca34a8f61c7b1135473425896b97f8eaafd45c7ef38e36662448fb5ecc3bb0a4ecc36103564739d4c71d3264fd095ecced8030fbec31feee  kidletime-5.247.0.tar.xz
 "

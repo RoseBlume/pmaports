@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=partitionmanager
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-dde061a8c033431e4adfc993a312dd78f247712d34686cf1c312628477c67a84c08a15032442779bc218026d962699b4325368b1064117a3ae651acadc23eab5  partitionmanager-24.01.80.tar.xz
+525f485c3e149345cc994be9cb3dfd724b28fc8a13e37769f4e72c6f1a7e5dbfe4b28269eeffd2e1cf213af67e7846a67f514ce7a15062ed8991c56e03c92df6  partitionmanager-24.01.85.tar.xz
 "

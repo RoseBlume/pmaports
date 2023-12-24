@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=sddm-kcm
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="Config module for SDDM"
 # armhf blocked by extra-cmake-modules
@@ -57,5 +57,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-9c1204bf35b272533a7b0b7b09402c6a4e233b0abea51f97ed53b45b5fe902759530578abab528c8d58329df95e2144983d8eb71403ffb5c3563bd70a103deb5  sddm-kcm-5.90.0.tar.xz
+ed4c5bc00372bd5381487b80c950b777f77067cad4459bc2ecda4b44ef8e7d74277f0fbdd711c0856f3a6f50cb944b19acc99aca802683b9e26ab1dbe5256951  sddm-kcm-5.91.0.tar.xz
 "

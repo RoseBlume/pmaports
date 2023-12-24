@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-workspace
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="KDE Plasma Workspace"
 # armhf blocked by extra-cmake-modules
@@ -175,6 +175,6 @@ sddm_breeze() {
 }
 
 sha512sums="
-1ae09e56ed534808b7ba45d6dfe942af13530fb635c3d9f2c6e89e2de64a5e65fd36f977138c98e61ae60ed7b31e23a466035d8785efae8111080027fc521325  plasma-workspace-5.90.0.tar.xz
+f283b03f63ae4f239030675ac0f6033649bb07287ff04553b80097f3844f3db1b3bf1d660e7c6327095f241eb9d089aafbc2382b2878e41b3ea35eb0fd17a0c7  plasma-workspace-5.91.0.tar.xz
 affbeec6d236bf09ae95b7bf478015ead9b5eabcffa8291107e34463bc3f7563c01d4e444e035b7eb575700e64c4da9f5079950b254b8c24b305845f031eb17f  sddm.conf
 "

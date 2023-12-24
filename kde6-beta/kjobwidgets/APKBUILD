@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kjobwidgets
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Widgets for tracking KJob instances"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-c320fd01a67eef2a1ae5c06979629f2737bbc3122a23c0b80eb914da9bb422f7f9ea56ae6b69ac80414fd3771e5da638ac4cd91b7c8ca1021e528ad5371cf395  kjobwidgets-5.246.0.tar.xz
+99db8bd2ae3ab26bb41ce2be14da90e4e0de9912b133c4d557357363207f634e051a8cd0bcf3fc328d4bff1e97136d09a304d003ad47e93302235fa62010cc14  kjobwidgets-5.247.0.tar.xz
 "

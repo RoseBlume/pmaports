@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kanagram
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-ad83d1ded817f73809be404b6aee44f45671b26a88d93394491f009936a59d830ad8a91a8c5a7e205906bcf9c4bbaeff7668c0214c8045f9005213cf7f378463  kanagram-24.01.80.tar.xz
+51fd74295dde8abb0374957ebba6ee39ac7527a4d565d8b7abaddef43aca68d40effadc17fb35314ee72547773450102d7e3f3f6454fc8bc09a7bbed06448187  kanagram-24.01.85.tar.xz
 "

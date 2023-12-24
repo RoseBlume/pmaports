@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kongress
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Companion application for conferences"
 # armhf blocked by extra-cmake-modules
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-e06ac0c46f12d60af9c10e92c2508505f838eed57fc98896a8370cc28e22c51d37201f0afd21802f8a41152107f47072febf355fad88410bb885bc0750ecbfb6  kongress-24.01.80.tar.xz
+062751791075d7d3c7c5ae3944d0c9ba817474ab34b309cfd17c2cde4419c45bf4829391b85b432216d8c225111ebce44d4f7d2e7ca10e4979d2b67236a83cae  kongress-24.01.85.tar.xz
 "

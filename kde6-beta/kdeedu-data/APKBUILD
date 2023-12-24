@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdeedu-data
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="noarch !armhf"
@@ -34,5 +34,5 @@ package() {
 }
 
 sha512sums="
-f56143dac2f89317998d16fbe040810f374526b797f61f35f83be554001aa433e9c40bf92f814a876fabd5ab1dc5f448fc45ae491aa104ba30aecef0bc3f654f  kdeedu-data-24.01.80.tar.xz
+d6eb3fa7452e807e2aeef5253fc19a845fc9369653c95d8bbf8a2d23bb6e6bb8f9e536d46bc979455b8f8ca3f63b9e0c8e0cd8c517fb0683ad7e56f9ab9fe996  kdeedu-data-24.01.85.tar.xz
 "

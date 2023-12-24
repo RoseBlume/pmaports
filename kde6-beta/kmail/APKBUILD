@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmail
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -106,5 +106,5 @@ package() {
 }
 
 sha512sums="
-aeeb7ee9a5a28202a244bf7d0f5c2fac9bba014c71e2b5bef2d32d631fe43666884c24943db1ce48f22f3796914a3195bfca8d44c8c36346332cf39cfb53a94e  kmail-24.01.80.tar.xz
+bcf54feeece503bc2a65bb255b0aea6e8e437a2eb95d7456428e5a94247d7055944c326725e83ddb6b72ff9e87e4cf25aacf2503915aba33751813816352ea5f  kmail-24.01.85.tar.xz
 "

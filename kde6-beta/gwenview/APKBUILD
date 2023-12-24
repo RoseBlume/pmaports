@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=gwenview
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> purpose
@@ -79,5 +79,5 @@ package() {
 }
 
 sha512sums="
-1d218ddf7a4b6fe3b31336adb78edaaae147e8fe82a1f875431c7d34bfcab61a8d9e83bd7f727edb8e35e83d421dcdc3e0ea2bc441d2a4295c995521c44b27f1  gwenview-24.01.80.tar.xz
+998fc3555d21c046b3ba49585dc190b77985cc158359faa5f57de7c34a8f6b02ee946addd6e4337c4edf0c015702d04b99a75a74d14062ccac28877964bd0f07  gwenview-24.01.85.tar.xz
 "

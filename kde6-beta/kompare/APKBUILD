@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kompare
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-adb0479038538f9d15d33eedf3e8715978adfcf330f9591269858351be3fd1b314fe8a32ef57339c552f9bd4d52875d118f32485bc33d23c3156b7de419e2ef9  kompare-24.01.80.tar.xz
+fd20f160999dcad649cb18ef9fd0694e19e3fdcf6e3fbf2ebe58aee0eb048795e7a28cc0bee8f6ef5ce02a88a8300c3a493a740d711ebbee34e71cc617489d0b  kompare-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=artikulate
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-d1ad0f5e666277fe0c7dbf3fbf6e1a86960967e7dce4d0cb73950bd6ec8a67767cfe78a1eb36f7938ec79ce990f61d31e9b4647ab6747af012dba1cbaa85bc49  artikulate-24.01.80.tar.xz
+6a85903c890d01735716baebb1ca7cb04633958541bd206ce82577b80ecb48dd1fe9da19af6022677b07eb0b6972958acf33af0a1d24800e28cd660b5b96dcaa  artikulate-24.01.85.tar.xz
 "

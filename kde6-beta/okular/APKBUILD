@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=okular
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt5-qtwebengine -> purpose
@@ -109,5 +109,5 @@ mobile() {
 }
 
 sha512sums="
-476c2cc959a67551ef0f6bb9350d457b0dd8e92bd7e096e01dae9a963e543985582b454ea65cf831c3882e4db6811c43d139618aa3e777de1580b22c45dcdc4a  okular-24.01.80.tar.xz
+4810d593c892a4ae9ad54db227ce3430442fa6f0970f41ee5b5acb63789f267828a6368af680b1ac6a745dc6f43ab129cf093c2d9b38034553fd0e3a8c7ffc41  okular-24.01.85.tar.xz
 "

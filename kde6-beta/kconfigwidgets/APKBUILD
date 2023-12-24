@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kconfigwidgets
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Widgets for KConfig"
 # armhf blocked by extra-cmake-modules
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-dfea69a5acf4e0fbf866696295feb6733d54e23939da519c1b20cc0869df6616a35d53e67d419afdba898c1add464a9d747fe2ef02dc9b4759783806975ac8e2  kconfigwidgets-5.246.0.tar.xz
+c10ad991843107cdfef9dd0abba9d30dac56f22d760bab85294fd4a2c8d7ba54e9910245c0c38a7424a9bfc6308916265f6312b2d798c57dd933ac108b98719a  kconfigwidgets-5.247.0.tar.xz
 "

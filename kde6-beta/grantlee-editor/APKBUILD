@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=grantlee-editor
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Utilities and tools to manage themes in KDE PIM applications "
 # armhf blocked by extra-cmake-modules
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-a8acbbf8f72df281ea17d51f77a29d19f7560de8a58e276c2397c80cbf37d2f338542d90b6f19f9448b7c4a0246195cbf9908bd317e93d399e7f3997df116274  grantlee-editor-24.01.80.tar.xz
+4c445976afce9641da89ccc1961dfb366b35ca73789cc52b93490f216ca372f8e91fe7788252ae3439f049a4d50640c80f727d38b77b51d051d55365f2c37c44  grantlee-editor-24.01.85.tar.xz
 "

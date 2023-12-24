@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdegraphics-thumbnailers
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -39,5 +39,5 @@ package() {
 }
 
 sha512sums="
-83678d72732f22def85e665e9622c635aeb172411182774c3f2cb9e93d5d703acaa79c9d221beb91660cea432a85b44803dc8cd4deb193c6bb6823536607c667  kdegraphics-thumbnailers-24.01.80.tar.xz
+f3a9a185c97815f7b841c52340d17db6334f1ff79dbf16b1e222df2e0a66dfdd7fb9f2925d0ac86e4a04011d48d5b205b5849192b1303b37c34711edbe1f2de8  kdegraphics-thumbnailers-24.01.85.tar.xz
 "

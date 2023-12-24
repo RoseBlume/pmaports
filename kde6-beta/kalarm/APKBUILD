@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kalarm
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Personal alarm scheduler"
 url="https://kontact.kde.org/"
@@ -60,9 +60,7 @@ makedepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/kalarm.git"
-source="https://download.kde.org/unstable/release-service/$pkgver/src/kalarm-$pkgver.tar.xz
-	0001-$pkgname-Add-search-ktextwidgets.patch::https://invent.kde.org/pim/kalarm/-/commit/d0998827b0fd5ce761957d0c57296975bd383d97.patch
-	"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kalarm-$pkgver.tar.xz"
 
 build() {
 	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja\
@@ -81,6 +79,5 @@ package() {
 }
 
 sha512sums="
-0ffc39a73a14d49572f80ebbacfc7954969425feed5880b298f71b1d99c2ac770d1437e2695437da47e57f49b05fc7639ab3af1bd93e11974356e46ceb985d80  kalarm-24.01.80.tar.xz
-326ea17e474e669602fc7fcbfa2d9d05b62a6307a6c999f311832702096fad4ad5bfc112649747f5dacf9753b913eed741209eff9d8d9fbeae76f3ecb5636d49  0001-kalarm-Add-search-ktextwidgets.patch
+a9aeb0e057fdfd9e1c4b946768020066f8b4f5ad25277c7cd3023991e08c6b5fde371932f5146d87aa7ee60471f37add64941166051aafde6ae17ff206807e86  kalarm-24.01.85.tar.xz
 "

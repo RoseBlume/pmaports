@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kpty
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Pty abstraction"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-00f3bb9f4d24e218eb3fdfa4f9f537f3dd6d0a00477007e9e99d61a2b81b041bf8c2ef566488c97fde01b133e618cdf4a34d6b31f87e004b15cbe0f3c1f8ed8e  kpty-5.246.0.tar.xz
+6644f24ae5919854dd623b5eadc828a049b3ec276f4102fc369817e90de422f78f7e9779df0d993bb8f31758de5b186b6d28eca5a4135c419efdaa3a4ce64fdf  kpty-5.247.0.tar.xz
 "

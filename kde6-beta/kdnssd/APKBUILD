@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kdnssd
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 pkgdesc="Network service discovery using Zeroconf"
@@ -43,5 +43,5 @@ package() {
 }
 
 sha512sums="
-39e0fb7fce15dc757cba23f9e86e706ba207bca2082fe2ad390b75405f24c03ae8eebf1f6ce22b6280cdc41dbb4af3b48e73cffba32d427f84122ba43b48662d  kdnssd-5.246.0.tar.xz
+3dfecfe4bf301f21f1411cab37c90795d7c853a456492217513e2864d79ec568c2736299cd45e39e63eef003f3f5c3eab7b7af7476a323887437fb5af7f30487  kdnssd-5.247.0.tar.xz
 "

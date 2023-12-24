@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdepim-runtime
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Extends the functionality of kdepim"
 url="https://kontact.kde.org/"
@@ -97,5 +97,5 @@ package() {
 }
 
 sha512sums="
-c1b5fc2fda1cc7d24977574d1ed7fa37434e941549e63aedf297b12bb4868f94295c81be886844b3df5607f0c1ecb71fa3884ea7d029245b8e7af8b1aab7e965  kdepim-runtime-24.01.80.tar.xz
+53ff0aa8d8ea1cc551f435009f765738ed41e20ee957bff61a1f574b891d4fe671777c0cc0da7c17bae34505e1b586b3e1464b3f657b280f7d57abf76930ed3a  kdepim-runtime-24.01.85.tar.xz
 "

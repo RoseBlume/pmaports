@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kiconthemes
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Support for icon themes"
 # armhf blocked by extra-cmake-module
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-e470d0f4387ecd2013f431550a22a4a0865684d1603b230a2c323ad676a5292bc285d4187d424f0b079c18511dc07363bf45583ef1e0cff14c537fc15c7149a8  kiconthemes-5.246.0.tar.xz
+77581955aa159f6df6efd68bf8ba5c594bcf78e3faa55fb69a1fa5286041aacfe3f1f26b4cac31ceda6d4d2a18dffc6bfbdd093deae265c74575edf423d38190  kiconthemes-5.247.0.tar.xz
 "

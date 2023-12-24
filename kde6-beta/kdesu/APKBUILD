@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kdesu
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Integration with su for elevated privileges"
 # armhf blocked by extra-cmake-modules
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-f48d79847d3b17a76a29a12bd9f3a51ef2b81334e7084ae3fb9f4aceac3d305d7284534e50f0a92207c495f82cd1cbecb69c4644dcad1660c2de3eb8ea676822  kdesu-5.246.0.tar.xz
+58c1765da16d0ad8a33d68cecb4fb4286ccb5b31a6bf6f6d0291d422c1a6c766da72de50034dc7ec06e6bb8b58f0b15fcce67211bdb33d0033adf487a586a74a  kdesu-5.247.0.tar.xz
 "

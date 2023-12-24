@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=angelfish
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Small Webbrowser for Plasma Mobile"
 # armhf blocked by extra-cmake-modules
@@ -60,5 +60,5 @@ package() {
 }
 
 sha512sums="
-45dd982ad6ce306c2b0e8f94491cb3d1a42f99ee3115b78e3d3ef02d547f513104eef2fb41bdfa61b8440d3e1435fd6a8593f47bc75e0a18d8373d8ab05eaadd  angelfish-24.01.80.tar.xz
+7e60aca7e610c5c593b2285df9e202296338acb7a1eba46edde9ee3ce2f421c0f27ec631d51039828ff6161dec22f1febd59ac19729677d999cb7187b264f23b  angelfish-24.01.85.tar.xz
 "

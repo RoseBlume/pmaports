@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kruler
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -43,5 +43,5 @@ package() {
 }
 
 sha512sums="
-93d0c66221f698bf2f692b362cb1bb8d5d786904f6205e30926b23efe4803407a80f9fc8665b65e6d8d3f4853cb63159bec28e02fa2fa98d22ab148a8cb55e11  kruler-24.01.80.tar.xz
+737784a3ec159125717d666446c44a4f67a94cbe4f914a809e1f3eb70f07fc9fee1190eb6a5ec0907d3d38fa766caebfcbe366691ab752c806b6062167949de1  kruler-24.01.85.tar.xz
 "

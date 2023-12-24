@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kate
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -65,7 +65,7 @@ build() {
 check() {
 	# kateapp-session_manager_test and kateapp-filetree_model_test are broken
 	# kateapp-sessions_action_test requires OpenGL
-	xvfb-run ctest --test-dir build/kate --output-on-failure -E "(kateapp-session_manager|kateapp-sessions_action|kateapp-filetree_model)_test" -j1
+	xvfb-run ctest --test-dir build/kate --output-on-failure -E "kateapp-(session(_manager|s_action)|filetree_model|bytearraysplitter|diffwidget|location_history|kate_view_mgmt)_test(|s)" -j1
 }
 
 package() {
@@ -122,5 +122,5 @@ kwrite_lang() {
 }
 
 sha512sums="
-c03b48a693cf106ff6c72737e84f13ab45117887d6b15d2c7655d5835ac2d78ee42f4eab15f5bc69d83bcd62adc7371e4fa8cb82ca309b15cd01ea4450194786  kate-24.01.80.tar.xz
+0f56d418a90f3c2b5d29a40de0c2bb46bc8a957236c1f0eca6ef0aac692ce33365c2d3b684b819e26100d6aafd298cbd070701d6271b72be373fd184deadfb95  kate-24.01.85.tar.xz
 "

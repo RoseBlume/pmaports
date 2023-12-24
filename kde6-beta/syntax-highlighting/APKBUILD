@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=syntax-highlighting
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Syntax highlighting engine for structured text and code"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-e87f6b0f36bba4b84214beb0e53fad568c46947ad106b95e0ae97f1b3ac5f9f76431a750d68c579e5edd68bb29af29e5f6847e687491f6df7223105cc35adf8d  syntax-highlighting-5.246.0.tar.xz
+b6100e3ea592c7700ec3c2f561a6ef6a7b52ec5033a952a94a66bf6bfacb2a83379c8e082e0802ae8f4b53c16457f6ff57a7d4538a64dc9fa4c8ccf94f947879  syntax-highlighting-5.247.0.tar.xz
 "

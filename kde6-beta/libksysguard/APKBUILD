@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=libksysguard
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="KDE system monitor library"
 # armhf blocked by extra-cmake-modules
@@ -67,5 +67,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-485fa673451caf686b4c54906485ebf49048794ecf887a5cb30b874ed6488c271aeaf7205445459bbdfdd827da850ba0144156d2ebeae3688bea212bf7abed27  libksysguard-5.90.0.tar.xz
+7f40e94e91af12e6d0bceb0fe05652d7d48d10d1a88bceddf7d2dbabe4c0f1477554a216fb1a2bfefe279cc1f50cb890e6bbe39ed01c1271bc206d1c3eb89857  libksysguard-5.91.0.tar.xz
 "

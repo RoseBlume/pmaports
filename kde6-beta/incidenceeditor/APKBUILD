@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=incidenceeditor
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="KDE PIM incidence editor"
 # armhf blocked by extra-cmake-modules
@@ -40,10 +40,7 @@ makedepends="$depends_dev
 checkdepends="xvfb-run"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/pim/incidenceeditor.git"
-source="https://download.kde.org/unstable/release-service/$pkgver/src/incidenceeditor-$pkgver.tar.xz
-	0001-$pkgname-Use-renamed-kdiagram.patch::https://invent.kde.org/pim/incidenceeditor/-/commit/c64502a92568abe54e27f6d3adfcb1fe84baac4b.patch
-	0002-$pkgname-Look-for-KF6TextWidgets-explicitly.patch::https://invent.kde.org/pim/incidenceeditor/-/commit/d2bda9e3754f7daa8ea876e1d909fe038e03c85b.patch
-	"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/incidenceeditor-$pkgver.tar.xz"
 
 build() {
 	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
@@ -64,7 +61,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-f37e3a9bdaa3004d4e7ddd3ada286961c73e045fafeb263bdb3dd4379fe6108aa6a3903612f39ba6636b1c488bfdc91a257ccae89da8c69551ff5c140c29f981  incidenceeditor-24.01.80.tar.xz
-b34051315349fb09e7e5741e0a5516c1c5f83019332f7150b969c57d211b235b366cf19ba5e4929817202f721abbeb74359ada4d238aee843b963272983475cb  0001-incidenceeditor-Use-renamed-kdiagram.patch
-3793a42b42db07bcacaff0642c0072efcc1ef6c9f32641ba196dcf0dfd1223a5752d11c18ddfce6de4a8770bfdf0b107be9dc6fe7da2dd44f79f7a1787c7b1c1  0002-incidenceeditor-Look-for-KF6TextWidgets-explicitly.patch
+bf276f650e42d8334820d13a76a45cb792a47d00b6d9b2982437d9d2b86e2ae6a083240369835c7fc0aafab53e9afe58fb5a440c04f5015ce8d2db5fb34b8a23  incidenceeditor-24.01.85.tar.xz
 "

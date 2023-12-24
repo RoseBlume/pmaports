@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=wacomtablet
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="GUI for Wacom Linux drivers that supports different button/pen layout profiles"
 # armhf blocked by qt6-qtdeclarative
@@ -53,5 +53,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-94e5f5ba4305470dc1600f5669ab6b3461b4676d86a353841290dd10583018502ca52339f561b77fbe7a72fe04057dd674d93e99633ec8f27f7971e4d7290f6e  wacomtablet-5.90.0.tar.xz
+831c7ac79eea1b4addb1abb4dd173dc30d0b113a89f7f53b8392d14b63d5d8e9d1334d028c9dbf14370fb2773b6296a320db1897338a8c7c9eca2e6af67df0b6  wacomtablet-5.91.0.tar.xz
 "

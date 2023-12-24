@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=elisa
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # s390x blocked by vlc
@@ -69,5 +69,5 @@ package() {
 }
 
 sha512sums="
-111a33f8fb938c0d747108bd4d42049365cf3d4948f678cc0da6b0b5b60b17f3de0260a5092783612ca3509e4dbe087176291fccb559c02063e40f9d2b1726d1  elisa-24.01.80.tar.xz
+6fbf313d35d69149ad654582be27833cf13000324428d73010aeb83a319baf78a6f7c6a3e8be63ea8d1566c496dce55c7acbe2db8adef8c3125bc5af7af24cc6  elisa-24.01.85.tar.xz
 "

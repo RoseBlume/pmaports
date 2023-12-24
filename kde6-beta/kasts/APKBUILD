@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kasts
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Kirigami-based podcast player"
 # armhf blocked by extra-cmake-modules
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-61840689093cb7b497e300a2a604a9302c26ce3f3856d9e3d66d8c3ab737cdebf95f1d48d77363f27303446f898f7cdf700283991c143da632cba4dde27596e2  kasts-24.01.80.tar.xz
+cf591db36459c05d8799b309c4ae02fb323d5170b43816bd6469cd9f59eab69a0ad71962dfa170f7012746057099851fd967c739f67ccab303a1d72b0d316823  kasts-24.01.85.tar.xz
 "

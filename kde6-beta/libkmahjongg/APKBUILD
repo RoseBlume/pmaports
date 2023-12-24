@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkmahjongg
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-4a9e8852760f3c34f1ab73aa3e5782b70f5b8461230ad281ce38a23581d93cfb36197533ff6e479840f9fc0cd5b2a566eb2c31efeb78430e9c60247b8a4908d1  libkmahjongg-24.01.80.tar.xz
+1763342e006c10767bdc5886c5dc9fba6ad708b096a645baad4da89aab5fdafc45d7a98f0ee6f445b45d222ebe389f4e66a2286e29786af65c3c9ad85896f9e1  libkmahjongg-24.01.85.tar.xz
 "

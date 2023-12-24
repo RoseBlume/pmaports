@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=breeze
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 
 pkgdesc="Artwork, styles and assets for the Breeze visual style for the Plasma Desktop"
@@ -67,5 +67,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-858e12d453ecda177c7269a1afce0187a224e24d4f49a9bff978d60de7501b1cea534e9ee438e0f2e4a37ed0117eb4dc5191680d864d4f0ebe53d201fe623db7  breeze-5.90.0.tar.xz
+667f5e193ae91ea491fcb5f16e0ca4e36c719b7acfb00f6964fd115425ddb2919a3895fe46bfaa0c8308090d93c1397d26626362a83488d70729813635d7489a  breeze-5.91.0.tar.xz
 "

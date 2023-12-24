@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=step
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # s390x blocked by 
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-dde120f448aea8c9ce6724b45ddb969916d2f92931c2215e96624921eaaff56f18daefa4a0d2b46bd4446efc59ec4c48b8b2e19c92769fc86717a1df1ae6c63e  step-24.01.80.tar.xz
+eb4a57f69fdc8d13212d53138e81fc2db87c345abc2448738506da4c9c78cfad0d96217525ba37f8ac23ace0153fb6de624c476f3a61740e01d6ab19e20c73ba  step-24.01.85.tar.xz
 "

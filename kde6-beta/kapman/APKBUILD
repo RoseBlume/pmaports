@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kapman
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-10c29955c7654c348e95d08890981ff0449f5cb8ec9882c94f1691173f025dfeeb4e2f073a8ccdc09cea615092e1ecb88338b7b492c2363923700b1f1b940ea8  kapman-24.01.80.tar.xz
+ab6751ba4e4a8548632f1d3fbc8b07f4135c2b58b47cf39c2df1f5f7b986e7faf3f7bb2b7db59c4da036564128a8f00d214aaa0a016ba784669277f3803bdeed  kapman-24.01.85.tar.xz
 "

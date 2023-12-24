@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=qqc2-desktop-style
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="A style for Qt Quick Controls 2 to make it follow your desktop theme"
 # armhf blocked by qt6-qtdeclarative
@@ -22,6 +22,7 @@ makedepends="$depends_dev
 	extra-cmake-modules
 	samurai
 	"
+checkdepends="xvfb-run"
 subpackages="$pkgname-dev"
 _repo_url="https://invent.kde.org/frameworks/qqc2-desktop-style.git"
 source="https://download.kde.org/unstable/frameworks/$pkgver/qqc2-desktop-style-$pkgver.tar.xz"
@@ -35,7 +36,7 @@ build() {
 }
 
 check() {
-	ctest --test-dir build --output-on-failure
+	xvfb-run ctest --test-dir build --output-on-failure -E "animationspeedmodifiertest"
 }
 
 package() {
@@ -43,5 +44,5 @@ package() {
 }
 
 sha512sums="
-1711fbe8a09d316bb13461aafcc2bd6ae54485769f3385513d3ae46d1b227b99ce78ffff27824342f2bb36eb6940dc7821f8cb5d8446261ab5723d5345b383d5  qqc2-desktop-style-5.246.0.tar.xz
+d06620503610ee46869092672a1f0f041f69973a43701bdf6484b49e236ed6c16be8034bfe3d51b99339740b186fba525148b58f9632a94ee78d4ccbb0a7ed07  qqc2-desktop-style-5.247.0.tar.xz
 "

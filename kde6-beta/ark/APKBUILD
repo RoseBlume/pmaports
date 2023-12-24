@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ark
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Graphical file compression/decompression utility with support for multiple formats"
 # armhf blocked by extra-cmake-modules
@@ -67,5 +67,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-b4e4382e63a0a78dfb7562d4a44aabcaa979472b160b4899f1c0518950caf5cbd8723cdb00d2526f9d64e1dd8dcbf874616ee34087d1b675462621f9271d9044  ark-24.01.80.tar.xz
+f28973c85fc6320f70e61677f65174362f7a9933b098d4ed80277cbea2c7d1dbbe18e392cdc007c1b8087918f9e644723191470169124eefe8db982046582f27  ark-24.01.85.tar.xz
 "

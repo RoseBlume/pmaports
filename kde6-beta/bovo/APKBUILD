@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=bovo
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A Gomoku like game for two players"
 # armhf blocked by extra-cmake-modules
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-f320015979c55524d89726712fc507e1f2cede052eaf5736f46601a28203ba57a28d80f557ec2448d1e691a21a92a4abac06e320900f5ec57e093b5cdbd383a5  bovo-24.01.80.tar.xz
+669105f92b4e8c7b93da0a605b02f15c2ffb79a6b2e5ea571ca3837d7f8900a8d603a077eecad0738748e48db43a2e7599957ee55566621cbdf9811e69991935  bovo-24.01.85.tar.xz
 "

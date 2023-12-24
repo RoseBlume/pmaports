@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=knetwalk
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Connect all the terminals to the server, in as few turns as possible"
 # armhf blocked by extra-cmake-modules
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-0a5b2ecd4a663fc91f8ac56b4fc124c90182934b73e96ba9a9be1bec43ae5a6ad853feb6563b3bb40b98d549cfb1a34f8cda84689a06aed0cb7468965b026d63  knetwalk-24.01.80.tar.xz
+6e44ca0a7fec9b04e7420551fcc4929f26725a29bd2186269ecae021c889f784f2d69356e460ce2e7ea8b4ec63ee8cac183c8e4e7bc38a002462c48a926bd92e  knetwalk-24.01.85.tar.xz
 "

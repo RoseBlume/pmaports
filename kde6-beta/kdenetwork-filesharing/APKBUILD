@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdenetwork-filesharing
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-c950023fcbdbc325ae0bad692f49723bc1fea3dc4d1a98401b51b72ece58304e7861a46d385d783fb252bf61faaaa7fcb3d31989177fe7ab6d842e66e8b2ea9b  kdenetwork-filesharing-24.01.80.tar.xz
+470b7f4e0d4086dc394448da7a3112cf5a1cec016c8231585f36e2440d3c5bf91d55546e0a215df348a73151de69923b9bcef056772c10f914e19ecfc8bc7246  kdenetwork-filesharing-24.01.85.tar.xz
 "

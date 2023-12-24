@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kpipewire
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="Components relating to pipewire use in Plasma"
 # armhf blocked by extra-cmake-modules
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-25bd165fe1a2cda786bcb8f7e44b72a55a5dfb80ec8dcb5fd0c517a6f92df5e0cfe69fde955b0b1323e46ef2bb567a26e4167eb77ba815d94ba179706d3cabe7  kpipewire-5.90.0.tar.xz
+c85a5d676e3f887e3024961e6cf759d947acfbd5b470bd8b7f53584f6aaf237a670ef459fd1acd36bf3f3a15d971384a5b3941112608c5c838e5100a66b3f99e  kpipewire-5.91.0.tar.xz
 "

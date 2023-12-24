@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ktnef
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="API for handling TNEF data"
 # armhf blocked by extra-cmake-modules
@@ -42,5 +42,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-ecf751b22675add8b9fd5b6774884852f54fc4c6112df3d7d91d8dcee9fbf46880cd4ece270c1f8415cfbdffa46d531e0ba78ccf45f2dedafa7b75a685312cc6  ktnef-24.01.80.tar.xz
+73f1978cbce79c4134186539f3cb37299bbe03de32d394e41b351cf5a8528392604d3b47984bba4b46299b7b78cb3781882a9cc093613d35f43272e872da8951  ktnef-24.01.85.tar.xz
 "

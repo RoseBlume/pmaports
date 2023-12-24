@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=mimetreeparser
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Parser for MIME trees"
 # armhf blocked by extra-cmake-modules
@@ -54,5 +54,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-fd85a09b3d9da3777fecc3887db83ab4fd55a8b6f7264d6faf3fba017f9a292ef49633907d319b02195fe0b606cad3a4c05744ae397f274d4e8d81044c904f86  mimetreeparser-24.01.80.tar.xz
+5a3582d8649fb441e847496b099dab849481e7e7f841a5fe15216286b932593701a0fe03ddb3a66ec7143af4055f307cbe4168897a0e13f3949c22957dc4c3fd  mimetreeparser-24.01.85.tar.xz
 "

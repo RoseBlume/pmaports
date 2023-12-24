@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=marble
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A Virtual Globe and World Atlas that you can use to learn more about Earth"
 # armhf blocked by extra-cmake-modules
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-d92d4dec7601f6cc4ca2eca67ae9afb8c4680bbc0553f9692e9c2f700ce094431f10935fb10b1654cacd9a7f60b4ce4c0165e869186cb0b088db918d560f18bd  marble-24.01.80.tar.xz
+38920ffb5ff59f52ed4415f8002eb07514f80320adb6ff8c47f822b7902ebaca7321f7c52eff7ea052684ea7b4fdae5b6238eddcf0b242e9530888938e414adf  marble-24.01.85.tar.xz
 "

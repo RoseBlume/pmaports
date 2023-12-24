@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=dragon
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A multimedia player where the focus is on simplicity, instead of features"
 url="https://kde.org/applications/multimedia/org.kde.dragonplayer"
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-5554877905bdf0cff18bb35671f108bec391f4640bdd5c0f1fcb27441c873c94de383a0eb5c326783a5a64dd5958a5df998634720b7c6332ad6699e28bf948f3  dragon-24.01.80.tar.xz
+74085a382d2d5c48f431eb7e863c111fd8a060fa619b752e3a8ec453e54b68ea0d4178e59f687964ec8be660fefe3706d5ea886fb0ecc772318c34f303eb0c65  dragon-24.01.85.tar.xz
 "

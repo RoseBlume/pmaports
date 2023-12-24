@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdf
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-ac0b77d8dce5698a0ac279d4d5252327bb74f91b5f26bf68a07f30903f31ee30047ae2b1d1f2f74036001c54d4c24b19e9904bcb04857e959bc5e66988c2c1d4  kdf-24.01.80.tar.xz
+4810d7f73cd5dfeae03beeca22a32ea50a6728bde4f16218ed033563c62e31dcfafc3100ce9ba70487e0c5bce2e40ab0e78f271de63cb36b09524ac8ae260191  kdf-24.01.85.tar.xz
 "

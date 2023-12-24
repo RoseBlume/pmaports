@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kscreen
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="KDE's screen management software"
 # armhf blocked by qt6-qtdeclarative
@@ -64,5 +64,5 @@ package() {
 }
 
 sha512sums="
-b25384e23a5710477348617c0390c58196f2058b729e07193599625efc87c9c02f6543c1a865fce4cf1770f27b65c8ec268d8997bd56477f48aa6bb8e04d1d1f  kscreen-5.90.0.tar.xz
+9364ae8cc29a427680bd3fbdf4bca44976b02589b687a247c9635b0d0663cc69dd525d8a868eb799aeb065e9a42d11c8d1bb98c46d96712d2985c39e17976f6c  kscreen-5.91.0.tar.xz
 "

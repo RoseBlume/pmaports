@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=falkon
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Cross-platform Qt Web Browser"
 url="https://github.com/KDE/falkon"
@@ -69,5 +69,5 @@ bashcomp() {
 }
 
 sha512sums="
-c9c21ddb4aa3f0ec4d8c2dfe8b8222091113b7032cd0ac6e215ef2c270cbc7c93a972c6a3d9738ee3e3986f227aa2cdb750a2e01364643d157fc47fa9ad89ceb  falkon-24.01.80.tar.xz
+259173d1559ff740f783374ccf4ca6474feb16d924748aaff46bca42ce857197af56a7de28e86e863f45a3d213fe820ec0eb6e7ff38f8da14962c0fd3dd1483d  falkon-24.01.85.tar.xz
 "

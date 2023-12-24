@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=grantleetheme
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="KDE PIM mail related libraries"
 # armhf blocked by extra-cmake-modules
@@ -47,5 +47,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-9b14d0fe0e826b8b4db1da18f6f1bd4736276e2494ee0db9faea159baad5850685764efdd5381cb3987a869baa00556d2ef06909c90d7e1fa512a33283de09c1  grantleetheme-24.01.80.tar.xz
+9ded3a6c06c98fe041e6223d2b9e88db919ccab5293919fdcf34060a7717e9667893ad4733fcb979074e32e0c4e2e6038485aaf6471b068a2d59deb11824b007  grantleetheme-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kio
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Resource and network access abstraction"
 # armhf blocked by extra-cmake-modules
@@ -73,5 +73,5 @@ kwallet() {
 }
 
 sha512sums="
-d8005499121e0a6bc1c65303d425b29fcd99e9d74ca82a641fc72f2f70018100cbf9ce703bc871d6114b14adfc4a48f39b7007655b62fff5fcf0f5414039d44f  kio-5.246.0.tar.xz
+da56980d742d847ebe3e9156297425aba5a328a4ca0898a3e00907e0a5005b735d5712553d84c1e1e8c12bfbf14e63970df3d9f883fddf491bfddd5bc187286b  kio-5.247.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kwallet
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Secure and unified container for user passwords"
 # armhf blocked by extra-cmake-modules
@@ -75,5 +75,5 @@ bin() {
 }
 
 sha512sums="
-358190bcb18d5e7194ad1f5a357c7309dc4924ded3c88d5ed4a4c3099707f06d42e2a7d1adccc534921f50856e778b0649aa44533edc9b827f65d66dc50aa027  kwallet-5.246.0.tar.xz
+e9b11110e7ca1dbb83a90376c9080c9175f2db9f6b68b92add7957f745283fdf375e268d144c4c3d5a7f9dd688ada42829abeb33a7e397fe1c2fcc07c7271f31  kwallet-5.247.0.tar.xz
 "

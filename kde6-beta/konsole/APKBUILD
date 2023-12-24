@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=konsole
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -79,5 +79,5 @@ package() {
 }
 
 sha512sums="
-d4803af149c6221abf157001594f5f939e2e5f496fe4172ec1803e08f19d4bdd37761edc2342cfec126efd466c6b64ed7632451fc7a3974a64eaa008c2955999  konsole-24.01.80.tar.xz
+24a0f994507fc8c3a043d57f63ec297623277a95cc39a683373cdcffa7c72fd3616931544b118cb12af8b7ee68250583843330a3385b2a057755edd1246f6cd0  konsole-24.01.85.tar.xz
 "

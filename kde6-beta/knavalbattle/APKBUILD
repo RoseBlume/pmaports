@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=knavalbattle
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-7599d8899c4558d05249555b752170900ffbdd100804a6851d4479feb625f46200a923f0aedd79351665d1e0166106bf6c62504ede093d404dba06b3c92037c0  knavalbattle-24.01.80.tar.xz
+c9f2683981456f25488ce9749cec57b9eb5b0b17e69915f996e582ea10863b5e5ad1b36638f063a4dbccfab175f4107f155b269fc5a0af7062e5cdb4b762ea39  knavalbattle-24.01.85.tar.xz
 "

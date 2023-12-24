@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kblackbox
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-b420604d443bdecbdecb56f2ca4b09dd95111e696023adefceb14afde72cb44cb8451146305c2da2930114dbdae99786d9278b71002827344538c30cd0427a04  kblackbox-24.01.80.tar.xz
+903ca405c475a7f9f42f8fbe41c79d9ee2f21faeed9188d777ebc1d48ce1ed7c1dd407f5ea4c8221dcb50297187a1108ea99c7db9a1ddd613d47b1c9063b1f01  kblackbox-24.01.85.tar.xz
 "

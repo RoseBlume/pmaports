@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kclock
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Clock app for Plasma Mobile"
 url="https://invent.kde.org/utilities/kclock"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-462cadc567988c96836012b163093e21f21476bee136b0885a11b6ef366776a533d60f2c754de4f8a3c4c0ca4f550e6ede8ddc3907ab9995d98ee6d1733e3cf7  kclock-24.01.80.tar.xz
+a99ad5bdae073bace1de58a3080d78baeb4e2c4c2271bd0dd43d7a36acf4ad496c23337a0cd82357759c9dfc343c07301c513506669302228ab87d873a6c560b  kclock-24.01.85.tar.xz
 "

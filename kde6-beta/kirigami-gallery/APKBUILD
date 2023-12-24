@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kirigami-gallery
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-0aa3a75575e92c9e6b20eece413f81a8998ffa3f3fcf9b09b52f920bdc93455622df3fa4a9eaeb86570d627a5fc37ea423c405454671a3eb9733d95fd963b296  kirigami-gallery-24.01.80.tar.xz
+157f104aa8b117f88cd9155cc47ca7afd803625dc70e4a474c403e55a753243d48f9a4b5e8719d3cc22bed8dbe61b018e78880e1719086ca46ecaa4f7eddf110  kirigami-gallery-24.01.85.tar.xz
 "

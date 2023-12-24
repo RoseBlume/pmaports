@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kolf
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A miniature golf game with 2d top-down view"
 # armhf blocked by extra-cmake-modules
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-4c6437c656b139cfa567770925a774a80114e31cd4b7db1dfc324f019c371bdd628b033f2123a15934fdc9b13ffebd1999c50bf0e313ef7b593df56c73141a83  kolf-24.01.80.tar.xz
+d205cdd6f02683afe9f5e5f1dfed1ed85ddf02a09a3ffcd1b00abeb8e662ec947aec79e5224471d70f0c0f4d5e55e09c2fb03ea1bf15aa57cbd41532682723be  kolf-24.01.85.tar.xz
 "

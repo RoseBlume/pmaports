@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kbackup
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-be74516fb421c7207f5bfe7715b766008ea76482771bbac4d3187813ff4f9cd9630ce1f68b39115dffeeffad2860e4a577112097b8a6df7c65d37a20709c2fe1  kbackup-24.01.80.tar.xz
+8980b7e1664ed1c1861fe7062a687229c1f680e82241c2a8e3feedc5c2a5a3f792bebc4c0c011220543cbc094353c874a1f3b3f9f474c9dd65a917e73a21e0f2  kbackup-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=calindori
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Calendar for Plasma Mobile"
 # armhf blocked by qt6-qtdeclarative
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-4b6ae0581963cef2c7ef27a1c3c9130f1fda468c90e0c2d5c1365d7cafcf88428e35adeac183407422febf3f99a64c88cbf1ad10ef703f10594dfad5c289d6af  calindori-24.01.80.tar.xz
+7a562cf2866541f44c81aab4bf029bf1ffe165f7bb7b6fccb01cd73407c379d3940dcf99c874ff096936e2132b9fcdafd41a8571908c4c13e31b5ef613cfe044  calindori-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kpat
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="KPatience offers a selection of solitaire card games"
 # armhf blocked by extra-cmake-modules
@@ -48,7 +48,7 @@ build() {
 }
 
 check() {
-	xvfb-run ctest --test-dir build --output-on-failure -E "kpat-GolfSolveTest"
+	xvfb-run ctest --test-dir build --output-on-failure
 }
 
 package() {
@@ -56,5 +56,5 @@ package() {
 }
 
 sha512sums="
-3f8d871dc6e946c7eb3b1a6707045a63ef38227e69e43a72a82ad57283f03bbe74d7653d431e3351695ad29179fe6537af9c37f405571e65b2a70a64b6e427bc  kpat-24.01.80.tar.xz
+3c70dc8f0e7c74db29eaeea7f7e63f266858483a4af63788306079be0c59f5e59ace364fb74f5384cdac2ce8ea0edb53eaab09828eaae358e8372606c4aca452  kpat-24.01.85.tar.xz
 "

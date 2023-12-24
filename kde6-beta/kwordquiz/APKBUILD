@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kwordquiz
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-a800fa9ca5b50576f4932a710501ab429793db1599102e1b514d053d268eb00662af969ba2357b559710068cde17c0ba3dc4cccff20575cb8ef4311eeb396b96  kwordquiz-24.01.80.tar.xz
+990bf3724a30281f10ea3bca35c1803e4a55176296b80ff584c302f18533fef518002047456006c3bd7f6fbf59850b47c6b4cb780865a3a603a0893a95e2b9ca  kwordquiz-24.01.85.tar.xz
 "

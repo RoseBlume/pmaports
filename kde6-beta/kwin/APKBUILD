@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kwin
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="An easy to use, but flexible, composited Window Manager"
 # armhf blocked by qt6-qtdeclarative
@@ -119,5 +119,5 @@ package() {
 
 }
 sha512sums="
-89184a994eceab1f7a31aec65ba3722805d3cdd7f1a41b29e600b3fd7d9632c79f29be89a98d6582f60d88666ce4a2fe628c4341e4d408430826921b3ee326df  kwin-5.90.0.tar.xz
+149213de818b16226cb6cc2307797c460c6ab99a26d8a320d5f0e949e45e2ddcdf6ec78c3731722090c72a22177bd0f96f1017157bd81cd02202723517073a23  kwin-5.91.0.tar.xz
 "

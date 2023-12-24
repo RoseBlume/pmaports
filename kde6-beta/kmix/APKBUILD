@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmix
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-a7ee71232aeff11827ece3cfbc216440ec70973c9fd29833075f2ef64cabb93ed7240d4d2244ec1ce8477d59ec7137d996e8438d170d1f2ae98a9a6af46f004e  kmix-24.01.80.tar.xz
+377ddf94ca45f670e39199f2221ddc0ed5b78f3200daee28f4559ca70dba81ede296087a976cd08f41600adb9415151cdce6c84b9838a623df78ec4fd114a109  kmix-24.01.85.tar.xz
 "

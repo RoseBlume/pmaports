@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=krecorder
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Audio recorder for Plasma Mobile (and other platforms)"
 url="https://invent.kde.org/utilities/krecorder"
@@ -41,5 +41,5 @@ package() {
 }
 
 sha512sums="
-c182bb683bcd3b450819d214fb8614bd8bb95ac848ce977367ce7adccccbc90c15bb13fd8d43b4d6681123aa47ce7c2bb852447f74876df1a076cfcf17e30085  krecorder-24.01.80.tar.xz
+b0cb31237d6636a0d3779a943cfc94c70e948c982bac407f7e3f6bd4d4d506521dbd52941c4e6c85ed98dd907c7125a2c2915863b24a0715d214fea22bd4153e  krecorder-24.01.85.tar.xz
 "

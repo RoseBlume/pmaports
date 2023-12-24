@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdevelop
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt5-qtwebengine
@@ -72,5 +72,5 @@ package() {
 }
 
 sha512sums="
-ac7801800cdf876d77537c54a4bf9b2c8ddb90150fae0b4aef7e19bc10d192e872c6928d558509420a0bc1d5664ee3cfc2a3c5f914894e1594647bb71bbafc0f  kdevelop-24.01.80.tar.xz
+e295cbb0fd26e978209ce9b80491a4bf4054ad71cfdc7335f5e79e959664ff5c4b01f19a2e6d16085c9ad81b8253bf3e8bbeb6562f642778eae3f55c37cb47a0  kdevelop-24.01.85.tar.xz
 "

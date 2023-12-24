@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kblocks
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="The classic falling blocks game"
 url="https://kde.org/applications/games/kblocks/"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-faeb59a52afaf772535c3a38ae19f69dcf6e36fea7f7d57fbe72347a55e32a80847b3ea0d8324685d2a90b1629e4e7428fe9aa3f520a63bbf08b355d36b22eb4  kblocks-24.01.80.tar.xz
+387ddcb45e12ec05b57b8226615db584e8d73e2cfbc886438acdf42a270b9d3a42174122a452a47b5dff1aaae84e79b2e39d21216e644385664a8398ec74d3d9  kblocks-24.01.85.tar.xz
 "

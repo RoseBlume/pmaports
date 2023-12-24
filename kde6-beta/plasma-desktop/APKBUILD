@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-desktop
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="KDE Plasma Desktop"
 # armhf blocked by qt6-qtdeclarative
@@ -105,5 +105,5 @@ knetattach() {
 }
 
 sha512sums="
-10825a629ef7ff8fdb01f7f06f46e0d23dec9ff2099394bbcfd701a6c21c7dc00298b791693eb4d274e5482ec6b1ec12f7a41df8d1fccf5153cb47f4988a42b7  plasma-desktop-5.90.0.tar.xz
+475bd9487986d44b4782aeffd05d9fd78d43e3ac4d7b602de71a59f7da9d3a3a2e599cac1c12b61b5689d7a2417901012bfec82aa5b7b52c2b0a34c84111ef4c  plasma-desktop-5.91.0.tar.xz
 "

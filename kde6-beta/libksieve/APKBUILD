@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libksieve
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="KDE PIM library for managing sieves"
 # armhf blocked by extra-cmake-modules
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-0a3829c8199c663bc3eb413837789236c277439a2ba39df7f13fe7ca71e41d54f6be8db80df58581ec8a15a7964acff1cf066706dce9a65296c1b5f92d26859b  libksieve-24.01.80.tar.xz
+8901dbcfd732906b92b8f64622efb48f625a512d956f375af741a036c0dd213eb0044dc344ba05f9770bd9005fc7eeb2000ed40d55b556e94b0dcaf8b51a3d1f  libksieve-24.01.85.tar.xz
 "

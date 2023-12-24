@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=cervisia
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-c2a0ff5c8c633e8c6051d9782ea2e9a971a81e38516d158d4d038875ebda78999c3847503618a3cffec43154428732b30367839e4cc50137eee627302b2455e6  cervisia-24.01.80.tar.xz
+7e1c96e446502183f76aec4b143b619eb44e0f142189fecdbf2cd4175711597df2a39cf4ddde41190514f5f965b0dc8a5cf3c3cab3ecd44c01ffd935df487fb7  cervisia-24.01.85.tar.xz
 "

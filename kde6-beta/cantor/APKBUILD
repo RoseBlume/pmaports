@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=cantor
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt5-qtwebengine
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-7971bef28e45777c1d73c05cd6c8d1572fbfced44704a405f24f2ca23612b2cb1df3ba547c43c13fe7f62c8a80ae9d78019fa3d44056c882acc3fbf41b338351  cantor-24.01.80.tar.xz
+8229595c97f1dc722c978ec4fd50d5d9af26d20f31c5992ccf5061705fe6be35ffcef7919d9a897f6e2660c906eceb5d55a7279afc3828934d35f7b3db3c4ef2  cantor-24.01.85.tar.xz
 "

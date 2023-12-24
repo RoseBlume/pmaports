@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=knewstuff
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Framework for downloading and sharing additional application data"
 # armhf blocked by qt6-qtdeclarative
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-89fb2a4db627e5c0061220235051314bb48659646e67ad093d1f45cffd31eb274978f94bcea3a6abe1a8b5c7c2cd9f3db970c3e75ffcc2c6bfdfff23aeb755a3  knewstuff-5.246.0.tar.xz
+80079d57985086463b2da82298007b524415d16503a939ebd5cfd3d95d13ea3a5d731d544a5c974497c45eaaf269505380d3202f274c870895c958a816639655  knewstuff-5.247.0.tar.xz
 "

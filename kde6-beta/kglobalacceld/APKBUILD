@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kglobalacceld
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="Daemon providing Global Keyboard Shortcut (Accelerator) functionality"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -51,5 +51,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-66e7fa5f9514e10db4edf09266f399412c9df998d02921a7429abf749e10e2077bed41ec77c201201ed79ff6dc38c8e4e767b51788867c00e7b74955e997da1f  kglobalacceld-5.90.0.tar.xz
+34b53c7479b545fa6ebbafbf3d2dfd4bed92a7a58e2f38fef5dccd6410acb1de85a20de8d92cc4e71ff153f9cf12beb67e2bcbb2fd77b85aa570c950cb1cf554  kglobalacceld-5.91.0.tar.xz
 "

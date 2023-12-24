@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kigo
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="An open-source implementation of the popular Go game"
 # armhf blocked by extra-cmake-modules
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-a9d5770a503b756b80ddf4c8bc32a994451bce0a83a3d54e3b68f99aff0388d199fda29724c5980595bc7e38dd5334cfcdeb731ce67ad1902650cd0f20ae9f5e  kigo-24.01.80.tar.xz
+5a82393d51a96056dfde30578214401247d18cf26fe184be9b60b0c527b7062ab407721f634d70a6a827a87bbe716d6a25963c8712e3029c057eca7e0067ff46  kigo-24.01.85.tar.xz
 "

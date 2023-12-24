@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kaccounts-integration
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # s390x, ppc64le and riscv64 blocked by signon-ui -> qt5-qtwebengine
@@ -33,9 +33,7 @@ makedepends="$depends_dev
 	"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/network/kaccounts-integration.git"
-source="https://download.kde.org/unstable/release-service/$pkgver/src/kaccounts-integration-$pkgver.tar.xz
-	0001-$pkgname-Add-version-suffix-to-Qt6-build.patch::https://invent.kde.org/network/kaccounts-integration/-/commit/fe713c756d9f17713f017888492bbe989e923ac6.patch
-	"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kaccounts-integration-$pkgver.tar.xz"
 options="!check" # No tests available
 
 build() {
@@ -51,6 +49,5 @@ package() {
 }
 
 sha512sums="
-5899ec18a380a4a441e64423f83f66df09e5526576a017b06c1e5213ed0b0f5c0dbb41ef50a8acd1d53abad323166a835a9891442f6aeb57f3f7562d7be15fdb  kaccounts-integration-24.01.80.tar.xz
-d868a24c124ad20d8a60e7995327318d330d8f51d800b40dd38825d77ca2bc9a9060facbd80fb767b3f728fa82273ff3b944e08de8eed15762ae97b1ac1563ca  0001-kaccounts-integration-Add-version-suffix-to-Qt6-build.patch
+2efc0ec6ee712e9e0376a27ae968f4282478f8f56b4db801f1572aef505287973046b225180a4054827907beed9617620ac2de1a2cc2be4b353471999fca8a6a  kaccounts-integration-24.01.85.tar.xz
 "

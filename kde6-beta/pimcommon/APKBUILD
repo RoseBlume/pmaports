@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=pimcommon
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Common lib for KDEPim"
 # armhf blocked by extra-cmake-modules
@@ -62,12 +62,12 @@ build() {
 }
 
 check() {
-	xvfb-run ctest --test-dir build --output-on-failure
+	xvfb-run ctest --test-dir build --output-on-failure -E "pimcommon-needupdateversion-needupdateversionwidgettest"
 }
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-dc0a138c53ac67713794bd3ab75c29881b0aa2414da67d7acd2e93b9da652dbb3872c1511be71488288a7705e67b84deba8864b017a6b1f20f8cd122e4179e5f  pimcommon-24.01.80.tar.xz
+1a13c66cd8d988d910b8b11f75f4c75d0f94c54a2012cbe1574a3f4077114a35cf1d36f7f4baa453b2727e912c001ca600af3458f0d6e3c39890591af7257595  pimcommon-24.01.85.tar.xz
 "

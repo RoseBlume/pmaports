@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=blinken
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # s390x blocked by kxmlgui
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-5464da6100cc5963be32d69e5abca38a5ab512f2803145867ddd07b6f38b471239ff099b1556e977c1ec853c47e3024f3572c2417cafc8e74736d406bc9b76fc  blinken-24.01.80.tar.xz
+706884380887d20081f43645f1aaf6333ffd5c706f5e9b1ad9f4e2bc827ef290756f9dbdf5783ea1f536a492b8670253a74bc20831c76c81de8ef41106043252  blinken-24.01.85.tar.xz
 "

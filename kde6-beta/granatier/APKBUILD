@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=granatier
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-7539bc44caa71e892f3fee45104e67b6d260c787d28c3e2653ee52b140c4b5ada6e2ab828c2f15f0f31449d2c66462016b296a457d3c8b00ead797c5a8e7c6ce  granatier-24.01.80.tar.xz
+f4b02b603353557c4d3976557fb210be30c6b5f1e5efb6564a5049634dc6688074a7295707ea54dd5bd7b5a077f38b7815c184143cf1d9f801536089fd92cdb5  granatier-24.01.85.tar.xz
 "

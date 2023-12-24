@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkeduvocdocument
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 arch="all !armhf"
 url="https://edu.kde.org"
@@ -39,5 +39,5 @@ package() {
 }
 
 sha512sums="
-f8a06aff5b85f6a1df405959c7cb9717531ad07cdee109a49c3369b9bc10889d9b7080704199b8fb0e7ab6f95772eabddae27087fbd566c1f19b0086c8c19c8a  libkeduvocdocument-24.01.80.tar.xz
+1e941c149dff4afc3659d85711773f1911e5e95c1a68cbc7f81cc38afea57f742977cbaaa07bebdfd0831ff185d68ae219e5ff5ddc34f5d7660d1598c15613b7  libkeduvocdocument-24.01.85.tar.xz
 "

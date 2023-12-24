@@ -3,7 +3,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=alligator
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A convergent RSS/Atom feed reader"
 url="https://invent.kde.org/plasma-mobile/alligator/"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-fd5e677ab2659dc7ac842e60983cef05001bd7a786914b5c8cfccfb69f82bb2d96df171bf45ccfe17f494aa1f06dc8574b20f62e4178f299c718e0f5133c7822  alligator-24.01.80.tar.xz
+e7b593871f0d102f10b7d99758e8f182e56004e7a5a00f516d629f7c1f733dc6e8df7cb4ab44705b852f88d41059a025d6c7900a6e6cfd3669943d78369d7fbd  alligator-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=knotifications
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Abstraction for system notifications"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-e68a5aa499f1f728c1d0dc80394441bcf3a5856d6474617f0b7da487d693359a490ef0efeca11d2a269c992a25534f8532796d736afebff9d51f08498b699f00  knotifications-5.246.0.tar.xz
+820e1ff8c42c6e7583b1efedbb956de35bf917efac1efdd37a51b0c0c95040089e526b1664a78958ea4ce9cd9be13b854e20869f1ca2c4ebc66c4c4b80ef42d6  knotifications-5.247.0.tar.xz
 "

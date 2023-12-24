@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kglobalaccel
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Add support for global workspace shortcuts"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-ba1224d06935538d49e7aeabbe9a6bbe9430e2650a1acad79142089151ca8a5f2b75f147ab422bfccb31d2df66f5000ff0a8c83ed909f8e9ad1a29aa9e020f2c  kglobalaccel-5.246.0.tar.xz
+c54029be16fb0cb0226cdc98e6f28a0f2f5f5e710da5073b944d49ae7661853d2ead4a282f93b4b9f0204816dda325910259800e1f2e1ca4b8f4d1bd9dcd6e9b  kglobalaccel-5.247.0.tar.xz
 "

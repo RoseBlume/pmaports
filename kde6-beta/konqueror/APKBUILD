@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=konqueror
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="KDE File Manager & Web Browser"
 # armhf blocked by extra-cmake-modules
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-8b125db8d401699ae36da33c6885e07c62b51e8331aaba1470d28ca0da5e87c4695cc44cf498595a38f25ce5eecba22a59ea502acdb9eecd83b2db15c0439d1c  konqueror-24.01.80.tar.xz
+aa7f3530469dceaa1c78d6689e5497844b5ddb939d4b47a0eac18897e525f13f2f6df88385d78cc2ff8c3d722c1b2dd5704373dae727bdf097ca231d126b948a  konqueror-24.01.85.tar.xz
 "

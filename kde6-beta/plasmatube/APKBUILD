@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=plasmatube
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Kirigami YouTube video player based on Invidious"
 # armhf blocked by extra-cmake-modules
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-1753c4734e2f26c41b9e0d11d24440b2ac303a7dbe1ccde3f213d13b280f96da9f08c371dbe38381358c974001ba8a91ab46bf68db3a5790d93ac794f372bd0c  plasmatube-24.01.80.tar.xz
+ffe3aa67ab535edd5435b470cddfcaa644e492eafb746afeec3cad6efb1d8cccd1f772b4c18a5429e32a790272f2709fd29c2c46476f6437f9835d9c2d3fa0b9  plasmatube-24.01.85.tar.xz
 "

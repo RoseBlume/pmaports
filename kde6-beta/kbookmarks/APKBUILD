@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kbookmarks
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Support for bookmarks and the XBEL format"
 # armhf blocked by extra-cmake-modules
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-129e4b8583f0459a5bc4c9bdaf3df659daea46d3aff8cb5376d0a1a2129f7fb1d4db192c837ea52693ba87950ed85ad5e2e24da3052942f78636ab072f167f19  kbookmarks-5.246.0.tar.xz
+8354a174b556f151783de4b72098583bfdb77bc030c427af07728f9d34c6fc9d6bd7012cb117d202337ddf0b01be7d63698dd35754c8c03222b3d8258127c619  kbookmarks-5.247.0.tar.xz
 "

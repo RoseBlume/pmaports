@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kamera
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-50ac0a62f73c840b3147d6acd5ed1133d618101366e6eb09e4f729b811ffdeafa7116b887df294f72bb51601bfab56a067e38a88a61c769f959bc83176e2e201  kamera-24.01.80.tar.xz
+41c101d56f8eba152ed321c344d7e53a3e107b5fe8b4f7a9131c3fc904da4823b4a7bebb7b0be68087ff703a60125fd47812ef80e0c1492c76cded66e136cc3c  kamera-24.01.85.tar.xz
 "

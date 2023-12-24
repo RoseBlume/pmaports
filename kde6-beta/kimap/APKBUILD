@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kimap
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Job-based API for interacting with IMAP servers"
 # armhf blocked by extra-cmake-modules
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-2dea70be7e30165c0cf2f7d14d834d9af42331e9d9c7fa5e1550ac03005ed0212a5a84f542fd4afbe07780e26481ef4d206c9c842f66e08d6b139b0900bfa4d0  kimap-24.01.80.tar.xz
+e7038dc7a8edb2b2549a899e5d1b48059eb261b5d806e8f3d8e5c33ff08d4b285f6cb55d356629295cad5fbe90888c3b4b325a2dd84efff2cc40410d72d20766  kimap-24.01.85.tar.xz
 "

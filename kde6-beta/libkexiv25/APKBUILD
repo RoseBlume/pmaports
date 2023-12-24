@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkexiv25
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Library to manipulate picture metadata"
 url="https://www.kde.org/applications/graphics"
@@ -38,5 +38,5 @@ package() {
 }
 
 sha512sums="
-d4f38da84d90e3657310f6d32c0186a3afda861f83801652539e20261e24d66d816f5a75197ab41e11e3e2aca9ad55dd8573b28713f7e1ab08f84ea78b105516  libkexiv2-24.01.80.tar.xz
+07ff6f94ec7287474dbdcdd71255c562e6eeeeb2383694f43c25f1858564f23494679eb10e557f0150a8f302e1059128ba315516ecdf0938cce12224dbc66c21  libkexiv2-24.01.85.tar.xz
 "

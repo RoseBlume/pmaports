@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=baloo
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="A framework for searching and managing metadata"
 # armhf blocked by qt6-qtdeclarative
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-9f716ac3594d022b470d67a87b24c6574c152ad27e5d55e679119fa77275e6a8762a17ec9740fd6f22104880b20aff8b16f3e8ec531a7a7a0890e2f7aecad18a  baloo-5.246.0.tar.xz
+ce732b5cdd8496f32048b9c7ec363da16df3cef334dda1446d782512d01d4269f3a00350b9ad0ae998adef08d8f49239e8354819939b05e32601b5ed18eacefa  baloo-5.247.0.tar.xz
 "

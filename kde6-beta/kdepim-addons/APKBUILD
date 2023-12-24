@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdepim-addons
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -89,5 +89,5 @@ package() {
 }
 
 sha512sums="
-867ca9dc887955f5985c48daf6f01681e586cc56bd81e1123388507a894c40f891ca844f9861af30ffe23f9708cea4b7d7d204c264fc92b8daea6f68324a747e  kdepim-addons-24.01.80.tar.xz
+e1f64fdb0cfe7bb6c9c556f09011f609753a4daf012e02048558f21a9b72f6a7d19565d692b0e3d56aafd704103df4d14f145b8741099436e6beda6ebb883fbc  kdepim-addons-24.01.85.tar.xz
 "

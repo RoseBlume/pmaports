@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kbreakout
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A Breakout-like game"
 url="https://kde.org/applications/games/kbreakout/"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-998fa7f64f15005c0a14311f9cb75373183d325d4a62a89658f41192c4dd944651273ed50af059027f74d67c8e7a58feeb2f5849a371d9b9879b1cc31d38fa5e  kbreakout-24.01.80.tar.xz
+97d9b0e7a387a136848e2a8737bcc8935ebf6bc2f9ad446de19cd44a6b738a6382531e4ae6b149a759563db55db8848ca120f0446867674103f85f09c50cb963  kbreakout-24.01.85.tar.xz
 "

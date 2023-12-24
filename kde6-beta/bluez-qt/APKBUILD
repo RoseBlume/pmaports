@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=bluez-qt
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
 pkgdesc="Qt wrapper for Bluez 5 DBus API"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-c7f047ea479c562d05c073bee7f8e369e23a0c32a2b2134a1e1109248298d5924db789679ba69807df5267d4628f332c8a7a0724dcf96d62382901027132aa9c  bluez-qt-5.246.0.tar.xz
+7a210345359b0a73d6d995cf43abab4a55c97e66f9f21637d2b4c66614578435feffee6890fb471559662c9d23247ba9dbd7be0d79f8ddd6723737647d5bbca7  bluez-qt-5.247.0.tar.xz
 "

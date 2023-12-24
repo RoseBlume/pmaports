@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kpimtextedit
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Advanced text editor which provide advanced html feature"
 # armhf blocked by extra-cmake-modules
@@ -73,5 +73,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-21284fc5ae541756ff2af461747799c3781659bc08fe34982f1dc437d743fdc79dc48674365b625ca350f7564aa9291f8ce616aee0825f5b05d132567db3bf84  kpimtextedit-24.01.80.tar.xz
+f11b2e67cf7a09aadc50f04ea6e7446a784a9cd8d85e387a676124fd7a8973d2ea150f01bcbbda434094ccb161408210238b8d0b9fd44785c14f13d2c5c9c37c  kpimtextedit-24.01.85.tar.xz
 "

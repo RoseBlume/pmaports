@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=k3b
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -71,5 +71,5 @@ package() {
 }
 
 sha512sums="
-cb1c3cd2f122bf98ec58c4ebea4e32cf8bb5c8b3915b9ee2e28c38771b3707671c5e3825de6e401bf282537596d841502274b911f82d6f35d005c790bf0953ac  k3b-24.01.80.tar.xz
+ce851692254ab2594dcbd92308806e00538441e0fdb21f6bdd1dc6e01046c589042cb77b37108007538ead490878cf8a8f3e588588e1a3f1fd7e74bd9f511f79  k3b-24.01.85.tar.xz
 "

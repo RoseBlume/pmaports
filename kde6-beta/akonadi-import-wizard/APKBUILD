@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi-import-wizard
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by kmailtransport -> libkgapi -> qt6-qtwebengine
@@ -53,5 +53,5 @@ package() {
 }
 
 sha512sums="
-5ae85febc76b65e357e188ef7a50aac41891ba64090709d084f387f3168509602384b129e67c13bdb2e18ac8de8d9c958566db0393e0898c5414034ba2bee844  akonadi-import-wizard-24.01.80.tar.xz
+bbb0b5d3348d47e0a62e102bc643df8e3d6c35fe1e91c00acdf96c6b055f96b712d839e78d80258d0b48b4b4cadfa59e1fcf72eb9e9d115049bd40ce4f3aadf2  akonadi-import-wizard-24.01.85.tar.xz
 "

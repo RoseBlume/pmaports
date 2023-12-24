@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kleopatra
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 arch="all !armhf !s390x"
 url="https://www.kde.org/applications/utilities/kleopatra/"
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-6cf3b65c0a9b5001bfee57251ab594f1e9d0a16377bbe17e5fc385113b3b0c475842ee37407d9bdf62d36e654e5005bfd40f354c736d80c420b63e2b74b56b10  kleopatra-24.01.80.tar.xz
+9dfe2f5993abbace50370107f365e1f7d0178f183842ced511af7fb0adc900561a4b6c21f2436a62a30355ca767d409e3277bc5afd2a80014b8c9c4c26b56046  kleopatra-24.01.85.tar.xz
 "

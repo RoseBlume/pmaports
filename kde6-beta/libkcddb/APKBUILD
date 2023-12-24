@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkcddb
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -53,5 +53,5 @@ package() {
 }
 
 sha512sums="
-bbcc3767125e89abb3355e27377a4b891a688fdd3fb32dd1b96a7295d96f5bd7a157b222dfa6f696f04ea5984e0c25a8d3d4e5dab4271a98a43387bfcd2fee38  libkcddb-24.01.80.tar.xz
+67a2f901a8d7cbfe38022b42a70c32f1a8eceaa369db017a45abd5136d90e43a458c302a7cbbec96a1ee79d916c7571bf78d8e262b352e52024ad0bbc099c486  libkcddb-24.01.85.tar.xz
 "

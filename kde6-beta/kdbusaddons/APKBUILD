@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kdbusaddons
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Addons to QtDBus"
 # armhf blocked by extra-cmake-modules
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-bca55f2845ab5c0a8c79987f4e84b89f1205ae3e917f79cf8ee05819da719d014e6d6cb7606c3b6290d413089ca95e3ea6b6c8fb2868027f28ef8ddfcab60620  kdbusaddons-5.246.0.tar.xz
+60c2da76e7dae9db2029e9081d0fb8d1db837262bed598676cf13489a046198146dd705af7944da460985b66e0f540e6f8273e7761deaf72d291db1cf530cc0f  kdbusaddons-5.247.0.tar.xz
 "

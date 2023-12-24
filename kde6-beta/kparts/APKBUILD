@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kparts
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Document centric plugin system"
 # armhf blocked by extra-cmake-modules
@@ -53,5 +53,5 @@ package() {
 }
 
 sha512sums="
-47c668463f944e3aa6a07fa691c5691bb6727ab6826b02159efc6828097acb3ab55b144cc922d2f2a1e2b7e813deed968838ca1f8e06e41e9a3a9fd6778cc75c  kparts-5.246.0.tar.xz
+580edecf6388bf902ac7cc68307d9d6fc8f5f926ed6efc161d09f457dc637d81c489f97da053caf1a9355285c8340663afe201da012311429a135c4547bcc4b6  kparts-5.247.0.tar.xz
 "

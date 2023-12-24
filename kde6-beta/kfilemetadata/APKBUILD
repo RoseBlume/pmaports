@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kfilemetadata
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="A library for extracting file metadata"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-275c55bd1eb1987477457776d48711af8c6f44dbc4f187a6195c6603326a3aac6adf6eed0b0af43cbac689d26a48bd64c9a5643c82412fa9da5388958b048055  kfilemetadata-5.246.0.tar.xz
+e59fd92297e034b9791ac01b294cda081412f5398031da2992357599cdcdb0c5e04bafd7ed14d2540bdf0eb9c91fa76417370e7b3d0daef1f2bfc39c6ddbac88  kfilemetadata-5.247.0.tar.xz
 "

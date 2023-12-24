@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kollision
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A simple ball dodging game"
 # armhf blocked by extra-cmake-modules
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-727ef6c9734866b7c09b856b382c4b8ee0e375643722d6bf29ffce302e38111fe0f1797e8095e2adffccd517920f5b965c3e77d50d8026cdb6ea29c1510ea5e0  kollision-24.01.80.tar.xz
+db5c896178de08195810e49891217239b04ba24af193c0eeeaa22e5ccbcf97fb79f235ea83261ee113f818c75804b1e4b5e44b4d23ece057c0c3af789c3f0036  kollision-24.01.85.tar.xz
 "

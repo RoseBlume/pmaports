@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma5support
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="Support components for porting from KF5/Qt5 to KF6/Qt6"
 # armhf blocked by extra-cmake-modules
@@ -53,5 +53,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-2038d3055bd17c748073e070ba4d9cf8a159b81679ed3422cd3c23854323107f0482be60879bc34f5aa9b2b21941cfa93d55b1775f8ae2f2fba63e3c54e28ff5  plasma5support-5.90.0.tar.xz
+2b471f5c785a9fc6a592d5eb9d1b06abf501cb532156d96641211bac59a2fd0fb94fe9316411b39e2bca3ad145510e5472886dcd97140bfee39fc9a76b083ab4  plasma5support-5.91.0.tar.xz
 "

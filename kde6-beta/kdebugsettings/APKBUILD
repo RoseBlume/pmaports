@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdebugsettings
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 arch="all !armhf"
 url="https://kde.org/applications/utilities/"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-af658e3eefeaad18d7c41d2d49ba285d41acc0e27c5d5aeb9d42c8533f2dd3f6036fa58ff104f50b1dea0164de43cd986f73b74f1615fe59a11f60e41f1e69cf  kdebugsettings-24.01.80.tar.xz
+ed237309e116f34bfc9d4ef7b035225ab92bdded8a664f384efb3650e1d962e9a9c8d14724725918537ee748c88656e0545e594ae276693862f0c16b82da1469  kdebugsettings-24.01.85.tar.xz
 "

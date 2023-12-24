@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=minuet
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 _commit="353639d99eb54d251516a13db5032b71bd67b47c"
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-f3057b112c8866c78855ca42e14fbf792254ce97b4b46321e3f3428c5390e220623b82ab097d9bd8f35892ab1829d18133a2fe5597cce740253405d1bdde4602  minuet-24.01.80.tar.xz
+18184ad480eb027762fda0c8b1701426ec196cb024d7473607246f972f32686a78ce882a49c5f1662429e6b0d24d0d8fa5958212a6ac24aada0c11ff61a00823  minuet-24.01.85.tar.xz
 "

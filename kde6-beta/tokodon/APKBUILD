@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=tokodon
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A Mastodon client for Plasma and Plasma Mobile"
 url="https://invent.kde.org/network/tokodon/"
@@ -56,5 +56,5 @@ package() {
 }
 
 sha512sums="
-5ddfab002931b44ccdfde39452989060cd810dc5472ebd9b68b7cb76e444967a1b48d6ce9575456f7ff982e92577a6b1b4a27bf2fd2850566e33a9562aa56ef6  tokodon-24.01.80.tar.xz
+7601afd72401761afb1d37e7d3fcb20187e214d3b2cd541eb124f992c2dea64cc71e1869e117f61db312e0b408baff89e59698aaf2722e6eec76f305f0c20a37  tokodon-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kdav
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="A DAV protocol implementation with KJobs"
 url="https://community.kde.org/Frameworks"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-ae4714b93c08b00af1e23ab379bb6e69fa3899527e61164b327c07b6c0cb837fae6515c70eb717735091e9af7d6d4850c01c278be9586d89366e4e60cb6ccd72  kdav-5.246.0.tar.xz
+62475704f26b0c81d546a14e826f7ba00f918b8d2805f46f773a439e7e420e335918c541644f84cd5e5a8ac9afe264110f791947281847c0b2311bf388b4c2c6  kdav-5.247.0.tar.xz
 "

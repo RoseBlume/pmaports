@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kpmcore
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-90232751f20a3344a8f08eec9892adab0716bd2f454514bcc9b2c761bab5ef10466fc478486eac604def5b93f81d8c69c6fffca9508bca24e99f112f71802f9b  kpmcore-24.01.80.tar.xz
+5b3eb465a37395366281f806768582296efa4a6698cdf4516180265031f5b79ac19aec23c3a6c2c68c98e0077631a3405ff20bab7591378ea1d0639c749ded3c  kpmcore-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kig
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Interactive Geometry"
 url="https://edu.kde.org/kig"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-35bb45853ea7b0edcecc86fffa39c7fe623d142d4d04e5e5521676e7dc58242352d3db73cd01818c2f361cb7d95883f399dfc05d10dd84e3b954560cf9b89db8  kig-24.01.80.tar.xz
+e087a1241631b0e6826281ae5744c35e041818dc274eaba0933fc779da2206a4273ee9eecbcfdbece102d361df33405bf7b7d913ca59758d3feb79eb51fdeb6a  kig-24.01.85.tar.xz
 "

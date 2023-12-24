@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkgapi
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="LibKGAPI is a KDE-based library for accessing various Google services via their public API"
 # armhf blocked by extra-cmake-modules
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-4d0be5faa035d0275b674e2704f39865b53e94555eebc502c3bcd8be4d0d3a7d900c508e12b244c486cd5ff84def0bb2562b4fbbc693011d4808d4ad89899fa0  libkgapi-24.01.80.tar.xz
+b4c82f1054e720e87c2ef46f0648a0a8f0d4117e3f89cb3c6fbb4b57bb5a2307d7e506e3ffc6dfc97f779bc902052e02c6a847e8f0c8c9af41a4826889afd495  libkgapi-24.01.85.tar.xz
 "

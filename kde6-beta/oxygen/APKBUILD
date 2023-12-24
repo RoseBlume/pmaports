@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=oxygen
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="Artwork, styles and assets for the Oxygen visual style for the Plasma Desktop"
 # armhf blocked by extra-cmake-modules
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-1173100a50a6ed508d1c56eafe204ba034ee76208d1fb9565386ccf0f12cb880c6f1c029445e3e61f47c8a3571b9e82776470d2919f2dbb08da04e35ccf68519  oxygen-5.90.0.tar.xz
+29fa4cf333e1fc5d9b6da83b322c2d72c3498c3c7df0b4ab68d293b7c21217c4abc2ee6b9fbf708cd05880160bb58c0ad2108c4a779b8f4a6e3264e189824e0e  oxygen-5.91.0.tar.xz
 "

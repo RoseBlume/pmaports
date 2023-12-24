@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=audiocd-kio
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-f27a78b4b714a59c7486363bb8ca32277f23102f0eea3c39aead08b70c8970cd5b8ff0f3ee28c3e00f7de257c188daa35d586b09aabec1addf4fdc231d5a1cd2  audiocd-kio-24.01.80.tar.xz
+3c36ee0ff1cfdf954d1d934d4f4567b279536ba4c3380e8e9d50b7a2a1e0777a87080122552b0a30abb9a9bc5b6d47b1d0521170f865755860d044d2c80929e6  audiocd-kio-24.01.85.tar.xz
 "

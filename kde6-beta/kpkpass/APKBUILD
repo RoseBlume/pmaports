@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kpkpass
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 arch="all !armhf"
 url="https://kontact.kde.org/"
@@ -40,5 +40,5 @@ package() {
 }
 
 sha512sums="
-86ede41da1f15586a50d92d034522c232fabb52807be115a21f858c9c93351dbc1e3fe439248fdb2dcbf3a4017c9b0723a43298947270b81166ff6679c307b20  kpkpass-24.01.80.tar.xz
+c68f51911d4af2832a1d7f76c6fb08c86d3092659e4e51b43611ecf71f234805d7a29c4699f4bfba06e47f645f346fb72d66944c3e4233c8f2f9be5cf8110a94  kpkpass-24.01.85.tar.xz
 "

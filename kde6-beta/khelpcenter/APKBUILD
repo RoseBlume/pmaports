@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=khelpcenter
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Application to show KDE Applications' documentation"
 # armhf blocked by extra-cmake-modules
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-2d322bfca8ac527e13e514f17e579d916fea1d59cf5338968bc4fe5a9caa0d1aa37b23b9818cfa712ebc68cfd93433497f406a716fc2751ad88ac76816891991  khelpcenter-24.01.80.tar.xz
+1429218bd92a7babee28b62794bd5f5142b5904c28a61f6cb7e8547b9daccad7dffd7c39401c0865c709db36b2c60c1bddcb6ddff1a85b41ed23773f9db4e0d0  khelpcenter-24.01.85.tar.xz
 "

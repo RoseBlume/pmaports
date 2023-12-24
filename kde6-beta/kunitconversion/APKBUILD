@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kunitconversion
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Support for unit conversion"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -43,5 +43,5 @@ package() {
 }
 
 sha512sums="
-4982396699502794735ea5ab996b10cffb2bfe6e0f78982062e08b8b21f3d9f94c733ddd29aed6e01628aeae6bdf70081e23c3dc2c767879c563fea109e9de95  kunitconversion-5.246.0.tar.xz
+c19472c76a664d844e16846dce58c07ef61514c95cb604e7294d8b44ef9ed93ac8c18462a7108160f60bef729e1eb287c7b94522b2651d4d930340c675787a92  kunitconversion-5.247.0.tar.xz
 "

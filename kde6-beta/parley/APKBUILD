@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=parley
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-ceea1f968fc2336ea138c27a906548a3d79658ae4c6720a3f7038731d64328bb5873dd65a7c0ebfe654a63adea30aa03739aaf9a875dc8835883dbaadcbc1714  parley-24.01.80.tar.xz
+c3e15bd87a8b086267b4d8e9484c81738c7ecd582da70a32e3eec1fa30fdd5a9de192827ccf2df2d93b01cda3173f396f5e1c8788e28cd5a2263d2f8bacf2ef6  parley-24.01.85.tar.xz
 "

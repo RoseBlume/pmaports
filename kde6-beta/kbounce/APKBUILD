@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kbounce
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A single player arcade game with the elements of puzzle"
 url="https://kde.org/applications/games/kbounce/"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-69378aebf8865faacc2fbc91b6eeff8f820c105ad5084f5e1706de1c2afbfc8eb02e41f04b77fea5b364c159b19a66690107e899df0c32c3c2ed465b1d3e1b81  kbounce-24.01.80.tar.xz
+225470f63f03e99a1a1fd499656338e6f398bc6bc2477b9d5630f4685a76a71e4186ded0ab8afb963a698b222f225abdf6ba1f9dbe4a48bd690259bd298a61e1  kbounce-24.01.85.tar.xz
 "

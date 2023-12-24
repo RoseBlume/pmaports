@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi-mime
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Libraries and daemons to implement basic email handling"
 # armhf blocked by extra-cmake-modules
@@ -52,5 +52,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-881aa536e6ece1fbc77f16aedcf3e8b6f5f7a466b6a964ba53006597164f631b6de9f2c0a6129c5e9e78fc10c1c8f31aa145d62fb895b0eb8ab7684b3d4b57cc  akonadi-mime-24.01.80.tar.xz
+fb5d1dcc85d26d76203b199e9b866af7634526998008ccdad58817375e8cb07ff7ee7f393fb5e4e621636230bf9b599cfb4aa619f0c679ddb19d75993a887d57  akonadi-mime-24.01.85.tar.xz
 "

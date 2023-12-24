@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi-calendar-tools
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by akonadi-calendar -> kmailtransport -> libkgapi -> qt6-qtwebengine
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-1eb2bbeb33c4cf0036e8679102164a9de1b8dddfa726164fd76b1117532bf3fbb01a0d3448db174a9162e4d4f6fa4f409cc14e8ff96c2966396137ed16a3dc78  akonadi-calendar-tools-24.01.80.tar.xz
+3c9eef9c82a1575b8147adc4e733317ae65aaabbd2bea47ed4e8e2a653b605d19a0dcbe6e18314c3f6c05dfe4f1b2c0ef2ceee63706fd97c8862440c31caaca6  akonadi-calendar-tools-24.01.85.tar.xz
 "

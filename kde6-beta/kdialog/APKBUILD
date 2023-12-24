@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdialog
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-2b9ea99737cc6c849295d8a5242c5f273b6570f249d41c490f4851c2ad8aff45888c5fdfb6f27f2111638756b00a0888a231f574b5839d1327b43be7a57be10f  kdialog-24.01.80.tar.xz
+0ef36c07a4ad8e42d27b289e35bc48d159ef0f834652a2fb52402b1550a0286b8ec67426177519209f50b9dcb57141d908df6c91783df8db4814e58115e31ae0  kdialog-24.01.85.tar.xz
 "

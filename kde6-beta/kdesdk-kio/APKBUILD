@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdesdk-kio
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -40,5 +40,5 @@ package() {
 }
 
 sha512sums="
-5217ab112a0a891e0d27856194abc7868b07e81b56d9eaf8fed5c42ee8021d05d004663cc0ac96e2b65ce4ade4dd455de8c9e8120368a506e644def38e756b7c  kdesdk-kio-24.01.80.tar.xz
+8bc6ac134a30d8a1be903c73bde6bf08bbe064f68fad13bbc1b681d17c94e61548d86682d3e2486a3ba009cabbf1b81bd88499cb50de57efafafd5aa2a4fb7a9  kdesdk-kio-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kcmutils
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Utilities for interacting with KCModules"
 # armhf blocked by extra-cmake-modules
@@ -53,5 +53,5 @@ package() {
 }
 
 sha512sums="
-ab9f81ced58643c86a9eaff4a1b4d630de049e15adfd066781b1a86893ddf1423b966d0481ab8e62fa97aeab9b15b309eb69b025bd57945df550c4288f10e7fe  kcmutils-5.246.0.tar.xz
+59b7bd7bd1c859de935e5270d8c53dd75afa47a3dcef600831b9e845d7fffa8eb8144017a15015148836e8c58919970887b3d9d620385c3d2498a3d43c2880d6  kcmutils-5.247.0.tar.xz
 "

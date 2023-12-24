@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=knights
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Chess board by KDE with XBoard protocol support"
 # armhf blocked by extra-cmake-modules
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-1b8c9b83f7bca472493dd88bb130c5c778eaec71c023b23c678a5708d3bc9e5fccf81ae37fbb77896fc94e860e36ce2ee7daff65621eb65536f94e048dd72aa2  knights-24.01.80.tar.xz
+1faee366874b33c8ffffe27c0e0706b7e62d10c135fba8975876e8b63f3720a6958ebcd4264b4837ca930c6b25cbc7105ee1985728d67b2874b080f431ccca0b  knights-24.01.85.tar.xz
 "

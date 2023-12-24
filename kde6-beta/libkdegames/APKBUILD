@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkdegames
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -71,5 +71,5 @@ carddecks() {
 }
 
 sha512sums="
-b061d21c7d6644317e1d878efa0ce268c4aadeab04b7446b878513d3e22def0cfc0e82bc620c69f215fa667131dbdf4b6e99d597c5819d959cea134c0e279c71  libkdegames-24.01.80.tar.xz
+52a512cf2271999586480b7e9055ec6933bd60b82ec525169029871a0abbccecaa087811f96c1de14e62e626a5bae5002b9065fb8893241dfbb425347af94414  libkdegames-24.01.85.tar.xz
 "

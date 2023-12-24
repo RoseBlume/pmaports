@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kcoreaddons
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Addons to QtCore"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -58,5 +58,5 @@ icons() {
 }
 
 sha512sums="
-a2595fb281556f1650ac4be5f5168bc7903db13e05ed79a07b73eb905ecb3057312c1fb0b5d75c58092a1df45a3f4a04b2f047481861915436539ceeea70a14a  kcoreaddons-5.246.0.tar.xz
+1fd4c8dad2f05cc6bda081c6f0e54a56395e359621ccf5955a227b5d7520a3cc151421f35905dba330627cafc16e4aa1fe770ed59a4150964af6143dacf9622f  kcoreaddons-5.247.0.tar.xz
 "

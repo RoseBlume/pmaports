@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmplot
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-7ce730b97bf47d0a9e8dca3d815ba583953476c432467df087df7e4a7d817945e9adfa3a610257e457856bf6a76b390c9283a0520d8719e76cb34ec57296b41b  kmplot-24.01.80.tar.xz
+146f192c6b2a8b5f17957ffa186d867ab3cd0b1c3d10daeb3efcd1cc37fa3da07c3cf19953738671fb860fc4d53c64f798560878ad6a5fe181d44f30961a1e8a  kmplot-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=keditbookmarks
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-d1bdf95a09362aec0030c3d8e06893dd238c7e57d08cb91be6b521f7ee124ae5f2c25370610f49eb1a3c3f1175daf769bc28442bfea143a7f4e605f35137eb4f  keditbookmarks-24.01.80.tar.xz
+2a34300c79adc63cf735eb711777ffd6089f27af8f6047d4167602e7acdcaa758fe5652fc3dcc90fbbb0cd275b41485b7b736f11f033e4f9de18c550ecf377ef  keditbookmarks-24.01.85.tar.xz
 "

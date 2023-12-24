@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=modemmanager-qt
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Qt wrapper for ModemManager DBus API"
 # armhf blocked by extra-cmake-modules
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-0d26f2088e8c93d7d720e8464b725307e60a5a085d4c51091bf4f4e7b3b087e39668554459028511692cff2241816d2bcf40aeece94145428944a57ebfb845e5  modemmanager-qt-5.246.0.tar.xz
+5b5f0b5a0351a1637cd728852c63c8cd15bfd57ce60ab777daf4dc789734dccc849de371c93570621284002f187fbbdace258831b5eaf98f3543a2756e676d5d  modemmanager-qt-5.247.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kopeninghours
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Library for parsing and evaluating OSM opening hours expressions"
 url="https://invent.kde.org/libraries/kopeninghours"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-018e9009c73d9fe21cee434090fb335923df0cdf60cdab0c0da73fefa9e69e9f70b5aec8d977ba8d9b7306276a3bbaa5b28d00e9ef6fcc44cd5118b0f1dec5de  kopeninghours-24.01.80.tar.xz
+af139793876f8c642d97b4dd7d9f425a9266ffd92c6a02be37b526184795d6196b9da6c2636ddb1c17f7e9ce1c4f82f6a401cd03a8b4bd1e446694bb0356e7f7  kopeninghours-24.01.85.tar.xz
 "

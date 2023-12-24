@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kimageformats
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Image format plugins for Qt"
 # armhf blocked by extra-cmake-modules
@@ -44,9 +44,9 @@ build() {
 
 check() {
 	case "$CARCH" in
-		armv7) xvfb-run ctest --test-dir build --output-on-failure -E "kimageformats-read-(psd|jxl|xcf)" ;;
-		s390x) xvfb-run ctest --test-dir build --output-on-failure -E "kimageformats-(read-psd|write-avif)" ;;
-		*) xvfb-run ctest --test-dir build --output-on-failure -E "kimageformats-read-(psd|xcf)" ;;
+		armv7) xvfb-run ctest --test-dir build --output-on-failure -E "kimageformats-read-(psd|hej2|jxl|xcf)" ;;
+		s390x) xvfb-run ctest --test-dir build --output-on-failure -E "kimageformats-(read-psd|hej2|write-avif)" ;;
+		*) xvfb-run ctest --test-dir build --output-on-failure -E "kimageformats-read-(psd|hej2|xcf)" ;;
 	esac
 }
 
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-3985b2ab912998aa6ea4b436bfc660c9359674c00ca15dd3ca481cb2538c01c2cd9f244c8004849a573ace96061d8fbe04708c8971e5bcb0cf8195b9a04f597d  kimageformats-5.246.0.tar.xz
+0d0f9690c3be2bcc929caa57991560e67200f8da104645f6a4cb79c49391dee96b9c35680dcefce011110b6d62a036c4ff23ca2fc804d4ccb24ed121d8bf05e5  kimageformats-5.247.0.tar.xz
 "

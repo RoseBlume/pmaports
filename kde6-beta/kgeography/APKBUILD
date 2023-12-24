@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kgeography
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-9eb85a3b91b76759141fbea6578481e96979d85f83b0b2ab13b89b2de92a76c2c2c8c1d23284a37e9e6cf2a4d92a10b99897562dc5b18b5adbb15a7e8fbb89c0  kgeography-24.01.80.tar.xz
+43685bc98b7325982e0cf9dcc1d24763c872ddcf1d7caf74a0cb481dde05000a78e3774477073f3225016bffba60257d26c38d5f17cd28aad87a31000c000c71  kgeography-24.01.85.tar.xz
 "

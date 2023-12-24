@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kio-zeroconf
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -41,5 +41,5 @@ package() {
 }
 
 sha512sums="
-d9d30df2676b460457d937019f4aa0e37adc5bc583d105564c5eb5e08b3c57a7b50c2e626a1c9e30121d7c7a0f9778bc3e71c66142d163396e968e6bc1450bd5  kio-zeroconf-24.01.80.tar.xz
+be5c275a86bf6ee95f3111720c1a50b0c254d709a7e6018d941fbd0b8a9a31c02c617838b9949c533e11aae00ac7e308226956ed5ee91c0857ee9b03a1f9e48e  kio-zeroconf-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kiten
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-c07a37fd6955f6b93db48a2f0119a1dcb662fa2afc65845fd629c0ece58dd34d5376264cecf58bca4046a61730e24874ab59e7b4e20fc811b321454ae49f7db5  kiten-24.01.80.tar.xz
+8cb67fcc4e8a6011fdf75d0e7046139cc69bd52cbd86dd8de71cc0c420075a5e5bebb2b9b537e0d654c4211cd83b65696b75f02aaf807c0a4d09f412b9cb88f1  kiten-24.01.85.tar.xz
 "

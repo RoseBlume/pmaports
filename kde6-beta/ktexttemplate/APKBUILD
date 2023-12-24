@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=ktexttemplate
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Library to allow application developers to separate the structure of documents from the data they contain"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -40,5 +40,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-bc12f089e8a8a2da9375d71c10dde57ab589642ee3865fb717ebb21d6538136261e93306609912fb3f35df4294af6c2b3b2eca43d542e2466624bbcb7413d1c0  ktexttemplate-5.246.0.tar.xz
+20eef4df899043ccc25695a9f4b36f56fa639bf9216f2a0e9602961456b7bb8f99dfea1c5ffd0c9fe8c5024f3036ce2b55f0ab6e12d0e2e1b656cfdf24585396  ktexttemplate-5.247.0.tar.xz
 "

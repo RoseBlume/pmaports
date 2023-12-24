@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kcharselect
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -43,5 +43,5 @@ package() {
 }
 
 sha512sums="
-a8327540601bfef1b073e4725ee8e775d7ae878f89aec6dcd71becbdbc5dedeeb07ff0616913d0f0378cfe234b0cfa587e278bac21fc8c3747028014f0630577  kcharselect-24.01.80.tar.xz
+9d4a705555b0e42ccbf1816df394d376a145f8080262f56e558a0ab527d416410c07de629d6eb18bd31cdfef7da280bdcd066356dc3ab36c85dbb44ac1ba14b6  kcharselect-24.01.85.tar.xz
 "

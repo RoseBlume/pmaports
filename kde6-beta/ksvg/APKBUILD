@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=ksvg
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Configuration system"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -46,5 +46,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-f28bdddfccb023ffa5c7355cd92de8ec680b1a7079e789348dd9706f683c0ab88832597a5b75cb0cbbc879e2baa47f1609999bd3c69b1b4125b41830cbeb7821  ksvg-5.246.0.tar.xz
+b8b0383e75533c865a486ce2f18a420ab4f03c85b7fb735c03fb9335a83d45ba6f26a1dac471f822d5cd20e269d8e2b09104de98180d9a699ddb95cb53173ae0  ksvg-5.247.0.tar.xz
 "

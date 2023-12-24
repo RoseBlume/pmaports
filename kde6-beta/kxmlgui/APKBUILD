@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kxmlgui
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="User configurable main windows"
 # armhf blocked by extra-cmake-modules
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-f6f19fcb1fb8486c9a22335910e13c271a172a8cc419c49aa4ca06299f8ef2066d1463038b9b21fb930c9cc12fc88044b2de5ba847d7c805f6b052a1dd58864e  kxmlgui-5.246.0.tar.xz
+ff4df6da5399c0650495242d8344f501002957d30d521ab037e0d34c321aaa9f438522ddb80cc31ed05ef7a8be9120b41ba6b40a35dd7e0fa9f46725df561d62  kxmlgui-5.247.0.tar.xz
 "

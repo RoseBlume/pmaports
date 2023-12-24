@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=mailcommon
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="KDE PIM library providing support for mail applications"
 # riscv64 disabled due to missing rust in recursive dependency
@@ -85,5 +85,5 @@ package() {
 }
 
 sha512sums="
-6a6ad90f25ce72a83035c0a6b172c4059b0e9467e07facc0a3101d347b73d866bfb88042d3e078d7c6e9809e15fe8cdd6249990a68f721c969ee89ff88151a8b  mailcommon-24.01.80.tar.xz
+44d55b06e71255f87d70825e7dfe15d66a9c77f346ffe801aa3552134e17c51a65897f73a4b05fc6afa72ed10a454b392b642f3ada771111f892801c673e0fed  mailcommon-24.01.85.tar.xz
 "

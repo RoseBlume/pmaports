@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libksane
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-e98d460aa1ad8cb106ff6af04cbe2c07c4e8c55ae69413f3c784d55a91be3f92028f37021fd9386200116bce1dabf2503f6d2248b82b30e9c47d6ff0bcbd88d8  libksane-24.01.80.tar.xz
+3d557cde7db85bcc049e31eb0d9ec1d7d037ace3002b284ce1b7ea3e6b3e7b637817b637dd391675bbfaf3858bbef6351cac03cf29dc7533bdc915248e8a1d71  libksane-24.01.85.tar.xz
 "

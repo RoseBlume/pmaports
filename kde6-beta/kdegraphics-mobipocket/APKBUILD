@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdegraphics-mobipocket
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A collection of plugins to handle mobipocket files"
 # armhf blocked by extra-cmake-modules
@@ -37,5 +37,5 @@ package() {
 }
 
 sha512sums="
-471e3b3e24fd2268dfbcec497db628cb454e7c6566eb1c38474ce1cfbfe9b0a3dc8567047baede165fe15df2c30d694a35d5893f693b1ef6723851cfb8cb962d  kdegraphics-mobipocket-24.01.80.tar.xz
+4c9ed49b31f2d0bd3719404496409270059f7f5e07d129852eb01a2e821de97509a627924462dc7399f9ced1d39f22277ea58d6d7ec15a4a334fc0b8aea9a074  kdegraphics-mobipocket-24.01.85.tar.xz
 "

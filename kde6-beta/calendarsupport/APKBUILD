@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=calendarsupport
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="Library providing calendar support"
 # armhf blocked by extra-cmake-modules
@@ -55,5 +55,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-991ac02a7ffa6d7b856a910f79930a5c76f5b9ab64e752b431a4dd88b686c8d417170e5aa6d5258880293ffa5bd2fb8d4ac1733e5a8ab48b9f7fbb05f0ed2aca  calendarsupport-24.01.80.tar.xz
+dfa0ba8df48e70e4d681cd40abf44378984a68b6c270f6389d3dee9bd45aa297cddc298919e638169d83325fd2137f61e66b2969cc5e1f243e2afcf564e5022f  calendarsupport-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=sonnet
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Spelling framework for Qt"
 # armhf blocked by extra-cmake-modules
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-b52d1b63ab65ad38da256901862f7cf5587cd77d6c446d1f14da69d5d828186414607e05e2801400d5c1d1abdbe0a6f3a8e60525257c7116ecf6621d1b093304  sonnet-5.246.0.tar.xz
+b6982f2cf1f31e6d9f763c0f97912a72e39f3b2fc7dbe64141f940fb8de192ac77a923b5a3af29ffb56cc3f65116697a3c08d0183b115f6a499b0f12c98ca640  sonnet-5.247.0.tar.xz
 "

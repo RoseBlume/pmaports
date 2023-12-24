@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kde-gtk-config
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="GTK2 and GTK3 Configurator for KDE"
 # armhf blocked by qt6-qtdeclarative
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-2fd3425bc4edd89dee14bc812e440ee5f475895a6bffa5209c64f076abbccef436f9c91f4bfcb30671033fe8a4d9d88695973b5f8cdfa0d2185ef4977cfea744  kde-gtk-config-5.90.0.tar.xz
+f06a28cfdb956b21aaabcf0dcfa8b5ff7a49be4f20c77a90364cdc0e7b5f4f4b8d0590feb2beba0e390a3870132b4603a9c681f63957f37fb93810b73a1eea27  kde-gtk-config-5.91.0.tar.xz
 "

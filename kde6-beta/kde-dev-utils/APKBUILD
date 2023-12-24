@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kde-dev-utils
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -41,5 +41,5 @@ package() {
 }
 
 sha512sums="
-00d6e3fe5ceaef5af1b19b6195ef56877a74b285a8cb1ad2bc56efcd7d9e7498b77fc8ef8a0f96b9a4d4a13a0b0ac4739218c6a8fec3e66db0905f5c6f15ed29  kde-dev-utils-24.01.80.tar.xz
+2f3eced7d026a5661ca33355106b1ae80fc899270b9a068d121de76d28640e23a1e2ebb5bfdc6ac49206b479d64bd245063e626f37dd66f70222a9d5421bcbc5  kde-dev-utils-24.01.85.tar.xz
 "

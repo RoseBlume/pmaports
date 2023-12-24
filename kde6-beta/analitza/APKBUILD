@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=analitza
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-e3b70a2b8b8d49984c514b061f32627e2fb729ffa254e6921ab83fce3b00deeeef5a7aacb4972091bdbae122ccabed809b6fef86aa3946be4c59fa3a6041fabb  analitza-24.01.80.tar.xz
+cc148b2b3f0e2ef898865ac51bf332843a1ffb66bcea63342c8fc8e7bfc4f7463833e388bd26fb5477a89a87ba9da5d7c4a37b15644abced100270406c96e7b9  analitza-24.01.85.tar.xz
 "

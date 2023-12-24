@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kdeplasma-addons
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="All kind of addons to improve your Plasma experience"
 # armhf blocked by qt6-qtdeclarative
@@ -71,5 +71,5 @@ package() {
 }
 
 sha512sums="
-058e15f3ad0e6f4aa43261e49a0d9e668eaed64a265902e8b174bfd7787ef33d92d6a178bc610236e5e8bbb631b38f9f663b2bc8def3bc4c85512ac00d59bc76  kdeplasma-addons-5.90.0.tar.xz
+f0c654698ca92845e2dc49332ee02db3f53c1fe89204d37c74e3c816093c191ff04ed5088628c6327dc323b9fe0c3ca09fe0f4db6d0de3a645107382c7fbeb38  kdeplasma-addons-5.91.0.tar.xz
 "

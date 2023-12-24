@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ksystemlog
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-ff714ef1253e75f71ec2c7dcc6d48bb393770b58eadc636b3ab3e7859f945420b91d64ba54abe522def74862770d9f5ebdc1e21575299f261aad82b7246d8ecc  ksystemlog-24.01.80.tar.xz
+431a4d5bc872cdd5bfe24cb60c88ab44e54df31344f1ac56a34f9498bd931f88bf0bb3c47b5c41d9f4f1fb192ceb92d3d457904531f5d4c02f06fe34b9c78a2d  ksystemlog-24.01.85.tar.xz
 "

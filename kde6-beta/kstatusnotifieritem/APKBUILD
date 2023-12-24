@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kstatusnotifieritem
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Implementation of Status Notifier Items"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -40,5 +40,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-33fbf0efec0751d8e1a25809ba875ac185c3a183890392b0744d4095848788a85e59c9ef2fbe6031c413175f06522a4720624f1c26165238de06d20e392c54e0  kstatusnotifieritem-5.246.0.tar.xz
+b852f76fdb6752124da67d8e33517127de1d0b246d9889b89e12d4fa67ecf75b3ab8c9018448ac54511fd41e49f4ad3cd820ab0c712c20c39551bbafed90a6e8  kstatusnotifieritem-5.247.0.tar.xz
 "

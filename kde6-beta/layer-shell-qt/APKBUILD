@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=layer-shell-qt
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="Qt component to allow applications to make use of the Wayland wl-layer-shell protocol"
 # armhf blocked by extra-cmake-modules
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-2aa3ebeacd50600ea4789cd569e9db5ea65f643c66586dbf1bde1fcbc746393c810925f495adc62c10e9cc44b9ec89d3e2f8a09039675127f1483053508b207b  layer-shell-qt-5.90.0.tar.xz
+ffe5e3e9b2c6b69c893ca247939b015172856e233d182d5867243aeabb9467a8634d1f0680250ffa1f7e81161a0fbb8bdf48f9dd526915142c4f3f031ff4244e  layer-shell-qt-5.91.0.tar.xz
 "

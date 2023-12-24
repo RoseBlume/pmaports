@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kalk
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 pkgdesc="A powerful cross-platfrom calculator application"
 arch="all !armhf" # Blocked by qt6-qtdeclarative
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-8dbe6ac23d160579f7eceeb3c1cfe10e7907bb2911fb8cd1d882547d4feeec13b82d5dbdf671ca4237aab0341fe4d1a139cb2aa120a27628cd743f2f4495aef4  kalk-24.01.80.tar.xz
+d298850c1dc118054fa2fcb4221bb45800ca3b29e2d6d66091e05943bc5cb4d4b5fa182db91eb70db05229094eb4bd4e8ac3ab095e938a42b7aa3e08393320bd  kalk-24.01.85.tar.xz
 "

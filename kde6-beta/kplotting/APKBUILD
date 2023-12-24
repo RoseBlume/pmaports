@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kplotting
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Lightweight plotting framework"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -40,5 +40,5 @@ package() {
 }
 
 sha512sums="
-a3f3b43e4e642d613d495f3f616300e00c98da513aff621547720254a387d765fe059decf85bfd917ca4625efb814579e8701a4195a4533bc572233ec83e6310  kplotting-5.246.0.tar.xz
+c8b48372a915270eccf6cfa43357fafd3771ddc1450612c4b8de36fcc735536bc0003be4f0cae98b963affee2b3b07d0343b45df6c8e7cb3f20838c542ed5de0  kplotting-5.247.0.tar.xz
 "

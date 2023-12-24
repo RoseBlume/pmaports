@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kaccounts-providers
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # s390x, ppc64le and riscv64 blocked by qt5-qtwebengine
@@ -27,9 +27,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/network/kaccounts-providers.git"
-source="https://download.kde.org/unstable/release-service/$pkgver/src/kaccounts-providers-$pkgver.tar.xz
-	0001-$pkgname-Port-to-KF6.patch::https://invent.kde.org/network/kaccounts-providers/-/commit/59c3b37240e95b1cd1c6176bdd1e76b9dbe2dcdf.patch
-	"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kaccounts-providers-$pkgver.tar.xz"
 options="!check" # No tests
 
 build() {
@@ -45,6 +43,5 @@ package() {
 }
 
 sha512sums="
-3a4d8054acdd8fbe553dcd7ef3d113b1afa45385962cb7bfacc02331b81856c601cb16ec6fb80b4e10602ea880da5cd47ee8a0d501433571de6ac5f7619e57ab  kaccounts-providers-24.01.80.tar.xz
-330f6d31b324f83189eb9dad15fb2ae629dffb3b8ab96f82b7496191a59ed0209a748b24a122bc63c1ad6beabd67212d57fe388bac137860c2fba096304e0f3f  0001-kaccounts-providers-Port-to-KF6.patch
+8f9a2ce924dad57de122ac168543ebffb57ea248a33586885386187855b5c29b4214c23aa7dd7c88d701f3d9eaf2adfdeea710d4a2893fe8787c44722abb97e7  kaccounts-providers-24.01.85.tar.xz
 "

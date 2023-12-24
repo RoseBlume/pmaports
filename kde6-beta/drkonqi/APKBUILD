@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=drkonqi
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="The KDE crash handler"
 # armhf blocked by extra-cmake-modules
@@ -70,5 +70,5 @@ package() {
 }
 
 sha512sums="
-84db589f190ca1be6c3dbfc57e53fd9b2d1982d1833066bacf88fd6bc63258d093571dfdb03f2bb963d448fb275d4e5ebc2061d18c3dc42c9069eeb59428c53f  drkonqi-5.90.0.tar.xz
+05e10c8e8b4a9980063419e6c1190134328dd46f51a37a4e5e10656ba741eb193da5cce0275ecf7d8d62b7be7c300ae66c36def3beb4c76d3c6d0c011c05ba78  drkonqi-5.91.0.tar.xz
 "

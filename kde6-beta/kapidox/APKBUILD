@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kapidox
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 arch="noarch !armhf" # armhf blocked by extra-cmake-modules
 pkgdesc="Scripts and data for building API documentation (dox) in a standard format and style"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-047cefe14f3923b0e7bb0ae0d79cc51f04058d1932b8918b926c5859a0ea123ff0fc2bf56f12cd40cebb929e579623bc27ed09ffa3442aa8dc90fe42f3752aa5  kapidox-5.246.0.tar.xz
+1072af3b3dc5939b46c1f84ef7304ad48624b9a569ec8ee1530c272bea19eb982190994658c8e8754c0b5222c0526677cba1196d71c47ad8e020a85ebd6c0d7e  kapidox-5.247.0.tar.xz
 "

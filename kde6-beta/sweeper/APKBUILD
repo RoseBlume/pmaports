@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=sweeper
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-559ccffdb30b650c64a1a86a7359062646488d01e550eac48983feaaacdb06896f182f9b11ae994fe3e9ec0033ea018d8ed16d92adef96f43b7501613101a843  sweeper-24.01.80.tar.xz
+87f8d5721651a851655bae86855b034e8aef6a74348719ba371e23a8bd43a2eb65d233dd21ffea2b141aac54447c0bc50a1aaf2722667c646874b993b6673e6a  sweeper-24.01.85.tar.xz
 "

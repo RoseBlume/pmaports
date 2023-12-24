@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kcolorchooser
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -39,5 +39,5 @@ package() {
 }
 
 sha512sums="
-ce23f5bfa76a0b6419587451b6dd117f947df2aa69121094c69fe07098229af61211b374b26d186256d8e445613d04882199864863b2b939146445729fd44106  kcolorchooser-24.01.80.tar.xz
+46da3ba73018244cd423602703d8b3733129c41a424e35008ab42951855d7f88b5e4ceeb62a9310195de8889490645c7e5c9e0632a23ad02af89964f72fbbea4  kcolorchooser-24.01.85.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=polkit-kde-agent-1
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="Daemon providing a polkit authentication UI for KDE"
 # armhf blocked by extra-cmake-modules
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-eccd8478719de581c25e681a991fc3665a8aa6daf35b3fc695f2db5c4e53702f2b5dcb6bc382f3a2b10b050b820b2f34da2b3fa8d2601f801aec3a33e40f7903  polkit-kde-agent-1-5.90.0.tar.xz
+37270b070c2c7e5eeb3301dbc4518e0630c18adc5f78ee750474b6524fee2203fb1bdbb0331e1e6e5bdd46357fed911d10121376c91c784cbd2520f022e26543  polkit-kde-agent-1-5.91.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kcontacts
-pkgver=5.246.0
+pkgver=5.247.0
 pkgrel=0
 pkgdesc="Address book API for KDE"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -53,5 +53,5 @@ package() {
 }
 
 sha512sums="
-ca28e326f625c66fe5138a9a4855a9f207cf5d74ab3665cea1d348e5f389b2428defd9861175a1a9a720683747d94d2bd50572f7b4577699791e30213a7c94aa  kcontacts-5.246.0.tar.xz
+cdc54fb4e705f4601e5d6d9b51b62450f390cee3b0435490e3a86831cb55d53ee3a3a2b187e673eb7d14ea996b08dee2161dc71e9dc5411124447d3e476efdba  kcontacts-5.247.0.tar.xz
 "

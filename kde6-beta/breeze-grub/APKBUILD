@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=breeze-grub
-pkgver=5.90.0
+pkgver=5.91.0
 pkgrel=0
 pkgdesc="Breeze theme for GRUB"
 arch="noarch !s390x !armhf" # armhf blocked by extra-cmake-modules
@@ -35,5 +35,5 @@ package() {
 	cp -r breeze "$pkgdir"/usr/share/grub/themes
 }
 sha512sums="
-0719382627d3265b6f11ddfee0299be9c6485fb53aca495b8dad2a6e57123174db16c80a5b87002491641f345d35d1f107025041205bbd65c3eed1c7d0dffaf1  breeze-grub-5.90.0.tar.xz
+e3f7a19d5aaa08f0609502a6afe57731900ecdf78879d57be7f6422943e1767edaa436e12a77a4ef9b2374e61bc916e2277e97b2f3ab4b07d409539a9b91156d  breeze-grub-5.91.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkomparediff2
-pkgver=24.01.80
+pkgver=24.01.85
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -43,5 +43,5 @@ package() {
 }
 
 sha512sums="
-721aefbeaaf93414e2a21a08b168d7bb86d59451f57a333e41e323748a00bbe331df0a5841fde34254a433ec1fee06b4989e5086744dba9f5f36f907acd31b10  libkomparediff2-24.01.80.tar.xz
+c5a2928a053d0bb8bed3ff523a9cff9d89679cbaf06a47064561f8828b81189ea0262703b9621f2d7f2bb8d8d4da29bb3318603995ef34cbfdd95e8247cec0a9  libkomparediff2-24.01.85.tar.xz
 "
