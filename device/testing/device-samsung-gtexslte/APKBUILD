@@ -1,0 +1,30 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-gtexslte
+pkgdesc="Samsung Galaxy Tab A 7.0 (2016)"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	linux-samsung-gtexslte
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+0c8dbb862cfe6c43249811068f6845ff0580317824823999c7aefc6a80c6aa27022587b5bcc60a5753fc9766981a66ea70300590fcce60b8f520ff8f7fe68fc1  deviceinfo
+"
