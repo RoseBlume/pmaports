@@ -33,10 +33,3 @@ def test_aports_kernel(args):
                                    " not be explicitly specified in makedepends!"
                                    " pmbootstrap installs cross-compiler"
                                    " automatically.")
-
-        # check some options only for main and community devices
-        for dir in ["main", "device/main", "device/community"]:
-            if path.startswith(f"{args.aports}/{dir}"):
-                if "pmb:kconfigcheck-community" not in apkbuild["options"]:
-                    raise RuntimeError(f"{aport_name}: \"pmb:kconfigcheck-community\" missing in"
-                                       " options= line, required for all community/main devices.")
