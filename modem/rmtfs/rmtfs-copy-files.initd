@@ -1,0 +1,54 @@
+#!/sbin/openrc-run
+
+# This script copies the modemst1, modemst2, fsc and fsg partitions in
+# preparation for use by rmtfs. This way we allow the modem to write changes
+# that are persistent across reboots without modifying the original partitions.
+
+name="UIM Slot selection"
+description="Select UIM slot and application on the embedded QMI nodem."
+
+# rmtfs conf.d variables
+rmtfs_files_path=""
+
+# Source rmtfs configuration
+. /etc/conf.d/rmtfs
+
+# DT compatible path
+compat_path="/sys/firmware/devicetree/base/compatible"
+
+depend() {
+	need udev-settle
+	before rmtfs
+}
+
+copy_partition() {
+	local name="$1"
+	local target="${rmtfs_files_path}/${name}"
+
+	if [ -e "${target}" ]; then
+		return 0
+	fi
+
+	cat /dev/disk/by-partlabel/"${name}" > "${target}"
+}
+
+start() {
+	if [ -z "$rmtfs_files_path" ]; then
+		eend 0 "RMTFS not configured to copy files"
+		return 0
+	fi
+
+	if [ -d "${rmtfs_files_path}" ]; then
+		eend 0 "RMTFS files already exist"
+		return 0
+	fi
+
+	einfo "Creating RMTFS files"
+
+	mkdir -p "${rmtfs_files_path}"
+
+	copy_partition modemst1
+	copy_partition modemst2
+	copy_partition fsc
+	copy_partition fsg
+}
