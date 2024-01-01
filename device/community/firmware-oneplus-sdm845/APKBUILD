@@ -1,7 +1,7 @@
 # Maintainer: Caleb Connolly <caleb@connolly.tech>
 
 pkgname=firmware-oneplus-sdm845
-pkgver=9
+pkgver=10
 pkgrel=0
 pkgdesc="Firmware for OnePlus 6 / 6T"
 url="https://gitlab.com/sdm845-mainline/firmware-oneplus-sdm845"
@@ -10,12 +10,13 @@ depends="linux-firmware-qcom linux-firmware-ath10k"
 license="proprietary"
 options="!check !strip !archcheck !tracedeps textrels pmb:cross-native"
 
-_version="dc9c77f220d104d7224c03fcbfc419a03a58765e"
+_version="9dd812bbdf0ccad819c273fea9466152cbf3e71b"
 _board2_commit="fc750b3f1bda29c08cfe9329eb781c0ae3608456"
 
 source="$pkgname.tar.gz::$url/-/archive/$_version/$pkgname-$_version.tar.gz
 	firmware.files
 	sensor.files
+	modem_pr.files
 	30-gpu-firmware.files
 	board-2.bin::https://gitlab.com/dylanvanassche/ath10k-firmware/-/raw/$_board2_commit/linux-firmware/board-2.bin
 	30-oneplus-sdm845-firmware-ci.files
@@ -24,6 +25,7 @@ subpackages="
 	$pkgname-initramfs:firmware_initramfs
 	$pkgname-pmtest
 	$pkgname-sensors:firmware_sensors
+	$pkgname-mcfg:firmware_mcfg
 "
 
 package() {
@@ -57,21 +59,34 @@ pmtest() {
 firmware_sensors() {
 	pkgdesc="Files to be included to add sensor support"
 	depends="$pkgname"
-	install_if="$pkgname-nonfree-firmware"
+	install_if="soc-qcom-sdm845-nonfree-firmware"
 	mkdir "$subpkgdir"
 
 	cd "$srcdir/$pkgname-$_version/"
 	while IFS="" read -r _i || [ -n "$_i" ]; do
 		[ ! -d $(dirname $_i) ] && mkdir -p $(dirname $_i)
-		echo $_i
-		install -Dm644 $_i "$pkgdir/$_i"
+		install -Dm644 $_i "$subpkgdir/$_i"
 	done < "$srcdir/sensor.files"
 }
 
+firmware_mcfg() {
+	pkgdesc="Files to be included for modem region configuration"
+	depends="$pkgname"
+	install_if="soc-qcom-sdm845-nonfree-firmware"
+	mkdir "$subpkgdir"
+
+	cd "$srcdir/$pkgname-$_version/"
+	while IFS="" read -r _i || [ -n "$_i" ]; do
+		[ ! -d $(dirname $_i) ] && mkdir -p $(dirname $_i)
+		install -Dm644 $_i "$subpkgdir/$_i"
+	done < "$srcdir/modem_pr.files"
+}
+
 sha512sums="
-d14b22434016cb12b8c04a3e7ac186451d77b92284e926a2771d958960d4da8ffb10cb9db555a200babcedd7be3379d2840882d19c26edc88805eee943310c2f  firmware-oneplus-sdm845.tar.gz
+5d74eda76413757830fd63f3847415a506de6a5cc5b4f3f34e7f4cb87767e0e21edd1db9776f45e4ede1a4e8ceb4221da8a1902bd6dca22a38371e7c481d3f79  firmware-oneplus-sdm845.tar.gz
 23e4ea891f688bf5669e4b8479aab06b56c5478429b759c22fa417e1ad09cb413e55856140b456c6b676b8920ecec40aa0215d8fd61a23ac2c5c02240552f247  firmware.files
 4e5c4f55d4b084c6c21810b93a63a75ad86dd04cd1c079497bd2387f8bd0a411053ca1e894974af8bfda77ddc79c92a6669550be3a48fbef01cf797b54d6cb67  sensor.files
+0034464a72c69313141bcd4a97f5a73e25c4f370beac1b7ec10a2f46cf8be5655d8d9d1c9a4052ba36577e14c8a7922bb97090250bb173244a1006918e51658f  modem_pr.files
 bc6c329bf6bb9622320ab610f4f5fb944129e276855a4cf5646cb29a553f4c47cd9a4ef4305cbcd94a991471bc109b8f615cefd6871be99bf6a457fe0fa5aa19  30-gpu-firmware.files
 a8eaab63f467553a65789a316d6f58cc15b0ad9bf3f698e6dbe51efa841db7f62a69d0c24b69da4f36de4a01dc29b723911d9cf17f925d3ce1170cbfa6b16029  board-2.bin
 d6a81ab4697e763eebf2b428e8a63dbdd0a44743691d9277e9d3c7de26dbcbddaea1928a6cfa5509f8f41506d8812022f200ec47f87d28e05af77302683ffcf4  30-oneplus-sdm845-firmware-ci.files
