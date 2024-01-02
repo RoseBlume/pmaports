@@ -18,6 +18,17 @@ add_config() {
 	fi
 }
 
+# srcdir is defined in APKBUILD
+# shellcheck disable=SC2154
+fragments_from_package="$(find "$srcdir" -maxdepth 1 -name "*.config")"
+
+if [ -n "$fragments_from_package" ]; then
+	for config in $fragments_from_package;
+	do
+		kernel_configs="$kernel_configs $(basename "$config")"
+	done
+fi
+
 # mainline is default config fragment
 add_config "mainline"
 
@@ -32,7 +43,10 @@ fi
 # builddir is defined in APKBUILD
 for config in $kernel_configs;
 do
-	cp /usr/share/devicepkg-dev/config-fragments/"$config" "$builddir"/kernel/configs
+	_paths="/usr/share/devicepkg-dev/config-fragments/$config $srcdir/$config"
+	for file in $_paths; do
+		[ -f "$file" ] && cp "$file" "$builddir"/kernel/configs
+	done
 done
 
 # apply all the configs, _pmos_defconfig is defined in device package
