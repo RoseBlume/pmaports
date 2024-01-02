@@ -2,24 +2,21 @@
 # Co-Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=linux-lenovo-21bx
 pkgver=6.7
-pkgrel=2
+pkgrel=3
 _commit="dd209a8fb4840e48ca4963bb23057f38b1066a6d"
 pkgdesc="Lenovo ThinkPad X13s kernel fork"
 arch="aarch64"
-_carch="arm64"
-_flavor="lenovo-21bx"
 url="https://kernel.org"
 license="GPL-2.0-only"
 options="!strip
 	!check
 	!tracedeps
 	pmb:cross-native
-	pmb:kconfigcheck-community
-	pmb:kconfigcheck-uefi
 	"
 makedepends="
 	bash
 	bison
+	devicepkg-dev
 	findutils
 	flex
 	openssl-dev
@@ -29,42 +26,35 @@ makedepends="
 
 # Source
 _repository="linux"
-_config="config-$_flavor.$arch"
+_carch="arm64"
+_flavor="${pkgname#linux-}"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/jhovold/$_repository/archive/$_commit.tar.gz
-	$_config
+	lenovo-21bx.config
 	0001-drm-panel-edp-Add-timings-for-BOE-NV133WUM-N63.patch
 "
 builddir="$srcdir/linux-$_commit"
 _outdir="out"
 
+_pmos_defconfig="johan_defconfig"
+_pmos_uefi="true"
+
 prepare() {
 	default_prepare
-	cp "$srcdir/config-$_flavor.$arch" .config
+	. kernel_prepare
 }
 
 build() {
-	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+	. kernel_build
 }
 
 package() {
-	mkdir -p "$pkgdir"/boot
-	make zinstall modules_install dtbs_install \
-		ARCH="$_carch" \
-		INSTALL_PATH="$pkgdir"/boot \
-		INSTALL_MOD_PATH="$pkgdir" \
-		INSTALL_MOD_STRIP=1 \
-		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
-	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
-
-	install -D "$builddir"/include/config/kernel.release \
-		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+	. kernel_package
 }
+
 
 sha512sums="
 e660104c28e3f41e4f6ccdccb95be7b17077a9d230a68899e8851be05c8eba6b2473ef8a2b4fc86bed1cdf02d305d06c6acae453a3648a597ad59b4ac422ccbb  linux-lenovo-21bx-dd209a8fb4840e48ca4963bb23057f38b1066a6d.tar.gz
-02c804db63f2ff5a78155f93930174c81ac040a03f9919961c1d8f2b5b06d92b10cad35a40c5bdddf4dfd1a7e22fd813562042cf94075498e4040b31b430f3b3  config-lenovo-21bx.aarch64
+f736e60b261842e66a71fdbfae986dfdea131e21d347b8a617b13e3f4fc8e7000e964fc13e908cceb916e32a1c7384c679b6989a16880d843b6a96d9e2d4aee2  lenovo-21bx.config
 fac2fc6cd033c30d1abea6ac77c173945f77e7c3db9e547b6e2a68969e731d4d69f6093fbc3a0b7068dddffe224692edb7175a953bc28f9449b8018c91835d31  0001-drm-panel-edp-Add-timings-for-BOE-NV133WUM-N63.patch
 "
