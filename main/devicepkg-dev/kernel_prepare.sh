@@ -13,7 +13,7 @@ add_config() {
 	# shellcheck disable=SC2154
 	# _carch is defined in APKBUILD
 	_arch_config="$_config-$_carch.config"
-	if [ -f "$_arch_config" ]; then
+	if [ -f "/usr/share/devicepkg-dev/config-fragments/$_arch_config" ]; then
 		kernel_configs="$kernel_configs $_arch_config"
 	fi
 }
