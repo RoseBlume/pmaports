@@ -3,7 +3,7 @@
 pkgname=soc-qcom-sdm845
 pkgdesc="Common package for Qualcomm SDM845 devices"
 pkgver=17
-pkgrel=1
+pkgrel=2
 url="https://postmarketos.org"
 license="BSD-3-Clause"
 arch="aarch64"
@@ -34,6 +34,7 @@ source="
 	call_audio_idle_suspend_workaround.initd
 	call_audio_idle_suspend_workaround.sh
 	modemmanager.conf
+	rmtfs.conf
 "
 
 package() {
@@ -56,12 +57,17 @@ modem() {
 		q6voiced-openrc
 		msm-modem-uim-selection
 	"
+	# We ship a custom /etc/conf.d/rmtfs
+	replaces="rmtfs-openrc"
 
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	mkdir "$subpkgdir"
 
 	install -Dm644 "$srcdir"/modemmanager.conf \
 		"$subpkgdir"/etc/conf.d/modemmanager
+	install -Dm644 "$srcdir"/rmtfs.conf \
+		"$subpkgdir"/etc/conf.d/rmtfs
+
 }
 
 nonfree_firmware() {
@@ -137,4 +143,5 @@ e55545b0b319bb0cb7e8c6ca961828f7e8c389f97b45492e0c432b9bbd5d3158359828e852ceac68
 5a58475b6e2ee1d655f3f23d8dc19e1cb2f32f1dfff3b9a9337d9c5baad1ec24bfaec0fb9cc03f00e5a291bee27c6b8bffbc65157e2bee5d65ef6d1adcb0910b  call_audio_idle_suspend_workaround.initd
 aa5cdb138a3cdd0b15d2bbb60c7f67ae0280ddc7d0488cfe2fc44680095a43c1cdacc54d70a689f2117538e9bf1e42758d8c3ac542c9cb8e8dc6d6f3161b7577  call_audio_idle_suspend_workaround.sh
 e33f41360ccc4900bb76a26cc7b46bde1fb90facdf45c4fbcebc80499386939948401cacd6df9f779eafab10f4ee77ee1fef3e7bd06f483f8c2a4a644c84f327  modemmanager.conf
+70dad6fd030230b0617a5fa85c26a31b1876c9d8f576ae4fc744074c0f62f9fd50755db533b812703cf6b8d4897ce00fcffbe65e9ec310022b2668da6e65da03  rmtfs.conf
 "
