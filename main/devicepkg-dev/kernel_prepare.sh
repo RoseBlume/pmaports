@@ -2,32 +2,22 @@
 
 kernel_configs=""
 
-# $1: config fragment name
-add_config() {
-	_config="$1"
-
-	# update kernel_configs variable with a new fragment
-	kernel_configs="$kernel_configs $_config.config"
-
-	# look for architecture-speficic fragment in the format <name>-<carch>.config
+# $1: file path
+apply_jinja_template() {
+	filepath="$1"
+	filename="$(basename "$filepath")"
+	# builddir is defined in APKBUILD
 	# shellcheck disable=SC2154
-	# _carch is defined in APKBUILD
-	_arch_config="$_config-$_carch.config"
-	if [ -f "/usr/share/devicepkg-dev/config-fragments/$_arch_config" ]; then
-		kernel_configs="$kernel_configs $_arch_config"
-	fi
+	makefile="$builddir"/Makefile
+	kernel_version="$(grep "^VERSION" "$makefile" | sed -e "s/VERSION = //")"
+	kernel_patchlevel="$(grep "^PATCHLEVEL" "$makefile" | sed -e "s/PATCHLEVEL = //")"
+	# shellcheck disable=SC2154
+	jinja2 --strict \
+		-D kernel_version="$kernel_version" \
+		-D kernel_patchlevel="$kernel_patchlevel" \
+		-D arch="$_carch" \
+		"$filepath" > "$builddir"/kernel/configs/"${filename%.j2}"
 }
-
-# srcdir is defined in APKBUILD
-# shellcheck disable=SC2154
-fragments_from_package="$(find "$srcdir" -maxdepth 1 -name "*.config")"
-
-if [ -n "$fragments_from_package" ]; then
-	for config in $fragments_from_package;
-	do
-		kernel_configs="$kernel_configs $(basename "$config")"
-	done
-fi
 
 # $1: config fragment name
 validate_config() {
@@ -63,13 +53,24 @@ validate_config() {
 	done < <(grep -Eo "^CONFIG.*=\".*\"" "$_fragment_file")
 }
 
+# srcdir is defined in APKBUILD
+# shellcheck disable=SC2154
+fragments_from_package="$(find "$srcdir" -maxdepth 1 -name "*.config" -o -name "*.config.j2")"
+
+if [ -n "$fragments_from_package" ]; then
+	for config in $fragments_from_package;
+	do
+		kernel_configs="$kernel_configs $(basename "$config")"
+	done
+fi
+
 # mainline is default config fragment
-add_config "mainline"
+kernel_configs="$kernel_configs mainline.config.j2"
 
 # shellcheck disable=SC2154
 # _pmos_uefi is defined in APKBUILD
 if [ "$_pmos_uefi" = "true" ]; then
-	add_config "uefi"
+	kernel_configs="$kernel_configs uefi.config.j2"
 fi
 
 # copy fragments
@@ -78,14 +79,20 @@ fi
 for config in $kernel_configs; do
 	_paths="/usr/share/devicepkg-dev/config-fragments/$config $srcdir/$config"
 	for file in $_paths; do
-		[ -f "$file" ] && cp "$file" "$builddir"/kernel/configs
+		if [ -f "$file" ]; then
+			if [[ "$file" == *.config ]]; then
+				cp "$file" "$builddir"/kernel/configs
+			elif [[ "$file" == *.config.j2 ]]; then
+				apply_jinja_template "$file"
+			fi
+		fi
 	done
 done
 
 # apply all the configs, _pmos_defconfig is defined in device package
 # shellcheck disable=SC2086,SC2154
 # _carch and _pmos_defconfig are defined in APKBUILD
-make ARCH="$_carch" $_pmos_defconfig $kernel_configs
+make ARCH="$_carch" $_pmos_defconfig ${kernel_configs//.j2/}
 
 # validate all configs. this will go through all of them, and will
 # print all errors. However, it will end the script only after going
@@ -96,7 +103,7 @@ make ARCH="$_carch" $_pmos_defconfig $kernel_configs
 # at least one misconfiguration, so we will be able to end up with an
 # error on condition of this variable.
 EXIT_CODE=0
-for config in $kernel_configs;
+for config in ${kernel_configs//.j2/};
 do
 	validate_config "$config"
 done
