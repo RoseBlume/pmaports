@@ -1,16 +1,15 @@
 pkgname=devicepkg-dev
-pkgver=0.19.3
+pkgver=0.19.4
 pkgrel=0
 pkgdesc="Provides default device package functions"
 url="https://postmarketos.org"
 arch="noarch"
 license="MIT"
+subpackages="$pkgname-jinja2:_jinja2"
 source="
 	compiler-gcc.h
-	config-fragments/mainline.config
-	config-fragments/uefi.config
-	config-fragments/uefi-arm64.config
-	config-fragments/uefi-x86_64.config
+	config-fragments/mainline.config.j2
+	config-fragments/uefi.config.j2
 	devicepkg_build.sh
 	devicepkg_package.sh
 	devicepkg_pmtest_post_install.sh
@@ -86,22 +85,24 @@ package() {
 		"$pkgdir/usr/bin/kernel_prepare"
 	install -Dm644 "$srcdir/compiler-gcc.h" \
 		"$pkgdir/usr/share/devicepkg-dev/compiler-gcc.h"
-	install -Dm644 "$srcdir/mainline.config" \
-		"$pkgdir/usr/share/devicepkg-dev/config-fragments/mainline.config"
-	install -Dm644 "$srcdir/uefi.config" \
-		"$pkgdir/usr/share/devicepkg-dev/config-fragments/uefi.config"
-	install -Dm644 "$srcdir/uefi-arm64.config" \
-		"$pkgdir/usr/share/devicepkg-dev/config-fragments/uefi-arm64.config"
-	install -Dm644 "$srcdir/uefi-x86_64.config" \
-		"$pkgdir/usr/share/devicepkg-dev/config-fragments/uefi-x86_64.config"
+	install -Dm644 "$srcdir/mainline.config.j2" \
+		"$pkgdir/usr/share/devicepkg-dev/config-fragments/mainline.config.j2"
+	install -Dm644 "$srcdir/uefi.config.j2" \
+		"$pkgdir/usr/share/devicepkg-dev/config-fragments/uefi.config.j2"
+}
+
+# Install jinja2-cli when building kernel for kconfig fragments,
+# rely on postmarketos-installkernel for it
+_jinja2() {
+	install_if="$pkgname=$pkgver-r$pkgrel postmarketos-installkernel"
+	depends="jinja2-cli"
+	mkdir "$subpkgdir"
 }
 
 sha512sums="
 d69930dd790b00fb39760a37d95a10899f0d167e10e2804feb05d9ce04f94185dc32d36edc90214aba2ea2aa09bf18f7dab93f1d2eff23f67beb2cc83be30e7c  compiler-gcc.h
-37956199ef4c4eb54c93535d46b9930b794e2f17ac5590292e786b2ed5404a1819ae1c8a3c468c5d675be4c2172be2cfcb80b7e34b7efc05ed894f1448210656  mainline.config
-745d8213e9dffb5c2779a716b31e7828c62ca7a525fa29edd4f3c91919a8c722976a02e52e600b56eff4c23dc23f4b5e03ebb8a71402153df96607f47c892757  uefi.config
-29eeabcc1d8c2f3782993a89f940e2eaa96176227df3f45ca2387315aca86ae83591ed5e66438991f9b0d246922b6e06bdf9651e4eb3f87c8e2a36ed743eb231  uefi-arm64.config
-b11dc74089a27c0597cdd296889d19eb20c02ce8da51ca89542e4f106e9ecca1c1988d384f04d3ea9083cc9020995466752a022b50924deec63ca2e475c0aaf4  uefi-x86_64.config
+989009ba34096c7c195130a572cfae4b221c495da2dabf9481ccef3b13ab5623f06f3a1b2a880d69db06ee8f7c699d98406e86de80cd3fb5fee2d208e2ac3198  mainline.config.j2
+04cdc0b2f88782497c709a3ad314aa7fb3c47097837a44d360af71785cef9774d4d7b075afba492a35a4557d9d7674c964f78aec90c7d01873074b95c541b6f6  uefi.config.j2
 faba89519197a9bccba3049a031f11b22f5c8b1b87b5278cb4daaa9d73f5946394643f9a59f76eb120618e6fe8df08b80879eca12b76a24ce03b1c9c7db65528  devicepkg_build.sh
 5b83255dabd2019ea07a589d185bee5dad6760e28ab02de3480a0adfd1cf20d0c2e0b4a978e56757899ef683819091cee99d168a48e24a3f604b725e1ba26849  devicepkg_package.sh
 3b997a00e76be7d4540290275585026c5b83832c0b9a7214346763f03ec196b3f1bea9f50a9928a5cab0bc22dc557af136ffe146bd45d3666b5c05589891047d  devicepkg_pmtest_post_install.sh
@@ -110,7 +111,7 @@ f81e74e45ae8e55686ae459f550e229e7398daeafa72bd023c2d8c3a0d50e60bf53d5bbdfec931e9
 57e9c3a4caffc8b2eed07553725b25d0917c74cf774994e61de4874d1ca8e6df646c36f8f9d34c75497bea860e383f1abf429599141ea163ce90d69dbb31a9bb  devicepkg_subpackage_kernel.sh
 9fb15d78e11ff19dbb85f283ccc8bd59f4ecdbf0382053b5f251e7e4e573b7b329cd73c119008cd3f95f2b537a2b45d0753abe669c56f4378d847373f11a569b  kernel_build.sh
 6a0ade8f5b2f48271a2330aecf2ec55cdcb68531999970be65cb0d9637665bd46748115d634de7eaa73489d96db4ff78dabe93b3038879578a143bbed5d3e548  kernel_package.sh
-811777dee1f0b747c95a38feae570712a03ed2fbd6c105b1d1a9113203f51d33145bb0d45fa79b0329aaf079b176eada5a36f47b86d04421c589683906a1c653  kernel_prepare.sh
+46fecd4b500bf42c869a3c4d1dbf36fa4116832c3c0ebd023dbd8f2541875ed699763dc88931b5f099aa738b4a87a2d698dbcfd8e242b59baa123120718c9bb2  kernel_prepare.sh
 9bb7f2a0930f397a713e9f4b6d5b83a426d9a2a3f692dcc42ac30717bf26ead869d8823a38f3ad388af12b2b9a02e8ec4d4418e9c2062389ed06d2b891a49ff3  deviceinfo
 136247a16ec91dc0c7241eeddb28c2196ae3b29946a9bc7e9566f848491ef1c53b12d05bf2dbc1cc352986712fd76f25c1510bcc8f301af540a2f01c33b299e1  expected-deviceinfo-downstream
 8cdbf149e1bdfaf4d4a246a208732836956fd81a3aa01ef968e4c2e2cca4027f71cfc38e22debade83ddfca4e05267983c1c8a9c1aa9461a8cf493ef7e893097  expected-deviceinfo-mainline
