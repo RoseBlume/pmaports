@@ -1,10 +1,11 @@
 pkgname=devicepkg-dev
-pkgver=0.19.4
+pkgver=0.19.5
 pkgrel=0
 pkgdesc="Provides default device package functions"
 url="https://postmarketos.org"
 arch="noarch"
 license="MIT"
+makedepends="jinja2-cli"
 subpackages="$pkgname-jinja2:_jinja2"
 source="
 	compiler-gcc.h
@@ -22,6 +23,10 @@ source="
 	testdata/deviceinfo
 	testdata/expected-deviceinfo-downstream
 	testdata/expected-deviceinfo-mainline
+	testdata/expected-uefi-config-arm
+	testdata/expected-uefi-config-arm64
+	testdata/expected-uefi-config-arm64-pre-6.1.0
+	testdata/expected-uefi-config-x86_64
 "
 
 check() {
@@ -58,6 +63,68 @@ check() {
 		"$srcdir/expected-deviceinfo-mainline";
 	then
 		echo "ERROR: mainline deviceinfo contains incorrect data"
+	fi
+
+	_template="$srcdir/uefi.config.j2"
+
+	# Generate uefi config on 6.6.0 arm
+	# (no CONFIG_EFI_ZBOOT, no CONFIG_EFI_MIXED)
+	jinja2 --strict \
+		-D kernel_version="6" \
+		-D kernel_patchlevel="6" \
+		-D arch="arm" \
+		"$_template" > "$testdir/uefi-config-arm"
+
+	# Generate uefi config on 6.6.0 arm64
+	# (CONFIG_EFI_ZBOOT, no CONFIG_EFI_MIXED)
+	jinja2 --strict \
+		-D kernel_version="6" \
+		-D kernel_patchlevel="6" \
+		-D arch="arm64" \
+		"$_template" > "$testdir/uefi-config-arm64"
+
+	# Generate uefi config on 5.15.0 arm64
+	# (no CONFIG_EFI_ZBOOT, no CONFIG_EFI_MIXED)
+	jinja2 --strict \
+		-D kernel_version="5" \
+		-D kernel_patchlevel="15" \
+		-D arch="$_carch" \
+		"$_template" > "$testdir/uefi-config-arm64-pre-6.1.0"
+
+	# Generate uefi config on 6.6.0 x86_64
+	# (no CONFIG_EFI_ZBOOT, CONFIG_EFI_MIXED)
+	jinja2 --strict \
+		-D kernel_version="6" \
+		-D kernel_patchlevel="6" \
+		-D arch="x86_64" \
+		"$_template" > "$testdir/uefi-config-x86_64"
+
+	if ! cmp -s "$srcdir/expected-uefi-config-arm" \
+		"$testdir/uefi-config-arm"
+	then
+		echo "ERROR: unexpected result with uefi config on arm using 6.6.0 version"
+		exit 1
+	fi
+
+	if ! cmp -s "$srcdir/expected-uefi-config-arm64" \
+		"$testdir/uefi-config-arm64"
+	then
+		echo "ERROR: unexpected result with uefi config on arm64 using 6.6.0 version"
+		exit 1
+	fi
+
+	if ! cmp -s "$srcdir/expected-uefi-config-arm64-pre-6.1.0" \
+		"$testdir/uefi-config-arm64-pre-6.1.0"
+	then
+		echo "ERROR: unexpected result with uefi config on arm64 using 5.15.0 version"
+		exit 1
+	fi
+
+	if ! cmp -s "$srcdir/expected-uefi-config-x86_64" \
+		"$testdir/uefi-config-x86_64"
+	then
+		echo "ERROR: unexpected result with uefi config on x86_64 using 6.6.0 version"
+		exit 1
 	fi
 
 	# Cleanup
@@ -115,4 +182,8 @@ f81e74e45ae8e55686ae459f550e229e7398daeafa72bd023c2d8c3a0d50e60bf53d5bbdfec931e9
 9bb7f2a0930f397a713e9f4b6d5b83a426d9a2a3f692dcc42ac30717bf26ead869d8823a38f3ad388af12b2b9a02e8ec4d4418e9c2062389ed06d2b891a49ff3  deviceinfo
 136247a16ec91dc0c7241eeddb28c2196ae3b29946a9bc7e9566f848491ef1c53b12d05bf2dbc1cc352986712fd76f25c1510bcc8f301af540a2f01c33b299e1  expected-deviceinfo-downstream
 8cdbf149e1bdfaf4d4a246a208732836956fd81a3aa01ef968e4c2e2cca4027f71cfc38e22debade83ddfca4e05267983c1c8a9c1aa9461a8cf493ef7e893097  expected-deviceinfo-mainline
+c75c157bd7fe05662be7fe24d00f8603ddc4a760f5589463ae4ea2a594430e700835ba2b6edd6b540be5c131fcfc8717556c17a1fdbc41583926787bb09709bd  expected-uefi-config-arm
+22406d611d716d32482ee3b46080d7b945ac3e0e4083bdddfa7a1eca4e9733332118a90739f4ded6e2eee01abe213c95408d9e10fbf087e19d46907bbc21bc7e  expected-uefi-config-arm64
+c75c157bd7fe05662be7fe24d00f8603ddc4a760f5589463ae4ea2a594430e700835ba2b6edd6b540be5c131fcfc8717556c17a1fdbc41583926787bb09709bd  expected-uefi-config-arm64-pre-6.1.0
+3d3ca6a614e7114a9e45c307be42245550030cc8d5d8c7a7e9130cb5da8c5a6b6a641fa9f33c41a4a9ec3dd9158b4a03b00ef2bbae233b255200d91400498e06  expected-uefi-config-x86_64
 "
