@@ -1,0 +1,65 @@
+# Maintainer: Anton Bambura <jenneron@protonmail.com>
+pkgname=linux-postmarketos-mediatek-mt81xx
+pkgver=6.7_rc8_git20240103
+pkgrel=0
+pkgdesc="Mediatek MT8186/8192/8195 kernel package"
+arch="aarch64"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip
+	!check
+	!tracedeps
+	pmb:cross-native
+	"
+makedepends="
+	bash
+	bison
+	devicepkg-dev
+	findutils
+	flex
+	openssl-dev
+	perl
+	gmp-dev
+	mpc1-dev
+	mpfr-dev
+	xz
+	postmarketos-installkernel
+"
+
+# Source
+_repository="chromeos-kernel"
+_carch="arm64"
+_flavor="${pkgname#linux-}"
+_commit="7080f6ac6a10642612c9ac33f770dee559bfdccb"
+source="
+	$pkgname-$_commit.tar.gz::https://gitlab.collabora.com/google/$_repository/-/archive/$_commit/chromeos-kernel-$_commit.tar.gz
+	01-disable-ext3.config
+	02-disable-other-arches.config
+	03-disable-selinux.config
+	04-enable-rtl8822ce.config
+"
+builddir="$srcdir/$_repository-$_commit"
+
+_pmos_defconfig="defconfig"
+
+prepare() {
+	default_prepare
+	. kernel_prepare
+}
+
+build() {
+	. kernel_build
+}
+
+package() {
+	. kernel_package
+}
+
+
+sha512sums="
+0d2623dcb41d2f085707573354d32b46133c059d6e8dc204456f6e52e51081bbe1aa7e1ea17531158b6d3fe89c86d0f4dfcbae1ec052c946d23f59d8de904d7b  linux-postmarketos-mediatek-mt81xx-7080f6ac6a10642612c9ac33f770dee559bfdccb.tar.gz
+a25abe6de9445b9205490ce28439bfa682c75b6f970da381f105b9197859bc8fd7c4ca088e38c798ddeec2e0dc12570fbe2164b2cba4474bc78d4a77cc74aa5f  01-disable-ext3.config
+35ecb29e29544c8beab51ed4f1c75f968d1a1f4c7485dc32454b57cba20d9b17a970ecf9d0596f644cf509c145ebd21563ee53af417960773597cd8c57b97909  02-disable-other-arches.config
+f867e00b9468813217b2e98a2d3adae91685d335d14be0e3385aed7f15ec4e10e8cc26d3c00b4fab3cb1106a00b912494136288414f1f3e22e5764077ab53e02  03-disable-selinux.config
+9ac02735e2fdf088da4c6ef5e3e3d64d63ad06d4be7c8c0b14ffa725c3b6983b4086f117006da390c461f3c541d4bafd7fb7a724a44429f131c4db9b8c1535b0  04-enable-rtl8822ce.config
+"
