@@ -53,6 +53,24 @@ validate_config() {
 	done < <(grep -Eo "^CONFIG.*=\".*\"" "$_fragment_file")
 }
 
+# if full config is supplied instead of defconfig, copy it.
+copy_full_config() {
+	# shellcheck disable=SC2154
+	# _config and srcdir are defined in APKBUILD
+	if [ -n "$_config" ]; then
+		cp "$srcdir/$_config" .config
+	fi
+}
+
+# if we need only to copy a full config (.e.g. if we want to edit
+# it), then we can pass ONLY_COPY=1 to env and the code will end up
+# here. This is needed for "pmbootstrap kconfig edit" command when
+# using full configs
+if [ "$ONLY_COPY" = "1" ]; then
+	copy_full_config
+	return
+fi
+
 # srcdir is defined in APKBUILD
 # shellcheck disable=SC2154
 fragments_from_package="$(find "$srcdir" -maxdepth 1 -name "*.config" -o -name "*.config.j2")"
@@ -88,6 +106,10 @@ for config in $kernel_configs; do
 		fi
 	done
 done
+
+# copy full config when using it instead of defconfig
+# empty _pmos_defconfig won't be a problem
+copy_full_config
 
 # apply all the configs, _pmos_defconfig is defined in device package
 # shellcheck disable=SC2086,SC2154
