@@ -1,17 +1,14 @@
 # Maintainer: Jenneron <jenneron@protonmail.com>
 pkgname=linux-google-veyron
 pkgver=6.1.39
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline kernel for Google Veyron devices"
 arch="armv7"
 _carch="arm"
 _flavor="${pkgname#linux-}"
 url="https://kernel.org"
 license="GPL-2.0-only"
-options="!strip !check !tracedeps
-	pmb:cross-native
-	pmb:kconfigcheck-community
-"
+options="!strip !check !tracedeps pmb:cross-native"
 makedepends="
 	bash
 	bison
@@ -21,6 +18,7 @@ makedepends="
 	installkernel
 	openssl-dev
 	perl
+	postmarketos-installkernel
 	rsync
 	gzip
 	xz
@@ -47,23 +45,15 @@ replaces="linux-postmarketos-rockchip"
 
 prepare() {
 	default_prepare
-	cp "$srcdir/config-$_flavor.$CARCH" .config
+	. kernel_prepare
 }
 
 build() {
-	unset LDFLAGS
-	make ARCH="$_carch" \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+	. kernel_build
 }
 
 package() {
-	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
-
-	make -j1 modules_install dtbs_install \
-		ARCH="$_carch" \
-		INSTALL_MOD_STRIP=1 \
-		INSTALL_MOD_PATH="$pkgdir" \
-		INSTALL_DTBS_PATH="$pkgdir/boot/dtbs"
+	. kernel_package
 }
 
 sha512sums="
