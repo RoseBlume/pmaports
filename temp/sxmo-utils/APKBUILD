@@ -179,7 +179,7 @@ dwm() {
 
 		sxmo-dwm
 		"
-	install="$subpkgname.post-install"
+	install="sxmo-utils-dwm.post-install"
 
 	mkdir -p "$subpkgdir"
 }
@@ -194,7 +194,7 @@ sway() {
 		sxmo-sway
 		seatd
 		"
-	install="$subpkgname.post-install"
+	install="sxmo-utils-sway.post-install"
 
 	mkdir -p "$subpkgdir"
 }
