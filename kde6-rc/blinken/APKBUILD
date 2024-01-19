@@ -1,0 +1,50 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=blinken
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+# s390x blocked by kxmlgui
+arch="all !armhf !s390x !riscv64"
+url="https://edu.kde.org/blinken/"
+pkgdesc="Memory Enhancement Game"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kguiaddons-dev
+	ki18n-dev
+	kxmlgui-dev
+	phonon-dev
+	qt6-qtbase-dev
+	qt6-qtsvg-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/education/blinken.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/blinken-$pkgver.tar.xz"
+subpackages="$pkgname-doc $pkgname-lang"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+39894b0ff4164c3244c91c90f719a79bc010e02929a87a525ec435139aa6fef1ed77a6443b01d5d55407e6f0eb3dc1e6179fab785d91534fb6123baa9610c049  blinken-24.01.90.tar.xz
+"

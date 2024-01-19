@@ -1,0 +1,57 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kcontacts
+pkgver=5.248.0
+pkgrel=0
+pkgdesc="Address book API for KDE"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.0-or-later"
+# TODO: Replace gnupg with specific gnupg subpackages that kcontacts really needs.
+depends="
+	gnupg
+	iso-codes
+	"
+depends_dev="
+	kcodecs-dev
+	kconfig-dev
+	kcoreaddons-dev
+	ki18n-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kcontacts.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kcontacts-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# kcontacts-addresstest requires Wayland display
+	xvfb-run ctest --test-dir build --output-on-failure -E "kcontacts-addresstest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+571b472629605a25a4245623cc346c8ad64b559dc12533dce6360f888133b08c09a67fa89a0cca0753317f81f098877a756cdf527cdb4527d84e072ca13005df  kcontacts-5.248.0.tar.xz
+"

@@ -1,0 +1,54 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kiconthemes
+pkgver=5.248.0
+pkgrel=0
+pkgdesc="Support for icon themes"
+# armhf blocked by extra-cmake-module
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only"
+depends_dev="
+	karchive-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kitemviews-dev
+	kwidgetsaddons-dev
+	qt6-qtsvg-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kiconthemes.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kiconthemes-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# kiconengine_unittest is broken
+	xvfb-run ctest --test-dir build --output-on-failure -E "kiconengine_unittest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+f573997476c9d1f738db595210e2a1f1c94dae2ded53106d02352da005c4ec493a424c70fe29087f28422d00e4031ce73ce4e1d8927153c699a28bc42c694626  kiconthemes-5.248.0.tar.xz
+"

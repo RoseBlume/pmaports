@@ -1,0 +1,57 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kcalutils
+pkgver=24.01.90
+pkgrel=0
+pkgdesc="The KDE calendar utility library"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://api.kde.org/kdepim/kcalutils/html"
+license="LGPL-2.0-or-later"
+depends_dev="
+	grantlee-dev
+	kcalendarcore-dev
+	kcodecs-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kidentitymanagement-dev
+	ktexttemplate-dev
+	kwidgetsaddons-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/kcalutils.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kcalutils-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+
+	# kcalutils-testincidenceformatter and kcalutils-testtodotooltip are broken
+	CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "kcalutils-test(incidenceformatter|todotooltip|dndfactory)"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+e219d2e9ef9918766d7c04b6b76606815c67d958e56e708c1d7140b2629fc82acbd623ac59991e56ba843417105a621d7bd27bf420582ce2995df97becc293d6  kcalutils-24.01.90.tar.xz
+"

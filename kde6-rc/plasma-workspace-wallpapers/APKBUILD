@@ -1,0 +1,43 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=plasma-workspace-wallpapers
+pkgver=5.92.0
+pkgrel=0
+pkgdesc="Wallpapers for the Plasma Workspace"
+# armhf blocked by extra-cmake-modules
+arch="noarch !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+_repo_url="https://invent.kde.org/plasma/plasma-workspace-wallpapers.git"
+source="https://download.kde.org/unstable/plasma/$pkgver/plasma-workspace-wallpapers-$pkgver.tar.xz"
+# No tests available
+options="!check"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+70602cd4f7554769a5f733711e30a913adf835f3546b9979d73b93300dcede1e8689d3807bbb03a65402b03b31f2b41200931a6ac84ffe7747696fb34c933719  plasma-workspace-wallpapers-5.92.0.tar.xz
+"

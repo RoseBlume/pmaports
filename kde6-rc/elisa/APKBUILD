@@ -1,0 +1,73 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=elisa
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+# s390x blocked by vlc
+arch="all !armhf !s390x"
+url="https://kde.org/applications/multimedia/org.kde.elisa"
+pkgdesc="A simple music player aiming to provide a nice experience for its users"
+license="LGPL-3.0-or-later"
+depends="
+	kirigami
+	vlc
+	"
+makedepends="
+	baloo-dev
+	extra-cmake-modules
+	kcmutils-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	kdoctools-dev
+	kfilemetadata-dev
+	ki18n-dev
+	kio-dev
+	kirigami-dev
+	kpackage-dev
+	kxmlgui-dev
+	qqc2-desktop-style-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtmultimedia-dev
+	qt6-qtsvg-dev
+	samurai
+	vlc-dev
+	"
+checkdepends="
+	cmd:dbus-run-session
+	xvfb-run
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/multimedia/elisa.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/elisa-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	cd build
+
+	# mediaplaylistproxymodelTest, elisaqmltests and localfilelistingtest are broken
+	CTEST_OUTPUT_ON_FAILURE=TRUE dbus-run-session xvfb-run ctest -E "(viewManagerTest|mediaplaylistproxymodelTest|elisaqmltests|localfilelistingtest)"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+6f8a2a0d6b9ab084e236ebe854f92fe0be7b43fc45a5f8896031df432173a22a875893e5433d14380560914156a1a2706f3848f3ab108d6753d05bfb94a7b09b  elisa-24.01.90.tar.xz
+"

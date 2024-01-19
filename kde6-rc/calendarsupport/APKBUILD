@@ -1,0 +1,59 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=calendarsupport
+pkgver=24.01.90
+pkgrel=0
+pkgdesc="Library providing calendar support"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kontact.kde.org"
+license="GPL-2.0-or-later AND Qt-GPL-exception-1.0 AND LGPL-2.0-or-later"
+depends_dev="
+	akonadi-calendar-dev
+	akonadi-dev
+	akonadi-mime-dev
+	akonadi-notes-dev
+	kcalendarcore-dev
+	kcalutils-dev
+	kcodecs-dev
+	kguiaddons-dev
+	kholidays-dev
+	ki18n-dev
+	kidentitymanagement-dev
+	kio-dev
+	kmime-dev
+	pimcommon-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/calendarsupport.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/calendarsupport-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+c8b1b8128c2a112ee67fb279a123f88eb3bfd54d5b90fc9cdd867106b1929d2292086e6844c4d0626c258fa14065dc803b7b51969df4acc1a223a8a420b0188e  calendarsupport-24.01.90.tar.xz
+"

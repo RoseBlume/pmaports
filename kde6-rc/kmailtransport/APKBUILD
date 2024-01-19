@@ -1,0 +1,59 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kmailtransport
+pkgver=24.01.90
+pkgrel=0
+pkgdesc="Manage mail transport"
+# armhf blocked by extra-cmake-modules
+# ppc64le and s390x blocked by libkgapi
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kontact.kde.org/"
+license="LGPL-2.0-or-later"
+depends_dev="
+	akonadi-dev
+	akonadi-mime-dev
+	kcmutils-dev
+	kconfigwidgets-dev
+	ki18n-dev
+	kio-dev
+	kmime-dev
+	ksmtp-dev
+	kwallet-dev
+	libkgapi-dev
+	qtkeychain-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="
+	dbus
+	xvfb-run
+	"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/kmailtransport.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kmailtransport-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# smtpjobtest is broken
+	dbus-run-session -- xvfb-run ctest --test-dir build --output-on-failure -E "smtpjobtest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+15800ee87bfcb54f758b9b1492a5c7937e97471c0035bbe27eb5a6671da8bfb9a6289827783292584dec026c9e07a6a5b6f6d537029d8afa1eb5551ce7c5f9a0  kmailtransport-24.01.90.tar.xz
+"

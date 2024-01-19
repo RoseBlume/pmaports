@@ -1,0 +1,109 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=plasma-desktop
+pkgver=5.92.0
+pkgrel=0
+pkgdesc="KDE Plasma Desktop"
+# armhf blocked by qt6-qtdeclarative
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> kaccounts-integration
+arch="all !armhf !ppc64le !s390x !riscv64"
+url='https://kde.org/plasma-desktop/'
+license="GPL-2.0-only AND LGPL-2.1-only"
+depends="
+	accountsservice
+	font-noto-emoji
+	ibus-emoji
+	kirigami
+	plasma-workspace
+	qqc2-desktop-style
+	setxkbmap
+	xdg-user-dirs
+	"
+makedepends="
+	attica-dev
+	baloo-dev
+	eudev-dev
+	extra-cmake-modules
+	fontconfig-dev
+	ibus-dev
+	kauth-dev
+	kcmutils-dev
+	kcodecs-dev
+	kconfig-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	kdoctools-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kitemmodels-dev
+	knewstuff-dev
+	knotifications-dev
+	knotifyconfig-dev
+	kpeople-dev
+	kpipewire-dev
+	krunner-dev
+	kwallet-dev
+	kwin-dev
+	libplasma-dev
+	libxcursor-dev
+	libxi-dev
+	libxkbfile-dev
+	plasma-activities-stats-dev
+	plasma-workspace-dev
+	plasma5support-dev
+	qqc2-desktop-style-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtsvg-dev
+	samurai
+	signon-plugin-oauth2-dev
+	xf86-input-evdev-dev
+	xf86-input-libinput-dev
+	xf86-input-synaptics-dev
+	xkeyboard-config-dev
+	"
+checkdepends="
+	dbus
+	iso-codes
+	xvfb-run
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+subpackages="$pkgname-dbg $pkgname-doc $pkgname-lang knetattach"
+_repo_url="https://invent.kde.org/plasma/plasma-desktop.git"
+source="https://download.kde.org/unstable/plasma/$pkgver/plasma-desktop-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# kcm-keyboard-keyboard_memory_persister_test is broken
+	dbus-run-session -- xvfb-run ctest --test-dir build --output-on-failure -E "(positioner|kcm-keyboard-keyboard_memory_persister_)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+knetattach() {
+	pkgdesc="Wizard which makes it easier to integrate network resources with the Plasma Desktop"
+	depends=""
+
+	amove usr/bin/knetattach
+	amove usr/share/applications/org.kde.knetattach.desktop
+}
+
+sha512sums="
+c418b5d308b41043fbd86a842cbfb2f8e72875ccc726b3149b0da5f2411d4cf5be3a0358df97c8f3b78e542cfffe4a82b7738879f09205776775c3d11b67ad8e  plasma-desktop-5.92.0.tar.xz
+"

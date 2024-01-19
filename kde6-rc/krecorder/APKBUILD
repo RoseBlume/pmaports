@@ -1,0 +1,45 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=krecorder
+pkgver=24.01.90
+pkgrel=0
+pkgdesc="Audio recorder for Plasma Mobile (and other platforms)"
+url="https://invent.kde.org/utilities/krecorder"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+license="GPL-3.0-or-later"
+depends="
+	kirigami-addons
+	kirigami
+	"
+makedepends="
+	extra-cmake-modules
+	ki18n-dev
+	kirigami-addons-dev
+	kirigami-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtmultimedia-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/utilities/krecorder.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/krecorder-$pkgver.tar.xz"
+options="!check" # No tests
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+6434f801f297ad5fcefc6a6c1f44b2bb84805eb4641ac3956ececfbe83c6814cc9355584b4648ab7b7f3765b0b6146f8bce818e050794e539d2a8fd294a5c4a9  krecorder-24.01.90.tar.xz
+"

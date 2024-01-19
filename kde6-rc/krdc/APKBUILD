@@ -1,0 +1,60 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=krdc
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/internet/krdc/"
+pkgdesc="Remote Desktop Client"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+depends="freerdp"
+makedepends="
+	extra-cmake-modules
+	freerdp-dev
+	kbookmarks-dev
+	kcmutils-dev
+	kcompletion-dev
+	kconfig-dev
+	kdnssd-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	knotifications-dev
+	knotifyconfig-dev
+	knotifyconfig-dev
+	kstatusnotifieritem-dev
+	kwallet-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	libssh-dev
+	libvncserver-dev
+	samurai
+	"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/network/krdc.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/krdc-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+bb2c479dec318c641298d7684435b384b319fb1a7082670df73592ac2e280bd1a565dafa7054ff1ea6f829fce37835586fbcd773b7b89fc1ebd444805838d03f  krdc-24.01.90.tar.xz
+"

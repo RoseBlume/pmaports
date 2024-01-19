@@ -1,0 +1,70 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=neochat
+pkgver=24.01.90
+pkgrel=0
+pkgdesc="A client for Matrix, the decentralized communication protocol"
+url="https://invent.kde.org/network/neochat/"
+# armhf blocked by extra-cmake-modules
+# riscv64 blocked due to build failure on builders, compiler segfault
+# Wait for real riscv64 hardware before enabling again
+arch="all !armhf !riscv64"
+license="GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND BSD-2-Clause"
+depends="
+	kirigami-addons
+	kirigami
+	kitemmodels
+	kquickcharts
+	kquickimageeditor
+	qqc2-desktop-style
+	"
+makedepends="
+	cmark-dev
+	extra-cmake-modules
+	kconfig-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kio-dev
+	kirigami-addons-dev
+	kirigami-dev
+	kitemmodels-dev
+	knotifications-dev
+	kquickimageeditor-dev
+	kstatusnotifieritem-dev
+	libquotient-dev
+	qcoro-dev
+	qqc2-desktop-style-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	qt6-qtmultimedia-dev
+	qt6-qtsvg-dev
+	qt6-qtwebview-dev
+	qtkeychain-dev
+	samurai
+	sonnet-dev
+	"
+subpackages="$pkgname-dbg $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/network/neochat.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/neochat-$pkgver.tar.xz"
+# No tests
+options="!check"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+10c94e7a26b81a40ad6c02bca4a06f659f5bad1b810d3547f5a3d5564e25d203a61e1cad8c7f07244934c1171a55486d16d1464ef7707616ef91d818bed4aa28  neochat-24.01.90.tar.xz
+"

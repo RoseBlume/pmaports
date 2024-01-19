@@ -1,0 +1,67 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=akonadiconsole
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+# s390x, ppc64le and riscv64 blocked by akonadi
+# ppc64le blocked by calendarsupport
+arch="all !armhf !s390x !ppc64le !riscv64"
+url="https://kontact.kde.org/"
+pkgdesc="Application for debugging Akonadi Resources"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	akonadi-contacts-dev
+	akonadi-dev
+	akonadi-search-dev
+	calendarsupport-dev
+	extra-cmake-modules
+	kcalendarcore-dev
+	kcompletion-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcontacts-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	ki18n-dev
+	kio-dev
+	kitemmodels-dev
+	kitemviews-dev
+	kmime-dev
+	ktextwidgets-dev
+	kwidgetsaddons-dev
+	kxmlgui-dev
+	libkdepim-dev
+	messagelib-dev
+	qt6-qtbase-dev
+	samurai
+	xapian-bindings
+	"
+checkdepends="xvfb-run"
+_repo_url="https://invent.kde.org/pim/akonadiconsole.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/akonadiconsole-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+b5fef64411be9ac5cb4c21f40ee4a66dcc4adf662d0d57ea424c9afa0e0fcbff5ed8d807e80e14d1c908e6e45b0ef3d15870402f77ad1655f76fa587a30c3266  akonadiconsole-24.01.90.tar.xz
+"

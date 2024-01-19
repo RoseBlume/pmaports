@@ -1,0 +1,74 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kitinerary
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by qt6-qtdeclarative
+# ppc64le FTBFS
+arch="all !armhf !ppc64le"
+url="https://kontact.kde.org/"
+pkgdesc="Data model and extraction system for travel reservation information"
+license="LGPL-2.0-or-later"
+depends_dev="
+	kcalendarcore-dev
+	kcontacts-dev
+	kmime-dev
+	kpkpass-dev
+	libphonenumber-dev
+	zxing-cpp-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	ki18n-dev
+	libxml2-dev
+	poppler-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	samurai
+	shared-mime-info
+	zlib-dev
+	"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/kitinerary.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kitinerary-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# skipped tests are broken
+	local skipped_tests="("
+	local tests="
+		datatypes
+		jsonlddocument
+		mergeutil
+		knowledgedb
+		airportdb
+		extractorscriptengine
+		pkpassextractor
+		postprocessor
+		calendarhandler
+		extractor
+		"
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)test"
+	ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+39c39e16fb961af26861fa3bea224ffbf47e11b6e16fe4b3b15d9242a78694cd1b39edbb0fba80a66bcc8210a197ff6d13e43611accfa1c845d6b861b87ebc13  kitinerary-24.01.90.tar.xz
+"

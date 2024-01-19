@@ -1,0 +1,66 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kmail-account-wizard
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> kmailtransport
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kontact.kde.org/"
+pkgdesc="KMail account wizard"
+license="GPL-2.0-or-later AND LGPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	akonadi-dev
+	akonadi-mime-dev
+	extra-cmake-modules
+	gpgme-dev
+	kcmutils-dev
+	kcodecs-dev
+	kconfig-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kidentitymanagement-dev
+	kimap-dev
+	kldap-dev
+	kmailtransport-dev
+	knewstuff-dev
+	knotifications-dev
+	knotifyconfig-dev
+	kservice-dev
+	ktexteditor-dev
+	kwallet-dev
+	libkdepim-dev
+	libkleo-dev
+	pimcommon-dev
+	qt6-qtbase-dev
+	samurai
+	shared-mime-info
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/pim/kmail-account-wizard.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kmail-account-wizard-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+d17a1b5a7c03547e491353c02d03c8824ccd10ec4d3659b517e514750d2dbad1bb41ab8f82bf85606c7e55e6c9944165a17c0167bc92feb14824bcacd2b9a451  kmail-account-wizard-24.01.90.tar.xz
+"

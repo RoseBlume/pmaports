@@ -1,0 +1,48 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=qqc2-desktop-style
+pkgver=5.248.0
+pkgrel=0
+pkgdesc="A style for Qt Quick Controls 2 to make it follow your desktop theme"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)"
+depends_dev="
+	kconfigwidgets-dev
+	kiconthemes-dev
+	kirigami-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev"
+_repo_url="https://invent.kde.org/frameworks/qqc2-desktop-style.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/qqc2-desktop-style-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure -E "animationspeedmodifiertest"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c69336f7c0488823a371421443bda60ce0b5eb8f0a325bf66699d7073dfb1772285fd602dbc4c20e0a4e49e88f3d6a15a71d9f6269d1cdc851d80ae59d74fcf5  qqc2-desktop-style-5.248.0.tar.xz
+"

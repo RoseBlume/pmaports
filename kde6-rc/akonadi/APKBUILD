@@ -1,0 +1,100 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=akonadi
+pkgver=24.01.90
+pkgrel=0
+pkgdesc="A cross-desktop storage service for PIM data and meta data providing concurrent read, write, and query access"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by kaccounts-integration
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://community.kde.org/KDE_PIM"
+license="LGPL-2.0-or-later"
+depends="
+	mariadb
+	qt6-qtbase-mysql
+	qt6-qtbase-sqlite
+	"
+depends_dev="
+	boost-dev
+	kcompletion-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	kitemmodels-dev
+	kitemviews-dev
+	kwidgetsaddons-dev
+	kwindowsystem-dev
+	kxmlgui-dev
+	libxml2-dev
+	qt6-qtbase-dev
+	shared-mime-info
+	sqlite-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="
+	cmd:dbus-run-session
+	xvfb-run
+	"
+subpackages="$pkgname-dbg $pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/akonadi.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/akonadi-$pkgver.tar.xz"
+
+build() {
+	# make -dbg smaller
+	export CFLAGS="$CFLAGS -g1"
+	export CXXFLAGS="$CXXFLAGS -g1"
+	# akonadi recurses while walking e-mail threads, so give it a decent stack
+	LDFLAGS="$LDFLAGS -Wl,-z,stack-size=1024768" \
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_DESIGNERPLUGIN=ON
+	cmake --build build
+}
+
+check() {
+	# akonadixml-xmldocumenttest, mimetypecheckertest and akonadi-mysql-testenvironmenttest are broken
+	# All sqlite tests are hanging
+	# All mysql tests are broken "Cannot connect to non-local host <hostname>"
+	# tagmodeltest fails on 32-bit architectures
+	local skipped_tests="("
+	local tests="
+		akonadixml-xmldocument
+		mimetypechecker
+		akonadi-mysql-testenvironment
+		.*sqlite.*
+		.*mysql.*
+		tagmodel
+		"
+	case "$CARCH" in
+		s390x) tests="$tests
+			AkonadiServer-itemcreatehandler
+			AkonadiServer-relationhandler
+			" ;;
+	esac
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)test"
+	dbus-run-session xvfb-run ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+aeb4cc90cfd04e9064afb663aee4a16e437ee5716183542ab329e2d914071d86dc197e3578878d680f80a4aed40f89a266d08a5e9a0706251144749f9f260f8a  akonadi-24.01.90.tar.xz
+"

@@ -1,0 +1,61 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=sddm-kcm
+pkgver=5.92.0
+pkgrel=0
+pkgdesc="Config module for SDDM"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.kde.org"
+license="GPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND LGPL-2.1-or-later AND GPL-2.0-only"
+depends="
+	sddm
+	systemsettings
+	"
+makedepends="
+	extra-cmake-modules
+	karchive-dev
+	kauth-dev
+	kcmutils-dev
+	kconfigwidgets-dev
+	kcoreaddons-dev
+	kdeclarative-dev
+	ki18n-dev
+	kio-dev
+	knewstuff-dev
+	kxmlgui-dev
+	libxcursor-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+
+	samurai
+	xcb-util-image-dev
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/plasma/sddm-kcm.git"
+source="https://download.kde.org/unstable/plasma/$pkgver/sddm-kcm-$pkgver.tar.xz"
+# No tests
+options="!check"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+2b5c0e03d381afadfd9cf1da145cf79903d8a775afd645c4151b6820d995af16a2bcbdec3918b614f5ad94641279459f100af55faee2bae2f63153d130dc6199  sddm-kcm-5.92.0.tar.xz
+"

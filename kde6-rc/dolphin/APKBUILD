@@ -1,0 +1,81 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=dolphin
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/system/dolphin"
+pkgdesc="KDE File Manager"
+license="GPL-2.0-only"
+depends="
+	udisks2
+	kio-extras
+	"
+depends_dev="
+	baloo-dev
+	baloo-widgets-dev
+	kbookmarks-dev
+	kcmutils-dev
+	kcompletion-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdoctools-dev
+	kfilemetadata-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	knewstuff-dev
+	knotifications-dev
+	kparts-dev
+	ktextwidgets-dev
+	kuserfeedback-dev
+	kwindowsystem-dev
+	musl-fts-dev
+	phonon-dev
+	plasma-activities-dev
+	qt6-qtbase-dev
+	solid-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules	
+	ruby-test-unit
+	samurai
+	"
+checkdepends="
+	dbus
+	xvfb-run
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang $pkgname-zsh-completion"
+_repo_url="https://invent.kde.org/system/dolphin.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/dolphin-$pkgver.tar.xz"
+
+build() {
+	LDFLAGS="$LDFLAGS -Wl,-z,stack-size=0x100000" \
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=None \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# kfileitemmodeltest, dolphinquerytest and dolphinmainwindowtest are broken
+	xvfb-run ctest --test-dir build --output-on-failure -E "(kfileitemmodel|dolphinquery|dolphinmainwindow)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	# We don't ship systemd
+	rm -r "$pkgdir"/usr/lib/systemd
+}
+
+sha512sums="
+dc14f3f2bcea4fe19b54b0c5cd50ad633eda1707ce1adb551b27b58dfdf2288bc2990aaeebbf2245c36f7c0516c677ec8a68c7115179392994986974c66806d5  dolphin-24.01.90.tar.xz
+"

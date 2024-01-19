@@ -1,0 +1,49 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kdebugsettings
+pkgver=24.01.90
+pkgrel=0
+arch="all !armhf"
+url="https://kde.org/applications/utilities/"
+pkgdesc="An application to enable/disable qCDebug"
+license="GPL-2.0-or-later"
+makedepends="
+	extra-cmake-modules
+	kcompletion-dev
+	kconfig-dev
+	kcoreaddons-dev
+	kdbusaddons-dev
+	ki18n-dev
+	kitemviews-dev
+	kwidgetsaddons-dev
+	kxmlgui-dev
+	qt6-qtbase-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/utilities/kdebugsettings.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kdebugsettings-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+16598297ade0ea48b78be3bb100c70ba293adb0e606f1a177c37549d4f82bd63c99c861987eaac5dc9e8748deae917228d38c0f651a707a8ecd302a0f23f9d98  kdebugsettings-24.01.90.tar.xz
+"

@@ -1,0 +1,49 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kwidgetsaddons
+pkgver=5.248.0
+pkgrel=0
+pkgdesc="Addons to QtWidgets"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="GPL-2.0-only AND LGPL-2.1-only AND Unicode-DFS-2016"
+depends_dev="qt6-qtbase-dev"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+checkdepends="
+	mesa-dri-gallium
+	xvfb-run
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kwidgetsaddons.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kwidgetsaddons-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# ktwofingertaptest, ktwofingerswipetest and and ksqueezedtextlabelautotest are broken
+	xvfb-run ctest --test-dir build --output-on-failure -E '(ktooltipwidget|ktwofingertap|ktwofingerswipe|ksqueezedtextlabelauto)test'
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+acbe5ac303e422d4ec7acd5432b04a2f27b5222e9510ff2be223ad1b6a6a922c6683b5ba18feae0663777764ddb26c72f058b24841b18449680e7739994cf3f1  kwidgetsaddons-5.248.0.tar.xz
+"

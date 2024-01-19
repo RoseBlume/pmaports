@@ -1,0 +1,49 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=keditbookmarks
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.kde.org/"
+pkgdesc="Bookmark Organizer and Editor"
+license="GPL-2.0-only AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kbookmarks-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kio-dev
+	kparts-dev
+	kwindowsystem-dev
+	qt6-qtbase-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/utilities/keditbookmarks.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/keditbookmarks-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+b9b5696d49e30b5eb58f10bec69420933e0eff15ced6e5533f338e46d26dd5796dcd6297f56edc8bc95e4f792c6c52ca562d4a98c66235a2f5888e5d258da7ee  keditbookmarks-24.01.90.tar.xz
+"

@@ -1,0 +1,54 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=qqc2-breeze-style
+pkgver=5.92.0
+pkgrel=0
+pkgdesc="Breeze inspired QQC2 style"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.plasma-mobile.org/"
+license="LicenseRef-KDE-Accepted-LGPL AND LicenseRef-KFQF-Accepted-GPL"
+depends="kirigami"
+makedepends="
+	extra-cmake-modules
+	kconfig-dev
+	kconfigwidgets-dev
+	kguiaddons-dev
+	kiconthemes-dev
+	kirigami-dev
+	kquickcharts-dev
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	samurai
+	"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+subpackages="$pkgname-dev"
+_repo_url="https://invent.kde.org/plasma/qqc2-breeze-style.git"
+source="https://download.kde.org/unstable/plasma/$pkgver/qqc2-breeze-style-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+24b1476f39dd0a0f27434f2e5fd1108a023d5a29a925dfbdec2edf9af528607a09aa58cbf6bd4c08fb3778b73f7ebdd7deadfc3592bb3d11ad5c21a044b4e554  qqc2-breeze-style-5.92.0.tar.xz
+"

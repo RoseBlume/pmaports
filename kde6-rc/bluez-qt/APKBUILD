@@ -1,0 +1,49 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=bluez-qt
+pkgver=5.248.0
+pkgrel=0
+arch="all !armhf" # armhf blocked by qt6-qtdeclarative
+pkgdesc="Qt wrapper for Bluez 5 DBus API"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-or-later"
+depends_dev="
+	qt6-qtbase-dev
+	qt6-qtdeclarative-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc"
+_repo_url="https://invent.kde.org/frameworks/bluez-qt.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/bluez-qt-$pkgver.tar.xz"
+# Multiple tests either hang or fail completely
+options="!check"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+7478faa8f1d09c7cb61f06250f9d7d0e11432f8c4b894331d10d44ab529665f2c68a1696f545f93331c7055b92c00a4085718f1b3ffe760159a7c634827bdcf3  bluez-qt-5.248.0.tar.xz
+"

@@ -1,0 +1,65 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=libksieve
+pkgver=24.01.90
+pkgrel=0
+pkgdesc="KDE PIM library for managing sieves"
+# armhf blocked by extra-cmake-modules
+# ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
+arch="all !armhf !ppc64le !s390x !riscv64"
+url="https://kontact.kde.org/"
+license="GPL-2.0-only"
+depends_dev="
+	karchive-dev
+	kdoctools-dev
+	ki18n-dev
+	kiconthemes-dev
+	kidentitymanagement-dev
+	kimap-dev
+	kio-dev
+	kmailtransport-dev
+	kmime-dev
+	knewstuff-dev
+	kpimtextedit-dev
+	kwindowsystem-dev
+	libkdepim-dev
+	pimcommon-dev
+	qt6-qtbase-dev
+	qt6-qtwebengine-dev
+	syntax-highlighting-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	samurai
+	"
+checkdepends="xvfb-run"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/pim/libksieve.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/libksieve-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# libksieveui-findbar-findbarbasetest, sieveeditorhelphtmlwidgettest and sieveeditor-autocreatescripts-sieveeditorgraphicalmodewidgettest require OpenGL
+	xvfb-run ctest --test-dir build --output-on-failure -E "(libksieveui-findbar-findbarbase|sieveeditorhelphtmlwidget|sieveeditor-autocreatescripts-sieveeditorgraphicalmodewidget)test"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+95a5f27e2086442130aafde8619410959741ada29661851edbe7b21ce4826542779e14fb69a74a35e48fdaf6f9f585d8db801ca1a77e3ae46b05a8771c51dd36  libksieve-24.01.90.tar.xz
+"

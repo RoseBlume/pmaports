@@ -1,0 +1,68 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=kscreen
+pkgver=5.92.0
+pkgrel=0
+pkgdesc="KDE's screen management software"
+# armhf blocked by qt6-qtdeclarative
+arch="all !armhf"
+url="https://kde.org/plasma-desktop/"
+license="GPL-2.0-or-later AND LGPL-2.1-or-later"
+depends="hicolor-icon-theme"
+makedepends="
+	extra-cmake-modules
+	kcmutils-dev
+	kconfig-dev
+	kconfigwidgets-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	kglobalaccel-dev
+	ki18n-dev
+	kiconthemes-dev
+	ksvg-dev
+	kwidgetsaddons-dev
+	kxmlgui-dev
+	layer-shell-qt-dev
+	libkscreen-dev
+	libplasma-dev
+	qt6-qtbase-dev
+	qt6-qtsensors-dev
+	samurai
+	"
+checkdepends="xvfb-run"
+
+case "$pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/plasma/kscreen.git"
+source="https://download.kde.org/unstable/plasma/$pkgver/kscreen-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	# kscreen-kded-configtest and kscreen-kded-testgenerator are broken
+	# kscreen-kded-osdtest hangs 
+	xvfb-run ctest --test-dir build --output-on-failure -E "kscreen-kded-((config|osd)test|testgenerator)"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+
+	# We don't ship systemd
+	rm -r "$pkgdir"/usr/lib/systemd
+}
+
+sha512sums="
+bc83680ff4e1a270429466945b1431cd0b53f68a7add560a0cef53caaf565188da08c95c2820dae9578adb109af5ce068746f7f518e00e65701c2cb6474b73ad  kscreen-5.92.0.tar.xz
+"

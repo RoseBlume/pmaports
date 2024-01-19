@@ -1,0 +1,47 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kdnssd
+pkgver=5.248.0
+pkgrel=0
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+pkgdesc="Network service discovery using Zeroconf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.0-or-later"
+depends="avahi"
+depends_dev="
+	avahi-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kdnssd.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kdnssd-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+79e0f13c573c774ffebbf42ae50f18d5376d99ddaa905e0e15b51aad01499bf92f84a54359ee54b55831ba2816edb3865f84e1900e70e5b728ad9f1d29703006  kdnssd-5.248.0.tar.xz
+"

@@ -1,0 +1,51 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-frameworks
+pkgname=kauth
+pkgver=5.248.0
+pkgrel=0
+pkgdesc="Abstraction to system policy and authentication features"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-or-later"
+depends_dev="
+	kcoreaddons-dev
+	kwindowsystem-dev
+	polkit-qt-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	doxygen
+	extra-cmake-modules
+	graphviz
+	qt6-qttools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
+_repo_url="https://invent.kde.org/frameworks/kauth.git"
+source="https://download.kde.org/unstable/frameworks/$pkgver/kauth-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	# KAuthHelperTest hangs
+	ctest --test-dir build --output-on-failure -E '(KAuthHelperTest)'
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+66ac493080481a705bbef689127649997805b727b24febed52ddab4a0553b88016e06b95382d06d05464b05f9033deb799634176c4e4886cf2a1c2ba696460cc  kauth-5.248.0.tar.xz
+"

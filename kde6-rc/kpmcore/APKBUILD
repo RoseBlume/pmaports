@@ -1,0 +1,56 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kpmcore
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://kde.org/applications/system/org.kde.partitionmanager"
+pkgdesc="Library for managing partitions"
+license="GPL-3.0-or-later"
+depends="
+	device-mapper-udev
+	sfdisk
+	smartmontools
+	"
+makedepends="
+	extra-cmake-modules
+	kauth-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kwidgetsaddons-dev
+	qca-qt6-dev
+	qt6-qtbase-dev
+	samurai
+	"
+checkdepends="dbus"
+subpackages="$pkgname-dev $pkgname-lang"
+_repo_url="https://invent.kde.org/system/kpmcore.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kpmcore-$pkgver.tar.xz"
+
+# secfixes:
+#   4.2.0-r0:
+#     - CVE-2020-27187
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	dbus-run-session -- ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+6fff1a14ba4905446504192ac0f36bf654a57a0b9873334b2a39850ee6a15d3b872dadb33b035fd3056a70851894e43d0fcf7e6c969092e36be3eaf1a2a4be42  kpmcore-24.01.90.tar.xz
+"

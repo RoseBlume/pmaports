@@ -1,0 +1,48 @@
+# Contributor: Bart Ribbers <bribbers@disroot.org>
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=kdialog
+pkgver=24.01.90
+pkgrel=0
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://www.kde.org/"
+pkgdesc="A utility for displaying dialog boxes from shell scripts"
+license="GPL-2.0-or-later AND GFDL-1.2-only"
+makedepends="
+	extra-cmake-modules
+	kdbusaddons-dev
+	kguiaddons-dev
+	kiconthemes-dev
+	kio-dev
+	knotifications-dev
+	ktextwidgets-dev
+	kwindowsystem-dev
+	qt6-qtbase-dev
+	samurai
+	"
+subpackages="$pkgname-lang"
+_repo_url="https://invent.kde.org/utilities/kdialog.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/kdialog-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+e76636739719b4f7cc6a02d6b24b296d73dd58519d0fc012c9d7298ba4d03af22a98ee21a56b3f0f80a40d54bb9daecd3eea9f5b1e0678b7c032d8d8fb9385d9  kdialog-24.01.90.tar.xz
+"

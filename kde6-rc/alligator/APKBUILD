@@ -1,0 +1,48 @@
+# Maintainer: team/kde <bribbers@disroot.org>
+
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-applications
+pkgname=alligator
+pkgver=24.01.90
+pkgrel=0
+pkgdesc="A convergent RSS/Atom feed reader"
+url="https://invent.kde.org/plasma-mobile/alligator/"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+license="GPL-2.0-only OR GPL-3.0-only"
+depends="
+	kirigami-addons
+	kirigami
+	qt6-qtbase-sqlite
+	"
+makedepends="
+	extra-cmake-modules
+	kconfig-dev
+	kcoreaddons-dev
+	ki18n-dev
+	kirigami-addons-dev
+	qt6-qtbase-dev
+
+	samurai
+	syndication-dev
+	"
+_repo_url="https://invent.kde.org/network/alligator.git"
+source="https://download.kde.org/unstable/release-service/$pkgver/src/alligator-$pkgver.tar.xz"
+# No tests
+
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=MinSizeRel \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+b1d5022fdf017e93603ca69e43a838c6b0a347327cbaa7a3787c02cf8ebc1f630a80df11f69135b0dd03d8062abd5b10408ecfdd527218c03cec84694e86f26a  alligator-24.01.90.tar.xz
+"

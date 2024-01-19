@@ -1,0 +1,37 @@
+# The group tag is just to easily find this APKBUILD by some scripts for automation
+# group=kde-plasma
+pkgname=ocean-sound-theme
+pkgver=5.92.0
+pkgrel=0
+pkgdesc="Ocean Sound Theme for Plasma"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://invent.kde.org/plasma/ocean-sound-theme"
+license="BSD-2-Clause AND CC-BY-SA-4.0 and CC0-1.0"
+makedepends="
+	extra-cmake-modules
+	qt6-qttools-dev
+	samurai
+	"
+_repo_url="https://invent.kde.org/plasma/ocean-sound-theme.git"
+source="https://download.kde.org/unstable/plasma/$pkgver/ocean-sound-theme-$pkgver.tar.xz"
+
+build() {
+	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+sha512sums="
+888fc87c0c736433c5fe6e1a46b5ce4a53242442cb8e7b6f6bd85930ba3b0c2ec2395132f41c21f6c8672d13ccf6b0ea72c422770062b63cfc52e7fa70735e52  ocean-sound-theme-5.92.0.tar.xz
+"
