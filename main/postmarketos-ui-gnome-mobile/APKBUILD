@@ -34,18 +34,7 @@ depends="
 _pmb_recommends="
 	calls
 	chatty
-	firefox-esr
-	font-noto
-	font-noto-emoji
-	gnome-text-editor
-	gnome-calculator
-	gnome-clocks
-	gnome-contacts
-	gnome-software
-	gnome-software-plugin-apk
 	karlender
-	lollypop
-	loupe
 	mobile-config-firefox
 	portfolio
 	postmarketos-default-camera
@@ -53,7 +42,6 @@ _pmb_recommends="
 	postmarketos-welcome
 	postprocessd
 	ttyescape
-	xdg-user-dirs
 	"
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="
