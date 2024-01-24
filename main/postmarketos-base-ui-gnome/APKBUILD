@@ -32,11 +32,15 @@ source="
 	10_pmOS-wallpaper.gschema.override
 	"
 options="!check"
-subpackages="$pkgname-wallpaper-pmos:wallpaper_pmos"
+subpackages="
+	$pkgname-flatpak
+	$pkgname-wallpaper-pmos:wallpaper_pmos
+	"
 
 _pmb_recommends="
 	evince
 	firefox-esr
+	flatpak
 	font-noto
 	font-noto-emoji
 	gnome-calculator
@@ -56,6 +60,14 @@ _pmb_recommends="
 package() {
 	install -Dm644 -t "$pkgdir"/usr/share/glib-2.0/schemas \
 		"$srcdir"/*.override
+}
+
+flatpak() {
+	install_if="$pkgname=$pkgver-r$pkgrel flatpak"
+	depends="gnome-software-plugin-flatpak"
+	install="$subpkgname.post-install"
+
+	mkdir "$subpkgdir"
 }
 
 # GNOME and Phosh depend on this package to set the pmOS wallpaper. GNOME
