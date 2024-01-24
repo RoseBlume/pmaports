@@ -6,7 +6,8 @@ pkgrel=6
 pkgdesc="(Wayland) Gnome Shell"
 url="https://gnome.org/"
 # armhf blocked by gnome-shell -> gjs -> mozjs102
-arch="noarch !armhf"
+# riscv64 blocked by gnome-calendar
+arch="noarch !armhf !riscv64"
 license="GPL-3.0-or-later"
 depends="
 	!gnome-shell-mobile
@@ -17,6 +18,10 @@ depends="
 	gnome
 	postmarketos-base-ui-gnome
 	postmarketos-base-ui-gnome-wallpaper-pmos
+	"
+_pmb_recommends="
+	gnome-calendar
+	nautilus
 	"
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="firefox-wayland.sh"
