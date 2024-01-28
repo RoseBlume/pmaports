@@ -1,7 +1,7 @@
-From e3dacd3c546bc3a54e55c0d677a03041b43f5572 Mon Sep 17 00:00:00 2001
+From 0528e804b6625bd42664ac661566efb4f1918031 Mon Sep 17 00:00:00 2001
 From: Marius Gripsgard <marius@ubports.com>
 Date: Wed, 31 May 2023 05:48:35 +0200
-Subject: [PATCH 02/11] cursor: Always follow cursor position from mir
+Subject: [PATCH 3/7] cursor: Always follow cursor position from mir
 
 It makes no sense to not, if we dont we can quickly get out of sync with
 mir.

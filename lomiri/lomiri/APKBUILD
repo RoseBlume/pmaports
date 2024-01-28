@@ -1,18 +1,24 @@
 # Contributor: Bart Ribbers <bribbers@disroot.org>
 # Maintainer: Luca Weiss <luca@z3ntu.xyz>
 pkgname=lomiri
-pkgver=0.1.4
+pkgver=0.2.1
 pkgrel=0
 pkgdesc="A convergent desktop environment"
-arch="all !armhf"
+# armhf: blocked by lomiri-ui-toolkit
+# s390x, riscv64, ppc64le: blocked by lomiri-system-settings
+arch="all !armhf !s390x !riscv64 !ppc64le"
 url="https://gitlab.com/ubports/development/core/lomiri"
 license="GPL-3.0-only AND LGPL-2.1-only"
 depends="
 	ayatana-indicator-keyboard
 	ayatana-indicator-session
+	biometryd
 	gsettings-desktop-schemas
+	lomiri-notifications
 	lomiri-schemas
 	lomiri-settings-components
+	lomiri-telephony-service
+	lomiri-thumbnailer
 	openrc-settingsd
 	qt5-qtbase-sqlite
 	qt5-qtgraphicaleffects
@@ -48,19 +54,15 @@ makedepends="
 	"
 checkdepends="py3-dbusmock"
 source="https://gitlab.com/ubports/development/core/lomiri/-/archive/$pkgver/lomiri-$pkgver.tar.gz
-	0001-Add-support-for-both-older-qtmir-and-newer-qtmir-wit.patch
-	0002-cursor-Always-follow-cursor-position-from-mir.patch
-	0003-Add-missing-includes.patch
-	0004-Link-against-libintl.patch
-	0005-Compile-with-C-17.patch
-	0006-Use-correct-value-for-Leds.state.patch
-	0007-Disable-broken-tests-due-to-dropped-mocks-from-mir-2.patch
-	0008-Add-qt5-suffix-to-search-for-Qt-tools.patch
-	0009-No-systemd.patch
-	0010-Disable-lightdm-integration.patch
-	0011-Fix-overwriting-INCLUDE_DIRECTORIES-variable.patch
+	0001-Fix-overwriting-INCLUDE_DIRECTORIES-variable.patch
+	0002-Fix-build-on-32bit-arches-with-64bit-time_t.patch
+	0003-cursor-Always-follow-cursor-position-from-mir.patch
+	0004-Disable-broken-tests-due-to-dropped-mocks-from-mir-2.patch
+	0005-Add-qt5-suffix-to-search-for-Qt-tools.patch
+	0006-No-systemd.patch
+	0007-Disable-lightdm-integration.patch
 	"
-subpackages="$pkgname-lang indicators-client:indicators_client"
+subpackages="$pkgname-lang"
 options="!check" # Tests fail
 
 build() {
@@ -79,28 +81,26 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	# Remove this mock as apk thinks, it conflicts with the qmenumodel package
-	# conflicts: qmenumodel-0_git20180727-r0[so:libqmenumodel.so.0=0]
-	rm -r "$pkgdir"/usr/lib/lomiri/qml/mocks/QMenuModel.1/
-}
 
-indicators_client() {
-	pkgdesc="Indicators client test application"
-	amove usr/bin/indicators-client
-	amove usr/share/applications/indicators-client.desktop
+	# Remove various mocks and test files not wanted at runtime
+	rm "$pkgdir"/usr/bin/indicators-client
+	rm "$pkgdir"/usr/bin/lomiri-mock-indicator-service
+	rm -r "$pkgdir"/usr/lib/lomiri/qml/mocks/
+	rm -r "$pkgdir"/usr/lib/lomiri/qml/utils/Lomiri/SelfTest/
+	rm -r "$pkgdir"/usr/libexec/lomiri/tests/
+	rm "$pkgdir"/usr/libexec/lomiri/uqmlscene
+	rm "$pkgdir"/usr/share/applications/indicators-client.desktop
+	rm -r "$pkgdir"/usr/share/lomiri/mocks/
+	rm -r "$pkgdir"/usr/share/lomiri/tests/
 }
 
 sha512sums="
-9a6991a1008a0679de16047e1e536466f863a63116de6948d89324b7ef309677c034d20250c5d6de70cf28e414ff0db792b54c47cb3f694b9dbf8828fedbedeb  lomiri-0.1.4.tar.gz
-d2c97e8217ef6b0be5b7920e921a627c79d34ee1f8efeb49b05a571cff44d8941fdbdeee9476d6d426fb33de01c55cb838771ba97c34361bfbe416863655c5d6  0001-Add-support-for-both-older-qtmir-and-newer-qtmir-wit.patch
-420f9eff1036f83535f1f619d5ec0f38c701e7915da0508c99e3ecea49c3e87937f7dade1febabd643ec1c90d9a1859cbbcf71a6e20a11bd73dd473107b1e3ae  0002-cursor-Always-follow-cursor-position-from-mir.patch
-ea40ac01e1ee053140bf73f953b8e057e3ecc56632fa946d8dc39f78c75b74e1c3c987fca312ed7e9efed21160fb8e504d4237be0671f151b631af2cb8b5aec4  0003-Add-missing-includes.patch
-e81ce96d52359d44bfffc41628a53061b1c5a425453e29792d9263ed623d1f044382c267691c78f21e2ff078be22e0b56ab60374a347faa9499deba7881b067e  0004-Link-against-libintl.patch
-0ec7e95356776fb3faacbb2decb8acceff6eaf172dbe63e65ba2cbb430ecbd8646f22de0d6a7e391241ccc1b9ce020fd6826cd1c6dd767cc0abfb6f957557409  0005-Compile-with-C-17.patch
-b83008abeca06e3d62c534d79f98eeb91f3c4549d5bd375a8ae6619bbdb9863af4f7069ee9290454607455f839b6fed6064bc91c0b30ceeba277694f9063519f  0006-Use-correct-value-for-Leds.state.patch
-1eb06076f45270ca0fa4561266eb67463b4be0734056825cb755cf2c186538dd2fa15a08d6dd712617b186aa1904ff2a09c8ecfb2b23af4ce35e765d652631b2  0007-Disable-broken-tests-due-to-dropped-mocks-from-mir-2.patch
-807ecc10cbe254318968a102a84fe11bddcc1b8821b387b55219e814e75194b8e762409e9f06879ab9eaa47f0c8610aeebd2b024a68fd1542c7979993e504432  0008-Add-qt5-suffix-to-search-for-Qt-tools.patch
-c66fa913b5c876df0fd419dd0c1608e17c452cf763bff80b090a6cbb8d4bd8b154f276b1a30aa022b8be0a4aabe271f14af551afabaae3bb73f73757db8fc675  0009-No-systemd.patch
-de57c25796d239e41026f18b26966dec0e8b883b10dde6d1adba67a7cad92b55c421be4c17e6f2b120477d745cc278b72cfd4c9d9a76293d8a2879762b5edf21  0010-Disable-lightdm-integration.patch
-7bcc59acbd452432c38d84b4b7175e98cbb0fd4268b6361f5aac5678fe8d8069218a5ed11178c8175dbd4a0a40db71ad1ec69d5b3cbd42f98a76501a201ebf29  0011-Fix-overwriting-INCLUDE_DIRECTORIES-variable.patch
+4f844cb7552a6df9c3ed31f6705d0af2147fd44e7b390e8a4f7c5f95e61fc91590ebec1b296cf9eae83bbaa56df8fc5b1fa685143a788472e21525532d0b4251  lomiri-0.2.1.tar.gz
+46f11652b0ed77fd27f14cef236a9f247885cc2fd85c433b47c617c0a9a3f80c292ba98c779b02e75bd752075160dc5e997b3f2bd4e24ee7f7005706268ded81  0001-Fix-overwriting-INCLUDE_DIRECTORIES-variable.patch
+2a1f8069ff84486f7905fa2dc098b283c4d8308ad374d3f8383559241bfd9da4cabaecacfef41825f154e0d2d902eb85dff788aaca6260e1f6a21714bba7ff1d  0002-Fix-build-on-32bit-arches-with-64bit-time_t.patch
+f124a98e8b13a0c640ab7180a9516d11122c787bff821225f7730fe292ad476a7fc68d1ffa7b3d2be0f3daf4732c3d60aba61044225764bf62eb4b432ca51a68  0003-cursor-Always-follow-cursor-position-from-mir.patch
+1ce136ed0dd5f9a285d194684194ca04135ad9b4a7ac3bea5f1714b58465cc8d98f5f218938ea2155d9d9a4939877a65b7f7b02dba2d6beed3a940e42e137fd8  0004-Disable-broken-tests-due-to-dropped-mocks-from-mir-2.patch
+33e92a4646352f16993829ae7686b7ebf2c949d418e51ed466268b53d8d0f939861fa113a19403936ce48e16e58c6166e370a4fd27a184bde554c4e2746b0898  0005-Add-qt5-suffix-to-search-for-Qt-tools.patch
+828c19e69cc830b40d648ed5bfe03fdd350986c0f6276c7cb659097c54bb593a5a5c2471d2b4a463ced80f23f790829f50f5ec807c4e0d846e5b84a433109c1c  0006-No-systemd.patch
+1ddd7a73bf5aa815e50251afd4b54563cc366667c9b9d230ba377451a569a0af01255ad2a3dbff255fc2067d9a404592f3c3f3910ff1c1a83f1280741663e92d  0007-Disable-lightdm-integration.patch
 "
