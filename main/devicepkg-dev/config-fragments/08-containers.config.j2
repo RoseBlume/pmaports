@@ -47,6 +47,12 @@ CONFIG_EXT4_FS=m
 CONFIG_EXT4_FS_POSIX_ACL=y # Optional section
 CONFIG_EXT4_FS_SECURITY=y # Optional section
 
+# for kube-proxy
+CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+
+# TODO: maybe add more checks for kubernetes
+# See https://gitlab.com/postmarketOS/pmaports/-/merge_requests/3581#note_1146287816
+
 {% if kver >= [3, 2] %}
 CONFIG_CFS_BANDWIDTH=y # Optional section
 {% endif %}

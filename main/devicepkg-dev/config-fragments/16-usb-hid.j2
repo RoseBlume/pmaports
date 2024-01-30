@@ -1,0 +1,5 @@
+# Create a list of integers for kernel version, so we can compare it properly. 
+{% set kver = [kernel_version | int, kernel_patchlevel | int] %}
+
+CONFIG_USB_HID=m
+CONFIG_USB_HIDDEV=y

@@ -1,0 +1,30 @@
+# Create a list of integers for kernel version, so we can compare it properly. 
+{% set kver = [kernel_version | int, kernel_patchlevel | int] %}
+
+CONFIG_USB_NET_DRIVERS=m
+CONFIG_USB_USBNET=m
+
+# RTW88
+{% if kver >= [6, 2] %}
+CONFIG_WLAN_VENDOR_REALTEK=y
+CONFIG_RTW88=m
+CONFIG_RTW88_CORE=m
+CONFIG_RTW88_USB=m
+CONFIG_RTW88_8822B=m
+CONFIG_RTW88_8822C=m
+CONFIG_RTW88_8723D=m
+CONFIG_RTW88_8821C=m
+CONFIG_RTW88_8822BU=m
+CONFIG_RTW88_8822CU=m
+CONFIG_RTW88_8723DU=m
+CONFIG_RTW88_8821CU=m
+{% endif %}
+
+# RTL8XXXU
+CONFIG_RTL8XXXU=m
+
+# AX8817X
+CONFIG_USB_NET_AX88179_178A=m
+CONFIG_USB_NET_AX8817X=m
+
+# TODO: add more adapters here

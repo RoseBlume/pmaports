@@ -1,0 +1,4 @@
+# Create a list of integers for kernel version, so we can compare it properly. 
+{% set kver = [kernel_version | int, kernel_patchlevel | int] %}
+
+# TODO: add various HID devices like keyboards, mouses, gaming controllers, etc

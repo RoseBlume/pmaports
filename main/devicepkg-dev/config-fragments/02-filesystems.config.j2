@@ -1,7 +1,16 @@
 # Create a list of integers for kernel version, so we can compare it properly. 
 {% set kver = [kernel_version | int, kernel_patchlevel | int] %}
 
+# ext2 and ext3 file systems can be used with ext4 driver
+# also, having ext3 as built-in prevents us from enabling ext4 as module
+CONFIG_EXT2_FS=n
+CONFIG_EXT3_FS=n
+
 CONFIG_BTRFS_FS=m
 CONFIG_EXFAT_FS=m
 CONFIG_EXT4_FS=m
 CONFIG_F2FS_FS=m
+
+# for samba
+CONFIG_NETWORK_FILESYSTEMS=y
+CONFIG_CIFS=m
