@@ -1,0 +1,12 @@
+# Create a list of integers for kernel version, so we can compare it properly. 
+{% set kver = [kernel_version | int, kernel_patchlevel | int] %}
+
+# disable legacy gadgets
+CONFIG_USB_ETH=n
+CONFIG_USB_FUNCTIONFS=n
+CONFIG_USB_MASS_STORAGE=n
+CONFIG_USB_G_SERIAL=n
+
+# enable configfs gadgets
+CONFIG_USB_CONFIGFS_NCM=y
+CONFIG_USB_CONFIGFS_RNDIS=y

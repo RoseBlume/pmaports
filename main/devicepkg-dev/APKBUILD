@@ -1,5 +1,5 @@
 pkgname=devicepkg-dev
-pkgver=0.19.8
+pkgver=0.19.9
 pkgrel=0
 pkgdesc="Provides default device package functions"
 url="https://postmarketos.org"
@@ -9,8 +9,6 @@ makedepends="jinja2-cli"
 subpackages="$pkgname-jinja2:_jinja2"
 source="
 	compiler-gcc.h
-	config-fragments/mainline.config.j2
-	config-fragments/uefi.config.j2
 	devicepkg_build.sh
 	devicepkg_package.sh
 	devicepkg_pmtest_post_install.sh
@@ -28,6 +26,25 @@ source="
 	testdata/expected-uefi-config-arm64-pre-6.1.0
 	testdata/expected-uefi-config-x86_64
 "
+
+_kconfig_fragments="
+	01-general.config.j2
+	02-filesystems.config.j2
+	03-fde.config.j2
+	04-nftables.config.j2
+	05-wireguard.config.j2
+	06-waydroid.config.j2
+	07-iwd.config.j2
+	08-containers.config.j2
+	09-zram.config.j2
+	10-usb-gadgets.config.j2
+	11-uefi.config.j2
+	99-misc.config.j2
+"
+
+for file in $_kconfig_fragments; do
+	source="$source config-fragments/$file"
+done
 
 check() {
 	# Prepare a temporary dir to run the tests
@@ -65,7 +82,7 @@ check() {
 		echo "ERROR: mainline deviceinfo contains incorrect data"
 	fi
 
-	_template="$srcdir/uefi.config.j2"
+	_template="$srcdir/11-uefi.config.j2"
 
 	# Generate uefi config on 6.6.0 arm
 	# (no CONFIG_EFI_ZBOOT, no CONFIG_EFI_MIXED)
@@ -156,10 +173,11 @@ package() {
 		"$pkgdir/usr/bin/kernel_prepare"
 	install -Dm644 "$srcdir/compiler-gcc.h" \
 		"$pkgdir/usr/share/devicepkg-dev/compiler-gcc.h"
-	install -Dm644 "$srcdir/mainline.config.j2" \
-		"$pkgdir/usr/share/devicepkg-dev/config-fragments/mainline.config.j2"
-	install -Dm644 "$srcdir/uefi.config.j2" \
-		"$pkgdir/usr/share/devicepkg-dev/config-fragments/uefi.config.j2"
+
+	for file in $_kconfig_fragments; do
+		install -Dm644 "$srcdir/$file" \
+			-t "$pkgdir/usr/share/devicepkg-dev/config-fragments"
+	done
 }
 
 # Install jinja2-cli when building kernel for kconfig fragments,
@@ -172,8 +190,6 @@ _jinja2() {
 
 sha512sums="
 d69930dd790b00fb39760a37d95a10899f0d167e10e2804feb05d9ce04f94185dc32d36edc90214aba2ea2aa09bf18f7dab93f1d2eff23f67beb2cc83be30e7c  compiler-gcc.h
-04373cc6776871e999b98636aa8147179f5eebe56c501dc7e482d53ddbabd8c92fef437a3826bd33d1bb286e0325ef4affeb6e9d06c1548d86b0eeea3d0752a9  mainline.config.j2
-82377ade19e1a41d9df6bf7f9c2cf3894f2a93e6ac27bed4ac1fed6e1290303298be3c7fc583b10826c69fceb865048c37614dd72520998a251b04b4948b5b9e  uefi.config.j2
 faba89519197a9bccba3049a031f11b22f5c8b1b87b5278cb4daaa9d73f5946394643f9a59f76eb120618e6fe8df08b80879eca12b76a24ce03b1c9c7db65528  devicepkg_build.sh
 5b83255dabd2019ea07a589d185bee5dad6760e28ab02de3480a0adfd1cf20d0c2e0b4a978e56757899ef683819091cee99d168a48e24a3f604b725e1ba26849  devicepkg_package.sh
 3b997a00e76be7d4540290275585026c5b83832c0b9a7214346763f03ec196b3f1bea9f50a9928a5cab0bc22dc557af136ffe146bd45d3666b5c05589891047d  devicepkg_pmtest_post_install.sh
@@ -182,7 +198,7 @@ f81e74e45ae8e55686ae459f550e229e7398daeafa72bd023c2d8c3a0d50e60bf53d5bbdfec931e9
 57e9c3a4caffc8b2eed07553725b25d0917c74cf774994e61de4874d1ca8e6df646c36f8f9d34c75497bea860e383f1abf429599141ea163ce90d69dbb31a9bb  devicepkg_subpackage_kernel.sh
 9fb15d78e11ff19dbb85f283ccc8bd59f4ecdbf0382053b5f251e7e4e573b7b329cd73c119008cd3f95f2b537a2b45d0753abe669c56f4378d847373f11a569b  kernel_build.sh
 6a0ade8f5b2f48271a2330aecf2ec55cdcb68531999970be65cb0d9637665bd46748115d634de7eaa73489d96db4ff78dabe93b3038879578a143bbed5d3e548  kernel_package.sh
-d50f30286ee57e2f84ffdc71e4235a59a186829aaf3de5bae14f9249ec276ad60423b35d166080f2242b55b7267be7f142293415124eba7a8cb530666a3c85aa  kernel_prepare.sh
+48c0474b88b9c0fc394cca92f072e2530af93096f488cd9b525571b9edacb1dcf0f09c25719d2e7e3e661b7d0e2de0b7762eb5d4863167d06a20059374bdfa0e  kernel_prepare.sh
 9bb7f2a0930f397a713e9f4b6d5b83a426d9a2a3f692dcc42ac30717bf26ead869d8823a38f3ad388af12b2b9a02e8ec4d4418e9c2062389ed06d2b891a49ff3  deviceinfo
 136247a16ec91dc0c7241eeddb28c2196ae3b29946a9bc7e9566f848491ef1c53b12d05bf2dbc1cc352986712fd76f25c1510bcc8f301af540a2f01c33b299e1  expected-deviceinfo-downstream
 8cdbf149e1bdfaf4d4a246a208732836956fd81a3aa01ef968e4c2e2cca4027f71cfc38e22debade83ddfca4e05267983c1c8a9c1aa9461a8cf493ef7e893097  expected-deviceinfo-mainline
@@ -190,4 +206,16 @@ d50f30286ee57e2f84ffdc71e4235a59a186829aaf3de5bae14f9249ec276ad60423b35d166080f2
 a113c2e67f38fdb8cdf38e52bf410daab036aeac837caacdebbc3593c1a937cc22cb48bcbf245b8a0da1faf84b3e9bda791a5ece6649736f2cabdadf6ab37ba4  expected-uefi-config-arm64
 5dce8dfdf74def0953ae09172d7b9ae5fa3daca48465ac72a3619fd61a5df03971da87740f8dbe661e1a97ec487adc2c3de4d73bee94b3dc08b6fdf5ab7763a6  expected-uefi-config-arm64-pre-6.1.0
 420ace1c2cfea7e85d8f1caae024604a91a8e0ea39c9afa5f5b60c187c0bb3b3204a77ce6a736f36b62293d93898d679bcabc0acc8ee9d6859940e967138033c  expected-uefi-config-x86_64
+684652ea673d4dc597f57ba76cee6089357e1425aaf1da388cbc22ae0202fd3d1a33c19d4b9ddb8bc3174f8432e5b4203bb4082df75f391c8c7182fa3b0bea0a  01-general.config.j2
+ead86c483682d75a8bba70894ca11dd2ee3a6bdfc47d6761550ab7cdb97dd77fc1f5ae0a529842ad71adb3a6de5f495024d99cbcc01304b1291c11e2798c39ea  02-filesystems.config.j2
+38ea5c3894e9a5f57ee3483c5bec07e7a1e2cf010bb7541195fde5fc6e114478790fa62dccb29aadcb9fde0ad45cfbc7c8f58a10263ce7b4e6293a061afc52ef  03-fde.config.j2
+bf029ea0deaffb0e25f76228aafda55aa22d690337962cffbaf88eb0b934c80f796a9a90af2bd3cef594dd51ee2d63e9cc79b5926b092c4fe7655ce46d9bb6da  04-nftables.config.j2
+aeac84798dce231617ab84f4a6388d1d32c0e02387ec4dfc5a7ab914f1f770ee51e4e5f3b18bdd07353b21194ac6321b3ac1c3d50e2f0cde3d54bcf448b318be  05-wireguard.config.j2
+483ae51d15eac5517cb00144fe85a3a8c63b8d06c63e41cf751c32758f010f957fadf5b6e67d99e180cb762a4582ae6afc4f89db4d5d3b06fa4e80c42671443f  06-waydroid.config.j2
+bd9970aa729e01ed1a5541d5cc5e1790ee9352812057f2ac368c6252edd1652a437c0a2bd1b0457192bfdf28c9a39cd9fe37a4abcaa064022b6fcf6f2bd04b6d  07-iwd.config.j2
+574ee379b0327559323cb64bde25b07aba04d3d6f5419c1902f4726252574277c9262195ebf1372c8f244a886c28a1eb8616a87fec3d79bd84b85f9e4ce073a3  08-containers.config.j2
+8e101d07e72c60a7c6372791b523019c8c43d71759a0f60c1a8621e5ac30231a1e41519927e043c2b9623351b912c7c738e6da0d02fa5028afd8207258becdf7  09-zram.config.j2
+b716a9ff6494735f8214fee540c2acada76311cb3afff088737adcf66d96caa81a1d77ba35d49272ac719fa8ae5b68d1fcecdaf6c4618bdc75fbc6552280734b  10-usb-gadgets.config.j2
+82377ade19e1a41d9df6bf7f9c2cf3894f2a93e6ac27bed4ac1fed6e1290303298be3c7fc583b10826c69fceb865048c37614dd72520998a251b04b4948b5b9e  11-uefi.config.j2
+cfe891b58fa03f4eecabb24e473d875733cb1fad472013c875893962568ab943ca1a54b58bd75a7bccf0187ad3700bceb24721e9d7b56d0b86f20c75060cfcb2  99-misc.config.j2
 "

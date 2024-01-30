@@ -1,0 +1,41 @@
+# Create a list of integers for kernel version, so we can compare it properly. 
+{% set kver = [kernel_version | int, kernel_patchlevel | int] %}
+
+CONFIG_BLK_DEV_INITRD=y
+CONFIG_CGROUPS=y
+CONFIG_CRYPTO_XTS=y
+CONFIG_DEVTMPFS=y
+CONFIG_DM_CRYPT=m
+CONFIG_INPUT_EVDEV=y
+CONFIG_SYSVIPC=y
+CONFIG_TMPFS_POSIX_ACL=y
+CONFIG_VT=y
+CONFIG_BPF_SYSCALL=y
+CONFIG_CGROUP_BPF=y
+CONFIG_USB_CONFIGFS_NCM=y
+
+{% if kver >= [2, 6] %}
+CONFIG_BINFMT_ELF=y
+{% endif %}
+
+{% if kver >= [3, 10] %}
+CONFIG_BINFMT_SCRIPT=y
+{% endif %}
+
+{% if kver >= [4, 0] %}
+CONFIG_UEVENT_HELPER=y
+CONFIG_USER_NS=y
+{% endif %}
+
+{% if kver < [4, 7] %}
+CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
+{% endif %}
+
+{% if kver < [4, 14] %}
+CONFIG_SAMSUNG_TUI=n
+CONFIG_TZDEV=n
+{% endif %}
+
+{% if kver < [5, 2] and arch in ["arm", "i386"] %}
+CONFIG_LBDAF=n
+{% endif %}

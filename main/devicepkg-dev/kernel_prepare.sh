@@ -74,17 +74,15 @@ fi
 
 # srcdir is defined in APKBUILD
 # shellcheck disable=SC2154
-fragments_from_package="$(find "$srcdir" -maxdepth 1 -name "*.config" -o -name "*.config.j2")"
+fragments_from_package="$(find "$srcdir" -maxdepth 1 -name "*.config" -o -name "*.config.j2" | sort)"
+fragments_from_devicepkg="$(find /usr/share/devicepkg-dev/config-fragments -maxdepth 1 -name "*.config" -o -name "*.config.j2" | sort)"
 
-if [ -n "$fragments_from_package" ]; then
-	for config in $fragments_from_package;
-	do
-		kernel_configs="$kernel_configs $(basename "$config")"
-	done
-fi
+all_fragments="$fragments_from_package $fragments_from_devicepkg"
 
-# mainline is default config fragment
-kernel_configs="$kernel_configs mainline.config.j2"
+for config in $all_fragments;
+do
+	kernel_configs="$kernel_configs $(basename "$config")"
+done
 
 # shellcheck disable=SC2154
 # _pmos_uefi is defined in APKBUILD
