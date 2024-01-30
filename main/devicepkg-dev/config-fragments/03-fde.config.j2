@@ -1,0 +1,6 @@
+# Create a list of integers for kernel version, so we can compare it properly. 
+{% set kver = [kernel_version | int, kernel_patchlevel | int] %}
+
+CONFIG_MD=y
+CONFIG_CRYPTO_SHA256=y # TODO: make this module
+CONFIG_CRYPTO_AES=y # TODO: make this module

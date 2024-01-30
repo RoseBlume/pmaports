@@ -1,0 +1,36 @@
+# Create a list of integers for kernel version, so we can compare it properly. 
+{% set kver = [kernel_version | int, kernel_patchlevel | int] %}
+
+CONFIG_ANDROID_BINDERFS=n
+CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder"
+CONFIG_ANDROID_BINDER_IPC=y
+CONFIG_ANDROID_BINDER_IPC_SELFTEST=n
+CONFIG_BLK_DEV_LOOP=m
+CONFIG_BPF_SYSCALL=y
+CONFIG_BRIDGE=m
+CONFIG_BRIDGE_VLAN_FILTERING=y
+CONFIG_CGROUP_BPF=y
+CONFIG_FUSE_FS=m
+CONFIG_IP_NF_MANGLE=m
+CONFIG_NETFILTER_XTABLES=m
+CONFIG_NETFILTER_XT_MATCH_COMMENT=m
+CONFIG_SQUASHFS=m
+CONFIG_SQUASHFS_XATTR=y
+CONFIG_SQUASHFS_XZ=y
+CONFIG_TMPFS_XATTR=y
+CONFIG_TUN=m
+CONFIG_VETH=m
+CONFIG_VLAN_8021Q=m # prerequisite for bridge
+
+{% if kver >= [3, 5] %}
+CONFIG_CROSS_MEMORY_ATTACH=y
+{% endif %}
+
+{% if kver >= [4, 20] %}
+CONFIG_PSI=y
+CONFIG_PSI_DEFAULT_DISABLED=n
+{% endif %}
+
+{% if kver < [5, 18] %}
+CONFIG_ASHMEM=y
+{% endif %}

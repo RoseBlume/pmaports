@@ -1,0 +1,109 @@
+# Create a list of integers for kernel version, so we can compare it properly. 
+{% set kver = [kernel_version | int, kernel_patchlevel | int] %}
+
+# containers (lxc, Docker)
+CONFIG_NAMESPACES=y
+CONFIG_NET_NS=y
+CONFIG_PID_NS=y
+CONFIG_IPC_NS=y
+CONFIG_UTS_NS=y
+CONFIG_CGROUPS=y
+CONFIG_CGROUP_CPUACCT=y
+CONFIG_CGROUP_DEVICE=y
+CONFIG_CGROUP_FREEZER=y
+CONFIG_CGROUP_SCHED=y
+CONFIG_CPUSETS=y
+CONFIG_KEYS=y
+CONFIG_VETH=m
+CONFIG_BRIDGE=m
+CONFIG_BRIDGE_NETFILTER=m
+CONFIG_IP_NF_FILTER=m
+CONFIG_IP_NF_TARGET_MASQUERADE=m
+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+CONFIG_NETFILTER_XT_MATCH_IPVS=m
+CONFIG_NETFILTER_XT_MARK=m
+CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m # needed for lxc
+CONFIG_IP_NF_NAT=m
+CONFIG_NF_NAT=m
+CONFIG_POSIX_MQUEUE=y
+CONFIG_BLK_DEV_DM=m # Storage Drivers
+CONFIG_DUMMY=m # Network Drivers
+CONFIG_USER_NS=y
+CONFIG_BLK_CGROUP=y # Optional section
+CONFIG_BLK_DEV_THROTTLING=y # Optional section
+CONFIG_CGROUP_PERF=y # Optional section
+CONFIG_NET_CLS_CGROUP=m # Optional section
+CONFIG_NET_SCHED=y # Optional section
+CONFIG_FAIR_GROUP_SCHED=y # Optional section
+CONFIG_RT_GROUP_SCHED=y # Optional section
+CONFIG_IP_NF_TARGET_REDIRECT=m # Optional section
+CONFIG_IP_VS=m # Optional section
+CONFIG_IP_VS_NFCT=y # Optional section
+CONFIG_IP_VS_PROTO_TCP=y # Optional section
+CONFIG_IP_VS_PROTO_UDP=y # Optional section
+CONFIG_IP_VS_RR=m # Optional section
+CONFIG_EXT4_FS=m
+CONFIG_EXT4_FS_POSIX_ACL=y # Optional section
+CONFIG_EXT4_FS_SECURITY=y # Optional section
+
+# for kube-proxy
+CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+
+# TODO: maybe add more checks for kubernetes
+# See https://gitlab.com/postmarketOS/pmaports/-/merge_requests/3581#note_1146287816
+
+{% if kver >= [3, 2] %}
+CONFIG_CFS_BANDWIDTH=y # Optional section
+{% endif %}
+
+{% if kver >= [3, 3] %}
+CONFIG_CHECKPOINT_RESTORE=y # Needed for lxc
+{% endif %}
+
+{% if kver >= [3, 6] %}
+CONFIG_MEMCG=y
+CONFIG_DM_THIN_PROVISIONING=m # Storage Drivers
+CONFIG_SWAP=y
+{% endif %}
+
+{% if kver >= [3, 6] and arch in ["i386", "x86_64", "sparc64", "ia64"] %}
+CONFIG_HUGETLB_PAGE=y
+CONFIG_CGROUP_HUGETLB=y
+{% endif %}
+
+{% if kver >= [3, 6] and kver < [6, 1] %}
+CONFIG_MEMCG_SWAP=y
+{% endif %}
+
+{% if kver >= [3, 7] and kver < [5, 0] %}
+CONFIG_NF_NAT_IPV4=m # Needed for lxc
+CONFIG_NF_NAT_IPV6=m # Needed for lxc
+{% endif %}
+
+{% if kver >= [3, 7] %}
+CONFIG_VXLAN=m # Network Drivers
+CONFIG_IP6_NF_TARGET_MASQUERADE=m # Needed for lxc
+{% endif %}
+
+{% if kver >= [3, 9] %}
+CONFIG_BRIDGE_VLAN_FILTERING=y # This is already enabled
+CONFIG_MACVLAN=m # Network Drivers
+{% endif %}
+
+{% if kver >= [3, 14] %}
+CONFIG_CGROUP_NET_PRIO=y # Optional section
+{% endif %}
+
+{% if kver >= [3, 18] %}
+CONFIG_OVERLAY_FS=m # Storage Drivers
+{% endif %}
+
+{% if kver >= [3, 19] %}
+CONFIG_IPVLAN=m # Network Drivers
+CONFIG_SECCOMP=y # Optional section
+{% endif %}
+
+{% if kver >= [3, 14] %}
+CONFIG_CGROUP_PIDS=y # Optional section
+{% endif %}

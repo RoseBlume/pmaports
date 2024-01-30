@@ -1,0 +1,32 @@
+# Create a list of integers for kernel version, so we can compare it properly. 
+{% set kver = [kernel_version | int, kernel_patchlevel | int] %}
+
+# fbkeyboard, buffyboard
+CONFIG_INPUT_UINPUT=m
+
+# hfd-service
+CONFIG_LEDS_TRIGGER_TIMER=m
+
+# change MTU, e.g. for Wireguard
+CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
+CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
+
+# https://gitlab.com/postmarketOS/pmaports/-/issues/1837
+CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL=y
+
+# set lazy rcu
+# https://gitlab.com/postmarketOS/pmaports/-/commit/b7432745223387caa871196b931ab73cdd863dfc
+{% if kver >= [6, 2] %}
+CONFIG_RCU_EXPERT=y
+CONFIG_RCU_NOCB_CPU=y
+CONFIG_RCU_LAZY=y
+{% endif %}
+
+# for qemu, box86/64, fex-emu, etc
+CONFIG_BINFMT_MISC=y
+
+# feedbackd
+LEDS_TRIGGER_PATTERN=m
+
+# https://gitlab.com/postmarketOS/pmaports/-/merge_requests/4481
+CONFIG_PM_WAKELOCKS=y
