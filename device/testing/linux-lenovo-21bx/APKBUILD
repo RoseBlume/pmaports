@@ -30,7 +30,6 @@ _carch="arm64"
 _flavor="${pkgname#linux-}"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/jhovold/$_repository/archive/$_commit.tar.gz
-	lenovo-21bx.config
 	0001-drm-panel-edp-Add-timings-for-BOE-NV133WUM-N63.patch
 "
 builddir="$srcdir/linux-$_commit"
@@ -55,6 +54,5 @@ package() {
 
 sha512sums="
 e660104c28e3f41e4f6ccdccb95be7b17077a9d230a68899e8851be05c8eba6b2473ef8a2b4fc86bed1cdf02d305d06c6acae453a3648a597ad59b4ac422ccbb  linux-lenovo-21bx-dd209a8fb4840e48ca4963bb23057f38b1066a6d.tar.gz
-f736e60b261842e66a71fdbfae986dfdea131e21d347b8a617b13e3f4fc8e7000e964fc13e908cceb916e32a1c7384c679b6989a16880d843b6a96d9e2d4aee2  lenovo-21bx.config
 fac2fc6cd033c30d1abea6ac77c173945f77e7c3db9e547b6e2a68969e731d4d69f6093fbc3a0b7068dddffe224692edb7175a953bc28f9449b8018c91835d31  0001-drm-panel-edp-Add-timings-for-BOE-NV133WUM-N63.patch
 "
