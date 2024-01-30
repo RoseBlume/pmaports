@@ -16,6 +16,7 @@ apply_jinja_template() {
 		-D kernel_version="$kernel_version" \
 		-D kernel_patchlevel="$kernel_patchlevel" \
 		-D arch="$_carch" \
+		-D use_uefi="$_pmos_uefi" \
 		"$filepath" > "$builddir"/kernel/configs/"${filename%.j2}"
 }
 
@@ -87,8 +88,9 @@ kernel_configs="$kernel_configs mainline.config.j2"
 
 # shellcheck disable=SC2154
 # _pmos_uefi is defined in APKBUILD
-if [ "$_pmos_uefi" = "true" ]; then
-	kernel_configs="$kernel_configs uefi.config.j2"
+# set _pmos_uefi to false when it is not true, so we can pass it to jinja2
+if [ "$_pmos_uefi" != "true" ]; then
+	_pmos_uefi="false"
 fi
 
 # copy fragments

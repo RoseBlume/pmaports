@@ -1,5 +1,5 @@
 pkgname=devicepkg-dev
-pkgver=0.19.7
+pkgver=0.19.8
 pkgrel=0
 pkgdesc="Provides default device package functions"
 url="https://postmarketos.org"
@@ -73,6 +73,7 @@ check() {
 		-D kernel_version="6" \
 		-D kernel_patchlevel="6" \
 		-D arch="arm" \
+		-D use_uefi="true" \
 		"$_template" > "$testdir/uefi-config-arm"
 
 	# Generate uefi config on 6.6.0 arm64
@@ -81,6 +82,7 @@ check() {
 		-D kernel_version="6" \
 		-D kernel_patchlevel="6" \
 		-D arch="arm64" \
+		-D use_uefi="true" \
 		"$_template" > "$testdir/uefi-config-arm64"
 
 	# Generate uefi config on 5.15.0 arm64
@@ -89,6 +91,7 @@ check() {
 		-D kernel_version="5" \
 		-D kernel_patchlevel="15" \
 		-D arch="$_carch" \
+		-D use_uefi="true" \
 		"$_template" > "$testdir/uefi-config-arm64-pre-6.1.0"
 
 	# Generate uefi config on 6.6.0 x86_64
@@ -97,6 +100,7 @@ check() {
 		-D kernel_version="6" \
 		-D kernel_patchlevel="6" \
 		-D arch="x86_64" \
+		-D use_uefi="true" \
 		"$_template" > "$testdir/uefi-config-x86_64"
 
 	if ! cmp -s "$srcdir/expected-uefi-config-arm" \
@@ -169,7 +173,7 @@ _jinja2() {
 sha512sums="
 d69930dd790b00fb39760a37d95a10899f0d167e10e2804feb05d9ce04f94185dc32d36edc90214aba2ea2aa09bf18f7dab93f1d2eff23f67beb2cc83be30e7c  compiler-gcc.h
 04373cc6776871e999b98636aa8147179f5eebe56c501dc7e482d53ddbabd8c92fef437a3826bd33d1bb286e0325ef4affeb6e9d06c1548d86b0eeea3d0752a9  mainline.config.j2
-04cdc0b2f88782497c709a3ad314aa7fb3c47097837a44d360af71785cef9774d4d7b075afba492a35a4557d9d7674c964f78aec90c7d01873074b95c541b6f6  uefi.config.j2
+82377ade19e1a41d9df6bf7f9c2cf3894f2a93e6ac27bed4ac1fed6e1290303298be3c7fc583b10826c69fceb865048c37614dd72520998a251b04b4948b5b9e  uefi.config.j2
 faba89519197a9bccba3049a031f11b22f5c8b1b87b5278cb4daaa9d73f5946394643f9a59f76eb120618e6fe8df08b80879eca12b76a24ce03b1c9c7db65528  devicepkg_build.sh
 5b83255dabd2019ea07a589d185bee5dad6760e28ab02de3480a0adfd1cf20d0c2e0b4a978e56757899ef683819091cee99d168a48e24a3f604b725e1ba26849  devicepkg_package.sh
 3b997a00e76be7d4540290275585026c5b83832c0b9a7214346763f03ec196b3f1bea9f50a9928a5cab0bc22dc557af136ffe146bd45d3666b5c05589891047d  devicepkg_pmtest_post_install.sh
@@ -178,12 +182,12 @@ f81e74e45ae8e55686ae459f550e229e7398daeafa72bd023c2d8c3a0d50e60bf53d5bbdfec931e9
 57e9c3a4caffc8b2eed07553725b25d0917c74cf774994e61de4874d1ca8e6df646c36f8f9d34c75497bea860e383f1abf429599141ea163ce90d69dbb31a9bb  devicepkg_subpackage_kernel.sh
 9fb15d78e11ff19dbb85f283ccc8bd59f4ecdbf0382053b5f251e7e4e573b7b329cd73c119008cd3f95f2b537a2b45d0753abe669c56f4378d847373f11a569b  kernel_build.sh
 6a0ade8f5b2f48271a2330aecf2ec55cdcb68531999970be65cb0d9637665bd46748115d634de7eaa73489d96db4ff78dabe93b3038879578a143bbed5d3e548  kernel_package.sh
-6d7e2ecf895eeebce8538a0d9f5cf21ff6223f1dc48960f21aa26072ccec4eb6d7266faa597b9cb05721fb4a03973100e3c72551ce5312951d43f1678c17b3cf  kernel_prepare.sh
+d50f30286ee57e2f84ffdc71e4235a59a186829aaf3de5bae14f9249ec276ad60423b35d166080f2242b55b7267be7f142293415124eba7a8cb530666a3c85aa  kernel_prepare.sh
 9bb7f2a0930f397a713e9f4b6d5b83a426d9a2a3f692dcc42ac30717bf26ead869d8823a38f3ad388af12b2b9a02e8ec4d4418e9c2062389ed06d2b891a49ff3  deviceinfo
 136247a16ec91dc0c7241eeddb28c2196ae3b29946a9bc7e9566f848491ef1c53b12d05bf2dbc1cc352986712fd76f25c1510bcc8f301af540a2f01c33b299e1  expected-deviceinfo-downstream
 8cdbf149e1bdfaf4d4a246a208732836956fd81a3aa01ef968e4c2e2cca4027f71cfc38e22debade83ddfca4e05267983c1c8a9c1aa9461a8cf493ef7e893097  expected-deviceinfo-mainline
-c75c157bd7fe05662be7fe24d00f8603ddc4a760f5589463ae4ea2a594430e700835ba2b6edd6b540be5c131fcfc8717556c17a1fdbc41583926787bb09709bd  expected-uefi-config-arm
-22406d611d716d32482ee3b46080d7b945ac3e0e4083bdddfa7a1eca4e9733332118a90739f4ded6e2eee01abe213c95408d9e10fbf087e19d46907bbc21bc7e  expected-uefi-config-arm64
-c75c157bd7fe05662be7fe24d00f8603ddc4a760f5589463ae4ea2a594430e700835ba2b6edd6b540be5c131fcfc8717556c17a1fdbc41583926787bb09709bd  expected-uefi-config-arm64-pre-6.1.0
-3d3ca6a614e7114a9e45c307be42245550030cc8d5d8c7a7e9130cb5da8c5a6b6a641fa9f33c41a4a9ec3dd9158b4a03b00ef2bbae233b255200d91400498e06  expected-uefi-config-x86_64
+5dce8dfdf74def0953ae09172d7b9ae5fa3daca48465ac72a3619fd61a5df03971da87740f8dbe661e1a97ec487adc2c3de4d73bee94b3dc08b6fdf5ab7763a6  expected-uefi-config-arm
+a113c2e67f38fdb8cdf38e52bf410daab036aeac837caacdebbc3593c1a937cc22cb48bcbf245b8a0da1faf84b3e9bda791a5ece6649736f2cabdadf6ab37ba4  expected-uefi-config-arm64
+5dce8dfdf74def0953ae09172d7b9ae5fa3daca48465ac72a3619fd61a5df03971da87740f8dbe661e1a97ec487adc2c3de4d73bee94b3dc08b6fdf5ab7763a6  expected-uefi-config-arm64-pre-6.1.0
+420ace1c2cfea7e85d8f1caae024604a91a8e0ea39c9afa5f5b60c187c0bb3b3204a77ce6a736f36b62293d93898d679bcabc0acc8ee9d6859940e967138033c  expected-uefi-config-x86_64
 "
