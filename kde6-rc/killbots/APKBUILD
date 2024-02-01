@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=killbots
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="A simple game of evading killer robots"
 # armhf blocked by extra-cmake-modules
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-6f98964fe71184ee627c8e8c51959a23b8be690f0b6f0a20bd64bfc29a6e83ea55179537f225844103ea4003e0c4004c9211a503fd9422ffcfe03f55b6748c28  killbots-24.01.90.tar.xz
+2d4222266a6d7c0acbe176b158fb2b36923443cdf89a8f3492b25d2422894ef37f11e628cd1990dcbd91ce93c71e46c84623af1613d4a8d316c119dede64ddc1  killbots-24.01.95.tar.xz
 "

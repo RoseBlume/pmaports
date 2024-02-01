@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kde-inotify-survey
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Tooling for monitoring inotify limits and informing the user when they have been or about to be reached"
 url="https://invent.kde.org/system/kde-inotify-survey"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-c23a8e6ce7872ab1c0ed81b99fac738b8c51f332cff8a2ddb41734b171ae22c731905121da6379e1d0f8f56f9a82286c14747fb8c8523ea579127114bf2d5216  kde-inotify-survey-24.01.90.tar.xz
+88d53a44702c865f435f3cafaa3902b55e30d29d665a47984bc66331344a4efbe09baeff126622f97503e6c40ee0a7088415f4dfcdaab8bf2f944f74743de298  kde-inotify-survey-24.01.95.tar.xz
 "

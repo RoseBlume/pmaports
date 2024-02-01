@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=qqc2-breeze-style
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Breeze inspired QQC2 style"
 # armhf blocked by extra-cmake-modules
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-24b1476f39dd0a0f27434f2e5fd1108a023d5a29a925dfbdec2edf9af528607a09aa58cbf6bd4c08fb3778b73f7ebdd7deadfc3592bb3d11ad5c21a044b4e554  qqc2-breeze-style-5.92.0.tar.xz
+792955759078c907a1084c35fc860f7862b25c15cbd3874cf9ff2948196ce0cebb7686a4019784b45ec4eb9c2d56dfd67d58834ab0c382fd6ea19dea45397157  qqc2-breeze-style-5.93.0.tar.xz
 "

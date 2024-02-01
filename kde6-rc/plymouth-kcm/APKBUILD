@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plymouth-kcm
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-c2b55eb5baa8839065c6e9eb7a942672a88c1f258f1753a9f74023ef89a00407b13def469279da015071f1d303bfc97285e155d6fcbaf15646776decd2480f59  plymouth-kcm-5.92.0.tar.xz
+a74724ec725e0d6ae0059274c5509834452760e4c1662de1cf4c248f7d47e58e10c5b61a58a8e2d65d08b204e2fd0816e91d9c70ede56c96c074a48ff168d21f  plymouth-kcm-5.93.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-nano
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="A minimal Plasma shell package intended for embedded devices"
 # armhf blocked by extra-cmake-modules
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-03bce36bea3bb35c859b5f8982a253521cc50e86970ea09fe67429ed2460d7c6a40bb77c65b9cff3842f13bfb048cea1bc59744d0e7fa372433fc9221e7eb87e  plasma-nano-5.92.0.tar.xz
+d0d379247ab9701d7de91abcd882739dd4d8b9b564c34200e342b25107adeffa1f9cf3e2b9fbad29fe18aa51cabcc1fdc2dc72e4ea92e5c945481145bc8e454b  plasma-nano-5.93.0.tar.xz
 "

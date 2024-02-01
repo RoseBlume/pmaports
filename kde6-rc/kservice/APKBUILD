@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kservice
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Advanced plugin and service introspection"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -62,5 +62,5 @@ package() {
 }
 
 sha512sums="
-2f31ab4bbb0c0efa4619191c3ac81c44559185a601b888e956189aa6ffbf90fef2c1ec445c94341e3350e72d82ea6c61434546b80788dcffba9f3c112ac145a7  kservice-5.248.0.tar.xz
+c8377e8c4b87788c69ccf1093220cd41ec79191319c70ed4bc31708a595517c07315c219b4482718ea9134e4ee5104827847339ba9e3e26b17568adfe748859f  kservice-5.249.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmousetool
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-4163a7f9c9339da3c8dd682baeceaa5f9b86dd156367ebc91b3d630ef8a163e5e45ac67afc8c0304c86a582ef33601354a45ded9994baa453f103a0bc8be534f  kmousetool-24.01.90.tar.xz
+7611c555d258875bcfcc3d4b094c196732556fb73dc9ea8adf3a9a00e871d9115fd6ef4e7e6cceca84522e701eadead83159a99cdc1604571b9a559efa714e7f  kmousetool-24.01.95.tar.xz
 "

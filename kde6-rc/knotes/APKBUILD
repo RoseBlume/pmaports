@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=knotes
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by kdepim-runtime
@@ -76,5 +76,5 @@ package() {
 }
 
 sha512sums="
-02a8061f229c89790e8138001d83c173cfbb55c046da46fe39744fbf6da87334268473050563f7c0d2d4fc8e05892cb7dcd05726240640b036dfac154323a26c  knotes-24.01.90.tar.xz
+577624ee341a530c3b3aaaed1487cf8de1caa044c0264caaeee4e7fb86c542313f5e08e17a85425818724eef179017f862cd3c3f1739f7bb6a33ca7f76843482  knotes-24.01.95.tar.xz
 "

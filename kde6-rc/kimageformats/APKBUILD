@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kimageformats
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Image format plugins for Qt"
 # armhf blocked by extra-cmake-modules
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-28f1c8cdd0876ddb40c6142bb8d12d1f29393dbef3f6df6acc6800c2be8af470c5a7decf5ffe2a63c3b9c7c1a733e0cb44c061b033f0c5060acf6f5409b77a97  kimageformats-5.248.0.tar.xz
+038d16d9b407e253f7aa21d9e8ac06f4510cdb28621f97d7344a3cd5bb3e563fcf106638a1c1b53083e03521ef56cfe7dae4312cf84ea873325d3482ff6ffacf  kimageformats-5.249.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=krdc
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -56,5 +56,5 @@ package() {
 }
 
 sha512sums="
-bb2c479dec318c641298d7684435b384b319fb1a7082670df73592ac2e280bd1a565dafa7054ff1ea6f829fce37835586fbcd773b7b89fc1ebd444805838d03f  krdc-24.01.90.tar.xz
+d090ea2b115f006fc250d27bbec5c94eea734c4038328ce87f6072c47715d19dfb7247feeddc6b13c74d40bacb377da36c106b297cdfdc62d568048e5c3b7aeb  krdc-24.01.95.tar.xz
 "

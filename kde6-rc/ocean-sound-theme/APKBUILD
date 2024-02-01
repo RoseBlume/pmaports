@@ -1,7 +1,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=ocean-sound-theme
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Ocean Sound Theme for Plasma"
 # armhf blocked by extra-cmake-modules
@@ -33,5 +33,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-888fc87c0c736433c5fe6e1a46b5ce4a53242442cb8e7b6f6bd85930ba3b0c2ec2395132f41c21f6c8672d13ccf6b0ea72c422770062b63cfc52e7fa70735e52  ocean-sound-theme-5.92.0.tar.xz
+99b5196857979bb7da1983b8477aedcb8668b8dca06b5b425c76b3630171d1c0b0e827ae664583c8016760fa833247531be30759e7b1f68ebe89a7a10f67ca92  ocean-sound-theme-5.93.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi-contacts
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Libraries and daemons to implement Contact Management in Akonadi"
 # armhf blocked by extra-cmake-modules
@@ -62,5 +62,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-e9104b5baf161a091625e9533c78de462f78abae21db3cca9f033b3656072dc95a5212fa0e6ec348767da75d1b879eda1d91129c0ba9a12afeec813765eb061d  akonadi-contacts-24.01.90.tar.xz
+f9e7579a436d522f9b67deee199628a36da918bed2b426f9272c6b9ba4a890d296794db54c019c7b0d39ca22d8f4e8d9b13e3e850b7a9c69802a892a0fb4c18a  akonadi-contacts-24.01.95.tar.xz
 "

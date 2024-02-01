@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kget
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-8410d08325d99dde8ac8f922df35f6793aa6b5c33e48413d791789d60d045eb0cce2a08cade91d29fcfea8f5595aa9dba1643d94e9bf8b906577a4e2a12877a4  kget-24.01.90.tar.xz
+250bdadd44aef901689bd894155c318700bdc114bac8b379170c833f88a658f4c26ce734bea3140770338d452db2aa339af50dd4133d38fcd070e0e3bed97eb4  kget-24.01.95.tar.xz
 "

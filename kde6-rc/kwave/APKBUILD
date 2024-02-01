@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kwave
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -65,5 +65,5 @@ package() {
 }
 
 sha512sums="
-c33507fef13cfc8689d98490c1256ca367544caa8a1ef7f13aab1c9e6b22a572cbb7ba975f12b867b8170f096a50d58679c1d67fa308ef69116fc858a90b13a3  kwave-24.01.90.tar.xz
+a925f21874c554f1168bc5baec2e68e1b1325b90b67611d89ec68b5319b8ccdec5edb770b8499ae98547e5ee818879d3179d58a930481d53f973d631c75ba529  kwave-24.01.95.tar.xz
 "

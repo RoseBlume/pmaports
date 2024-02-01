@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kteatime
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 arch="all !armhf"
 url="https://kde.org/applications/utilities/org.kde.kteatime"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-56c8032e432fd00f2b8f9fcdda814ebc64094142acc59dc71509c6891466bbbb0ff551288634fdf8df86b9a8e5b9a41e9559a18ee2ea1787ae9da50c8464af56  kteatime-24.01.90.tar.xz
+96e1366c0f1cf63d4e87f4cce28563bc88173a7b5440eb15505521223400dc5ed43c09cadc38162d5d63f8a30fbeaf6e86ecf529f6bd62bdf383423e50acd0a6  kteatime-24.01.95.tar.xz
 "

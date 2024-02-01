@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=lokalize
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Computer-Aided Translation System"
 url="https://apps.kde.org/lokalize/"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-eb2967cecdc14fe080dbe4d8a94e5d88e37c14964a3a0db35669331faf963e85c8cdeae6548c529c4cfdcc004e243a3fd1cc1a983afbd15df2a3691e0ab08040  lokalize-24.01.90.tar.xz
+ca5c9f9e75fa1cfdb8cc8247d29b4a4db4b0985296b33821e16254c8bfbe86e1392575336aecd8ce8ddf8caa0c47ac29d7a81b3822bcb473e59d37649d7e51a5  lokalize-24.01.95.tar.xz
 "

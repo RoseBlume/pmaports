@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=ksshaskpass
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="ssh-add helper that uses kwallet and kpassworddialog"
 # armhf blocked by qt6-qtdeclarative
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-c5627c61be098d143dcaf182560362f480fb3a121980ed716cc62930b221e56a64c5b16532ef42a0b329da5cc3bcc59c480ca4e4968033a62a48d71f2ae53d62  ksshaskpass-5.92.0.tar.xz
+c2202708e8624fc456610486b6c51d9ad7f9671d1ab73ae9869ffe3ef05e8b583830ead6d1e10c8a6c975522ee12eaaf5310a3d8310975bab779f29c2abf2d6f  ksshaskpass-5.93.0.tar.xz
 "

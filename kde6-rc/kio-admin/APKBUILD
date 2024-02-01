@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kio-admin
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Manage files as administrator using the admin:// KIO protocol"
 url="https://invent.kde.org/system/kio-admin"
@@ -41,5 +41,5 @@ package() {
 }
 
 sha512sums="
-377cb07463f5bfdce113838bb1431426fdd24e9ef6a9d791757845e8f1fe1719a1d77ef8d33d5a861bc368597ec3f5bc57983f4efc727b24b8168b2fd47ce3e5  kio-admin-24.01.90.tar.xz
+2d68a84a8c4c94990a7e79d2ccb8ba08778336df0cd2efa999a9f149ecffc3b80dec33703f32c06110a56abbacddf64b84aa4779c86eedae92c4773a9cd47008  kio-admin-24.01.95.tar.xz
 "

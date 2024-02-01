@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=mailimporter
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="KDE PIM library providing support for mail applications"
 # armhf blocked by extra-cmake-modules
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-b029dfd757dfb5390a27a7cce2a8226e66a1212aa806b0e5cfad51c2569ff4bc050619b4e25c5bfd51ea78f851d383af33c21d4d95b3570701c1aff79bd31040  mailimporter-24.01.90.tar.xz
+155134f37251efb43829661d0335702bf8c561e7a8f7942e7d1658bb2bcafc2aba32e36285d9a90ff2a298f3e0af07a97f374c3a94424887b152bdee75942a72  mailimporter-24.01.95.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=dolphin-plugins
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Extra Dolphin plugins"
 url="https://www.kde.org/applications/system/dolphin/"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-0b9251ea40758b256bf9a63c986d1522ae2317320cdc7b9f064520217692e6df70c724901aa86b4f553224a5f39b8d0f5e01afa442bd9d34b6a6fccd14ba94e4  dolphin-plugins-24.01.90.tar.xz
+1608e937be505513f6113f7151fa21fed5af1ef430fe972f2def1912827a4163fd84c36c604527a31b9e9abfcbc9ec6cc22ffd724f31ddee0a489b2112252d04  dolphin-plugins-24.01.95.tar.xz
 "

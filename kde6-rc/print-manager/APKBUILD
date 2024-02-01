@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=print-manager
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-929dca8934e9b8a450b0f26afac3dbcfff05ddd75edfea78e9d4a3b4a955a784a8544710e4976119ed4fc66524c865ea873525e730316ca4f665a799970f0330  print-manager-5.92.0.tar.xz
+56a3c4ffad589df256a8e873b078fe51c4734893382e7c8c46be4f599d7e140f93ba4866a3e196e3811c9c91cd66d3169e4040110e39980423033426c35777e9  print-manager-5.93.0.tar.xz
 "

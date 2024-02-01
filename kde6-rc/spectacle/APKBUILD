@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=spectacle
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Application for capturing desktop screenshots"
 # armhf blocked by extra-cmake-modules
@@ -64,6 +64,6 @@ package() {
 	rm -r "$pkgdir"/usr/lib/systemd
 }
 sha512sums="
-a01c751d4a5e1524dfee36c60f716e16cdc1bb4759411207e0f9ee8ac9d719f4a023d62977b49d3ffad3e8639517acd59c06bb5e8599d3e3d592b5da0944dd35  spectacle-24.01.90.tar.xz
+239ec2d9c1a2a021072cb956a59bd2c7a0985aa33ec7da856c3432d5376c2b7a2b4dd7fd6d9c4c31abc16799d876a7677b41fdddcd8392184a1c1b149b425095  spectacle-24.01.95.tar.xz
 7c563d811f30d26f83e01a465e803b95167c5b2b842315257216ab282e07c69e7582a14d7f429cd19678199179ad8f3f2854265092f5a4c9ce9b65c87ed3849d  spectacle.desktop
 "

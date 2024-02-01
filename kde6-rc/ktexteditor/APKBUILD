@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=ktexteditor
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Advanced embeddable text editor"
 # armhf blocked by extra-cmake-modules
@@ -72,5 +72,5 @@ package() {
 }
 
 sha512sums="
-c437942c4ac29ce716f72af94068920f8e91278980b2a6278613fa4097edf7849c0630716dc1e6a72d9dee5cfa5a1b3420979cb6a3d5517f84df606a98bb6456  ktexteditor-5.248.0.tar.xz
+a776fad2c018cc33c429ccc5106cbd3f590480bc9e0cc9ba84d3bdac7fc6229235736e63a09b41e3230a90dddb9485cfeac785fae94f7cdf793beded01dd90de  ktexteditor-5.249.0.tar.xz
 "

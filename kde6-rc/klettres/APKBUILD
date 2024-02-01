@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=klettres
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-18c4077ae94bc955279d90b802b4359cf2c38b29d77904334f2c550117b678c237136b951c4663a35d4f582b0601cdc1f8e791b86d78a0f58c3763008e03ff0b  klettres-24.01.90.tar.xz
+ab10d236aceb21a70d8bce96bd7e5ac7880634e3cbe71fc5d141fc7cd34f91136dbf4cbf03b82920a4b6f576dddbb65d9308d1ba3e527761f6a5014c596dcf88  klettres-24.01.95.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kholidays
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Support for icon themes"
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-1e5613ce7e12d869860c6073c54ebf57cb06ef33f39944bcca4c72f2da4531b734d8cb59e46c3f372c614c3734b680476f9dd699eacaee9242e0a541fb6525e0  kholidays-5.248.0.tar.xz
+9ea98721e467fe66787b8a7d50192c0fe6d9ab69290f7fe929bbb9d46544797a6613a5118f638b1c0dbb80121585a38dc1780cc72993870effbf29b4fe1b80e0  kholidays-5.249.0.tar.xz
 "

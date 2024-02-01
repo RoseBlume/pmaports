@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kcalendarcore
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="The KDE calendar access library"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-074bc11195017bdec09adddd7d06ad757b49a84b2a7d726b93f0a482b95b24ea2a1f3875ee7799bc74e9dbe39b77d9cf3111f2741845f1534ec7f6edbb832aca  kcalendarcore-5.248.0.tar.xz
+ff9943d05abc3ac561c87af0fc2022ddab2075bf5d2d9bd1f8ac601bec0db495dcaf0047b97235e0627fff875836e98f22fa9435446a783caf109a2902367260  kcalendarcore-5.249.0.tar.xz
 "

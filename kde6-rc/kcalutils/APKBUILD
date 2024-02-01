@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kcalutils
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="The KDE calendar utility library"
 # armhf blocked by extra-cmake-modules
@@ -53,5 +53,5 @@ package() {
 }
 
 sha512sums="
-e219d2e9ef9918766d7c04b6b76606815c67d958e56e708c1d7140b2629fc82acbd623ac59991e56ba843417105a621d7bd27bf420582ce2995df97becc293d6  kcalutils-24.01.90.tar.xz
+8bc1c642bf4d3b77312729fce9f8d594a34a06fc1dce2ceebfb1661ca364fca0a9e3adf9b98d17063ead78c2b3da60fcdb3cc922031cdc9f427d2677a5261ccc  kcalutils-24.01.95.tar.xz
 "

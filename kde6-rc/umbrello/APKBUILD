@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=umbrello
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-6b9cc80018343575f750607aa8c707be43009d2badba5e9e64e63e96402c0c2b2459181ce2aa164f19a83990e57cee9eddb70e77092168c9fe19493a8fb66d72  umbrello-24.01.90.tar.xz
+07bdcaaaeb3637369866d07b2157e3f9a33d6e8fa4dc30785e4ca8c3093f6d365b8b61a347997ee81c0d0f5c22fc8ca97eb05d47cdd284d3bb2350d11c967a33  umbrello-24.01.95.tar.xz
 "

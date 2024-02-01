@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=solid
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Hardware integration and detection"
 # armhf blocked by qt6-qtdeclarative
@@ -51,5 +51,5 @@ libs() {
 	amove usr/lib/libKF6Solid.so.6
 }
 sha512sums="
-f469c3cf7de4bbcbd826e053054f0dfd33166e60462b52c3bdb64afceac537f9bd1ab644a31230f69384df9fd8cba719069bbc67034fee013cf89614afa62c14  solid-5.248.0.tar.xz
+7f3aa94de559dbc317629c112240cbff2d44edde38c92e1348fa9167d95f1dba52526d0e5fff67ee3d147e2d2220694565185e3255050a1ca4f555991981e481  solid-5.249.0.tar.xz
 "

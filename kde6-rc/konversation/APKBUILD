@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=konversation
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -60,5 +60,5 @@ package() {
 }
 
 sha512sums="
-aa34935c49037d85529de390018f4910ed764c1a8434d7e091eb92a7c88db17466c2e23269e13c63ef7a1d400549ea2d37a63836a71d991c4df8d292baf02925  konversation-24.01.90.tar.xz
+6858f28c6907e88fb527de56354b0cab0a1c0efa961b2ebc9cfaebac87cd540e887de77e6d01f2cbd91a1ea18096b7c4591884e4c7c6d198b75acd06d4aa264a  konversation-24.01.95.tar.xz
 "

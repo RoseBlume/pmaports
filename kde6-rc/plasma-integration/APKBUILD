@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-integration
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Qt Platform Theme integration plugins for the Plasma workspace"
 # armhf blocked by qt6-qtdeclarative
@@ -63,5 +63,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-a0b1146d329a11d05ded34e64604158b4e23fde08bc36389a46caa2c60b992e3925cc521b6e7ba748752ae05d8cc3f60cfd8a0a2ce39a46d0f20d08cff38d74f  plasma-integration-5.92.0.tar.xz
+e97d7911b7a8b637bdb2ee669e1b4b9bf16f1e6fc1971d18fb7950d1b328f34b43331d898efc61235a57109e3dc9f853d6cdaf9ab8ad99cc75c8ae18685cd539  plasma-integration-5.93.0.tar.xz
 "

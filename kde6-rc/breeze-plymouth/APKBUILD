@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=breeze-plymouth
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://kde.org/"
@@ -39,5 +39,5 @@ package() {
 }
 
 sha512sums="
-140bdea57fff8909c1feb27ef8ecfb5d1a42587099ca110815e2d59dfc5d46096889ba72024d6793cfae353930ced7f8bf326c142d06b20d4c786a32a47be73c  breeze-plymouth-5.92.0.tar.xz
+6c01790e54014f7dc95a8e72a3d7aa6076fddace58ee1191ee5a08b4e2a2b384e965c8a3f92e2fab7ecfb425e88f65d810e171a1ac79ddc2bf3429aea1fd32c4  breeze-plymouth-5.93.0.tar.xz
 "

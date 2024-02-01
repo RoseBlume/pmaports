@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=arianna
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="EPub Reader for mobile devices"
 url="https://invent.kde.org/graphics/arianna/"
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-cf34901ffed4088a86c673eb7b64329d621cf8b93516ab5a76f123e72317ecba4b13a19d9092ea73042acb94b16d1c9942f4f8c3c4b8eac7dc68eb4f5962f003  arianna-24.01.90.tar.xz
+0e82380c9256c6b6942e2eb8b3cda20d3723f970df67c962786029cd533a6515e08d29377c64f63f7e45652e84fb3cfb4135457cbc832fd3d623ca15b93f8e4e  arianna-24.01.95.tar.xz
 "

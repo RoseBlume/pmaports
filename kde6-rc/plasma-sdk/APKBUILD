@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-sdk
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Applications useful for Plasma Development"
 # armhf blocked by qt6-qtdeclarative
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-c082eb4c5d445a91138d94cbce8d8caef035d50d4bb0a741fe9ebe5e14c99d61693136a10fadc5cd1fdb67ea6b2fe69d5880ddb082ff0efea2098a8a8d39b285  plasma-sdk-5.92.0.tar.xz
+e92e65330ee404dc36398fca09d736f5e4219153775adbedd838e220c130fbc25245219be675215d7abdcf4d98320bd86fdaf040b247f940fbb38d0c060250d5  plasma-sdk-5.93.0.tar.xz
 "

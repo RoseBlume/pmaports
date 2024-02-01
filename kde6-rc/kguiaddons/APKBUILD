@@ -4,7 +4,7 @@
 # The group tag is just to easily find this apkbuild by some scripts for automation
 # group=kde-frameworks
 pkgname=kguiaddons
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Addons to QtGui"
 # armhf blocked by extra-cmake-modules
@@ -51,5 +51,5 @@ bin() {
 }
 
 sha512sums="
-15af45e4f49fe3a774058a085f408e6bb2b00cae0c62c4abf2ad1b4c9b67fc349805fdb38ce6ab9500cae521d028ff93dc52935c97e0b3e88bac17e476f3ed29  kguiaddons-5.248.0.tar.xz
+da211721275ae5c7ff1e3f61938ea8a13991e122e5f942f7f1c6aea83cdb2920a4dd8119471e604f70211fac5fd563fcf14ce2cbe28539e5f6a9b330ceccd41e  kguiaddons-5.249.0.tar.xz
 "

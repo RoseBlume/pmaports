@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ktouch
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by qt5-qtdeclarative
 arch="all !armhf"
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-7ce82e884a4cc93392aa23962eac36ff17480f7b5cbb49ee7bab42dbc33439bce81c4e9a0d175e4ba81be4ec7ef95eb90e7548c1f96400dec3f5593f10b2a90c  ktouch-24.01.90.tar.xz
+dbe58a57356691e137223eac4e895d7734931b214995b2f4e75045d6f3c97d27943179d50b8cc21c9b2cbd9c43eaddec2782088520b6bb8e8bed6c7b2a80e4ca  ktouch-24.01.95.tar.xz
 "

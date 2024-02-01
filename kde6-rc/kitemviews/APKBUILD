@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kitemviews
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Widget addons for Qt Model/View"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -41,5 +41,5 @@ package() {
 }
 
 sha512sums="
-ba9eba36252c471353425f0647be153de5f2dcab30a51608f9b0a3c0500fc0999379ef2cb52a8277bf9639bac4c644ee7544232390eb3866bb68063b74e12423  kitemviews-5.248.0.tar.xz
+211e4c363d9151234c6a44ba927b10cbf4413d82d1e498ecc650f1c36c29ee485cd7012546164a32d3dfd98e62ed90035b166ff4da2c1389e9b57ac79cf95e85  kitemviews-5.249.0.tar.xz
 "

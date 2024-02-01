@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kcalc
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-18bdc27f661f605437c1e05a5dcfaa226ab31783139ac01ba795b23ab9cf3567ebbc5ab79cf92f8db6dc01616f88de5181a57f3cb6cf14cfa903e625d310273e  kcalc-24.01.90.tar.xz
+02c64bc1f28a20e0bf1c416684804194a5d2de68e387f565164787b093b0254fc844074555d148876e7d0fd89439bd04ec38ec8eb326f50589e059d9f2fb3e38  kcalc-24.01.95.tar.xz
 "

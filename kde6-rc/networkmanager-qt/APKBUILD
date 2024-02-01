@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=networkmanager-qt
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Qt wrapper for NetworkManager API"
 # armhf blocked by extra-cmake-modules
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-a323427e20fc81bcd83639a438320b5c1b6f6f1d5c8013ac56f43bef6d42f0f430863785891d2a295bf9f5c1649547b79361c195e0aa075f204203dd793ff4a1  networkmanager-qt-5.248.0.tar.xz
+a0d1a8e5e9135fe69e05f3bfc2400c592de550e27d390db04c4a1452e5062f7287603479c3516846be73680a66e058c22b6ec1c2fac69592cadaf16d1a1abd7f  networkmanager-qt-5.249.0.tar.xz
 "

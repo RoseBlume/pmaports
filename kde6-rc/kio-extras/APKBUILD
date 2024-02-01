@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kio-extras
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -71,5 +71,5 @@ package() {
 }
 
 sha512sums="
-cfd17fb1164c8f6a9e9ba67bb8dd90b6c744ce1ece115dcac83caed9854f26706a42d62fad4fcb9988f81cce8319b6fccda1c1052ab41376c88beb7df3929567  kio-extras-24.01.90.tar.xz
+ad0cf481a80a9698a4ca1fade7af190c3ffa240a0ac3b5f00385ea20fafb7e3c42042a2047c3f353b893701eb517ca668ab480dd4fb88abd118610a581c65ca4  kio-extras-24.01.95.tar.xz
 "

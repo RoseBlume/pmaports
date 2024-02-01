@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kdeclarative
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Provides integration of QML and KDE Frameworks"
 # armhf blocked by qt6-qtdeclarative
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-b3f228212914d01e2b4991f8bfd3bfb6c93cc824ba5db81271f62280a512eac94a3a47d77075d29de4dd2660d9e27607630b783b04ad35882104e7b5aba3958a  kdeclarative-5.248.0.tar.xz
+cf47c5464ce3d602dba7dbdc81a232d2577c43569031751579555668cdd188a2fa564a5b78e44149ee72d7ab14317386825098250d86d1f357be9f902beddf63  kdeclarative-5.249.0.tar.xz
 "

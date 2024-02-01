@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-thunderbolt
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-cb9e69fbb876eb7a28ebfad36456ae28a92fdd62708ec3d5d1baa8aaadd3825ebbed732bc5146c31c492bd9e63869efd9ab8637d9faa0a1fae629726c27191c7  plasma-thunderbolt-5.92.0.tar.xz
+f6b0dbb87ce15f2725e6df2fa5f6a21c3b004e4c101d30a816845206937595ca5b8cbd2329a8ec911467c804f4e218e49824abba1a591de864585517b14d0c52  plasma-thunderbolt-5.93.0.tar.xz
 "

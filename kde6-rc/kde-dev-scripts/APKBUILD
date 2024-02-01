@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kde-dev-scripts
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf !s390x"
@@ -35,5 +35,5 @@ package() {
 }
 
 sha512sums="
-dbd9d8eb0ccaa8dbb698f021b153f7467cc8831baa41fe69e1c826fab63f5e4584ebcb77ace812adc0d2eb2864f06eceaece6eb883afd1e3e3e55fee6673821c  kde-dev-scripts-24.01.90.tar.xz
+51a867ab5beee32ae45d0638dd4a821f3a8ddcbbbaf124764675f1ebb61054dfa2a778f5b813aa0ac25b57485b9757fcd0e562978c254cc72f63eb5e454dee39  kde-dev-scripts-24.01.95.tar.xz
 "

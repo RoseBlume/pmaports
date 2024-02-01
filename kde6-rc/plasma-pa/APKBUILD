@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-pa
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Plasma applet for audio volume management using PulseAudio"
 # armhf blocked by qt6-qtdeclarative
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-1d0b549be06493900bd78a9dddf0380c7e8cef2e529fb1b86e4eb0f407d4cdbbb4a6f3d89620436b453c460787b9d94121ccd7629b71b94ae3a2b53457c5f95d  plasma-pa-5.92.0.tar.xz
+8f94f5014ef53a47c1069695157a5f012a9bb2030d57411b18d97ac2a34efadd9d709cf279fdb0be4c7187ccbb6859e683863cf36b05b3e9b997d4ea01ec5468  plasma-pa-5.93.0.tar.xz
 "

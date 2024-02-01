@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi-calendar
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Akonadi calendar integration"
 # armhf blocked by extra-cmake-modules
@@ -55,5 +55,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-dfaa8e67a9d1d194c172b8c7ce3635a258d25a338aaf405f4c86af7a839d3ec6f9daa1723713ac4a09720f21bcd7fb75f818cedb774ff5263e1e65597958ff5f  akonadi-calendar-24.01.90.tar.xz
+9408d4ef6d01b6081b49b2944984eac4cb7e41ac73bca41c0a4018514fe1d3db6609538b3db0ce4827615e3b04924d91975d47e0354b7d1e11e7d14adfe9216e  akonadi-calendar-24.01.95.tar.xz
 "

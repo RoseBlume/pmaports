@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kalzium
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-2d9f5769b5789ffc5e22ca81024527075bb35e954404a949d960ba9634addf3a46cfc4f8293f4ec3d97d75ec2a47b701cc00ad14f7286de26535ce221f8ac766  kalzium-24.01.90.tar.xz
+2013d19d6a5ec275ee2641bd8a6c4158df9a759bc9811dfe90d16a94364d362a816e248431a9a070a61672ce314a74f5c56b42421ff5d14db8f2e9c641eb592e  kalzium-24.01.95.tar.xz
 "

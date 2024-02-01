@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=breeze-gtk
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="A GTK Theme Built to Match KDE's Breeze"
 # armhf blocked by extra-cmake-modules
@@ -44,5 +44,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-c84becefb9d807677b67163771044f0ee1eecc0660d36071bc4bbf08be4b4d3567ef33a7dd69bc70e33741f1f4239564f67747c5f02ef36df31fc9fbe0603bea  breeze-gtk-5.92.0.tar.xz
+1bdfa1e9c8b161de53ae0d76da82999320a4a702be875c00e7f8b291903181be2cd0339b2f88a9c4bbe74e0a5b862bd8965a9d4ed2ff827e0f2f2ae2b4f85159  breeze-gtk-5.93.0.tar.xz
 "

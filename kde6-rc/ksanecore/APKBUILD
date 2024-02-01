@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ksanecore
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-176d7a203ca0eff598dcfca61c3bfd42bc3b242f38e021d1c4eb0e20fb388e1253a6f37cf5410ce9dac42d3267183607424e20651c747ec08949d9a696c1b149  ksanecore-24.01.90.tar.xz
+cf542af0d2337c7f52874b3e80514c04ffe354dbc8febaa2c83e1bf2dbc18ef8a337f155f1a2c05882586b1cb6300e74d8bc6d457a2519b17b523c3c530f590c  ksanecore-24.01.95.tar.xz
 "

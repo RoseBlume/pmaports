@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=krunner
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Framework for providing different actions given a string query"
 # armhf blocked by extra-cmake-modules
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-b0f08a52185a33fd0630c80a45fbffbc0b9100db597adb897c2f27d93cd09711972b7318d48b7f4ba669133684540960ae6a5b94c0add50809193206bb0d30bc  krunner-5.248.0.tar.xz
+5f8bb8e94993d3a1493d5fcc0259d886f3c4bd639505075e06b530a4219d062058663cdab76fd6b851b964f66ea6496f01f1ee310f5b94ac240045f78dda9b08  krunner-5.249.0.tar.xz
 "

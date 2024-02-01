@@ -3,7 +3,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ghostwriter
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Distraction-free markdown editor"
 url="https://invent.kde.org/office/ghostwriter/"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-21051fcddbb560b1a64ee668f7678406c69f0d42426e8fc8c9c0dff9c25295fcedb671b6d031fd056d5ea2a2fd0d41761318ee4657e66dd3531125e07e70c989  ghostwriter-24.01.90.tar.xz
+e230eec960308c12a894b69b344275c8ff5b4c5318fa0979b0739ab6e5bc13f29008c2c104829bd5ef504d309847e57ed5abc045e614efd97635ec6c201e8353  ghostwriter-24.01.95.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kamoso
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt5-qtwebengine -> purpose
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-e7d38dd80babd5491a8691a6ba28feecd2e869df32f08255b91f16c89d91e4d477d26c2960b1d55885909c319265d352f9f6130df4aa4f9bf747229679c71a2a  kamoso-24.01.90.tar.xz
+c825518590f2964f7365ba9698400965194cb6204e516da7b5f288349d8f8722bbcd6fcfa46af5ae35e67e0e742e23812666ad8f0869248e42249e56b7383f07  kamoso-24.01.95.tar.xz
 "

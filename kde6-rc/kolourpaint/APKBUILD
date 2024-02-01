@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kolourpaint
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-359707cd26d2f1972863ada9e450b488fbd7598c9b0e211d49ce5cc1ae2d3b34ae9e523d3181c13f5d4eb187d4df3c96de01fdd1f07a1fa5558766092549fa85  kolourpaint-24.01.90.tar.xz
+e1c26bea8ec4331cfbdc6891b6adb6a657d4d4a6e8c1a3fdf37db005f994b18df089b589d3344b5ae670f5e6e528591d0c4bcae9412ed15d1440024d40bcd946  kolourpaint-24.01.95.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kdecoration
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Plugin based library to create window decorations"
 arch="all !armhf"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-b86f1a913c9279acdd5da1426102e39fc0539124ba63ebd59c65eafe65040fe0689c0c3c89e8932267963229ca3b627a8c3ed5bc1932ff14aa09e8cd433eef82  kdecoration-5.92.0.tar.xz
+68296a323f1cfc96506e2d840d95a233f7f86780a03e4d7575b0f9c679ef1ff3ef181146653895a4bc5cd1fad815b0d717af57078698cd811e44dea4f136c036  kdecoration-5.93.0.tar.xz
 "

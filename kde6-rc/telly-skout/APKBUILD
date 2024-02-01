@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=telly-skout
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Convergent TV guide based on Kirigami"
 url="https://invent.kde.org/plasma-mobile/telly-skout"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-f896d6f137cbf15154c3b60c12818875fa6d61013f9d11b09fd7164c007aecd0c8e51bcb97205e3c9c0065a2da53f0c393a292b9b5e0af841b764f11c961b081  telly-skout-24.01.90.tar.xz
+c2717169381c8dd7215b5c07c5ef7e1163c2d2706209f444be57c2ba5926656ebbdb4fe00290c65e8afe3e7cfa51508948194a49f9c6820b707a40a8716d42ee  telly-skout-24.01.95.tar.xz
 "

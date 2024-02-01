@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdeconnect
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Adds communication between KDE and your smartphone"
 url="https://community.kde.org/KDEConnect"
@@ -80,6 +80,6 @@ nftables() {
 }
 
 sha512sums="
-79fbe6887e6a180eeee3d2c5b036f4129b9701a15813db6055b0bd07f3bdc0e5f9a14cff07b7beb18a4ca473db7625ff5e7382078da840e1e66072c0df546b8a  kdeconnect-kde-24.01.90.tar.xz
+4f874457d3eed8e1984d1ca9eeee435e8a8a26aeb29d081c9d143c8f394422f419cd8c54192df77fdf3d48f4782e362428f72fdca5b772b87259b635297a7d1d  kdeconnect-kde-24.01.95.tar.xz
 0ccc2cb0ffd3892698b45bcf723cfdd23ad98f0e2b0436cd0a91d9ed13c6992853e2c4092ee8a0edc6216f1f262151e99e344b8f16c52237e9ff8de62fd37cae  60_kdeconnect.nft
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kalarm
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Personal alarm scheduler"
 url="https://kontact.kde.org/"
@@ -79,5 +79,5 @@ package() {
 }
 
 sha512sums="
-1dead896e15a1b0f43c818d0efbd128e823e6f239062dced48ebdf27a2235d3d5f7eed5e3b718987d05c1ff0902adf9a28f23e618247e82ea13e483977bbd6da  kalarm-24.01.90.tar.xz
+2820726a26c5f3dff9f691b36ded2730fcf8016a566c1a8e629766741738509cb1906cebe40610fd9005566150b89cfc06df34583b7715cb703bd1c3828315fb  kalarm-24.01.95.tar.xz
 "

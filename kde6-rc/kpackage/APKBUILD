@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kpackage
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Framework that lets applications manage user installable packages of non-binary assets"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-23c943b56750caff06b8dd47427b26aaab9f49d2556f31fe49f31841f43e0e6e26809ed0cceccee4e4cfed80ebefc414cb5d64a71a93e8317c3b8cba959f453b  kpackage-5.248.0.tar.xz
+49fe3f6d0e4715bfc4e9bb887c8dcf14e5586f815779af16ef9e9bbe54ae58c941ae8c570803278a99770cc2ade830aa3eea46905f1c33644bb5cde6bfd0949c  kpackage-5.249.0.tar.xz
 "

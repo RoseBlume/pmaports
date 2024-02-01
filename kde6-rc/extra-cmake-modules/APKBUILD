@@ -5,7 +5,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=extra-cmake-modules
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Extra CMake modules"
 url="https://invent.kde.org/frameworks/extra-cmake-modules"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-ae737eab43467b64f6d81ec542792ff199b316d2c55177f7ce45f122c72feccbe755ab98e89630b47d4945c29becdcdbf8942c51109e814db8d7501653a87a9d  extra-cmake-modules-5.248.0.tar.xz
+aa43000acb9b2ed72d8c377278d0d2c0ddc0a140cd58197bf0b4993b743eaa6ddb785ac27465680ab26d3c1d4c7e853dfbb40231b4704a63130cd595e56cdc05  extra-cmake-modules-5.249.0.tar.xz
 "

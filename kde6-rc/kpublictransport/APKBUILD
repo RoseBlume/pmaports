@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kpublictransport
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-46a8a984b3e074c68f84f784eb11d38d09ebe6a5a86749f56faafef9415f9c8a613ff1c3d24bde215195fb874e6a3208710f76f7199e66f69d5cea924a184ce6  kpublictransport-24.01.90.tar.xz
+138c10c947e838011b766c3142dedcfb7565158fe15c2d6aed1790fe362b3ddf642d2af29fd32e99a81bc64ed87f1b180aca594ac180ea8dbfbfc91cb31d6cf5  kpublictransport-24.01.95.tar.xz
 "

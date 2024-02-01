@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-firewall
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Control Panel for your system firewall"
 # armhf blocked by qt6-qtdeclarative
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-846bb54e691db9a31b21f52b93372203d0aa9e620257006dfed6fb3ab26659a14d075d70b7f8b85e9c8dbbae983f0d59d356179253c6ced1ca2bc0ff4675e83c  plasma-firewall-5.92.0.tar.xz
+3dd03674843b1c6d7eb351e1a5227c2ecbec21f0f6f1036ba3f38d72e6124b3caa93f46c400aac831f5ace94049faf74c543e6a3fa9fc8b3a1c577b6dacb2cea  plasma-firewall-5.93.0.tar.xz
 "

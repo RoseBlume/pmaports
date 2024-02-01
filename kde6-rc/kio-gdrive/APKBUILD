@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kio-gdrive
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> libkgapi
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-08c579668ca0b0a50e06a139625805374aa51c15782917a90a00595e6785fcde5fdda1c8310dcd2628f976d678ce01c49755b69b47c6876b4f98896a4bb5090d  kio-gdrive-24.01.90.tar.xz
+34783a64c987b470cc1d764ad0ac9e845889381875154479330ee8124f57127079d4760130850d9c5713b0dcf7487d579e975819a1af1dc1237205a2534f9f7f  kio-gdrive-24.01.95.tar.xz
 "

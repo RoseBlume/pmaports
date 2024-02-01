@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-mobile
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Modules providing phone functionality for Plasma"
 # armhf blocked by extra-cmake-modules
@@ -92,5 +92,5 @@ package() {
 }
 
 sha512sums="
-ada9e1bb7481127da97049676feb7249a66d44dd09476e6c2d0c02063733af997ae50f40fdab33eec22169caf979ccade88c7f5f882a3898d47de73ad0ff2d08  plasma-mobile-5.92.0.tar.xz
+768a03b053c4042b8d5f25cd2c05438eeaf657459e946a50bd788edf40ea53254f83f798444531ed2f54535b48c89026facc9f9b272493f3dc7c2bc94cd42df9  plasma-mobile-5.93.0.tar.xz
 "

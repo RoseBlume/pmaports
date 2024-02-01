@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-browser-integration
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Components necessary to integrate browsers into the Plasma Desktop"
 # armhf blocked by extra-cmake-modules
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-d531442695a93e3d1f29c906346eb443b37587985b4a85f845e01397ebe9a119b071e9fcd39b052c2cdc3de9a634c01068eb6a93bac03d4ab44caf423533f0f6  plasma-browser-integration-5.92.0.tar.xz
+32ee6e699a29f43f63bce431cd1d77481301fede67a931a431a2cc8eab107bebd9d373ebd57889b69fa407bafc9f33ad6ed215c725e5043e856e73365e72f347  plasma-browser-integration-5.93.0.tar.xz
 "

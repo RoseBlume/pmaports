@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=klines
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-ebdb923a486072eba6600ae4319d495865d1a2a0db5f392a3601356b25836acc15dcb184358862040b7d1885f42e98c701629374988097e301ceeecfa4a939b5  klines-24.01.90.tar.xz
+38fd014438fdfda1cdc7e70473688b52f9a9b016e579f99c5f4fa3a79e2591516d1b19c42e4c407567958f57be250aac627906cddbbc4838aed76455a2cf7e36  klines-24.01.95.tar.xz
 "

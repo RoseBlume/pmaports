@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=breeze-icons
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Breeze icon themes"
 arch="noarch !armhf" # armhf blocked by extra-cmake-modules
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-56352c026eeaafb81b664a5f609d999ada6e56c0f51e58e0e03ed6509183c7f8c39299a92622d36f14a0c825d84abaead4b6f6c9f40cbb3dca5486315cd03717  breeze-icons-5.248.0.tar.xz
+0a9feb9d11e8872db14169124c05129213c404a1725d78a19dbabe155cf1e56af736e8ea262633c8c6d2d6ed376270a69e0c2cf7a2e6e1f8023ae9d2e3569abf  breeze-icons-5.249.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kaccounts-integration
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # s390x, ppc64le and riscv64 blocked by signon-ui -> qt5-qtwebengine
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-12fa3c32af375bf916ced6277f3156fc511292b9905eb1a194342aa8b0ccb5c7944a27068a9dab87208f6dd1af859e2e608e1f750472a4feb8837af492ae2bd5  kaccounts-integration-24.01.90.tar.xz
+1c559b4f6276f283fe3e0334867a4811d20ab86f2809f197e9a593f28fd63d73c7da5195b2b573b00418b231e921c3e131485e188907a9785c129011e82086b8  kaccounts-integration-24.01.95.tar.xz
 "

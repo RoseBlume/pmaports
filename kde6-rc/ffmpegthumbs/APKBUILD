@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ffmpegthumbs
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # not useful on s390x
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-fa31927d07aa89a2d81c53d8408fb132183f2825f5a1664ad118cc10ce7a8351c2b3f9f2f1a23ab9a21fa347c61f9494791081c67d80853c172f64d573ade26a  ffmpegthumbs-24.01.90.tar.xz
+21f14b7ddc3e5df81c185e3d06cbf6d2cac9c8d856243721d6f1057838508f64a3a34a93e9c21d729954d099544f4508856dbe2159df3cdcf1536e0b35af2eff  ffmpegthumbs-24.01.95.tar.xz
 "

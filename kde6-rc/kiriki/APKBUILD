@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kiriki
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="An addictive and fun dice game"
 # armhf blocked by extra-cmake-modules
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-2f4f4a6d08b09c68db41c28d8a317b781249f3d2720871293325f539a8c7ffa3a6e5dcc0d6bb64a13138914b55788980eaef5fb501e06ce271b9e71f16a5fadb  kiriki-24.01.90.tar.xz
+1d533e09b8dca50aeb8a9e3122c302d1f8c3b3ee52b436121bc2d956ec3bb015818265e8d8948cc738a32d59b8c4bc5f93825c0abc9706dbab48d8b18e36c492  kiriki-24.01.95.tar.xz
 "

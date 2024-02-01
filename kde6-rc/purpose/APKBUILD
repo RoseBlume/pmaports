@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=purpose
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Framework for providing abstractions to get the developer's purposes fulfilled"
 # armhf blocked by extra-cmake-modules
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-e043091e8d628d7e8b274184bd18de06a7d78aab463c553191c580fd897d7e991c848ef16b96ab25879dd64f2b3bc8ee6d9b60c34b3c7c94714fef77649cdae8  purpose-5.248.0.tar.xz
+9efa22bbd12297c082ab697202980c586b32d11276b8d682176385a654177f9def23e6ea227da6f43a1b45e10da04cedc323f5039d75694de4201c9fcdd1c527  purpose-5.249.0.tar.xz
 "

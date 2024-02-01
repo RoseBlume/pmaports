@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=knotifyconfig
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Configuration system for KNotify"
 # armhf blocked by extra-cmake-modules
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-519a31c635d8aed6ea54419a44e73d1f7244c5dc5aaca7c5c60698f825ed40ceff28091c402030b940d60d4df8f750dfadb1ccfab6cbefd081cdeb6d1a0e515c  knotifyconfig-5.248.0.tar.xz
+5c8e29333ab0d68da9b16bc4e6e2c6a2a6f01424a541f4b087b2d603185d743af6b2e1fdf4ac1245f07b2d7b82cff6a311708ada3330f07a5af1450b83783ac8  knotifyconfig-5.249.0.tar.xz
 "

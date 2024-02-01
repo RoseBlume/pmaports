@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi-notes
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Libraries and daemons to implement management of notes"
 # armhf blocked by extra-cmake-modules
@@ -41,5 +41,5 @@ package() {
 }
 
 sha512sums="
-a5af53c2c5b650fd05fb65226455c60e8ea85db074dacb699cb380564e69396f07dd1bb363d101c892901f66d99fe18841585e068ebb8a6e25c32471bc8cfc85  akonadi-notes-24.01.90.tar.xz
+f0650170610e156f48a2fdbdc635d17cc170cfa42fe3eae1c2a2422c8324b2bf79a04432a42c64bbcae70733fa3052e53e7b7f22f2fca086222e81ae46ede56f  akonadi-notes-24.01.95.tar.xz
 "

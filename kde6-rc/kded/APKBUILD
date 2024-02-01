@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kded
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Extensible deamon for providing system level services"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-e79fbcfa42c5f5330c9656c2ddbf568307b532679eca8c0da585c678b335e13fbb6ad229001ca7fa0af61e33e793d1ce2a3a8f69a9525c662abf7431acd13bb8  kded-5.248.0.tar.xz
+6e9b131286fb5b8dae1c6e5c6ecf08def88ef8eb5b625f6e3c71197cd977f58b16b81399ff2807809a4753f5096c9bbca79595583e0700ef7f90e61eb69ad2d3  kded-5.249.0.tar.xz
 "

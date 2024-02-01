@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kcrash
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Support for application crash analysis and bug report from apps"
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-4279ea8d9a1e18b7fe2a0f70f109dcc9691df41b7a5e4ea22f24ff7f57a63ac64f7f1d743cbf78d7dfc2e15f812bc0715c8eb7bd4ad63a50828963506c7dfc50  kcrash-5.248.0.tar.xz
+04061e1e550ac6a40860db9e9454a0c71321f6b6a39c1d6c0ade17f3aebd132851ddd0956ec783f07b60fce2cf9362aacbdcf43dc8d001aae1f8b0d927eda393  kcrash-5.249.0.tar.xz
 "

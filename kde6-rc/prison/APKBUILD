@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=prison
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="A barcode API to produce QRCode barcodes and DataMatrix barcodes"
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-5ddc1c87e5fe972a203d823c0c53509fa53238cf1f742c61902bb6a6a3c1660ad243bfc56b24b13cdb87c10bd70e41e67f75633d0c0245c4af8253ca904f4f90  prison-5.248.0.tar.xz
+17446bcf29b83f7fc8ee6c58a028c7968d37f62ac1a4f06870a352988faa5694b171c40bbfa30de029f6a6b308e9839a4f55c47864385d623875937c3ef3937e  prison-5.249.0.tar.xz
 "

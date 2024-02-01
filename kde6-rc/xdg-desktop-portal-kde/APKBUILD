@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=xdg-desktop-portal-kde
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="A backend implementation for xdg-desktop-portal that is using Qt/KDE"
 # armhf blocked by extra-cmake-modules
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-00ee49a6b8c8553f933f395a840681b2ac00b3e5c072b53ab1ebef8a199d4c3ffba6629e83bd304ed094189679d62fa3fd939def7d4fde856a5e9a8210bcb753  xdg-desktop-portal-kde-5.92.0.tar.xz
+98dd0e415dd26787a6f53e2759064e56ec9267a9fe0b88e801f5b0a5c17024249475363af7f78d85646cfbc2c00796e7408f67da4226004aae6832c5c8ff1d75  xdg-desktop-portal-kde-5.93.0.tar.xz
 "

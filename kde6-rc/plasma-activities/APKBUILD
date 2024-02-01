@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-activities
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -53,5 +53,5 @@ libs() {
 }
 
 sha512sums="
-e5d157c59cd6b6f86f23a43a19c01c37b5ebdd0c9b45e3ee3a6ab291524ac84868daf9c223ffcadafa048bd508d78ac703848e67ccf05ba622ee4e8fa2af6602  plasma-activities-5.92.0.tar.xz
+e8d26de8b493472e7de287ca5b4b5ae28d6aaaaf2d02c29f9eef1e66a08e45a9d72ba4cd876d81a9011bcc4eedc705beec61fe90c177e07a1c8fd529e2581af2  plasma-activities-5.93.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-welcome
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="A friendly onboarding wizard for Plasma"
 # armhf blocked by qt6-qtdeclarative
@@ -62,5 +62,5 @@ package() {
 }
 
 sha512sums="
-e6b9781bf7d56f7673ccaf9f9312d1b05d3c4eb7cb636a914fe84ca9ffbefb616a02190c5e14a00f6bead3ef9362dcd76674fc2cbd2d15bebeb8d236105f5335  plasma-welcome-5.92.0.tar.xz
+cca763d4d70bc0d39fd10d2020fe82cc0b54f490d20fb1d255ad2b610e44488bf37218f99d1869704cec9c8499e948e7308b393bc7a47fe2934f17b9c778660a  plasma-welcome-5.93.0.tar.xz
 "

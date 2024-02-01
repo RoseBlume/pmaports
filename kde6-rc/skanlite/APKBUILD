@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=skanlite
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-50296fd2e8907331812fa6d366b7440916b8c790ab21d1328e91f78308a786a312c58194096f398b02d08d46c1433d9c4cad7148cc34e7b58cf70482555308ba  skanlite-24.01.90.tar.xz
+ab232cefed1cbf54bfed9f81903a0b647d4aa2cc12d9e294dcb6ef8ae6f56460c7fbee74d5a62980dcb69378e726c8669292337ed5d7a814a055f56c63813144  skanlite-24.01.95.tar.xz
 "

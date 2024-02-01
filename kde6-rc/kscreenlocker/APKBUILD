@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kscreenlocker
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Library and components for secure lock screen architecture"
 # armhf blocked by extra-cmake-modules
@@ -79,7 +79,7 @@ package() {
 }
 
 sha512sums="
-600f68229df28e12811dffea90ef6f19606948abe6d37494f2fd92843d5246f0aa9898f6c07c9176cca228ef62b6203464d0454ea9d766967746471f7a373a99  kscreenlocker-5.92.0.tar.xz
+512e84f049910053f8b3bc61ea513c6b02f18cfa14ddb7dffa4ac948cb931470f7cbcfb4af7d37f47063141b675fb39f0e8711f6616cba40267a372849968ba8  kscreenlocker-5.93.0.tar.xz
 cdbc45fb74a3c43fb2302fe09bf2f9f644ca93693e0110cf748c403762236aaeea8284a8d21fc495014c69b6d5fe4789aaff7687ce9f03dda270490fa5042e2b  kde.pam
 fe2f244b73b5cccf4b7125b9e3cac0a35566840e4ba2f69937fd8053aa56af71ee43dcbfa9c0f79de9ebe31f656e98a5d38955f77560be5c3535b08215ad8789  kde-fingerprint.pam
 2ae866d25224ba345ea9d5ddb2fce668de5c51d1cfbb4d7a048c50107ccd6cffc3231a46855599c0ba3d62ff002a26e45b69d9029f88f4ab42661465a5e526c5  kde-smartcard.pam

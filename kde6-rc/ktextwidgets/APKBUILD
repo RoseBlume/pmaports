@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=ktextwidgets
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Advanced text editing widgets"
 # armhf blocked by extra-cmake-modules
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-7ca1648ec68f665605fe687c843bf3f3754c11166ffcda630ae3070bfaf552ba6888d7f202f5f1a3301349e5a1f98693f1705c6cbf20f39f4f85f8eaa5bd8e2d  ktextwidgets-5.248.0.tar.xz
+86997d22c28bdf4bc1316928f4260d36062e112e57bca14b80f89465935fb3a399efd60f3f048386028a86456a7535b0d45e66f43335112d29773424b75699b9  ktextwidgets-5.249.0.tar.xz
 "

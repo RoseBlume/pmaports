@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=bluedevil
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Integrate the Bluetooth technology within KDE workspace and applications"
 # armhf blocked by qt6-qtdeclarative
@@ -62,5 +62,5 @@ package() {
 }
 
 sha512sums="
-dc062685a6420f75175a0194d11887f5852591beddc7928b0f1699abcedb8c95665241c34effa4608eb5ca203d25c38e93213e35b806e25c2300c86e19e68f51  bluedevil-5.92.0.tar.xz
+fb657b4458549a8209d5ca9bfd761d55661cd758941c77b5bbffacc2f6061e918b374010ee7a9562812532a0ffef94b9831439c10d67a29fbfae4ad282f72150  bluedevil-5.93.0.tar.xz
 "

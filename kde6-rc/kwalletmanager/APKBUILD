@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kwalletmanager
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -58,5 +58,5 @@ package() {
 }
 
 sha512sums="
-1cd4b1fe0c38d788298b527c0c9c41a26b33e0eee8f2f803aae0bc58f317e631cf4a1ceb64fe495e8f33eb0a340e0cbcfc35904ec489e42dd9424e61c9a998c0  kwalletmanager-24.01.90.tar.xz
+5ac620c99e35dbbf48c7313dde6f66fe2c962554359b1c72565d3ecbce84f5b953ed2cab6c69aea19f4375d440e8e439ba998ee132946f29efde75aa824fd03c  kwalletmanager-24.01.95.tar.xz
 "

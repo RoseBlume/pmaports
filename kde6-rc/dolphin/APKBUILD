@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=dolphin
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -77,5 +77,5 @@ package() {
 }
 
 sha512sums="
-dc14f3f2bcea4fe19b54b0c5cd50ad633eda1707ce1adb551b27b58dfdf2288bc2990aaeebbf2245c36f7c0516c677ec8a68c7115179392994986974c66806d5  dolphin-24.01.90.tar.xz
+2b58357c6c28c63148b3ec0ecbf772216849cbc33ccec7b12c1aae2b6c08777289f15375c0f5e05d64df0bef809274e833c943e6f51706fc39483c666956a3f9  dolphin-24.01.95.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kwidgetsaddons
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Addons to QtWidgets"
 # armhf blocked by extra-cmake-modules
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-acbe5ac303e422d4ec7acd5432b04a2f27b5222e9510ff2be223ad1b6a6a922c6683b5ba18feae0663777764ddb26c72f058b24841b18449680e7739994cf3f1  kwidgetsaddons-5.248.0.tar.xz
+9c7e08da744c09b0e57e72f87f2177ada2b855227567ffa6099de1286bf6a4acad550ba780cc5d3612f8f72e083dc7c495b4e6d3c7438bc98f5fb3174f425adb  kwidgetsaddons-5.249.0.tar.xz
 "

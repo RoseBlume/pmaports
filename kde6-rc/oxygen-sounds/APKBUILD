@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=oxygen-sounds
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="The Oxygen Sound Theme"
 # armhf blocked by extra-cmake-modules
@@ -41,5 +41,5 @@ package() {
 }
 
 sha512sums="
-55829688d5172b00899aa6f0d7f4f3b27f1e0d7654368434e806cf59d41ebd98f022205dcc66ecc623503fe32ae066f6797667da8132b4d5f57ec40caa121ab6  oxygen-sounds-5.92.0.tar.xz
+805dae92eebb721878f17a75940efa53638f8575f81c2666995ff496df5885cecd9e8954fece95f823f5881e2ede2522e9713d249eeb8d3e4aab08a933811f1b  oxygen-sounds-5.93.0.tar.xz
 "

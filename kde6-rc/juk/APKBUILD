@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=juk
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -58,5 +58,5 @@ package() {
 }
 
 sha512sums="
-36013e612d1dfb4b401ddd7051bfd7812be92a63c872241abba814c5cb2389788e376a8fe5b04ed8c68998a3e9861f9eecdc2c814098560b355132d114273725  juk-24.01.90.tar.xz
+b11796d11723a120ef572298cb3c0ef10170d21c60ed77eee5979f1fde636bcb581a7d4c16804b7e3c74be7624f0926b5e0ec6df720d3362d33f50dd2c057293  juk-24.01.95.tar.xz
 "

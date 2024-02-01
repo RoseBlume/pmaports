@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=audiotube
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Client for YouTube Music"
 url="https://invent.kde.org/plasma-mobile/audiotube"
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-5ff60f5312b42692cb5a93311384a83a5c8d617fb6241da41d99877b4f85f46ce5283379149ae555ff0b17b073e6bd13c7853b69a545a10de89a1f6149386daa  audiotube-24.01.90.tar.xz
+a346f6b8b4a8721814b5ccbefd53510f53ab1eb8cc3eb8b151a880075c00ae1e0ca9e8307382add772af9e5e8639ff7a7c0271fa6b0b33fdab4cfa8c5fb05591  audiotube-24.01.95.tar.xz
 "

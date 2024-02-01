@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kipi-plugins
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="A collection of plugins extending the KDE graphics and image applications"
 # armhf blocked by extra-cmake-modules
@@ -43,5 +43,5 @@ package() {
 }
 
 sha512sums="
-76c047482f491268170e9124486e1e60e9a3b8e9e2a67dda5bd9c7fad4369ffc9c446fb7d906aab818dbe74c02fc6d86e123db626d87a48e730333722044c2d9  kipi-plugins-24.01.90.tar.xz
+0b8a47796dd5abc7fb70a152035fcbdf53dea1b77f093c18b680cd7e2ac11b895d29bb9bc94eb409fbcb6550b163ad6240948967e0158427ccc43484afba8885  kipi-plugins-24.01.95.tar.xz
 "

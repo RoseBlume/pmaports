@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdenlive
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # ppc64le mlt uses 64bit long double while libgcc uses 128bit long double
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> purpose
@@ -56,5 +56,5 @@ package() {
 }
 
 sha512sums="
-cc22091b11dff162f9d601b7cfd11db1ca300a017c233ae6ea1ba3b4bdbad64f451e61a9f0632da051b7f52e4eab1290e50cacf9631d3802b19a9ca33f2a23a3  kdenlive-24.01.90.tar.xz
+d5c66a9e3078877c5983084c89ab82e8b02b03a85723eef068d5509de8f736f9adec69f62baa3d6312fb0ef62c54aa7ef75fde69906709d7ecd079879db05c78  kdenlive-24.01.95.tar.xz
 "

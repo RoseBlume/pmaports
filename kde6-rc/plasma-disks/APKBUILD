@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-disks
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Monitors S.M.A.R.T. capable devices for imminent failure"
 # armhf blocked by qt6-qtdeclarative
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-a6c736cd6b8def552756fb0faee97dbedc181a4b5419fa8355607aff39cf21b2de628e08391784af1987470707cb33e74c8bafa1043bc7966c88e0b73eb28f23  plasma-disks-5.92.0.tar.xz
+95cca9241cd417330246af5b5dae46fa60233c2618ac213549c07d60722a514e29d2734cb5c89d5eb9f81a6014bbb814326a4d58dae87a88921c7f17eedc7d8f  plasma-disks-5.93.0.tar.xz
 "

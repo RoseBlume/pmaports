@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kosmindoormap
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -61,5 +61,5 @@ package() {
 }
 
 sha512sums="
-f778d1f5b672dda2e869cd0b39ece891210b673602d0c1f417424094014a4706461603ecfc833b6fbc353e757aa0447559f01472d6f7730f1a91a36e4c32cbfd  kosmindoormap-24.01.90.tar.xz
+d8183b393850a1a177e5b5d69b80a013256a337905a5481a143d27819ce8ae336fc3e694df65230ff01dbd5f48c72f009c982a558af536b7f24466a2dd1812f1  kosmindoormap-24.01.95.tar.xz
 "

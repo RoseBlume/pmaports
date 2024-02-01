@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=flatpak-kcm
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Flatpak Permissions Management KCM"
 # armhf blocked by qt6-qtdeclarative
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-665e4a081676c4581cedb3b8085e5946ae8f5f10d1762701059b8e364a36de45f5a2e827caf906e806b2e9cda57fecb84cda602e5526fadd7006bce1a2dc2cc8  flatpak-kcm-5.92.0.tar.xz
+ea953e43168752015dfd1276677af55a906c3ac387fc085cab39595174245ff347b7d24d38bc80c24969a24b9affa962028d48a3435f963940ab7a0e25a5853c  flatpak-kcm-5.93.0.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kontactinterface
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-02f17380de22261c8cf41a99c5cc3a55cd88a0f4e4b125a1637b8fead60acff5ddb512a4e57d6264400edb533247c9433634f4f1889397106d40163389df121f  kontactinterface-24.01.90.tar.xz
+43aec6d8e4ae825d76c05ff8e8cc1abb12a5fda2bd36f036d75dc51ceb0d309a768175a16bf6e4cc9a5f2482d32b07d555d8701404b9199c6f9b2c911d44f910  kontactinterface-24.01.95.tar.xz
 "

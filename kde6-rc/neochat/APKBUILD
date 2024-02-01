@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=neochat
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="A client for Matrix, the decentralized communication protocol"
 url="https://invent.kde.org/network/neochat/"
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-10c94e7a26b81a40ad6c02bca4a06f659f5bad1b810d3547f5a3d5564e25d203a61e1cad8c7f07244934c1171a55486d16d1464ef7707616ef91d818bed4aa28  neochat-24.01.90.tar.xz
+f82a83825cb1c0816feedeadfbcf192cb8fe0119759bc165a033f9012084d5ec6cfaac96190cedaf7f4f0670beb3f234f3bb9148eb4f97d108d801a357a0019c  neochat-24.01.95.tar.xz
 "

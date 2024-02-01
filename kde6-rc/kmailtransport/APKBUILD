@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmailtransport
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Manage mail transport"
 # armhf blocked by extra-cmake-modules
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-15800ee87bfcb54f758b9b1492a5c7937e97471c0035bbe27eb5a6671da8bfb9a6289827783292584dec026c9e07a6a5b6f6d537029d8afa1eb5551ce7c5f9a0  kmailtransport-24.01.90.tar.xz
+5dab4bfdaedb0a6edb0b38b87be8cffaf8b6688af8a5117e7a42b336fa3a7f7a799a6be57aed1ba2a3497001195697bc6e317e8cb00967526cda9b294fe079a6  kmailtransport-24.01.95.tar.xz
 "

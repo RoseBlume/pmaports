@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-vault
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Plasma applet and services for creating encrypted vaults"
 # armhf blocked by extra-cmake-modules
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-cfccb1836617e2e7e923819e748bd7a6bdb8d0e4a973a57fc96f873bf0faadac0d62b092462feee6a88ecf4d4065e26009b243974b9e535d3b08ba3fa9d9f362  plasma-vault-5.92.0.tar.xz
+fe4c3aa15666adfe13c825f0a1bff8d0c1804dc847ccddd81602cb594f5255f19665ab124cef0956c7b512483e36fc218cfecc015d3f2a82c9812577a6fd60c9  plasma-vault-5.93.0.tar.xz
 "

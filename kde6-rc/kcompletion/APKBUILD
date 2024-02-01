@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kcompletion
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Text completion helpers and widgets"
 # armhf blocked by extra-cmake-modules
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-f50a41b26c85569ee23d107370ed94651eeb50074b5ced7bfb3870b10ff1685008356991086d4fcd3718d3dfb1b48e774f382fe0b5da5176a4c1d032bd9e50dd  kcompletion-5.248.0.tar.xz
+33c5fd588272d15f81b1f293509b1d5dd69482efed2568fdad14399f2f7d191bae7d9fb8d6f2620889f6b48045ed2ec2e16201dff42c16b205c9e219ad8629e8  kcompletion-5.249.0.tar.xz
 "

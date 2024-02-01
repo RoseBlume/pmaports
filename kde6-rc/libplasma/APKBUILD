@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=libplasma
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Plasma library and runtime components based upon KDE Frameworks and Qt"
 # armhf blocked by qt6-qtdeclarative
@@ -47,6 +47,7 @@ makedepends="$depends_dev
 	"
 checkdepends="
 	hicolor-icon-theme
+	xcb-util-cursor
 	xvfb-run
 	"
 
@@ -78,5 +79,5 @@ package() {
 }
 
 sha512sums="
-dc83adbdd3c9db02b54f5b50f9f9ec1ecea6367bf4352bf5fe306711ae836be541729a1cc85e98179460df7a3f05989d6a2ae66344544f6aff9a77c69d102770  libplasma-5.92.0.tar.xz
+436f9954b525b5fb9b97f9ee0724b2ac966fee0a674c499270a3faa594c59a89e2853add58be3177ca613621373abbff96cd5d974044a2ab7010e9d042c45ffc  libplasma-5.93.0.tar.xz
 "

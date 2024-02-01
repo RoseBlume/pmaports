@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkcompactdisc
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -41,5 +41,5 @@ package() {
 }
 
 sha512sums="
-32924ee4559e147b08f8150af7e05798e0c220e9516941362ea26991f8b92a5bb4a3ca96f2ce32640a56ebf1b9b9b845189f5287848ec35522c0b3a7c414c4e5  libkcompactdisc-24.01.90.tar.xz
+b2f742dd84f4332c9ad7e7296ffbf6cc778086f56b213789b3babaadb1f5cba37e1a793d45de6273c9b391722bbf7528269bf5a55247221a84b5d03957732b23  libkcompactdisc-24.01.95.tar.xz
 "

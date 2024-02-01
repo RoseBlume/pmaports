@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=yakuake
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 arch="all !armhf"
 url="https://kde.org/applications/system/org.kde.yakuake"
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-b9d02b929ababa9f4e720f4c374ea5c933ce2fd92231a2e066d0a5752c46c7196524dc7b41499cba879529b5c69d32ffc578b3373ca8fc27f364dcd894d796b4  yakuake-24.01.90.tar.xz
+11000f051ff53482d4738091541c30b12f6ab2ad2419520d7d8b3f2ed6db7fbb92f85661461ffd98e1ae6a9a321b0d0343339d2bf05e0b85dce755fdcc43d46e  yakuake-24.01.95.tar.xz
 "

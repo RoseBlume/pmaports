@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=filelight
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-1e26fd0722ec2ea2b2744b03a67414ce0221f02b99e5a7d74869f6a8af032db750ff5dca96cc22569d4db4c11ce0439cb68efe91af7ab70aa29c49a729ee6d3c  filelight-24.01.90.tar.xz
+90b45810c55392a7956580241de70c811cffecd30ab6f43834c72a7cfdfbdd1595bfaa68c2dd390eb9e32bc93e3526750752e638d9e340f81d2075fdff4ed445  filelight-24.01.95.tar.xz
 "

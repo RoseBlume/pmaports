@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdebugsettings
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 arch="all !armhf"
 url="https://kde.org/applications/utilities/"
@@ -23,7 +23,10 @@ makedepends="
 	qt6-qtbase-dev
 	samurai
 	"
-checkdepends="xvfb-run"
+checkdepends="
+	xcb-util-cursor-dev
+	xvfb-run
+	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/utilities/kdebugsettings.git"
 source="https://download.kde.org/unstable/release-service/$pkgver/src/kdebugsettings-$pkgver.tar.xz"
@@ -45,5 +48,5 @@ package() {
 }
 
 sha512sums="
-16598297ade0ea48b78be3bb100c70ba293adb0e606f1a177c37549d4f82bd63c99c861987eaac5dc9e8748deae917228d38c0f651a707a8ecd302a0f23f9d98  kdebugsettings-24.01.90.tar.xz
+3553738f67075f62948b1544f4f136e9ef1ba6cef800897bea5cd66646e21c381febcc9f903edaba04f459f3e1c3ad1897d16ebd80f7ffa54f9127defdbe42e9  kdebugsettings-24.01.95.tar.xz
 "

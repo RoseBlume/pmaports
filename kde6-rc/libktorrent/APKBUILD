@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libktorrent
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-2fdf31b64540d7e9ba56370db1a9ee0c34eb0faf4fd1d2712144682dc58a39d15118350ba3094b8ba8d6b47866f96071fbaa47e9d0b63bc6d9e166fd6caebf2e  libktorrent-24.01.90.tar.xz
+c9d216b2d45f2fa4d1e62bd2d39fba4c60e1ff23ae00d1a420a0a690242e49dbb26dddcc7f7a96f57be50d6e5c594510d9266c72596f779b1bd5a269f2b312f6  libktorrent-24.01.95.tar.xz
 "

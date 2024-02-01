@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kwallet-pam
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="KWallet PAM integration"
 # armhf blocked by extra-cmake-modules
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-bd4d1740096aac0b962f360296f82c1211ece65c2baf7ebfe03896413a91e5631e9c2fbc3aedc0fefae88394a347d6357d7b160c237b8e87e79eec9cedcb4433  kwallet-pam-5.92.0.tar.xz
+9bea625ce5c28aba49e7f2715f776f411d23e218805582da049b987a7f657605555f57271023135e5086591bca6ca24680e00a068165118c76f9c7ef587d2336  kwallet-pam-5.93.0.tar.xz
 "

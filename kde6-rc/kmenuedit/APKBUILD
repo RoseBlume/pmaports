@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kmenuedit
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="KDE menu editor"
 # armhf blocked by qt6-qtdeclarative
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-81334f5aa9e0e3fedac98d6a4afd4e8abeeaa5e03913f5c86e8f2897c5f694767e1016f31e21d20034f0d147c74041f1ee6b3f6405e31da0ce2b4bd961509e9a  kmenuedit-5.92.0.tar.xz
+9e43a3aca35e8489940e371bf60368a2938cccf65dfd7f5db89bcbe087c11e6945056249e6678a0c72b89e8dd3c828d0b60f48877ceab3f98a46aa2ce3a991ec  kmenuedit-5.93.0.tar.xz
 "

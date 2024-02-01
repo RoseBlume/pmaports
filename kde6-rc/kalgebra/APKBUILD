@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kalgebra
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-1545f2f1e6d33f64ea7229d9888966dd98be4caf6d24bc84dcd5847be251df788ea7f7d1e9461cd0960a5e1b6a89b9e0f93a659e2fe8621071895b14eb99bfe5  kalgebra-24.01.90.tar.xz
+ffccc0ee8432423daaf9e07206b75ec6abbe6015c9b9cb8a37b0f505748525aad8906c67186978ec710c795f5094e0487a1c2287317dbd6df326d98929d38705  kalgebra-24.01.95.tar.xz
 "

@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kauth
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="Abstraction to system policy and authentication features"
 # armhf blocked by extra-cmake-modules
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-66ac493080481a705bbef689127649997805b727b24febed52ddab4a0553b88016e06b95382d06d05464b05f9033deb799634176c4e4886cf2a1c2ba696460cc  kauth-5.248.0.tar.xz
+5f9d269a321484e5748a2177a08f096ec5be4e99dadb67ce506b81db785826f7c6234a66344557341683039d4397d2acd87950d05b06c1e8a1f636eaaff8439c  kauth-5.249.0.tar.xz
 "

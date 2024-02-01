@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ktimer
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="A little tool to execute programs after some time"
 # armhf blocked by extra-cmake-modules
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-53dd58103a3c6d401c86ee0dc4cd5e75cf73936093a4bbd6a014b38054088b6440284bb0b3678cb2c071480ff133b4580bdac6f1563c0922ce7cb45b3cfcacec  ktimer-24.01.90.tar.xz
+bc13d0ef128ae314af71b14da95d46308745c8f499f9de37a70ff5777e5afdc92d00da25fe73f2ce471a7e206f56a38f7fc220d1aad4edcc71afbd5929bab144  ktimer-24.01.95.tar.xz
 "

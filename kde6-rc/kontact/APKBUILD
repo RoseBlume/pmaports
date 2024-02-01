@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kontact
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-29526864d608444268eee6d9757bd7716ecef19dfd256ca377c3ea2d894f5392d6eb784fa917378b76c1aa3ae1124a3f49fe927ea98574f1b27c45c2cc4296ed  kontact-24.01.90.tar.xz
+bbf17fb497dfd18de3a8e0a9ff5717b3db8e9c0cf1cc2556aaf82816c8b164fef96a352b2b7ec1b46425d324e63bf8bf88b2aa9572a60c705a9e1ab9faf5c180  kontact-24.01.95.tar.xz
 "

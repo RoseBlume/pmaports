@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkdcraw
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -40,5 +40,5 @@ package() {
 }
 
 sha512sums="
-e844225032146f4839184b674c4a3e5bc86587f23dab95fe3b867fce7ffa1ac19add832c557c20ad8375628d5bfe2b1b630546d84a29bd4e7383be46aa2163f1  libkdcraw-24.01.90.tar.xz
+90f69a264f3cb9789a149fc0888861af5abe11aa27e4fbccdfa48e5796b411bb456d21c81c1193613d0dce0cf1dc275c7e07d3fb9798565d457e3b68ae1a0059  libkdcraw-24.01.95.tar.xz
 "

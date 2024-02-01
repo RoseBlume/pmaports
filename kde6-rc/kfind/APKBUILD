@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kfind
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -44,5 +44,5 @@ package() {
 }
 
 sha512sums="
-0bb1b5efadfe28cfe493e0821bb8a9f69f8f8cd67827ae38061807589f04dc2643838ebcba0bf59b1ed2b59dc5ae44ec124f5d1eba32ae1e41890f88b1ac39a3  kfind-24.01.90.tar.xz
+9f37da7a9ff737e71bf5d4b556d27a6470ca9acef1a650c1737966d500aab651f3e0fa8ff8a0d4249ec3d1bfc0d1ae73d2971761153288cef9f132bae58d826a  kfind-24.01.95.tar.xz
 "

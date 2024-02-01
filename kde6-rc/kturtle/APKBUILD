@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kturtle
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-e93303711ae75121a5cc484858ff35ad89668a9f9856eaece4fa5c4138e034dd824d50b372fa38e72d590c4fc76ea118eae9c97a357f2f7653d7906085a5a457  kturtle-24.01.90.tar.xz
+fb212da6eb69aefb4f6aab849dff04da5dafc012eab8e17196bb8d87f80207d9e07e20c51975138b0e9bec2e0dfbcd98ebbed0f50933155ae6177184fb6b713a  kturtle-24.01.95.tar.xz
 "

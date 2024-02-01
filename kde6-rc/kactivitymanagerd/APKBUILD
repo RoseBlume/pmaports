@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kactivitymanagerd
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="System service to manage user's activities and track the usage patterns"
 # armhf blocked by qt6-qtdeclarative
@@ -54,5 +54,5 @@ package() {
 	rm -r "$pkgdir"/usr/lib/systemd
 }
 sha512sums="
-f3db380e87e87c6c3267f7d5195337ed828c25fc8dc300501a838ca90e86da22fbaa911a16fe516d265d18735d92b769a87defbe6333a30f3f75df02edff1a8f  kactivitymanagerd-5.92.0.tar.xz
+b0731fb3924bd02e859ba895d75784eaf25c8942a1a0105b69bd23c0b34dc369165114f1fc93092f87840f4502d6d3244f5ba46e9d274972202516f082b1e80a  kactivitymanagerd-5.93.0.tar.xz
 "

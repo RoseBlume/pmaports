@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kquickcharts
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="A QtQuick plugin providing high-performance charts"
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-6045141d7e75ba73dcffe216ee9084b4516e2a6ffecc923842751e0259313d12444181d1bba9f427ce22bbe485c9a47927d70b90c9fbbf8de45c71b6b5ad2d8b  kquickcharts-5.248.0.tar.xz
+6c518e337b28e871e3e4ae102cf52ba485b25cd47d0e5d85d97cd567d6a66b3eca0a6a6bf27101aa4290c587c40001de2cd6e0a5bce9df57b5ff1abdb449e944  kquickcharts-5.249.0.tar.xz
 "

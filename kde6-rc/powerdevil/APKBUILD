@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=powerdevil
-pkgver=5.92.0
+pkgver=5.93.0
 pkgrel=0
 pkgdesc="Manages the power consumption settings of a Plasma Shell"
 # armhf blocked by extra-cmake-modules
@@ -78,5 +78,5 @@ package() {
 }
 
 sha512sums="
-da66c8d673b48e66d589edab34906dd0ee5c8d0f406d1441b5cf43a957213d5755540a2410c8f726e452d17602c65e0421954d47aced8c9678b56b7148b34dd1  powerdevil-5.92.0.tar.xz
+8a6e4e98bc728aedb6441d5052aed39922f83a1255a16a1ae60969afedf094f83af08caab54fd3d39c7168bce450ef38e9692ebb0f2a7257e57b157f90bdf6ff  powerdevil-5.93.0.tar.xz
 "

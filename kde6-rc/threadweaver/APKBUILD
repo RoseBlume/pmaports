@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=threadweaver
-pkgver=5.248.0
+pkgver=5.249.0
 pkgrel=0
 pkgdesc="High-level multithreading framework"
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-8bcbd0230d0326002cc82fcbe0c379afb7c57589671617e1befbe2611fb6987d035fa1e8dc67ad27ed4bdc845a7848b6568c809357a32ad7653e2c27f5720bb4  threadweaver-5.248.0.tar.xz
+98f573932056f430432843fc34e66d34b567f4ec9d7c80a6821388584b5e6156a79eb39758fee4d5ae86ba5b4cbf3fdd11db0e3d5cbe72ad230814d9d9e54853  threadweaver-5.249.0.tar.xz
 "

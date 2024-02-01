@@ -4,7 +4,7 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmbox
-pkgver=24.01.90
+pkgver=24.01.95
 pkgrel=0
 pkgdesc="Library for accessing mail storages in MBox format"
 # armhf blocked by extra-cmake-modules
@@ -38,5 +38,5 @@ package() {
 }
 
 sha512sums="
-b5ce2d5f00e947422faabf1f5df34501571e8816013cb8487ff90f09398a3d7b66ec5778361f1317a4aa2bea49f8da3af65cf78a7966f3c9710c913146df772b  kmbox-24.01.90.tar.xz
+d4d2ea5ce9da71d4dae6ac525c7bb083cbf070c57629c947480092b89b9e74a0231acfaca44f970842f10fccf2eb8958bcc33df615d86d5cefdc3d4deb06ff3a  kmbox-24.01.95.tar.xz
 "
