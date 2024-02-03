@@ -1,0 +1,123 @@
+# TEMPLATE pipeline for integration tests
+image: alpine:latest
+after_script:
+  - .ci/lib/move_logs.sh $CI_PROJECT_DIR
+
+variables:
+  PYTHONUNBUFFERED: 1
+  # This includes a hack to install the packages that were built in a previous
+  # pipeline (with different signing keys). As for some reason even though we
+  # replace the signing keys in pmbootstrap with the ones from the previous job
+  # BEFORE creating the chroot, apk still rejects the packages :(
+  PMBOOTSTRAP_URL: https://gitlab.com/sdm845-mainline/pmbootstrap.git
+  PMBOOTSTRAP_TAG: caleb/allow-untrusted-hack
+  # defines PACKAGES
+{{ variables }}
+
+# Variables DEVICE, UPGRADE_TEST, and BOOT_TEST are set in the
+# parallel matrix below.
+
+stages:
+  - install
+  - upgrade
+  - boot
+
+workflow:
+  name: "Testing for $PACKAGES"
+  # Default rules for all jobs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+
+install:
+  # tags:
+  #   - kvm
+  stage: install
+  # So we can fetch the packages that were built in the parent pipeline
+  # and install them in the chroot
+  needs:
+    - pipeline: $PARENT_PIPELINE_ID
+      job: $BUILD_ARCH_JOB
+  before_script:
+    - apk add curl sudo
+    # Avoid using the local pmaports checkout so we don't build packages (and sidestep annoying permissions issues)
+    - (cd /tmp ; curl -fsSL "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh" | sh)
+    # Use the same keys as the build job so we can generate an index
+    - mkdir -p /home/pmos/.local/var/pmbootstrap/config_abuild/
+    - mv packages/config_abuild/* /home/pmos/.local/var/pmbootstrap/config_abuild/
+    - chown -R 12345:12345 /home/pmos/.local/var/pmbootstrap/config_abuild
+    - sudo -u pmos -- pmbootstrap config device ${DEVICE}
+    # Use the console UI so we pull in some additional system packages
+    - sudo -u pmos -- pmbootstrap config ui console
+    # For QEMU (ignored for other devices)
+    - sudo -u pmos -- pmbootstrap config kernel virt
+  script:
+    - ARCH=${BUILD_ARCH_JOB##build-}
+    # For now we only support packages that are pulled in automatically for the device.
+    # Introducing support for testing packages that must be explicitly installed requires
+    # having a job per package and doing dependency/conflict resolution.
+    - .ci/lib/copy-in-packages.sh $ARCH
+    - sudo -u pmos -- pmbootstrap install --no-image --password 147147
+  artifacts:
+    when: on_failure
+    paths:
+      - log.txt
+      - pmbootstrap.cfg
+    expire_in: 1 week
+  parallel:
+    matrix:
+{{ matrix }}
+
+upgrade:
+  # tags:
+  #   - kvm
+  stage: upgrade
+  # So we can fetch the packages that were built in the parent pipeline
+  # and install them in the chroot
+  needs:
+    - pipeline: $PARENT_PIPELINE_ID
+      job: $BUILD_ARCH_JOB
+  rules:
+    - if: $UPGRADE_TEST == "true"
+  before_script:
+    - apk add curl sudo
+    # Avoid using the local pmaports checkout so we don't build packages (and sidestep annoying permissions issues)
+    - (cd /tmp ; curl -fsSL "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh" | sh)
+    # Use the same keys as the build job so we can generate an index
+    - mkdir -p /home/pmos/.local/var/pmbootstrap/config_abuild/
+    - mv packages/config_abuild/* /home/pmos/.local/var/pmbootstrap/config_abuild/
+    - chown -R 12345:12345 /home/pmos/.local/var/pmbootstrap/config_abuild
+    - sudo -u pmos -- pmbootstrap -y zap -a
+    - sudo -u pmos -- pmbootstrap config device ${DEVICE}
+    # Use the console UI so we pull in some additional system packages
+    - sudo -u pmos -- pmbootstrap config ui console
+  script:
+    - ARCH=${BUILD_ARCH_JOB##build-}
+    # For now we only support packages that are pulled in automatically for the device.
+    # Introducing support for testing packages that must be explicitly installed requires
+    # having a job per package and doing dependency/conflict resolution.
+    - sudo -u pmos -- pmbootstrap install --no-image --password 147147
+    - .ci/lib/copy-in-packages.sh $ARCH
+    - sudo -u pmos -- pmbootstrap chroot -r -- apk upgrade -a --allow-untrusted
+  artifacts:
+    when: on_failure
+    paths:
+      - log.txt
+      - pmbootstrap.cfg
+    expire_in: 1 week
+  parallel:
+    matrix:
+{{ matrix }}
+
+boot:
+  # tags:
+  #   - kvm
+  stage: boot
+  rules:
+    - if: $BOOT_TEST == "true"
+  script:
+    - echo boot
+  parallel:
+    matrix:
+{{ matrix }}
+
+

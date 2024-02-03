@@ -7,30 +7,20 @@ after_script:
 stages:
   - lint
   - build
+  - test
 
-# defaults for "only"
-# We need to run the CI jobs in a "merge request specific context", if CI is
-# running in a merge request. Otherwise the environment variable that holds the
-# merge request ID is not available. This means, we must set the "only"
-# variable accordingly - and if we only do it for one job, all other jobs will
-# not get executed. So have the defaults here, and use them in all jobs that
-# should run on both the master branch, and in merge requests.
-# https://docs.gitlab.com/ee/ci/merge_request_pipelines/index.html#excluding-certain-jobs
-.only-default: &only-default
-  only:
-    - master
-    - merge_requests
-    - tags
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 # device documentation
 wiki:
   stage: lint
-  <<: *only-default
-  only:
-    refs:
-      - merge_requests
-    changes:
-      - device/*/device-*/*
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - device/*/device-*/*
   script:
     - .ci/lib/gitlab_prepare_ci.sh
     - .ci/wiki.sh
@@ -38,10 +28,8 @@ wiki:
 # testcases linting
 ruff:
   stage: lint
-  <<: *only-default
-  only:
-    refs:
-      - merge_requests
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     changes:
       - .ci/*
       - .ci/*/*
@@ -55,7 +43,6 @@ ruff:
 # shellcheck and various grep checks
 shellcheck-grep:
   stage: lint
-  <<: *only-default
   image: alpine:edge
   script:
     - .ci/lib/gitlab_prepare_ci.sh
@@ -65,7 +52,6 @@ shellcheck-grep:
 
 editor-config:
   stage: lint
-  <<: *only-default
   image: alpine:edge
   script:
     - .ci/lib/gitlab_prepare_ci.sh
@@ -74,7 +60,6 @@ editor-config:
 # aports checks (generic)
 pytest-commits:
   stage: lint
-  <<: *only-default
   script:
     - .ci/lib/gitlab_prepare_ci.sh
     - .ci/pytest.sh
@@ -93,17 +78,15 @@ aport-lint:
   script:
     - .ci/lib/gitlab_prepare_ci.sh
     - .ci/apkbuild-lint.sh
-  only:
-    - merge_requests
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   allow_failure: true
 
 # kernel kconfig check
 kernel-kconfig:
   stage: lint
-  only:
-    refs:
-      - master
-      - merge_requests
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     changes:
       - device/*/linux-*/config-*
       - main/linux-*/config-*
@@ -115,8 +98,8 @@ kernel-kconfig:
 # (Checks for "Allow commits from members who can merge to the target branch")
 mr-settings:
   stage: lint
-  only:
-    - merge_requests
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   before_script:
     - apk -q add python3
   script:
@@ -126,11 +109,14 @@ mr-settings:
 # build changed aports
 .build:
   stage: build
-  <<: *only-default
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   before_script:
     - .ci/lib/gitlab_prepare_ci.sh
   after_script:
     - cp -r /home/pmos/.local/var/pmbootstrap/packages/ packages/ || true
+    - cp -r /home/pmos/.local/var/pmbootstrap/config_abuild packages/ || true
   artifacts:
     expire_in: 1 week
     paths:
@@ -166,3 +152,32 @@ build-riscv64:
   extends: .build
   script:
     - .ci/build-riscv64.sh
+
+# Generate the test pipeline
+generate-test-pipeline:
+  stage: test
+  # Only test in MRs or when pushing to a stable release branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_REF_PROTECTED == 'true' && $CI_COMMIT_BRANCH != '$CI_DEFAULT_BRANCH'
+  before_script:
+    - .ci/lib/gitlab_prepare_ci.sh
+  script:
+    - .ci/generate-test-pipeline.sh
+  artifacts:
+    paths:
+      - test-pipeline.yml
+
+Run tests:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_REF_PROTECTED == 'true' && $CI_COMMIT_BRANCH != '$CI_DEFAULT_BRANCH'
+  needs:
+    - job: generate-test-pipeline
+      artifacts: true
+  trigger:
+    include:
+      - artifact: test-pipeline.yml
+        job: generate-test-pipeline
+  variables:
+    PARENT_PIPELINE_ID: $CI_PIPELINE_ID
