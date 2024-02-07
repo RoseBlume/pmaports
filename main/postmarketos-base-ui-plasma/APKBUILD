@@ -2,7 +2,7 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-base-ui-plasma
 pkgver=1
-pkgrel=0
+pkgrel=1
 pkgdesc="Meta package for shared configuration for Plasma-based UIs"
 url="https://postmarketos.org"
 arch="noarch !armhf" # armhf is not supported
@@ -35,6 +35,7 @@ depends="$depends
 	"
 _pmb_recommends="
 	breeze-gtk
+	cups
 	discover
 	flatpak
 	font-droid-nonlatin
