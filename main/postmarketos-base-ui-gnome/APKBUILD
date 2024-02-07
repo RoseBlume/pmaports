@@ -1,7 +1,7 @@
 # Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=postmarketos-base-ui-gnome
 pkgver=3
-pkgrel=1
+pkgrel=2
 pkgdesc="Meta package for shared configuration for GNOME-based UIs"
 url="https://postmarketos.org"
 arch="noarch"
@@ -35,6 +35,7 @@ options="!check"
 subpackages="$pkgname-wallpaper-pmos:wallpaper_pmos"
 
 _pmb_recommends="
+	cups
 	evince
 	firefox-esr
 	flatpak
