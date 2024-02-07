@@ -1,0 +1,73 @@
+# Maintainer: Luca Weiss <luca@z3ntu.xyz>
+pkgname=postmarketos-ui-lomiri
+pkgver=1
+pkgrel=0
+pkgdesc="(Wayland) Lomiri"
+url="https://lomiri.com/"
+arch="noarch"
+license="GPL-3.0-or-later"
+depends="
+	elogind
+	hfd-service
+	lomiri
+	lomiri-system-settings
+	maliit-keyboard
+	networkmanager
+	networkmanager-cli
+	networkmanager-openrc
+	networkmanager-tui
+	networkmanager-wifi
+	networkmanager-wwan
+	postmarketos-artwork-wallpapers
+	postmarketos-base-ui
+	repowerd
+	sensorfw
+	superd
+	tinydm
+	tinydm-openrc
+"
+install="$pkgname.post-install $pkgname.post-upgrade"
+source="
+	000-gschema.override
+	lomiri.desktop
+	start_lomiri.sh
+	superd/ayatana-indicator-bluetooth.service
+	superd/ayatana-indicator-datetime.service
+	superd/ayatana-indicator-keyboard.service
+	superd/ayatana-indicator-power.service
+	superd/ayatana-indicator-session.service
+	superd/lomiri-indicator-network.service
+"
+options="!check"
+
+package() {
+	install -Dm644 "$srcdir"/000-gschema.override \
+		"$pkgdir"/usr/share/glib-2.0/schemas/000-postmarketos.gschema.override
+	install -Dm644 "$srcdir"/lomiri.desktop \
+		"$pkgdir"/usr/share/wayland-sessions/lomiri.desktop
+	install -Dm755 "$srcdir"/start_lomiri.sh \
+		"$pkgdir"/usr/bin/start_lomiri
+
+	mkdir -p "$pkgdir"/etc/superd/services/
+	for file in "$srcdir"/*.service; do
+		filename=$(basename $file)
+		# Install service
+		install -Dm644 "$file" \
+			"$pkgdir"/usr/share/superd/services/"$filename"
+		# Enable by default
+		ln -s /usr/share/superd/services/"$filename" \
+			"$pkgdir"/etc/superd/services/"$filename"
+	done
+}
+
+sha512sums="
+f44d4e2544d44119ed1ab9fb454a20d1fc050925a029ce10df4d7c20da3d1f461b018cdd6129272e38e50179d1e5ff71b72d3cc4dbce28113fe1b3561a2e84b5  000-gschema.override
+26d677d1b4e1e4d358e947bce880746b6bad6f7c4700f7e675acf126c5125004d4d6b1508810fa39526fa3a0a2e5547c64cd6d41f1dfeec09a6a549dcbdb97c8  lomiri.desktop
+0015e209ea054032d474a0328a7bdcdeb1b25e7386343b7a7395662a1dfac11bd4ca410d0c75685b8472fad470b5d4249249c63ba544994131892c813311287e  start_lomiri.sh
+23cb9450b63f0b3d3d59f65a0b81e59daca001e7e610a02ec659821f84e933ae7ae871a3fbf4d94d8f901bccab403e7e43ab2568a69237139f3c8281fa1473f3  ayatana-indicator-bluetooth.service
+66525275ebf8aea149edffe4a7143ecd49ee6a2344137df56309cc235aed75331b53c2e80e777fbc72cbf9fbf16cfcd8bb789e6b1e37a3b8228169ffbc90acbd  ayatana-indicator-datetime.service
+dc4401d994aaaab4059ec864b4b9098e29078b8f958980fbbd787f40e9f990340e4477e8c222a1ab12340f9b330b2ebe0c70ef8403a7e8870371fb06985f585e  ayatana-indicator-keyboard.service
+5869ca75519aa38ea19615c525062af52252a2cec5c3ed49485e9fd74606ab5c37576928f0b0c941f78568588be03a3ec107c4117ccefc70c3096412c393d6a7  ayatana-indicator-power.service
+65132639a26095f19c21abe1e630c93b6a0ba458fc4e2b69a0a2978408c1da327fd42307150f3d0a4b7332a613c66331788a373dc9e1bbbff169e76ac363a0c2  ayatana-indicator-session.service
+b95141f45dacd94a02fad4283623586de9a135464c1b37a17e1a706e66e9f5383b0517dc0f255def5732a74a02d61c3ed687de006c345227bd9b0c9d4d89cea9  lomiri-indicator-network.service
+"
