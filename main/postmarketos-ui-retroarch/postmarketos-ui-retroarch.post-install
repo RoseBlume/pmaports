@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rc-update add tinydm
+rc-update add bluetooth default
+
+tinydm-set-session -s /usr/share/wayland-sessions/retroarch.desktop
