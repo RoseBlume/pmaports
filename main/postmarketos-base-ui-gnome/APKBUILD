@@ -35,21 +35,21 @@ options="!check"
 subpackages="$pkgname-wallpaper-pmos:wallpaper_pmos"
 
 _pmb_recommends="
-	evince
+	evince;flatpak:flathub:app/org.gnome.Evince
 	firefox-esr
 	flatpak
 	font-noto
 	font-noto-emoji
-	gnome-calculator
-	gnome-clocks
+	gnome-calculator;flatpak:flathub:app/org.gnome.Calculator
+	gnome-clocks;flatpak:flathub:app/org.gnome.clocks
 	gnome-console
-	gnome-contacts
-	gnome-maps
+	gnome-contacts;flatpak:flathub:app/org.gnome.Contacts
+	gnome-maps;flatpak:flathub:app/org.gnome.Maps
 	gnome-software
 	gnome-software-plugin-apk
-	gnome-text-editor
-	lollypop
-	loupe
+	gnome-text-editor;flatpak:flathub:app/org.gnome.TextEditor
+	lollypop;flatpak:flathub:app/org.gnome.Lollypop
+	loupe;flatpak:flathub:app/org.gnome.Loupe
 	postmarketos-artwork-wallpapers-gnome
 	xdg-user-dirs
 	xdg-user-dirs-gtk
