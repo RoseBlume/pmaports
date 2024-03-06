@@ -121,7 +121,7 @@ bluez() {
 
 elogind() {
 	install_if="$pkgname=$pkgver-r$pkgrel elogind"
-	depends="sleep-inhibitor"
+	depends="sleep-inhibitor !systemd-logind"
 	install="$subpkgname.pre-upgrade $subpkgname.post-install"
 	replaces="
 		elogind
@@ -179,7 +179,6 @@ networkmanager() {
 		gojq
 		networkmanager
 		networkmanager-cli
-		networkmanager-openrc
 		networkmanager-tui
 		networkmanager-wifi
 		networkmanager-wwan
