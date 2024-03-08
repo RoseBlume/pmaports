@@ -14,10 +14,10 @@ depends="
 	postmarketos-base-ui-plasma
 	"
 _pmb_recommends="
-	angelfish
+	angelfish;flatpak:flathub:app/org.kde.angelfish
 	index
-	kclock
-	koko
+	kclock;flatpak:flathub:app/org.kde.kclock
+	koko;flatpak:flathub:app/org.kde.koko
 	plasma-dialer
 	plasma-mobile-sounds
 	plasma-phonebook
