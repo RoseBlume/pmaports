@@ -10,7 +10,7 @@ import os
 import add_pmbootstrap_to_import_path
 import pmb.parse
 
-
+@pytest.mark.skip(reason="needs to option to skip unchanged packages (for CI), see pma#2658")
 def test_aports_ui(args):
     """
     Raise an error if package in _pmb_recommends is not found
