@@ -1,0 +1,53 @@
+# Maintainer: Caleb Connolly <caleb@postmarketos.org>
+
+pkgname=pinch
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="A small, fast, semi-modular initramfs PID-1"
+url="https://github.com/calebccff/pinch"
+arch="all !s390x" # s390x: fails to build
+license="GPL-3.0-only"
+source="https://github.com/calebccff/pinch/archive/$pkgver/pinch-$pkgver.tar.gz
+	00-initramfs-base.dirs
+	00-initramfs-pinch.files"
+#provides="postmarketos-initramfs=$pkgver-r$pkgrel"
+makedepends="cargo eudev-dev cargo-auditable lld"
+_cargo_opts="--frozen --no-default-features"
+RUSTFLAGS="-C target-feature=+crt-static -C strip=symbols"
+
+prepare() {
+	default_prepare
+	cargo fetch --target="$CTARGET" --locked
+}
+
+build() {
+	cargo auditable build $_cargo_opts --release
+}
+
+check() {
+	cargo test $_cargo_opts
+}
+
+package() {
+	install -Dm755 target/release/pinch -t "$pkgdir"/usr/lib/pinch/
+
+	mkdir -p "$pkgdir"/sbin/
+	ln -s /usr/lib/pinch/pinch "$pkgdir"/sbin/init
+
+	for script in $(find "$builddir"/lua/ -type f); do
+		echo "installing $script"
+		install -Dm644 "$script" -t "$pkgdir"/usr/lib/pinch/
+	done
+
+	# install -Dm644 "$srcdir"/00-initramfs-base.dirs \
+	# 	-t "$pkgdir"/usr/share/mkinitfs/dirs/
+
+	install -Dm644 "$srcdir"/00-initramfs-pinch.files \
+		-t "$pkgdir"/usr/share/mkinitfs/files/
+}
+
+sha512sums="
+0fe114cbda7d0b031a2f300de95d753c0d248560257fdc01e76bd3d3498ff87347e8779885851cf3369868921d2576048f8d51de2edf2726154a3465cba090a9  hkdm-0.2.1.tar.gz
+be538eeebeccc2454817a1df11b8ce6063f51df888c852f2e361aa2ebd9ad94b9c82c7c71fa1215be426aa5fa59993e1bb6132c9b2ff352cadc1e2b4125cb392  hkdm.openrc
+8dac666f468bc27fc9b8083f61a6bc0cac493784cd74ac1103fd44daa00103676ea836c48c82bd8cb5772cae07cc42f283b7ff326172cd40e7f91191577788ad  hkdm.conf
+"
