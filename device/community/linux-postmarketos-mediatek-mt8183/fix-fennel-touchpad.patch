@@ -1,0 +1,13 @@
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel.dtsi
+index bbe6c338f465..428a962e4e8d 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel.dtsi
+@@ -11,6 +11,8 @@ &mt6358codec {
+ };
+ 
+ &i2c2 {
++	/delete-node/ trackpad@15;
++
+ 	trackpad@2c {
+ 		compatible = "hid-over-i2c";
+ 		reg = <0x2c>;
