@@ -1,6 +1,13 @@
 #!/bin/sh
 # shellcheck disable=SC1091
 
+echo "Launching pinch!"
+exec /usr/lib/pinch/pinch
+
+while true; do
+	sh -i
+done
+
 IN_CI="false"
 
 [ -e /hooks/10-verbose-initfs.sh ] && set -x
