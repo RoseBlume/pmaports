@@ -1,10 +1,10 @@
 [Unit]
-Description=Ayatana Indicator Keyboard
+Description=Ayatana Indicator Sound Service
 PartOf=graphical-session.target
 PartOf=ayatana-indicators.target
 
 [Service]
-ExecStart=/usr/libexec/ayatana-indicator-keyboard/ayatana-indicator-keyboard-service
+ExecStart=/usr/libexec/ayatana-indicator-sound/ayatana-indicator-sound-service
 Restart=on-failure
 
 [Install]
