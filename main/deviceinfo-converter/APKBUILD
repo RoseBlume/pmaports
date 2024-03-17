@@ -1,0 +1,27 @@
+# Maintainer: Brandon Boese <brandonboese@protonmail.com>
+pkgname=deviceinfo-converter
+pkgver=0.2.0
+pkgrel=0
+pkgdesc="A quick Rust script to parse postmarketOS deviceinfo files and create a Lomiri deviceinfo file out of it"
+url="https://codeberg.org/JustSoup321/deviceinfo-converter"
+arch="all"
+license="GPL-3.0-or-later"
+source="$pkgname-$pkgver.tar.gz::https://codeberg.org/JustSoup321/deviceinfo-converter/archive/$pkgver.tar.gz
+	$pkgname.sh"
+makedepends="cargo"
+builddir="$srcdir/$pkgname"
+options="!check" # no tests
+
+build() {
+	cargo build --release
+}
+
+package() {
+	install -Dm 755 ./target/release/deviceinfo-converter -t "$pkgdir/usr/bin"
+	install -m644 -D ../$pkgname.sh "$pkgdir"/etc/profile.d/$pkgname.sh
+}
+
+sha512sums="
+064a5c76f62851f5e27af5653f2d974ec99fe0e4f40850fc0c831d3246e2111bd1057ffa5b0676074be0097acb18eef9ded1e5c47c1cd7b106c0aa5554e4bb9e  deviceinfo-converter-0.2.0.tar.gz
+488c3d8275d61f747fdfe298487f59f5a643e07ab195860453f0b267a6e91574a4fa70331010edf46a42f940b6636842fdb89cd9ecb84985768bcb0317701820  deviceinfo-converter.sh
+"
