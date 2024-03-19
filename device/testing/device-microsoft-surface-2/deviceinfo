@@ -1,0 +1,24 @@
+# Reference: <https://postmarketos.org/deviceinfo>
+# Please use double quotes only. You can source this file in shell
+# scripts.
+
+deviceinfo_format_version="0"
+deviceinfo_name="Microsoft Surface 2"
+deviceinfo_manufacturer="Microsoft"
+deviceinfo_codename="microsoft-surface-2"
+deviceinfo_year="2013"
+deviceinfo_arch="armv7"
+
+# Device related
+deviceinfo_chassis="tablet"
+deviceinfo_keyboard="true"
+deviceinfo_external_storage="true"
+
+# Bootloader related
+deviceinfo_flash_method="none"
+deviceinfo_dtb_0b="tegra114-microsoft-surface-2-0b-efi"
+deviceinfo_dtb_13="tegra114-microsoft-surface-2-13-efi"
+deviceinfo_kernel_cmdline="cpuidle.off=1 console=ttyS0,115200 PMOS_NO_OUTPUT_REDIRECT PMOS_FORCE_PARTITION_RESIZE"
+deviceinfo_generate_grub_config="true"
+deviceinfo_generate_bootimg="false"
+deviceinfo_boot_filesystem="fat32"

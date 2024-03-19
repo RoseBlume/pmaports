@@ -1,0 +1,86 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Jenneron <jenneron@protonmail.com>
+pkgname=device-microsoft-surface-2
+pkgdesc="Microsoft Surface 2"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+# pmb:strict: avoid grub-related install error during build with pmbootstrap
+options="!check !archcheck pmb:strict"
+depends="
+	alsa-ucm-conf
+	postmarketos-base
+"
+makedepends="devicepkg-dev grub grub-efi"
+subpackages="
+	$pkgname-kernel-0b:kernel_0b
+	$pkgname-kernel-13:kernel_13
+	$pkgname-nonfree-firmware:nonfree_firmware
+	$pkgname-x11
+"
+source="deviceinfo modules-initfs"
+
+build() {
+	devicepkg_build $startdir $pkgname
+
+	grub-mkimage \
+		--prefix="/grub" \
+		--output="bootarm.efi" \
+		--format="arm-efi" \
+		--compression="xz" \
+
+		\
+		all_video \
+		cat \
+		configfile \
+		disk \
+		echo \
+		efi_gop \
+		fat \
+		gzio \
+		help \
+		iso9660 \
+		linux \
+		normal \
+		ls \
+		part_gpt \
+		part_msdos
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+
+	install -D "$srcdir"/bootarm.efi \
+		"$pkgdir"/boot/EFI/Boot/bootarm.efi
+}
+
+kernel_0b() {
+	pkgdesc="Microsoft Surface 2 with BDID 0B"
+	depends="linux-postmarketos-grate"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+kernel_13() {
+	pkgdesc="Microsoft Surface 2 with BDID 13"
+	depends="linux-postmarketos-grate"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="WiFi firmware"
+	depends="linux-firmware-mrvl"
+	mkdir "$subpkgdir"
+}
+
+x11() {
+	install_if="$pkgname=$pkgver-r$pkgrel xorg-server"
+	depends="xf86-video-opentegra libvdpau-tegra"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+8ecfa7720b0fc33505ee77121139b241b8c321e04d9051485935bf2df91eb6812e8d4d05a07c711f50eb8826abbe5f0c6c7a68c238b4f42ef8d12da5b124acc6  deviceinfo
+cbc29204c85619f32912c673ce3b3d4e8052cb91bbb80c255095c8fb4eda367c2a03ab0959819e4a5a4a2b79022640a4c6413b92962d38c14cddcaf077260ade  modules-initfs
+"
