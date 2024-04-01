@@ -5,6 +5,7 @@ rc-update add elogind default
 rc-update add hfd-service default
 rc-update add hkdm default
 rc-update add networkmanager default
+rc-update add polkit default
 rc-update add repowerd default
 rc-update add sensorfw default
 rc-update add tinydm default
