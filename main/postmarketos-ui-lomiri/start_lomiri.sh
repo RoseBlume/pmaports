@@ -42,4 +42,7 @@ fi
 
 superd &
 
+# Start Pipewire
+/usr/libexec/pipewire-launcher &
+
 lomiri
