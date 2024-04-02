@@ -8,7 +8,7 @@ url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base u-boot-beelink-gt1 soc-amlogic-s905"
+depends="postmarketos-base u-boot-amlogic-beelink-gt1 soc-amlogic-s905"
 makedepends="devicepkg-dev"
 subpackages="
 	$pkgname-kernel-alpine:kernel_alpine
