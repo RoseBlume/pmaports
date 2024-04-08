@@ -10,7 +10,7 @@ XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_DATA_HOME
 XDG_STATE_HOME="${HOME}/.local/state"
 export XDG_STATE_HOME
-XDG_DATA_DIRS="${HOME}/.local/share/applications/:${HOME}/.local/share/flatpak/exports/share/:/var/lib/flatpak/exports/share/:/usr/local/share/:/usr/share/"
+XDG_DATA_DIRS="${HOME}/.local/share/:${HOME}/.local/share/flatpak/exports/share/:/var/lib/flatpak/exports/share/:/usr/local/share/:/usr/share/"
 export XDG_DATA_DIRS
 XDG_RUNTIME_DIR="/run/user/$(id -u)"
 export XDG_RUNTIME_DIR
