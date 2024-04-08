@@ -48,7 +48,7 @@ source="
 	20_pmOS-wallpaper-gnome-mobile.gschema.override
 	firefox-wayland.sh
 	"
-options="!check"
+options="!check pmb:systemd"
 
 package() {
 	install -Dm755 \
