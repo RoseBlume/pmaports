@@ -1,16 +1,22 @@
 pkgname=postmarketos-base
 pkgver=32
-pkgrel=5
+pkgrel=6
 pkgdesc="Meta package for minimal postmarketOS base"
 url="https://postmarketos.org"
 arch="noarch"
 license="GPL-3.0-or-later"
 makedepends="postmarketos-initramfs"
 depends="
-	alpine-base
+	alpine-baselayout
+	alpine-conf
+	alpine-release
+	apk-tools
+	busybox
+	busybox-suid
 	devicepkg-utils>=0.2.0
 	eudev
 	logbookd
+	musl-utils
 	openssh
 	postmarketos-bootsplash
 	postmarketos-ramdisk
@@ -25,6 +31,7 @@ subpackages="
 	$pkgname-mesa
 	$pkgname-nftables
 	$pkgname-nofde
+	$pkgname-openrc
 	"
 options="!check"
 
@@ -87,6 +94,11 @@ prepare() {
 }
 
 package() {
+	# pmos-base-init provided by a subpackage in this APKBUILD, and it may not
+	# exist when this is evaluated at the top level. It's moved into this
+	# function to work around it.
+	depends="$depends postmarketos-base-init"
+
 	local i
 	for i in $_source440; do
 		install -Dm440 "$srcdir/$(flatpath "$i")" "$pkgdir/$i"
@@ -118,6 +130,13 @@ nofde() {
 	# installing anything for systems that don't use fde
 	provides="postmarketos-fde-unlocker"
 	provider_priority=1
+	mkdir "$subpkgdir"
+}
+
+openrc() {
+	provides="$pkgname-init=$pkgver-r$pkgrel"
+	provider_priority=10
+	depends="busybox-mdev-openrc openrc"
 	mkdir "$subpkgdir"
 }
 
