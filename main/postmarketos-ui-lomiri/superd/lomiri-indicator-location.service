@@ -1,0 +1,12 @@
+[Unit]
+Description=Indicator Location Backend
+PartOf=graphical-session.target
+#After=indicators-pre.target
+
+[Service]
+ExecStart=/usr/libexec/indicator-location/indicator-location-service
+Restart=on-failure
+
+[Install]
+# FIXME: use the Ayatana's target once we're fully an Ayatana indicator
+WantedBy=indicators-pre.target

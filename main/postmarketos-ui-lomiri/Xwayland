@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# The intention behind this wrapper is to set the EGL_PLATFORM to "wayland"
+# which might be a necessity depending on the driver stack in use (mostly hybris).
+# Additionally it allows to selectively en-/disable certain behavior of Xwayland
+# using device-info config files.
+
+if [ -f /system/build.prop ]; then
+    export EGL_PLATFORM=wayland
+fi
+
+# Additional arguments sourced from device-info config
+ARGS=""
+
+XWAYLAND_SHM=$(device-info get XwaylandShm)
+HAS_XWAYLAND_SHM=$?
+if [ "$HAS_XWAYLAND_SHM" = "0" ]; then
+    if [ "$XWAYLAND_SHM" = "true" ]; then
+        ARGS="$ARGS -shm"
+    fi
+fi
+
+exec /usr/bin/Xwayland $@ $ARGS

@@ -2,43 +2,77 @@
 pkgname=postmarketos-ui-lomiri
 pkgver=1
 pkgrel=0
-pkgdesc="(Wayland) Lomiri"
+pkgdesc="(Wayland) The convergent desktop environment (Experimental)"
 url="https://lomiri.com/"
-arch="noarch"
+arch="noarch !armhf !riscv64"
 license="GPL-3.0-or-later"
 depends="
-	elogind
+	bluez
 	hfd-service
 	lomiri
+	lomiri-indicator-location
+	lomiri-location-service
+	lomiri-notifications
 	lomiri-system-settings
-	maliit-keyboard
 	networkmanager
-	networkmanager-cli
-	networkmanager-openrc
-	networkmanager-tui
-	networkmanager-wifi
-	networkmanager-wwan
-	postmarketos-artwork-wallpapers
+	pipewire
+	polkit
+	polkit-elogind
 	postmarketos-base-ui
+	postmarketos-base-ui-bluez
+	postmarketos-base-ui-elogind
+	postmarketos-base-ui-networkmanager
+	postmarketos-base-ui-qt-tweaks
+	postmarketos-base-ui-qt-wayland
+	postmarketos-base-ui-tinydm
+	postmarketos-base-ui-wifi
 	repowerd
 	sensorfw
 	superd
 	tinydm
-	tinydm-openrc
+	wireplumber
+	xwayland
+"
+_pmb_recommends="
+	ayatana-indicator-messages
+	ayatana-indicator-sound
+	deviceinfo-converter
+	font-droid-nonlatin
+	font-noto
+	font-noto-extra
+	font-noto-emoji
+	lomiri-calculator-app
+	lomiri-docviewer-app
+	lomiri-filemanager-app
+	lomiri-sounds
+	lomiri-weather-app
+	maliit-keyboard
+	pipewire-alsa
+	pipewire-pulse
+	postmarketos-artwork-wallpapers
+	ttyescape
+	xdg-user-dirs
+	yaru-icon-theme
+	yaru-theme
 "
 install="$pkgname.post-install $pkgname.post-upgrade"
 source="
 	000-gschema.override
+	logo.svg
 	lomiri.desktop
+	set-xdg-env.sh
 	start_lomiri.sh
 	superd/ayatana-indicator-bluetooth.service
 	superd/ayatana-indicator-datetime.service
-	superd/ayatana-indicator-keyboard.service
+	superd/ayatana-indicator-messages.service
 	superd/ayatana-indicator-power.service
 	superd/ayatana-indicator-session.service
+	superd/ayatana-indicator-sound.service
+	superd/lomiri-indicator-location.service
 	superd/lomiri-indicator-network.service
+	Xwayland
 "
-options="!check"
+options="!check pmb:systemd-never"
 
 package() {
 	install -Dm644 "$srcdir"/000-gschema.override \
@@ -47,6 +81,10 @@ package() {
 		"$pkgdir"/usr/share/wayland-sessions/lomiri.desktop
 	install -Dm755 "$srcdir"/start_lomiri.sh \
 		"$pkgdir"/usr/bin/start_lomiri
+	install -Dm755 "$srcdir"/Xwayland \
+		"$pkgdir"/usr/libexec/Xwayland.lomiri
+	install -Dm755 "$srcdir"/set-xdg-env.sh \
+		"$pkgdir"/etc/profile.d/set-xdg-env.sh
 
 	mkdir -p "$pkgdir"/etc/superd/services/
 	for file in "$srcdir"/*.service; do
@@ -58,16 +96,31 @@ package() {
 		ln -s /usr/share/superd/services/"$filename" \
 			"$pkgdir"/etc/superd/services/"$filename"
 	done
+
+	mkdir -p "$pkgdir"/etc/skel/.config/lomiri
+	touch "$pkgdir"/etc/skel/.config/lomiri/wizard-has-run
+
+	ln -s "$pkgdir"/usr/share/wallpapers "$pkgdir"/usr/share/backgrounds
+
+	# Replace the launcher logo
+	mkdir -p "$pkgdir"/usr/share/lomiri/Launcher/graphics/
+	install -Dm644 "$srcdir"/logo.svg \
+		"$pkgdir"/usr/share/lomiri/Launcher/graphics/
 }
 
 sha512sums="
-f44d4e2544d44119ed1ab9fb454a20d1fc050925a029ce10df4d7c20da3d1f461b018cdd6129272e38e50179d1e5ff71b72d3cc4dbce28113fe1b3561a2e84b5  000-gschema.override
+476259cc514eb9cec5ba35e1832d30310ddfd0bd8dfe060ac5ea704fa3ce22007b82614e7ce3b3766ef4a47cb51db51435f8c6d6f9fdd6bec80b67986374788c  000-gschema.override
+f3760c336d56073cceffa807f37a353125110b9976b1f420c2cefb741fa840ec44435fd03ef72d5a0fb018bac4d1d53d579aefc62df514a29d0e05465331e462  logo.svg
 26d677d1b4e1e4d358e947bce880746b6bad6f7c4700f7e675acf126c5125004d4d6b1508810fa39526fa3a0a2e5547c64cd6d41f1dfeec09a6a549dcbdb97c8  lomiri.desktop
-0015e209ea054032d474a0328a7bdcdeb1b25e7386343b7a7395662a1dfac11bd4ca410d0c75685b8472fad470b5d4249249c63ba544994131892c813311287e  start_lomiri.sh
+89554f04244e202be93de551a40be0f4fd53d9d659a5e8235f96d2f270958f61f9b0922a2d16a07be1ba9ccd18e337c87a01e45107457025ba2deccbbf52977a  set-xdg-env.sh
+965737211ce300ff678a8f17101f44d5b0fe86dcbe1d9fa48daa458f4c94ebae7d816bd4deab2e09e9bed130e4af610e157246f25441d51173700960918f51a0  start_lomiri.sh
 23cb9450b63f0b3d3d59f65a0b81e59daca001e7e610a02ec659821f84e933ae7ae871a3fbf4d94d8f901bccab403e7e43ab2568a69237139f3c8281fa1473f3  ayatana-indicator-bluetooth.service
 66525275ebf8aea149edffe4a7143ecd49ee6a2344137df56309cc235aed75331b53c2e80e777fbc72cbf9fbf16cfcd8bb789e6b1e37a3b8228169ffbc90acbd  ayatana-indicator-datetime.service
-dc4401d994aaaab4059ec864b4b9098e29078b8f958980fbbd787f40e9f990340e4477e8c222a1ab12340f9b330b2ebe0c70ef8403a7e8870371fb06985f585e  ayatana-indicator-keyboard.service
+fe5a1f94ca2204bf4608e8fcd9f934b900de19cf0fa1130cd8996e28d876ec10709588607b846ee0f30998677aaa0c4dba63ec954515eb50862413d318b0a233  ayatana-indicator-messages.service
 5869ca75519aa38ea19615c525062af52252a2cec5c3ed49485e9fd74606ab5c37576928f0b0c941f78568588be03a3ec107c4117ccefc70c3096412c393d6a7  ayatana-indicator-power.service
 65132639a26095f19c21abe1e630c93b6a0ba458fc4e2b69a0a2978408c1da327fd42307150f3d0a4b7332a613c66331788a373dc9e1bbbff169e76ac363a0c2  ayatana-indicator-session.service
+780e3b09d5174cab5035b95952dee9e49735b94b2a74af629a625f56ddc23ae8126fc28eb7324cb6e96144e1dee8f3cf3788a52cb8329f4c4ceda7bc7dd76ec7  ayatana-indicator-sound.service
+3b779c043273526c1c64c44ba55296035d27a1bb15f44b814f2e7133d08da9dc98c5aa7441f48d53b67d1a490554cd1cfe88bb91951be904c9ba7fec84a2202b  lomiri-indicator-location.service
 b95141f45dacd94a02fad4283623586de9a135464c1b37a17e1a706e66e9f5383b0517dc0f255def5732a74a02d61c3ed687de006c345227bd9b0c9d4d89cea9  lomiri-indicator-network.service
+eef2b6e4a77325972794da46d14961a499af7d4bb729c13528929381f6c87ae454ad195e64ac2d355029c473233246f5324773385d6d0cf8cccded8db4fd3546  Xwayland
 "
