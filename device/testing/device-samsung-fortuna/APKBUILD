@@ -77,9 +77,6 @@ kernel_grandprimelte() {
 	replaces="$_old_pkgname"
 	provides="$_old_pkgname=$pkgver-r$pkgrel"
 
-	# FIXME:
-	# Use deviceinfo_dtb_grandprimelte="qcom/msm8916-samsung-grandprimelte"
-	# when the device tree is available
 	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
 }
 
@@ -132,6 +129,6 @@ nonfree_firmware_grandprimelte() {
 }
 
 sha512sums="
-396fb4401f01272ebe922d863ab1fdb069c5d571f6574f04f5f50cd512e4cbfa002710694c2fcc46b45b43f06d350678b930d26642a82f1864135483be25c8d2  deviceinfo
+9e1717f54718f5636e60f49c566825de15a014bb0967514e2c46416d94c27c4cd5abf44a50a29a346f5419df838d794e38a8729c4309c179953af3cad3628b82  deviceinfo
 02b6d383149ba2ec3a31b206767be7ead31d9f0e7ee5cab11047000c53ccad387a118cbddb06093bca5cae3e82f884c02194de47b8e7a9c76102ac46506bb111  modules-initfs
 "
