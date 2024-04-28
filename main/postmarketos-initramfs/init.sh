@@ -28,16 +28,13 @@ setup_log
 setup_firmware_path
 
 if [ "$IN_CI" = "false" ]; then
-	# shellcheck disable=SC2154
-	load_modules /lib/modules/initramfs.load "libcomposite"
 	setup_framebuffer
 	show_splash "Loading..."
-	setup_mdev
-	setup_dynamic_partitions "${deviceinfo_super_partitions:=}"
-else
-	# loads all modules
-	setup_udev
 fi
+
+setup_udev
+setup_dynamic_partitions "${deviceinfo_super_partitions:=}"
+
 run_hooks /hooks
 
 if [ "$IN_CI" = "true" ]; then
