@@ -53,7 +53,6 @@ mount_subpartitions
 wait_boot_partition
 mount_boot_partition /boot
 extract_initramfs_extra /boot/initramfs-extra
-setup_udev
 run_hooks /hooks-extra
 
 # For testing the mass storage gadget log export function. We use a flag
