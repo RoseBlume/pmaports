@@ -1,0 +1,25 @@
+From 5421b1aadd4c88bef0e393dd0d703c29677648b0 Mon Sep 17 00:00:00 2001
+From: jane400 <pmos@j4ne.de>
+Date: Sat, 11 May 2024 11:46:13 +0200
+Subject: [PATCH 11/11] build-path: musl fix
+
+---
+ src/basic/build-path.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/basic/build-path.c b/src/basic/build-path.c
+index b5972658df..288458b03e 100644
+--- a/src/basic/build-path.c
++++ b/src/basic/build-path.c
+@@ -37,7 +37,7 @@ static int get_runpath_from_dynamic(const ElfW(Dyn) *d, ElfW(Addr) bias, const c
+                          * using the bias calculated earlier. */
+                         if (d->d_un.d_val != 0)
+                                 strtab = (const char *) ((uintptr_t) d->d_un.d_val
+-#if defined(__mips__) || defined(__riscv)
++#if defined(__mips__) || defined(__riscv) || true
+                                          + bias
+ #endif
+                                 );
+-- 
+2.45.0
+

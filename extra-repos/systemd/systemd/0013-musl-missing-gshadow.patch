@@ -1,26 +1,31 @@
-From ebf0f69d8614b8d86a971b97ff0d847d1e5d47c9 Mon Sep 17 00:00:00 2001
-From: Alex Kiernan <alex.kiernan@gmail.com>
-Date: Tue, 10 Mar 2020 11:05:20 +0000
-Subject: [PATCH] Handle missing gshadow
+From d09f301e78dba52ccfed1b7a31a16770f4ab616c Mon Sep 17 00:00:00 2001
+From: jane400 <pmos@j4ne.de>
+Date: Sun, 2 Jun 2024 10:07:09 +0200
+Subject: [PATCH] musl: missing gshadow
 
-gshadow usage is now present in the userdb code. Mask all uses of it to
-allow compilation on musl
-
-Upstream-Status: Inappropriate [musl specific]
-Signed-off-by: Alex Kiernan <alex.kiernan@gmail.com>
-[Rebased for v247]
-Signed-off-by: Luca Boccassi <luca.boccassi@microsoft.com>
 ---
+ src/basic/gshadow.h          |  5 +++++
  src/shared/user-record-nss.c | 20 ++++++++++++++++++++
- src/shared/user-record-nss.h |  4 ++++
  src/shared/userdb.c          |  7 ++++++-
- 3 files changed, 30 insertions(+), 1 deletion(-)
+ 3 files changed, 31 insertions(+), 1 deletion(-)
+ create mode 100644 src/basic/gshadow.h
 
+diff --git a/src/basic/gshadow.h b/src/basic/gshadow.h
+new file mode 100644
+index 0000000000..a6a56f38ce
+--- /dev/null
++++ b/src/basic/gshadow.h
+@@ -0,0 +1,5 @@
++#pragma once
++
++#define ENABLE_GSHADOW 0
++
++struct sgrp {};
 diff --git a/src/shared/user-record-nss.c b/src/shared/user-record-nss.c
-index 88b8fc2f8f..a819d41bac 100644
+index ffb5721466..2596c658b3 100644
 --- a/src/shared/user-record-nss.c
 +++ b/src/shared/user-record-nss.c
-@@ -329,8 +329,10 @@ int nss_group_to_group_record(
+@@ -286,8 +286,10 @@ int nss_group_to_group_record(
          if (isempty(grp->gr_name))
                  return -EINVAL;
  
@@ -31,7 +36,7 @@ index 88b8fc2f8f..a819d41bac 100644
  
          g = group_record_new();
          if (!g)
-@@ -346,6 +348,7 @@ int nss_group_to_group_record(
+@@ -303,6 +305,7 @@ int nss_group_to_group_record(
  
          g->gid = grp->gr_gid;
  
@@ -39,7 +44,7 @@ index 88b8fc2f8f..a819d41bac 100644
          if (sgrp) {
                  if (looks_like_hashed_password(utf8_only(sgrp->sg_passwd))) {
                          g->hashed_password = strv_new(sgrp->sg_passwd);
-@@ -361,6 +364,7 @@ int nss_group_to_group_record(
+@@ -318,6 +321,7 @@ int nss_group_to_group_record(
                  if (r < 0)
                          return r;
          }
@@ -47,15 +52,20 @@ index 88b8fc2f8f..a819d41bac 100644
  
          r = json_build(&g->json, JSON_BUILD_OBJECT(
                                         JSON_BUILD_PAIR("groupName", JSON_BUILD_STRING(g->group_name)),
-@@ -387,6 +391,7 @@ int nss_sgrp_for_group(const struct group *grp, struct sgrp *ret_sgrp, char **re
+@@ -341,9 +345,12 @@ int nss_sgrp_for_group(const struct group *grp, struct sgrp *ret_sgrp, char **re
+         int r;
+ 
+         assert(grp);
++#if ENABLE_GSHADOW
          assert(ret_sgrp);
++#endif
          assert(ret_buffer);
  
 +#if ENABLE_GSHADOW
          for (;;) {
                  _cleanup_free_ char *buf = NULL;
                  struct sgrp sgrp, *result;
-@@ -415,6 +420,9 @@ int nss_sgrp_for_group(const struct group *grp, struct sgrp *ret_sgrp, char **re
+@@ -372,6 +379,9 @@ int nss_sgrp_for_group(const struct group *grp, struct sgrp *ret_sgrp, char **re
                  buflen *= 2;
                  buf = mfree(buf);
          }
@@ -65,25 +75,15 @@ index 88b8fc2f8f..a819d41bac 100644
  }
  
  int nss_group_record_by_name(
-@@ -426,7 +434,9 @@ int nss_group_record_by_name(
-         struct group grp, *result;
-         bool incomplete = false;
-         size_t buflen = 4096;
-+#if ENABLE_GSHADOW
-         struct sgrp sgrp, *sresult = NULL;
-+#endif
-         int r;
- 
-         assert(name);
-@@ -455,6 +465,7 @@ int nss_group_record_by_name(
-                 buf = mfree(buf);
-         }
+@@ -391,6 +401,7 @@ int nss_group_record_by_name(
+         if (r < 0)
+                 return r;
  
 +#if ENABLE_GSHADOW
          if (with_shadow) {
                  r = nss_sgrp_for_group(result, &sgrp, &sbuf);
                  if (r < 0) {
-@@ -466,6 +477,9 @@ int nss_group_record_by_name(
+@@ -402,6 +413,9 @@ int nss_group_record_by_name(
                  incomplete = true;
  
          r = nss_group_to_group_record(result, sresult, ret);
@@ -93,25 +93,24 @@ index 88b8fc2f8f..a819d41bac 100644
          if (r < 0)
                  return r;
  
-@@ -483,7 +497,9 @@ int nss_group_record_by_gid(
-         struct group grp, *result;
+@@ -418,13 +432,16 @@ int nss_group_record_by_gid(
+         _cleanup_free_ char *sbuf = NULL;
+         _cleanup_free_ struct group *result = NULL;
          bool incomplete = false;
-         size_t buflen = 4096;
 +#if ENABLE_GSHADOW
          struct sgrp sgrp, *sresult = NULL;
 +#endif
          int r;
  
-         for (;;) {
-@@ -509,6 +525,7 @@ int nss_group_record_by_gid(
-                 buf = mfree(buf);
-         }
+         r = getgrgid_malloc(gid, &result);
+         if (r < 0)
+                 return r;
  
 +#if ENABLE_GSHADOW
          if (with_shadow) {
                  r = nss_sgrp_for_group(result, &sgrp, &sbuf);
                  if (r < 0) {
-@@ -520,6 +537,9 @@ int nss_group_record_by_gid(
+@@ -436,6 +453,9 @@ int nss_group_record_by_gid(
                  incomplete = true;
  
          r = nss_group_to_group_record(result, sresult, ret);
@@ -120,35 +119,19 @@ index 88b8fc2f8f..a819d41bac 100644
 +#endif
          if (r < 0)
                  return r;
- 
-diff --git a/src/shared/user-record-nss.h b/src/shared/user-record-nss.h
-index 22ab04d6ee..4e52e7a911 100644
---- a/src/shared/user-record-nss.h
-+++ b/src/shared/user-record-nss.h
-@@ -2,7 +2,11 @@
- #pragma once
- 
- #include <grp.h>
-+#if ENABLE_GSHADOW
- #include <gshadow.h>
-+#else
-+struct sgrp;
-+#endif
- #include <pwd.h>
- #include <shadow.h>
  
 diff --git a/src/shared/userdb.c b/src/shared/userdb.c
-index a77eff4407..955e361d3a 100644
+index 75dece3442..4f4e21a6c4 100644
 --- a/src/shared/userdb.c
 +++ b/src/shared/userdb.c
-@@ -1038,13 +1038,15 @@ int groupdb_iterator_get(UserDBIterator *iterator, GroupRecord **ret) {
+@@ -1038,13 +1038,16 @@ int groupdb_iterator_get(UserDBIterator *iterator, GroupRecord **ret) {
                  if (gr) {
                          _cleanup_free_ char *buffer = NULL;
                          bool incomplete = false;
 +#if ENABLE_GSHADOW
                          struct sgrp sgrp;
--
 +#endif
+ 
                          if (streq_ptr(gr->gr_name, "root"))
                                  iterator->synthesize_root = false;
                          if (gr->gr_gid == GID_NOBODY)
@@ -158,16 +141,18 @@ index a77eff4407..955e361d3a 100644
                          if (!FLAGS_SET(iterator->flags, USERDB_SUPPRESS_SHADOW)) {
                                  r = nss_sgrp_for_group(gr, &sgrp, &buffer);
                                  if (r < 0) {
-@@ -1057,6 +1059,9 @@ int groupdb_iterator_get(UserDBIterator *iterator, GroupRecord **ret) {
+@@ -1055,8 +1058,10 @@ int groupdb_iterator_get(UserDBIterator *iterator, GroupRecord **ret) {
+                                 r = -EUCLEAN;
+                                 incomplete = true;
                          }
- 
-                         r = nss_group_to_group_record(gr, r >= 0 ? &sgrp : NULL, ret);
-+#else
-+                        r = nss_group_to_group_record(gr, NULL, ret);
 +#endif
++
++                        r = nss_group_to_group_record(gr, NULL, ret);
+ 
+-                        r = nss_group_to_group_record(gr, r >= 0 ? &sgrp : NULL, ret);
                          if (r < 0)
                                  return r;
  
 -- 
-2.39.2
+2.45.1
 
