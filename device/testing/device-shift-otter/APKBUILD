@@ -1,0 +1,36 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Caleb Connolly <caleb@postmarketos.org>
+pkgname=device-shift-otter
+pkgdesc="SHIFT SHIFTphone 8"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	firmware-qcom-adreno-a660
+	linux-postmarketos-qcom-sdm845
+	make-dynpart-mappings
+	mkbootimg
+	postmarketos-base
+	soc-qcom-sc7280
+	soc-qcom-sc7280-qbootctl
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+	"
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+b06f25dc2ea717aae558beb943eaf48fa99c19966dbe82071914ee15ae4e77cfa997da67915cb48ef26cb9ff63a9f719bb1bc5f295ef61659afce1b8b6351e87  deviceinfo
+85b8be6b2a8a05fa5a2f7a649f95db85b73d1fe169e1c3bad90227db390b98c6461225f4fa1d0b2d7529268445841aeedc1ea8489772c371026b82539d2aa985  modules-initfs
+"
