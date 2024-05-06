@@ -64,6 +64,8 @@ package() {
 
 	mkdir -p "$pkgdir"/boot/dtbs/qcom
 	cp -r "$pkgdir"/boot/dtbs-tmp/qcom/sdm8* "$pkgdir"/boot/dtbs/qcom
+	cp -r "$pkgdir"/boot/dtbs-tmp/qcom/sm* "$pkgdir"/boot/dtbs/qcom
+	cp -r "$pkgdir"/boot/dtbs-tmp/qcom/qcm* "$pkgdir"/boot/dtbs/qcom
 	rm -rf "$pkgdir"/boot/dtbs-tmp
 
 	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
