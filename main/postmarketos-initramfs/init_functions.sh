@@ -835,7 +835,7 @@ debug_shell() {
 	chmod +x /sbin/pmos_logdump
 
 	# Get the console (ttyX) associated with /dev/console
-	active_console="$(cat /sys/devices/virtual/tty/console/active)"
+	active_console="$(cat /sys/devices/virtual/tty/console/active | cut -d ' ' -f1)"
 
 	# Spawn a getty on the active console
 	run_getty "$active_console"
