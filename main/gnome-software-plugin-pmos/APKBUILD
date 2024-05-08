@@ -10,7 +10,7 @@ depends="gnome-software dbus postmarketos-upgrader-dbus"
 makedepends="gnome-software-dev build-base meson ninja"
 _commit=38b3a7266da385148cb7bb269cda00ce832a5da8
 source="https://gitlab.com/andrisas/gnome-software-plugin-pmos/-/archive/$_commit/gnome-software-plugin-pmos-$_commit.tar.gz"
-options="!check"
+options="!check !pmb:crossdirect"
 
 build() {
 	abuild-meson "$srcdir/$pkgname-$_commit" "$srcdir/output"
