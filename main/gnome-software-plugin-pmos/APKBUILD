@@ -1,0 +1,26 @@
+# Maintainer: andrisas <sebokandris2009@gmail.com>
+pkgname=gnome-software-plugin-pmos
+pkgver=0.1
+pkgrel=0
+pkgdesc="gnome-software plugin for upgrading pmos"
+url="https://postmarketos.org/"
+arch="all"
+license="GPL-3.0"
+depends="gnome-software dbus postmarketos-upgrader-dbus"
+makedepends="gnome-software-dev build-base meson ninja"
+install=""
+_commit=38b3a7266da385148cb7bb269cda00ce832a5da8
+source="https://gitlab.com/andrisas/gnome-software-plugin-pmos/-/archive/$_commit/$pkgname-$_commit.tar.gz"
+options="!check"
+
+build() {
+	abuild-meson "$srcdir/$pkgname-$_commit" "$srcdir/output"
+}
+
+package() {
+	DESTDIR="$pkgdir" ninja -C "$srcdir/output" install 
+}
+
+sha512sums="
+44a320aafae4516ee9d03c3f991269a2fa26060bcb66e92e961413318c27a361dde74abc2b0b352387d79c8146e8a08cc121630c8bfdec27f457ea8fdcf8b914  gnome-software-plugin-pmos-38b3a7266da385148cb7bb269cda00ce832a5da8.tar.gz
+"
