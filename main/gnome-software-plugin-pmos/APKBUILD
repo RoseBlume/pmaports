@@ -8,7 +8,7 @@ arch="all"
 license="GPL-3.0"
 depends="gnome-software dbus postmarketos-upgrader-dbus"
 makedepends="gnome-software-dev build-base meson ninja"
-_commit=38b3a7266da385148cb7bb269cda00ce832a5da8
+_commit=5fd1e977368a36f3ea22e970ac7a870821677d03
 source="https://gitlab.com/andrisas/gnome-software-plugin-pmos/-/archive/$_commit/gnome-software-plugin-pmos-$_commit.tar.gz"
 options="!check !pmb:crossdirect"
 
@@ -21,5 +21,5 @@ package() {
 }
 
 sha512sums="
-44a320aafae4516ee9d03c3f991269a2fa26060bcb66e92e961413318c27a361dde74abc2b0b352387d79c8146e8a08cc121630c8bfdec27f457ea8fdcf8b914  gnome-software-plugin-pmos-38b3a7266da385148cb7bb269cda00ce832a5da8.tar.gz
+6f377eeee34345c386c9334c77b24995c2bc218c7238382db0d9c1c183170ccb91be88039b08b2091dbaa3cc9d9f50c7fffd9e4740004734fb8452861703723b  gnome-software-plugin-pmos-5fd1e977368a36f3ea22e970ac7a870821677d03.tar.gz
 "
