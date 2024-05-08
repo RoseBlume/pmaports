@@ -8,9 +8,8 @@ arch="all"
 license="GPL-3.0"
 depends="gnome-software dbus postmarketos-upgrader-dbus"
 makedepends="gnome-software-dev build-base meson ninja"
-install=""
 _commit=38b3a7266da385148cb7bb269cda00ce832a5da8
-source="https://gitlab.com/andrisas/gnome-software-plugin-pmos/-/archive/$_commit/$pkgname-$_commit.tar.gz"
+source="https://gitlab.com/andrisas/gnome-software-plugin-pmos/-/archive/$_commit/gnome-software-plugin-pmos-$_commit.tar.gz"
 options="!check"
 
 build() {
@@ -18,7 +17,7 @@ build() {
 }
 
 package() {
-	DESTDIR="$pkgdir" ninja -C "$srcdir/output" install 
+	DESTDIR="$pkgdir" ninja -C "$srcdir/output" install
 }
 
 sha512sums="

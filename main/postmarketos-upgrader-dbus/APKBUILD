@@ -8,10 +8,9 @@ arch="noarch"
 license="GPL-3.0"
 depends="pbsplash dbus py3-distro py3-packaging py3-dbus"
 makedepends="build-base meson ninja"
-install=""
 _commit=3961a50182f9ab5b79d077999749dd828c66e5e5
 source="
-	https://gitlab.com/andrisas/postmarketos-upgrader-dbus/-/archive/$_commit/$pkgname-$_commit.tar.gz
+	https://gitlab.com/andrisas/postmarketos-upgrader-dbus/-/archive/$_commit/postmarketos-upgrader-dbus-$_commit.tar.gz
 	pmos_upgrader_dbus"
 options="!check"
 
@@ -20,8 +19,8 @@ build() {
 }
 
 package() {
-	DESTDIR="$pkgdir" ninja -C "$srcdir/output" install 
-    mkdir -p "$pkgdir"/etc/runlevels/upgrade
+	DESTDIR="$pkgdir" ninja -C "$srcdir/output" install
+	mkdir -p "$pkgdir"/etc/runlevels/upgrade
 	install -Dm755 "$srcdir/pmos_upgrader_dbus" -t "$pkgdir"/etc/init.d/
 }
 
