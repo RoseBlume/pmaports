@@ -19,7 +19,7 @@ source="$pkgname-$pkgver.tar.gz::https://gitlab.freedesktop.org/PipeWire/media-s
 options="!check" # No tests
 builddir="$srcdir/media-session-$pkgver"
 
-provides="pipewire-session-manager"
+provides="pipewire-session-manager wireplumber"
 provider_priority=1
 replaces="pipewire-media-session<0.3.39 pipewire-pulse<0.3.39 pipewire-jack<0.3.39 pipewire-alsa<0.3.39 pipewire-spa-bluez<0.3.39"
 
