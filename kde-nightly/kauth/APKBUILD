@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kauth
-pkgver=9999_git20240503
+pkgver=9999_git20240512
 pkgrel=0
-_commit="c90c038de037c37cf770f6ae710e2b9042f17f12"
+_commit="e79efdd06d1d9dcae9b9e5ee1cf1059f8b78f5bd"
 pkgdesc="Abstraction to system policy and authentication features"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -26,7 +26,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kauth.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-09/kauth-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/kauth-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-e4cae6f0ff9d0c3e97c9f6901e5985a772ad8752987c5a277f71536ff174470b6827258232c88e7519d9b7b0960a4990ca26b1115808c9bf979917fa135e857a  kauth-c90c038de037c37cf770f6ae710e2b9042f17f12.tar.xz
+4f4b7a8e985ad4b44613fdf4c1c44beaa38116179d6ea3b6f7874013bcfedb888019ed46dccbb5893ff896b2f05a0ba06c7a6c4b6c2a7b877392d6de172ab835  kauth-e79efdd06d1d9dcae9b9e5ee1cf1059f8b78f5bd.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kcalendarcore
-pkgver=9999_git20240503
+pkgver=9999_git20240512
 pkgrel=0
-_commit="5f559cd45fe03a0e0c7792c1a7475bc190eeb8f5"
+_commit="8fd5a0efef5f5aaeeebb0c82028ed8f0e225e7a4"
 pkgdesc="The KDE calendar access library"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://community.kde.org/Frameworks"
@@ -23,7 +23,7 @@ makedepends="$depends_dev
 	"
 subpackages="$pkgname-dev $pkgname-doc"
 _repo_url="https://invent.kde.org/frameworks/kcalendarcore.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-09/kcalendarcore-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/kcalendarcore-$_commit.tar.xz"
 options="!check" # RecursOn-ConnectDaily(2|3|6) make the builders stuck
 
 replaces="kcalcore"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-5fb418b98905e0fc31f42d857908b044a69244791f41e945b6df1db6c8dd0982743aa329b4248429f37153fff6bee052baaf405a8c6fab3eeca12a6007135db7  kcalendarcore-5f559cd45fe03a0e0c7792c1a7475bc190eeb8f5.tar.xz
+8049a410c297e3f4aaf14ffdfd63e16ad995406a32d12cfce118439d89ec234b0e6467f2668c70462a2239bef3479430d93b6b900e7c6743fe52b8195b587af8  kcalendarcore-8fd5a0efef5f5aaeeebb0c82028ed8f0e225e7a4.tar.xz
 "

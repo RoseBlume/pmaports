@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkcddb
-pkgver=9999_git20240506
+pkgver=9999_git20240513
 pkgrel=0
-_commit="ba6c4d863c2e298826cffd2bf1b6a5c842871522"
+_commit="56b394a35dd978b3bcbe31b4379cbfc6ce0d0511"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://www.kde.org/applications/multimedia/"
@@ -27,7 +27,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/multimedia/libkcddb.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-09/libkcddb-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/libkcddb-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 options="net" # Required for tests
 
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-83a23ede686d3b885011ce6ebbe0a3eb2d3b78b70e4003935a202bbfbfd803437651a36cea59a07f84ecaf7539a0983029ac0caa0d075b29369cc48dd9710873  libkcddb-ba6c4d863c2e298826cffd2bf1b6a5c842871522.tar.xz
+4abc08d17169920a41a9a637dea0165f4e8e221d0c1211023d338f4d4055c6d87a4c5cc299425651fa1921d683e07a5c3ea8238d81fc8519a63626d77e803c88  libkcddb-56b394a35dd978b3bcbe31b4379cbfc6ce0d0511.tar.xz
 "
