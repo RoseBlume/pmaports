@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=eventviews
-pkgver=9999_git20240513
+pkgver=9999_git20240515
 pkgrel=0
-_commit="1c4d88e72abbc32512b410c1de559abad30e9ee7"
+_commit="bf257f5763eb0e9ae3dc1c04b5544238f20c2d75"
 pkgdesc="Library for creating events"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
@@ -39,7 +39,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/eventviews.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/eventviews-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/eventviews-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -62,5 +62,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-be8f466c0675bb9cbfa708aa1eab1e4f76cc3b1f8ba680fcbbc1eeecfdaaf6681a2bc6a4601313461ec3c936e8d7c68064df0936ef291f34291c06eacef2c640  eventviews-1c4d88e72abbc32512b410c1de559abad30e9ee7.tar.xz
+3a7257a8c55e45ffdaf81e7c2201c1413c8391894ec27baefd87c97a0e91648df65e315c1587173c353b66cd53e2aa66cda93eec9774e02b29807b1fde70f8ab  eventviews-bf257f5763eb0e9ae3dc1c04b5544238f20c2d75.tar.xz
 "

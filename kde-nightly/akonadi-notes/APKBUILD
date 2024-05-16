@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi-notes
-pkgver=9999_git20240504
+pkgver=9999_git20240514
 pkgrel=0
-_commit="3c2015ddf11ca609819b239d84bcfd81667ea66d"
+_commit="07e98017358e4d4c9cc0de0ba8d1358c34028ba2"
 pkgdesc="Libraries and daemons to implement management of notes"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -22,7 +22,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/akonadi-notes.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/akonadi-notes-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/akonadi-notes-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-3b21609f0570eb17553da681388f64b3a4fef1fce78b6deae748fa8f96643c00f425b3515604a06b5608759ab582767740f134a024d87500f9b43e0cb371e5eb  akonadi-notes-3c2015ddf11ca609819b239d84bcfd81667ea66d.tar.xz
+c5d8a19d18823557d18568c8c305d593b0d5d00a1103617d11b7c92fb0debcca529422a9aacc96ac08cb004b90e45e4194b9171c8a2122d294e2135ce258a67b  akonadi-notes-07e98017358e4d4c9cc0de0ba8d1358c34028ba2.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=bovo
-pkgver=9999_git20240513
+pkgver=9999_git20240515
 pkgrel=0
-_commit="a45a8f531c97cc2e96770d536f2ad6d95f6b6e2f"
+_commit="b84c2daee22760b7cae87148165968f50d3b7193"
 pkgdesc="A Gomoku like game for two players"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -25,7 +25,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/games/bovo.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/bovo-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/bovo-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-3b3c886aaf984a6dad2e3e4b588599e7563251cb567b72236355015f87f6a8cc65f4e412541a1f549f16a6593db64dd90ada487fe77d939c48856d90b1b8876f  bovo-a45a8f531c97cc2e96770d536f2ad6d95f6b6e2f.tar.xz
+3832acf60a988a9472c0cd434500837d01370a62799367827970c41df32ec15019158db559d90b2501289ba8cd9d503c6097ff17392b66327b185eb944dd70f3  bovo-b84c2daee22760b7cae87148165968f50d3b7193.tar.xz
 "

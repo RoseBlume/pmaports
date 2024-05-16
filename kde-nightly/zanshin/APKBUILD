@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=zanshin
-pkgver=9999_git20240512
+pkgver=9999_git20240515
 pkgrel=0
-_commit="b36d3b9c33fc0542918972c9927c13742e18ce9f"
+_commit="9bd9f8d9857c278d819b271bb1da2e857280fc8a"
 # armhf blocked by qt6-qtdeclarative
 # ppc64le and s390x blocked by qt6-qtwebengine -> akonadi-calendar
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -29,7 +29,7 @@ checkdepends="
 	xvfb-run
 	"
 _repo_url="https://invent.kde.org/pim/zanshin.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/zanshin-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/zanshin-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -69,5 +69,5 @@ package() {
 }
 
 sha512sums="
-bf944ba7fc6949a4528cb3f787b727623c3822f7d8fd14a818adbc6b86326350b0eab718c31c769612db55c8b32fd95a1b236c31b6ec81e6b84112af2a92381c  zanshin-b36d3b9c33fc0542918972c9927c13742e18ce9f.tar.xz
+b591a089b0b1b202e3bab08647db2b9ea7c03392c9eb63c831d2ae1ba10216f5d0f0bb8facc7d2b4c60c3e0eab9f6104686cc46fcf09a4665cb669ef631f4489  zanshin-9bd9f8d9857c278d819b271bb1da2e857280fc8a.tar.xz
 "

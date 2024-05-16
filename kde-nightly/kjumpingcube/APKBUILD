@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kjumpingcube
-pkgver=9999_git20240513
+pkgver=9999_git20240514
 pkgrel=0
-_commit="df5cd74fc2df561b97a50adda514d6b375948277"
+_commit="c1656688f94967a4c5dd9a459196221e986f7fa8"
 pkgdesc="A simple dice driven tactical game"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -30,7 +30,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/games/kjumpingcube.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/kjumpingcube-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/kjumpingcube-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-8014a9a7befba9c7771ec0884ec4fc89bae636b81ea5b8641bbd0f3455c1e1011bcaa11128b840c69b05406013f176a9619505e24543af933102e66b81ab6f3f  kjumpingcube-df5cd74fc2df561b97a50adda514d6b375948277.tar.xz
+53fe6e877641cbf975924ec5fbac6721fbbf3fdaca63566bcc71331761185ef09fbdcf974d0d6db268a7400c67211e9a5dbe919c963b56d937b9e775d8788fc7  kjumpingcube-c1656688f94967a4c5dd9a459196221e986f7fa8.tar.xz
 "

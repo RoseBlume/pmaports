@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kigo
-pkgver=9999_git20240509
+pkgver=9999_git20240514
 pkgrel=0
-_commit="70c3ebb0c6a99a9cc7b68fa249e583aaeb3ba54a"
+_commit="6a44f711ce8552c3fb3802819f9e34326cd97ac7"
 pkgdesc="An open-source implementation of the popular Go game"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -31,7 +31,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/games/kigo.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/kigo-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/kigo-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-5d2405cbf2900e92ab0c42a220557475541f0cf38e861187526ae41dbbab12d47638fb3123c7ab2216ecc9f261c86205e6a209e379b579fd5d559ef607f41365  kigo-70c3ebb0c6a99a9cc7b68fa249e583aaeb3ba54a.tar.xz
+1a6d2a3427732bdb74b29ce750789b6c4595b075d63ae0560b8a825e33db972be7e6fd5094dd6a21695e76b0c317efd220a8e44f3de2005576a5f7122b8df18d  kigo-6a44f711ce8552c3fb3802819f9e34326cd97ac7.tar.xz
 "

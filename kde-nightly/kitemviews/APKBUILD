@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kitemviews
-pkgver=9999_git20240513
+pkgver=9999_git20240514
 pkgrel=0
-_commit="0ba2711e13ced7dc18e64b2427abb535614a7d20"
+_commit="972dca1dc5c47378a1ff20b069d4f2112833ab4c"
 pkgdesc="Widget addons for Qt Model/View"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://community.kde.org/Frameworks"
@@ -21,7 +21,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kitemviews.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-14/kitemviews-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/kitemviews-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-3ba549c3d66ff2e8cad6b4a76fb2bcd042e9de314ff3287d8b14a814676417df9823c3c2f2760d3adcbd9dd6967f91bc53b125c5382422c67da202b37f826dbb  kitemviews-0ba2711e13ced7dc18e64b2427abb535614a7d20.tar.xz
+0b6f2b2408ae308ae393600ed0922cf81cff8af83e1873a89fa37e7ff29ed215884cf52e095f2b701e10959951d66ab3265cda5e9995058242569ab114f158ee  kitemviews-972dca1dc5c47378a1ff20b069d4f2112833ab4c.tar.xz
 "
