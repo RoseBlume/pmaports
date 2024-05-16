@@ -6,7 +6,7 @@
 # How to add a new service file (4 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=8
+pkgver=9
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -32,6 +32,8 @@ subpackages="
 	openssh-server-pam-service:_service
 	pd-mapper-service:_service
 	phosh-service:_service
+	pipewire-service:_service
+	pipewire-pulse-service:_service
 	pulseaudio-service:_service
 	q6voiced-service:_service
 	qbootctl-service:_service
@@ -39,6 +41,7 @@ subpackages="
 	rtkit-service:_service
 	sleep-inhibitor-service:_service
 	tqftpserv-service:_service
+	wireplumber-service:_service
 	wpa_supplicant-service:_service
 	xdg-desktop-portal-service:_service
 	xdg-desktop-portal-gtk-service:_service
@@ -59,6 +62,8 @@ _nftables_sources="system/nftables.service"
 _openssh_server_pam_sources="system/sshd.service system/sshdgenkeys.service"
 _pd_mapper_sources="system/pd-mapper.service"
 _phosh_sources="system/phosh.service"
+_pipewire_sources="user/pipewire.service user/pipewire.socket"  # From https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/src/daemon/systemd/user
+_pipewire_pulse_sources="user/pipewire-pulse.service user/pipewire-pulse.socket"  # From https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/src/daemon/systemd/user
 _pulseaudio_sources="user/pulseaudio.service user/pulseaudio.socket"
 _q6voiced_sources="system/q6voiced.service"
 _qbootctl_sources="system/qbootctl.service"
@@ -66,6 +71,7 @@ _rmtfs_sources="system/rmtfs.service"
 _rtkit_sources="system/rtkit-daemon.service"
 _sleep_inhibitor_sources="system/sleep-inhibitor.service"
 _tqftpserv_sources="system/tqftpserv.service"
+_wireplumber_sources="user/wireplumber.service"  # https://gitlab.freedesktop.org/pipewire/wireplumber/-/blob/master/src/systemd/user
 _wpa_supplicant_sources="system/wpa_supplicant.service"
 _xdg_desktop_portal_sources="
 	user/xdg-desktop-portal.service
@@ -98,6 +104,8 @@ source="$(flatpath \
 	$_openssh_server_pam_sources \
 	$_pd_mapper_sources \
 	$_phosh_sources \
+	$_pipewire_sources \
+	$_pipewire_pulse_sources \
 	$_pulseaudio_sources \
 	$_q6voiced_sources \
 	$_qbootctl_sources \
@@ -105,6 +113,7 @@ source="$(flatpath \
 	$_rtkit_sources \
 	$_sleep_inhibitor_sources \
 	$_tqftpserv_sources \
+	$_wireplumber_sources \
 	$_wpa_supplicant_sources \
 	$_xdg_desktop_portal_sources \
 	$_xdg_desktop_portal_gtk_sources \
@@ -143,6 +152,10 @@ fa445c4a53214524baed4e9c52a5463592a074f88a5a286eacb60d0907c0545f725afde23abd68cf
 c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731cd280cbb3525b4c60311817609381e2308d9f2dfb7c0d7072  system-sshdgenkeys.service
 0bed9a8a719661609ad84d1c6fcdf2fe9213e741682b7ddebad82d9744f137c593788ed522868f10b95b599d81743d07ec3212630a7e99d333261dfa1bf1cc11  system-pd-mapper.service
 5f53e07a48c64ab27deead4c1dc64dbea048de5632026d131e27e0fc3115723a1138d043199e2fdba9a281c420b3286a0aa96b063ed7f02c1153487ef732dd98  system-phosh.service
+3c3c93f7f618a1d2104cbaeea14bf1d2f60749176962150609bc8d7cb07cbbf490d8d5b0c72f358ffe5a918ad599cb1aca62338af026c1905efa57d71b465986  user-pipewire.service
+18293fe6523f58a7dddb7385c6cb18952e8d8ae8876c9523eb60303be3387fda08495ea60da11407d29d4ecd8ca3f7664ed8b633be189e3c68b9571a3d0d21e8  user-pipewire.socket
+1392055a818eb10482fa385888dfe18cc2997adb3db8617a66389ba816225327386510bbdabaed1e56f39383347a508465e91d2006783cfee96a0a5fa56e6261  user-pipewire-pulse.service
+87508179bc1771a77889d299dfb4a95ef14245fed513c771fb281043e720a924dc94b87c1a1d79e7d46cb3d2bec26809b2275b15796391f398f766c9c7f3596e  user-pipewire-pulse.socket
 416cdca1d43af8f7a9fcb5c04abdc666500f918fa5a6985736be6132da074aa1f322ba891d74eefaeff4b8911240a3942bf82ef21ec3ba0c1f10ccc37e6cea49  user-pulseaudio.service
 26c47085980e3f11f214d51846509f41ec9367360355b2d3fb40c7dc6e4394e04d084e645081d03c794669b902141513fbc6c3828b599588e308f98e28d99a92  user-pulseaudio.socket
 4c4c3f1e5e829ff67dd35df59120ab59730ff1f1ca0aab93f16d670132979a99099fad59e6c736908cc19df9172c9bdfe476ec721a1cc28de8c2210da46ce1f1  system-q6voiced.service
@@ -151,6 +164,7 @@ c0badea3905c1d53d213fbfe11d25b556a2e484fe77eb50e9f4d42e25b67b56a0804e7d8e1b7731c
 1a0958e4fe232967946e9f2b17a13434b137236ba5d18442175d648b084d82df3a9fc5723c1621be899ee290b99777ac3c0ee6ad733e72d8e70f63b37ad00036  system-rtkit-daemon.service
 be9df5e3fd9c88ec1a8db4aa2d9e8075d74ee3d2670aa3cfc611df3cff4d4041ac888a0338c9d5f134bbc69aa32eb52ac40eb3e0981813afa18389cba14d3818  system-sleep-inhibitor.service
 c569b27925297672c479e12a6425abdf5791886fff77c2c2b67b7aa9277eb0a22e7b95b52dbc225870c97460d0988a4dae18ed864e19096c704c0895de55b699  system-tqftpserv.service
+210a7610acfcaee642ac34abe80e77f492e7e2411a9226d26578675893a125b8333a26c2756cf4376745e32fb99a2b7851d737e4df3b2c7d923f730d8ae33e9d  user-wireplumber.service
 d55edea6983ad73b1817dfac3e6d418113c8e0fbd6cb2835dedcad2e5c76c8889c09348a184ed4ab38397d7d539831ef6a7ce08037e12c7ab6dc274519dc5812  system-wpa_supplicant.service
 9a3620d3df53540a91efa48df322288d96ec887415f538877a979be40eb5239b95917b9ac57fda2c699fe3f1c6500f7de09a4ce6625b0818f5786e125713552f  user-xdg-desktop-portal.service
 e09a3c76f3be961dce9f564bb654ea84d1d7fb59907a2168c0569bf6c17a5ebe9fbe4d1f94f1d014433757bb721bc443d5962deb540cacbd5547b1dd47717f92  user-xdg-desktop-portal-rewrite-launchers.service
