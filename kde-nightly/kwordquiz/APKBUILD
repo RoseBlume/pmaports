@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kwordquiz
-pkgver=9999_git20240512
+pkgver=9999_git20240517
 pkgrel=0
-_commit="4a332a9810c275a9e3edeba4c169594ef1c8d0ac"
+_commit="5e56783f4c075ac15792ba0da268e353263df9c7"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://edu.kde.org/kwordquiz"
@@ -36,7 +36,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/education/kwordquiz.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/kwordquiz-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-20/kwordquiz-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -60,5 +60,5 @@ package() {
 }
 
 sha512sums="
-c8ed0ab6e7be0e17e598f06302297fde3b3a5f61e78effd6cbe3506b6db5bb69608d1abc8e57d8c06d5b6fd59ffbd5ab5ac4c7ce3b5586c35c62bb65bd023617  kwordquiz-4a332a9810c275a9e3edeba4c169594ef1c8d0ac.tar.xz
+8b96572a277faa3efff865d77e26172afa257b9ff11304e8027e2558bb92c0876a742194e8e48a6bf13641bc9c4ab1ab70ecd72eb6078a94b3f09c2936739835  kwordquiz-5e56783f4c075ac15792ba0da268e353263df9c7.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=dragon
-pkgver=9999_git20240514
+pkgver=9999_git20240517
 pkgrel=0
-_commit="ec5e78fe19fbc945ccf2c44fe56295c0a02b8505"
+_commit="bd694496f74f1629a88f1064683afb25aa424f98"
 pkgdesc="A multimedia player where the focus is on simplicity, instead of features"
 url="https://kde.org/applications/multimedia/org.kde.dragonplayer"
 # armhf blocked by extra-cmake-modules
@@ -35,7 +35,7 @@ makedepends="
 	solid-dev
 	"
 _repo_url="https://invent.kde.org/multimedia/dragon.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/dragon-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-20/dragon-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-9e70180e3cc74f94d5091a2a686087dc83f87cbc0785f669abe15232815f48c6aa5d9997a36976225099503a3ca2b78ed772514a497636d264baba0550d095bb  dragon-ec5e78fe19fbc945ccf2c44fe56295c0a02b8505.tar.xz
+b253611176767812ec6dc5b43b06fdd6685479c5d6d695b6f47013f7801f21e884a58c6ec21b9a30c5eba42be86ad8e61d27fd3d5f9759fb2ff2be6658253eb8  dragon-bd694496f74f1629a88f1064683afb25aa424f98.tar.xz
 "

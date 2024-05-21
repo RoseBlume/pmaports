@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkdegames
-pkgver=9999_git20240515
+pkgver=9999_git20240517
 pkgrel=0
-_commit="14f4142ea909d8d83210d938fc27e73c18eb9f37"
+_commit="0210e0c6634c9692b4e81176c0cabe9518e28a7d"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://kde.org/applications/games"
@@ -45,7 +45,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/games/libkdegames.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/libkdegames-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-20/libkdegames-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang carddecks::noarch"
 
 options="!check"
@@ -75,5 +75,5 @@ carddecks() {
 }
 
 sha512sums="
-62c75b1d55d9bd37b4f8437730de33d5a142b1acb1cecd62f663d2f7369a8293007f3798eed3ec14fe3554ba98794f2ad0aa210d8d6defab5a6e5453bdec104c  libkdegames-14f4142ea909d8d83210d938fc27e73c18eb9f37.tar.xz
+6c8f409f7789f4964b068e1343b8e251c13211b9b21a771ffc180efed130e594ead266fa81df6a6693cccc678d56dc657c2e14de457956c2105818999104f8c2  libkdegames-0210e0c6634c9692b4e81176c0cabe9518e28a7d.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=tokodon
-pkgver=9999_git20240515
+pkgver=9999_git20240517
 pkgrel=0
-_commit="acc882059db583e544e05cfe969e4d59047ab12e"
+_commit="90aab63609f36f43fa13b095c75f37ef463311ed"
 pkgdesc="A Mastodon client for Plasma and Plasma Mobile"
 url="https://invent.kde.org/network/tokodon/"
 # armhf blocked by extra-cmake-modules
@@ -41,7 +41,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/network/tokodon.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-15/tokodon-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-20/tokodon-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-8f19f3f26203c8f196458216146af1dd20c19f2c837cc70d845c36353ab34f0c57f986661a17da515d6d9edbb5d681c233d06610825e344faca1dc605a644aad  tokodon-acc882059db583e544e05cfe969e4d59047ab12e.tar.xz
+e6fd2ad2d9e9aea809631d3c142a37c9227e02c9aeab90ec717e75df5e807fb8fcc84a6b0ebf6b3c0de57538b45a55b60f5ed771a78cbcbca7f0d115c19afbd0  tokodon-90aab63609f36f43fa13b095c75f37ef463311ed.tar.xz
 "
