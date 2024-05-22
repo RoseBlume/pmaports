@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=neochat
-pkgver=9999_git20240517
+pkgver=9999_git20240521
 pkgrel=0
-_commit="0f3e401d42f2ecbc794657fa1be1718515f0cebf"
+_commit="2f1c5df11d2e3478dd97bbc9bb49070599a19cbe"
 pkgdesc="A client for Matrix, the decentralized communication protocol"
 url="https://invent.kde.org/network/neochat/"
 # armhf blocked by extra-cmake-modules
@@ -55,7 +55,7 @@ makedepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/network/neochat.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-20/neochat-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-21/neochat-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -76,5 +76,5 @@ package() {
 }
 
 sha512sums="
-f52ddcbfac1b356fa93595f96869c1ef14dbde93a2b64f19cb9701499c14c817a945451a29919d5702b01d89c4fb1ef388c608d393e43549404ea84c9130ce67  neochat-0f3e401d42f2ecbc794657fa1be1718515f0cebf.tar.xz
+4603f8d1a09ab0d8d7bb5520c1e6e7713ac4434b33213edd841a8cbf62747ad4ef282adefd8c1f594390071d50e058ffc8f0832a5efbf1cc3720d2f2d5311618  neochat-2f1c5df11d2e3478dd97bbc9bb49070599a19cbe.tar.xz
 "

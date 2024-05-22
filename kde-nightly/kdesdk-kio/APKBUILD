@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdesdk-kio
-pkgver=9999_git20240516
+pkgver=9999_git20240519
 pkgrel=0
-_commit="21ea135e8a87c635bcfedcd68d261a0a092c672d"
+_commit="43d96462fe98648efa6261f8bc434b535b6c05dd"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/development"
@@ -21,7 +21,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/sdk/kdesdk-kio.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-20/kdesdk-kio-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-21/kdesdk-kio-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # No tests
 
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-0a38042053d2e3226fbe5763fe0a02c38a8c83353ffc268cdc6836cab1349b18bfc3c6db0200290c2a441aee5f683a799388252894d95517726e376532d13092  kdesdk-kio-21ea135e8a87c635bcfedcd68d261a0a092c672d.tar.xz
+bf8c44e51d7b87e4ec49cb341b9a09f10ae23fe41629944662d123f84b94978eae5067a5db8b489a2f72f33686cd84072fed1ce405521d5984ff5ddac8919c75  kdesdk-kio-43d96462fe98648efa6261f8bc434b535b6c05dd.tar.xz
 "
