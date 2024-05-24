@@ -11,7 +11,6 @@ license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
 	pmb:kconfigcheck-community
-	pmb:kconfigcheck-uefi
 	"
 makedepends="
 	bash
@@ -23,6 +22,7 @@ makedepends="
 	openssl-dev
 	perl
 	postmarketos-installkernel
+	linux-firmware-mrvl
 "
 
 # Source
@@ -56,6 +56,7 @@ source="
     0018-fix-cherrypick-doubled-CHIP_LIVERPOOL.patch
     0019-Missing-break.patch
     0020-fix-needed-for-video-codec-support.patch
+    0021-fix-gcc-newer-than-11.patch
 "
 builddir="$srcdir/linux-${_kernver//_/-}"
 
@@ -106,4 +107,5 @@ d28a87d87b0d5dce74c39faead63eaca097b87824286431dfdb5a688e43b7ce6992cdfbd8e738697
 36156b23bac2a52de4dfca55f90af954dc107a8ede8477b4ced2d6c843dc1896a563ae729f664b7eab80bd214640f4589b75ef5a2fd5720f4cdc7684badaed19  0018-fix-cherrypick-doubled-CHIP_LIVERPOOL.patch
 98f899200ead6debd9fbff1ec681b1352e339118e24216515671334a07aeea64868ae5d05c49c1a21ca2a0820c557ed2b7cc6a112909ab1a1a1bbe32d51c26ba  0019-Missing-break.patch
 d730e2476e5bfa320aa719ef8dc12017dfcdf7542400370a4a46de6f1f2ed288090ad00725ab2d384da581970ee124bfe14ea7a167e0f68890aaf87efb1bb521  0020-fix-needed-for-video-codec-support.patch
+0094930f0f0fe66ebd02beed38770fb8ebdd393ac5e4ae60c68ed740d423823f0157db004fa55dd8964b9890439da922a543d07261e093b2a65f02a184fe5c75  0021-fix-gcc-newer-than-11.patch
 "

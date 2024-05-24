@@ -1,0 +1,35 @@
+From 8b33742318f7f95e98374baa1ccea641b0388a45 Mon Sep 17 00:00:00 2001
+From: crashniels <39709384+crashniels@users.noreply.github.com>
+Date: Fri, 24 May 2024 19:47:37 +0200
+Subject: [PATCH 21/21] fix: gcc newer than 11
+
+https://lore.kernel.org/lkml/20220129010215.781601-1-jforbes@fedoraproject.org/t/
+---
+ tools/lib/subcmd/subcmd-util.h | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/tools/lib/subcmd/subcmd-util.h b/tools/lib/subcmd/subcmd-util.h
+index 794a375dad36..7009fc176636 100644
+--- a/tools/lib/subcmd/subcmd-util.h
++++ b/tools/lib/subcmd/subcmd-util.h
+@@ -49,13 +49,12 @@ static NORETURN inline void die(const char *err, ...)
+ 
+ static inline void *xrealloc(void *ptr, size_t size)
+ {
+-	void *ret = realloc(ptr, size);
+-	if (!ret && !size)
+-		ret = realloc(ptr, 1);
++	void *ret;
++	if (!size)
++		size = 1;
++	ret = realloc(ptr, size);
+ 	if (!ret) {
+ 		ret = realloc(ptr, size);
+-		if (!ret && !size)
+-			ret = realloc(ptr, 1);
+ 		if (!ret)
+ 			die("Out of memory, realloc failed");
+ 	}
+-- 
+2.45.1
+

@@ -20,6 +20,5 @@ deviceinfo_framebuffer_landscape="true"
 # Bootloader related
 deviceinfo_flash_method="none"
 deviceinfo_kernel_cmdline="panic=0 clocksource=tsc consoleblank=0 drm.debug=0 drm.edid_firmware=edid/my_edid.bin"
-deviceinfo_generate_systemd_boot="true"
 deviceinfo_partition_type="gpt"
 deviceinfo_boot_filesystem="fat32"
