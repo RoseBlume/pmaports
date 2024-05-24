@@ -1,0 +1,24 @@
+From bca577d59a225eff27a7645989442fdaa7ebc792 Mon Sep 17 00:00:00 2001
+From: codedwrench <rick.04.1996@gmail.com>
+Date: Thu, 30 Dec 2021 15:05:26 +0100
+Subject: [PATCH 18/20] fix: cherrypick doubled CHIP_LIVERPOOL
+
+---
+ drivers/gpu/drm/amd/amdgpu/dce_v8_0.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
+index bd9d32217d25..e54b86bd6d99 100644
+--- a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
+@@ -408,7 +408,6 @@ static int dce_v8_0_get_num_crtc(struct amdgpu_device *adev)
+ 		num_crtc = 6;
+ 		break;
+ 	case CHIP_KAVERI:
+-	case CHIP_LIVERPOOL:
+ 		num_crtc = 4;
+ 		break;
+ 	case CHIP_KABINI:
+-- 
+2.45.1
+

@@ -1,0 +1,25 @@
+From 999e4d75141f493a417a98a831256ee49d990702 Mon Sep 17 00:00:00 2001
+From: Rick de Bondt <rick_1996@hotmail.com>
+Date: Fri, 31 Dec 2021 15:19:08 +0100
+Subject: [PATCH 20/20] fix: needed for video codec support
+
+---
+ drivers/gpu/drm/amd/amdgpu/cik.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/cik.c b/drivers/gpu/drm/amd/amdgpu/cik.c
+index 86f9daac1bf7..b1af875249f4 100644
+--- a/drivers/gpu/drm/amd/amdgpu/cik.c
++++ b/drivers/gpu/drm/amd/amdgpu/cik.c
+@@ -136,6 +136,8 @@ static int cik_query_video_codecs(struct amdgpu_device *adev, bool encode,
+ 	case CHIP_KAVERI:
+ 	case CHIP_KABINI:
+ 	case CHIP_MULLINS:
++	case CHIP_LIVERPOOL:
++	case CHIP_GLADIUS:
+ 		if (encode)
+ 			*codecs = &cik_video_codecs_encode;
+ 		else
+-- 
+2.45.1
+

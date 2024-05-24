@@ -1,0 +1,33 @@
+# Maintainer: Clayton Craft <clayton@craftyguy.net>
+pkgname=device-sony-ps4
+pkgdesc="Sony Playstation 4 Original"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="x86_64"
+options="!check !archcheck"
+depends="
+	linux-firmware-none
+	linux-sony-ps4
+	postmarketos-base
+	grub-efi-x86
+	"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+	"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+296e007edc70238c88a73453e05db87375cbf3c5d8131d41c91c113d97b3af752e7cb9912cc59abcfdd4d10eb6585e5b308aeac18d5b08addc5562ffeea8f324  deviceinfo
+24ed2457630757df9e69b3216b883c3032848b3cc692fd5cf0252baa6dc0dbea33e95b20767a9cb36e8461a8e79e65d50cc5ecd3a6801dc3e8e90951a34138aa  modules-initfs
+"
