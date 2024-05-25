@@ -31,6 +31,11 @@ makedepends="
 	samurai
 	xdg-desktop-portal-dev
 	"
+checkdepends="
+	dbus-x11
+	py3-gobject3
+	xvfb-run
+	"
 subpackages="$pkgname-lang"
 
 case "$pkgver" in
@@ -38,7 +43,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/xdg-desktop-portal-kde.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-23/xdg-desktop-portal-kde-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-05-24/xdg-desktop-portal-kde-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/xdg-desktop-portal-kde-$_commit"
@@ -50,6 +55,10 @@ build() {
 		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DKDE_INSTALL_LIBEXECDIR=libexec
 	cmake --build build
+}
+
+check() {
+	xvfb-run ctest --test-dir build --output-on-failure
 }
 
 package() {
