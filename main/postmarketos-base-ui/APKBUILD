@@ -1,7 +1,7 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-base-ui
-pkgver=22
-pkgrel=3
+pkgver=23
+pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -69,6 +69,7 @@ _source644="
 "
 _source600="
 	usr/lib/NetworkManager/system-connections/USB_Networking.nmconnection
+	usr/lib/NetworkManager/system-connections/USB_Tethering.nmconnection
 "
 _source755="
 	etc/tinydm.d/env-wayland.d/50-firefox-wayland.sh
@@ -174,6 +175,7 @@ _usb_tethering() {
 	amove usr/lib/NetworkManager/conf.d/50-tethering.conf
 	amove usr/lib/NetworkManager/dispatcher.d/50-tethering.sh
 	amove usr/lib/NetworkManager/system-connections/USB_Networking.nmconnection
+	amove usr/lib/NetworkManager/system-connections/USB_Tethering.nmconnection
 }
 
 networkmanager() {
@@ -274,11 +276,12 @@ d4b4c4fed2dee7266f6a87ae266691377593014943e2953e4cd87a59f3110f25bfb5f3f866cc8435
 6507eb31cdd694a7db0280246433118a650bf5d99fbe639f967ae2d95945429a7e03ca6feb5bb6e7b9fb14fcec21e13e51209a79edd0041e77b5bf76b129ed6f  rootfs-usr-lib-NetworkManager-conf.d-50-tethering.conf
 900554534191fa0797064d35350934cdd8af59f30f0ae7d8ec63c2e11c44a16c643d3024b6543940488cd590fec1d392548bcaacc3be88cddff90f69b17ece07  rootfs-usr-lib-NetworkManager-conf.d-50-use-dnsmasq.conf
 ebb7700018cf64fe6dcb747365cd2fb816deb6e06e7368af779284b51b1f0749e24f8e70b0b72fa6bff4178a02af934f728c3b115c8c1f77aa1a3490879af731  rootfs-usr-share-wireplumber-wireplumber.conf.d-50-pulseaudio.conf
-1b8add60574ec4644197cb93263c0653325c2e88e03673de918be5fb3280c7b81e8e97dce498850a07f2f3307771c44f3c876922e5cbd5207523ede31816296f  rootfs-usr-lib-NetworkManager-system-connections-USB_Networking.nmconnection
+fa77db033a453bfbed7a18e880f4127bf106a9c8351d13277e44a9405733ad342d730fd80fccc69259cfb7a8cf165ca8eb7ef718893ed400d407341c7fc8c804  rootfs-usr-lib-NetworkManager-system-connections-USB_Networking.nmconnection
+21149e1539fb32b28bee272474fac6443299cd4b50e0c0f420b751779f7ca2aa1355656c65c3b97d8b535592248ee8bd2e8c0cf2c16738e1a1e38c088024f5dc  rootfs-usr-lib-NetworkManager-system-connections-USB_Tethering.nmconnection
 d1ddd43489e6016e3ffd716027ed2bae4a2ab5f213118bdbcb96750e267ab7c0367cd0e0e386300aa5550352653144f5caeddd790621fe0879f83ca1995bb65c  rootfs-etc-tinydm.d-env-wayland.d-50-firefox-wayland.sh
 ecaa57d033a119a53a6574c27636b7c89d659d75ea48a973a6a4ff6f90e5d07202529fd489bfc9dfc7430f5b60f40612f6d5c06f7fab47e681b0a3112a874058  rootfs-etc-tinydm.d-env-wayland.d-50-sdl-wayland.sh
 91410389f8d59ee504068b108ea8b93b89d3e9dd40f8db44ac984ada9a5b82ded1c0bbe2fedd6d8803ba449a66967e3b302ebbf0e2362923edb277f6c75a84af  rootfs-usr-lib-NetworkManager-dispatcher.d-50-dns-filter.sh
-9dcf698c729e6a3d05201aa74c1618169f344f9c973e6a074591b0b4f352470235decbbc658393f44c62b6b1508c68f3c1787a640f219dbcc136e9335f3994c4  rootfs-usr-lib-NetworkManager-dispatcher.d-50-tethering.sh
+3e88a7f20d851dd94936bb967ce053010d5f3dbf509023c00dab2a78c64f287263459cedb11ee2234eb72a1cadd93a5481f8e2a3bc4b304d50be41559e3414eb  rootfs-usr-lib-NetworkManager-dispatcher.d-50-tethering.sh
 bf8db527c49fa724e640a90269ba2648a2555f5867b2adbfbd88d1f685261f757339757c09ee08f590c76de4bd3d0c73a47dea9bd340644dd4707e76152cefd1  rootfs-etc-profile.d-qt-mobile-controls.sh
 6e193eca3961a78d47b4656892eae34d019d9317a255a201f5ea61e3300caff04c526a27cd98d0edc072b36e3eaf3a1768f4cd27c5e2be8b19c167d535c820a6  rootfs-etc-profile.d-qt-wayland.sh
 "
