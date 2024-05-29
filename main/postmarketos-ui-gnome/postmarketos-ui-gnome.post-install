@@ -1,3 +1,5 @@
 #!/bin/sh
 
-rc-update add gdm default
+if command -v rc-update >/dev/null; then
+	rc-update add gdm default
+fi
