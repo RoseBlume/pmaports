@@ -8,5 +8,7 @@ if [ -f ${SDDM_CONF} ]; then
 	fi
 fi
 
-rc-update add modemmanager default
-rc-update add sddm default
+if command -v rc-update >/dev/null; then
+	rc-update add modemmanager default
+	rc-update add sddm default
+fi

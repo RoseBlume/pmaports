@@ -2,7 +2,7 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-ui-plasma-desktop
 pkgver=3
-pkgrel=2
+pkgrel=3
 pkgdesc="(X11/Wayland) KDE Desktop Environment (works well with tablets)"
 url="https://www.kde.org"
 # armhf and riscv64 blocked by plasma
@@ -38,7 +38,9 @@ _pmb_recommends="$_pmb_recommends
 	xdpyinfo
 	"
 options="!check pmb:systemd" # No tests for a metapkg
-subpackages="$pkgname-openrc $pkgname-systemd"
+subpackages="$pkgname-systemd"
+install="$pkgname.post-install $pkgname.post-upgrade"
+source="50-plasma-desktop.preset"
 
 package() {
 	mkdir -p "$pkgdir"
@@ -58,16 +60,12 @@ extras() {
 	mkdir -p "$subpkgdir"
 }
 
-openrc() {
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
-
-	mkdir -p "$subpkgdir"
-}
-
 systemd() {
 	install_if="$pkgname=$pkgver-r$pkgrel systemd"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 
-	mkdir -p "$subpkgdir"
+	install -Dm644 "$srcdir"/50-plasma-desktop.preset \
+		-t "$subpkgdir"/usr/lib/systemd/system-preset/
 }
+sha512sums="
+cc1e6a1c53b9552f93a5a8b2b8e3d10723274c3e30d388f59c498fa7ee8ea4a3be0a6eee7a50558fd1e83fac540456fa300044380ca8dd6db62069c30c431482  50-plasma-desktop.preset
+"
