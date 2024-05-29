@@ -1,7 +1,7 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-base-ui
 pkgver=22
-pkgrel=5
+pkgrel=6
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -27,17 +27,22 @@ subpackages="
 	$pkgname-audio-pipewire:_audio_pipewire
 	$pkgname-audio-pulseaudio:_audio_pulseaudio
 	$pkgname-bluez
+	$pkgname-bluez-systemd:bluez_systemd
 	$pkgname-bluez-obexd:_obexd
 	$pkgname-elogind
 	$pkgname-flatpak
 	$pkgname-networkmanager-usb-tethering:_usb_tethering
 	$pkgname-networkmanager
+	$pkgname-networkmanager-systemd:networkmanager_systemd
 	$pkgname-openrc-settingsd:_openrc_settingsd
 	$pkgname-qt-tweaks:qt_tweaks
 	$pkgname-qt-wayland:qt_wayland
+	$pkgname-systemd
 	$pkgname-tinydm
 	$pkgname-wifi-iwd:iwd
+	$pkgname-wifi-iwd-systemd:iwd_systemd
 	$pkgname-wifi-wpa_supplicant:wpa_supplicant
+	$pkgname-wifi-wpa_supplicant-systemd:wpa_supplicant_systemd
 	$pkgname-x11
 	postmarketos-default-camera:_default_camera
 	"
@@ -65,6 +70,11 @@ _source644="
 	usr/lib/NetworkManager/conf.d/50-random-mac.conf
 	usr/lib/NetworkManager/conf.d/50-tethering.conf
 	usr/lib/NetworkManager/conf.d/50-use-dnsmasq.conf
+	usr/lib/systemd/system-preset/50-bluetooth.preset
+	usr/lib/systemd/system-preset/50-iwd.preset
+	usr/lib/systemd/system-preset/50-networkmanager.preset
+	usr/lib/systemd/system-preset/50-wpa_supplicant.preset
+	usr/lib/systemd/system-preset/99-base-ui.preset
 	usr/share/wireplumber/wireplumber.conf.d/50-pulseaudio.conf
 "
 _source600="
@@ -123,6 +133,11 @@ bluez() {
 	amove etc/conf.d/bluetooth
 }
 
+bluez_systemd() {
+	install_if="$pkgname-bluez=$pkgver-r$pkgrel systemd"
+	amove usr/lib/systemd/system-preset/50-bluetooth.preset
+}
+
 elogind() {
 	install_if="$pkgname=$pkgver-r$pkgrel elogind"
 	depends="sleep-inhibitor !systemd-logind"
@@ -142,6 +157,12 @@ _openrc_settingsd() {
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	replaces="openrc-settingsd-openrc"
 	amove etc/conf.d/openrc-settingsd
+}
+
+systemd() {
+	install_if="$pkgname-=$pkgver-r$pkgrel systemd"
+	depends="systemd-timesyncd"
+	amove usr/lib/systemd/system-preset/99-base-ui.preset
 }
 
 tinydm() {
@@ -186,6 +207,11 @@ networkmanager() {
 	amove usr/lib/NetworkManager/dispatcher.d/50-dns-filter.sh
 }
 
+networkmanager_systemd() {
+	install_if="$pkgname-networkmanager=$pkgver-r$pkgrel systemd"
+	amove usr/lib/systemd/system-preset/50-networkmanager.preset
+}
+
 _default_camera() {
 	# dummy package for camera app, packages can install_if on this to install
 	# the appropriate camera app for that device/UI
@@ -211,9 +237,15 @@ wpa_supplicant() {
 	amove etc/conf.d/wpa_supplicant
 }
 
+wpa_supplicant_systemd() {
+	install_if="$pkgname-wpa_supplicant=$pkgver-r$pkgrel systemd"
+	amove usr/lib/systemd/system-preset/50-wpa_supplicant.preset
+}
+
 iwd() {
 	pkgdesc="Use iwd as the WiFi backend (but may not work with all devices)"
 	depends="iwd"
+
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	provides="postmarketos-base-ui-wifi=$pkgver-r$pkgrel"
 	# Lower than wpa_supplicant for now, see:
@@ -221,6 +253,11 @@ iwd() {
 	provider_priority=90
 
 	amove usr/lib/NetworkManager/conf.d/50-iwd.conf
+}
+
+iwd_systemd() {
+	install_if="$pkgname-iwd=$pkgver-r$pkgrel systemd"
+	amove usr/lib/systemd/system-preset/50-iwd.preset
 }
 
 _audio_none() {
@@ -273,6 +310,11 @@ cac604e25c46e695dd30bd5a10cfd2d69595fcc3bc290096ac94b76b10834d591ea6576afb79c46b
 d4b4c4fed2dee7266f6a87ae266691377593014943e2953e4cd87a59f3110f25bfb5f3f866cc843519f628695e4df7602bfdcd3d79f2c2cd6e8256535c33b038  rootfs-usr-lib-NetworkManager-conf.d-50-random-mac.conf
 6507eb31cdd694a7db0280246433118a650bf5d99fbe639f967ae2d95945429a7e03ca6feb5bb6e7b9fb14fcec21e13e51209a79edd0041e77b5bf76b129ed6f  rootfs-usr-lib-NetworkManager-conf.d-50-tethering.conf
 900554534191fa0797064d35350934cdd8af59f30f0ae7d8ec63c2e11c44a16c643d3024b6543940488cd590fec1d392548bcaacc3be88cddff90f69b17ece07  rootfs-usr-lib-NetworkManager-conf.d-50-use-dnsmasq.conf
+ee18a6d19f037f4ab76e0cefbe0b2c74f36c892f4c938d1122afe8b9e4c55c38fb48e311271f4036471c0c12e022bc8beea8181b34e084b7fb9e4685ff445551  rootfs-usr-lib-systemd-system-preset-50-bluetooth.preset
+b6f586ec976beb816a284ed4b9568b57b967e6f02c66e0df0df0b40d7100260d828c51ba1ea22efbd7d4691f045e56f9b54be1ee5cd76af9021539e1c136d860  rootfs-usr-lib-systemd-system-preset-50-iwd.preset
+15647e8e0b4a696f4abf75606d016e6963aa831d97218712d46f2f53ccd1d46115d1d4a0c0742d04a59498e2f936d68d2d0b55a5b1169292ba8b3f70e781d785  rootfs-usr-lib-systemd-system-preset-50-networkmanager.preset
+1cee819a9163eb1212c934057615f712bd9380f067ff4b240903ef96165c78d1a32e5312c2d9af07cb68284edff5482a02829319d446a5f35e1c935ca0ab4e96  rootfs-usr-lib-systemd-system-preset-50-wpa_supplicant.preset
+f494c848a82d48d126291f36ae79fcca7c4cc33029ebb6cadc76436502044975d5d40a53e4fdee97ec2d8558e9231fca2b2b9cc1ac388b32a692e40de7475978  rootfs-usr-lib-systemd-system-preset-99-base-ui.preset
 ebb7700018cf64fe6dcb747365cd2fb816deb6e06e7368af779284b51b1f0749e24f8e70b0b72fa6bff4178a02af934f728c3b115c8c1f77aa1a3490879af731  rootfs-usr-share-wireplumber-wireplumber.conf.d-50-pulseaudio.conf
 1b8add60574ec4644197cb93263c0653325c2e88e03673de918be5fb3280c7b81e8e97dce498850a07f2f3307771c44f3c876922e5cbd5207523ede31816296f  rootfs-usr-lib-NetworkManager-system-connections-USB_Networking.nmconnection
 d1ddd43489e6016e3ffd716027ed2bae4a2ab5f213118bdbcb96750e267ab7c0367cd0e0e386300aa5550352653144f5caeddd790621fe0879f83ca1995bb65c  rootfs-etc-tinydm.d-env-wayland.d-50-firefox-wayland.sh
