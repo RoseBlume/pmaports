@@ -2,14 +2,13 @@
 # Maintainer: Bart Ribbers <bribbers@disroot.org>
 pkgname=postmarketos-base-ui-plasma
 pkgver=2
-pkgrel=4
+pkgrel=5
 pkgdesc="Meta package for shared configuration for Plasma-based UIs"
 url="https://postmarketos.org"
 arch="noarch !armhf" # armhf is not supported
 license="GPL-3.0-or-later"
 depends="
 	bluedevil
-	bluez-openrc
 	breeze
 	dnsmasq
 	iio-sensor-proxy
@@ -48,6 +47,7 @@ source="
 	kdewallet.kwl
 	kdewallet.salt
 	qtlogging.ini
+	50-plasma-base.preset
 	"
 options="!check pmb:gpu-accel"
 
@@ -71,6 +71,7 @@ openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel openrc"
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="
+		bluez-openrc
 		elogind
 		elogind-openrc
 		iio-sensor-proxy-openrc
@@ -82,9 +83,9 @@ openrc() {
 
 systemd() {
 	install_if="$pkgname=$pkgver-r$pkgrel systemd"
-	install="$subpkgname.post-install $subpkgname.post-upgrade"
 
-	mkdir -p "$subpkgdir"
+	install -Dm644 "$srcdir"/50-plasma-base.preset \
+		-t "$subpkgdir"/usr/lib/systemd/system-preset/
 }
 
 sha512sums="
@@ -92,4 +93,5 @@ sha512sums="
 923309f71ee0840ae49d610ab5c11260432f462709eee7148ee5a4703872b9926a3267b16b524162c1560e0798c63fe392a161a57be5c6000bbb1e3f0c947e25  kdewallet.kwl
 f3fdaaaf13e985166b86158d5a60098aa45195ea078a4cab7fbf12d3aa428000af3e46ec011dbdc38a4c00faeac5f9a3b5bc2765a6afdd0f1ee58616e31e7429  kdewallet.salt
 341f0b866c315f37868ef3e7137cce8b53a0e8e6164e5af71b3e8e2fa68321afbf0652d76124ef84bade1393f701748852ac939aef9daff7e272a0df827780eb  qtlogging.ini
+2918f2594dfbd50db5849c9c4d0571b5bc96379a8ab927f283a9cf197bd06866e6d11d2e2b2aa2119639089adb7e4b6b8ee5b6339604d54bab58c6012a9e3416  50-plasma-base.preset
 "
