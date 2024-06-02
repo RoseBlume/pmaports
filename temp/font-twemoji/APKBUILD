@@ -1,0 +1,24 @@
+# Forked from Alpine edge, UI pkgs depend on this
+
+pkgname=font-twemoji
+pkgver=15.0.3
+_builddate=2024-01-30_11-10
+pkgrel=0
+pkgdesc="Twemoji font in TrueType format"
+url="https://github.com/twitter/twemoji"
+options="!check" # no tests
+arch="noarch"
+license="CC-BY-4.0"
+source="https://artefacts.whynothugo.nl/twemoji.ttf/$_builddate/Twemoji-$pkgver.ttf"
+# Builds from https://git.sr.ht/~whynothugo/twemoji.ttf/
+
+package() {
+	depends="fontconfig"
+
+	install -Dm644 "$srcdir"/Twemoji-$pkgver.ttf \
+		"$pkgdir"/usr/share/fonts/twemoji/Twemoji.ttf
+}
+
+sha512sums="
+6426071694454697bf5d4785ba92afb4e5002ac984e12ca656e91b1f227105e4ff1bde7d62f12f7818a5a5e0f878f37675abaf75188a2b583db25f9d6ef390b9  Twemoji-15.0.3.ttf
+"
