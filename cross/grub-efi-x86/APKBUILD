@@ -12,15 +12,15 @@ pkgdesc="GRUB $_arch EFI files for every architecture"
 url="https://www.gnu.org/software/grub/"
 license="GPL-3.0-or-later"
 arch="x86_64"
-source="grub-efi-$pkgver-r$pkgrel-$_arch-edge.apk::$_mirror/edge/main/$_arch/grub-efi-$pkgver-r$pkgrel.apk"
+source="grub-efi-$pkgver-r$pkgrel-$_arch-v3.20.apk::$_mirror/v3.20/main/$_arch/grub-efi-$pkgver-r$pkgrel.apk"
 
 package() {
 	mkdir -p "$pkgdir"
 	cd "$pkgdir"
-	tar -xf "$srcdir/grub-efi-$pkgver-r$pkgrel-$_arch-edge.apk"
+	tar -xf "$srcdir/grub-efi-$pkgver-r$pkgrel-$_arch-v3.20.apk"
 	rm .PKGINFO .SIGN.*
 }
 
 sha512sums="
-3cc14376ad5dc2a4d8488d49199d1257c5024c8c4afcbcdf67a0cd7a66e75962191850cca4248ce13abf060b4d9e2fd0966ef6adeb38a00d58c9e4054eec1e9d  grub-efi-2.12-r5-x86-edge.apk
+eea3891458477dba624b11bf5c5b1e98e3fff2b01bd081a5c67c87f245c7cd9c79566015045c7e60f893bc9dcbfde8e545d52defce07d7c8f981d143fabadfc0  grub-efi-2.12-r5-x86-v3.20.apk
 "
