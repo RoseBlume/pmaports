@@ -22,7 +22,7 @@ makedepends="
 	"
 pkggroups="messagebus"
 provider_priority=1
-install="$pkgname.pre-install $pkgname.post-install"
+install="$pkgname.pre-install"
 triggers="$pkgname.trigger=/usr/share/dbus-1/system.d"
 options="!check" # Borked in pmbootstrap...
 subpackages="
