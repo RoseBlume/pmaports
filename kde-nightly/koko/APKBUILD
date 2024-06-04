@@ -7,7 +7,6 @@ pkgname=koko
 pkgver=9999_git20240521
 pkgrel=0
 _commit="d41a8490ad9d157ea1b721b1086141ef52d0314a"
-_geonames_pkgver=9999_git20231016
 pkgdesc="Image gallery application for Plasma Mobile"
 url="https://invent.kde.org/graphics/koko"
 # armhf blocked by qt6-qtdeclarative
@@ -41,7 +40,7 @@ makedepends="
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/graphics/koko.git"
 _data_date=2023-09-02
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-03/koko-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-04/koko-$_commit.tar.xz
 	https://dev.alpinelinux.org/archive/koko/cities1000-$_data_date.zip
 	https://dev.alpinelinux.org/archive/koko/admin1CodesASCII-$_data_date.txt
 	https://dev.alpinelinux.org/archive/koko/admin2Codes-$_data_date.txt
