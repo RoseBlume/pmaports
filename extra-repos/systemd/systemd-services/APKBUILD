@@ -6,7 +6,7 @@
 # How to add a new service file (4 steps):
 pkgname=systemd-services
 # 1. bump pkgver
-pkgver=9
+pkgver=10
 pkgrel=0
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
@@ -25,6 +25,7 @@ subpackages="
 	bluez-service:_service
 	dconf-service:_service
 	flatpak-service:_service
+	geoclue-service:_service
 	hexagonrpcd-service:_service
 	iio-sensor-proxy-service:_service
 	modemmanager-service:_service
@@ -55,6 +56,7 @@ _at_spi2_core_sources="user/at-spi-dbus-bus.service"
 _bluez_sources="system/bluetooth.service"
 _dconf_sources="user/dconf.service"
 _flatpak_sources="system/flatpak-system-helper.service user/flatpak-session-helper.service user/flatpak-portal.service"
+_geoclue_sources="system/geoclue.service" # From https://gitlab.freedesktop.org/geoclue/geoclue/-/blob/master/data/geoclue.service.in
 _hexagonrpcd_sources="system/hexagonrpcd-sdsp.service system/iio-sensor-proxy.d/hexagonrpcd.conf"
 _iio_sensor_proxy_sources="system/iio-sensor-proxy.service"
 _modemmanager_sources="system/ModemManager.service"
@@ -97,6 +99,7 @@ source="$(flatpath \
 	$_bluez_sources \
 	$_dconf_sources \
 	$_flatpak_sources \
+	$_geoclue_sources \
 	$_hexagonrpcd_sources \
 	$_iio_sensor_proxy_sources \
 	$_modemmanager_sources \
@@ -143,6 +146,7 @@ e4de73d12abd046c8683e3be6e3aab40a5db3f5d6246cedbb3ff099bcc8037a167b23ac957d30f11
 0cfef56afeea103ca487b36f13665021bb349b8c890f023135a93c47d45cb58dd39ffe76212fb780546b1aaed8174e40345a961d7125f7d7ace5921e1dcc7ba9  system-flatpak-system-helper.service
 815a3072c211c85ff475ac7f2fb9c280b567b98777c0f7bf7fea4575b5eaa3b9a4003a08eb3b8cb5b2d7f9fb6525e04491e8d87013e2539ae3a574db647f97b1  user-flatpak-session-helper.service
 7a17986c0f0554f0b27a5933b3e04657323edb23047878616727863fdc748cb8d8fea978f43895341037e2d1512bbd492bdbc19c40419cd3e109345614645388  user-flatpak-portal.service
+f3463b85ac47055b400dfd2e24694c5e1dc6ab039efac0fe54496fc027c0732cda5e52a362a497b372dea671dc615154e8abfea866728d243cbbcd25e68a91aa  system-geoclue.service
 b009a1494f84705dcbea664823e24fb18f326ca84017d9c470ef55c0225d519993aacacf76b24c895ee926dbc2b3269ebc6b2a353cda5ad1b732af5624941a6a  system-hexagonrpcd-sdsp.service
 af0e416f78ab317fe09813de58b446e5178457992ea4a2da2eb128811045201087d847e1b7ac0447a59c20129a736135e5d76b113262aa1f76b994e77b9c6b42  system-iio-sensor-proxy.d-hexagonrpcd.conf
 d12ebe6e7db2a8e34baab640dd4e2ea9cd01bc19054adf32d55528a6b27f71c2006ac2d65a58c98e21ed598e9cc66bfe79e197d20ed9d13f866a5a6cd3e247d5  system-iio-sensor-proxy.service
