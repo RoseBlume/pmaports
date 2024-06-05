@@ -1,18 +1,21 @@
-# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Barnabas Czeman <trabarni@gmail.com>
 pkgname=device-xiaomi-kenzo
 pkgdesc="Xiaomi Redmi Note 3"
-pkgver=1
+pkgver=2
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-depends="postmarketos-base linux-xiaomi-kenzo mkbootimg mdss-fb-init-hack"
+depends="
+	firmware-qcom-adreno-a530
+	linux-postmarketos-qcom-msm8956
+	mkbootimg
+	msm-firmware-loader
+	postmarketos-base
+"
 makedepends="devicepkg-dev"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
-source="deviceinfo
-	fb.modes
-	directfbrc"
+source="deviceinfo modules-initfs"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -20,19 +23,9 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-
-	install -Dm644 "$srcdir"/fb.modes "$pkgdir"/etc/fb.modes
-	install -Dm644 "$srcdir"/directfbrc "$pkgdir"/etc/directfbrc
-}
-
-nonfree_firmware() {
-	pkgdesc="Wifi firmware"
-	depends="firmware-xiaomi-kenzo"
-	mkdir "$subpkgdir"
 }
 
 sha512sums="
-354079b4b20507d9bf4f6cdcc83832ec26eaa451f2dde6e28a9b1c81b22db944b6b656b192041d05be67ecd1e6e412ad312ab3b7d59f6a6822fef18244e52989  deviceinfo
-646cedb1c4675ef04530f8cab305a48767ddc894d1d08541aae3a4c124268ca9ef88aa4fa6ad507d8618f4355144a206a32f5a75ade8e60ab1fc9a338d5209f8  fb.modes
-19b0a9ae89ad4ad1adfcc2a1b5a1abfe71f560c2857e392f904c393f0b3bb4d29d7c2fbf8e080227d50e7e13f53fd5a5f3b0902c89582ec3e2742430ade19f07  directfbrc
+4335b0f1588316c178d4dc8d58d6fedba1b7262a5a0e66c04600254b2648a86b3713eab553fa3057e42e57c343d96bb8e074704365b9a1f8f49f05229345dc4a  deviceinfo
+49b043e07489df2d9d3266d440898ccb058964508f87146b9b978f5d344a844028cf38a3ecdb4c258851ba34399615978ae95978d45c115f9dd823e955538cbf  modules-initfs
 "
