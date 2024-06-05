@@ -1,7 +1,7 @@
-From 69684808042d563c8d92e6641bff22ab5d1e2717 Mon Sep 17 00:00:00 2001
+From 915809af6ee266c1c7792a0be01ae4da02d4766f Mon Sep 17 00:00:00 2001
 From: codedwrench <rick.04.1996@gmail.com>
 Date: Mon, 20 Dec 2021 16:30:44 +0100
-Subject: [PATCH 07/20] feat: usb support
+Subject: [PATCH 07/22] feat: usb support
 
 ---
  drivers/usb/host/Kconfig       |   8 +
@@ -9,8 +9,7 @@ Subject: [PATCH 07/20] feat: usb support
  drivers/usb/host/xhci-aeolia.c | 585 +++++++++++++++++++++++++++++++++
  drivers/usb/host/xhci-aeolia.h |  14 +
  drivers/usb/host/xhci.c        |  30 +-
- drivers/usb/host/xhci.h        |   1 +
- 6 files changed, 625 insertions(+), 14 deletions(-)
+ 5 files changed, 624 insertions(+), 14 deletions(-)
  create mode 100644 drivers/usb/host/xhci-aeolia.c
  create mode 100644 drivers/usb/host/xhci-aeolia.h
 
@@ -657,10 +656,10 @@ index 000000000000..2b711d6a92ca
 +
 +#endif /* DRIVERS_USB_HOST_XHCI_AEOLIA_H_ */
 diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index f5b1bcc875de..86d31339e20b 100644
+index 1fd2f6a850eb..1c8fb48c7095 100644
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -5325,20 +5325,22 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+@@ -5373,20 +5373,22 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
  
  	/* Set dma_mask and coherent_dma_mask to 64-bits,
  	 * if xHC supports 64-bit addressing */
@@ -697,18 +696,6 @@ index f5b1bcc875de..86d31339e20b 100644
  	}
  
  	xhci_dbg(xhci, "Calling HCD init\n");
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 5a75fe563123..1e328faf3c65 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1900,6 +1900,7 @@ struct xhci_hcd {
- #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
- #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
- #define XHCI_EP_CTX_BROKEN_DCS	BIT_ULL(42)
-+#define XHCI_PLAT_DMA		BIT_ULL(43)
- 
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
 -- 
 2.45.1
 

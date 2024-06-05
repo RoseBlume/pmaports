@@ -1,7 +1,7 @@
-From a29702022cc70091f32654d07e46abb71a2a76da Mon Sep 17 00:00:00 2001
+From 92a4a84d51795f0a765a0dc6b3db08ca60b74805 Mon Sep 17 00:00:00 2001
 From: codedwrench <rick.04.1996@gmail.com>
 Date: Fri, 24 Dec 2021 22:40:25 +0100
-Subject: [PATCH 10/20] feat: working state, broken gpu
+Subject: [PATCH 10/22] feat: working state, broken gpu
 
 ---
  drivers/ata/ahci.c                    | 289 ++++++++++++++++++++++++++
@@ -13,7 +13,7 @@ Subject: [PATCH 10/20] feat: working state, broken gpu
  6 files changed, 392 insertions(+), 35 deletions(-)
 
 diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index 812731e80f8e..3fda418e8db8 100644
+index 149ee16fd022..5ba41c18b295 100644
 --- a/drivers/ata/ahci.c
 +++ b/drivers/ata/ahci.c
 @@ -34,6 +34,10 @@
@@ -27,7 +27,7 @@ index 812731e80f8e..3fda418e8db8 100644
  #define DRV_NAME	"ahci"
  #define DRV_VERSION	"3.0"
  
-@@ -604,6 +608,11 @@ static const struct pci_device_id ahci_pci_tbl[] = {
+@@ -605,6 +609,11 @@ static const struct pci_device_id ahci_pci_tbl[] = {
  	/* Enmotus */
  	{ PCI_DEVICE(0x1c44, 0x8000), board_ahci },
  
@@ -39,7 +39,7 @@ index 812731e80f8e..3fda418e8db8 100644
  	/* Loongson */
  	{ PCI_VDEVICE(LOONGSON, 0x7a08), board_ahci },
  
-@@ -934,6 +943,23 @@ static int ahci_configure_dma_masks(struct pci_dev *pdev, int using_dac)
+@@ -954,6 +963,23 @@ static int ahci_configure_dma_masks(struct pci_dev *pdev, int using_dac)
  	if (pdev->dma_mask && pdev->dma_mask < DMA_BIT_MASK(32))
  		return 0;
  
@@ -63,7 +63,7 @@ index 812731e80f8e..3fda418e8db8 100644
  	rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(dma_bits));
  	if (rc)
  		dev_err(&pdev->dev, "DMA enable failed\n");
-@@ -1554,6 +1580,12 @@ static int ahci_init_msi(struct pci_dev *pdev, unsigned int n_ports,
+@@ -1574,6 +1600,12 @@ static int ahci_init_msi(struct pci_dev *pdev, unsigned int n_ports,
  {
  	int nvec;
  
@@ -76,7 +76,7 @@ index 812731e80f8e..3fda418e8db8 100644
  	if (hpriv->flags & AHCI_HFLAG_NO_MSI)
  		return -ENODEV;
  
-@@ -1680,6 +1712,13 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+@@ -1700,6 +1732,13 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
  
  	WARN_ON((int)ATA_MAX_QUEUE > AHCI_MAX_CMDS);
  
@@ -90,7 +90,7 @@ index 812731e80f8e..3fda418e8db8 100644
  	ata_print_version_once(&pdev->dev, DRV_VERSION);
  
  	/* The AHCI driver can only drive the SATA ports, the PATA driver
-@@ -1933,8 +1972,258 @@ static void ahci_remove_one(struct pci_dev *pdev)
+@@ -1947,8 +1986,258 @@ static void ahci_remove_one(struct pci_dev *pdev)
  				     NULL);
  	pm_runtime_get_noresume(&pdev->dev);
  	ata_pci_remove_one(pdev);
@@ -350,7 +350,7 @@ index 812731e80f8e..3fda418e8db8 100644
  
  MODULE_AUTHOR("Jeff Garzik");
 diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-index 2e89499bd9c3..29792fdb6bef 100644
+index 60ae707a88cc..efdfac788727 100644
 --- a/drivers/ata/ahci.h
 +++ b/drivers/ata/ahci.h
 @@ -447,4 +447,32 @@ static inline int ahci_nr_ports(u32 cap)
@@ -387,10 +387,10 @@ index 2e89499bd9c3..29792fdb6bef 100644
 +
  #endif /* _AHCI_H */
 diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
-index 92431f381445..37a550f03f04 100644
+index 752b66d7d0df..5e249922a72a 100644
 --- a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
 +++ b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
-@@ -1067,6 +1067,10 @@ static int gmc_v7_0_sw_init(void *handle)
+@@ -1068,6 +1068,10 @@ static int gmc_v7_0_sw_init(void *handle)
  	if (r)
  		return r;
  
@@ -401,7 +401,7 @@ index 92431f381445..37a550f03f04 100644
  	/*
  	 * number of VMs
  	 * VMID 0 is reserved for System
-@@ -1092,6 +1096,8 @@ static int gmc_v7_0_sw_init(void *handle)
+@@ -1093,6 +1097,8 @@ static int gmc_v7_0_sw_init(void *handle)
  		return -ENOMEM;
  	atomic_set(&adev->gmc.vm_fault_info_updated, 0);
  
@@ -411,10 +411,10 @@ index 92431f381445..37a550f03f04 100644
  }
  
 diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 16b93198e1fc..a5bf768079a0 100644
+index f20dc0c7b78f..4d36261e88a9 100644
 --- a/drivers/iommu/amd/iommu.c
 +++ b/drivers/iommu/amd/iommu.c
-@@ -3298,6 +3298,7 @@ static int irq_remapping_select(struct irq_domain *d, struct irq_fwspec *fwspec,
+@@ -3300,6 +3300,7 @@ static int irq_remapping_select(struct irq_domain *d, struct irq_fwspec *fwspec,
  	if (devid < 0)
  		return 0;
  

@@ -1,7 +1,7 @@
-From f7410f699e589b13303a40651634ee35329c7781 Mon Sep 17 00:00:00 2001
+From 0bd681355cbd557d93a6cc62e0b816ed661095c9 Mon Sep 17 00:00:00 2001
 From: codedwrench <rick.04.1996@gmail.com>
 Date: Tue, 21 Dec 2021 19:22:42 +0100
-Subject: [PATCH 09/20] feat: trying to modernize ps4-apcie so it works with
+Subject: [PATCH 09/22] feat: trying to modernize ps4-apcie so it works with
  kernel 5.15
 
 ---
@@ -54,10 +54,10 @@ index c132daabe615..af7339aaa843 100644
  
  static const struct irq_domain_ops x86_vector_domain_ops = {
 diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index 1722bb161841..16b93198e1fc 100644
+index 5ceaaabb4f9d..f20dc0c7b78f 100644
 --- a/drivers/iommu/amd/iommu.c
 +++ b/drivers/iommu/amd/iommu.c
-@@ -3292,6 +3292,8 @@ static int irq_remapping_select(struct irq_domain *d, struct irq_fwspec *fwspec,
+@@ -3294,6 +3294,8 @@ static int irq_remapping_select(struct irq_domain *d, struct irq_fwspec *fwspec,
  		devid = get_ioapic_devid(fwspec->param[0]);
  	else if (x86_fwspec_is_hpet(fwspec))
  		devid = get_hpet_devid(fwspec->param[0]);

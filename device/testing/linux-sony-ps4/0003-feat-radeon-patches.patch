@@ -1,7 +1,7 @@
-From dc23b796280fdd4b001818972ab3ab5a90834f6d Mon Sep 17 00:00:00 2001
+From 246294ab578bb46cdcba26ebca73246089e2043b Mon Sep 17 00:00:00 2001
 From: codedwrench <rick.04.1996@gmail.com>
 Date: Mon, 20 Dec 2021 13:59:32 +0100
-Subject: [PATCH 03/20] feat: radeon patches
+Subject: [PATCH 03/22] feat: radeon patches
 
 ---
  drivers/gpu/drm/radeon/Makefile            |   2 +
@@ -28,7 +28,7 @@ Subject: [PATCH 03/20] feat: radeon patches
  create mode 100644 drivers/gpu/drm/radeon/ps4_bridge.c
 
 diff --git a/drivers/gpu/drm/radeon/Makefile b/drivers/gpu/drm/radeon/Makefile
-index 11c97edde54d..d8572620aaa7 100644
+index 3d502f1bbfcb..9735ac7a69fa 100644
 --- a/drivers/gpu/drm/radeon/Makefile
 +++ b/drivers/gpu/drm/radeon/Makefile
 @@ -53,6 +53,8 @@ radeon-y += radeon_device.o radeon_asic.o radeon_kms.o \
@@ -41,10 +41,10 @@ index 11c97edde54d..d8572620aaa7 100644
  radeon-y += \
  	r600_dma.o \
 diff --git a/drivers/gpu/drm/radeon/atombios_encoders.c b/drivers/gpu/drm/radeon/atombios_encoders.c
-index 0fce73b9a646..45d72b9d740f 100644
+index 2b4491137217..12f2f35be471 100644
 --- a/drivers/gpu/drm/radeon/atombios_encoders.c
 +++ b/drivers/gpu/drm/radeon/atombios_encoders.c
-@@ -690,7 +690,8 @@ atombios_get_encoder_mode(struct drm_encoder *encoder)
+@@ -691,7 +691,8 @@ atombios_get_encoder_mode(struct drm_encoder *encoder)
  	if (radeon_encoder->is_mst_encoder || radeon_encoder->offset)
  		return ATOM_ENCODER_MODE_DP_MST;
  	/* dp bridges are always DP */
@@ -1851,10 +1851,10 @@ index 7c5e80d03fc9..ba877d0b73fd 100644
  	return 0;
  }
 diff --git a/drivers/gpu/drm/radeon/radeon_connectors.c b/drivers/gpu/drm/radeon/radeon_connectors.c
-index 607ad5620bd9..98a9f09a6cf6 100644
+index d157bb9072e8..984323a541ba 100644
 --- a/drivers/gpu/drm/radeon/radeon_connectors.c
 +++ b/drivers/gpu/drm/radeon/radeon_connectors.c
-@@ -1476,6 +1476,30 @@ static void radeon_dvi_force(struct drm_connector *connector)
+@@ -1480,6 +1480,30 @@ static void radeon_dvi_force(struct drm_connector *connector)
  		radeon_connector->use_digital = true;
  }
  
@@ -1885,7 +1885,7 @@ index 607ad5620bd9..98a9f09a6cf6 100644
  static enum drm_mode_status radeon_dvi_mode_valid(struct drm_connector *connector,
  				  struct drm_display_mode *mode)
  {
-@@ -1875,6 +1899,7 @@ radeon_add_atom_connector(struct drm_device *dev,
+@@ -1879,6 +1903,7 @@ radeon_add_atom_connector(struct drm_device *dev,
  	uint32_t subpixel_order = SubPixelNone;
  	bool shared_ddc = false;
  	bool is_dp_bridge = false;
@@ -1893,7 +1893,7 @@ index 607ad5620bd9..98a9f09a6cf6 100644
  	bool has_aux = false;
  
  	if (connector_type == DRM_MODE_CONNECTOR_Unknown)
-@@ -1926,6 +1951,18 @@ radeon_add_atom_connector(struct drm_device *dev,
+@@ -1930,6 +1955,18 @@ radeon_add_atom_connector(struct drm_device *dev,
  	if (!radeon_connector)
  		return;
  
@@ -1912,7 +1912,7 @@ index 607ad5620bd9..98a9f09a6cf6 100644
  	connector = &radeon_connector->base;
  
  	radeon_connector->connector_id = connector_id;
-@@ -1985,12 +2022,20 @@ radeon_add_atom_connector(struct drm_device *dev,
+@@ -1989,12 +2026,20 @@ radeon_add_atom_connector(struct drm_device *dev,
  		case DRM_MODE_CONNECTOR_HDMIA:
  		case DRM_MODE_CONNECTOR_HDMIB:
  		case DRM_MODE_CONNECTOR_DisplayPort:
@@ -1940,7 +1940,7 @@ index 607ad5620bd9..98a9f09a6cf6 100644
  						      rdev->mode_info.underscan_property,
  						      UNDERSCAN_OFF);
 diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
-index 4f0fbf667431..7536004a5b71 100644
+index 1c005e0ddd38..efa4c92762dd 100644
 --- a/drivers/gpu/drm/radeon/radeon_device.c
 +++ b/drivers/gpu/drm/radeon/radeon_device.c
 @@ -107,6 +107,7 @@ static const char radeon_family_name[][16] = {

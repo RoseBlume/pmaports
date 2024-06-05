@@ -1,7 +1,7 @@
-From 1bf15653192a3f10db28b4973278fc516f0ffd01 Mon Sep 17 00:00:00 2001
+From 0d69fe3288f2c3444a25c72847a6d670ab07c77b Mon Sep 17 00:00:00 2001
 From: codedwrench <rick.04.1996@gmail.com>
 Date: Mon, 20 Dec 2021 14:56:09 +0100
-Subject: [PATCH 05/20] feat: sdhci support
+Subject: [PATCH 05/22] feat: sdhci support
 
 ---
  drivers/mmc/host/sdhci-pci-core.c | 67 +++++++++++++++++++++++++++++++
@@ -9,7 +9,7 @@ Subject: [PATCH 05/20] feat: sdhci support
  2 files changed, 69 insertions(+)
 
 diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
-index c2b26ada104d..a4bfc2a46bb8 100644
+index 8736e04fa73c..d50a3658820d 100644
 --- a/drivers/mmc/host/sdhci-pci-core.c
 +++ b/drivers/mmc/host/sdhci-pci-core.c
 @@ -37,6 +37,10 @@
@@ -78,7 +78,7 @@ index c2b26ada104d..a4bfc2a46bb8 100644
  static int mrst_hc_probe_slot(struct sdhci_pci_slot *slot)
  {
  	slot->host->mmc->caps |= MMC_CAP_8_BIT_DATA;
-@@ -1964,6 +2016,12 @@ static const struct pci_device_id pci_ids[] = {
+@@ -1974,6 +2026,12 @@ static const struct pci_device_id pci_ids[] = {
  	SDHCI_PCI_DEVICE(O2, SEABIRD1, o2),
  	SDHCI_PCI_DEVICE(ARASAN, PHY_EMMC, arasan),
  	SDHCI_PCI_DEVICE(SYNOPSYS, DWC_MSHC, snps),
@@ -91,7 +91,7 @@ index c2b26ada104d..a4bfc2a46bb8 100644
  	SDHCI_PCI_DEVICE(GLI, 9750, gl9750),
  	SDHCI_PCI_DEVICE(GLI, 9755, gl9755),
  	SDHCI_PCI_DEVICE(GLI, 9763E, gl9763e),
-@@ -1998,6 +2056,10 @@ int sdhci_pci_enable_dma(struct sdhci_host *host)
+@@ -2008,6 +2066,10 @@ int sdhci_pci_enable_dma(struct sdhci_host *host)
  
  	pci_set_master(pdev);
  
@@ -102,7 +102,7 @@ index c2b26ada104d..a4bfc2a46bb8 100644
  	return 0;
  }
  
-@@ -2351,6 +2413,7 @@ static int sdhci_pci_probe(struct pci_dev *pdev,
+@@ -2361,6 +2423,7 @@ static int sdhci_pci_probe(struct pci_dev *pdev,
  		chip->allow_runtime_pm = chip->fixes->allow_runtime_pm;
  	}
  	chip->num_slots = slots;
@@ -110,7 +110,7 @@ index c2b26ada104d..a4bfc2a46bb8 100644
  	chip->pm_retune = true;
  	chip->rpm_retune = true;
  
-@@ -2365,7 +2428,11 @@ static int sdhci_pci_probe(struct pci_dev *pdev,
+@@ -2375,7 +2438,11 @@ static int sdhci_pci_probe(struct pci_dev *pdev,
  	slots = chip->num_slots;	/* Quirk may have changed this */
  
  	for (i = 0; i < slots; i++) {

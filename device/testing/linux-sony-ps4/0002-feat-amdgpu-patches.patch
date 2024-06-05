@@ -1,7 +1,7 @@
-From 522659e83843e32995e008cc8c5d5de5d0509171 Mon Sep 17 00:00:00 2001
+From dc3a4684ee5dde8df325a4f94af3d2ca6a248736 Mon Sep 17 00:00:00 2001
 From: codedwrench <rick.04.1996@gmail.com>
 Date: Mon, 20 Dec 2021 12:32:27 +0100
-Subject: [PATCH 02/20] feat: amdgpu patches
+Subject: [PATCH 02/22] feat: amdgpu patches
 
 ---
  drivers/gpu/drm/amd/amdgpu/Makefile           |   1 +
@@ -48,7 +48,7 @@ index 8d0748184a14..bc79dc5dfaac 100644
  include $(FULL_AMD_PATH)/pm/Makefile
  
 diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-index f428f94b43c0..8f3a0c5ca344 100644
+index d90da384d185..fc3d11bbd206 100644
 --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
 +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
 @@ -270,6 +270,9 @@ extern int amdgpu_num_kcq;
@@ -62,10 +62,10 @@ index f428f94b43c0..8f3a0c5ca344 100644
  #define AMDGPU_SMARTSHIFT_MAX_BIAS (100)
  #define AMDGPU_SMARTSHIFT_MIN_BIAS (-100)
 diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-index 0de66f59adb8..4c3884d7e55d 100644
+index c777aff164b7..edceba19b54a 100644
 --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
 +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-@@ -1508,6 +1508,31 @@ static const struct drm_connector_funcs amdgpu_connector_dp_funcs = {
+@@ -1516,6 +1516,31 @@ static const struct drm_connector_funcs amdgpu_connector_dp_funcs = {
  	.late_register = amdgpu_connector_late_register,
  };
  
@@ -97,7 +97,7 @@ index 0de66f59adb8..4c3884d7e55d 100644
  static const struct drm_connector_funcs amdgpu_connector_edp_funcs = {
  	.dpms = drm_helper_connector_dpms,
  	.detect = amdgpu_connector_dp_detect,
-@@ -1539,6 +1564,7 @@ amdgpu_connector_add(struct amdgpu_device *adev,
+@@ -1547,6 +1572,7 @@ amdgpu_connector_add(struct amdgpu_device *adev,
  	struct i2c_adapter *ddc = NULL;
  	uint32_t subpixel_order = SubPixelNone;
  	bool shared_ddc = false;
@@ -105,7 +105,7 @@ index 0de66f59adb8..4c3884d7e55d 100644
  	bool is_dp_bridge = false;
  	bool has_aux = false;
  
-@@ -1587,6 +1613,18 @@ amdgpu_connector_add(struct amdgpu_device *adev,
+@@ -1595,6 +1621,18 @@ amdgpu_connector_add(struct amdgpu_device *adev,
  	if (!amdgpu_connector)
  		return;
  
@@ -124,7 +124,7 @@ index 0de66f59adb8..4c3884d7e55d 100644
  	connector = &amdgpu_connector->base;
  
  	amdgpu_connector->connector_id = connector_id;
-@@ -1641,12 +1679,21 @@ amdgpu_connector_add(struct amdgpu_device *adev,
+@@ -1649,12 +1687,21 @@ amdgpu_connector_add(struct amdgpu_device *adev,
  		case DRM_MODE_CONNECTOR_HDMIA:
  		case DRM_MODE_CONNECTOR_HDMIB:
  		case DRM_MODE_CONNECTOR_DisplayPort:
@@ -149,10 +149,10 @@ index 0de66f59adb8..4c3884d7e55d 100644
  						      adev->mode_info.underscan_property,
  						      UNDERSCAN_OFF);
 diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index 1545884dc703..98e10ea8a911 100644
+index 2f51789d9818..125233cf8287 100644
 --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
 +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -98,6 +98,8 @@ const char *amdgpu_asic_name[] = {
+@@ -106,6 +106,8 @@ const char *amdgpu_asic_name[] = {
  	"KAVERI",
  	"KABINI",
  	"HAWAII",
@@ -161,7 +161,7 @@ index 1545884dc703..98e10ea8a911 100644
  	"MULLINS",
  	"TOPAZ",
  	"TONGA",
-@@ -1913,6 +1915,8 @@ static int amdgpu_device_parse_gpu_info_fw(struct amdgpu_device *adev)
+@@ -1957,6 +1959,8 @@ static int amdgpu_device_parse_gpu_info_fw(struct amdgpu_device *adev)
  #ifdef CONFIG_DRM_AMDGPU_CIK
  	case CHIP_BONAIRE:
  	case CHIP_HAWAII:
@@ -170,7 +170,7 @@ index 1545884dc703..98e10ea8a911 100644
  	case CHIP_KAVERI:
  	case CHIP_KABINI:
  	case CHIP_MULLINS:
-@@ -2098,6 +2102,8 @@ static int amdgpu_device_ip_early_init(struct amdgpu_device *adev)
+@@ -2144,6 +2148,8 @@ static int amdgpu_device_ip_early_init(struct amdgpu_device *adev)
  	case CHIP_KAVERI:
  	case CHIP_KABINI:
  	case CHIP_MULLINS:
@@ -180,10 +180,10 @@ index 1545884dc703..98e10ea8a911 100644
  			adev->family = AMDGPU_FAMILY_KV;
  		else
 diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index 41677f99c67b..1028b50fe858 100644
+index 4df888c7e2ff..8efd8c40762b 100644
 --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
 +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -47,6 +47,10 @@
+@@ -46,6 +46,10 @@
  #include "amdgpu_fdinfo.h"
  #include "amdgpu_amdkfd.h"
  
@@ -194,7 +194,7 @@ index 41677f99c67b..1028b50fe858 100644
  #include "amdgpu_ras.h"
  #include "amdgpu_xgmi.h"
  #include "amdgpu_reset.h"
-@@ -1049,6 +1053,12 @@ static const struct pci_device_id pciidlist[] = {
+@@ -1759,6 +1763,12 @@ static const struct pci_device_id pciidlist[] = {
  	{0x1002, 0x985D, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_MULLINS|AMD_IS_MOBILITY|AMD_IS_APU},
  	{0x1002, 0x985E, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_MULLINS|AMD_IS_MOBILITY|AMD_IS_APU},
  	{0x1002, 0x985F, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_MULLINS|AMD_IS_MOBILITY|AMD_IS_APU},
@@ -207,9 +207,9 @@ index 41677f99c67b..1028b50fe858 100644
  #endif
  	/* topaz */
  	{0x1002, 0x6900, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_TOPAZ},
-@@ -1342,6 +1352,16 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
- 	if (ret)
- 		return ret;
+@@ -2066,6 +2076,16 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
+ 	size = pci_resource_len(pdev, 0);
+ 	is_fw_fb = amdgpu_is_fw_framebuffer(base, size);
  
 +	#ifdef CONFIG_X86_PS4
 +	/* On the PS4 (Liverpool graphics) we have a hard dependency on the
@@ -280,7 +280,7 @@ index c076a6b9a5a2..486c571768d8 100644
  		long tmo;
  
 diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
-index abd8469380e5..b18ddd5bf89a 100644
+index 0ed0736d515a..b98296c851db 100644
 --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
 +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c
 @@ -377,6 +377,8 @@ amdgpu_ucode_get_load_type(struct amdgpu_device *adev, int load_type)
@@ -293,10 +293,10 @@ index abd8469380e5..b18ddd5bf89a 100644
  #endif
  	case CHIP_TOPAZ:
 diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
-index ac9a8cd21c4b..62adda3fb3de 100644
+index 7d58bf410be0..412faeef0c96 100644
 --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
 +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vkms.c
-@@ -535,6 +535,8 @@ static int amdgpu_vkms_hw_init(void *handle)
+@@ -536,6 +536,8 @@ static int amdgpu_vkms_hw_init(void *handle)
  	case CHIP_KAVERI:
  	case CHIP_KABINI:
  	case CHIP_MULLINS:
@@ -350,7 +350,7 @@ index 6134ed964027..5bd8a782feb5 100644
  
  	/* DVO is always DVO */
 diff --git a/drivers/gpu/drm/amd/amdgpu/cik.c b/drivers/gpu/drm/amd/amdgpu/cik.c
-index 54f28c075f21..86f9daac1bf7 100644
+index de6d10390ab2..353899a95424 100644
 --- a/drivers/gpu/drm/amd/amdgpu/cik.c
 +++ b/drivers/gpu/drm/amd/amdgpu/cik.c
 @@ -788,6 +788,206 @@ static const u32 hawaii_mgcg_cgcg_init[] =
@@ -595,7 +595,7 @@ index 54f28c075f21..86f9daac1bf7 100644
  	default:
  		break;
  	}
-@@ -2143,6 +2371,63 @@ static int cik_common_early_init(void *handle)
+@@ -2147,6 +2375,63 @@ static int cik_common_early_init(void *handle)
  		} else
  			adev->external_rev_id = adev->rev_id + 0xa1;
  		break;
@@ -659,7 +659,7 @@ index 54f28c075f21..86f9daac1bf7 100644
  	default:
  		/* FIXME: not supported yet */
  		return -EINVAL;
-@@ -2325,6 +2610,42 @@ int cik_set_ip_blocks(struct amdgpu_device *adev)
+@@ -2329,6 +2614,42 @@ int cik_set_ip_blocks(struct amdgpu_device *adev)
  		amdgpu_device_ip_block_add(adev, &uvd_v4_2_ip_block);
  		amdgpu_device_ip_block_add(adev, &vce_v2_0_ip_block);
  		break;
@@ -1628,7 +1628,7 @@ index 37b4a3db6360..d81187445ebe 100644
  	else
  		ao_cu_num = adev->gfx.config.max_cu_per_sh;
 diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
-index 0a50fdaced7e..92431f381445 100644
+index 63c47f61d0df..752b66d7d0df 100644
 --- a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
 +++ b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
 @@ -150,6 +150,8 @@ static int gmc_v7_0_init_microcode(struct amdgpu_device *adev)
@@ -1640,7 +1640,7 @@ index 0a50fdaced7e..92431f381445 100644
  		return 0;
  	default: BUG();
  	}
-@@ -401,6 +403,10 @@ static int gmc_v7_0_mc_init(struct amdgpu_device *adev)
+@@ -402,6 +404,10 @@ static int gmc_v7_0_mc_init(struct amdgpu_device *adev)
  			adev->gmc.gart_size = 256ULL << 20;
  			break;
  #ifdef CONFIG_DRM_AMDGPU_CIK
@@ -1651,7 +1651,7 @@ index 0a50fdaced7e..92431f381445 100644
  		case CHIP_BONAIRE: /* UVD, VCE do not support GPUVM */
  		case CHIP_HAWAII:  /* UVD, VCE do not support GPUVM */
  		case CHIP_KAVERI:  /* UVD, VCE do not support GPUVM */
-@@ -687,6 +693,19 @@ static int gmc_v7_0_gart_enable(struct amdgpu_device *adev)
+@@ -688,6 +694,19 @@ static int gmc_v7_0_gart_enable(struct amdgpu_device *adev)
  			       table_addr >> 12);
  	}
  
@@ -2474,10 +2474,10 @@ index f6233019f042..d7d510c76e4f 100644
  			(struct cik_ih_ring_entry *)patched_ihre;
  
 diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-index cfedfb1e8596..c4f2df2d5015 100644
+index e574aa32a111..5aa872cbef5e 100644
 --- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
 +++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
-@@ -1346,6 +1346,9 @@ static int kfd_fill_gpu_cache_info(struct kfd_dev *kdev,
+@@ -1349,6 +1349,9 @@ static int kfd_fill_gpu_cache_info(struct kfd_dev *kdev,
  		num_of_cache_types = ARRAY_SIZE(kaveri_cache_info);
  		break;
  	case CHIP_HAWAII:
@@ -2488,7 +2488,7 @@ index cfedfb1e8596..c4f2df2d5015 100644
  		num_of_cache_types = ARRAY_SIZE(hawaii_cache_info);
  		break;
 diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device.c b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-index 88c483f69989..e5fdaa65a99a 100644
+index 660eb7097cfc..f40f9e4f3134 100644
 --- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
 +++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
 @@ -62,6 +62,8 @@ static const struct kfd2kgd_calls *kfd2kgd_funcs[] = {
@@ -2559,10 +2559,10 @@ index 88c483f69989..e5fdaa65a99a 100644
  	[CHIP_FIJI] = {&fiji_device_info, &fiji_vf_device_info},
  	[CHIP_POLARIS10] = {&polaris10_device_info, &polaris10_vf_device_info},
 diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-index 4f2e0cc8a51a..0213bc5d19d1 100644
+index 442857f3bde7..d88513d0aca0 100644
 --- a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
 +++ b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-@@ -293,7 +293,8 @@ static void deallocate_vmid(struct device_queue_manager *dqm,
+@@ -307,7 +307,8 @@ static void deallocate_vmid(struct device_queue_manager *dqm,
  				struct queue *q)
  {
  	/* On GFX v7, CP doesn't flush TC at dequeue */
@@ -2572,7 +2572,7 @@ index 4f2e0cc8a51a..0213bc5d19d1 100644
  		if (flush_texture_cache_nocpsch(q->device, qpd))
  			pr_err("Failed to flush TC\n");
  
-@@ -1938,6 +1939,8 @@ struct device_queue_manager *device_queue_manager_init(struct kfd_dev *dev)
+@@ -1929,6 +1930,8 @@ struct device_queue_manager *device_queue_manager_init(struct kfd_dev *dev)
  		device_queue_manager_init_cik(&dqm->asic_ops);
  		break;
  

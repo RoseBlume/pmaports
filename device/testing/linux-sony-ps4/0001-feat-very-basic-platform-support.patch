@@ -1,7 +1,7 @@
-From 6d02e33f54b3eef38cce2615dd98d9a19e6bd9f3 Mon Sep 17 00:00:00 2001
+From a39f0b4736da33e9bee30fa890232892e73a0000 Mon Sep 17 00:00:00 2001
 From: codedwrench <rick.04.1996@gmail.com>
 Date: Sun, 19 Dec 2021 18:23:28 +0100
-Subject: [PATCH 01/20] feat: very basic platform support
+Subject: [PATCH 01/22] feat: very basic platform support
 
 ---
  arch/x86/Kconfig                      |  10 +-
@@ -39,10 +39,10 @@ Subject: [PATCH 01/20] feat: very basic platform support
  create mode 100644 drivers/ps4/ps4-apcie.c
 
 diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 1f96809606ac..73fe353b87e5 100644
+index a08ce6360382..c510ff611adc 100644
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -549,7 +549,15 @@ config X86_NUMACHIP
+@@ -541,7 +541,15 @@ config X86_NUMACHIP
  	  Adds support for Numascale NumaChip large-SMP systems. Needed to
  	  enable more than ~168 cores.
  	  If you don't have one of these, you should say N here.
@@ -175,10 +175,10 @@ index c92c9c774c0e..d1fb4f09d727 100644
  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F4) },
  	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
 diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index de01903c3735..08081765dc16 100644
+index 5036104d5470..ca800a2f28b3 100644
 --- a/arch/x86/kernel/head64.c
 +++ b/arch/x86/kernel/head64.c
-@@ -518,6 +518,9 @@ void __init x86_64_start_reservations(char *real_mode_data)
+@@ -520,6 +520,9 @@ void __init x86_64_start_reservations(char *real_mode_data)
  	case X86_SUBARCH_INTEL_MID:
  		x86_intel_mid_early_setup();
  		break;
@@ -422,10 +422,10 @@ index a110338c860c..6d866a189d6a 100644
  obj-$(CONFIG_ATM)		+= atm/
  obj-$(CONFIG_FUSION)		+= message/
 diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index 2a822b229bd0..d0b753e4bd31 100644
+index 50ea582be591..ea0e5dc8d88d 100644
 --- a/drivers/iommu/amd/init.c
 +++ b/drivers/iommu/amd/init.c
-@@ -2578,6 +2578,7 @@ static void __init free_iommu_resources(void)
+@@ -2603,6 +2603,7 @@ static void __init free_iommu_resources(void)
  	free_iommu_all();
  }
  
@@ -433,7 +433,7 @@ index 2a822b229bd0..d0b753e4bd31 100644
  /* SB IOAPIC is always on this device in AMD systems */
  #define IOAPIC_SB_DEVID		((0x00 << 8) | PCI_DEVFN(0x14, 0))
  
-@@ -2629,6 +2630,7 @@ static bool __init check_ioapic_information(void)
+@@ -2654,6 +2655,7 @@ static bool __init check_ioapic_information(void)
  
  	return ret;
  }
@@ -441,7 +441,7 @@ index 2a822b229bd0..d0b753e4bd31 100644
  
  static void __init free_dma_resources(void)
  {
-@@ -2769,8 +2771,10 @@ static int __init early_amd_iommu_init(void)
+@@ -2794,8 +2796,10 @@ static int __init early_amd_iommu_init(void)
  	if (!is_kdump_kernel() || amd_iommu_disabled)
  		disable_iommus();
  
@@ -2163,10 +2163,10 @@ index 000000000000..d5e87d1ee74e
 +};
 +module_pci_driver(apcie_driver);
 diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index 011f2f1ea5bb..9639b645a907 100644
+index 8a1e26473566..9c62f14fad84 100644
 --- a/include/linux/pci_ids.h
 +++ b/include/linux/pci_ids.h
-@@ -549,6 +549,8 @@
+@@ -551,6 +551,8 @@
  #define PCI_DEVICE_ID_AMD_16H_NB_F4	0x1534
  #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F3 0x1583
  #define PCI_DEVICE_ID_AMD_16H_M30H_NB_F4 0x1584
@@ -2175,7 +2175,7 @@ index 011f2f1ea5bb..9639b645a907 100644
  #define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
  #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
  #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
-@@ -891,6 +893,30 @@
+@@ -893,6 +895,30 @@
  #define PCI_DEVICE_ID_TI_DRA72x		0xb501
  
  #define PCI_VENDOR_ID_SONY		0x104d

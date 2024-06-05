@@ -1,0 +1,39 @@
+From 77961812e981b14669eb51cfa67181149a9bb64a Mon Sep 17 00:00:00 2001
+From: crashniels <39709384+crashniels@users.noreply.github.com>
+Date: Sat, 25 May 2024 19:32:05 +0200
+Subject: [PATCH 22/22] fix: use upstream values
+
+---
+ drivers/usb/host/xhci-aeolia.c | 2 +-
+ drivers/usb/host/xhci.c        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-aeolia.c b/drivers/usb/host/xhci-aeolia.c
+index 1401af61430c..9ab0be144f42 100644
+--- a/drivers/usb/host/xhci-aeolia.c
++++ b/drivers/usb/host/xhci-aeolia.c
+@@ -43,7 +43,7 @@ static void xhci_aeolia_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	 * Do not try to enable MSIs, we provide the MSIs ourselves
+ 	 * Do not touch DMA mask, we need a custom one
+ 	 */
+-	xhci->quirks |= XHCI_PLAT | XHCI_PLAT_DMA;
++	xhci->quirks |= XHCI_PLAT | XHCI_SUSPEND_RESUME_CLKS;
+ }
+ 
+ /* called during probe() after chip reset completes */
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 1c8fb48c7095..a79e9dc827e4 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -5373,7 +5373,7 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+ 
+ 	/* Set dma_mask and coherent_dma_mask to 64-bits,
+ 	 * if xHC supports 64-bit addressing */
+-	if (!(xhci->quirks & XHCI_PLAT_DMA)) {
++	if (!(xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
+ 		if (HCC_64BIT_ADDR(xhci->hcc_params) &&
+ 		    !dma_set_mask(dev, DMA_BIT_MASK(64))) {
+ 			xhci_dbg(xhci, "Enabling 64-bit DMA addresses.\n");
+-- 
+2.45.1
+

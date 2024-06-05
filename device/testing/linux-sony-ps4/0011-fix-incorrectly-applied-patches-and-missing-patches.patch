@@ -1,7 +1,7 @@
-From 3232e8ab49cc10e3eae5e2975234de61a3554ba9 Mon Sep 17 00:00:00 2001
+From ed61a42f4a35bf12c7a78642f7d814f50b936f57 Mon Sep 17 00:00:00 2001
 From: codedwrench <rick.04.1996@gmail.com>
 Date: Sat, 25 Dec 2021 16:13:58 +0100
-Subject: [PATCH 11/20] fix: incorrectly applied patches and missing patches
+Subject: [PATCH 11/22] fix: incorrectly applied patches and missing patches
 
 ---
  drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c              |  3 +++
@@ -30,10 +30,10 @@ index d81187445ebe..8513dd006ad5 100644
  			pr_err("gfx7: Failed to validate ucode firmware \"%s\"\n", fw_name);
  			goto out;
 diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-index 0213bc5d19d1..5640b941ec3a 100644
+index d88513d0aca0..0ddcd498a68b 100644
 --- a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
 +++ b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
-@@ -1869,6 +1869,8 @@ struct device_queue_manager *device_queue_manager_init(struct kfd_dev *dev)
+@@ -1860,6 +1860,8 @@ struct device_queue_manager *device_queue_manager_init(struct kfd_dev *dev)
  
  	switch (dev->device_info->asic_family) {
  	/* HWS is not available on Hawaii. */
