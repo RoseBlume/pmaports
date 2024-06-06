@@ -15,6 +15,8 @@ license="GPL-3.0-or-later AND CC0-1.0"
 depends="
 	kirigami
 	kirigami-addons
+	kitemmodels
+	qqc2-desktop-style
 	"
 makedepends="
 	extra-cmake-modules
@@ -32,7 +34,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/office/marknote.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-05/marknote-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/marknote-$_commit.tar.xz"
 options="!check" # No tests
 
 builddir="$srcdir/$pkgname-$_commit"
