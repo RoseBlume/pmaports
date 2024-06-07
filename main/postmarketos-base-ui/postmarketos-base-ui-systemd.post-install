@@ -1,0 +1,5 @@
+#!/bin/sh
+
+for _service in haveged systemd-rfkill timesyncd; do
+	systemctl preset "$_service".service || true
+done
