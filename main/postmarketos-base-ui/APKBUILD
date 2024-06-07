@@ -33,6 +33,7 @@ subpackages="
 	$pkgname-flatpak
 	$pkgname-networkmanager-usb-tethering:_usb_tethering
 	$pkgname-networkmanager
+	$pkgname-networkmanager-systemd:networkmanager_systemd
 	$pkgname-openrc-settingsd:_openrc_settingsd
 	$pkgname-qt-tweaks:qt_tweaks
 	$pkgname-qt-wayland:qt_wayland
@@ -72,6 +73,7 @@ _source644="
 	usr/lib/NetworkManager/conf.d/50-use-dnsmasq.conf
 	usr/lib/systemd/system-preset/50-bluetooth.preset
 	usr/lib/systemd/system-preset/50-iwd.preset
+	usr/lib/systemd/system-preset/50-networkmanager.preset
 	usr/lib/systemd/system-preset/50-wpa_supplicant.preset
 	usr/share/wireplumber/wireplumber.conf.d/50-pulseaudio.conf
 "
@@ -201,6 +203,14 @@ networkmanager() {
 	amove usr/lib/NetworkManager/dispatcher.d/50-dns-filter.sh
 }
 
+networkmanager_systemd() {
+	depends="networkmanager-service"
+	install_if="$pkgname-networkmanager=$pkgver-r$pkgrel systemd"
+	install="$subpkgname.post-install $subpkgname.post-upgrade $subpkgname.post-deinstall"
+
+	amove usr/lib/systemd/system-preset/50-networkmanager.preset
+}
+
 _default_camera() {
 	# dummy package for camera app, packages can install_if on this to install
 	# the appropriate camera app for that device/UI
@@ -327,6 +337,7 @@ d4b4c4fed2dee7266f6a87ae266691377593014943e2953e4cd87a59f3110f25bfb5f3f866cc8435
 900554534191fa0797064d35350934cdd8af59f30f0ae7d8ec63c2e11c44a16c643d3024b6543940488cd590fec1d392548bcaacc3be88cddff90f69b17ece07  rootfs-usr-lib-NetworkManager-conf.d-50-use-dnsmasq.conf
 ee18a6d19f037f4ab76e0cefbe0b2c74f36c892f4c938d1122afe8b9e4c55c38fb48e311271f4036471c0c12e022bc8beea8181b34e084b7fb9e4685ff445551  rootfs-usr-lib-systemd-system-preset-50-bluetooth.preset
 b6f586ec976beb816a284ed4b9568b57b967e6f02c66e0df0df0b40d7100260d828c51ba1ea22efbd7d4691f045e56f9b54be1ee5cd76af9021539e1c136d860  rootfs-usr-lib-systemd-system-preset-50-iwd.preset
+15647e8e0b4a696f4abf75606d016e6963aa831d97218712d46f2f53ccd1d46115d1d4a0c0742d04a59498e2f936d68d2d0b55a5b1169292ba8b3f70e781d785  rootfs-usr-lib-systemd-system-preset-50-networkmanager.preset
 1cee819a9163eb1212c934057615f712bd9380f067ff4b240903ef96165c78d1a32e5312c2d9af07cb68284edff5482a02829319d446a5f35e1c935ca0ab4e96  rootfs-usr-lib-systemd-system-preset-50-wpa_supplicant.preset
 ebb7700018cf64fe6dcb747365cd2fb816deb6e06e7368af779284b51b1f0749e24f8e70b0b72fa6bff4178a02af934f728c3b115c8c1f77aa1a3490879af731  rootfs-usr-share-wireplumber-wireplumber.conf.d-50-pulseaudio.conf
 1b8add60574ec4644197cb93263c0653325c2e88e03673de918be5fb3280c7b81e8e97dce498850a07f2f3307771c44f3c876922e5cbd5207523ede31816296f  rootfs-usr-lib-NetworkManager-system-connections-USB_Networking.nmconnection
