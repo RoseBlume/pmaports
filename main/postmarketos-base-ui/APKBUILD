@@ -37,8 +37,10 @@ subpackages="
 	$pkgname-qt-wayland:qt_wayland
 	$pkgname-tinydm
 	$pkgname-wifi-iwd-openrc:iwd_openrc
+	$pkgname-wifi-iwd-systemd:iwd_systemd
 	$pkgname-wifi-iwd:iwd
 	$pkgname-wifi-wpa_supplicant-openrc:wpa_supplicant_openrc
+	$pkgname-wifi-wpa_supplicant-systemd:wpa_supplicant_systemd
 	$pkgname-wifi-wpa_supplicant:wpa_supplicant
 	$pkgname-x11
 	postmarketos-default-camera:_default_camera
@@ -67,6 +69,8 @@ _source644="
 	usr/lib/NetworkManager/conf.d/50-random-mac.conf
 	usr/lib/NetworkManager/conf.d/50-tethering.conf
 	usr/lib/NetworkManager/conf.d/50-use-dnsmasq.conf
+	usr/lib/systemd/system-preset/50-iwd.preset
+	usr/lib/systemd/system-preset/50-wpa_supplicant.preset
 	usr/share/wireplumber/wireplumber.conf.d/50-pulseaudio.conf
 "
 _source600="
@@ -212,6 +216,15 @@ wpa_supplicant() {
 	mkdir -p "$subpkgdir"
 }
 
+wpa_supplicant_systemd() {
+	install_if="$pkgname-wpa_supplicant=$pkgver-r$pkgrel systemd"
+	install="$subpkgname.post-install $subpkgname.post-upgrade $subpkgname.post-deinstall"
+
+	depends="wpa_supplicant-service"
+
+	amove usr/lib/systemd/system-preset/50-wpa_supplicant.preset
+}
+
 wpa_supplicant_openrc() {
 	install_if="$pkgname-wpa_supplicant=$pkgver-r$pkgrel openrc"
 	install="$subpkgname.post-install $subpkgname.post-upgrade"
@@ -233,6 +246,15 @@ iwd() {
 	depends="iwd"
 
 	amove usr/lib/NetworkManager/conf.d/50-iwd.conf
+}
+
+iwd_systemd() {
+	install_if="$pkgname-iwd=$pkgver-r$pkgrel systemd"
+	install="$subpkgname.post-install $subpkgname.post-upgrade $subpkgname.post-deinstall"
+
+	depends="iwd-service"
+
+	amove usr/lib/systemd/system-preset/50-iwd.preset
 }
 
 iwd_openrc() {
@@ -294,6 +316,8 @@ cac604e25c46e695dd30bd5a10cfd2d69595fcc3bc290096ac94b76b10834d591ea6576afb79c46b
 d4b4c4fed2dee7266f6a87ae266691377593014943e2953e4cd87a59f3110f25bfb5f3f866cc843519f628695e4df7602bfdcd3d79f2c2cd6e8256535c33b038  rootfs-usr-lib-NetworkManager-conf.d-50-random-mac.conf
 6507eb31cdd694a7db0280246433118a650bf5d99fbe639f967ae2d95945429a7e03ca6feb5bb6e7b9fb14fcec21e13e51209a79edd0041e77b5bf76b129ed6f  rootfs-usr-lib-NetworkManager-conf.d-50-tethering.conf
 900554534191fa0797064d35350934cdd8af59f30f0ae7d8ec63c2e11c44a16c643d3024b6543940488cd590fec1d392548bcaacc3be88cddff90f69b17ece07  rootfs-usr-lib-NetworkManager-conf.d-50-use-dnsmasq.conf
+b6f586ec976beb816a284ed4b9568b57b967e6f02c66e0df0df0b40d7100260d828c51ba1ea22efbd7d4691f045e56f9b54be1ee5cd76af9021539e1c136d860  rootfs-usr-lib-systemd-system-preset-50-iwd.preset
+1cee819a9163eb1212c934057615f712bd9380f067ff4b240903ef96165c78d1a32e5312c2d9af07cb68284edff5482a02829319d446a5f35e1c935ca0ab4e96  rootfs-usr-lib-systemd-system-preset-50-wpa_supplicant.preset
 ebb7700018cf64fe6dcb747365cd2fb816deb6e06e7368af779284b51b1f0749e24f8e70b0b72fa6bff4178a02af934f728c3b115c8c1f77aa1a3490879af731  rootfs-usr-share-wireplumber-wireplumber.conf.d-50-pulseaudio.conf
 1b8add60574ec4644197cb93263c0653325c2e88e03673de918be5fb3280c7b81e8e97dce498850a07f2f3307771c44f3c876922e5cbd5207523ede31816296f  rootfs-usr-lib-NetworkManager-system-connections-USB_Networking.nmconnection
 d1ddd43489e6016e3ffd716027ed2bae4a2ab5f213118bdbcb96750e267ab7c0367cd0e0e386300aa5550352653144f5caeddd790621fe0879f83ca1995bb65c  rootfs-etc-tinydm.d-env-wayland.d-50-firefox-wayland.sh
