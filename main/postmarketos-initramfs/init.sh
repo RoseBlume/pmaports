@@ -81,6 +81,8 @@ unlock_root_partition
 resize_root_filesystem
 mount_root_partition
 
+copy_kernel_modules
+
 # Mount boot partition into sysroot, so we do not depend on /etc/fstab, as
 # not all old installations have a proper /etc/fstab file. See #2800
 umount /boot

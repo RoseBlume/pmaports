@@ -12,6 +12,7 @@ HOST_IP="${unudhcpd_host_ip:-172.16.42.1}"
 deviceinfo_getty=""
 deviceinfo_name=""
 deviceinfo_codename=""
+deviceinfo_dev_kernel_copy_all_modules=""
 
 # Redirect stdout and stderr to logfile
 setup_log() {
@@ -600,6 +601,33 @@ mount_root_partition() {
 		show_splash "ERROR: root partition does not contain a root filesystem\\nhttps://postmarketos.org/troubleshooting"
 		fail_halt_boot
 	fi
+}
+
+# For development or CI we might be booting with a different kernel
+# to what we have in the rootfs. Usually this means we also have all
+# kernel modules available in the initramfs, so we copy them over
+# to make them available in the rootfs.
+copy_kernel_modules() {
+	local reason
+
+	reason="they were missing from rootfs"
+
+	if [ "$deviceinfo_dev_kernel_copy_all_modules" != "true" ]; then
+		# Copying kernel modules is disabled
+		return
+	elif grep -q "pmos.force-copy-modules" /proc/cmdline; then
+		reason="pmos.force-copy-modules was specified on the cmdline"
+	elif [ -e "/sysroot/lib/modules/$(uname -r)" ]; then
+		# Kernel modules already present
+		return
+	fi
+
+	remount -o rw /sysroot
+	echo "Copying kernel modules for $(uname -sr) to rootfs"
+	cp -af /lib/modules/"$(uname -r)" /sysroot/lib/modules/
+	remount -o ro /sysroot
+
+	echo "Updated kernel modules in rootfs because $reason"
 }
 
 # $1: path to the hooks dir
