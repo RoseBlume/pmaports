@@ -341,6 +341,59 @@ get_partition_type() {
 	blkid "$partition" | sed 's/^.*TYPE="\([a-zA-z0-9_]*\)".*$/\1/'
 }
 
+# $1: partition
+check_filesystem() {
+	local partition=""
+	local status=""
+	local type=""
+
+	partition="$1"
+	type="$(get_partition_type "$partition")"
+	case "$type" in
+		btrfs)
+			echo "Check 'btrfs' root filesystem ($partition)"
+			if ! btrfs check --readonly "$partition" ; then
+				status="fail"
+			fi
+			;;
+		ext*)
+			echo "Auto-repair and check 'ext' filesystem ($partition)"
+			e2fsck -p "$partition"
+			if [ $? -gt 4 ]; then
+				status="fail"
+			fi
+			;;
+		f2fs)
+			echo "Auto-repair and check 'f2fs' filesystem ($partition)"
+			fsck.f2fs -p "$partition"
+			status=$?
+			if [ $? -gt 4 ]; then
+				status="fail"
+			fi
+			;;
+		vfat)
+			echo "Auto-repair and check 'vfat' filesystem ($partition)"
+			fsck.vfat -p "$partition"
+			if [ $? -gt 4 ]; then
+				status="fail"
+			fi
+
+			;;
+		*)	echo "WARNING: fsck not supported for '$type' filesystem ($partition)." ;;
+	esac
+
+	if [ "$status" = "fail" ]; then
+		show_splash "WARNING: filesystem needs manual repair (fsck) ($partition)\\nhttps://postmarketos.org/troubleshooting\\n\\nBoot anyways by pressing Enter or the Power Button..."
+		while [ "$status" = "fail" ]; do
+			if is_key KEY_ENTER KEY_POWER ; then
+				status=""
+			fi
+		done
+	fi
+
+	show_splash "Loading..."
+}
+
 # $1: path
 # $2: set to "rw" for read-write
 # Mount the boot partition. It gets mounted twice, first at /boot (ro), then at
@@ -356,6 +409,7 @@ mount_boot_partition() {
 	fi
 
 	if [ "$2" = "rw" ]; then
+		check_filesystem "$partition"
 		echo "Mount boot partition ($partition) to $1 (read-write)"
 	else
 		mount_opts="$mount_opts,ro"
@@ -561,14 +615,15 @@ mount_root_partition() {
 	partition="$(find_root_partition)"
 	rootfsopts=""
 
+	check_filesystem "$partition"
 	# shellcheck disable=SC2013
 	for x in $(cat /proc/cmdline); do
 		[ "$x" = "${x#pmos_rootfsopts=}" ] && continue
-		# Prepend a comma because this will be appended to "ro" below
+		# Prepend a comma because this will be appended to "rw" below
 		rootfsopts=",${x#pmos_rootfsopts=}"
 	done
 
-	echo "Mount root partition ($partition) to /sysroot (read-only) with options ${rootfsopts#,}"
+	echo "Mount root partition ($partition) to /sysroot (read-write) with options ${rootfsopts#,}"
 	type="$(get_partition_type "$partition")"
 	echo "Detected $type filesystem"
 
@@ -581,7 +636,7 @@ mount_root_partition() {
 	if ! modprobe "$type"; then
 		echo "INFO: unable to load module '$type' - maybe it's built in"
 	fi
-	if ! mount -t "$type" -o ro"$rootfsopts" "$partition" /sysroot; then
+	if ! mount -t "$type" -o rw"$rootfsopts" "$partition" /sysroot; then
 		echo "ERROR: unable to mount root partition!"
 		show_splash "ERROR: unable to mount root partition\\nhttps://postmarketos.org/troubleshooting"
 		fail_halt_boot
