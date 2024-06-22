@@ -5,7 +5,7 @@ pkgver=99993.12.0
 _pkgver=3.12.0
 _commit="d45c6dbee9171fa9dc25b2d6b298469619fbedb6"
 _ver=${_pkgver%_git*}
-pkgrel=1
+pkgrel=2
 pkgdesc="Script to build Alpine Packages"
 url="https://git.alpinelinux.org/cgit/abuild/"
 arch="all"
@@ -24,7 +24,10 @@ subpackages="
 	"
 options="suid !check" # tests are SLOW in qemu
 pkggroups="abuild"
-source="https://gitlab.com/calebccff/abuild/-/archive/$_commit/abuild-$_commit.tar.gz"
+source="
+	https://gitlab.com/calebccff/abuild/-/archive/$_commit/abuild-$_commit.tar.gz
+	0001-pmos-systemd-introduce-systemd_system_services-and-s.patch
+"
 builddir="$srcdir"/abuild-"$_commit"
 
 build() {
@@ -100,4 +103,5 @@ _rootbld() {
 
 sha512sums="
 3959c47c8ada26a23f647b4af4258e6ff1a8c7b6b4821cafe655da953933f12fed8c5753a8ec2cde6abd1e3e9b67dccaa74acc0633827d581d532905af9fb1e4  abuild-d45c6dbee9171fa9dc25b2d6b298469619fbedb6.tar.gz
+78f08d8c1f1a0d3ac083158b9c072bce707782ce42d7c57e56aa213f9cf09156ad0927ff74f83cb31622a33f208a837e36c2c8bea433cc36c7fadd132634c3c3  0001-pmos-systemd-introduce-systemd_system_services-and-s.patch
 "
