@@ -3,7 +3,7 @@
 pkgname=gdm
 pkgver=9999
 _pkgver=45.0.1
-pkgrel=0
+pkgrel=1
 pkgdesc="GNOME display manager"
 url="https://wiki.gnome.org/Projects/GDM"
 # blocked by gnome-shell
@@ -47,6 +47,10 @@ source="https://download.gnome.org/sources/gdm/${_pkgver%%.*}/gdm-$_pkgver.tar.x
 	"
 install="gdm.pre-install"
 builddir="$srcdir/gdm-$_pkgver"
+
+systemd_system_services="
+	gdm.service:default
+"
 
 build() {
 	abuild-meson \
