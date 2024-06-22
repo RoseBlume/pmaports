@@ -4,7 +4,7 @@
 pkgname=networkmanager
 pkgver=9999
 _pkgver=1.42.6
-pkgrel=0
+pkgrel=1
 pkgdesc="Network Management daemon"
 url="https://wiki.gnome.org/Projects/NetworkManager"
 arch="all"
@@ -52,8 +52,6 @@ checkdepends="
 install="
 	$pkgname.pre-install
 	$pkgname.pre-upgrade
-	$pkgname.post-install
-	$pkgname.post-upgrade
 	"
 subpackages="
 	$pkgname-dbg
@@ -80,6 +78,9 @@ source="https://download.gnome.org/sources/NetworkManager/${_pkgver:0:4}/Network
 	$pkgname.rules
 	"
 builddir="$srcdir/NetworkManager-$_pkgver"
+systemd_system_services="
+	NetworkManager.service
+"
 
 # on the builders:
 # mount("/sys") failed with Operation not permitted (1)
@@ -88,13 +89,6 @@ options="!check"
 _plugindir="usr/lib/NetworkManager/$_pkgver"
 
 build() {
-	#msg 'Building without systemd'
-	#_build output \
-	#	-Dsession_tracking=no \
-	#	-Dsuspend_resume=consolekit \
-	#	-Dsystemd_journal=false \
-	#	-Dsystemdsystemunitdir=no
-
 	msg 'Building with systemd'
 	_build output \
 		-Dsession_tracking=systemd \
@@ -106,8 +100,8 @@ build() {
 _build() {
 	local outdir=$1; shift
 
-		#-Db_lto=true \
 	abuild-meson \
+		-Db_lto=true \
 		-Dconfig_dhcp_default=internal \
 		-Dconfig_plugins_default=ifupdown \
 		-Dcrypto=nss \
@@ -160,16 +154,6 @@ package() {
 		"$pkgdir/usr/share/polkit-1/rules.d/01-org.freedesktop.NetworkManager.settings.modify.system.rules"
 
 	mv "$pkgdir/usr/share/doc/NetworkManager" "$pkgdir/usr/share/doc/$pkgname"
-
-	# post-install message
-	cat > "$pkgdir"/usr/share/doc/$pkgname/README.alpine <<-EOF
-		To modify system network connections without the root password: add your user account to the 'plugdev' group, or use Polkit.
-
-		To use iwd instead of the default wpa_supplicant install iwd, start its service and add the following to your /etc/NetworkManager/NetworkManager.conf:
-
-		[device]
-		wifi.backend=iwd
-	EOF
 }
 
 dev() {
@@ -217,12 +201,10 @@ ppp() {
 	amove usr/lib/pppd/*/nm-pppd-plugin.so
 }
 
-# TODO: Add dependency on wpa_supplicant or iwd via some virtual (?).
 wifi() {
 	_default_plugin
 	pkgdesc="WiFi device plugin for NetworkManager"
 	depends="$depends wireless-regdb"
-	install="$subpkgname.post-install"
 }
 
 wwan() {
