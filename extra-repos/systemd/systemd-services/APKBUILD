@@ -3,17 +3,16 @@
 # need to be forked just for the service, or don't provide
 # a service file at all.
 
-# How to add a new service file (4 steps):
+# How to add a new service file (5 steps):
 pkgname=systemd-services
-# 1. bump pkgver
+# 1. bump pkgver and set pkgrel=0
 pkgver=9
-pkgrel=0
+pkgrel=1
 pkgdesc="Systemd service files"
 url="https://postmarketos.org"
 arch="noarch"
 options="!check"
 license="BSD-3-Clause"
-triggers="$pkgname.trigger=/usr/lib/systemd"
 
 # 2. Add a new entry to subpackes in the format
 #    <pkgname>-service:_service where pkgname is the name
@@ -123,6 +122,40 @@ source="$(flatpath \
 	$_xdg_desktop_portal_gnome_sources \
 	$_xdg_desktop_portal_wlr_sources \
 )"
+
+# 5.
+systemd_system_services="
+	ModemManager.service
+	apk-polkit-server.service
+	bluetooth.service
+	geoclue.service
+	hexagonrpcd-sdsp.service
+	iio-sensor-proxy.service
+	iwd.service
+	nftables.service
+	pd-mapper.service
+	phosh.service
+	q6voiced.service
+	qbootctl.service
+	rmtfs.service
+	rtkit-deamon.service
+	sleep-inhibitor.service
+	sshd.service
+	tqftpserv.service
+	wpa_supplicant.service
+	"
+
+systemd_user_services="
+	xdg-desktop-portal.service
+	xdg-document-portal.service
+	xdg-permission-store.service
+	xdg-desktop-portal-gtk.service
+	xdg-desktop-portal-gnome.service
+	xdg-desktop-portal-wlr.service
+	pulseaudio.socket
+	mmsd-tng.service
+"
+
 
 _service() {
 	local name=$(echo ${subpkgname%%-service})
