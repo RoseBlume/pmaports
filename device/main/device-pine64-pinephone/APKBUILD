@@ -2,8 +2,8 @@
 # Maintainer: Arnav Singh <me@arnavion.dev>
 # Co-Maintainer: Jan Jasper de Kroon <jajadekroon@gmail.com>
 pkgname=device-pine64-pinephone
-pkgver=3
-pkgrel=1
+pkgver=4
+pkgrel=0
 pkgdesc="PINE64 PinePhone"
 url="https://postmarketos.org"
 license="MIT"
@@ -24,22 +24,13 @@ subpackages="
 	$pkgname-x11
 	"
 depends="
-	alsa-ucm-conf>=1.2.6.2
-	atinout
-	eg25-manager
-	eg25-manager-openrc
-	iw
-	linux-postmarketos-allwinner>=5.14
-	mesa-egl
 	postmarketos-base
-	u-boot-pinephone>=2021.01_git20201228-r2
 	u-boot-tools
-	fwupd>=1.8.6
-	"
+"
 # FIXME: use upstream alsa-ucm-conf instead, once it works the same (pma#2115)
 replaces="alsa-ucm-conf"
 makedepends="devicepkg-dev dtc"
-install="$pkgname.post-install $pkgname.post-upgrade $pkgname.pre-upgrade"
+install="$pkgname.pre-upgrade"
 source="
 	00_alsa_pinephone_dshare.conf
 	10-pinephone-proximity.rules
@@ -73,7 +64,6 @@ source="
 # workaround to purge the -elogind subpackage that was previously
 # created/installed
 provides="$pkgname-elogind=$pkgver-r$pkgrel"
-_pmb_recommends="$pkgname-nonfree-firmware"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -115,6 +105,18 @@ build() {
 }
 
 package() {
+	depends="
+		$depends
+		$pkgname-nonfree-firmware
+		alsa-ucm-conf>=1.2.6.2
+		atinout
+		eg25-manager
+		fwupd>=1.8.6
+		iw
+		linux-postmarketos-allwinner>=5.14
+		mesa-egl
+		u-boot-pinephone>=2021.01_git20201228-r2
+	"
 	devicepkg_package $startdir $pkgname
 	install -Dm644 "$srcdir"/boot.scr \
 		"$pkgdir"/boot/boot.scr
@@ -176,6 +178,7 @@ nonfree_firmware() {
 
 openrc() {
 	install_if="$pkgname=$pkgver-r$pkgrel eg25-manager-openrc"
+	install="$subpkgname.post-install $subpkgname.post-upgrade"
 	depends="eg25-manager-openrc"
 	install -Dm644 "$srcdir"/90-modem-eg25-openrc.rules -t \
 		"$subpkgdir"/usr/lib/udev/rules.d/
