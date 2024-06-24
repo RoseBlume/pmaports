@@ -82,7 +82,7 @@ fi
 provides="busctl eudev openrc-settingsd=$pkgver-r$pkgrel"
 provider_priority=100
 
-install="$pkgname.post-install"
+install="$pkgname.pre-install"
 subpackages="
 	$pkgname-dev
 	$pkgname-doc
