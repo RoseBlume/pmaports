@@ -1,8 +1,8 @@
 # Maintainer: Oliver Smith <ollipearanoid@postmarketos.org>
 # pmbootstrap installs this, if systemd is selected in "pmbootstrap init".
 pkgname=postmarketos-base-systemd
-pkgver=1
-pkgrel=2
+pkgver=2
+pkgrel=0
 pkgdesc="Meta package for running postmarketOS with systemd"
 url="https://postmarketos.org"
 arch="noarch"
@@ -23,6 +23,10 @@ _source644="
 	etc/profile.d/99motd.sh
 	etc/systemd/logind.conf
 	etc/ssh/sshd_config.d/usepam.conf
+	usr/lib/systemd/system-preset/90-base.preset
+	usr/lib/systemd/system-preset/99-default-disable.preset
+	usr/lib/systemd/user-preset/90-base.preset
+	usr/lib/systemd/user-preset/99-default-disable.preset
 "
 
 _source755="
@@ -55,5 +59,9 @@ a6c27ab5d365807a40b16328918b6ca3d7f97a4128381674001cf46133928d8bb073ff4691b78c82
 fbaa33425e507062a454f11bda48508f261c2144e5c23a20f567dc1cef14ce1dec57f8d934f418f5b6095509757f8503481aba9790a04c8f9f6995e65833d8c9  rootfs-etc-profile.d-99motd.sh
 2faac294bb632762e247b850f09ff4b544ccff6c462efd8d4faca71ba30bdfa9c460377a0dc88e92c5dbbe251017d164064a56ac0e0410f224b45d4f5f81866c  rootfs-etc-systemd-logind.conf
 208f53c1d142151277cfcf0a95df839919ce8cb15ec888d50890dc6b3631a994335bfa12194cec856b649f97cfd7c80019c595cc0ea2c5ee96498a3e76a9950b  rootfs-etc-ssh-sshd_config.d-usepam.conf
+3a2c12e67404fd4bfb3b6bb8d4142f871a021a2062181a102d5f5b77c59db8f631935533fecc55247456322d573cf4715de08ccfb99098272ead238ec47f0e6c  rootfs-usr-lib-systemd-system-preset-90-base.preset
+771cff1f45d8489541ce05de05da0f9ce16fb77ac713b811c13104a9d18cd3242436686ecf91251c8e0e72aad692f24d304d81265c3a7b4f02265c9b9e4a8bab  rootfs-usr-lib-systemd-system-preset-99-default-disable.preset
+9b3b9abdb3d3541038d37d6870baed81f20be7f5b80874bd142eeb686b08958180b4d4a293912c9760e4353a58d6a5dea43e155002f224d14a157f7a082cde60  rootfs-usr-lib-systemd-user-preset-90-base.preset
+771cff1f45d8489541ce05de05da0f9ce16fb77ac713b811c13104a9d18cd3242436686ecf91251c8e0e72aad692f24d304d81265c3a7b4f02265c9b9e4a8bab  rootfs-usr-lib-systemd-user-preset-99-default-disable.preset
 605df1f004783d2e0ec5dd99a688bca27502c8c24bc05fb4dc26589b2070b0fbd1cf9bd56e6861d7cda2f8ac8147e7eb040acfd886185c01c8cf9de8b1ce2dcd  rootfs-usr-bin-setup-timezone
 "
