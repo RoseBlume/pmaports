@@ -26,6 +26,11 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 mount_proc_sys_dev
 setup_log
 setup_firmware_path
+
+if grep -q "pmos.force-load-modules" /proc/cmdline; then
+	load_modules /lib/modules/initramfs.load "libcomposite"
+fi
+
 # Run udev early, before splash, to make sure any relevant display drivers are
 # loaded in time
 setup_udev

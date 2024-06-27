@@ -100,6 +100,15 @@ setup_firmware_path() {
 	echo -n /lib/firmware/postmarketos >$SYS
 }
 
+# shellcheck disable=SC3043
+load_modules() {
+	local file="$1"
+	local modules="$2"
+	[ -f "$file" ] && modules="$modules $(grep -v ^\# "$file")"
+	# shellcheck disable=SC2086
+	modprobe -a $modules
+}
+
 setup_udev() {
 	if ! command -v udevd > /dev/null || ! command -v udevadm > /dev/null; then
 		echo "ERROR: udev not found!"
