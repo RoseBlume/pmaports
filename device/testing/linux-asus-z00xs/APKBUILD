@@ -1,5 +1,5 @@
 # Reference: <https://postmarketos.org/vendorkernel>
-# Kernel config based on: arch/x86_64/configs/(CHANGEME!)
+# Kernel config based on: arch/x86_64/configs/zenfone2_defconfig
 
 pkgname=linux-asus-z00xs
 pkgver=3.10.72
@@ -20,7 +20,7 @@ makedepends="
 	flex
 	openssl-dev
 	perl
-  linux-headers
+	linux-headers
 "
 
 # Source
@@ -34,11 +34,11 @@ source="
 	gcc8-fix-put-user.patch
 	gcc10-extern_YYLOC_global_declaration.patch
 	kernel-use-the-gnu89-standard-explicitly.patch
-  fix-recordmcount.patch
-  x86-relocs-Make-per_cpu_load_addr-static.patch
-  01_ipc-shm-fix-redefinition-of-shm_rcu_free.patch
-  03_ipc-fix-undefined-references.patch
-  ipc-fix-undefined-sem_wait_array.patch
+	fix-recordmcount.patch
+	x86-relocs-Make-per_cpu_load_addr-static.patch
+	01_ipc-shm-fix-redefinition-of-shm_rcu_free.patch
+	03_ipc-fix-undefined-references.patch
+	ipc-fix-undefined-sem_wait_array.patch
 "
 builddir="$srcdir/$_repository-$_commit"
 _outdir="out"
