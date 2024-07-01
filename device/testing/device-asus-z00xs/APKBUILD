@@ -1,0 +1,30 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-asus-z00xs
+pkgdesc="Asus ZenFone Zoom (ZX551ML)"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="x86_64"
+options="!check !archcheck"
+depends="
+	linux-asus-z00xs
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+c9aeae4e2d3b9f68e90857a3f23fc2590cd648e83293f8e80e883f395d9b7e40ba99bc85744bce440c14e7e746e9f3ac3dccc14f4c59e97967a55e5f3e733f0c  deviceinfo
+"
