@@ -14,8 +14,6 @@ depends="
 	busybox
 	busybox-suid
 	devicepkg-utils>=0.2.0
-	eudev
-	logbookd
 	musl-utils
 	openssh
 	postmarketos-bootsplash
@@ -39,11 +37,8 @@ replaces="
 	alpine-baselayout
 	alpine-baselayout-data
 	alpine-release
-	busybox-openrc
-	openrc
 	sudo
 	sudo-ldap
-	zram-init-openrc
 	"
 replaces_priority=100  # leave plenty for alpine
 
@@ -140,8 +135,26 @@ nofde() {
 openrc() {
 	provides="$pkgname-init=$pkgver-r$pkgrel"
 	provider_priority=10
-	depends="busybox-mdev-openrc openrc"
-	mkdir "$subpkgdir"
+	depends="
+		busybox-mdev-openrc
+		eudev
+		logbookd
+		openrc
+		"
+	replaces="
+		busybox-openrc
+		openrc
+		zram-init-openrc
+		"
+	replaces_priority=100  # leave plenty for alpine
+	install="$subpkgname.post-install $subpkgname.post-upgrade"
+
+	amove etc/conf.d/swapfile
+	amove etc/conf.d/zram-init
+	amove etc/conf.d/syslog
+	amove etc/init.d/deferred-initcalls
+	amove etc/init.d/swapfile
+	amove etc/init.d/tmpfs
 }
 
 sha512sums="
