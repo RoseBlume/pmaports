@@ -9,14 +9,11 @@ makedepends="postmarketos-initramfs"
 depends="
 	alpine-baselayout
 	alpine-conf
-	alpine-release
 	apk-tools
 	busybox
 	busybox-suid
 	devicepkg-utils>=0.2.0
 	musl-utils
-	openssh
-	postmarketos-bootsplash
 	postmarketos-ramdisk
 	postmarketos-mvcfg
 	postmarketos-keys
