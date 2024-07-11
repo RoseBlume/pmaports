@@ -1,0 +1,4 @@
+#!/bin/sh
+
+systemctl disable --now swclock-offset-boot
+systemctl disable --now swclock-offset-shutdown
