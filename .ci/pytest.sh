@@ -9,7 +9,7 @@
 if [ "$(id -u)" = 0 ]; then
 	set -x
 	wget "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
-	sh ./install_pmbootstrap.sh pytest
+	sh ./install_pmbootstrap.sh pytest losetup
 	exec su "${TESTUSER:-pmos}" -c "sh -e $0"
 fi
 
