@@ -193,3 +193,55 @@ auto-update:
       - log.txt
       - log_testsuite_pmaports.txt
       - pmbootstrap.cfg
+
+# temporary pmbootstrap v3 test ci:
+.pmbootstrap-v3:
+  variables:
+    PMBOOTSTRAP_TAG: "master"
+  allow_failure: true
+
+v3-pytest-commits:
+  extends:
+    - pytest-commits
+    - .pmbootstrap-v3
+
+v3-aport-lint:
+  extends:
+    - aport-lint
+    - .pmbootstrap-v3
+
+v3-build-x86_64:
+  extends:
+    - build-x86_64
+    - .pmbootstrap-v3
+
+v3-build-x86:
+  extends:
+    - build-x86
+    - .pmbootstrap-v3
+
+v3-build-aarch64:
+  extends:
+    - build-aarch64
+    - .pmbootstrap-v3
+
+v3-build-armv7:
+  extends:
+    - build-armv7
+    - .pmbootstrap-v3
+
+v3-build-armhf:
+  extends:
+    - build-armhf
+    - .pmbootstrap-v3
+
+v3-build-riscv64:
+  extends:
+    - build-riscv64
+    - .pmbootstrap-v3
+
+v3-auto-update:
+  extends:
+    - auto-update
+    - .pmbootstrap-v3
+
