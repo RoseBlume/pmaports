@@ -1,11 +1,10 @@
 # Maintainer: Henrik Grimler <henrik@grimler.se>
-# Co-Maintainer: Jenneron <jenneron@protonmail.com>
 # Kernel config based on: arch/arm/configs/exynos_defconfig
 # and Hardkernel's odroidxu4_defconfig
 
 pkgname=linux-postmarketos-exynos5
 pkgver=6.1.56
-pkgrel=5
+pkgrel=6
 pkgdesc="Mainline kernel fork for Samsung Exynos5 devices"
 arch="armv7"
 _carch="arm"
