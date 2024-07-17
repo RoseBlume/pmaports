@@ -1,0 +1,7 @@
+enable NetworkManager
+enable nftables
+
+# Note: these technically conflict, but the `provides=` in the pmos-base-ui
+# APKBUILD should prevent these backends from being installed at the same time.
+enable iwd
+enable wpa_supplicant

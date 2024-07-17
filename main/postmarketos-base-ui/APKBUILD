@@ -1,6 +1,6 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-base-ui
-pkgver=25
+pkgver=26
 pkgrel=0
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
@@ -35,6 +35,7 @@ subpackages="
 	$pkgname-openrc-settingsd:_openrc_settingsd
 	$pkgname-qt-tweaks:qt_tweaks
 	$pkgname-qt-wayland:qt_wayland
+	$pkgname-systemd
 	$pkgname-tinydm
 	$pkgname-wifi-iwd:iwd
 	$pkgname-wifi-wpa_supplicant:wpa_supplicant
@@ -65,6 +66,8 @@ _source644="
 	usr/lib/NetworkManager/conf.d/50-random-mac.conf
 	usr/lib/NetworkManager/conf.d/50-tethering.conf
 	usr/lib/NetworkManager/conf.d/50-use-dnsmasq.conf
+	usr/lib/systemd/system-preset/10-postmarketos-base-ui.preset
+	usr/lib/systemd/user-preset/10-postmarketos-base-ui.preset
 	usr/share/wireplumber/wireplumber.conf.d/50-bluetooth.conf
 "
 _source600="
@@ -272,6 +275,8 @@ cac604e25c46e695dd30bd5a10cfd2d69595fcc3bc290096ac94b76b10834d591ea6576afb79c46b
 d4b4c4fed2dee7266f6a87ae266691377593014943e2953e4cd87a59f3110f25bfb5f3f866cc843519f628695e4df7602bfdcd3d79f2c2cd6e8256535c33b038  rootfs-usr-lib-NetworkManager-conf.d-50-random-mac.conf
 6507eb31cdd694a7db0280246433118a650bf5d99fbe639f967ae2d95945429a7e03ca6feb5bb6e7b9fb14fcec21e13e51209a79edd0041e77b5bf76b129ed6f  rootfs-usr-lib-NetworkManager-conf.d-50-tethering.conf
 900554534191fa0797064d35350934cdd8af59f30f0ae7d8ec63c2e11c44a16c643d3024b6543940488cd590fec1d392548bcaacc3be88cddff90f69b17ece07  rootfs-usr-lib-NetworkManager-conf.d-50-use-dnsmasq.conf
+451fbced6796ae46e6c0cda7378a3a925012368b3e0d6ec03a7a63c2ff8a406540020129e7c25c76d52042a9bb2e11b5a823724ed9e5a7630039fab9b2185f6b  rootfs-usr-lib-systemd-system-preset-10-postmarketos-base-ui.preset
+24623bd8a605d49c7e147b20919a5a59f9afa1c8eb728229e36f9bdf0544dbcf6119230db98eef4d30cf4945adf5cca75af06f7d536e5e5610ea5193e029a2c7  rootfs-usr-lib-systemd-user-preset-10-postmarketos-base-ui.preset
 92930f027626825b027f585a9be180f8a6ebae6dc44d2cf8f9d43cce00db8cbb43c33fc341fe382abacb832ea1b6414dc4c8129d265b0258d096599b2e206a93  rootfs-usr-share-wireplumber-wireplumber.conf.d-50-bluetooth.conf
 1b8add60574ec4644197cb93263c0653325c2e88e03673de918be5fb3280c7b81e8e97dce498850a07f2f3307771c44f3c876922e5cbd5207523ede31816296f  rootfs-usr-lib-NetworkManager-system-connections-USB_Networking.nmconnection
 d1ddd43489e6016e3ffd716027ed2bae4a2ab5f213118bdbcb96750e267ab7c0367cd0e0e386300aa5550352653144f5caeddd790621fe0879f83ca1995bb65c  rootfs-etc-tinydm.d-env-wayland.d-50-firefox-wayland.sh

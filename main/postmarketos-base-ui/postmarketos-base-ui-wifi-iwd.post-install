@@ -1,4 +1,6 @@
 #!/bin/sh -e
 
-rc-update -qq del wpa_supplicant || true
-rc-update -q add iwd default
+if command -v rc-update > /dev/null; then
+	rc-update -qq del wpa_supplicant || true
+	rc-update -q add iwd default
+fi
