@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=networkmanager-qt
-pkgver=9999_git20240512
+pkgver=9999_git20240712
 pkgrel=0
-_commit="8f670cea1cd3d6b8b8c112cc925290ad66f87fd5"
+_commit="6d45ee2889dcf7b751cc54c193072e228f25187f"
 pkgdesc="Qt wrapper for NetworkManager API"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -22,7 +22,7 @@ makedepends="$depends_dev
 	"
 subpackages="$pkgname-dev $pkgname-doc"
 _repo_url="https://invent.kde.org/frameworks/networkmanager-qt.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/networkmanager-qt-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/networkmanager-qt-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/networkmanager-qt-$_commit"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-2eb76ea0de0df09a1d55febffaff631cd1f4826410b8df58524a7c827a22090d7aafc100af34acc08680b55f7d90bd36679188bce254356599e1ecfe37350cb6  networkmanager-qt-8f670cea1cd3d6b8b8c112cc925290ad66f87fd5.tar.xz
+efe450f3cfd2dfa8be397722728e8e7f5b24ccfa72c06b7a72d7437a3a5930465bdb9ec8376e0391ece7315a2c076f05da16b795ba19e2c39c6613324ebb46d4  networkmanager-qt-6d45ee2889dcf7b751cc54c193072e228f25187f.tar.xz
 "

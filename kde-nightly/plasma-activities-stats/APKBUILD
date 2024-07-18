@@ -3,19 +3,19 @@
 
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
-pkgname=kactivities-stats
-pkgver=9999_git20240221
+pkgname=plasma-activities-stats
+pkgver=9999_git20240524
 pkgrel=0
-_commit="6fba8debc89207746776bf7918308f6feeea5022"
+_commit="2d594abd01b9547811896fc13c0ab552c0db5c32"
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
 pkgdesc="A library for accessing the usage data collected by the activities system"
-url="https://community.kde.org/Frameworks"
+url="https://invent.kde.org/plasma/plasma-activities-stats"
 license="LGPL-2.1-only OR LGPL-3.0-only"
 depends_dev="
 	boost-dev
 	graphviz-dev
-	kactivities-dev
 	kconfig-dev
+	plasma-activities-dev
 	qt6-qtdeclarative-dev
 	qt6-qttools-dev
 	"
@@ -25,12 +25,12 @@ makedepends="$depends_dev
 	qt6-qtbase-dev
 	samurai
 	"
-_repo_url="https://invent.kde.org/frameworks/kactivities-stats.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/kactivities-stats-$_commit.tar.xz"
+_repo_url="https://invent.kde.org/plasma/plasma-activities-stats.git"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/plasma-activities-stats-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc"
 
 options="!check"
-builddir="$srcdir/kactivities-stats-$_commit"
+builddir="$srcdir/plasma-activities-stats-$_commit"
 
 build() {
 	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-234b0761bd87f9b86eb290aae3520a644576e5e7fb6f46d9b3df2898ac7607b0361bd2e52667fab73af38e358a99ed2fed71c291ca9d40474516a5fd1da9bf7c  kactivities-stats-6fba8debc89207746776bf7918308f6feeea5022.tar.xz
+2a6b9f0b83c84c99d6eee305e540b5b2958a1d80375027e4149bc52dfa3954fa1e69f62f8ee301a328a295661b5a04f389288ba649fb6667e8c02269339d89f4  plasma-activities-stats-2d594abd01b9547811896fc13c0ab552c0db5c32.tar.xz
 "

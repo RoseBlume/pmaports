@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-other
 pkgname=kirigami-addons
-pkgver=9999_git20240517
+pkgver=9999_git20240717
 pkgrel=0
-_commit="7d6c5dff96942eb8f262826019c9349b0d77b307"
+_commit="92dfe44895cc9ea003cd12f0b61ce63d21d5661e"
 pkgdesc="Add-ons for the Kirigami framework"
 url="https://invent.kde.org/libraries/kirigami-addons"
 # armhf blocked by extra-cmake-modules
@@ -18,6 +18,8 @@ depends="
 	"
 makedepends="
 	extra-cmake-modules
+	kglobalaccel-dev
+	kguiaddons-dev
 	ki18n-dev
 	kirigami-dev
 	samurai
@@ -25,7 +27,7 @@ makedepends="
 checkdepends="xvfb-run"
 subpackages="$pkgname-dev $pkgname-lang"
 _repo_url="https://invent.kde.org/libraries/kirigami-addons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/kirigami-addons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/kirigami-addons-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kirigami-addons-$_commit"
@@ -49,5 +51,5 @@ package() {
 }
 
 sha512sums="
-9f87c07007bac241bcebc3db5c9ecebeda4472014222a9b8a94bd84786807e412f4febd49d1dded08adba0b99bb468951128040af8cbb8fb755bcb1d61c58341  kirigami-addons-7d6c5dff96942eb8f262826019c9349b0d77b307.tar.xz
+cf4339c8ea56db6328c8147c2981acc5e18f55ad39cea61dd83dd407493c5bce5204e2fb555c72585bc94f487d2a4da49f34309096d69eb78ffce2b5a814c9ea  kirigami-addons-92dfe44895cc9ea003cd12f0b61ce63d21d5661e.tar.xz
 "

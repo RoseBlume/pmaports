@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmime
-pkgver=9999_git20240520
+pkgver=9999_git20240716
 pkgrel=0
-_commit="242b09deca99348f3f961510d0431722d0418092"
+_commit="ac55898e60016b57637257a02b80f2568e752733"
 pkgdesc="Library for handling mail messages and newsgroup articles"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -16,14 +16,17 @@ depends_dev="
 	kcodecs-dev
 	ki18n-dev
 	qt6-qtbase-dev
+	qt6-qttools-dev
 	"
 makedepends="$depends_dev
+	doxygen
 	extra-cmake-modules
+	graphviz
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/kmime.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/kmime-$_commit.tar.xz"
-subpackages="$pkgname-dev $pkgname-lang"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/kmime-$_commit.tar.xz"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
 builddir="$srcdir/kmime-$_commit"
@@ -32,7 +35,8 @@ build() {
 	cmake -B build -DBUILD_WITH_QT6=ON -G Ninja \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_INSTALL_LIBDIR=lib
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_QCH=ON
 	cmake --build build
 }
 
@@ -48,5 +52,5 @@ package() {
 }
 
 sha512sums="
-4d29acf15e6a4df80728f799c72f5449671aa73e6bae7c55135f57ac1000cdd7771621299edb6382608c890ba4bbe07b74f92bbbc7af090ad9a29ab64a470db7  kmime-242b09deca99348f3f961510d0431722d0418092.tar.xz
+ba534ba8d868e3a92dd53dbd6f420bfe5ba02f2aab2561ac2470227a667107a36c2b2f9511b6b5da5353dcd66b65fe262e9b338dd72f481dc9b5ceecb5e09c47  kmime-ac55898e60016b57637257a02b80f2568e752733.tar.xz
 "

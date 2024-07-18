@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdegraphics-thumbnailers
-pkgver=9999_git20240504
+pkgver=9999_git20240628
 pkgrel=0
-_commit="96a09081239fa01900b059f2abe56804ae928efe"
+_commit="19edd58349ff090b92ed3b76f6e7ca6966c4d3af"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 pkgdesc="Thumbnailers for various graphics file formats"
@@ -23,7 +23,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/graphics/kdegraphics-thumbnailers.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/kdegraphics-thumbnailers-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/kdegraphics-thumbnailers-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-ad45c99c94fc62f3c5b00dd6bd8a8870bee7eed47f7514d44d94dc4a0f35d660b0675f3c52d017967996c4258c33ac783a93324be39b992b836637c03f6d8ebc  kdegraphics-thumbnailers-96a09081239fa01900b059f2abe56804ae928efe.tar.xz
+2c5cb71814f6b1f4268cc75c8b1deaa0664574c062283afd905f6fcb043efb5f05afbc9a32e8e72d08f76832e96dfba904adfa0ee511326ea169014af7002af8  kdegraphics-thumbnailers-19edd58349ff090b92ed3b76f6e7ca6966c4d3af.tar.xz
 "

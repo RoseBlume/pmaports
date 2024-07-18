@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=dolphin
-pkgver=9999_git20240521
+pkgver=9999_git20240717
 pkgrel=0
-_commit="0e1a9bb80f8b5787c90773a1880f2e17729cdfb3"
+_commit="b66070293f504c288186ee1b72f35fed85371db3"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/system/dolphin"
@@ -19,7 +19,6 @@ depends="
 depends_dev="
 	baloo-dev
 	baloo-widgets-dev
-	kactivities-dev
 	kbookmarks-dev
 	kcmutils-dev
 	kcompletion-dev
@@ -40,6 +39,7 @@ depends_dev="
 	kwindowsystem-dev
 	musl-fts-dev
 	phonon-dev
+	plasma-activities-dev
 	qt6-qtbase-dev
 	solid-dev
 	"
@@ -55,7 +55,7 @@ checkdepends="
 	"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang $pkgname-zsh-completion"
 _repo_url="https://invent.kde.org/system/dolphin.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/dolphin-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/dolphin-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/dolphin-$_commit"
@@ -82,5 +82,5 @@ package() {
 }
 
 sha512sums="
-a9a3a3b09a2dbc01112d20bfc8d1cca132c0e00a2189adef568996eba7e9e115adcd14c7c899713a49f212b762cd20e37201c9ee949ea5a6a58a8dbf0b43da0c  dolphin-0e1a9bb80f8b5787c90773a1880f2e17729cdfb3.tar.xz
+273e4be6f8475800129c78f3b30408673bc7f49c98f87bba191b3951f0b8357edab3ef8875e6f162dd699377c5df4014547081e1fb50317b9cadb9631cbff177  dolphin-b66070293f504c288186ee1b72f35fed85371db3.tar.xz
 "

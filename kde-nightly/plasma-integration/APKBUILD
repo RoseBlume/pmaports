@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-integration
-pkgver=9999_git20240516
+pkgver=9999_git20240707
 pkgrel=0
-_commit="c9d36b3876e8256c66447b68ae3c5a5e2ddcc8bd"
+_commit="b2a6653de9463f49c67131b643ff766f55b9f831"
 pkgdesc="Qt Platform Theme integration plugins for the Plasma workspace"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -42,7 +42,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-integration.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/plasma-integration-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/plasma-integration-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # Broken
 
@@ -67,5 +67,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-a1a4dbf30929d02589ce286b4794edf1e109a615cb028decb3456decc106839738031b944afcb3165c71642b7be6014b97b77de14aa30511b1b8117f505c0e48  plasma-integration-c9d36b3876e8256c66447b68ae3c5a5e2ddcc8bd.tar.xz
+8f8b7792a172ad564f5bf92df702ef4a9b3974e0204ebfd293dcc4b8f8bbdd87466e96e481f9e66def4f17b62cc484f5bed5312a226dbf413d236295bb29c0cc  plasma-integration-b2a6653de9463f49c67131b643ff766f55b9f831.tar.xz
 "

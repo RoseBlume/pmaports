@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=mailimporter
-pkgver=9999_git20240520
+pkgver=9999_git20240717
 pkgrel=0
-_commit="e6f0d25cf39174609e15130f323432cfd711c768"
+_commit="368f4cd82f4c8e703a44b98fec5bd2345d256a41"
 pkgdesc="KDE PIM library providing support for mail applications"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> akonadi
@@ -32,7 +32,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/mailimporter.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/mailimporter-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/mailimporter-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-6049f44ac83bfae36df9640084c27d788091a94a27ef827ff49528a93baa1e86e72cd24397bedd2e0e44a85e32e9ce9146357d628666da6a8f9ea80a2d0cd59e  mailimporter-e6f0d25cf39174609e15130f323432cfd711c768.tar.xz
+641189815a995bc45c2ad2202a08ccb92895c8ffa17dff20db91a165bc27aed4d4fb324b0264c1e0dbddd0e33bf3a14ef798ea566715ace4f0d8ad2c1ddc6b0e  mailimporter-368f4cd82f4c8e703a44b98fec5bd2345d256a41.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kunitconversion
-pkgver=9999_git20240518
+pkgver=9999_git20240712
 pkgrel=0
-_commit="2645b07ee99299acf818a71745f46fd9c9ad5cf3"
+_commit="18f95b6aac402f1a577d2f572e8f98260b9ce092"
 pkgdesc="Support for unit conversion"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://community.kde.org/Frameworks"
@@ -22,7 +22,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kunitconversion.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/kunitconversion-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/kunitconversion-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 options="net" # net required for tests
 
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-7be2d8617d00f8374c59fe1291fa9721b7d6481d324747e301db84c04ff28f7b85725797ebee55dc8fd64c59bf4d44ecbe6561f6b19668f25a2ed8cb8aa7a43c  kunitconversion-2645b07ee99299acf818a71745f46fd9c9ad5cf3.tar.xz
+e20d28da650681f0970f9dca94d33a2ce5b0a3bed6a59915af5cc538046395255193d9633e6d2308dccde03551474e7e1bb87f3851c45281f20e8f273ff2deff  kunitconversion-18f95b6aac402f1a577d2f572e8f98260b9ce092.tar.xz
 "

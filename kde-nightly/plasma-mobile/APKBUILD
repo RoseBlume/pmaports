@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-mobile
-pkgver=9999_git20240517
+pkgver=9999_git20240717
 pkgrel=0
-_commit="0fd1f8a822a62f5b073d49df5d15e9a961f4448f"
+_commit="9e8f0a0c74e5da86450fd90ab76cc4c31f762150"
 pkgdesc="Modules providing phone functionality for Plasma"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -15,10 +15,10 @@ license="GPL-2.0-or-later AND LGPL-2.1-or-later"
 depends="
 	breeze-icons
 	dbus-x11
-	kactivities
 	kpipewire
 	kquickcharts
 	maliit-keyboard
+	plasma-activities
 	plasma-nano
 	plasma-nm
 	plasma-pa
@@ -29,7 +29,6 @@ depends="
 makedepends="
 	eudev-dev
 	extra-cmake-modules
-	kactivities-dev
 	kauth-dev
 	kbookmarks-dev
 	kcodecs-dev
@@ -57,6 +56,7 @@ makedepends="
 	libplasma-dev
 	modemmanager-qt-dev
 	networkmanager-qt-dev
+	plasma-activities-dev
 	plasma-workspace-dev
 	qcoro-dev
 	qt6-qtdeclarative-dev
@@ -75,7 +75,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-mobile.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/plasma-mobile-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/plasma-mobile-$_commit.tar.xz
 	99-flashlight.rules
 	"
 options="!check" # No tests
@@ -102,6 +102,6 @@ package() {
 }
 
 sha512sums="
-e7294fa544bde34147d7d0dd9c31f5548154a3b5e243fb9f5e9a47c5d5260a85cc25141fc2b2551de70f8f3c7b865d54569764e5adb764574a0d085f08bf5a5c  plasma-mobile-0fd1f8a822a62f5b073d49df5d15e9a961f4448f.tar.xz
+099826fecfd956b753d77bda06c752a790165f7037a5525f4fe5ee77cf396dec2bc822724b815c0e76388966d5c60eb8ca45bfb678f406cc5ef58c3c00b10713  plasma-mobile-9e8f0a0c74e5da86450fd90ab76cc4c31f762150.tar.xz
 4badc25cbb7dc84d6af54cff5f3c09dcc37da86b7e930bdcab6d75f8dd90ef0dd9c8a3837ab696b1f4de9cad82d5e64ddd44904640a92e910a8f45524542be95  99-flashlight.rules
 "

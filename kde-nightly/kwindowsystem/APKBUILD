@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kwindowsystem
-pkgver=9999_git20240516
+pkgver=9999_git20240712
 pkgrel=0
-_commit="1034604d8af29532bf3b33eea09f8dce4ecdbdb8"
+_commit="1a1e7f534a00d587078e3eac74c95eebfd64274b"
 pkgdesc="Access to the windowing system"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -27,7 +27,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kwindowsystem.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-06-06/kwindowsystem-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/kwindowsystem-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -70,5 +70,5 @@ package() {
 }
 
 sha512sums="
-10807ffb3934c3b8998edc67e52f227992d7e1fe2c4d59623252f415b735d881f7d1497cddbfaaa5c52b956a3f4d4a00d2cf4963e424014bc237c9f262399c56  kwindowsystem-1034604d8af29532bf3b33eea09f8dce4ecdbdb8.tar.xz
+7b889818807899f6722b51703fa1a07f43f18aca1b6b4cdb27696b2da3748f1b350bb0a6a80686e9545b6dc0fb141b9f1686ba155e5c8ceeff695e0afb44131d  kwindowsystem-1a1e7f534a00d587078e3eac74c95eebfd64274b.tar.xz
 "
