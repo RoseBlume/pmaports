@@ -1,0 +1,24 @@
+# Maintainer: Alexey Min <alexeymin@postmarketos.org>
+pkgname=postmarketos-install-recommends
+pkgver=1
+pkgrel=0
+pkgdesc="Script to quickly install pmb_recommends for a package"
+url="https://postmarketos.org"
+options="!check"  # no tests
+depends="git python3"
+source="install-recommends.py"
+arch="noarch"
+license="ISC"
+
+build() {
+	mkdir -p "$builddir"
+}
+
+package() {
+	install -Dm755 "$srcdir/install-recommends.py" \
+		"$pkgdir/usr/bin/install-recommends"
+}
+
+sha512sums="
+6963e91a0132d539adf3f8dd0631f858fb049b4e09558a93dd2e81cff6e8a1d2b0b03520c46256c48734dfa02224da606af973ab1801d32c098b0f6bc642bbec  install-recommends.py
+"
