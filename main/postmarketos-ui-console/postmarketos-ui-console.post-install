@@ -1,3 +1,5 @@
 #!/bin/sh
 
-rc-update add networkmanager default
+if command -v rc-update > /dev/null; then
+	rc-update add networkmanager default
+fi
