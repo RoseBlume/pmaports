@@ -1,5 +1,8 @@
+# Forked from Alpine for systemd support
+
 pkgname=gnome-settings-daemon-mobile
-pkgver=46.0
+pkgver=99946.0
+_pkgver=46.0
 pkgrel=0
 pkgdesc="GNOME settings daemon"
 url="https://gitlab.gnome.org/verdre/gnome-settings-daemon-mobile"
@@ -7,11 +10,11 @@ arch="all"
 options="!check" # tests fail on builders
 license="GPL-2.0-only AND LGPL-2.1-only"
 depends="pulseaudio"
+provides="gnome-settings-daemon=$pkgver-r$pkgrel"
 depends_dev="
 	alsa-lib-dev
 	colord-dev
 	cups-dev
-	elogind-dev
 	geoclue-dev
 	geocode-glib-dev>=3.26.4-r1
 	lcms2-dev
@@ -24,6 +27,7 @@ depends_dev="
 	nss-dev
 	pango-dev
 	polkit-dev
+	systemd-dev
 	pulseaudio-dev
 	upower-dev
 	"
@@ -50,27 +54,16 @@ _commit=46-mobile-0
 _gvc_commit="8e7a5a4c3e51007ce6579292642517e3d3eb9c50"
 source="gnome-settings-daemon-mobile-$_commit.tar.gz::https://gitlab.gnome.org/verdre/gnome-settings-daemon-mobile/-/archive/$_commit/gnome-settings-daemon-mobile-$_commit.tar.gz
 	libgnome-volume-control-$_gvc_commit.tar.gz::https://gitlab.gnome.org/GNOME/libgnome-volume-control/-/archive/$_gvc_commit/gnome-shell-$_gvc_commit.tar.gz"
-builddir="$srcdir/gnome-settings-daemon-mobile-$_commit"
+builddir="$srcdir/$pkgname-$_commit"
 
 build() {
-	cd "$builddir"
 	rm -rf "$builddir/subprojects/gvc"
 	mv "$srcdir/libgnome-volume-control-$_gvc_commit" $builddir/subprojects/gvc
 	abuild-meson \
 		-Db_lto=true \
-		-Delogind=true \
-		-Dsystemd=false \
+		-Dsystemd=true \
 		. output
 	meson compile -C output
-}
-
-check() {
-	meson test --no-rebuild --print-errorlogs -C output
-}
-
-package() {
-	provides="gnome-settings-daemon=$pkgver-r$pkgrel"
-	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 
 dev() {
@@ -78,9 +71,12 @@ dev() {
 	default_dev
 }
 
-lang() {
-	provides="gnome-settings-daemon-lang=$pkgver-r$pkgrel"
-	default_lang
+check() {
+	meson test --no-rebuild --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
 }
 
 sha512sums="
