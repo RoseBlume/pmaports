@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kompare
-pkgver=9999_git20240528
+pkgver=9999_git20240718
 pkgrel=0
-_commit="7f2b834144aac602620206150f8da14603271e92"
+_commit="43f35d1f74a73b127692838f95a69cf36e921381"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/development/org.kde.kompare"
@@ -28,7 +28,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/sdk/kompare.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-17/kompare-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-19/kompare-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-0d7486ecb84534e1585a43279bc3a838a137c1e332cf37379c05b8a02508fbb5c175ada97a359a362a87dd460696d65b03a48669bbd217d13d4ce22adeb63870  kompare-7f2b834144aac602620206150f8da14603271e92.tar.xz
+4b2535c629f166c51ef447d6fa1970efb34af3b3c2a3d5fb659262bea4498e862260beedc95032838d1ff79281fa3e4a808b6d7566a66c371bfeedf9f6b70a93  kompare-43f35d1f74a73b127692838f95a69cf36e921381.tar.xz
 "
