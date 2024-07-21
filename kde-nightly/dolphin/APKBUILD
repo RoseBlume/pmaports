@@ -6,7 +6,7 @@
 pkgname=dolphin
 pkgver=9999_git20240719
 pkgrel=0
-_commit="8cea3f233687493640db9c10251ff1accd3d793c"
+_commit="2059ce2986e2d2cf6e22041b2ffe28e50b913c7f"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/system/dolphin"
@@ -55,7 +55,7 @@ checkdepends="
 	"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang $pkgname-zsh-completion"
 _repo_url="https://invent.kde.org/system/dolphin.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-19/dolphin-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-20/dolphin-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/dolphin-$_commit"
@@ -82,5 +82,5 @@ package() {
 }
 
 sha512sums="
-b2d02a843d121497fc5e012281fffdd067f63a5c19b585548d8c1eb329f3f391b7938ae078e6f852437e38521da7e21580c88992c47999cda0b582840ea69e69  dolphin-8cea3f233687493640db9c10251ff1accd3d793c.tar.xz
+d267946aa820fb4cf8bbbdfd969ddeb7ae5a8f25d741e5f0fe85cb3681a04252aff9f495806189a1484c779b3d2d2d8353aa4e9a59a5458b083d799df7a446df  dolphin-2059ce2986e2d2cf6e22041b2ffe28e50b913c7f.tar.xz
 "
