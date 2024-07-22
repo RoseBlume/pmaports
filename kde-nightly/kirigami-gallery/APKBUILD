@@ -12,7 +12,10 @@ arch="all !armhf"
 url="https://kde.org/applications/development/org.kde.kirigami2.gallery"
 pkgdesc="Gallery application built using Kirigami"
 license="LGPL-2.0-or-later"
-depends="kirigami"
+depends="
+	kirigami
+	kitemmodels
+	"
 makedepends="
 	extra-cmake-modules
 	kirigami-dev
@@ -23,7 +26,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/sdk/kirigami-gallery.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-20/kirigami-gallery-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/kirigami-gallery-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"

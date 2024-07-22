@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=elisa
-pkgver=9999_git20240720
+pkgver=9999_git20240721
 pkgrel=0
-_commit="7afa30f707bebef11ce92fa3b9e0fa7c5a39544d"
+_commit="bd12657f54f135ec5034cda7cd7e3390d4e99e4c"
 # armhf blocked by extra-cmake-modules
 # s390x blocked by vlc
 arch="all !armhf !s390x"
@@ -49,7 +49,7 @@ checkdepends="
 	xvfb-run
 	"
 _repo_url="https://invent.kde.org/multimedia/elisa.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-20/elisa-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/elisa-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -75,5 +75,5 @@ package() {
 }
 
 sha512sums="
-9f88fb5d5a24e5203f45c32d9b4b3fe0df00d4d3565e62319ea61ddd1185b07796e74304df6216ddef056d4e38f383b076e3ad302cf760116b6e976268485795  elisa-7afa30f707bebef11ce92fa3b9e0fa7c5a39544d.tar.xz
+829f68204fc7b1ee3da18467b25bb7bf7349fb5501f5af6c93cb13ef9a5a441d4624f744fcc0468f3a73e68f613e6de09426a5ab7191e21b74f8f93e7d2d2184  elisa-bd12657f54f135ec5034cda7cd7e3390d4e99e4c.tar.xz
 "
