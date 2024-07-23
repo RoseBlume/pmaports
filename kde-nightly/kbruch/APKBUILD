@@ -6,7 +6,7 @@
 pkgname=kbruch
 pkgver=9999_git20240721
 pkgrel=0
-_commit="e0a4d3e514f9a60db1a7e9dd5d023f360e6f51b1"
+_commit="4f9781905e923e0136590bb4cf4c2254549b2e09"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://edu.kde.org/kbruch/"
@@ -24,7 +24,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/education/kbruch.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/kbruch-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/kbruch-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-5de113d9041a6730e363643e27ae828b504607e29934b625e406d14c65851f57c416ebd8e807917eeb85a75139b68e8cb84a6ed16fbc09c0fedc0c119523daf8  kbruch-e0a4d3e514f9a60db1a7e9dd5d023f360e6f51b1.tar.xz
+ee75b0267b937fe3485f8b973baf19373e6dd537dcd79e6b8baa2ed8faed905e471a07f1932fb79e114b660d725243267d09374bf073634a57e6b55c95788106  kbruch-4f9781905e923e0136590bb4cf4c2254549b2e09.tar.xz
 "

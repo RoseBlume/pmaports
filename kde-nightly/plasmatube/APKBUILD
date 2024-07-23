@@ -6,7 +6,7 @@
 pkgname=plasmatube
 pkgver=9999_git20240721
 pkgrel=0
-_commit="9cf3b51adb6f084db1d8e66470e4d513b1dde2e3"
+_commit="ab699e295832da737cb6daf48c58a4e214983ec3"
 pkgdesc="Kirigami YouTube video player based on Invidious"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -34,7 +34,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/multimedia/plasmatube.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/plasmatube-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/plasmatube-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-176c364fb5b8bcf0140041ddd5736da4d22d1812b97e7b2aefeb125052a8331cf7564833a7d7c75745df9f3ab4c3ccaf483a97a6d9acb4f853414bd80677ccf2  plasmatube-9cf3b51adb6f084db1d8e66470e4d513b1dde2e3.tar.xz
+1c9dcf8a74e4a220ea42a97e87227eb660cb326b6d019b4a7577c3c3987e7b7ca876cfdb8dd4abf2229e12a33c916018717caed60451874d5812e179e1908c40  plasmatube-ab699e295832da737cb6daf48c58a4e214983ec3.tar.xz
 "

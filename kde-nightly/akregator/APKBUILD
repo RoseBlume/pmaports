@@ -6,7 +6,7 @@
 pkgname=akregator
 pkgver=9999_git20240721
 pkgrel=0
-_commit="d7c58d75f3eee737d8f8d786329993a98f332b9f"
+_commit="2afd6d341ba8ed905245c07c840c1a8aacd3f58b"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -42,7 +42,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/akregator.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/akregator-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/akregator-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -65,5 +65,5 @@ package() {
 }
 
 sha512sums="
-cfa64f748526b06f809b2b5806461f3e8bd81b050501aaaf621af62b981f8138bcfc858fe20308b009c7a0252edff6627762ff76fe6083a143ed7cd5221f78e0  akregator-d7c58d75f3eee737d8f8d786329993a98f332b9f.tar.xz
+19698b265f8e76481c579f1a936775a87abe9be5acb70ec7f0b0824c25bd8281f21b29d16b34d1ad1277f26cf5310e23900be5d111971464cdef16aeba9400d1  akregator-2afd6d341ba8ed905245c07c840c1a8aacd3f58b.tar.xz
 "

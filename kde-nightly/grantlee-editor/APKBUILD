@@ -6,7 +6,7 @@
 pkgname=grantlee-editor
 pkgver=9999_git20240721
 pkgrel=0
-_commit="06ebe3c8ccb25477835855b569b13725c0b71214"
+_commit="0b524a13bba6f79598b21c61561bdfc621566296"
 pkgdesc="Utilities and tools to manage themes in KDE PIM applications "
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -36,7 +36,7 @@ makedepends="
 	syntax-highlighting-dev
 	"
 _repo_url="https://invent.kde.org/pim/grantlee-editor.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/grantlee-editor-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/grantlee-editor-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-c9233c98744a129929760734eca9874cac2ba5e54b82d65eef4d4eb36ed47a4c4e74ead5ac018254abc1c1701b6f89cd2342808214661b525a394eb44fb01299  grantlee-editor-06ebe3c8ccb25477835855b569b13725c0b71214.tar.xz
+7c2f3990b88519ebf724d6376d503f14d06af308ce05afe70c1b5ce0d619b7327c2cfeddd407a2a61103cc53bdbc251de1bd896a4af3e442584fcb69dbbd04c7  grantlee-editor-0b524a13bba6f79598b21c61561bdfc621566296.tar.xz
 "

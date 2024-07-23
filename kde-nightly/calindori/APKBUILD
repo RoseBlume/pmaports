@@ -6,7 +6,7 @@
 pkgname=calindori
 pkgver=9999_git20240721
 pkgrel=0
-_commit="afc558df3209036ff911e8de93a7c12aea930b7c"
+_commit="8b410fc2a7608658b70d55eca7c49b62483fdfb6"
 pkgdesc="Calendar for Plasma Mobile"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -28,7 +28,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/plasma-mobile/calindori.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/calindori-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/calindori-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # No tests
 
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-cdf0bc68af51344f802440c8b8514e0cf8a3e68939507eaf20dfc8ae7a514564fa94f75fa10dc545fd0f0edf84baabb842e5a30fba09945803b2d64bdbb8af85  calindori-afc558df3209036ff911e8de93a7c12aea930b7c.tar.xz
+463d60848ba598bfe9e5a3a5d9d52d8f665f1a65dc61cf38f78ec0721bd2995080725cfc6d58c0e6b4cf242585e438fda93b089a899d3fafa98f9229904d5343  calindori-8b410fc2a7608658b70d55eca7c49b62483fdfb6.tar.xz
 "

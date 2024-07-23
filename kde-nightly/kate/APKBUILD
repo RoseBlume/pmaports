@@ -6,7 +6,7 @@
 pkgname=kate
 pkgver=9999_git20240721
 pkgrel=0
-_commit="2c6cff3045e662f501f5bbd99343da67dce22f07"
+_commit="7e830aea31110cf92bcf0077023f28ce2d169b26"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/utilities/org.kde.kate"
@@ -37,7 +37,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/utilities/kate.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/kate-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/kate-$_commit.tar.xz"
 subpackages="kate-common:kate_common kwrite:kwrite kwrite-doc:kwrite_doc kwrite-lang:kwrite_lang $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -111,5 +111,5 @@ kwrite_lang() {
 }
 
 sha512sums="
-978e0446ba8fae666c0a495a8af25c35720f3cf69174cecb22714f72d5c157d73b8d32af66da12512c076483f0ca4b6faf0e4d890a800a4709dded840315bf9b  kate-2c6cff3045e662f501f5bbd99343da67dce22f07.tar.xz
+6fd359e552ef113ef7dd065b7df86007fabeef4889eedeef200633d4020de8977cf5082e3a668743449fa08a8298aed566b2d626d77d0e7e102e7b4199cc6eb2  kate-7e830aea31110cf92bcf0077023f28ce2d169b26.tar.xz
 "

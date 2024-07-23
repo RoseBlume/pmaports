@@ -6,7 +6,7 @@
 pkgname=bovo
 pkgver=9999_git20240721
 pkgrel=0
-_commit="acabbee25268e47e930c37ca24ee37f38ea2aec4"
+_commit="74b26bf98ab1a8df6e20a8e49fda9a02e8921492"
 pkgdesc="A Gomoku like game for two players"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -25,7 +25,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/games/bovo.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/bovo-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/bovo-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-78ead6bd23f4a6543b1c178c9b22a31e8e8d07b8ef1a753e7386dcd71c3b59de2a9e1c498d63c435b1e304f199c2cb91530a26d899b32231daa0d74a16b53bcc  bovo-acabbee25268e47e930c37ca24ee37f38ea2aec4.tar.xz
+3267f494b2df453b7794285d2d5a5be3a3d56461c713375cd5a64f3eb4e06d58915d7c2f8a2b4147b10c614cab8f3fed63b0964affb1d131e6de42ebc1098106  bovo-74b26bf98ab1a8df6e20a8e49fda9a02e8921492.tar.xz
 "

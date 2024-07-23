@@ -6,7 +6,7 @@
 pkgname=khangman
 pkgver=9999_git20240721
 pkgrel=0
-_commit="5dbd5dce8cd8b8a70e564054d23a2deecdd34f02"
+_commit="4927bbf32572118160d893ff1052b30681f526f6"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://edu.kde.org/khangman"
@@ -33,7 +33,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/education/khangman.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/khangman-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/khangman-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-b9ff10dc4252cdf65c9815531a4574041313547c612397f71ea78c9887cad5aaf4ddbe86e7c287e122180e746c8c8848a94358e58a0406f8b7fb777ae77cc03a  khangman-5dbd5dce8cd8b8a70e564054d23a2deecdd34f02.tar.xz
+d0e785180b26834f9f328ff9b389ea727788ac1126ba2b521ad8eacf0e37978d2f7d003e688d3cd0223afd233a6747524f70ecf05863d88adb259c92570efc88  khangman-4927bbf32572118160d893ff1052b30681f526f6.tar.xz
 "

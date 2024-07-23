@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmbox
-pkgver=9999_git20240717
+pkgver=9999_git20240721
 pkgrel=0
-_commit="2fea8c06c6ebfdcb9d6c22d775481944b59db304"
+_commit="7d220e422443cf0003aa4b292274f4998255295a"
 pkgdesc="Library for accessing mail storages in MBox format"
 # armhf blocked by extra-cmake-modules
 # s390x blocked by kmime
@@ -16,7 +16,7 @@ license="LGPL-2.0-or-later"
 depends_dev="kmime-dev"
 makedepends="$depends_dev extra-cmake-modules samurai"
 _repo_url="https://invent.kde.org/pim/kmbox.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/kmbox-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/kmbox-$_commit.tar.xz"
 subpackages="$pkgname-dev"
 
 options="!check"
@@ -39,5 +39,5 @@ package() {
 }
 
 sha512sums="
-fef8f64d33f2075a0ca972e549809f4deece6e035c6682c3d99158211e04d66b8dba0f75775d3ac547e231aa1f0dcf802896e782f431f25a1440ff305604fcbc  kmbox-2fea8c06c6ebfdcb9d6c22d775481944b59db304.tar.xz
+cd7bc095d2dfaa6b56ff2e617a9e090e881790bc59ebca3179759a525c10e187fadfbe981d3e1405c3874acfc73de8aceb1f6e6a5081d229a074ef97326e79d8  kmbox-7d220e422443cf0003aa4b292274f4998255295a.tar.xz
 "

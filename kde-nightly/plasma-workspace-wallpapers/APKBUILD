@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-workspace-wallpapers
-pkgver=9999_git20240707
+pkgver=9999_git20240722
 pkgrel=0
-_commit="9f2caa002044443dd134122a99ac323581b4e7d9"
+_commit="ad9b53269574ddc5eaabb2aa70a60f1de2a05caa"
 pkgdesc="Wallpapers for the Plasma Workspace"
 # armhf blocked by extra-cmake-modules
 arch="noarch !armhf"
@@ -23,7 +23,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-workspace-wallpapers.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/plasma-workspace-wallpapers-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/plasma-workspace-wallpapers-$_commit.tar.xz"
 options="!check" # No tests available
 
 options="!check"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-bc588402c1518db4130ecf7b05bd7ce3b3c8406c43747b3d5a01437b595ef09d44c391a08dfb2e041c0ba3057845cea15660ac2d5e51f81f385146789683e57b  plasma-workspace-wallpapers-9f2caa002044443dd134122a99ac323581b4e7d9.tar.xz
+436f97c67b76af4d72c6a85c1c6d19a8591462eaa434e770493022ab25ea56160e0149a2f24626dc4243468d78f22456981c7c8555b8c7c7e26eda753f9d40eb  plasma-workspace-wallpapers-ad9b53269574ddc5eaabb2aa70a60f1de2a05caa.tar.xz
 "

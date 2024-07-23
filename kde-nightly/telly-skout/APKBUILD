@@ -6,7 +6,7 @@
 pkgname=telly-skout
 pkgver=9999_git20240721
 pkgrel=0
-_commit="185924a0a437e93065cbf827a871b61cb6b1f10d"
+_commit="29042524d79b1dd2e75f8e908a4efd6e4227b5be"
 pkgdesc="Convergent TV guide based on Kirigami"
 url="https://invent.kde.org/plasma-mobile/telly-skout"
 # armhf blocked by qt6-qtdeclarative
@@ -27,7 +27,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/utilities/telly-skout.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/telly-skout-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/telly-skout-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-d74222dc5d59cc23b23e86d20278afb84a90359fe2c5430489989ebe29c15bd518614fa25fd66fbf2a3e0a79ce1a6ef377faf8c71692fe84c113558e37e0f5f0  telly-skout-185924a0a437e93065cbf827a871b61cb6b1f10d.tar.xz
+6350e6d4870287d8a647cd9a5361f96ff3d51b611874797e54f379d86983e78dea2b934ac30d352c51b23d0ffd063daeb694f839671ae118d11e1a64c5b7d479  telly-skout-29042524d79b1dd2e75f8e908a4efd6e4227b5be.tar.xz
 "

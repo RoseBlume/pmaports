@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdiamond
-pkgver=9999_git20240715
+pkgver=9999_git20240721
 pkgrel=0
-_commit="441712edc744d277d3dcf483704d8454148eb91a"
+_commit="b47512268ec5c0d0992e71c3445c3ee1640239f4"
 pkgdesc="A single player puzzle game"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -30,7 +30,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/games/kdiamond.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-21/kdiamond-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/kdiamond-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-ccc721f2012e1a654a2ba0e62bc4e1e59f4a5042b1dd67eea9a60b453ee9d6a419ad3ed1cdcb031ccdafbecac9e30f14b86e06c481b3191fbffdb3b301eaeaeb  kdiamond-441712edc744d277d3dcf483704d8454148eb91a.tar.xz
+cbdb93b5bd96207818c47095ffb3ebc0e12bf337f7b43aeb2581c9ab8073ba8c983c95052d996872f2e7f41fe7497a38634d50c6ccfc00495e8bdddf25f540c6  kdiamond-b47512268ec5c0d0992e71c3445c3ee1640239f4.tar.xz
 "
