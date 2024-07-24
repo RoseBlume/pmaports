@@ -6,7 +6,7 @@
 pkgname=kitinerary
 pkgver=9999_git20240722
 pkgrel=0
-_commit="44935d01cfc0e9cc50f554feb76766648f5aefc4"
+_commit="4a8ba6e95d90a7fb51c3a87db505f40cb3712ddd"
 # armhf blocked by qt6-qtdeclarative
 # ppc64le FTBFS
 arch="all !armhf !ppc64le"
@@ -33,7 +33,7 @@ makedepends="$depends_dev
 	zlib-dev
 	"
 _repo_url="https://invent.kde.org/pim/kitinerary.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-22/kitinerary-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-23/kitinerary-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 # broken with new libxml
 options="!check"
@@ -76,5 +76,5 @@ package() {
 }
 
 sha512sums="
-602aac50c53e9ac0dba64d1b5e8c9af95474433c0487bf68326ecd5de184363175578421eaae7e5c08ea60496e739a1bad50d3693c433675fd889ab01a704c46  kitinerary-44935d01cfc0e9cc50f554feb76766648f5aefc4.tar.xz
+fd74278dc7421d02fdc4ff58780e4b62be689702ccf2e440f8d12153e1ed045d068ed54426f515dde65201036c7934b17e5a7e691e4855f3d147dd9b0fdd3ed8  kitinerary-4a8ba6e95d90a7fb51c3a87db505f40cb3712ddd.tar.xz
 "
