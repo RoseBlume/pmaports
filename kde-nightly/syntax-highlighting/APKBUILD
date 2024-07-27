@@ -6,7 +6,7 @@
 pkgname=syntax-highlighting
 pkgver=9999_git20240723
 pkgrel=0
-_commit="35edcc4ff1153ccde11bdf3bee32aedb44b81153"
+_commit="9a823a7a9023ac78fbf0d5cdd2dd12d33ea4912e"
 pkgdesc="Syntax highlighting engine for structured text and code"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://community.kde.org/Frameworks"
@@ -24,7 +24,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/syntax-highlighting.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-23/syntax-highlighting-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-24/syntax-highlighting-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-c2e49dd40cd33915e2268b19b7460f1e02a6cd7e742d17fb06aa1c318f5d919b8331d3956e282a4b6b9efdd7ea90a8b2e4dfd0eb7c996055307ff2433d6fa292  syntax-highlighting-35edcc4ff1153ccde11bdf3bee32aedb44b81153.tar.xz
+d97ef176f00c7413b807852054b2b85f6bd2e1e2593a02ccb4e60d7cb11ac5826e10291953c2926db4c672bd1a4556be7f2e447be39f13cf0e8b14eecdfe2867  syntax-highlighting-9a823a7a9023ac78fbf0d5cdd2dd12d33ea4912e.tar.xz
 "

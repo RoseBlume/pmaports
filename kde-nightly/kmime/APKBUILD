@@ -6,7 +6,7 @@
 pkgname=kmime
 pkgver=9999_git20240722
 pkgrel=0
-_commit="6f669914afe28de285eca78283980d4db403c33b"
+_commit="65858a6a762172fe401dccee5161bef05ab30f82"
 pkgdesc="Library for handling mail messages and newsgroup articles"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -25,7 +25,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/kmime.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-23/kmime-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-24/kmime-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-5f90c21d4b3dfe18427c46e07335cc5ba7a5efff40cf85cb7e61895dcca4c47832e024dc466b64d578d9318fb85d48659a08ddf5c978c5820b895ab1c00461fd  kmime-6f669914afe28de285eca78283980d4db403c33b.tar.xz
+c53c4782ab072b62c18c0686b5f4197484205f004a9cdae4e219c5d3569a16d262c33345412ea9bee0f90055d1a4ee9dca52794f6ad9fb1524dd2f4520408bf3  kmime-65858a6a762172fe401dccee5161bef05ab30f82.tar.xz
 "
