@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmail-account-wizard
-pkgver=9999_git20240723
+pkgver=9999_git20240727
 pkgrel=0
-_commit="269f3ed2e79aef9e554f99aff02b6cfb531fa534"
+_commit="28a00c7492a2f6cc2492b3ead8ef7dde738e5b66"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> kmailtransport
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -43,7 +43,7 @@ makedepends="
 	shared-mime-info
 	"
 _repo_url="https://invent.kde.org/pim/kmail-account-wizard.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-24/kmail-account-wizard-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-27/kmail-account-wizard-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-428e0e3a80547eb504ae506b7318f8bc277bd7303799ac829133eef51d4b9a109dcb55aeb7861d353d36e4f2b0725aa9e1a43c61f5aa2cd8ebc9b40e9e4c5bb4  kmail-account-wizard-269f3ed2e79aef9e554f99aff02b6cfb531fa534.tar.xz
+97cc2b9d49bb56772779e4673f9ad1f57313e853d08369ddbc93b6cc79bd467a3a7c1a885af738388ab221670330f3731e11d3a73a3a9d6c673a75f18840cc74  kmail-account-wizard-28a00c7492a2f6cc2492b3ead8ef7dde738e5b66.tar.xz
 "
