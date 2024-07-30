@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=okular
-pkgver=9999_git20240727
+pkgver=9999_git20240728
 pkgrel=0
-_commit="6e6d7c88741a5b7161605d32cfe29a9781bb597f"
+_commit="76a6826c8ada978942c9baee0a15fdeca0ece3ef"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt5-qtwebengine -> purpose
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -50,7 +50,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/graphics/okular.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-27/okular-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-28/okular-$_commit.tar.xz"
 subpackages="
 	$pkgname-common
 	$pkgname-common-qml:common_qml
@@ -111,5 +111,5 @@ mobile() {
 }
 
 sha512sums="
-4272e0e04e01ceaa687a3cc7be2cac733b349c17737e56eff3f544eebedde0bce727a281e1ddc589e75a87bb845ef47d113a30e3c60c142e01394f99ebb3e80c  okular-6e6d7c88741a5b7161605d32cfe29a9781bb597f.tar.xz
+8ee4eb43c7778ff586ffd22e21721719ef53f92ac2d2ce4b2155201d0493099ef2b44188fcd18529147b281b7d1236f99e2203c0b9a53aef983de2d8762e79b6  okular-76a6826c8ada978942c9baee0a15fdeca0ece3ef.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkleo
-pkgver=9999_git20240727
+pkgver=9999_git20240728
 pkgrel=0
-_commit="67a2e815520a350c46425f3cad4266312a135280"
+_commit="d1bd20176a68f3b8c3ade33cb818176e0b6cf7dc"
 pkgdesc="KDE PIM cryptographic library"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -32,7 +32,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/libkleo.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-27/libkleo-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-28/libkleo-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-864fe20a81acff9ff7df702f6b7fe72984892d83d388236a0e468e623e54059134171d2e6b560e4e8e71da55ba38455a1aa1da4c7cb3809865cb1834b71d7b71  libkleo-67a2e815520a350c46425f3cad4266312a135280.tar.xz
+17edfa91f123573551eb09489a3281a8a27b843c3db55358c7416e97457f9e6cabecb49e614f525e43155c1ae79d6b007eaba62a124b27ba2a98d7cfa8015384  libkleo-d1bd20176a68f3b8c3ade33cb818176e0b6cf7dc.tar.xz
 "

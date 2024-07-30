@@ -6,7 +6,7 @@
 pkgname=kcolorscheme
 pkgver=9999_git20240712
 pkgrel=0
-_commit="87a88f9033c18c21331d5b98160ff22f77cfcf54"
+_commit="042d87f1eb7f7be923d56215575f7170c24a0b91"
 pkgdesc="Classes to read and interact with KColorScheme"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://community.kde.org/Frameworks"
@@ -23,7 +23,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kcolorscheme.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-27/kcolorscheme-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-28/kcolorscheme-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -46,5 +46,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-fd96450155706e976e35a2b265b25ca944c59d24f122ad18f65a3caae046975344977e0c11a9850fec6c8967829b472ae3837eafe3cfe608fedf049d0b6e122b  kcolorscheme-87a88f9033c18c21331d5b98160ff22f77cfcf54.tar.xz
+4ea187d2b40958c44b20c0cb91728bca59c6835c05b29eaf6c3e98b2f4d53c8f44ba1e0d22867bdc36ccb78667495004d8b24241ffbead5f5ce9bb8e273ee68d  kcolorscheme-042d87f1eb7f7be923d56215575f7170c24a0b91.tar.xz
 "

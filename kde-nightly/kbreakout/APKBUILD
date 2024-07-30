@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kbreakout
-pkgver=9999_git20240727
+pkgver=9999_git20240728
 pkgrel=0
-_commit="3ab9408e8d3ad5c61c91e99868fdeb8146cea00e"
+_commit="0c05be4f6766139668705179e89badd2aa70cc74"
 pkgdesc="A Breakout-like game"
 url="https://kde.org/applications/games/kbreakout/"
 # armhf blocked by extra-cmake-modules
@@ -29,7 +29,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/games/kbreakout.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-27/kbreakout-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-28/kbreakout-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-6549212a476093a345c71131d4dc8d38296119bae316ba51c0bced91cbdefbf92395789ee3f1f5715e33e15b4e711d328f36306248d4aa1c350cdd88ae96ce27  kbreakout-3ab9408e8d3ad5c61c91e99868fdeb8146cea00e.tar.xz
+8c802bdbf751c60ffdc01dc00c138aa5f990a0aac54ddf64e2fd6737303d7751373cb48d8f8e76e40a1aefcc89a329f9261a85a16e72ac6f553e22f6f4ef6726  kbreakout-0c05be4f6766139668705179e89badd2aa70cc74.tar.xz
 "
