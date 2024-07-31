@@ -141,6 +141,23 @@ setup_dynamic_partitions() {
 }
 
 mount_subpartitions() {
+	search_boot_uuid=""
+	search_boot_path=""
+	search_root_uuid=""
+	search_root_path=""
+	# shellcheck disable=SC2013
+	for x in $(cat /proc/cmdline); do
+		if ! [ "$x" = "${x#pmos_root_uuid=}" ]; then
+			search_root_uuid="${x#pmos_root_uuid=}"
+		elif ! [ "$x" = "${x#pmos_root=}" ]; then
+			search_root_path="${x#pmos_root=}"
+		elif ! [ "$x" = "${x#pmos_boot_uuid=}" ]; then
+			search_boot_uuid="${x#pmos_boot_uuid=}"
+		elif ! [ "$x" = "${x#pmos_boot=}" ]; then
+			search_boot_path="${x#pmos_boot=}"
+		fi
+	done
+
 	try_parts="/dev/disk/by-partlabel/userdata /dev/disk/by-partlabel/system* /dev/mapper/system*"
 	android_parts=""
 	for x in $try_parts; do
@@ -150,7 +167,7 @@ mount_subpartitions() {
 	attempt_start=$(get_uptime_seconds)
 	wait_seconds=10
 	echo "Trying to mount subpartitions for $wait_seconds seconds..."
-	while [ -z "$(find_root_partition)" ]; do
+	while true; do
 		partitions="$android_parts $(grep -v "loop\|ram" < /proc/diskstats |\
 			sed 's/\(\s\+[0-9]\+\)\+\s\+//;s/ .*//;s/^/\/dev\//')"
 		for partition in $partitions; do
@@ -161,9 +178,43 @@ mount_subpartitions() {
 					# Ensure that this was the *correct* subpartition
 					# Some devices have mmc partitions that appear to have
 					# subpartitions, but aren't our subpartition.
-					if [ -n "$(find_root_partition)" ]; then
-						break
+					found_boot_partition=""
+					for subpartition in $(kpartx -l "$partition" | awk '{print "/dev/mapper/"$1}'); do
+						if [ -n "$search_boot_uuid" ] && [ "$(blkid "$subpartition" | grep -c "UUID=\"$search_boot_uuid\"")" = 1 ]; then
+							found_boot_partition="$subpartition"
+						elif [ "$search_boot_path" = "$subpartition" ]; then
+							found_boot_partition="$subpartition"
+						else
+							for l in pmOS_i_boot pmOS_inst_boot pmOS_boot; do
+								if [ "$(blkid "$subpartition" | grep -c "LABEL=\"$l\"")" = 1 ]; then
+									found_boot_partition="$subpartition"
+								fi
+							done
+						fi
+						[ -n "$found_boot_partition" ] && break
+					done
+					if [ -n "$found_boot_partition" ]; then
+						for subpartition in $(kpartx -l "$partition" | awk '{print "/dev/mapper/"$1}'); do
+							if [ "$subpartition" != "$found_boot_partition" ]; then
+								if [ -z "$search_root_uuid" ] && [ -z "$search_root_path" ]; then
+									if [ "$(blkid "$subpartition" | grep -c "TYPE=\"crypto_LUKS\"")" = 1 ]; then
+										PMOS_ROOT="$subpartition"
+									else
+										for l in pmOS_install pmOS_root; do
+											if [ "$(blkid "$subpartition" | grep -c "LABEL=\"$l\"")" = 1 ]; then
+												PMOS_ROOT="$subpartition"
+											fi
+										done
+									fi
+								elif [ -n "$search_root_uuid" ] && [ "$(blkid "$subpartition" | grep -c "UUID=\"$search_root_uuid\"")" = 1 ]; then
+									PMOS_ROOT="$subpartition"
+								elif [ "$search_root_path" = "$subpartition" ]; then
+									PMOS_ROOT="$subpartition"
+								fi
+							fi
+						done
 					fi
+					[ -n "$PMOS_ROOT" ] && return
 					kpartx -d "$partition"
 					continue
 					;;
