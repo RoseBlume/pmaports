@@ -6,7 +6,7 @@
 pkgname=mimetreeparser
 pkgver=9999_git20240728
 pkgrel=0
-_commit="5b6efbe440fe95aef89509895f6e021972a3a3e7"
+_commit="929f47ad8c8860c73e8cd4901f6e08363b180fbd"
 pkgdesc="Parser for MIME trees"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -31,7 +31,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/mimetreeparser.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-28/mimetreeparser-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-30/mimetreeparser-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -54,5 +54,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-9fc38bfd966b67a5ea7aa080b577505b8bac2ff42cc50b3b9ec7b20023a45cda4911a333b95d2b04f35188716b2af5aac7e1d91cfa777eb25a0cf03a68fb73ca  mimetreeparser-5b6efbe440fe95aef89509895f6e021972a3a3e7.tar.xz
+19d8c94b9477e197fb4d5eeeaf213cd3dde0b535ffbf8c6f82c6fd0382b81cbb81ea39d794f741202716afe375165a160ed9337d018dd229361fca47f8985093  mimetreeparser-929f47ad8c8860c73e8cd4901f6e08363b180fbd.tar.xz
 "
