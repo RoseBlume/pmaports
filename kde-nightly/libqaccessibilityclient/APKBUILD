@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-other
 pkgname=libqaccessibilityclient
-pkgver=9999_git20231211
+pkgver=9999_git20240712
 pkgrel=0
-_commit="78a0fb5289ae6b7d3a5b7b1317ac6d48dee3ae93"
+_commit="8e1578da54688f129e15d154285e81a869d23ef5"
 pkgdesc="Accessibilty tools helper library, used e.g. by screen readers"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -22,7 +22,7 @@ checkdepends="
 	xvfb-run
 	"
 _repo_url="https://invent.kde.org/libraries/libqaccessibilityclient.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-30/libqaccessibilityclient-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-07-31/libqaccessibilityclient-$_commit.tar.xz"
 subpackages="$pkgname-dev"
 options="!check" # Broken
 
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-6bc77b6b0a2a8908be577e38f2fed55a48bff14fc6bbc66bcc28cc259d00a9ace336fcd0b556b831b3571a7d8a7d6cb5e6a713f23c63321d043fa3d3d1c1f721  libqaccessibilityclient-78a0fb5289ae6b7d3a5b7b1317ac6d48dee3ae93.tar.xz
+bf92fa665b69973ffe5977bd210d6c05926d62077e9a92c0a9ac226c57221c0a223de30ec60b6e5d928746e40d11b907333030144b937b0247a3bdabd98e8b5c  libqaccessibilityclient-8e1578da54688f129e15d154285e81a869d23ef5.tar.xz
 "
