@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=plasma-nano
-pkgver=9999_git20240628
+pkgver=9999_git20240803
 pkgrel=0
-_commit="7d0f907d8c268c90adca729ba1329873913764ad"
+_commit="357658b7a39bdc90e69c6a00636af5cb955a2d95"
 pkgdesc="A minimal Plasma shell package intended for embedded devices"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -29,7 +29,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/plasma-nano.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-02/plasma-nano-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-03/plasma-nano-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-c2d0a27dff68888b1b213e4b319f812ed082f06019f0f424c4e8b4b05dda36021bfbe5d351d940014901e8e0d06f86e33a8a51cdd44c8e789ecbaccf82fa8e64  plasma-nano-7d0f907d8c268c90adca729ba1329873913764ad.tar.xz
+ed133181c4266df95f24967c1505fbcebf43000f05637a7009df0800df2457a96eb3e21372b98785fd0c407e0275d2570b3155187f5bd122073453ea28eb040f  plasma-nano-357658b7a39bdc90e69c6a00636af5cb955a2d95.tar.xz
 "

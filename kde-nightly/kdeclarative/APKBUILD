@@ -6,7 +6,7 @@
 pkgname=kdeclarative
 pkgver=9999_git20240802
 pkgrel=0
-_commit="7c7a11c58d9d8dd7623a12515504688c985ef32e"
+_commit="dbf9f3d1793a269856a70b7933258c9b6be98ef4"
 pkgdesc="Provides integration of QML and KDE Frameworks"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -33,7 +33,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kdeclarative.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-02/kdeclarative-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-03/kdeclarative-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -58,5 +58,5 @@ package() {
 }
 
 sha512sums="
-1ec53c5b86a3c7a616c114952c1c0d1916cc2d7245fa026e7bdbd7db1dcf92218ae710448c56e5830392458903b3f8d09a7f3b2ebe40d25f285f3416345044dd  kdeclarative-7c7a11c58d9d8dd7623a12515504688c985ef32e.tar.xz
+2a3bc6541a3fdbdb9766ca3588ba70371b0d723fc8a79b1c5f7606ba71eed7f1672a78ad1f4f19ae6d23d2375ae39a7ca919ca63e84755ffcba916ba5669bd2c  kdeclarative-dbf9f3d1793a269856a70b7933258c9b6be98ef4.tar.xz
 "
