@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-other
 pkgname=ruqola
-pkgver=9999_git20240803
+pkgver=9999_git20240804
 pkgrel=0
-_commit="262dccf2fde9bbc4c223c5dcbf19b30309775d86"
+_commit="014d786090c0b3368722c530d1341f658f9a6f5a"
 pkgdesc="A Qt client for Rocket Chat"
 url="https://invent.kde.org/network/ruqola"
 # armhf blocked by qt6-qtdeclarative-dev
@@ -46,7 +46,7 @@ makedepends="
 checkdepends="xvfb-run"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/network/ruqola.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-03/ruqola-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-04/ruqola-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/ruqola-$_commit"
@@ -85,5 +85,5 @@ package() {
 }
 
 sha512sums="
-05f148e904f5cfa29d8372b5d8ca93491dd82a55b9a283fe540d4a018891d165376be451191da5a75a4bb0078297f73bfbc9fb22124f3e182e3c86a560203fbf  ruqola-262dccf2fde9bbc4c223c5dcbf19b30309775d86.tar.xz
+70d340f6ca2a39813ff41fb09f6550ea415162d93e57d45e578b66fab870ba0db4d5e55ff53d1c960ee202cd20a6007f12d6f54a0fab6cac6e0fafbb0b62f616  ruqola-014d786090c0b3368722c530d1341f658f9a6f5a.tar.xz
 "
