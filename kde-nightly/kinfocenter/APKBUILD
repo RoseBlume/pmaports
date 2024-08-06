@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kinfocenter
-pkgver=9999_git20240802
+pkgver=9999_git20240805
 pkgrel=0
-_commit="72e9fdf07d6f7aa07ecb615a2994aac84a13b3ee"
+_commit="65e4cb8ba96e24af3f0744c11f796d3a86a85b86"
 pkgdesc="A utility that provides information about a computer system"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -45,7 +45,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kinfocenter.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-04/kinfocenter-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-05/kinfocenter-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -68,5 +68,5 @@ package() {
 }
 
 sha512sums="
-98a0e956abe67ae037a26816d2fe60b241faaef40558ccd5ca564a3efde90b06025d645c2e5e0f397cbd8e2fd8386188939d08cf3814c20c4b190e73bab42291  kinfocenter-72e9fdf07d6f7aa07ecb615a2994aac84a13b3ee.tar.xz
+6c8c634ddb0351298718059ace39dd78c2b6b25222184e61173c3a319f0043c3bfea912ab4300e038fc18ea90d7f598671f75d3631160eddb15f4ae7aad19905  kinfocenter-65e4cb8ba96e24af3f0744c11f796d3a86a85b86.tar.xz
 "
