@@ -1,0 +1,29 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-samsung-a82xq
+pkgdesc="Samsung Quantum 2"
+pkgver=0.1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-qcom-sm8150
+	mesa-dri-gallium
+	mkbootimg
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="deviceinfo"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+96ddcd24aeff82e09d51119f710fbfb0e11188617a07bb4fea2d02b736cba88582f870850772dd6a226a95944b359c0c12c211478b35c3eeba2402c3b31ad53a  deviceinfo
+"
