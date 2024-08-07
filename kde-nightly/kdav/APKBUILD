@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kdav
-pkgver=9999_git20240802
+pkgver=9999_git20240806
 pkgrel=0
-_commit="1894c2c7fc61925ab3e75e4607bcc78e5fd42f3c"
+_commit="8366806ca71ddc852c3831d0839758b7d0148509"
 pkgdesc="A DAV protocol implementation with KJobs"
 url="https://community.kde.org/Frameworks"
 # armhf blocked by qt6-qtdeclarative
@@ -28,7 +28,7 @@ makedepends="$depends_dev
 checkdepends="xvfb-run"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/frameworks/kdav.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-05/kdav-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-06/kdav-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kdav-$_commit"
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-99bec068cdcd2a358206323b696ccb2148bfa437c16d143566cbf679df34ff360a0b23eebd3bfa4f6353b3cf3389d9e9b1f7c02a4ff7402dfd87c3ec36d5061f  kdav-1894c2c7fc61925ab3e75e4607bcc78e5fd42f3c.tar.xz
+ce64589d32b162eed5afee17c1e1bec7882b07bf0eacd7674ac1d19378c4e4cf282aa32f4b365ca2e0e16a0e6267d4f56415776280f1311aac2ef8ce47cfa4a1  kdav-8366806ca71ddc852c3831d0839758b7d0148509.tar.xz
 "
