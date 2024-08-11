@@ -6,7 +6,7 @@
 pkgname=qqc2-desktop-style
 pkgver=9999_git20240809
 pkgrel=0
-_commit="66415a263d6ba7ca987418dc2b4b86dca754bb5c"
+_commit="438544c4c90d972227b572422cd93e612a56625c"
 pkgdesc="A style for Qt Quick Controls 2 to make it follow your desktop theme"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -24,7 +24,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/qqc2-desktop-style.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-09/qqc2-desktop-style-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-10/qqc2-desktop-style-$_commit.tar.xz"
 subpackages="$pkgname-dev"
 
 options="!check"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-582f886cf82d4623d67bd0dbb6190bec4e86e4cfd9a796178a6d00c449ebee73b16d35768b19c5d44d8af6b1d17bbbc83d7c90ef9988416146b9ab2de9eb1bd6  qqc2-desktop-style-66415a263d6ba7ca987418dc2b4b86dca754bb5c.tar.xz
+7cb20915e2ff6a6d8da4c1af0167828effdc33d5cf8bd466375585be2339565d24c477566e4a2c669401d60633e7f467d947049649f9ddbb31669a597a63392c  qqc2-desktop-style-438544c4c90d972227b572422cd93e612a56625c.tar.xz
 "
