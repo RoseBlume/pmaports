@@ -1,0 +1,32 @@
+From 3979cf4b179747abdad7e2f4b4e0e421c760e66d Mon Sep 17 00:00:00 2001
+From: "armel.guido" <armel.guido@gmx.com>
+Date: Fri, 19 Jul 2024 13:58:49 -0300
+Subject: [PATCH] ennable bzImage config
+
+---
+ init/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index c88bb30a8..d4c360fcf 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -225,6 +225,7 @@ config HAVE_KERNEL_GZIP
+ 
+ config HAVE_KERNEL_BZIP2
+ 	bool
++	default y
+ 
+ config HAVE_KERNEL_LZMA
+ 	bool
+@@ -243,6 +244,7 @@ config HAVE_KERNEL_ZSTD
+ 
+ config HAVE_KERNEL_UNCOMPRESSED
+ 	bool
++	default y
+ 
+ choice
+ 	prompt "Kernel compression mode"
+-- 
+2.39.2
+

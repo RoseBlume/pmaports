@@ -1,0 +1,3752 @@
+From 0f25e4d3d54cf5f995dc4b76bb59db07db091dfb Mon Sep 17 00:00:00 2001
+From: "armel.guido" <armel.guido@gmx.com>
+Date: Tue, 16 Jul 2024 01:01:11 -0300
+Subject: [PATCH 4/4] arm: samsung j7xelte general fixes
+
+---
+ arch/arm/dts/Makefile                   |    2 +-
+ arch/arm/dts/exynos-pinctrl.h           |   79 +
+ arch/arm/dts/exynos-syscon-restart.dtsi |   20 +
+ arch/arm/dts/exynos7870-j7xelte.dts     | 2449 +++++++++++++++++++++++
+ arch/arm/dts/exynos7870.dtsi            |  684 +++++++
+ arch/arm/dts/exynos78x0-j7xelte.dts     |    2 +-
+ arch/arm/mach-exynos/Kconfig            |    8 +-
+ configs/j7xelte_defconfig               |   50 +-
+ include/dt-bindings/clock/exynos7870.h  |  336 ++++
+ 9 files changed, 3606 insertions(+), 24 deletions(-)
+ create mode 100644 arch/arm/dts/exynos-pinctrl.h
+ create mode 100644 arch/arm/dts/exynos-syscon-restart.dtsi
+ create mode 100644 arch/arm/dts/exynos7870-j7xelte.dts
+ create mode 100644 arch/arm/dts/exynos7870.dtsi
+ create mode 100644 include/dt-bindings/clock/exynos7870.h
+
+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
+index ab0a765e07..7d1c6c41bf 100644
+--- a/arch/arm/dts/Makefile
++++ b/arch/arm/dts/Makefile
+@@ -31,7 +31,7 @@ dtb-$(CONFIG_EXYNOS7420) += exynos7420-espresso7420.dtb
+ dtb-$(CONFIG_TARGET_A5Y17LTE) += exynos78x0-axy17lte.dtb
+ dtb-$(CONFIG_TARGET_A3Y17LTE) += exynos78x0-axy17lte.dtb
+ dtb-$(CONFIG_TARGET_A7Y17LTE) += exynos78x0-axy17lte.dtb
+-dtb-$(CONFIG_TARGET_J7XELTE) += exynos78x0-j7xelte.dtb
++dtb-$(CONFIG_TARGET_J7XELTE) += exynos7870-j7xelte.dtb
+ 
+ dtb-$(CONFIG_ARCH_APPLE) += \
+ 	t8103-j274.dtb \
+diff --git a/arch/arm/dts/exynos-pinctrl.h b/arch/arm/dts/exynos-pinctrl.h
+new file mode 100644
+index 0000000000..7dd94a9b36
+--- /dev/null
++++ b/arch/arm/dts/exynos-pinctrl.h
+@@ -0,0 +1,79 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Samsung Exynos DTS pinctrl constants
++ *
++ * Copyright (c) 2016 Samsung Electronics Co., Ltd.
++ *		http://www.samsung.com
++ * Copyright (c) 2022 Linaro Ltd
++ * Author: Krzysztof Kozlowski <krzk@kernel.org>
++ */
++
++#ifndef __DTS_ARM64_SAMSUNG_EXYNOS_PINCTRL_H__
++#define __DTS_ARM64_SAMSUNG_EXYNOS_PINCTRL_H__
++
++#define EXYNOS_PIN_PULL_NONE		0
++#define EXYNOS_PIN_PULL_DOWN		1
++#define EXYNOS_PIN_PULL_UP		3
++
++/* Pin function in power down mode */
++#define EXYNOS_PIN_PDN_OUT0		0
++#define EXYNOS_PIN_PDN_OUT1		1
++#define EXYNOS_PIN_PDN_INPUT		2
++#define EXYNOS_PIN_PDN_PREV		3
++
++/*
++ * Drive strengths for Exynos5410, Exynos542x, Exynos5800, Exynos7885, Exynos850
++ * (except GPIO_HSI block), ExynosAutov9 (FSI0, PERIC1)
++ */
++#define EXYNOS5420_PIN_DRV_LV1		0
++#define EXYNOS5420_PIN_DRV_LV2		1
++#define EXYNOS5420_PIN_DRV_LV3		2
++#define EXYNOS5420_PIN_DRV_LV4		3
++
++/* Drive strengths for Exynos5433 */
++#define EXYNOS5433_PIN_DRV_FAST_SR1	0
++#define EXYNOS5433_PIN_DRV_FAST_SR2	1
++#define EXYNOS5433_PIN_DRV_FAST_SR3	2
++#define EXYNOS5433_PIN_DRV_FAST_SR4	3
++#define EXYNOS5433_PIN_DRV_FAST_SR5	4
++#define EXYNOS5433_PIN_DRV_FAST_SR6	5
++#define EXYNOS5433_PIN_DRV_SLOW_SR1	8
++#define EXYNOS5433_PIN_DRV_SLOW_SR2	9
++#define EXYNOS5433_PIN_DRV_SLOW_SR3	0xa
++#define EXYNOS5433_PIN_DRV_SLOW_SR4	0xb
++#define EXYNOS5433_PIN_DRV_SLOW_SR5	0xc
++#define EXYNOS5433_PIN_DRV_SLOW_SR6	0xf
++
++/* Drive strengths for Exynos7 (except FSYS1) */
++#define EXYNOS7_PIN_DRV_LV1		0
++#define EXYNOS7_PIN_DRV_LV2		2
++#define EXYNOS7_PIN_DRV_LV3		1
++#define EXYNOS7_PIN_DRV_LV4		3
++
++/* Drive strengths for Exynos7 FSYS1 block */
++#define EXYNOS7_FSYS1_PIN_DRV_LV1	0
++#define EXYNOS7_FSYS1_PIN_DRV_LV2	4
++#define EXYNOS7_FSYS1_PIN_DRV_LV3	2
++#define EXYNOS7_FSYS1_PIN_DRV_LV4	6
++#define EXYNOS7_FSYS1_PIN_DRV_LV5	1
++#define EXYNOS7_FSYS1_PIN_DRV_LV6	5
++
++/* Drive strengths for Exynos850 GPIO_HSI block */
++#define EXYNOS850_HSI_PIN_DRV_LV1	0	/* 1x   */
++#define EXYNOS850_HSI_PIN_DRV_LV1_5	1	/* 1.5x */
++#define EXYNOS850_HSI_PIN_DRV_LV2	2	/* 2x   */
++#define EXYNOS850_HSI_PIN_DRV_LV2_5	3	/* 2.5x */
++#define EXYNOS850_HSI_PIN_DRV_LV3	4	/* 3x   */
++#define EXYNOS850_HSI_PIN_DRV_LV4	5	/* 4x   */
++
++#define EXYNOS_PIN_FUNC_INPUT		0
++#define EXYNOS_PIN_FUNC_OUTPUT		1
++#define EXYNOS_PIN_FUNC_2		2
++#define EXYNOS_PIN_FUNC_3		3
++#define EXYNOS_PIN_FUNC_4		4
++#define EXYNOS_PIN_FUNC_5		5
++#define EXYNOS_PIN_FUNC_6		6
++#define EXYNOS_PIN_FUNC_EINT		0xf
++#define EXYNOS_PIN_FUNC_F		EXYNOS_PIN_FUNC_EINT
++
++#endif /* __DTS_ARM64_SAMSUNG_EXYNOS_PINCTRL_H__ */
+diff --git a/arch/arm/dts/exynos-syscon-restart.dtsi b/arch/arm/dts/exynos-syscon-restart.dtsi
+new file mode 100644
+index 0000000000..bc9a78f6d4
+--- /dev/null
++++ b/arch/arm/dts/exynos-syscon-restart.dtsi
+@@ -0,0 +1,20 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Samsung's Exynos SoC syscon reboot/poweroff nodes common definition.
++ */
++
++&pmu_system_controller {
++	poweroff: syscon-poweroff {
++		compatible = "syscon-poweroff";
++		regmap = <&pmu_system_controller>;
++		offset = <0x330c>; /* PS_HOLD_CONTROL */
++		mask = <0x5200>; /* reset value */
++	};
++
++	reboot: syscon-reboot {
++		compatible = "syscon-reboot";
++		regmap = <&pmu_system_controller>;
++		offset = <0x0400>; /* SWRESET */
++		mask = <0x1>;
++	};
++};
+diff --git a/arch/arm/dts/exynos7870-j7xelte.dts b/arch/arm/dts/exynos7870-j7xelte.dts
+new file mode 100644
+index 0000000000..ce3e2670bd
+--- /dev/null
++++ b/arch/arm/dts/exynos7870-j7xelte.dts
+@@ -0,0 +1,2449 @@
++/dts-v1/;
++
++/ {
++	#address-cells = <2>;
++	#size-cells = <1>;
++	compatible = "samsung, J7XE LTE EUR OPEN 04", "samsung,exynos7870";
++	interrupt-parent = <1>;
++	model = "Samsung J7XE LTE EUR rev04 board based on Exynos7870";
++	model_info-chip = <7870>;
++	model_info-hw_rev = <4>;
++	model_info-hw_rev_end = <255>;
++	model_info-platform = "android";
++	model_info-subtype = "samsung";
++	model_info-system_rev = "006";
++
++	aliases {
++		mshc0 = "/dwmmc0@13540000";
++		mshc1 = "/dwmmc1@13550000";
++		mshc2 = "/dwmmc2@13560000";
++		pinctrl0 = "/pinctrl@139F0000";
++		pinctrl3 = "/pinctrl@13750000";
++		pinctrl4 = "/pinctrl@10530000";
++		pinctrl5 = "/pinctrl@139C0000";
++		pinctrl6 = "/pinctrl@139B0000";
++	};
++
++        //bootloaderfb@67000000 {
++        //        compatible = "simple-framebuffer";
++        //        format = "a8r8g8b8";
++        //        height = <1480>;
++        //        reg = <0 0x67000000 4262400>;
++        //        stride = <2880>;
++        //        width = <720>;
++        //};
++
++	chosen {
++	};
++
++	clock-controller@10460000 {
++		#clock-cells = <1>;
++		compatible = "samsung,exynos7870-clock";
++		reg = <0 0x10460000 4096>;
++	};
++
++	cpus {
++		#address-cells = <2>;
++		#size-cells = <0>;
++
++		cpu@0 {
++			compatible = "arm,cortex-a53", "arm,armv8";
++			cpu-idle-states = <10>;
++			device_type = "cpu";
++			enable-method = "psci";
++			reg = <0 0x00>;
++		};
++
++		cpu@1 {
++			compatible = "arm,cortex-a53", "arm,armv8";
++			cpu-idle-states = <10>;
++			device_type = "cpu";
++			enable-method = "psci";
++			reg = <0 0x01>;
++		};
++
++		cpu@100 {
++			compatible = "arm,cortex-a53", "arm,armv8";
++			cpu-idle-states = <11>;
++			device_type = "cpu";
++			enable-method = "psci";
++			reg = <0 0x100>;
++		};
++
++		cpu@101 {
++			compatible = "arm,cortex-a53", "arm,armv8";
++			cpu-idle-states = <11>;
++			device_type = "cpu";
++			enable-method = "psci";
++			reg = <0 0x101>;
++		};
++
++		cpu@102 {
++			compatible = "arm,cortex-a53", "arm,armv8";
++			cpu-idle-states = <11>;
++			device_type = "cpu";
++			enable-method = "psci";
++			reg = <0 0x102>;
++		};
++
++		cpu@103 {
++			compatible = "arm,cortex-a53", "arm,armv8";
++			cpu-idle-states = <11>;
++			device_type = "cpu";
++			enable-method = "psci";
++			reg = <0 0x103>;
++		};
++
++		cpu@2 {
++			compatible = "arm,cortex-a53", "arm,armv8";
++			cpu-idle-states = <10>;
++			device_type = "cpu";
++			enable-method = "psci";
++			reg = <0 0x02>;
++		};
++
++		cpu@3 {
++			compatible = "arm,cortex-a53", "arm,armv8";
++			cpu-idle-states = <10>;
++			device_type = "cpu";
++			enable-method = "psci";
++			reg = <0 0x03>;
++		};
++
++		idle-states {
++			entry-method = "arm,psci";
++
++			sleep_boot: cpu-sleep-boot {
++				arm,psci-suspend-param = <65536>;
++				compatible = "exynos,idle-state";
++				desc = "boot cluster cpu sleep";
++				entry-latency-us = <35>;
++				exit-latency-us = <90>;
++				min-residency-us = <750>;
++				status = "okay";
++			};
++
++			sleep_nonboot: cpu-sleep-nonboot {
++				arm,psci-suspend-param = <65536>;
++				compatible = "exynos,idle-state";
++				desc = "non-boot cluster cpu sleep";
++				entry-latency-us = <35>;
++				exit-latency-us = <90>;
++				min-residency-us = <750>;
++				status = "okay";
++			};
++		};
++	};
++
++	dwmmc0: dwmmc0@13540000 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		clock-names = "biu", "ciu", "ciu_gate";
++		clocks = <14 0x136 14 0x139 14 0x25a>;
++		compatible = "samsung,exynos-dw-mshc";
++		broken-cd;
++		bypass-for-allpass;
++		card-detect-delay = <200>;
++		card-init-hwacg-ctrl;
++		ciu_clkin = <25 0x32 50 0x64 200 0x64 50 0xc8 200 0xc8>;
++		clk-drive-number = <6>;
++		clock-frequency = <800000000>;
++		clock-gate;
++		data-timeout = <200>;
++		desc-size = <4>;
++		enable-ulp-mode;
++		fifo-depth = <64>;
++		fixed_voltage;
++		interrupts = <0 0xf5 0>;
++		mmc-ddr-1_8v;
++		mmc-hs200-1_8v;
++		mmc-hs400-1_8v;
++		mmc-shutdown-poweroff;
++		non-removable;
++		num-ref-clks = <10>;
++		num-slots = <1>;
++		pinctrl-0 = <89 0x5a 91 0x5c 93 0x5e>;
++		pinctrl-1 = <95>;
++		pinctrl-2 = <96>;
++		pinctrl-3 = <97>;
++		pinctrl-4 = <98>;
++		pinctrl-5 = <99>;
++		pinctrl-6 = <100>;
++		pinctrl-names = "default", "fast-slew-rate-1x", "fast-slew-rate-2x", "fast-slew-rate-3x", "fast-slew-rate-4x", "fast-slew-rate-5x", "fast-slew-rate-6x";
++		pm-skip-mmc-resume-init;
++		reg = <0 0x13540000 8192>;
++		samsung,dw-mshc-ciu-div = <3>;
++		samsung,dw-mshc-ddr-timing = <3 0x00 4 0x02>;
++		samsung,dw-mshc-sdr-timing = <3 0x00 4 0x00>;
++		samsung,dw-mshc-ddr200-delay-line = <96>;
++		samsung,dw-mshc-ddr200-timing = <1 0x00 4 0x00>;
++		samsung,dw-mshc-ddr200-ulp-timing = <3 0x00 3 0x00>;
++		samsung,dw-mshc-hs200-timing = <3 0x00 3 0x00>;
++		samsung,dw-mshc-txdt-crc-timer-fastlimit = <52>;
++		samsung,dw-mshc-txdt-crc-timer-initval = <56>;
++		status = "okay";
++		supports-8bit;
++		supports-cmd23;
++		supports-erase;
++		supports-highspeed;
++		supports-hs400-enhanced-strobe;
++		use-fine-tuning;
++		use-smu;
++
++		slot@0 {
++			bus-width = <8>;
++			reg = <0>;
++		};
++	};
++
++	dwmmc1: dwmmc1@13550000 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		clock-names = "biu", "ciu", "ciu_gate";
++		clocks = <14 0x137 14 0x13a 14 0x25b>;
++		compatible = "samsung,exynos-dw-mshc";
++		caps-control;
++		card-detect-delay = <200>;
++		card-detect-type-external;
++		channel = <1>;
++		ciu_clkin = <25 0x32 50 0x64 200 0x64 200 0x190>;
++		clk_addr = "13750000.pinctrl";
++		clk_pin = "gpr2-0";
++		clk_str_num = <4>;
++		clk_val = <2>;
++		clock-gate;
++		enable-cclk-on-suspend;
++		fifo-depth = <64>;
++		fixed_voltage;
++		interrupts = <0 0xf6 0>;
++		pinctrl-0 = <101 0x66 103 0x68>;
++		keep-power-in-suspend;
++		num-ref-clks = <8>;
++		num-slots = <1>;
++		pinctrl-names = "default";
++		pm-ignore-notify;
++		reg = <0 0x13550000 8192>;
++		samsung,dw-mshc-ciu-div = <3>;
++		samsung,dw-mshc-ddr-timing = <3 0x00 2 0x01>;
++		samsung,dw-mshc-sdr-timing = <3 0x00 2 0x00>;
++		status = "okay";
++		supports-4bit;
++		supports-highspeed;
++		use-broken-voltage;
++		use-fine-tuning;
++
++		slot@0 {
++			bus-width = <4>;
++			reg = <0>;
++		};
++	};
++
++	dwmmc2: dwmmc2@13560000 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		clock-names = "biu", "ciu", "ciu_gate";
++		clocks = <14 0x138 14 0x13b 14 0x25c>;
++		compatible = "samsung,exynos-dw-mshc";
++		bypass-for-allpass;
++		bypass-smu;
++		card-detect = <50 0x01 15>;
++		card-detect-delay = <200>;
++		card-detect-gpio;
++		card-init-hwacg-ctrl;
++		ciu_clkin = <25 0x32 50 0x64 200 0x64 200 0x190>;
++		clk-drive-number = <4>;
++		clock-frequency = <800000000>;
++		clock-gate;
++		data-timeout = <200>;
++		desc-size = <8>;
++		fifo-depth = <64>;
++		hto-timeout = <550>;
++		ignore-phase = <128>;
++		interrupts = <0 0xf7 0>;
++		pinctrl-0 = <105 0x6a 107 0x6c 109>;
++		num-ref-clks = <8>;
++		num-slots = <1>;
++		only_once_tune;
++		pinctrl-1 = <110>;
++		pinctrl-2 = <111>;
++		pinctrl-3 = <112>;
++		pinctrl-4 = <113>;
++		pinctrl-names = "default", "fast-slew-rate-1x", "fast-slew-rate-2x", "fast-slew-rate-3x", "fast-slew-rate-4x";
++		reg = <0 0x13560000 8192>;
++		samsung,dw-mshc-ciu-div = <3>;
++		samsung,dw-mshc-ddr-timing = <3 0x00 2 0x01>;
++		samsung,dw-mshc-sdr-timing = <3 0x00 3 0x00>;
++		samsung,dw-mshc-sdr104-timing = <3 0x00 3 0x00>;
++		samsung,dw-mshc-sdr50-timing = <3 0x00 4 0x02>;
++		samsung,voltage-int-extra = <7>;
++		sd-uhs-sdr104;
++		sd-uhs-sdr50;
++		sec-sd-slot-type = <1>;
++		status = "okay";
++		supports-4bit;
++		supports-cmd23;
++		supports-erase;
++		supports-highspeed;
++		use-fine-tuning;
++
++		slot@0 {
++			bus-width = <4>;
++			disable-wp;
++			reg = <0>;
++		};
++	};
++
++	touch_3p3_en {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <36 0x06 0>;
++		regulator-max-microvolt = <2800000>;
++		regulator-min-microvolt = <2800000>;
++		regulator-name = "vtouch_2.8v";
++	};
++
++	vmmc: fixedregulator@0 {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <139 0x00 1>;
++		regulator-initial-mode = <0>;
++		regulator-max-microvolt = <2800000>;
++		regulator-min-microvolt = <2800000>;
++		regulator-name = "vmmc";
++	};
++
++	gpio_keys {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		compatible = "gpio-keys";
++		pinctrl-0 = <135 0x88 137 0x8a>;
++		pinctrl-names = "default";
++
++		button@1 {
++			gpio-key,wakeup = <1>;
++			gpios = <50 0x00 15>;
++			interrupt-parent = <50>;
++			interrupts = <0 0x00 0>;
++			label = "gpio-keys: KEY_POWER";
++			linux,code = <116>;
++		};
++
++		button@2 {
++			gpios = <27 0x01 15>;
++			interrupt-parent = <27>;
++			interrupts = <1 0x00 0>;
++			label = "gpio-keys: KEY_VOLUMEDOWN";
++			linux,code = <114>;
++		};
++
++		button@3 {
++			gpios = <27 0x00 15>;
++			interrupt-parent = <27>;
++			interrupts = <0 0x00 0>;
++			label = "gpio-keys: KEY_VOLUMEUP";
++			linux,code = <115>;
++		};
++
++		button@4 {
++			gpio-key,wakeup = <1>;
++			gpios = <31 0x07 15>;
++			interrupt-parent = <31>;
++			interrupts = <7 0x00 0>;
++			label = "gpio-keys: KEY_HOMEPAGE";
++			linux,code = <172>;
++		};
++	};
++
++	hsi2c@10510000 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		compatible = "samsung,exynos5-hsi2c";
++		clock-frequency = <2500000>;
++		clock-names = "rate_hsi2c", "gate_hsi2c";
++		clocks = <14 0x259 14 0x259>;
++		gpio_scl = <64 0x01 1>;
++		gpio_sda = <64 0x00 1>;
++		interrupts = <0 0x173 0 0x00 372 0x00>;
++		pinctrl-0 = <63>;
++		pinctrl-names = "default";
++		reg = <0 0x10510000 8192 0x00 273678720 0x100>;
++		samsung,check-transdone-int;
++		samsung,hs-mode;
++		samsung,hsi2c-batcher;
++		samsung,scl-clk-stretching;
++		status = "okay";
++
++		cod3026x@04 {
++			#io-channel-cells = <1>;
++			but-zones-list = <70 0xe2 0 0xcb 70 0x246 204 0x122 70 0x73 291 0x1e8 70 0x72 489 0x3e8>;
++			compatible = "codec,cod3026x";
++			gpios = <50 0x04 15>;
++			interrupt-parent = <50>;
++			io-channel-names = "adc-jack";
++			io-channel-ranges;
++			io-channels = <69 0x02>;
++			mic-adc-range = <1350>;
++			mic-bias-ldo-voltage = <3>;
++			mic-bias1-voltage = <1>;
++			mic-bias2-voltage = <1>;
++			mic-det-delay = <50>;
++			pinctrl-0 = <68>;
++			pinctrl-names = "default";
++			reg = <4>;
++			ten-bit-address;
++			use-det-adc-mode;
++			vdd-supply = <67>;
++		};
++
++		s2mpu05_pmic@66 {
++			buck2en_addr = "139B0080.pinctrl";
++			buck2en_pin = "etc1-3";
++			check_jigon = <0>;
++			compatible = "samsung,s2mpu05-pmic";
++			interrupt-parent = <50>;
++			interrupts = <2 0x00 0>;
++			pinctrl-0 = <65 0x42>;
++			g3d_en = <1>;
++			init_time,hour = <12>;
++			init_time,mday = <1>;
++			init_time,min = <0>;
++			init_time,mon = <0>;
++			init_time,sec = <0>;
++			init_time,wday = <5>;
++			init_time,year = <116>;
++			pinctrl-names = "default";
++			reg = <102>;
++			smpl_en = <1>;
++			smpl_timer_val = <4>;
++			ten-bit-address;
++			wtsr_en = <1>;
++			wtsr_timer_val = <3>;
++
++			regulators {
++
++				BUCK1 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-expected-consumer = <2>;
++					regulator-initial-mode = <1>;
++					regulator-max-microvolt = <1300000>;
++					regulator-min-microvolt = <500000>;
++					regulator-name = "BUCK1";
++					regulator-ramp-delay = <12000>;
++				};
++
++				BUCK2 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-expected-consumer = <4>;
++					regulator-initial-mode = <2>;
++					regulator-max-microvolt = <1300000>;
++					regulator-min-microvolt = <500000>;
++					regulator-name = "BUCK2";
++					regulator-ramp-delay = <12000>;
++				};
++
++				BUCK3 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <2>;
++					regulator-max-microvolt = <1300000>;
++					regulator-min-microvolt = <500000>;
++					regulator-name = "BUCK3";
++					regulator-ramp-delay = <12000>;
++				};
++
++				BUCK4 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <2>;
++					regulator-max-microvolt = <1500000>;
++					regulator-min-microvolt = <1200000>;
++					regulator-name = "BUCK4";
++					regulator-ramp-delay = <12000>;
++				};
++
++				BUCK5 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <2>;
++					regulator-max-microvolt = <2100000>;
++					regulator-min-microvolt = <1800000>;
++					regulator-name = "BUCK5";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO1 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <3>;
++					regulator-max-microvolt = <1350000>;
++					regulator-min-microvolt = <650000>;
++					regulator-name = "vdd_ldo1";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO10 {
++					regulator-always-on;
++					regulator-initial-mode = <1>;
++					regulator-max-microvolt = <1350000>;
++					regulator-min-microvolt = <650000>;
++					regulator-name = "vdd_ldo10";
++					regulator-ramp-delay = <12000>;
++				};
++
++				vqmmc: LDO2 {
++					regulator-initial-mode = <0>;
++					regulator-max-microvolt = <2800000>;
++					regulator-min-microvolt = <1800000>;
++					regulator-name = "vqmmc";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO25 {
++					regulator-initial-mode = <1>;
++					regulator-max-microvolt = <2375000>;
++					regulator-min-microvolt = <800000>;
++					regulator-name = "vdd_ldo25";
++					regulator-ramp-delay = <12000>;
++				};
++
++				vemmc: LDO26 {
++					regulator-boot-on;
++					regulator-initial-mode = <3>;
++					regulator-max-microvolt = <3375000>;
++					regulator-min-microvolt = <1800000>;
++					regulator-name = "vemmc";
++					regulator-ramp-delay = <12000>;
++				};
++
++				vqemmc: LDO27 {
++					regulator-boot-on;
++					regulator-initial-mode = <3>;
++					regulator-max-microvolt = <2375000>;
++					regulator-min-microvolt = <800000>;
++					regulator-name = "vqemmc";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO29 {
++					regulator-boot-on;
++					regulator-initial-mode = <3>;
++					regulator-max-microvolt = <3000000>;
++					regulator-min-microvolt = <3000000>;
++					regulator-name = "LCD_3P0";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO3 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <3>;
++					regulator-max-microvolt = <2375000>;
++					regulator-min-microvolt = <800000>;
++					regulator-name = "vdd_ldo3";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO30 {
++					regulator-boot-on;
++					regulator-initial-mode = <3>;
++					regulator-max-microvolt = <1800000>;
++					regulator-min-microvolt = <1800000>;
++					regulator-name = "LCD_1P8";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO31 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <3>;
++					regulator-max-microvolt = <2800000>;
++					regulator-min-microvolt = <2800000>;
++					regulator-name = "vdd_ldo31";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO32 {
++					regulator-max-microvolt = <3300000>;
++					regulator-min-microvolt = <3300000>;
++					regulator-name = "VDD_MOTOR_3.3";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO33 {
++					regulator-initial-mode = <3>;
++					regulator-max-microvolt = <3300000>;
++					regulator-min-microvolt = <3300000>;
++					regulator-name = "vdd_sensor_3p3";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO34: LDO34 {
++					regulator-initial-mode = <1>;
++					regulator-max-microvolt = <3300000>;
++					regulator-min-microvolt = <3300000>;
++					regulator-name = "tsp_dvdd";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO35: LDO35 {
++					regulator-initial-mode = <0>;
++					regulator-max-microvolt = <2800000>;
++					regulator-min-microvolt = <2800000>;
++					regulator-name = "VDD_CAM_SENSOR_A2P8";
++				};
++
++				LDO4 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <1>;
++					regulator-max-microvolt = <1350000>;
++					regulator-min-microvolt = <800000>;
++					regulator-name = "vdd_ldo4";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO5 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <3>;
++					regulator-max-microvolt = <1350000>;
++					regulator-min-microvolt = <800000>;
++					regulator-name = "vdd_ldo5";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO6 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <1>;
++					regulator-max-microvolt = <1350000>;
++					regulator-min-microvolt = <800000>;
++					regulator-name = "vdd_ldo6";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO7 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <1>;
++					regulator-max-microvolt = <2375000>;
++					regulator-min-microvolt = <800000>;
++					regulator-name = "vdd_ldo7";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO8 {
++					regulator-always-on;
++					regulator-boot-on;
++					regulator-initial-mode = <1>;
++					regulator-max-microvolt = <3375000>;
++					regulator-min-microvolt = <1800000>;
++					regulator-name = "vdd_ldo8";
++					regulator-ramp-delay = <12000>;
++				};
++
++				LDO9 {
++					regulator-always-on;
++					regulator-initial-mode = <1>;
++					regulator-max-microvolt = <1350000>;
++					regulator-min-microvolt = <650000>;
++					regulator-name = "vdd_ldo9";
++					regulator-ramp-delay = <12000>;
++				};
++			};
++		};
++	};
++
++	i2c@13830000 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		clock-names = "rate_i2c", "gate_i2c";
++		clocks = <14 0x72 14 0x72>;
++		compatible = "samsung,s3c2440-i2c";
++		interrupts = <0 0x1a8 0>;
++		pinctrl-0 = <48>;
++		pinctrl-names = "default";
++		reg = <0 0x13830000 256>;
++		status = "okay";
++
++		s2mu005-fuelgauge@34 {
++			compatible = "samsung,s2mu005-fuelgauge";
++			fuelgauge,capacity_calculation_type = <28>;
++			fuelgauge,capacity_max = <1000>;
++			fuelgauge,capacity_max_margin = <70>;
++			fuelgauge,capacity_min = <0>;
++			fuelgauge,fuel_alert_soc = <1>;
++			fuelgauge,fuel_int = <50 0x03 0>;
++			fuelgauge,model_type = <1>;
++			fuelgauge,type_str = "SDI";
++			pinctrl-0 = <49>;
++			pinctrl-names = "default";
++			reg = <59>;
++		};
++	};
++
++	i2c@13870000 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		clock-names = "rate_i2c", "gate_i2c";
++		clocks = <14 0x76 14 0x76>;
++		compatible = "samsung,s3c2440-i2c";
++		interrupts = <0 0x1ac 0>;
++		pinctrl-0 = <25>;
++		pinctrl-names = "default";
++		reg = <0 0x13870000 256>;
++		samsung,i2c-max-bus-freq = <400000>;
++		samsung,i2c-sda-delay = <100>;
++		status = "okay";
++
++		s2mu005@3d {
++			compatible = "samsung,s2mu005mfd";
++			pinctrl-0 = <26>;
++			pinctrl-names = "default";
++			reg = <61>;
++			s2mu005,irq-gpio = <27 0x07 0>;
++			s2mu005,wakeup;
++
++			leds {
++				factory_current = <300>;
++				flash-gpio = <28 0x02 0>;
++				flash_current = <1200>;
++				front_torch_current = <50>;
++				movie_current = <175>;
++				preflash_current = <150>;
++				status = "okay";
++				torch-gpio = <28 0x03 0>;
++				torch_current = <75>;
++
++				s2mu005-leds1 {
++					id = <0>;
++					ledname = "leds-sec1";
++					timeout = <15>;
++				};
++
++				s2mu005-leds2 {
++					id = <1>;
++					ledname = "leds-sec2";
++					timeout = <15>;
++				};
++			};
++		};
++	};
++
++	i2c@13890000 {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		clock-names = "rate_i2c", "gate_i2c";
++		clocks = <14 0x74 14 0x74>;
++		compatible = "samsung,s3c2440-i2c";
++		interrupts = <0 0x1ae 0>;
++		pinctrl-0 = <32>;
++		pinctrl-names = "default";
++		reg = <0 0x13890000 256>;
++		samsung,i2c-max-bus-freq = <300000>;
++		samsung,i2c-sda-delay = <100>;
++		status = "okay";
++
++		sec-nfc@27 {
++			clkctrl-reg = <273178636>;
++			compatible = "sec-nfc";
++			interrupt-parent = <27>;
++			interrupts = <6 0x00 0>;
++			pinctrl-0 = <37 0x26 39 0x28 41 0x2a 43>;
++			pinctrl-names = "default";
++			reg = <39>;
++			sec-nfc,check_nfc = <36 0x02 0>;
++			sec-nfc,firm-gpio = <34 0x01 0>;
++			sec-nfc,irq-gpio = <27 0x06 0>;
++			sec-nfc,nfc_clkreq = <33 0x03 2>;
++			sec-nfc,nfc_pd = <33 0x02 2>;
++			sec-nfc,pvdd_en = <35 0x01 0>;
++		};
++	};
++
++	gic: interrupt-controller@104E0000 {
++		#address-cells = <0>;
++		#interrupt-cells = <3>;
++		compatible = "arm,cortex-a15-gic", "arm,cortex-a9-gic";
++		interrupt-controller;
++		interrupts = <1 0x09 3844>;
++		reg = <0 0x104e1000 4096>, <0 273555456 0x1000>, <0 0x104e4000 8192>, <0 273571840 0x2000>;
++	};
++
++	mali@11400000 {
++		compatible = "arm,mali";
++		interrupt-names = "JOB", "MMU", "GPU";
++		interrupts = <0 0x11a 0>, <0 283 0>, <0 0x119 0>;
++		reg = <0 0x11400000 20480>;
++		samsung,power-domain = <114>;
++	};
++
++	memory@40000000 {
++		device_type = "memory";
++		reg = <0 0x40000000 1044381696>;
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0 0x80000000 1073741824>;
++	};
++
++	oscclk: oscclk {
++		clock-frequency = <26000000>;
++		compatible = "samsung,exynos7870-oscclk";
++	};
++
++	usb_phy: phy@135C0000 {
++		#address-cells = <2>;
++		#phy-cells = <1>;
++		#size-cells = <1>;
++		clock-names = "usbdrd20", "phyumux", "usb_pll";
++		clocks = <14 0x14f 14 0x150 14 0x15e>;
++		compatible = "samsung,exynos7870-usbdrd-phy";
++		is_not_vbus_pad;
++		ranges;
++		reg = <0 0x135c0000 256>;
++		samsung,pmu-syscon = <12>;
++		use_additional_tuning;
++	};
++
++	pinctrl4: pinctrl@10530000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		interrupts = <0 0x188 0>;
++		pinctrl-0 = <5>;
++		pinctrl-names = "sleep";
++		reg = <0 0x10530000 4096>;
++
++		gpm0: gpm0 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		hs-i2c0-bus {
++			samsung,pin-con-pdn = <3>;
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpm0-1", "gpm0-0";
++		};
++
++		pinctrl4_sleep_state: sleep-state {
++
++			gpm0-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpm0-0";
++			};
++
++			gpm0-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpm0-1";
++			};
++		};
++	};
++
++	pinctrl3: pinctrl@13750000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		interrupts = <0 0xfa 0>;
++		reg = <0 0x13750000 4096>;
++
++		gpr0 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpr1 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		sd0-bus-width1 {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpr1-0";
++		};
++
++		sd0-bus-width4 {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpr1-1", "gpr1-2", "gpr1-3";
++		};
++
++		sd0-bus-width8 {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpr1-4", "gpr1-5", "gpr1-6", "gpr1-7";
++		};
++
++		sd0-clk {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr0-0";
++		};
++
++		sd0-clk_fast_slew_rate_1x {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr0-0";
++		};
++
++		sd0-clk_fast_slew_rate_2x {
++			samsung,pin-drv = <1>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr0-0";
++		};
++
++		sd0-clk_fast_slew_rate_3x {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr0-0";
++		};
++
++		sd0-clk_fast_slew_rate_4x {
++			samsung,pin-drv = <3>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr0-0";
++		};
++
++		sd0-clk_fast_slew_rate_5x {
++			samsung,pin-drv = <4>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr0-0";
++		};
++
++		sd0-clk_fast_slew_rate_6x {
++			samsung,pin-drv = <5>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr0-0";
++		};
++
++		sd0-cmd {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpr0-1";
++		};
++
++		sd0-rdqs {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr0-2";
++		};
++
++		sd1_bus1: sd1-bus-width1 {
++			samsung,pin-con-pdn = <2>;
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pin-pud-pdn = <3>;
++			samsung,pins = "gpr3-0";
++		};
++
++		sd1_bus4: sd1-bus-width4 {
++			samsung,pin-con-pdn = <2>;
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pin-pud-pdn = <3>;
++			samsung,pins = "gpr3-1", "gpr3-2", "gpr3-3";
++		};
++
++		sd1_clk: sd1-clk {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr2-0";
++		};
++
++		sd1_cmd: sd1-cmd {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr2-1";
++		};
++
++		sd2_bus1: sd2-bus-width1 {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpr4-2";
++		};
++
++		sd2_bus4: sd2-bus-width4 {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpr4-3", "gpr4-4", "gpr4-5";
++		};
++
++		sd2_clk: sd2-clk {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr4-0";
++		};
++
++		sd2-clk_fast_slew_rate_1x {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr4-0";
++		};
++
++		sd2-clk_fast_slew_rate_2x {
++			samsung,pin-drv = <1>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr4-0";
++		};
++
++		sd2-clk_fast_slew_rate_3x {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr4-0";
++		};
++
++		sd2-clk_fast_slew_rate_4x {
++			samsung,pin-drv = <3>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpr4-0";
++		};
++
++		sd2_cmd: sd2-cmd {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpr4-1";
++		};
++	};
++
++	pinctrl6: pinctrl@139B0000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		interrupts = <0 0x1b6 0>;
++		pinctrl-0 = <7>;
++		pinctrl-1 = <8>;
++		pinctrl-names = "default", "sleep";
++		reg = <0 0x139b0000 4096>;
++
++		bt-en {
++			samsung,pin-con-pdn = <3>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <0>;
++			samsung,pin-pud-pdn = <0>;
++			samsung,pins = "gpd4-0";
++		};
++
++		cfg-gpio {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpc8-1", "gpc8-0";
++		};
++
++		wlan_enable: cfg-wlanen {
++			samsung,pin-con-pdn = <3>;
++			samsung,pin-drv = <3>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <0>;
++			samsung,pin-pud-pdn = <0>;
++			samsung,pin-val = <0>;
++			samsung,pins = "gpd3-6";
++		};
++
++		cnss-wlanen {
++			samsung,pin-con-pdn = <3>;
++			samsung,pin-drv = <3>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <0>;
++			samsung,pin-pud-pdn = <0>;
++			samsung,pin-val = <0>;
++			samsung,pins = "gpd3-6";
++		};
++
++		decon_te_off {
++			samsung,pin-function = <0>;
++			samsung,pins = "gpe0-2";
++		};
++
++		decon_te_on {
++			samsung,pin-function = <2>;
++			samsung,pins = "gpe0-2";
++		};
++
++		ese-pvdd-en {
++			samsung,pin-drv = <3>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpf4-0";
++		};
++
++		fimc-is-flash {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpd3-2", "gpd3-3";
++		};
++
++		fimc_is_mclk0_fn {
++			samsung,pin-drv = <1>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpe0-0";
++		};
++
++		fimc_is_mclk0_in {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpe0-0";
++		};
++
++		fimc_is_mclk0_out {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpe0-0";
++		};
++
++		fimc_is_mclk1_fn {
++			samsung,pin-drv = <1>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpe0-1";
++		};
++
++		fimc_is_mclk1_in {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpe0-1";
++		};
++
++		fimc_is_mclk1_out {
++			samsung,pin-drv = <2>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpe0-1";
++		};
++
++		gpb0 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpc0: gpc0 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpc1 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpc4 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpc5 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpc6 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpc8 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpc9 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpd1 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpd2 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpd3: gpd3 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpd4 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpe0 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpf0 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpf1 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpf2 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpf3 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpf4 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		grip_i2c-bus {
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpc1-3", "gpc1-2";
++		};
++
++		hs-i2c1-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <3>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpf3-0", "gpf3-1";
++		};
++
++		hs-i2c2-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <3>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpf3-2", "gpf3-3";
++		};
++
++		hs-i2c3-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpf0-1", "gpf0-0";
++		};
++
++		hs-i2c4-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpf1-1", "gpf1-0";
++		};
++
++		hs-i2c5-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpf0-3", "gpf0-2";
++		};
++
++		hs-i2c6-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpf2-1", "gpf2-0";
++		};
++
++		i2c0_pinctrl: i2c0-bus {
++			samsung,pin-con-pdn = <3>;
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pin-pud-pdn = <3>;
++			samsung,pins = "gpc1-1", "gpc1-0";
++		};
++
++		i2c1-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc1-3", "gpc1-2";
++		};
++
++		i2c4_pinctrl: i2c4-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc4-1", "gpc4-0";
++		};
++
++		i2c5-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc4-3", "gpc4-2";
++		};
++
++		i2c6-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc5-1", "gpc5-0";
++		};
++
++		i2c7-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpc8-1", "gpc8-0";
++		};
++
++		i2c8-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc9-1", "gpc9-0";
++		};
++
++		pinctrl6_initial_state: initial-state {
++
++			gpc0-2 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <1>;
++				samsung,pins = "gpc0-2";
++			};
++
++			gpd1-3 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <0>;
++				samsung,pins = "gpd1-3";
++			};
++
++			gpd1-4 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <0>;
++				samsung,pins = "gpd1-4";
++			};
++
++			gpd1-5 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <0>;
++				samsung,pins = "gpd1-5";
++			};
++
++			gpd1-6 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <3>;
++				samsung,pins = "gpd1-6";
++			};
++
++			gpd2-4 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <0>;
++				samsung,pins = "gpd2-4";
++			};
++
++			gpd2-5 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <0>;
++				samsung,pins = "gpd2-5";
++			};
++
++			gpd3-0 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <0>;
++				samsung,pins = "gpd3-0";
++			};
++
++			gpd3-1 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <0>;
++				samsung,pins = "gpd3-1";
++			};
++
++			gpd4-4 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <1>;
++				samsung,pin-pud = <0>;
++				samsung,pin-val = <0>;
++				samsung,pins = "gpd4-4";
++			};
++		};
++
++		nfc-det {
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpd1-2";
++		};
++
++		nfc-pvdd-en {
++			samsung,pin-drv = <3>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpd2-1";
++		};
++
++		nfc_n5_firm {
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <1>;
++			samsung,pin-val = <1>;
++			samsung,pins = "gpd4-1";
++		};
++
++		pm_wrsti: pm-wrsti {
++			samsung,pin-con-pdn = <3>;
++			samsung,pins = "gpd1-0";
++		};
++
++		proxy_i2c {
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpc5-1", "gpc5-0";
++		};
++
++		pwm-tout0 {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpc0-1";
++		};
++
++		pwm-tout1 {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpc0-2";
++		};
++
++		sensor_i2c {
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpc4-3", "gpc4-2";
++		};
++
++		pinctrl6_sleep_state: sleep-state {
++
++			gpb0-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <3>;
++				samsung,pins = "gpb0-0";
++			};
++
++			gpb0-1 {
++				samsung,pin-con-pdn = <1>;
++				samsung,pin-pud-pdn = <3>;
++				samsung,pins = "gpb0-1";
++			};
++
++			gpb0-2 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <3>;
++				samsung,pins = "gpb0-2";
++			};
++
++			gpb0-3 {
++				samsung,pin-con-pdn = <1>;
++				samsung,pin-pud-pdn = <3>;
++				samsung,pins = "gpb0-3";
++			};
++
++			gpc0-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpc0-1";
++			};
++
++			gpc0-2 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpc0-2";
++			};
++
++			gpc1-2 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc1-2";
++			};
++
++			gpc1-3 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc1-3";
++			};
++
++			gpc4-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc4-0";
++			};
++
++			gpc4-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc4-1";
++			};
++
++			gpc4-2 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc4-2";
++			};
++
++			gpc4-3 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc4-3";
++			};
++
++			gpc5-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc5-0";
++			};
++
++			gpc5-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc5-1";
++			};
++
++			gpc6-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpc6-0";
++			};
++
++			gpc6-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpc6-1";
++			};
++
++			gpc6-2 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpc6-2";
++			};
++
++			gpc6-3 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpc6-3";
++			};
++
++			gpc8-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc8-0";
++			};
++
++			gpc8-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc8-1";
++			};
++
++			gpc9-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpc9-0";
++			};
++
++			gpc9-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpc9-1";
++			};
++
++			gpd1-0 {
++				samsung,pin-con-pdn = <3>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd1-0";
++			};
++
++			gpd1-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd1-1";
++			};
++
++			gpd1-2 {
++				samsung,pin-con-pdn = <3>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd1-2";
++			};
++
++			gpd1-3 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd1-3";
++			};
++
++			gpd1-4 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd1-4";
++			};
++
++			gpd1-5 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd1-5";
++			};
++
++			gpd2-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd2-0";
++			};
++
++			gpd2-1 {
++				samsung,pin-con-pdn = <1>;
++				samsung,pin-pud-pdn = <3>;
++				samsung,pins = "gpd2-1";
++			};
++
++			gpd2-2 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd2-2";
++			};
++
++			gpd2-3 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd2-3";
++			};
++
++			gpd2-4 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd2-4";
++			};
++
++			gpd2-5 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd2-5";
++			};
++
++			gpd3-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd3-0";
++			};
++
++			gpd3-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd3-1";
++			};
++
++			gpd3-2 {
++				samsung,pin-con-pdn = <0>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd3-2";
++			};
++
++			gpd3-3 {
++				samsung,pin-con-pdn = <3>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd3-3";
++			};
++
++			gpd3-4 {
++				samsung,pin-con-pdn = <3>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd3-4";
++			};
++
++			gpd3-5 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd3-5";
++			};
++
++			gpd3-6 {
++				samsung,pin-con-pdn = <3>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd3-6";
++			};
++
++			gpd3-7 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd3-7";
++			};
++
++			gpd4-0 {
++				samsung,pin-con-pdn = <3>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpd4-0";
++			};
++
++			gpd4-1 {
++				samsung,pin-con-pdn = <3>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd4-1";
++			};
++
++			gpd4-2 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd4-2";
++			};
++
++			gpd4-3 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd4-3";
++			};
++
++			gpd4-4 {
++				samsung,pin-con-pdn = <0>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd4-4";
++			};
++
++			gpd4-5 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd4-5";
++			};
++
++			gpd4-6 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpd4-6";
++			};
++
++			gpe0-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpe0-0";
++			};
++
++			gpe0-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpe0-1";
++			};
++
++			gpe0-2 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpe0-2";
++			};
++
++			gpf0-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpf0-0";
++			};
++
++			gpf0-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpf0-1";
++			};
++
++			gpf0-2 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpf0-2";
++			};
++
++			gpf0-3 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpf0-3";
++			};
++
++			gpf1-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpf1-0";
++			};
++
++			gpf1-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpf1-1";
++			};
++
++			gpf2-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf2-0";
++			};
++
++			gpf2-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf2-1";
++			};
++
++			gpf3-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf3-0";
++			};
++
++			gpf3-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf3-1";
++			};
++
++			gpf3-2 {
++				samsung,pin-con-pdn = <0>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf3-2";
++			};
++
++			gpf3-3 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf3-3";
++			};
++
++			gpf4-0 {
++				samsung,pin-con-pdn = <0>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf4-0";
++			};
++
++			gpf4-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf4-1";
++			};
++
++			gpf4-2 {
++				samsung,pin-con-pdn = <0>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf4-2";
++			};
++
++			gpf4-3 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf4-3";
++			};
++
++			gpf4-4 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <1>;
++				samsung,pins = "gpf4-4";
++			};
++		};
++
++		spi0-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc6-0", "gpc6-2", "gpc6-3";
++		};
++
++		spi0-bus-suspend {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpc6-0", "gpc6-2", "gpc6-3";
++		};
++
++		spi0-cs {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc6-1";
++		};
++
++		spi2-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <3>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc5-1", "gpc5-0", "gpc4-2";
++		};
++
++		spi2-cs {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc4-3";
++		};
++
++		spi3-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpf3-3", "gpf3-2", "gpf3-0";
++		};
++
++		spi3-cs-0 {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpf3-1";
++		};
++
++		spi3-cs-1 {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpd1-0";
++		};
++
++		spi4-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpf4-3", "gpf4-2", "gpf4-0";
++		};
++
++		spi4-cs-0 {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpf4-1";
++		};
++
++		spi4-cs-1 {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpd1-1";
++		};
++
++		uart0-bus {
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpb0-3", "gpb0-2", "gpb0-1", "gpb0-0";
++		};
++
++		uart1-bus {
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpd2-3", "gpd2-2", "gpd2-1", "gpd2-0";
++		};
++	};
++
++	pinctrl5: pinctrl@139C0000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		interrupts = <0 0x1b7 0>;
++		pinctrl-0 = <6>;
++		pinctrl-names = "sleep";
++		reg = <0 0x139c0000 4096>;
++
++		gpc2 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpio-nfc {
++			samsung,pin-con-pdn = <3>;
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <0>;
++			samsung,pin-val = <1>;
++			samsung,pins = "gpc2-2";
++		};
++
++		i2c2_pinctrl: i2c2-bus {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpc2-1", "gpc2-0";
++		};
++
++		nfc_n5_clk_req {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpc2-3";
++		};
++
++		nfc_pd {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpc2-2";
++		};
++
++		pinctrl5_sleep_state: sleep-state {
++
++			gpc2-0 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc2-0";
++			};
++
++			gpc2-1 {
++				samsung,pin-con-pdn = <2>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc2-1";
++			};
++
++			gpc2-2 {
++				samsung,pin-con-pdn = <3>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc2-2";
++			};
++
++			gpc2-3 {
++				samsung,pin-con-pdn = <3>;
++				samsung,pin-pud-pdn = <0>;
++				samsung,pins = "gpc2-3";
++			};
++		};
++	};
++
++	pinctrl0: pinctrl@139F0000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		interrupts = <0 0x00 0>, <0 0x01 0>, <0 0x02 0>, <0 0x03 0>, <0 0x04 0>, <0 0x05 0>, <0 0x06 0>, <0 0x07 0>, <0 0x08 0>, <0 0x09 0>, <0 0x0a 0>, <0 0x0b 0>, <0 0x0c 0>, <0 0x0d 0>, <0 0x0e 0>, <0 0x0f 0>;
++		pinctrl-0 = <2>;
++		pinctrl-names = "default";
++		reg = <0 0x139f0000 4096>;
++
++		acc_int {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa2-3";
++		};
++
++		bt-btwake {
++			samsung,pin-function = <1>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa1-2";
++		};
++
++		bt-hostwake {
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa1-6";
++		};
++
++		cfg-input {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpa1-4";
++		};
++
++		cfg-irq {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpa1-4";
++		};
++
++		wlan_hostwake: cfg-wlanhostwake {
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpa2-2";
++		};
++
++		cod3026-irq {
++			samsung,pin-drv = <3>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpa0-4";
++		};
++
++		cd_ext_irq: dwmmc2_cd_ext_irq {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa0-1";
++		};
++
++		etc0 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		etc1 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		fuel_irq: fuel-irq {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa0-3";
++		};
++
++		gnss-sensor-i2c {
++			samsung,pin-function = <6>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa2-5", "gpa2-4";
++		};
++
++		gnss-sensor-irq {
++			samsung,pin-function = <6>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpa2-3";
++		};
++
++		gpa0: gpa0 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <3>;
++			gpio-controller;
++			interrupt-controller;
++			interrupt-parent = <1>;
++			interrupts = <0 0x00 0>, <0 0x01 0>, <0 0x02 0>, <0 0x03 0>, <0 0x04 0>, <0 0x05 0>, <0 0x06 0>, <0 0x07 0>;
++		};
++
++		gpa1 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <3>;
++			gpio-controller;
++			interrupt-controller;
++			interrupt-parent = <1>;
++			interrupts = <0 0x08 0>, <0 0x09 0>, <0 0x0a 0>, <0 0x0b 0>, <0 0x0c 0>, <0 0x0d 0>, <0 0x0e 0>, <0 0x0f 0>;
++		};
++
++		gpa2 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		gpq0 {
++			#gpio-cells = <2>;
++			#interrupt-cells = <2>;
++			gpio-controller;
++			interrupt-controller;
++		};
++
++		grip_irq {
++			samsung,pin-drv = <3>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa1-5";
++		};
++
++		hall-irq {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa1-3";
++		};
++
++		if-irq {
++			samsung,pin-drv = <3>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpa2-7";
++		};
++
++		if-pmic-irq {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa2-7";
++		};
++
++		pinctrl0_initial_state: initial-state {
++
++			etc0-1 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <1>;
++				samsung,pins = "etc0-1";
++			};
++
++			etc0-3 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <1>;
++				samsung,pins = "etc0-3";
++			};
++
++			gpq0-1 {
++				samsung,pin-drv = <0>;
++				samsung,pin-function = <0>;
++				samsung,pin-pud = <1>;
++				samsung,pins = "gpq0-1";
++			};
++		};
++
++		key_power: key-power {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa0-0";
++		};
++
++		key_voldown: key-voldown {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa2-1";
++		};
++
++		key_volup: key-volup {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa2-0";
++		};
++
++		key-home {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa1-7";
++		};
++
++		nfc-int {
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpa2-6";
++		};
++
++		pmic_irq: pmic-irq {
++			samsung,pin-drv = <3>;
++			samsung,pin-pud = <3>;
++			samsung,pins = "gpa0-2";
++		};
++
++		prox_int {
++			samsung,pin-drv = <0>;
++			samsung,pin-function = <15>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa0-5";
++		};
++
++		uart2-bus {
++			samsung,pin-function = <2>;
++			samsung,pin-pud = <0>;
++			samsung,pins = "gpa1-1", "gpa1-0";
++		};
++
++		uart2-sleep {
++			samsung,pin-function = <0>;
++			samsung,pin-pud = <1>;
++			samsung,pins = "gpa1-1";
++		};
++
++		wakeup-interrupt-controller {
++			compatible = "samsung,exynos4210-wakeup-eint";
++			interrupt-parent = <1>;
++			interrupts = <0 0x10 0>;
++		};
++	};
++
++	psci {
++		compatible = "arm,psci";
++		cpu_off = <2214592514>;
++		cpu_on = <3288334339>;
++		cpu_suspend = <3288334337>;
++		method = "smc";
++	};
++
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <1>;
++		ranges;
++
++		crypto {
++			compatible = "exynos8890-ion,crypto";
++			id = <1>;
++			reg = <0 0x80000000 8388608>;
++			reusable;
++		};
++
++		dram_init {
++			compatible = "exynos7870,deliver_cp";
++			reg = <0 0xaffff000 4096>;
++		};
++
++		gnss_if {
++			compatible = "exynos7870,gnss_if";
++			reg = <0 0xb7c00000 4194304>;
++		};
++
++		mfc_fw {
++			compatible = "exynos5433-ion,mfc_fw";
++			id = <8>;
++			reg = <0 0xae800000 2097152>;
++			secure;
++		};
++
++		mfc_nfw {
++			compatible = "exynos5433-ion,mfc_nfw";
++			id = <12>;
++			reg = <0 0xae600000 2097152>;
++		};
++
++		modem_if {
++			compatible = "exynos7870,modem_if";
++			reg = <0 0xb0000000 125829120>;
++		};
++
++		video_frame {
++			compat-id = <26 0x1d>;
++			compatible = "exynos8890-ion,vframe";
++			id = <5>;
++			reg = <0 0x82000000 88080384>;
++			reusable;
++			secure;
++		};
++
++		video_fw {
++			compat-id = <24>;
++			compatible = "exynos8890-ion,vfw";
++			id = <2>;
++			noprot;
++			reg = <0 0x80800000 4194304>;
++			reusable;
++			secure;
++		};
++
++		video_nfw {
++			compat-id = <20>;
++			compatible = "exynos8890-ion,vnfw";
++			id = <7>;
++			reg = <0 0x80c00000 4194304>;
++			reusable;
++		};
++
++		video_scaler {
++			compat-id = <28>;
++			compatible = "exynos8890-ion,vscaler";
++			id = <6>;
++			reg = <0 0x87400000 29360128>;
++			reusable;
++			secure;
++		};
++
++		video_stream {
++			compat-id = <25 0x1f>;
++			compatible = "exynos8890-ion,vstream";
++			id = <3>;
++			reg = <0 0x81000000 16777216>;
++			reusable;
++			secure;
++		};
++	};
++
++	pmu: system-controller@10480000 {
++		compatible = "samsung,exynos7870-pmu", "syscon";
++		reg = <0 0x10480000 65536>;
++	};
++
++	timer {
++		clock-frequency = <26000000>;
++		compatible = "arm,armv8-timer";
++		interrupts = <1 0x0d 65281>, <1 0x0c 0xff01>, <1 0x0b 65281>, <1 0x0a 0xff01>;
++		use-clocksource-only;
++	};
++
++	usb@13600000 {
++		#address-cells = <2>;
++		#size-cells = <1>;
++		clock-names = "usbdrd20", "phyumux", "usb_pll";
++		clocks = <14 0x14f 14 0x150 14 0x15e>;
++		compatible = "samsung,exynos7870-dwusb2";
++		ranges;
++		reg = <0 0x13600000 65536>;
++		status = "okay";
++
++		dwc3 {
++			compatible = "synopsys,dwc3";
++			dr_mode = "otg";
++			enable_sprs_transfer;
++			interrupts = <0 0xe6 0>;
++			is_not_vbus_pad;
++			maximum-speed = "high-speed";
++			phy-names = "usb2-phy", "usb3-phy";
++			phys = <81 0x00>, <81 0x01>;
++			reg = <0 0x13600000 65536>;
++		};
++	};
++};
+diff --git a/arch/arm/dts/exynos7870.dtsi b/arch/arm/dts/exynos7870.dtsi
+new file mode 100644
+index 0000000000..f5fd865a08
+--- /dev/null
++++ b/arch/arm/dts/exynos7870.dtsi
+@@ -0,0 +1,684 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Samsung Exynos7870 SoC device tree source
++ *
++ * Copyright (c) ???
++ */
++
++#include <dt-bindings/clock/exynos7870.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++
++/ {
++	compatible = "samsung,exynos7870";
++	#address-cells = <2>;
++	#size-cells = <1>;
++
++	interrupt-parent = <&gic>;
++
++	aliases {
++		pinctrl0 = &pinctrl0;
++		pinctrl1 = &pinctrl1;
++		pinctrl2 = &pinctrl2;
++		pinctrl3 = &pinctrl3;
++		pinctrl4 = &pinctrl4;
++		pinctrl5 = &pinctrl5;
++		pinctrl6 = &pinctrl6;
++		pinctrl7 = &pinctrl7;
++		mshc0 = &dwmmc0;
++		mshc1 = &dwmmc1;
++		mshc2 = &dwmmc2;
++	};
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53", "arm,armv8";
++			reg = <0x0>;
++			enable-method = "psci";
++			cpu-idle-states = <&sleep_boot>;
++		};
++
++		cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53", "arm,armv8";
++			reg = <0x1>;
++			enable-method = "psci";
++			cpu-idle-states = <&sleep_boot>;
++		};
++
++		cpu@2 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53", "arm,armv8";
++			reg = <0x2>;
++			enable-method = "psci";
++			cpu-idle-states = <&sleep_boot>;
++		};
++
++		cpu@3 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53", "arm,armv8";
++			reg = <0x3>;
++			enable-method = "psci";
++			cpu-idle-states = <&sleep_boot>;
++		};
++
++		cpu@100 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53", "arm,armv8";
++			reg = <0x100>;
++			enable-method = "psci";
++			cpu-idle-states = <&sleep_nonboot>;
++		};
++
++		cpu@101 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53", "arm,armv8";
++			reg = <0x101>;
++			enable-method = "psci";
++			cpu-idle-states = <&sleep_nonboot>;
++		};
++
++		cpu@102 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53", "arm,armv8";
++			reg = <0x102>;
++			enable-method = "psci";
++			cpu-idle-states = <&sleep_nonboot>;
++		};
++
++		cpu@103 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53", "arm,armv8";
++			reg = <0x103>;
++			enable-method = "psci";
++			cpu-idle-states = <&sleep_nonboot>;
++		};
++
++		idle-states {
++			entry-method = "arm,psci";
++
++			sleep_boot: cpu-sleep-boot {
++				compatible = "exynos,idle-state";
++				status = "okay";
++
++				arm,psci-suspend-param = <0x10000>;
++				entry-latency-us = <35>;
++				exit-latency-us = <90>;
++				min-residency-us = <750>;
++			};
++
++			sleep_nonboot: cpu-sleep-nonboot {
++				compatible = "exynos,idle-state";
++				status = "okay";
++
++				arm,psci-suspend-param = <0x10000>;
++				entry-latency-us = <35>;
++				exit-latency-us = <90>;
++				min-residency-us = <750>;
++			};
++		};
++	};
++
++	psci {
++		compatible = "arm,psci";
++		method = "smc";
++		cpu_suspend = <0xc4000001>;
++		cpu_off = <0x84000002>;
++		cpu_on = <0xc4000003>;
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		#clock-cells = <0>;
++
++		clock-frequency = <26000000>;
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
++	};
++
++	pmu_system_controller: system-controller@10480000 {
++		compatible = "samsung,exynos7870-pmu", "samsung,exynos7-pmu", "syscon";
++		reg = <0 0x10480000 0x10000>;
++	};
++
++	gic: interrupt-controller@104E0000 {
++		compatible = "arm,cortex-a15-gic", "arm,cortex-a9-gic";
++		#interrupt-cells = <3>;
++		#address-cells = <0>;
++		interrupt-controller;
++
++		reg = <0 0x104e1000 0x1000>,
++		      <0 0x104e2000 0x1000>,
++		      <0 0x104e4000 0x2000>,
++		      <0 0x104e6000 0x2000>;
++		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>;
++	};
++
++	clkio_dispaud_audiocdclk0: clkio_dispaud_audiocdclk0 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <100000000>;
++	};
++
++	clkio_dispaud_mixer_bclk_bt: clkio_dispaud_mixer_bclk_bt {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <12500000>;
++	};
++
++	clkio_dispaud_mixer_bclk_cp: clkio_dispaud_mixer_bclk_cp {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <12500000>;
++	};
++
++	clkio_dispaud_mixer_bclk_fm: clkio_dispaud_mixer_bclk_fm {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <12500000>;
++	};
++
++	clkio_dispaud_mixer_sclk_ap: clkio_dispaud_mixer_sclk_ap {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <12500000>;
++	};
++
++	clkphy_dispaud_mipiphy_rxclkesc0: clkphy_dispaud_mipiphy_rxclkesc0 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <188000000>;
++	};
++
++	clkphy_dispaud_mipiphy_txbyteclkhs: clkphy_dispaud_mipiphy_txbyteclkhs {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <188000000>;
++	};
++
++	clkphy_fsys_usb20drd_phyclock: clkphy_fsys_usb20drd_phyclock {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <60000000>;
++	};
++
++	clkphy_isp_s_rxbyteclkhs0_s4: clkphy_isp_s_rxbyteclkhs0_s4 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <188000000>;
++	};
++
++	clkphy_isp_s_rxbyteclkhs0_s4s: clkphy_isp_s_rxbyteclkhs0_s4s {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <188000000>;
++	};
++
++	oscclk: oscclk {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++
++		clock-frequency = <26000000>;
++	};
++
++	cmu_mif: clock-controller@10460000 {
++		compatible = "samsung,exynos7870-cmu-mif";
++		reg = <0 0x10460000 0x8d0>;
++		#clock-cells = <1>;
++
++		clocks = <&oscclk>;
++		clock-names = "oscclk";
++	};
++
++	cmu_dispaud: clock-controller@148D0000 {
++		compatible = "samsung,exynos7870-cmu-dispaud";
++		reg = <0 0x148d0000 0x844>;
++		#clock-cells = <1>;
++
++		clock-names = "clkio_dispaud_audiocdclk0",
++			      "clkio_dispaud_mixer_bclk_bt",
++			      "clkio_dispaud_mixer_bclk_cp",
++			      "clkio_dispaud_mixer_bclk_fm",
++			      "clkio_dispaud_mixer_sclk_ap",
++			      "clkphy_dispaud_mipiphy_rxclkesc0",
++			      "clkphy_dispaud_mipiphy_txbyteclkhs",
++			      "gout_clkcmu_dispaud_bus",
++			      "gout_clkcmu_dispaud_decon_int_eclk",
++			      "gout_clkcmu_dispaud_decon_int_vclk",
++			      "oscclk";
++		clocks = <&clkio_dispaud_audiocdclk0>,
++			 <&clkio_dispaud_mixer_bclk_bt>,
++			 <&clkio_dispaud_mixer_bclk_cp>,
++			 <&clkio_dispaud_mixer_bclk_fm>,
++			 <&clkio_dispaud_mixer_sclk_ap>,
++			 <&clkphy_dispaud_mipiphy_rxclkesc0>,
++			 <&clkphy_dispaud_mipiphy_txbyteclkhs>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_DISPAUD_BUS>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_DISPAUD_DECON_INT_ECLK>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_DISPAUD_DECON_INT_VCLK>,
++			 <&oscclk>;
++	};
++
++	cmu_fsys: clock-controller@13730000 {
++		compatible = "samsung,exynos7870-cmu-fsys";
++		reg = <0 0x13730000 0x82c>;
++		#clock-cells = <1>;
++
++		clock-names = "clkphy_fsys_usb20drd_phyclock",
++			      "gout_clkcmu_fsys_bus",
++			      "gout_clkcmu_fsys_usb20drd_refclk",
++			      "oscclk";
++		clocks = <&clkphy_fsys_usb20drd_phyclock>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_FSYS_BUS>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_FSYS_USB20DRD_REFCLK>,
++			 <&oscclk>;
++	};
++
++	cmu_g3d: clock-controller@11460000 {
++		compatible = "samsung,exynos7870-cmu-g3d";
++		reg = <0 0x11460000 0x80c>;
++		#clock-cells = <1>;
++
++		clock-names = "gout_clkcmu_g3d_switch",
++			      "oscclk";
++		clocks = <&cmu_mif CLK_GOUT_CLKCMU_G3D_SWITCH>,
++			 <&oscclk>;
++	};
++
++	cmu_isp: clock-controller@144D0000 {
++		compatible = "samsung,exynos7870-cmu-isp";
++		reg = <0 0x144d0000 0x824>;
++		#clock-cells = <1>;
++
++		clock-names = "clkphy_isp_s_rxbyteclkhs0_s4",
++			      "clkphy_isp_s_rxbyteclkhs0_s4s",
++			      "gout_clkcmu_isp_cam",
++			      "gout_clkcmu_isp_isp",
++			      "gout_clkcmu_isp_vra",
++			      "oscclk";
++		clocks = <&clkphy_isp_s_rxbyteclkhs0_s4>,
++			 <&clkphy_isp_s_rxbyteclkhs0_s4s>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_ISP_CAM>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_ISP_ISP>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_ISP_VRA>,
++			 <&oscclk>;
++	};
++
++	cmu_mfcmscl: clock-controller@12CB0000 {
++		compatible = "samsung,exynos7870-cmu-mfcmscl";
++		reg = <0 0x12cb0000 0x80c>;
++		#clock-cells = <1>;
++
++		clock-names = "gout_clkcmu_mfcmscl_mfc",
++			      "gout_clkcmu_mfcmscl_mscl",
++			      "oscclk";
++		clocks = <&cmu_mif CLK_GOUT_CLKCMU_MFCMSCL_MFC>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_MFCMSCL_MSCL>,
++			 <&oscclk>;
++	};
++
++	cmu_peri: clock-controller@101F0000 {
++		compatible = "samsung,exynos7870-cmu-peri";
++		reg = <0 0x101f0000 0x850>;
++		#clock-cells = <1>;
++
++		clock-names = "gout_clkcmu_peri_bus",
++			      "gout_clkcmu_peri_spi_ese",
++			      "gout_clkcmu_peri_spi_frontfrom",
++			      "gout_clkcmu_peri_spi_rearfrom",
++			      "gout_clkcmu_peri_spi_sensorhub",
++			      "gout_clkcmu_peri_spi_voiceprocessor",
++			      "gout_clkcmu_peri_uart_btwififm",
++			      "gout_clkcmu_peri_uart_debug",
++			      "gout_clkcmu_peri_uart_sensor",
++			      "oscclk";
++		clocks = <&cmu_mif CLK_GOUT_CLKCMU_PERI_BUS>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_PERI_SPI_ESE>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_PERI_SPI_FRONTFROM>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_PERI_SPI_REARFROM>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_PERI_SPI_SENSORHUB>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_PERI_SPI_VOICEPROCESSOR>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_PERI_UART_BTWIFIFM>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_PERI_UART_DEBUG>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_PERI_UART_SENSOR>,
++			 <&oscclk>;
++	};
++
++	pinctrl0: pinctrl@139F0000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		reg = <0 0x139f0000 0x1000>;
++		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
++
++		wakeup-interrupt-controller {
++			compatible = "samsung,exynos7-wakeup-eint";
++			interrupt-parent = <&gic>;
++			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
++		};
++	};
++
++	pinctrl1: pinctrl@148C0000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		reg = <0 0x148c0000 0x1000>;
++		interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	pinctrl2: pinctrl@139E0000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		reg = <0 0x139e0000 0x1000>;
++		interrupts = <GIC_SPI 441 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	pinctrl3: pinctrl@13750000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		reg = <0 0x13750000 0x1000>;
++		interrupts = <GIC_SPI 250 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	pinctrl4: pinctrl@10530000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		reg = <0 0x10530000 0x1000>;
++		interrupts = <GIC_SPI 392 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	pinctrl5: pinctrl@139C0000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		reg = <0 0x139c0000 0x1000>;
++		interrupts = <GIC_SPI 439 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	pinctrl6: pinctrl@139B0000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		reg = <0 0x139b0000 0x1000>;
++		interrupts = <GIC_SPI 438 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	pinctrl7: pinctrl@139D0000 {
++		compatible = "samsung,exynos7870-pinctrl";
++		reg = <0 0x139d0000 0x1000>;
++		interrupts = <GIC_SPI 440 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	i2c0: i2c@13870000 {
++		compatible = "samsung,s3c2440-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13870000 0x100>;
++		interrupts = <GIC_SPI 428 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2c0_bus>;
++
++		clock-names = "i2c";
++		clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_IFPMIC_IPCLKPORT_PCLK>;
++	};
++
++	i2c1: i2c@13880000 {
++		compatible = "samsung,s3c2440-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13880000 0x100>;
++		interrupts = <GIC_SPI 429 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2c1_bus>;
++
++		clock-names = "i2c";
++		clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_MUIC_IPCLKPORT_PCLK>;
++	};
++
++	i2c2: i2c@13890000 {
++		compatible = "samsung,s3c2440-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13890000 0x100>;
++		interrupts = <GIC_SPI 430 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2c2_bus>;
++
++		clock-names = "i2c";
++		clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_NFC_IPCLKPORT_PCLK>;
++	};
++
++	i2c3: i2c@13840000 {
++		compatible = "samsung,s3c2440-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13840000 0x100>;
++		interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2c3_bus>;
++
++		clock-names = "i2c";
++		clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_TSP_IPCLKPORT_PCLK>;
++	};
++
++	i2c4: i2c@13830000 {
++		compatible = "samsung,s3c2440-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13830000 0x100>;
++		interrupts = <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2c4_bus>;
++
++		clock-names = "i2c";
++		clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_FUELGAUGE_IPCLKPORT_PCLK>;
++	};
++
++	i2c5: i2c@138D0000 {
++		compatible = "samsung,s3c2440-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x138D0000 0x100>;
++		interrupts = <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2c5_bus>;
++
++		clock-names = "i2c";
++		clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_SENSOR1_IPCLKPORT_PCLK>;
++	};
++
++	i2c6: i2c@138E0000 {
++		compatible = "samsung,s3c2440-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x138E0000 0x100>;
++		interrupts = <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2c6_bus>;
++
++		clock-names = "i2c";
++		clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_SENSOR2_IPCLKPORT_PCLK>;
++	};
++
++	i2c7: i2c@13850000 {
++		compatible = "samsung,s3c2440-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13850000 0x100>;
++		interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2c7_bus>;
++
++		clock-names = "i2c";
++		clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_TOUCHKEY_IPCLKPORT_PCLK>;
++	};
++
++	i2c8: i2c@13860000 {
++		compatible = "samsung,s3c2440-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13860000 0x100>;
++		interrupts = <GIC_SPI 427 IRQ_TYPE_LEVEL_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&i2c8_bus>;
++
++		clock-names = "i2c";
++		clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_SPKAMP_IPCLKPORT_PCLK>;
++	};
++
++	hsi2c0: hsi2c@10510000 {
++		compatible = "i2c-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++        
++		reg = <0 0x10510000 0x2000>;
++	};
++
++	gpu: gpu@11400000 {
++	        compatible = "arm,mali-t830";
++		status = "disabled";
++
++	        reg = <0 0x11400000 0x5000>;
++	        interrupt-names = "job", "mmu", "gpu";
++	        interrupts = <GIC_SPI 282 IRQ_TYPE_LEVEL_HIGH>,
++		             <GIC_SPI 283 IRQ_TYPE_LEVEL_HIGH>,
++		             <GIC_SPI 281 IRQ_TYPE_LEVEL_HIGH>;
++
++	        clock-names = "core", "bus";
++		clocks = <&cmu_g3d CLK_GOUT_CLK_G3D_UID_G3D_IPCLKPORT_CLK>,
++		         <&cmu_g3d CLK_GOUT_CLK_G3D_UID_ASYNCS_D0_G3D_IPCLKPORT_I_CLK>;
++	};
++
++	// Internal eMMC
++	dwmmc0: dwmmc0@13540000 {
++		compatible = "samsung,exynos7885-dw-mshc-smu";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13540000 0x2000>;
++		interrupts = <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>;
++
++		clock-names = "biu", "ciu";
++		clocks = <&cmu_fsys CLK_GOUT_CLK_FSYS_UID_MMC0_IPCLKPORT_I_ACLK>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_FSYS_MMC0>;
++	};
++
++	// Wi-Fi SDIO
++	dwmmc1: dwmmc1@13550000 {
++		compatible = "samsung,exynos7885-dw-mshc-smu";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13550000 0x2000>;
++		interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
++
++		clock-names = "biu", "ciu";
++		clocks = <&cmu_fsys CLK_GOUT_CLK_FSYS_UID_MMC1_IPCLKPORT_I_ACLK>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_FSYS_MMC1>;
++	};
++
++	// External SD Card
++	dwmmc2: dwmmc2@13560000 {
++		compatible = "samsung,exynos7885-dw-mshc-smu";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		status = "disabled";
++
++		reg = <0 0x13560000 0x2000>;
++		interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>;
++
++		clock-names = "biu", "ciu";
++		clocks = <&cmu_fsys CLK_GOUT_CLK_FSYS_UID_MMC2_IPCLKPORT_I_ACLK>,
++			 <&cmu_mif CLK_GOUT_CLKCMU_FSYS_MMC2>;
++	};
++
++	usbdrd_phy: phy@135C0000 {
++		compatible = "samsung,exynos7870-usbdrd-phy", "samsung,exynos7-usbdrd-phy";
++		#phy-cells = <1>;
++		usb-role-switch;
++
++		reg = <0 0x135c0000 0x100>;
++
++		clock-names = "phy", "ref", "phy_pipe";
++		clocks = <&cmu_fsys CLK_GOUT_CLK_FSYS_UID_USB20DRD_IPCLKPORT_ACLK_HSDRD>,
++			 <&cmu_fsys CLK_GOUT_MUXGATE_USB_PLL>,
++			 <&cmu_fsys CLK_GOUT_MUXGATE_CLKPHY_FSYS_USB20DRD_PHYCLOCK_USER>;
++
++		samsung,pmu-syscon = <&pmu_system_controller>;
++	};
++
++	usbdrd: usb {
++		compatible = "samsung,exynos7870-dwusb2", "samsung,exynos5250-dwusb3";
++		#address-cells = <2>;
++		#size-cells = <1>;
++		status = "disabled";
++		usb-role-switch;
++		ranges;
++
++		clock-names = "usbdrd30";
++		clocks = <&cmu_fsys CLK_GOUT_CLK_FSYS_UID_USB20DRD_IPCLKPORT_ACLK_HSDRD>;
++
++		usb@13600000 {
++			compatible = "snps,dwc3";
++			usb-role-switch;
++
++			reg = <0 0x13600000 0x10000>;
++			interrupts = <GIC_SPI 230 IRQ_TYPE_LEVEL_HIGH>;
++
++			phy-names = "usb2-phy", "usb3-phy";
++			phys = <&usbdrd_phy 0>, <&usbdrd_phy 1>;
++		};
++	};
++};
++
++#include "exynos7870-pinctrl.dtsi"
++#include "exynos-syscon-restart.dtsi"
+diff --git a/arch/arm/dts/exynos78x0-j7xelte.dts b/arch/arm/dts/exynos78x0-j7xelte.dts
+index 5a2be37b51..301503a748 100644
+--- a/arch/arm/dts/exynos78x0-j7xelte.dts
++++ b/arch/arm/dts/exynos78x0-j7xelte.dts
+@@ -20,7 +20,7 @@
+ 		bootargs = "console=ttyS0,115200n8 earlycon"; // ¿coment me?
+ 	};
+ 
+-        clock: clock-controller@0x10460000 { // samsung wtf codeline
++        clock: clock-controller@10460000 { // samsung wtf codeline ¿fixed?
+                 compatible = "samsung,exynos7870-clock";
+                 reg = <0x0 0x10460000 0x1000>;
+                 #clock-cells = <1>;
+diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
+index 91840eeabe..0198e3f275 100644
+--- a/arch/arm/mach-exynos/Kconfig
++++ b/arch/arm/mach-exynos/Kconfig
+@@ -198,7 +198,7 @@ config TARGET_ESPRESSO7420
+ 	select PINCTRL_EXYNOS7420
+ 	select SUPPORT_SPL
+ 
+-config  TARGET_A5Y17LTE
++config TARGET_A5Y17LTE
+ 	bool "Samsung SM-A520F board"
+ 	select ARM64
+ 	select CLK_EXYNOS
+@@ -207,7 +207,7 @@ config  TARGET_A5Y17LTE
+ 	select PINCTRL_EXYNOS78x0
+ 	select SUPPORT_SPL
+ 
+-config  TARGET_A7Y17LTE
++config TARGET_A7Y17LTE
+ 	bool "Samsung SM-A720F board"
+ 	select ARM64
+ 	select CLK_EXYNOS
+@@ -216,7 +216,7 @@ config  TARGET_A7Y17LTE
+ 	select PINCTRL_EXYNOS78x0
+ 	select SUPPORT_SPL
+ 
+-config  TARGET_A3Y17LTE
++config TARGET_A3Y17LTE
+ 	bool "Samsung SM-A320F board"
+ 	select ARM64
+ 	select CLK_EXYNOS
+@@ -225,7 +225,7 @@ config  TARGET_A3Y17LTE
+ 	select PINCTRL_EXYNOS78x0
+ 	select SUPPORT_SPL
+ 
+-config  TARGET_J7XELTE
++config TARGET_J7XELTE
+ 	bool "Samsung SM-J10MN board"
+ 	select ARM64
+ 	select CLK_EXYNOS
+diff --git a/configs/j7xelte_defconfig b/configs/j7xelte_defconfig
+index 095571b148..7143972e4d 100644
+--- a/configs/j7xelte_defconfig
++++ b/configs/j7xelte_defconfig
+@@ -1,26 +1,40 @@
++# CONFIG_DISPLAY_CPUINFO is not set
++# This option is a number of 256MB DRAM banks, i.e. (ram size) / 256MB.
++# Used in samsung common board dram_init function.
++CONFIG_ARCH_EXYNOS7=y
++CONFIG_ARCH_EXYNOS=y
+ CONFIG_ARM=y
+-CONFIG_SKIP_LOWLEVEL_INIT=y
++CONFIG_BOARD_EARLY_INIT_F=n
++CONFIG_CMD_GPIO=y
++CONFIG_CMD_I2C=y
+ CONFIG_COUNTER_FREQUENCY=26000000
+-CONFIG_ARCH_EXYNOS=y
+-CONFIG_TEXT_BASE=0x40080000
+-CONFIG_SYS_MALLOC_F_LEN=0x400
+-CONFIG_ARCH_EXYNOS7=y
+-CONFIG_TARGET_A7Y17LTE=y
+-CONFIG_NR_DRAM_BANKS=12
+-CONFIG_HAS_CUSTOM_SYS_INIT_SP_ADDR=y
+ CONFIG_CUSTOM_SYS_INIT_SP_ADDR=0x40200e50
++CONFIG_DEBUG_UART_BASE=0x13820000
++CONFIG_DEBUG_UART_S5P=y
+ CONFIG_DEFAULT_DEVICE_TREE="exynos78x0-j7xelte"
+-CONFIG_SYS_LOAD_ADDR=0x40001000
++CONFIG_DISPLAY_CPUINFO=n
++CONFIG_DM_I2C_GPIO=y
++CONFIG_EXYNOS_FB=y
++CONFIG_EXYNOS_MIPI_DSIM=y
+ CONFIG_FIT=y
++CONFIG_HAS_CUSTOM_SYS_INIT_SP_ADDR=y
++CONFIG_HUSH_PARSER=y
++CONFIG_LMB_MAX_REGIONS=64
++CONFIG_NR_DRAM_BANKS=12
++CONFIG_PINCTRL_EXYNOS78x0=y
++CONFIG_PINCTRL_EXYNOS=y
++CONFIG_POSITION_INDEPENDENT=y
++CONFIG_S5P=y
++CONFIG_INIT_SP_RELATIVE=n
+ CONFIG_SAVE_PREV_BL_FDT_ADDR=y
+ CONFIG_SAVE_PREV_BL_INITRAMFS_START_ADDR=y
+-# CONFIG_DISPLAY_CPUINFO is not set
+-CONFIG_HUSH_PARSER=y
+-CONFIG_SYS_PBSIZE=1024
++CONFIG_SKIP_LOWLEVEL_INIT=y
+ CONFIG_SYS_BOOTM_LEN=0x2000000
+-CONFIG_CMD_GPIO=y
+-CONFIG_CMD_I2C=y
+-CONFIG_DM_I2C_GPIO=y
+-CONFIG_LMB_MAX_REGIONS=64
+-CONFIG_EXYNOS_FB=y
+-CONFIG_EXYNOS_MIPI_DSIM=y
++CONFIG_SYS_CONFIG_NAME="exynos78x0-common"
++CONFIG_SYS_LOAD_ADDR=0x40001000
++CONFIG_SYS_MALLOC_F_LEN=0x40000000
++CONFIG_SYS_PBSIZE=1024
++CONFIG_SYS_TEXT_BASE=0x40001000
++CONFIG_TARGET_J7XELTE=y
++CONFIG_TEXT_BASE=0x201000
++CONFIG_TEXT_BASE=0x40080000
+diff --git a/include/dt-bindings/clock/exynos7870.h b/include/dt-bindings/clock/exynos7870.h
+new file mode 100644
+index 0000000000..e714fb3993
+--- /dev/null
++++ b/include/dt-bindings/clock/exynos7870.h
+@@ -0,0 +1,336 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2023 ???
++ * Author: ???
++ *
++ * Device Tree binding constants for Exynos7870 clock controller.
++ */
++
++#ifndef _DT_BINDINGS_CLOCK_EXYNOS_7870_H
++#define _DT_BINDINGS_CLOCK_EXYNOS_7870_H
++
++/* CMU_MIF */
++#define CLK_FOUT_BUS_PLL							1
++#define CLK_FOUT_MEDIA_PLL							2
++#define CLK_FOUT_MEM_PLL							3
++#define CLK_DOUT_CLKCMU_DISPAUD_BUS						4
++#define CLK_DOUT_CLKCMU_DISPAUD_DECON_INT_ECLK					5
++#define CLK_DOUT_CLKCMU_DISPAUD_DECON_INT_VCLK					6
++#define CLK_DOUT_CLKCMU_FSYS_BUS						7
++#define CLK_DOUT_CLKCMU_FSYS_MMC0						8
++#define CLK_DOUT_CLKCMU_FSYS_MMC1						9
++#define CLK_DOUT_CLKCMU_FSYS_MMC2						10
++#define CLK_DOUT_CLKCMU_FSYS_USB20DRD_REFCLK					11
++#define CLK_DOUT_CLKCMU_G3D_SWITCH						12
++#define CLK_DOUT_CLKCMU_ISP_CAM							13
++#define CLK_DOUT_CLKCMU_ISP_ISP							14
++#define CLK_DOUT_CLKCMU_ISP_SENSOR0						15
++#define CLK_DOUT_CLKCMU_ISP_SENSOR1						16
++#define CLK_DOUT_CLKCMU_ISP_SENSOR2						17
++#define CLK_DOUT_CLKCMU_ISP_VRA							18
++#define CLK_DOUT_CLKCMU_MFCMSCL_MFC						19
++#define CLK_DOUT_CLKCMU_MFCMSCL_MSCL						20
++#define CLK_DOUT_CLKCMU_PERI_BUS						21
++#define CLK_DOUT_CLKCMU_PERI_SPI_ESE						22
++#define CLK_DOUT_CLKCMU_PERI_SPI_FRONTFROM					23
++#define CLK_DOUT_CLKCMU_PERI_SPI_REARFROM					24
++#define CLK_DOUT_CLKCMU_PERI_SPI_SENSORHUB					25
++#define CLK_DOUT_CLKCMU_PERI_SPI_VOICEPROCESSOR					26
++#define CLK_DOUT_CLKCMU_PERI_UART_BTWIFIFM					27
++#define CLK_DOUT_CLKCMU_PERI_UART_DEBUG						28
++#define CLK_DOUT_CLKCMU_PERI_UART_SENSOR					29
++#define CLK_DOUT_CLK_MIF_APB							30
++#define CLK_DOUT_CLK_MIF_BUSD							31
++#define CLK_DOUT_CLK_MIF_HSI2C							32
++#define CLK_FFAC_MUX_BUS_PLL_DIV2						33
++#define CLK_FFAC_MUX_MEDIA_PLL_DIV2						34
++#define CLK_FFAC_MUX_MEM_PLL_DIV2						35
++#define CLK_GOUT_CLKCMU_DISPAUD_BUS						36
++#define CLK_GOUT_CLKCMU_DISPAUD_DECON_INT_ECLK					37
++#define CLK_GOUT_CLKCMU_DISPAUD_DECON_INT_VCLK					38
++#define CLK_GOUT_CLKCMU_FSYS_BUS						39
++#define CLK_GOUT_CLKCMU_FSYS_MMC0						40
++#define CLK_GOUT_CLKCMU_FSYS_MMC1						41
++#define CLK_GOUT_CLKCMU_FSYS_MMC2						42
++#define CLK_GOUT_CLKCMU_FSYS_USB20DRD_REFCLK					43
++#define CLK_GOUT_CLKCMU_G3D_SWITCH						44
++#define CLK_GOUT_CLKCMU_ISP_CAM							45
++#define CLK_GOUT_CLKCMU_ISP_ISP							46
++#define CLK_GOUT_CLKCMU_ISP_SENSOR0						47
++#define CLK_GOUT_CLKCMU_ISP_SENSOR1						48
++#define CLK_GOUT_CLKCMU_ISP_SENSOR2						49
++#define CLK_GOUT_CLKCMU_ISP_VRA							50
++#define CLK_GOUT_CLKCMU_MFCMSCL_MFC						51
++#define CLK_GOUT_CLKCMU_MFCMSCL_MSCL						52
++#define CLK_GOUT_CLKCMU_PERI_BUS						53
++#define CLK_GOUT_CLKCMU_PERI_SPI_ESE						54
++#define CLK_GOUT_CLKCMU_PERI_SPI_FRONTFROM					55
++#define CLK_GOUT_CLKCMU_PERI_SPI_REARFROM					56
++#define CLK_GOUT_CLKCMU_PERI_SPI_SENSORHUB					57
++#define CLK_GOUT_CLKCMU_PERI_SPI_VOICEPROCESSOR					58
++#define CLK_GOUT_CLKCMU_PERI_UART_BTWIFIFM					59
++#define CLK_GOUT_CLKCMU_PERI_UART_DEBUG						60
++#define CLK_GOUT_CLKCMU_PERI_UART_SENSOR					61
++#define CLK_GOUT_CLK_MIF_UID_ASYNCAPB_HSI2C_AP_IPCLKPORT_PCLKM			62
++#define CLK_GOUT_CLK_MIF_UID_ASYNCAPB_HSI2C_AP_IPCLKPORT_PCLKS			63
++#define CLK_GOUT_CLK_MIF_UID_ASYNCAPB_HSI2C_CP_IPCLKPORT_PCLKM			64
++#define CLK_GOUT_CLK_MIF_UID_ASYNCAPB_HSI2C_CP_IPCLKPORT_PCLKS			65
++#define CLK_GOUT_CLK_MIF_UID_HSI2C_MIF_IPCLKPORT_IPCLK				66
++#define CLK_GOUT_CLK_MIF_UID_HSI2C_MIF_IPCLKPORT_ITCLK				67
++#define CLK_GOUT_CLK_MIF_UID_MODAPIF_V1P5_MIF_CP_IPCLKPORT_PCLK_HSI2C		68
++#define CLK_GOUT_CLK_MIF_UID_MODAPIF_V1P5_MIF_CP_IPCLKPORT_PCLK_HSI2C_BAT_0	69
++#define CLK_GOUT_CLK_MIF_UID_MODAPIF_V1P5_MIF_CP_IPCLKPORT_PCLK_HSI2C_BAT_1	70
++#define CLK_GOUT_CLK_MIF_UID_WRAP_ADC_IF_IPCLKPORT_I_OSC_SYS			71
++#define CLK_GOUT_CLK_MIF_UID_WRAP_ADC_IF_IPCLKPORT_PCLK_S0			72
++#define CLK_GOUT_CLK_MIF_UID_WRAP_ADC_IF_IPCLKPORT_PCLK_S1			73
++#define CLK_GOUT_MUXGATE_BUS_PLL						74
++#define CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_BUS					75
++#define CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_ECLK				76
++#define CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_VCLK				77
++#define CLK_GOUT_MUXGATE_CLKCMU_FSYS_BUS					78
++#define CLK_GOUT_MUXGATE_CLKCMU_FSYS_MMC0					79
++#define CLK_GOUT_MUXGATE_CLKCMU_FSYS_MMC1					80
++#define CLK_GOUT_MUXGATE_CLKCMU_FSYS_MMC2					81
++#define CLK_GOUT_MUXGATE_CLKCMU_FSYS_USB20DRD_REFCLK				82
++#define CLK_GOUT_MUXGATE_CLKCMU_ISP_CAM						83
++#define CLK_GOUT_MUXGATE_CLKCMU_ISP_ISP						84
++#define CLK_GOUT_MUXGATE_CLKCMU_ISP_SENSOR0					85
++#define CLK_GOUT_MUXGATE_CLKCMU_ISP_SENSOR1					86
++#define CLK_GOUT_MUXGATE_CLKCMU_ISP_SENSOR2					87
++#define CLK_GOUT_MUXGATE_CLKCMU_ISP_VRA						88
++#define CLK_GOUT_MUXGATE_CLKCMU_MFCMSCL_MFC					89
++#define CLK_GOUT_MUXGATE_CLKCMU_MFCMSCL_MSCL					90
++#define CLK_GOUT_MUXGATE_CLKCMU_PERI_BUS					91
++#define CLK_GOUT_MUXGATE_CLKCMU_PERI_SPI_ESE					92
++#define CLK_GOUT_MUXGATE_CLKCMU_PERI_SPI_FRONTFROM				93
++#define CLK_GOUT_MUXGATE_CLKCMU_PERI_SPI_REARFROM				94
++#define CLK_GOUT_MUXGATE_CLKCMU_PERI_SPI_SENSORHUB				95
++#define CLK_GOUT_MUXGATE_CLKCMU_PERI_SPI_VOICEPROCESSOR				96
++#define CLK_GOUT_MUXGATE_CLKCMU_PERI_UART_BTWIFIFM				97
++#define CLK_GOUT_MUXGATE_CLKCMU_PERI_UART_DEBUG					98
++#define CLK_GOUT_MUXGATE_CLKCMU_PERI_UART_SENSOR				99
++#define CLK_GOUT_MUXGATE_CLK_MIF_BUSD						100
++#define CLK_GOUT_MUXGATE_MEDIA_PLL						101
++#define CLK_GOUT_MUXGATE_MEM_PLL						102
++#define CLK_MOUT_BUS_PLL							103
++#define CLK_MOUT_CLKCMU_DISPAUD_BUS						104
++#define CLK_MOUT_CLKCMU_DISPAUD_DECON_INT_ECLK					105
++#define CLK_MOUT_CLKCMU_DISPAUD_DECON_INT_VCLK					106
++#define CLK_MOUT_CLKCMU_FSYS_BUS						107
++#define CLK_MOUT_CLKCMU_FSYS_MMC0						108
++#define CLK_MOUT_CLKCMU_FSYS_MMC1						109
++#define CLK_MOUT_CLKCMU_FSYS_MMC2						110
++#define CLK_MOUT_CLKCMU_FSYS_USB20DRD_REFCLK					111
++#define CLK_MOUT_CLKCMU_ISP_CAM							112
++#define CLK_MOUT_CLKCMU_ISP_ISP							113
++#define CLK_MOUT_CLKCMU_ISP_SENSOR0						114
++#define CLK_MOUT_CLKCMU_ISP_SENSOR1						115
++#define CLK_MOUT_CLKCMU_ISP_SENSOR2						116
++#define CLK_MOUT_CLKCMU_ISP_VRA							117
++#define CLK_MOUT_CLKCMU_MFCMSCL_MFC						118
++#define CLK_MOUT_CLKCMU_MFCMSCL_MSCL						119
++#define CLK_MOUT_CLKCMU_PERI_BUS						120
++#define CLK_MOUT_CLKCMU_PERI_SPI_ESE						121
++#define CLK_MOUT_CLKCMU_PERI_SPI_FRONTFROM					122
++#define CLK_MOUT_CLKCMU_PERI_SPI_REARFROM					123
++#define CLK_MOUT_CLKCMU_PERI_SPI_SENSORHUB					124
++#define CLK_MOUT_CLKCMU_PERI_SPI_VOICEPROCESSOR					125
++#define CLK_MOUT_CLKCMU_PERI_UART_BTWIFIFM					126
++#define CLK_MOUT_CLKCMU_PERI_UART_DEBUG						127
++#define CLK_MOUT_CLKCMU_PERI_UART_SENSOR					128
++#define CLK_MOUT_CLK_MIF_BUSD							129
++#define CLK_MOUT_MEDIA_PLL							130
++#define CLK_MOUT_MEM_PLL							131
++#define MIF_NR_CLK								132
++
++/* PMU_ALIVE */
++#define CLK_GOUT_PMU_DEBUG_CLKOUT_DISABLE	1
++#define CLK_GOUT_PMU_DEBUG_CLKOUT_SEL08		2
++#define CLK_GOUT_PMU_DEBUG_CLKOUT_SEL09		3
++#define CLK_GOUT_PMU_DEBUG_CLKOUT_SEL10		4
++#define CLK_GOUT_PMU_DEBUG_CLKOUT_SEL11		5
++#define CLK_GOUT_PMU_DEBUG_CLKOUT_SEL12		6
++#define PMU_ALIVE_NR_CLK			7
++
++/* CMU_DISPAUD */
++#define CLK_FOUT_AUD_PLL							1
++#define CLK_DOUT_CLK_DISPAUD_APB						2
++#define CLK_DOUT_CLK_DISPAUD_DECON_INT_ECLK					3
++#define CLK_DOUT_CLK_DISPAUD_DECON_INT_VCLK					4
++#define CLK_DOUT_CLK_DISPAUD_MI2S						5
++#define CLK_DOUT_CLK_DISPAUD_MIXER						6
++#define CLK_GOUT_CLK_DISPAUD_UID_CLKCMU_DISPAUD_BUS				7
++#define CLK_GOUT_CLK_DISPAUD_UID_CLKCMU_DISPAUD_BUS_DISP			8
++#define CLK_GOUT_CLK_DISPAUD_UID_CLKCMU_DISPAUD_BUS_PPMU			9
++#define CLK_GOUT_CLK_DISPAUD_UID_CLK_DISPAUD_APB_AUD				10
++#define CLK_GOUT_CLK_DISPAUD_UID_CLK_DISPAUD_APB_AUD_AMP			11
++#define CLK_GOUT_CLK_DISPAUD_UID_CLK_DISPAUD_APB_DISP				12
++#define CLK_GOUT_CLK_DISPAUD_UID_CON_DISPAUD_IPCLKPORT_I_AUD_I2S_BCLK_BT_IN	13
++#define CLK_GOUT_CLK_DISPAUD_UID_CON_DISPAUD_IPCLKPORT_I_AUD_I2S_BCLK_FM_IN	14
++#define CLK_GOUT_CLK_DISPAUD_UID_CON_DISPAUD_IPCLKPORT_I_CP2AUD_BCK		15
++#define CLK_GOUT_CLK_DISPAUD_UID_CON_DISPAUD_IPCLKPORT_I_EXT2AUD_BCK_GPIO_I2S	16
++#define CLK_GOUT_CLK_DISPAUD_UID_DECON_IPCLKPORT_I_ECLK				17
++#define CLK_GOUT_CLK_DISPAUD_UID_DECON_IPCLKPORT_I_VCLK				18
++#define CLK_GOUT_CLK_DISPAUD_UID_MI2S_AMP_IPCLKPORT_I2SCODCLKI			19
++#define CLK_GOUT_CLK_DISPAUD_UID_MI2S_AUD_IPCLKPORT_I2SCODCLKI			20
++#define CLK_GOUT_CLK_DISPAUD_UID_MIXER_AUD_IPCLKPORT_SYSCLK			21
++#define CLK_GOUT_MUXGATE_AUD_PLL						22
++#define CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_BUS_USER				23
++#define CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_ECLK_USER			24
++#define CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_VCLK_USER			25
++#define CLK_GOUT_MUXGATE_CLKPHY_DISPAUD_MIPIPHY_RXCLKESC0_USER			26
++#define CLK_GOUT_MUXGATE_CLKPHY_DISPAUD_MIPIPHY_TXBYTECLKHS_USER		27
++#define CLK_GOUT_MUXGATE_CLK_DISPAUD_DECON_INT_ECLK				28
++#define CLK_GOUT_MUXGATE_CLK_DISPAUD_DECON_INT_VCLK				29
++#define CLK_GOUT_MUXGATE_CLK_DISPAUD_MI2S					30
++#define CLK_GOUT_MUXGATE_DISP_PLL						31
++#define CLK_MOUT_AUD_PLL							32
++#define CLK_MOUT_CLKCMU_DISPAUD_BUS_USER					33
++#define CLK_MOUT_CLKCMU_DISPAUD_DECON_INT_ECLK_USER				34
++#define CLK_MOUT_CLKCMU_DISPAUD_DECON_INT_VCLK_USER				35
++#define CLK_MOUT_CLKPHY_DISPAUD_MIPIPHY_RXCLKESC0_USER				36
++#define CLK_MOUT_CLKPHY_DISPAUD_MIPIPHY_TXBYTECLKHS_USER			37
++#define CLK_MOUT_CLK_DISPAUD_DECON_INT_ECLK					38
++#define CLK_MOUT_CLK_DISPAUD_DECON_INT_VCLK					39
++#define CLK_MOUT_CLK_DISPAUD_MI2S						40
++#define CLK_MOUT_DISP_PLL							41
++#define CLK_FOUT_DISP_PLL							42
++#define DISPAUD_NR_CLK								43
++
++/* CMU_FSYS */
++#define CLK_GOUT_CLK_FSYS_UID_BUSP3_FSYS_IPCLKPORT_HCLK			1
++#define CLK_GOUT_CLK_FSYS_UID_MMC0_IPCLKPORT_I_ACLK			2
++#define CLK_GOUT_CLK_FSYS_UID_MMC1_IPCLKPORT_I_ACLK			3
++#define CLK_GOUT_CLK_FSYS_UID_MMC2_IPCLKPORT_I_ACLK			4
++#define CLK_GOUT_CLK_FSYS_UID_PDMA0_IPCLKPORT_ACLK_PDMA0		5
++#define CLK_GOUT_CLK_FSYS_UID_PPMU_FSYS_IPCLKPORT_ACLK			6
++#define CLK_GOUT_CLK_FSYS_UID_PPMU_FSYS_IPCLKPORT_PCLK			7
++#define CLK_GOUT_CLK_FSYS_UID_SROMC_IPCLKPORT_HCLK			8
++#define CLK_GOUT_CLK_FSYS_UID_UPSIZER_BUS1_FSYS_IPCLKPORT_ACLK		9
++#define CLK_GOUT_CLK_FSYS_UID_USB20DRD_IPCLKPORT_ACLK_HSDRD		10
++#define CLK_GOUT_CLK_FSYS_UID_USB20DRD_IPCLKPORT_HCLK_USB20_CTRL	11
++#define CLK_GOUT_CLK_FSYS_UID_USB20DRD_IPCLKPORT_HSDRD_REF_CLK		12
++#define CLK_GOUT_MUXGATE_CLKPHY_FSYS_USB20DRD_PHYCLOCK_USER		13
++#define CLK_GOUT_MUXGATE_USB_PLL					14
++#define CLK_MOUT_CLKPHY_FSYS_USB20DRD_PHYCLOCK_USER			15
++#define CLK_MOUT_USB_PLL						16
++#define CLK_FOUT_USB_PLL						17
++#define FSYS_NR_CLK							18
++
++/* CMU_G3D */
++#define CLK_DOUT_CLK_G3D_APB					1
++#define CLK_DOUT_CLK_G3D_BUS					2
++#define CLK_GOUT_CLK_G3D_UID_ASYNCS_D0_G3D_IPCLKPORT_I_CLK	3
++#define CLK_GOUT_CLK_G3D_UID_ASYNC_G3D_P_IPCLKPORT_PCLKM	4
++#define CLK_GOUT_CLK_G3D_UID_G3D_IPCLKPORT_CLK			5
++#define CLK_GOUT_CLK_G3D_UID_PPMU_G3D_IPCLKPORT_ACLK		6
++#define CLK_GOUT_CLK_G3D_UID_PPMU_G3D_IPCLKPORT_PCLK		7
++#define CLK_GOUT_CLK_G3D_UID_QE_G3D_IPCLKPORT_ACLK		8
++#define CLK_GOUT_CLK_G3D_UID_QE_G3D_IPCLKPORT_PCLK		9
++#define CLK_GOUT_CLK_G3D_UID_SYSREG_G3D_IPCLKPORT_PCLK		10
++#define CLK_GOUT_MUXGATE_CLKCMU_G3D_SWITCH_USER			11
++#define CLK_GOUT_MUXGATE_CLK_G3D				12
++#define CLK_GOUT_MUXGATE_G3D_PLL				13
++#define CLK_MOUT_CLKCMU_G3D_SWITCH_USER				14
++#define CLK_MOUT_CLK_G3D					15
++#define CLK_MOUT_G3D_PLL					16
++#define CLK_FOUT_G3D_PLL					17
++#define G3D_NR_CLK						18
++
++/* CMU_ISP */
++#define CLK_DOUT_CLK_ISP_APB					1
++#define CLK_DOUT_CLK_ISP_CAM_HALF				2
++#define CLK_GOUT_CLK_ISP_UID_CLK_ISP_CAM			3
++#define CLK_GOUT_CLK_ISP_UID_CLK_ISP_CAM_HALF			4
++#define CLK_GOUT_CLK_ISP_UID_CLK_ISP_ISPD			5
++#define CLK_GOUT_CLK_ISP_UID_CLK_ISP_ISPD_PPMU			6
++#define CLK_GOUT_CLK_ISP_UID_CLK_ISP_VRA			7
++#define CLK_GOUT_MUXGATE_CLKCMU_ISP_CAM_USER			8
++#define CLK_GOUT_MUXGATE_CLKCMU_ISP_ISP_USER			9
++#define CLK_GOUT_MUXGATE_CLKCMU_ISP_VRA_USER			10
++#define CLK_GOUT_MUXGATE_CLKPHY_ISP_S_RXBYTECLKHS0_S4S_USER	11
++#define CLK_GOUT_MUXGATE_CLKPHY_ISP_S_RXBYTECLKHS0_S4_USER	12
++#define CLK_GOUT_MUXGATE_CLK_ISP_CAM				13
++#define CLK_GOUT_MUXGATE_CLK_ISP_ISP				14
++#define CLK_GOUT_MUXGATE_CLK_ISP_ISPD				15
++#define CLK_GOUT_MUXGATE_CLK_ISP_VRA				16
++#define CLK_GOUT_MUXGATE_ISP_PLL				17
++#define CLK_MOUT_CLKCMU_ISP_CAM_USER				18
++#define CLK_MOUT_CLKCMU_ISP_ISP_USER				19
++#define CLK_MOUT_CLKCMU_ISP_VRA_USER				20
++#define CLK_MOUT_CLKPHY_ISP_S_RXBYTECLKHS0_S4S_USER		21
++#define CLK_MOUT_CLKPHY_ISP_S_RXBYTECLKHS0_S4_USER		22
++#define CLK_MOUT_CLK_ISP_CAM					23
++#define CLK_MOUT_CLK_ISP_ISP					24
++#define CLK_MOUT_CLK_ISP_ISPD					25
++#define CLK_MOUT_CLK_ISP_VRA					26
++#define CLK_MOUT_ISP_PLL					27
++#define CLK_FOUT_ISP_PLL					28
++#define ISP_NR_CLK						29
++
++/* CMU_MFCMSCL */
++#define CLK_DOUT_CLK_MFCMSCL_APB				1
++#define CLK_GOUT_CLK_MFCMSCL_UID_CLKCMU_MFCMSCL_MFC		2
++#define CLK_GOUT_CLK_MFCMSCL_UID_CLKCMU_MFCMSCL_MSCL		3
++#define CLK_GOUT_CLK_MFCMSCL_UID_CLKCMU_MFCMSCL_MSCL_BI		4
++#define CLK_GOUT_CLK_MFCMSCL_UID_CLKCMU_MFCMSCL_MSCL_D		5
++#define CLK_GOUT_CLK_MFCMSCL_UID_CLKCMU_MFCMSCL_MSCL_JPEG	6
++#define CLK_GOUT_CLK_MFCMSCL_UID_CLKCMU_MFCMSCL_MSCL_POLY	7
++#define CLK_GOUT_CLK_MFCMSCL_UID_CLKCMU_MFCMSCL_MSCL_PPMU	8
++#define CLK_GOUT_MUXGATE_CLKCMU_MFCMSCL_MFC_USER		9
++#define CLK_GOUT_MUXGATE_CLKCMU_MFCMSCL_MSCL_USER		10
++#define CLK_MOUT_CLKCMU_MFCMSCL_MFC_USER			11
++#define CLK_MOUT_CLKCMU_MFCMSCL_MSCL_USER			12
++#define MFCMSCL_NR_CLK						13
++
++/* CMU_PERI */
++#define CLK_GOUT_CLK_PERI_UID_BUSP1_PERIC0_IPCLKPORT_HCLK		1
++#define CLK_GOUT_CLK_PERI_UID_GPIO_ESE_IPCLKPORT_PCLK			2
++#define CLK_GOUT_CLK_PERI_UID_GPIO_NFC_IPCLKPORT_PCLK			3
++#define CLK_GOUT_CLK_PERI_UID_GPIO_TOP_IPCLKPORT_PCLK			4
++#define CLK_GOUT_CLK_PERI_UID_GPIO_TOUCH_IPCLKPORT_PCLK			5
++#define CLK_GOUT_CLK_PERI_UID_HSI2C_DEPTHCAM_IPCLKPORT_IPCLK		6
++#define CLK_GOUT_CLK_PERI_UID_HSI2C_FRONTCAM_IPCLKPORT_IPCLK		7
++#define CLK_GOUT_CLK_PERI_UID_HSI2C_FRONTSENSOR_IPCLKPORT_IPCLK		8
++#define CLK_GOUT_CLK_PERI_UID_HSI2C_MAINCAM_IPCLKPORT_IPCLK		9
++#define CLK_GOUT_CLK_PERI_UID_HSI2C_REARAF_IPCLKPORT_IPCLK		10
++#define CLK_GOUT_CLK_PERI_UID_HSI2C_REARSENSOR_IPCLKPORT_IPCLK		11
++#define CLK_GOUT_CLK_PERI_UID_I2C_FUELGAUGE_IPCLKPORT_PCLK		12
++#define CLK_GOUT_CLK_PERI_UID_I2C_IFPMIC_IPCLKPORT_PCLK			13
++#define CLK_GOUT_CLK_PERI_UID_I2C_MUIC_IPCLKPORT_PCLK			14
++#define CLK_GOUT_CLK_PERI_UID_I2C_NFC_IPCLKPORT_PCLK			15
++#define CLK_GOUT_CLK_PERI_UID_I2C_SENSOR1_IPCLKPORT_PCLK		16
++#define CLK_GOUT_CLK_PERI_UID_I2C_SENSOR2_IPCLKPORT_PCLK		17
++#define CLK_GOUT_CLK_PERI_UID_I2C_SPKAMP_IPCLKPORT_PCLK			18
++#define CLK_GOUT_CLK_PERI_UID_I2C_TOUCHKEY_IPCLKPORT_PCLK		19
++#define CLK_GOUT_CLK_PERI_UID_I2C_TSP_IPCLKPORT_PCLK			20
++#define CLK_GOUT_CLK_PERI_UID_MCT_IPCLKPORT_PCLK			21
++#define CLK_GOUT_CLK_PERI_UID_PWM_MOTOR_IPCLKPORT_I_OSCCLK		22
++#define CLK_GOUT_CLK_PERI_UID_PWM_MOTOR_IPCLKPORT_I_PCLK_S0		23
++#define CLK_GOUT_CLK_PERI_UID_SFRIF_TMU_CPUCL0_IPCLKPORT_PCLK		24
++#define CLK_GOUT_CLK_PERI_UID_SFRIF_TMU_CPUCL1_IPCLKPORT_PCLK		25
++#define CLK_GOUT_CLK_PERI_UID_SFRIF_TMU_G3D_IPCLKPORT_PCLK		26
++#define CLK_GOUT_CLK_PERI_UID_SPI_ESE_IPCLKPORT_PCLK			27
++#define CLK_GOUT_CLK_PERI_UID_SPI_ESE_IPCLKPORT_SPI_EXT_CLK		28
++#define CLK_GOUT_CLK_PERI_UID_SPI_FRONTFROM_IPCLKPORT_PCLK		29
++#define CLK_GOUT_CLK_PERI_UID_SPI_FRONTFROM_IPCLKPORT_SPI_EXT_CLK	30
++#define CLK_GOUT_CLK_PERI_UID_SPI_REARFROM_IPCLKPORT_PCLK		31
++#define CLK_GOUT_CLK_PERI_UID_SPI_REARFROM_IPCLKPORT_SPI_EXT_CLK	32
++#define CLK_GOUT_CLK_PERI_UID_SPI_SENSORHUB_IPCLKPORT_PCLK		33
++#define CLK_GOUT_CLK_PERI_UID_SPI_SENSORHUB_IPCLKPORT_SPI_EXT_CLK	34
++#define CLK_GOUT_CLK_PERI_UID_SPI_VOICEPROCESSOR_IPCLKPORT_PCLK		35
++#define CLK_GOUT_CLK_PERI_UID_SPI_VOICEPROCESSOR_IPCLKPORT_SPI_EXT_CLK	36
++#define CLK_GOUT_CLK_PERI_UID_TMU_CPUCL0_IPCLKPORT_I_CLK		37
++#define CLK_GOUT_CLK_PERI_UID_TMU_CPUCL1_IPCLKPORT_I_CLK		38
++#define CLK_GOUT_CLK_PERI_UID_TMU_G3D_IPCLKPORT_I_CLK			39
++#define CLK_GOUT_CLK_PERI_UID_UART_BTWIFIFM_IPCLKPORT_EXT_UCLK		40
++#define CLK_GOUT_CLK_PERI_UID_UART_BTWIFIFM_IPCLKPORT_PCLK		41
++#define CLK_GOUT_CLK_PERI_UID_UART_DEBUG_IPCLKPORT_EXT_UCLK		42
++#define CLK_GOUT_CLK_PERI_UID_UART_DEBUG_IPCLKPORT_PCLK			43
++#define CLK_GOUT_CLK_PERI_UID_UART_SENSOR_IPCLKPORT_EXT_UCLK		44
++#define CLK_GOUT_CLK_PERI_UID_UART_SENSOR_IPCLKPORT_PCLK		45
++#define CLK_GOUT_CLK_PERI_UID_WDT_CPUCL0_IPCLKPORT_PCLK			46
++#define CLK_GOUT_CLK_PERI_UID_WDT_CPUCL1_IPCLKPORT_PCLK			47
++#define PERI_NR_CLK							48
++
++#endif /* _DT_BINDINGS_CLOCK_EXYNOS_7870_H */
+-- 
+2.39.2
+

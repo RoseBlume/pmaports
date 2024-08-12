@@ -9,6 +9,12 @@ deviceinfo_codename="samsung-jxelte"
 deviceinfo_year="2016"
 deviceinfo_arch="aarch64"
 
+deviceinfo_append_dtb_mainline="true"
+deviceinfo_dtb_mainline="exynos7870-j7xelte"
+deviceinfo_getty="ttySAC2;115200"
+deviceinfo_flash_method="heimdall-isorec"
+deviceinfo_mesa_driver_mainline="exynos"
+
 # Device related
 deviceinfo_chassis="handset"
 deviceinfo_keyboard="false"
@@ -17,18 +23,11 @@ deviceinfo_screen_width="720"
 deviceinfo_screen_height="1280"
 
 # Bootloader related
-deviceinfo_flash_method="heimdall-bootimg"
-deviceinfo_kernel_cmdline="androidboot.selinux=permissive androidboot.selinux=permissive"
-deviceinfo_generate_bootimg="true"
-deviceinfo_bootimg_qcdt="true"
-deviceinfo_bootimg_mtk_mkimage="false"
-deviceinfo_bootimg_dtb_second="false"
-deviceinfo_flash_offset_base="0x10000000"
-deviceinfo_flash_offset_kernel="0x00008000"
-deviceinfo_flash_offset_ramdisk="0x01000000"
-deviceinfo_flash_offset_second="0x00f00000"
-deviceinfo_flash_offset_tags="0x00000100"
-deviceinfo_flash_pagesize="2048"
 deviceinfo_flash_heimdall_partition_kernel="BOOT"
+deviceinfo_flash_heimdall_partition_initfs="RECOVERY"
 deviceinfo_flash_heimdall_partition_rootfs="SYSTEM"
 deviceinfo_flash_sparse="true"
+deviceinfo_flash_kernel_on_update="true"
+
+# gpu accelerated
+deviceinfo_gpu_accelerated="true"

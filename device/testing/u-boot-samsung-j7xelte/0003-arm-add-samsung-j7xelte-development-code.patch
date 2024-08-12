@@ -1,0 +1,259 @@
+From 128f9f676754447bba0f2c21ad91061c5f672138 Mon Sep 17 00:00:00 2001
+From: "armel.guido" <armel.guido@gmx.com>
+Date: Tue, 16 Jul 2024 01:00:40 -0300
+Subject: [PATCH 3/4] arm: add samsung j7xelte development code
+
+---
+ arch/arm/dts/exynos78x0-j7xelte.dts | 197 +++++++++++++++++++++++++++-
+ configs/j7xelte_defconfig           |   9 +-
+ 2 files changed, 197 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/dts/exynos78x0-j7xelte.dts b/arch/arm/dts/exynos78x0-j7xelte.dts
+index 7fae8db874..5a2be37b51 100644
+--- a/arch/arm/dts/exynos78x0-j7xelte.dts
++++ b/arch/arm/dts/exynos78x0-j7xelte.dts
+@@ -10,12 +10,120 @@
+ / {
+ 	compatible = "samsung,exynos78x0", "samsung,exynos7880", "samsung,exynos7870";
+ 
+-	aliases {
+-		console = &uart2;
+-	};
++	//aliases {
++	//	console = &uart2;
++	//};
+ 
+ 	chosen {
+-		stdout-path = &uart2;
++		// stdout-path = &uart2; // console=ram
++		stdout-path = "serial0:921600n8";
++		bootargs = "console=ttyS0,115200n8 earlycon"; // ¿coment me?
++	};
++
++        clock: clock-controller@0x10460000 { // samsung wtf codeline
++                compatible = "samsung,exynos7870-clock";
++                reg = <0x0 0x10460000 0x1000>;
++                #clock-cells = <1>;
++        };
++
++        s6e3fa3: s6e3fa3_fhd {
++                mode = <2>; /* 0: video mode, 1: DP command mode, 2: MIPI command mode */
++                resolution = <1080 1920>;
++                size = <68 121>; // 7inch ??
++                timing,refresh = <60>;
++                timing,h-porch = <1 1 1>;
++                timing,v-porch = <10 3 1>;
++                timing,dsi-hs-clk = <850>;
++                timing,pms = <3 196 1>;
++                timing,dsi-escape-clk = <16>;
++        };
++
++        pd_dispaud: pd-dispaud@10484020 {
++                compatible = "samsung,exynos-pd";
++                reg = <0x0 0x10484020 0x20>;
++                cal_id = <0xB1380000>;
++                bts-status = "enabled";
++
++                spd_aud: spd-aud@10484020 {
++                        compatible = "samsung,exynos-spd";
++                };
++
++                spd_disp: spd-disp@10484020 {
++                        compatible = "samsung,exynos-spd";
++                };
++        };
++
++        pmu_system_controller: system-controller@10480000 {
++                compatible = "samsung,exynos7870-pmu", "syscon";
++                reg = <0x0 0x10480000 0x10000>;
++        };
++
++	dsim_0: dsim@14800000 {
++		compatible = "samsung,exynos8-mipi-dsi";
++		reg = <0x0 0x14800000 0x100>;
++		interrupts = <0 207 0>;
++		samsung,power-domain = <&spd_disp>;
++		status = "disabled";
++
++		phys = <&mipi_phy_dsim 0>;
++		phy-names = "dsim_dphy";
++
++		/* TBD: power domain will be added later */
++
++		clocks = <&clock 411>, /* dispaud_dsim0 */
++			 <&clock 434>, /* dispaud_mipiphy_rxclkesc0 */
++			 <&clock 433>; /* dispaud_mipiphy_txbyteclkhs */
++		clock-names = "dsim_pclk", "dphy_escclk", "dphy_byteclk";
++
++		/* number of data lanes in use */
++		data_lane_cnt = <4>;
++	};
++
++	mipi_phy_dsim: phy_m4s4_dsi@148F100C {
++		compatible = "samsung,mipi-phy-dsim";
++		reg = <0x0 0x148F100C 0x4>;
++		samsung,pmu-syscon = <&pmu_system_controller>;
++		isolation 	= <0x070C>;
++		reset 		= <0 	 >;
++		#phy-cells = <1>;
++	};
++
++	mipi_phy_isp: phy_isp_csi@144F1040 {
++		compatible = "samsung,mipi-phy-csis";
++		reg = <0x0 0x144F1040 0x4>; /* SYSREG address for reset */
++		samsung,pmu-syscon = <&pmu_system_controller>;
++		isolation 	= <0x070C 0x0714 0x0734>; /* PMU address offset */
++		reset 		= <0      1      2>; /* reset bit */
++		option 		= <256    3      256>; /* option bit */
++		#phy-cells = <1>;
++	};
++
++	decon_board: decon_board {
++		gpio_lcd_rst = <&gpd3 4 0x1>;
++
++		dsim_set_panel_power_enable {
++			type =
++			"regulator,enable",	"LCD_1P8",
++			"regulator,enable",	"LCD_3P0",
++			"delay,msleep",	"25";
++		};
++		dsim_set_panel_power_disable {
++			type =
++			"delay,usleep",	"5000 6000",
++			"gpio,low",	"gpio_lcd_rst",
++			"delay,usleep",	"10000 11000",
++			"regulator,disable",	"LCD_3P0",
++			"regulator,disable",	"LCD_1P8";
++		};
++		dsim_reset_panel {
++			type =
++			"gpio,high",	"gpio_lcd_rst",
++			"delay,usleep",	"5000 6000",
++			"gpio,low",	"gpio_lcd_rst",
++			"delay,usleep",	"5000 6000",
++			"gpio,high",	"gpio_lcd_rst",
++			"delay,usleep",	"10000 11000";
++		};
+ 	};
+ };
+ 
+@@ -27,3 +135,84 @@
+ 	clock-frequency = <26000000>;
+ };
+ 
++&dsim_0 {
++	lcd_info = <&s6e3fa3>;
++	decon_board = <&decon_board>;
++	status = "okay";
++};
++
++&decon_board {
++	gpio_lcd_rst = <&gpd3 4 0x1>;
++
++	dsim_set_panel_power_enable {
++		type =
++		"regulator,enable",	"LCD_3P0",
++		"regulator,enable",	"LCD_1P8";
++	};
++	dsim_set_panel_power_disable {
++		type =
++		"regulator,disable",	"LCD_1P8",
++		"delay,usleep",	"5000 6000",
++		"regulator,disable",	"LCD_3P0";
++	};
++	dsim_reset_panel {
++		type =
++		"gpio,high",	"gpio_lcd_rst",
++		"delay,usleep",	"10000 11000",
++		"gpio,low",	"gpio_lcd_rst",
++		"delay,usleep",	"10000 11000",
++		"gpio,high",	"gpio_lcd_rst",
++		"delay,usleep",	"10000 11000";
++	};
++};
++
++&decon_board {
++	gpio_lcd_rst = <&gpd3 4 0x1>;
++
++	dsim_set_panel_power_enable {
++		type =
++		"regulator,enable",	"LCD_3P0",
++		"regulator,enable",	"LCD_1P8";
++	};
++	dsim_set_panel_power_disable {
++		type =
++		"regulator,disable",	"LCD_1P8",
++		"delay,usleep",	"5000 6000",
++		"regulator,disable",	"LCD_3P0";
++	};
++	dsim_reset_panel {
++		type =
++		"gpio,high",	"gpio_lcd_rst",
++		"delay,usleep",	"10000 11000",
++		"gpio,low",	"gpio_lcd_rst",
++		"delay,usleep",	"10000 11000",
++		"gpio,high",	"gpio_lcd_rst",
++		"delay,usleep",	"10000 11000";
++	};
++};
++
++&decon_board {
++	gpio_lcd_rst = <&gpd3 4 0x1>;
++
++	dsim_set_panel_power_enable {
++		type =
++		"regulator,enable",	"LCD_1P8",
++		"regulator,enable",	"LCD_3P0",
++		"delay,usleep",	"10000 11000";
++	};
++	dsim_set_panel_power_disable {
++		type =
++		"gpio,low",	"gpio_lcd_rst",
++		"regulator,disable",	"LCD_3P0",
++		"regulator,disable",	"LCD_1P8";
++	};
++	dsim_reset_panel {
++		type =
++		"gpio,high",	"gpio_lcd_rst",
++		"delay,usleep",	"5000 6000",
++		"gpio,low",	"gpio_lcd_rst",
++		"delay,usleep",	"5000 6000",
++		"gpio,high",	"gpio_lcd_rst",
++		"delay,usleep",	"10000 11000";
++	};
++};
+diff --git a/configs/j7xelte_defconfig b/configs/j7xelte_defconfig
+index e2486e08f2..095571b148 100644
+--- a/configs/j7xelte_defconfig
++++ b/configs/j7xelte_defconfig
+@@ -2,19 +2,16 @@ CONFIG_ARM=y
+ CONFIG_SKIP_LOWLEVEL_INIT=y
+ CONFIG_COUNTER_FREQUENCY=26000000
+ CONFIG_ARCH_EXYNOS=y
+-# CONFIG_TEXT_BASE=0x40001000
+ CONFIG_TEXT_BASE=0x40080000
+ CONFIG_SYS_MALLOC_F_LEN=0x400
+ CONFIG_ARCH_EXYNOS7=y
+-CONFIG_TARGET_J7XELTE=y
+-CONFIG_NR_DRAM_BANKS=8
++CONFIG_TARGET_A7Y17LTE=y
++CONFIG_NR_DRAM_BANKS=12
+ CONFIG_HAS_CUSTOM_SYS_INIT_SP_ADDR=y
+ CONFIG_CUSTOM_SYS_INIT_SP_ADDR=0x40200e50
+ CONFIG_DEFAULT_DEVICE_TREE="exynos78x0-j7xelte"
+ CONFIG_SYS_LOAD_ADDR=0x40001000
+ CONFIG_FIT=y
+-CONFIG_USE_PREBOOT=y
+-CONFIG_PREBOOT="echo Read pressed buttons status;KEY_VOLUMEUP=gpa20;KEY_HOME=gpa17;KEY_VOLUMEDOWN=gpa21;KEY_POWER=gpa00;PRESSED=0;RELEASED=1;if gpio input $KEY_VOLUMEUP; then setenv VOLUME_UP $PRESSED; else setenv VOLUME_UP $RELEASED; fi;if gpio input $KEY_VOLUMEDOWN; then setenv VOLUME_DOWN $PRESSED; else setenv VOLUME_DOWN $RELEASED; fi;if gpio input $KEY_HOME; then setenv HOME $PRESSED; else setenv HOME $RELEASED; fi;if gpio input $KEY_POWER; then setenv POWER $PRESSED; else setenv POWER $RELEASED; fi;"
+ CONFIG_SAVE_PREV_BL_FDT_ADDR=y
+ CONFIG_SAVE_PREV_BL_INITRAMFS_START_ADDR=y
+ # CONFIG_DISPLAY_CPUINFO is not set
+@@ -25,3 +22,5 @@ CONFIG_CMD_GPIO=y
+ CONFIG_CMD_I2C=y
+ CONFIG_DM_I2C_GPIO=y
+ CONFIG_LMB_MAX_REGIONS=64
++CONFIG_EXYNOS_FB=y
++CONFIG_EXYNOS_MIPI_DSIM=y
+-- 
+2.39.2
+

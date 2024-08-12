@@ -1,0 +1,27 @@
+diff --git a/drivers/input/touchscreen/zinitix.c b/drivers/input/touchscreen/zinitix.c
+index 52f9e9e..4023482 100644
+--- a/drivers/input/touchscreen/zinitix.c
++++ b/drivers/input/touchscreen/zinitix.c
+@@ -282,6 +282,7 @@ static int zinitix_init_regulators(struct bt541_ts_data *bt541)
+ static int zinitix_send_power_on_sequence(struct bt541_ts_data *bt541)
+ {
+ 	int error;
++	uint16_t chip_code;
+ 	struct i2c_client *client = bt541->client;
+ 
+ 	error = zinitix_write_u16(client, 0xc000, 0x0001);
+@@ -292,6 +293,14 @@ static int zinitix_send_power_on_sequence(struct bt541_ts_data *bt541)
+ 	}
+ 	udelay(10);
+ 
++	error = zinitix_read_data(client, 0xcc00, &chip_code, sizeof(chip_code));
++	if (error) {
++		dev_err(&client->dev,
++			"Failed to read chip code\n");
++		return error;
++	}
++	dev_info(&client->dev, "Chip code: %x\n", (unsigned int)chip_code);
++
+ 	error = zinitix_write_cmd(client, 0xc004);
+ 	if (error) {
+ 		dev_err(&client->dev,
