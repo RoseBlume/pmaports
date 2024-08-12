@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=grantlee-editor
-pkgver=9999_git20240806
+pkgver=9999_git20240811
 pkgrel=0
-_commit="a84e896ccff7e1b6b0fcebb160a53527e0d38f16"
+_commit="f27d44190d6dab68bdf64248614953178351e437"
 pkgdesc="Utilities and tools to manage themes in KDE PIM applications "
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
@@ -36,7 +36,7 @@ makedepends="
 	syntax-highlighting-dev
 	"
 _repo_url="https://invent.kde.org/pim/grantlee-editor.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-10/grantlee-editor-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-12/grantlee-editor-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-0f0966fe9afeeff8a8f5de1caf30b49b7428156b1777c1c55ef57f213407825af24678aa25bbf5fe10bd39179e31286292b6264e1852d08841bd31936c809d28  grantlee-editor-a84e896ccff7e1b6b0fcebb160a53527e0d38f16.tar.xz
+a4cfdf76b2c43592eb78fdbe150900c72554aae1d5cb7a3b31382c58100bf6ccad8c06e52cb1620d5cd5b499cbaa02fa987627b4219aa2a2662c93993216358b  grantlee-editor-f27d44190d6dab68bdf64248614953178351e437.tar.xz
 "
