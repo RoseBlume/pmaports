@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kontrast
-pkgver=9999_git20240811
+pkgver=9999_git20240812
 pkgrel=0
-_commit="4fe2252649a63eec7ef9226376de1f5de15b640f"
+_commit="bef269785a76d13ac77588628e97d2a84bf2dcc2"
 pkgdesc="Tool to check contrast for colors that allows verifying that your colors are correctly accessible"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -29,7 +29,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/accessibility/kontrast.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-12/kontrast-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-13/kontrast-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # No tests
 
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-2343a5a62c796c31fe43860dfa104092405f14a92a6d36acdf1c0498d217cd29e0466e50aeaa9462069bd9580faeda06c4a8ba758aeacfbba8ad139ff66a1d32  kontrast-4fe2252649a63eec7ef9226376de1f5de15b640f.tar.xz
+b31e6677d225c3305fba6c54b08b38a9ff4d327a71adad42ed6e420b67f67ac683a64d42b337476a1c766be35c1a4abf695eb3414f384731de3e29769e414671  kontrast-bef269785a76d13ac77588628e97d2a84bf2dcc2.tar.xz
 "

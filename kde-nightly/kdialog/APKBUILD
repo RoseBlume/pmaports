@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdialog
-pkgver=9999_git20240810
+pkgver=9999_git20240812
 pkgrel=0
-_commit="5e548fd5be119c2d0137edfd392815cc3e9967e6"
+_commit="ac50169114ac4931a470a2a52cab312f30cdf516"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://www.kde.org/"
@@ -25,7 +25,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/utilities/kdialog.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-12/kdialog-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-13/kdialog-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-ec365217eb21c94644e8be55664c62dc4c7dc442f19159febfad5ae47b13f79fa24e71f2314a6da47f70fc5216f484bfdc9ed72b3bb6fba40993f6649bdd9299  kdialog-5e548fd5be119c2d0137edfd392815cc3e9967e6.tar.xz
+6f0b22c09c3c491348e2251cbfa71bc1376d2730c956b551e6707f60cf0b5298666068d7b04d7d94e821cc78289b0a31ec07a728f5440db7f59cdcd2de5f590a  kdialog-ac50169114ac4931a470a2a52cab312f30cdf516.tar.xz
 "

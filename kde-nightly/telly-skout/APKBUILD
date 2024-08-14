@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=telly-skout
-pkgver=9999_git20240811
+pkgver=9999_git20240812
 pkgrel=0
-_commit="2ddfc70db2ed03dee7acb36f50f13ec2fcb114a2"
+_commit="3b8712d75f568972dfcf7905e22789462850fb34"
 pkgdesc="Convergent TV guide based on Kirigami"
 url="https://invent.kde.org/plasma-mobile/telly-skout"
 # armhf blocked by qt6-qtdeclarative
@@ -27,7 +27,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/utilities/telly-skout.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-12/telly-skout-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-13/telly-skout-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -46,5 +46,5 @@ package() {
 }
 
 sha512sums="
-baa9d45dd0b280a6b633d198f7e6e29698c2fb719af0949268aebe91bb0a1654e43d1a98ed89c9cf35beeba24b7de28af18d0bca6f30c331b11e2aa699230e89  telly-skout-2ddfc70db2ed03dee7acb36f50f13ec2fcb114a2.tar.xz
+e48dfaec441c3d41df329b493866504fb84a62cd877dc65f254c2ecd1589c83f160a50c697b498c42d557700ba7a0d78c1992da80ae0ec9c02c60c94595d9743  telly-skout-3b8712d75f568972dfcf7905e22789462850fb34.tar.xz
 "

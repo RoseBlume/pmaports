@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=khangman
-pkgver=9999_git20240806
+pkgver=9999_git20240812
 pkgrel=0
-_commit="ce6a8b9a6effac9a38594658245294432ed52081"
+_commit="0fb6322f150e27ebec9312fc7409e59ade76c941"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
 url="https://edu.kde.org/khangman"
@@ -33,7 +33,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/education/khangman.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-12/khangman-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-13/khangman-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-bd58eca0b47ab7f301ed22a7c6fe808c0287c6f0ec2c0a8bce6e437ba270da74fa0b33fe9603dfb2847ece4495a2f9101a44be3071948be2433614cea19227f6  khangman-ce6a8b9a6effac9a38594658245294432ed52081.tar.xz
+2b62d183e1cbde52ef2a3080418056b02aa82ae97856c520f486111d24b903e46643e79f00897e73384fedf9ad91664ed9e84c78b4670c81c98660b6cfb56b88  khangman-0fb6322f150e27ebec9312fc7409e59ade76c941.tar.xz
 "

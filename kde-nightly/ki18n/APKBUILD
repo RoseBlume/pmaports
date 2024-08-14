@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=ki18n
-pkgver=9999_git20240809
+pkgver=9999_git20240812
 pkgrel=0
-_commit="49cd2b0efd8b4585bdf139340bc7e16a321474e9"
+_commit="aa460a33dec7f16d3c5fefdebf732c0d1999a40c"
 pkgdesc="Advanced internationalization framework"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -25,7 +25,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/ki18n.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-12/ki18n-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-13/ki18n-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -50,5 +50,5 @@ package() {
 }
 
 sha512sums="
-1d24ec466b19b7461223a4a4b824895a35e9d32091b2c279a46ac5c29e1664e8b0df26d00e708ef376bc9ae5a6a4cb47b2ea61433f2ef38e0ca108f1aade12c5  ki18n-49cd2b0efd8b4585bdf139340bc7e16a321474e9.tar.xz
+5642fe55774ee4d4de67aaa0c5ddd57943da223acc5d1cd9e81c494cbaa9de4f43ecd60dd3ecb686b0d9b0b2086854defb2d13232db97bbf1ba34395450f3e94  ki18n-aa460a33dec7f16d3c5fefdebf732c0d1999a40c.tar.xz
 "

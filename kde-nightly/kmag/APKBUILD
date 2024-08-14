@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kmag
-pkgver=9999_git20240721
+pkgver=9999_git20240812
 pkgrel=0
-_commit="2cb9e22bc1238aea10075245f9671890179f3f3e"
+_commit="6068e150934805fa57db82f2b8ce1180a228efac"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/utilities/org.kde.kmag"
@@ -22,7 +22,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/accessibility/kmag.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-12/kmag-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-13/kmag-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -45,5 +45,5 @@ package() {
 }
 
 sha512sums="
-26ea35f296da539712a9223a43201bac3ce1bd0810db0d20a3b86c56e9142bcc11f40d5287b4f884c3760477eacca5fd03c777fe17b6b56a57b6daa547a0df19  kmag-2cb9e22bc1238aea10075245f9671890179f3f3e.tar.xz
+a17732ea85d06865744da89965ba4f7bc29e2922465747df5a531c5150a4dbfbbf312d3767e826e7140093a38dc6df8deb07635a150150b3fc5c4fc48596885d  kmag-6068e150934805fa57db82f2b8ce1180a228efac.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=libkeduvocdocument
-pkgver=9999_git20240802
+pkgver=9999_git20240812
 pkgrel=0
-_commit="1d4e96ca0e335696ee0b588a773eaa614ad6e173"
+_commit="20774993c3ea3b279f71dc3e1573f6b73deeb9bc"
 arch="all !armhf"
 url="https://edu.kde.org"
 pkgdesc="Library to parse, convert, and manipulate KVTML files"
@@ -20,7 +20,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/education/libkeduvocdocument.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-12/libkeduvocdocument-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-13/libkeduvocdocument-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -43,5 +43,5 @@ package() {
 }
 
 sha512sums="
-d28393aba0b54247887a6970d85d8c067d81301241cfe282ee576bf005fa0f44b6a9a4175b40e790408ff248828e3a6fa52ee79fc444ab43434d445867db3654  libkeduvocdocument-1d4e96ca0e335696ee0b588a773eaa614ad6e173.tar.xz
+c8ef2dc0afb840248b5864b747a23e0b3ca461fe26be3c2b74e46d59aaf31fe0d8b3ec6b0b36aba66830909205e39ebff2029906fcaf0972434b09e30041a9f7  libkeduvocdocument-20774993c3ea3b279f71dc3e1573f6b73deeb9bc.tar.xz
 "
