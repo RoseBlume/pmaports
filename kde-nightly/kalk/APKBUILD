@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kalk
-pkgver=9999_git20240812
+pkgver=9999_git20240813
 pkgrel=0
-_commit="5df70f7f6cba35b49eb2ad0a4d6b5e35d21709f6"
+_commit="f4fac107249627678d07c88bad61a285bb192c95"
 pkgdesc="A powerful cross-platfrom calculator application"
 arch="all !armhf" # Blocked by qt6-qtdeclarative
 url="https://invent.kde.org/plasma-mobile/kalk"
@@ -28,7 +28,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/utilities/kalk.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-13/kalk-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-14/kalk-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kalk-$_commit"
@@ -52,5 +52,5 @@ package() {
 }
 
 sha512sums="
-ad33d225e4ab0fe5a96fd0acfcc3cfc7399a4f12eb97a4241d68bbab103aac5a5e825dabcc86cc203f631e227377610bd8d34b83a81190b4fe043f23575fc079  kalk-5df70f7f6cba35b49eb2ad0a4d6b5e35d21709f6.tar.xz
+6f0355ef92414d822ee874c6b2d89c65f8082c2468330e28a38e1f139f27297e370f1679bb82463aaf5c733e57bc9d88cc2865f5b05be2acc3776734c92fad55  kalk-f4fac107249627678d07c88bad61a285bb192c95.tar.xz
 "

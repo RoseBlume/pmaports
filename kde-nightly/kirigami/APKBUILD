@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=kirigami
-pkgver=9999_git20240809
+pkgver=9999_git20240813
 pkgrel=0
-_commit="369c163d7aa5e0397079936e260d022c1738dd63"
+_commit="398313d72d8e8726ee039dce1022cd5025437dc7"
 pkgdesc="A QtQuick based components set"
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
 url="https://community.kde.org/Frameworks"
@@ -25,7 +25,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/kirigami.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-13/kirigami-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-14/kirigami-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-libs $pkgname-lang"
 
 options="!check"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-ed58b2b2ab4c2dabe87851382623a502dce9a9622ead5f566e9ba01ccc44f2fdcb144bb3bdcddea1f3d8aee2f014b934ce0f2620195ab682b10984f36ba89cb9  kirigami-369c163d7aa5e0397079936e260d022c1738dd63.tar.xz
+fe18500791a72a8614cc8dae6ffb8d7291a4759050c10dbd03cd87adeb3b350befbfa7b9f8747cf905c6a164b20a0901bfc3fb4a284330df97576aae165eb4e5  kirigami-398313d72d8e8726ee039dce1022cd5025437dc7.tar.xz
 "
