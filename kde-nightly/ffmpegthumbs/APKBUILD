@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ffmpegthumbs
-pkgver=9999_git20240721
+pkgver=9999_git20240815
 pkgrel=0
-_commit="7d2567c3480b6def8c31dccb035f21d0b7e5ad26"
+_commit="29f41c68ca82617b4dfd8134aacc116f64fd9402"
 # armhf blocked by extra-cmake-modules
 # not useful on s390x
 arch="all !s390x !armhf"
@@ -24,7 +24,7 @@ makedepends="
 	taglib-dev
 	"
 _repo_url="https://invent.kde.org/multimedia/ffmpegthumbs.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-14/ffmpegthumbs-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-16/ffmpegthumbs-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -47,5 +47,5 @@ package() {
 }
 
 sha512sums="
-a4371c8d49d8b31d7842c0fa5fb9251413f2882796b1332f9fec7866f3d3977e59b2bfc5ff17f1694294fe2d3561b9df7f5dbd89280e4efb11ba4e736f426572  ffmpegthumbs-7d2567c3480b6def8c31dccb035f21d0b7e5ad26.tar.xz
+36e754e3f14dbbf6623103718c36d46709e37c3e2fc56330b794714c1441b9f6708489fc5ec09d01ed54485e5511e348756cb12c8790187ea96a40459702b8e5  ffmpegthumbs-29f41c68ca82617b4dfd8134aacc116f64fd9402.tar.xz
 "

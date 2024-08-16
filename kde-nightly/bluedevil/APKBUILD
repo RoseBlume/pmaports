@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=bluedevil
-pkgver=9999_git20240814
+pkgver=9999_git20240815
 pkgrel=0
-_commit="44415f8ba041bd7cb8c6cecfd18c88819ab59128"
+_commit="b394b41d98e9fb35cb9f47bd104190a1de690ab3"
 pkgdesc="Integrate the Bluetooth technology within KDE workspace and applications"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -43,7 +43,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/bluedevil.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-14/bluedevil-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-16/bluedevil-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-d2416feb1582276d4f5a4ae075e9dc5629131fe3183310218078248453522909702a28e3748412f44c27b9fcdaee65556d1e81c468ee87145f6066295495042d  bluedevil-44415f8ba041bd7cb8c6cecfd18c88819ab59128.tar.xz
+c7d7b4cda2ce1b6025bad0d555828f492b5298ea44f954d80eab5f75d728a16e6035f6172051ae67863f95a62f1cbd5a4e2c1e14592a0211c56e0fef3f0461e0  bluedevil-b394b41d98e9fb35cb9f47bd104190a1de690ab3.tar.xz
 "

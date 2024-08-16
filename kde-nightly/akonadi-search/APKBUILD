@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=akonadi-search
-pkgver=9999_git20240814
+pkgver=9999_git20240815
 pkgrel=0
-_commit="ea3f5efec1c5a0c22e4ab354d776588c2ecb557d"
+_commit="76fbc593ffb7540b9bbffcccb41adc09e7656bc5"
 pkgdesc="Libraries and daemons to implement searching in Akonadi"
 # armhf blocked by extra-cmake-modules
 # riscv64 blocked by akonadi
@@ -42,7 +42,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/akonadi-search.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-14/akonadi-search-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-16/akonadi-search-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -82,5 +82,5 @@ package() {
 	DESTDIR="$pkgdir" cmake --install build
 }
 sha512sums="
-7b3c161b967b69f50b5eec684568f3fe2c5f613732b2a56ec7d87e011defb8de41b2dd433bbc4a78730e2528728574dd45e8439b93776986b047ffaf7287f077  akonadi-search-ea3f5efec1c5a0c22e4ab354d776588c2ecb557d.tar.xz
+affc58d0541e472a6177bf777dbf5310cb9115b407028f3c78d72800572afb57ab3f3488f31032204b3cd199dad44b0a6a93d434e2f87725786e237000d44bce  akonadi-search-76fbc593ffb7540b9bbffcccb41adc09e7656bc5.tar.xz
 "
