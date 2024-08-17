@@ -1,0 +1,58 @@
+# Forked from Alpine to test alternative sip backend
+
+pkgname=calls
+pkgver=46.3
+pkgrel=1
+pkgdesc="Phone dialer and call handler"
+arch="all"
+url="https://gitlab.gnome.org/GNOME/calls"
+license="GPL-3.0-or-later"
+depends="
+	callaudiod
+	modemmanager
+	"
+makedepends="
+	callaudiod-dev
+	evolution-data-server-dev
+	desktop-file-utils
+	feedbackd-dev
+	folks-dev
+	gettext-dev
+	gobject-introspection-dev
+	gom-dev
+	gsound-dev
+	gstreamer-dev
+	gtk+3.0-dev
+	libhandy1-dev
+	libpeas-dev
+	meson
+	modemmanager-dev
+	ninja
+	py3-docutils
+	sofia-sip-linphone-dev
+	vala
+	"
+subpackages="$pkgname-doc $pkgname-dbg $pkgname-lang"
+source="https://download.gnome.org/sources/calls/${pkgver%%.*}/calls-$pkgver.tar.xz
+	"
+options="!check" # Requires running Wayland compositor
+
+build() {
+	abuild-meson \
+		-Db_lto=true \
+		-Dtests="$(want_check && echo true || echo false)" \
+		. output
+	meson compile -C output
+}
+
+check() {
+	meson test --no-rebuild --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+sha512sums="
+e128b6ddc6986ceb1335641f28a03111925e58a66de42276f25b5f4e030d4f448b193ca311502448c12876e0a2b3a84a1d6583480741ea13fc180aadef6f7314  calls-46.3.tar.xz
+"
