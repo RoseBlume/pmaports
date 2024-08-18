@@ -1,0 +1,41 @@
+From 82f88e88db681e24b11913b01ec336cb527f6441 Mon Sep 17 00:00:00 2001
+From: Joel Selvaraj <foss@joelselvaraj.com>
+Date: Thu, 15 Aug 2024 01:40:59 -0500
+Subject: [PATCH] HACK: media: camss: fix crash on stop streaming
+
+My hunch (not tested) is that, the following patch series [1] probably
+changed the logic of enabling and disabling stream and that caused the
+issue. Skipping the use_count check works fine. But not sure if it is the
+correct way to fix it and thus marked as HACK.
+
+[1] https://patchwork.kernel.org/project/linux-media/cover/20240416-enable-streams-impro-v4-0-1d370c9c2b6d@ideasonboard.com/
+
+Signed-off-by: Joel Selvaraj <foss@joelselvaraj.com>
+---
+ drivers/media/platform/qcom/camss/camss-video.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+index 54cd82f74115..9057247dab7b 100644
+--- a/drivers/media/platform/qcom/camss/camss-video.c
++++ b/drivers/media/platform/qcom/camss/camss-video.c
+@@ -557,11 +557,11 @@ static void video_stop_streaming(struct vb2_queue *q)
+ 
+ 		ret = v4l2_subdev_call(subdev, video, s_stream, 0);
+ 
+-		if (entity->use_count > 1) {
+-			/* Don't stop if other instances of the pipeline are still running */
+-			dev_dbg(video->camss->dev, "Video pipeline still used, don't stop streaming.\n");
+-			return;
+-		}
++		// if (entity->use_count > 1) {
++		// 	/* Don't stop if other instances of the pipeline are still running */
++		// 	dev_dbg(video->camss->dev, "Video pipeline still used, don't stop streaming.\n");
++		// 	return;
++		// }
+ 
+ 		if (ret) {
+ 			dev_err(video->camss->dev, "Video pipeline stop failed: %d\n", ret);
+-- 
+2.46.0
+
