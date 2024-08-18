@@ -608,6 +608,11 @@ mount_root_partition() {
 	if ! modprobe "$type"; then
 		echo "INFO: unable to load module '$type' - maybe it's built in"
 	fi
+
+	if [ "$type" = "btrfs" ]; then
+		btrfs device scan
+	fi
+	
 	if ! mount -t "$type" -o rw"$rootfsopts" "$partition" /sysroot; then
 		echo "ERROR: unable to mount root partition!"
 		show_splash "ERROR: unable to mount root partition\\nhttps://postmarketos.org/troubleshooting"
