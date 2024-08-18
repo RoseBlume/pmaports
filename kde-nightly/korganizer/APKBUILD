@@ -6,7 +6,7 @@
 pkgname=korganizer
 pkgver=9999_git20240816
 pkgrel=0
-_commit="5e951e5d8b91d1fc7282ec024d6d24a89d46157d"
+_commit="4c4e8c00ce54e9721d9d9d3233ffef85de10e318"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine -> kmailtransport
 arch="all !armhf !ppc64le !s390x !riscv64"
@@ -63,7 +63,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/korganizer.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-16/korganizer-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-17/korganizer-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -99,5 +99,5 @@ package() {
 }
 
 sha512sums="
-fef237d5a95bac2c12653d6fe324bcc9b58e2b76559e01dc7edbc90c919da6367ae8a642bd239cc4cb61ed3347302c3cbbc06e6f79a085a98aa32461707eb8a5  korganizer-5e951e5d8b91d1fc7282ec024d6d24a89d46157d.tar.xz
+36bf80f3a17d8828aa901e21259f9f5582834315d301c48a7c9f9a26c47d31744add6a233f8d58cc1bf18d5774bd811eb420e6b87f299525dfa960811aae7cc1  korganizer-4c4e8c00ce54e9721d9d9d3233ffef85de10e318.tar.xz
 "

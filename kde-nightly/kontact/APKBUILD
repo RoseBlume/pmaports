@@ -6,7 +6,7 @@
 pkgname=kontact
 pkgver=9999_git20240816
 pkgrel=0
-_commit="76a83270f4764fb737e7677e8f4c322d574856e0"
+_commit="7232c1f298f1171fd9bce15c24bd909ddc41a785"
 # armhf blocked by extra-cmake-modules
 # ppc64le, s390x and riscv64 blocked by qt6-qtwebengine
 # riscv64 disabled due to missing rust in recursive dependency
@@ -33,7 +33,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/kontact.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-16/kontact-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-17/kontact-$_commit.tar.xz"
 subpackages=" $pkgname-lang"
 
 options="!check"
@@ -56,5 +56,5 @@ package() {
 }
 
 sha512sums="
-55ef97af671423fd007947a9bab9b574a397f6bcd36c65b620cd11ea71a9e9ebd180db1375b4b1cd34aa186aa04af9d37a2a99e4ae5cd104e10f2cedc133ba80  kontact-76a83270f4764fb737e7677e8f4c322d574856e0.tar.xz
+ced1f50c5b141c345a853a58a72cfb3be4e89a136da1c3adef12fe3463781a0792d1527e58437a251c8aaacadcdcc9c1f175b03e7fde21e8b3da405f92e9a840  kontact-7232c1f298f1171fd9bce15c24bd909ddc41a785.tar.xz
 "

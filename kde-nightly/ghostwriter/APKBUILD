@@ -5,7 +5,7 @@
 pkgname=ghostwriter
 pkgver=9999_git20240816
 pkgrel=0
-_commit="ae06239cab1943b21918eb2756ee8975f6f1dc21"
+_commit="5b4d44e60fd5a026564470fda1df4220c7d8d58f"
 pkgdesc="Distraction-free markdown editor"
 url="https://invent.kde.org/office/ghostwriter/"
 arch="aarch64 x86_64"
@@ -29,7 +29,7 @@ makedepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/office/ghostwriter.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-16/ghostwriter-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-17/ghostwriter-$_commit.tar.xz"
 options="!check" # no tests
 
 options="!check"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-b56c361647d4833ea32bb3bd6dddc2848133285628d3e120f83d1ffd202f1f42b4d737fa4c0a2021d4fff57d4297a969ef15d29b17bd2ebd69847578acdaa64f  ghostwriter-ae06239cab1943b21918eb2756ee8975f6f1dc21.tar.xz
+717bd03f1a492cd75f5ed27b1a7f2ec2bd548d4d5c1b13cd5ec637c72e6484bb99895c3b32addc91b67086c0cb9ab4fe48a4fe3f46551f596310656289a2f6f0  ghostwriter-5b4d44e60fd5a026564470fda1df4220c7d8d58f.tar.xz
 "
