@@ -9,7 +9,7 @@ pkgrel=1
 pkgdesc="Mainline Kernel fork for SDM670 devices"
 arch="aarch64"
 _carch="arm64"
-url="https://gitlab.com/sdm670-mainline/linux"
+url="https://gitlab.com/panpanpanpan/linux"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
@@ -27,11 +27,11 @@ makedepends="
 "
 
 _config="config-$_flavor.$arch"
-_tag="sdm670-v$pkgver"
+_tag="imx363wip"
 
 # Source
 source="
-	https://gitlab.com/sdm670-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
+	https://gitlab.com/panpanpanpan/linux/-/archive/$_tag/linux-$_tag.tar.gz
 	$_config
 "
 builddir="$srcdir/linux-$_tag"
@@ -66,6 +66,6 @@ package() {
 }
 
 sha512sums="
-b992e72c8a8f2186088afb427acb8b79760ddb6350087abe15c0ac6064d10bd77adb2c3e260cf3f2014f93dd4b9fafd3f5a9805e9905cf75907e53a1f672dc36  linux-sdm670-v6.10.2.tar.gz
-359464f0c844f86f5f14e15d86f99e340fec5d0694f26a0706e6c3c0f5afe1da39d159c9e813a96a9dfc38f838a4362533a9c0ace7909ffb818713f507043d63  config-postmarketos-qcom-sdm670.aarch64
+532c5d7df06ee091cc8d726b06bae105bde688063db85297a724ad568ae4a7a7a8f6de10795fe9f396c6c1dfebf282e30f98772aac10104afd63993b9b9d0594  linux-imx363wip.tar.gz
+53d20b0cd09cb5dd2af15745c16bd0ff9c243ae6c39e8eda8d78f61d86b59680ebf06ed587debacfb9ff788683ccfa536a060404e295a893e7175b1a25563257  config-postmarketos-qcom-sdm670.aarch64
 "
