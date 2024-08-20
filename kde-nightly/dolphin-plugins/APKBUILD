@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=dolphin-plugins
-pkgver=9999_git20240817
+pkgver=9999_git20240818
 pkgrel=0
-_commit="1d1f29a55e042e367f6478f1467c6da4a8583a27"
+_commit="200f68a16665b836b8d2f75b4732776ad36689c0"
 pkgdesc="Extra Dolphin plugins"
 url="https://www.kde.org/applications/system/dolphin/"
 # armhf blocked by extra-cmake-modules
@@ -24,7 +24,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/sdk/dolphin-plugins.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-18/dolphin-plugins-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-19/dolphin-plugins-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-63147c85bd2e4cf6dc05aad8950dd130ba7eaad749708ca6f837b40423b6114e16dcb8559af936817adff825771701b2090bf8d362488b8d6a19a313d46b477f  dolphin-plugins-1d1f29a55e042e367f6478f1467c6da4a8583a27.tar.xz
+855707011def408386fb64f01b26fe9f31000939760094524ec098dbfbc8d3056d1755149302be7fe0137e5e07a0577c2e2f01540f8b8f55a621349e5ae6cb26  dolphin-plugins-200f68a16665b836b8d2f75b4732776ad36689c0.tar.xz
 "

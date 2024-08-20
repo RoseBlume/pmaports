@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kdebugsettings
-pkgver=9999_git20240815
+pkgver=9999_git20240819
 pkgrel=0
-_commit="7d749e2d8aee4ab9e572a12ddee380a521e4bca3"
+_commit="e87531f96448fb99656a3e28b8d773923aa4e7a1"
 arch="all !armhf"
 url="https://kde.org/applications/utilities/"
 pkgdesc="An application to enable/disable qCDebug"
@@ -26,7 +26,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/utilities/kdebugsettings.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-18/kdebugsettings-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-19/kdebugsettings-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-0da1fa8409c0cfaf149ca7a869423b6843b344f233020a64a488d9138d00345e11814425e263278011310dc8c5fb4f6ce576a248d54d3d7609bcec7d5163569b  kdebugsettings-7d749e2d8aee4ab9e572a12ddee380a521e4bca3.tar.xz
+9a34fe86c632f00591d7310b3823d4e4464b69ca3513afe72dd171447d89f389039470e4a8b6fbaf4cf8dfd544612f2e1a357fb08f1c159200e78c43fde97779  kdebugsettings-e87531f96448fb99656a3e28b8d773923aa4e7a1.tar.xz
 "
