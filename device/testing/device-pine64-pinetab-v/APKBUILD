@@ -1,0 +1,37 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-pine64-pinetab-v
+pkgdesc="Pine64 PineTab-v"
+pkgver=1
+pkgrel=1
+url="https://postmarketos.org"
+license="MIT"
+arch="riscv64"
+options="!check !archcheck"
+depends="
+	linux-pine64-star64
+	postmarketos-base
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	vf2_uEnv.txt
+	50-disable-glamor.conf
+	"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+	install -Dm644 "$srcdir"/vf2_uEnv.txt \
+		"$pkgdir"/boot/vf2_uEnv.txt
+	install -Dm644 "$srcdir"/50-disable-glamor.conf \
+		"$pkgdir"/usr/share/X11/xorg.conf.d/50-disable-glamor.conf
+}
+
+sha512sums="
+8044fca83f2538b8da28506b9ade7dd7a3f09889e931d773688c19ee5e5585992dc2e8a456ca665c8bdd56b02c14069bc9f5d3a0f62dec7a7c3ac3252675bc61  deviceinfo
+15b5f514435c223a5bff0c60ba5cbda9ce36df6ad9036753bb5503e357e067adda4f5b9252feb6b7ad1be7af44a3c1d511442c9ab4e69353f8c41d500c415c6e  vf2_uEnv.txt
+0c51c0f3a78dc55f99f14c5802a50498bc98eec3511671d3fde4d110cbc1ffac348d6daa3ef3dc25c11f20d357ed8a837574c04dd1018580e8306ad04f193c4c  50-disable-glamor.conf
+"
