@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-other
 pkgname=marknote
-pkgver=9999_git20240812
+pkgver=9999_git20240820
 pkgrel=0
-_commit="bde00127f26020736cd462bfe6b513746ad83ddd"
+_commit="8894b04e71f1ba73fcb601e1a2e0012ee9b6c310"
 pkgdesc="A simple markdown note management app"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -35,7 +35,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/office/marknote.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-19/marknote-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-20/marknote-$_commit.tar.xz"
 options="!check" # No tests
 
 builddir="$srcdir/$pkgname-$_commit"
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-3b98dc6fe43707ca8a502a65d343132005b06336dbc696f9af41dc5add68c9c23cddcc11f2e5a508074123da51b48beff567d6147b6f7d1ba79b525832f90a03  marknote-bde00127f26020736cd462bfe6b513746ad83ddd.tar.xz
+28af49dd83785bdc731460ce784b7626446d5dcb0b9645ecec0f789709467a6693977ee7fb20f0808ecf6ba826ca79cee8840dc3e93c523ec845ed563a22d1fe  marknote-8894b04e71f1ba73fcb601e1a2e0012ee9b6c310.tar.xz
 "

@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kongress
-pkgver=9999_git20240816
+pkgver=9999_git20240820
 pkgrel=0
-_commit="d14b24d115dce1cbda977d1fe2b0aa2142a9c8a5"
+_commit="c4954931d840040aa1937e0e3a5f0498a6107c9b"
 pkgdesc="Companion application for conferences"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -32,7 +32,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/utilities/kongress.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-19/kongress-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-20/kongress-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 options="!check" # No tests
 
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-3eca7309e2c65b59e3d843538d487a5c15328058baa61d9539f6497a62999456dd2d70b826dbf4cb54627b4885badb05f6ebae2472762a82bd446cbcf28aac4d  kongress-d14b24d115dce1cbda977d1fe2b0aa2142a9c8a5.tar.xz
+98ad183e8f4ddea1683e36425afd4b2509097a8c8066fcac87ec03e3fec30c3305b2426d4bbe7f122471c696a6f9a628c12b1aff59fdbf27a1c2cb05de14b770  kongress-c4954931d840040aa1937e0e3a5f0498a6107c9b.tar.xz
 "

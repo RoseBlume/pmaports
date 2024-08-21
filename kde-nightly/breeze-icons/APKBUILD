@@ -6,7 +6,7 @@
 pkgname=breeze-icons
 pkgver=9999_git20240819
 pkgrel=0
-_commit="1d428cc7d0eb2c57c5978f4f8469c6d993354d7e"
+_commit="de21da92b90cb1f663b6739fbdd1f160a434d6d8"
 pkgdesc="Breeze icon themes"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://community.kde.org/Frameworks"
@@ -21,7 +21,7 @@ makedepends="
 checkdepends="bash"
 subpackages="$pkgname-dev"
 _repo_url="https://invent.kde.org/frameworks/breeze-icons.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-19/breeze-icons-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-20/breeze-icons-$_commit.tar.xz"
 
 # Several KDE applications use icons not yet present in most themes
 # We want to keep the possibility for users to not use the KDE provided
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-a3c792bb0698c1228de7b4ab2d1ee170eec5c423e4e291e668251cad235f6c22f408b0ff035a8a758c16274e3710b74c89b22b21403bdf9dcc82a4cc144e1113  breeze-icons-1d428cc7d0eb2c57c5978f4f8469c6d993354d7e.tar.xz
+9a6d4bd52305e2e306f0ae8d709ef1192a3b6744ca40ff9b0f5b930b1184b1af5a8c0f182fabb34887402ffc8404da77a0ce6f18bacb7c5670a5861ead96bd6a  breeze-icons-de21da92b90cb1f663b6739fbdd1f160a434d6d8.tar.xz
 "

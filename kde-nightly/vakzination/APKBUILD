@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-mobile
 pkgname=vakzination
-pkgver=9999_git20240807
+pkgver=9999_git20240820
 pkgrel=0
-_commit="5123f3ddcf7cff79f8e864c262712719989b53ef"
+_commit="3c7137f7fcb16113d81c21941331547b41b27bdb"
 pkgdesc="Vakzination manages your health certificates like vaccination, test, and recovery certificates"
 url="https://invent.kde.org/plasma-mobile/vakzination"
 # armhf blocked by extra-cmake-modules
@@ -32,7 +32,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/plasma-mobile/vakzination.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-19/vakzination-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-20/vakzination-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-fb9be73088f0faca11b33292408c2256ce7d9b91ab8627498d23542c1ed4f0a0a2901f329d78f2d4f123b72a55e0a7fc76b7620871479b5e48402543628f4dd8  vakzination-5123f3ddcf7cff79f8e864c262712719989b53ef.tar.xz
+3ea0b352c8c88fe5a328d093dff2b41a944886813f6217b121749521cae51d19b7ef32360518d1bd54e3ecbf116f1f2a84e5d85904c5799242f2b9186d15263a  vakzination-3c7137f7fcb16113d81c21941331547b41b27bdb.tar.xz
 "
