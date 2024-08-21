@@ -59,7 +59,7 @@ check() {
 }
 
 package() {
-	make DESTDIR="$pkgdir" LUA="$_lua" install
+	make DESTDIR="$pkgdir" SBINDIR="/usr/bin" LIBDIR="/usr/lib" LUA="$_lua" install
 	install -d "$pkgdir"/var/lib/apk \
 		"$pkgdir"/lib/apk/exec \
 		"$pkgdir"/etc/apk/keys \
