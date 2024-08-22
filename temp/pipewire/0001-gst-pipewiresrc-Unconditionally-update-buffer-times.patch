@@ -1,0 +1,75 @@
+From 2c22efdba449585ddb65e12c1e71b0d6cf820a88 Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Thu, 21 Mar 2024 17:26:08 +0100
+Subject: [PATCH] gst/pipewiresrc: Unconditionally update buffer times
+
+In order to make it behave more similar to v4l2src and make it a proper
+live source.
+---
+ src/gst/gstpipewiresrc.c | 29 +++++++++++++----------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
+
+diff --git a/src/gst/gstpipewiresrc.c b/src/gst/gstpipewiresrc.c
+index b4ccc55b7..1a1a2a3d3 100644
+--- a/src/gst/gstpipewiresrc.c
++++ b/src/gst/gstpipewiresrc.c
+@@ -1255,8 +1255,10 @@ gst_pipewire_src_create (GstPushSrc * psrc, GstBuffer ** buffer)
+   GstPipeWireSrc *pwsrc;
+   const char *error = NULL;
+   GstBuffer *buf;
+-  gboolean update_time = FALSE, timeout = FALSE;
+   GstCaps *caps = NULL;
++  GstClock *clock;
++  GstClockTime pts, dts;
++  gboolean timeout = FALSE;
+ 
+   pwsrc = GST_PIPEWIRE_SRC (psrc);
+ 
+@@ -1297,12 +1299,10 @@ gst_pipewire_src_create (GstPushSrc * psrc, GstBuffer ** buffer)
+         goto streaming_eos;
+       buf = pwsrc->last_buffer;
+       pwsrc->last_buffer = NULL;
+-      update_time = TRUE;
+       GST_LOG_OBJECT (pwsrc, "EOS, send last buffer");
+       break;
+     } else if (timeout) {
+       if (pwsrc->last_buffer != NULL) {
+-        update_time = TRUE;
+         buf = gst_buffer_ref(pwsrc->last_buffer);
+         GST_LOG_OBJECT (pwsrc, "timeout, send keepalive buffer");
+         break;
+@@ -1331,21 +1331,18 @@ gst_pipewire_src_create (GstPushSrc * psrc, GstBuffer ** buffer)
+ 
+   *buffer = buf;
+ 
+-  if (update_time) {
+-    GstClock *clock;
+-    GstClockTime pts, dts;
+-
+-    clock = gst_element_get_clock (GST_ELEMENT_CAST (pwsrc));
+-    if (clock != NULL) {
+-      pts = dts = gst_clock_get_time (clock);
+-      gst_object_unref (clock);
+-    } else {
+-      pts = dts = GST_CLOCK_TIME_NONE;
+-    }
++  clock = gst_element_get_clock (GST_ELEMENT_CAST (pwsrc));
++  if (clock != NULL) {
++    pts = dts = gst_clock_get_time (clock);
++    gst_object_unref (clock);
++  } else {
++    pts = dts = GST_CLOCK_TIME_NONE;
++  }
+ 
+-    GST_BUFFER_PTS (*buffer) = pts;
+-    GST_BUFFER_DTS (*buffer) = dts;
++  GST_BUFFER_PTS (*buffer) = pts;
++  GST_BUFFER_DTS (*buffer) = dts;
+ 
++  if (timeout) {
+     GST_LOG_OBJECT (pwsrc, "Sending keepalive buffer pts/dts: %" GST_TIME_FORMAT
+       " (%" G_GUINT64_FORMAT ")", GST_TIME_ARGS (pts), pts);
+   }
+-- 
+2.46.0
+
