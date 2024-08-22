@@ -1,0 +1,40 @@
+From ddd6946c88095662160a616ba4911f17c6c03b2f Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Sun, 5 May 2024 14:10:00 +0200
+Subject: [PATCH] libcamera: Drop the first frame after camera startup
+
+Analogous to
+1a2fee260 ("v4l2: Drop the first frame after camera startup")
+and
+37eef2cf2 ("v4l2: queue dropped first buffer again")
+this works around broken drivers reporting bad timestamps, causing
+issues like stuck streams downstream.
+
+TODO: Try to detect such cases instead of unconditionally dropping a
+frame. Print a big warning so that drivers might get fixed eventually.
+---
+ spa/plugins/libcamera/libcamera-utils.cpp | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/spa/plugins/libcamera/libcamera-utils.cpp b/spa/plugins/libcamera/libcamera-utils.cpp
+index 4a5e0f676..ba32209fe 100644
+--- a/spa/plugins/libcamera/libcamera-utils.cpp
++++ b/spa/plugins/libcamera/libcamera-utils.cpp
+@@ -883,6 +883,14 @@ void impl::requestComplete(libcamera::Request *request)
+ 	}
+ 	const FrameMetadata &fmd = buffer->metadata();
+ 
++	if (fmd.sequence == 0) {
++		spa_log_debug(impl->log, "Skipping first buffer");
++		request->reuse();
++		SPA_FLAG_SET(b->flags, BUFFER_FLAG_OUTSTANDING);
++		spa_libcamera_buffer_recycle(impl, port, b->id);
++		return;
++	}
++
+ 	if (impl->clock) {
+ 		/* FIXME, we should follow the driver clock and target_ values.
+ 		 * for now we ignore and use our own. */
+-- 
+2.46.0
+
