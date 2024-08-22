@@ -6,10 +6,11 @@ _flavor="postmarketos-qcom-sdm670"
 pkgname=linux-$_flavor
 pkgver=6.10.2
 pkgrel=2
+pkgrel=3
 pkgdesc="Mainline Kernel fork for SDM670 devices"
 arch="aarch64"
 _carch="arm64"
-url="https://gitlab.com/sdm670-mainline/linux"
+url="https://gitlab.com/panpanpanpan/linux"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
@@ -27,11 +28,12 @@ makedepends="
 "
 
 _config="config-$_flavor.$arch"
-_tag="sdm670-v$pkgver"
+_tag="imx363-sdm670-v$pkgver"
 
 # Source
 source="
 	https://gitlab.com/sdm670-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
+	https://gitlab.com/panpanpanpan/linux/-/archive/$_tag/linux-$_tag.tar.gz
 	0001-HACK-media-camss-fix-crash-on-stop-streaming.patch
 	$_config
 "
