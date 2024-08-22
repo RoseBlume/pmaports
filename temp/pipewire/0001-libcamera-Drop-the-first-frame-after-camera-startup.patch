@@ -1,0 +1,27 @@
+From 1e3f192313fe55cd06074d11518efb78ee71e55f Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Sun, 5 May 2024 14:10:00 +0200
+Subject: [PATCH] libcamera: Drop the first frame after camera startup
+
+Anolagous to https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/1955
+---
+ spa/plugins/libcamera/libcamera-utils.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/spa/plugins/libcamera/libcamera-utils.cpp b/spa/plugins/libcamera/libcamera-utils.cpp
+index fdfd6e46d..3cbfffc8e 100644
+--- a/spa/plugins/libcamera/libcamera-utils.cpp
++++ b/spa/plugins/libcamera/libcamera-utils.cpp
+@@ -882,6 +882,9 @@ void impl::requestComplete(libcamera::Request *request)
+ 	}
+ 	const FrameMetadata &fmd = buffer->metadata();
+ 
++	if (fmd.sequence == 0)
++		return;
++
+ 	if (impl->clock) {
+ 		/* FIXME, we should follow the driver clock and target_ values.
+ 		 * for now we ignore and use our own. */
+-- 
+2.46.0
+
