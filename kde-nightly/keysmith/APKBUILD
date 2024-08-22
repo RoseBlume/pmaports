@@ -11,7 +11,10 @@ pkgdesc="OTP client for Plasma Mobile and Desktop"
 url="https://invent.kde.org/kde/keysmith"
 arch="all !armhf"
 license="GPL-3.0-or-later"
-depends="kirigami"
+depends="
+	kirigami
+	kirigami-addons
+	"
 makedepends="
 	extra-cmake-modules
 	kdbusaddons-dev
@@ -25,7 +28,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/utilities/keysmith.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-20/keysmith-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-21/keysmith-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/keysmith-$_commit"

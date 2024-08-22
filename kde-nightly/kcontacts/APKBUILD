@@ -6,7 +6,7 @@
 pkgname=kcontacts
 pkgver=9999_git20240818
 pkgrel=0
-_commit="fb436bfa13be7ce5b86bb54f9dbbbef5e6ee275d"
+_commit="4cceb8cce492b64d6e83eb530313dd1e5901c03c"
 pkgdesc="Address book API for KDE"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://community.kde.org/Frameworks"
@@ -32,7 +32,7 @@ makedepends="$depends_dev
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/frameworks/kcontacts.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-20/kcontacts-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-21/kcontacts-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -57,5 +57,5 @@ package() {
 }
 
 sha512sums="
-57afa0ab4b8a8cd1422b62a37e51f21e657bedde36b6a40e85322504d2e3888d1f130a8c6bce29a5b5097fce55c7f4bd30315367786e697376ed44d7dae52915  kcontacts-fb436bfa13be7ce5b86bb54f9dbbbef5e6ee275d.tar.xz
+85caf3a10194a1a55abdb55ff41b3df3d6217a472c4ccf98bd9325901046f3f63259d30b1fc6abc0b3aa10072fb64854b60efe6a3877ec7db2930eef5bc46ab9  kcontacts-4cceb8cce492b64d6e83eb530313dd1e5901c03c.tar.xz
 "

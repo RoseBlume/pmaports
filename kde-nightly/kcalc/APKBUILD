@@ -6,7 +6,7 @@
 pkgname=kcalc
 pkgver=9999_git20240820
 pkgrel=0
-_commit="3b14462739a596ee2acea46e50bfb3780383c868"
+_commit="caef0b39d4f34d02a5830ded2200ecf15329169c"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/utilities/org.kde.kcalc"
@@ -28,7 +28,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/utilities/kcalc.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-20/kcalc-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-21/kcalc-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -51,5 +51,5 @@ package() {
 }
 
 sha512sums="
-3620aa972d3e792a1101b1d609de6f7dcde4fe3666239ef805c351cabfcee4539b1acd4c0654f8a5a6240d17b9a44acfefa110bbdfd178e0f47c761c1985d8f0  kcalc-3b14462739a596ee2acea46e50bfb3780383c868.tar.xz
+30937d08881b55ffe945a23c50eae875fda48c3ba6918ea9f0c100cd263eaaef8e080de84bff383391d836737b930c802472cdc159be4247637fd9f9f92ef06d  kcalc-caef0b39d4f34d02a5830ded2200ecf15329169c.tar.xz
 "
