@@ -1,7 +1,7 @@
 # Maintainer: Clayton Craft <clayton@craftyguy.net>
 pkgname=postmarketos-base-ui
 pkgver=28
-pkgrel=0
+pkgrel=1
 pkgdesc="Meta package for minimal postmarketOS UI base"
 url="https://postmarketos.org"
 arch="noarch"
@@ -35,7 +35,6 @@ subpackages="
 	$pkgname-networkmanager
 	$pkgname-openrc-settingsd:_openrc_settingsd
 	$pkgname-qt-tweaks:qt_tweaks
-	$pkgname-qt-wayland:qt_wayland
 	$pkgname-tinydm
 	$pkgname-wayland
 	$pkgname-wifi-iwd:iwd
@@ -81,7 +80,6 @@ _source755="
 	usr/lib/NetworkManager/dispatcher.d/50-dns-filter.sh
 	usr/lib/NetworkManager/dispatcher.d/50-tethering.sh
 	etc/profile.d/qt-mobile-controls.sh
-	etc/profile.d/qt-wayland.sh
 	"
 
 # Avoid filename based checksum conflicts by including the whole path.
@@ -222,10 +220,6 @@ qt_tweaks() {
 	amove etc/profile.d/qt-mobile-controls.sh
 }
 
-qt_wayland() {
-	amove etc/profile.d/qt-wayland.sh
-}
-
 wpa_supplicant() {
 	pkgdesc="Use wpa_supplicant as the WiFi backend."
 	provides="postmarketos-base-ui-wifi=$pkgver-r$pkgrel"
@@ -326,5 +320,4 @@ ecaa57d033a119a53a6574c27636b7c89d659d75ea48a973a6a4ff6f90e5d07202529fd489bfc9df
 52d58729cbf3cd0318de633e8a8da74c7af246025a8c5746d5e7c854bdabbf27fa07d8558ffec92a30491cdb687fe4414de5adcddd7da5be3510f918fba463a2  rootfs-usr-lib-NetworkManager-dispatcher.d-50-dns-filter.sh
 9dcf698c729e6a3d05201aa74c1618169f344f9c973e6a074591b0b4f352470235decbbc658393f44c62b6b1508c68f3c1787a640f219dbcc136e9335f3994c4  rootfs-usr-lib-NetworkManager-dispatcher.d-50-tethering.sh
 bf8db527c49fa724e640a90269ba2648a2555f5867b2adbfbd88d1f685261f757339757c09ee08f590c76de4bd3d0c73a47dea9bd340644dd4707e76152cefd1  rootfs-etc-profile.d-qt-mobile-controls.sh
-6e193eca3961a78d47b4656892eae34d019d9317a255a201f5ea61e3300caff04c526a27cd98d0edc072b36e3eaf3a1768f4cd27c5e2be8b19c167d535c820a6  rootfs-etc-profile.d-qt-wayland.sh
 "
