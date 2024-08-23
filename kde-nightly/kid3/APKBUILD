@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-other
 pkgname=kid3
-pkgver=9999_git20240820
+pkgver=9999_git20240822
 pkgrel=0
-_commit="f02328054403e959e16814d0d384ce174ea39a4b"
+_commit="acbccb5aaec80e633d3adbfbe081cbf1d2fcfc79"
 pkgdesc="Efficient audio tagger that supports a large variety of file formats"
 url="https://kid3.kde.org/"
 # armhf blocked by extra-cmake-modules
@@ -31,7 +31,7 @@ makedepends="
 	"
 subpackages="$pkgname-doc"
 _repo_url="https://invent.kde.org/multimedia/kid3.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-21/kid3-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-22/kid3-$_commit.tar.xz"
 
 options="!check"
 builddir="$srcdir/kid3-$_commit"
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-137d769077466eb0e48a36209e13837237ed6fddc1d8569705cdf8e7e50f754a6b551f8e764edf35bf3bc1c455cd81620392312983adf11976cb09665b58475a  kid3-f02328054403e959e16814d0d384ce174ea39a4b.tar.xz
+91185acfea69316a73fe44b0736bfab04c40a60c346b3a674b6ad17a61cc3d6c81efb3534eb9f0d7b6f242fb29c2e6961681c094c8c060f300dc7278f20f8e21  kid3-acbccb5aaec80e633d3adbfbe081cbf1d2fcfc79.tar.xz
 "
