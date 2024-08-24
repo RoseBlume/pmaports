@@ -1,0 +1,84 @@
+# Forked from Alpine for temporary downstream patches
+
+pkgname=wireplumber
+pkgver=9999
+_pkgver=0.5.5
+pkgrel=0
+pkgdesc="Session / policy manager implementation for PipeWire"
+url="https://pipewire.org/"
+arch="all"
+license="LGPL-2.1-or-later"
+depends_dev="
+	elogind-dev
+	glib-dev
+	lua5.4-dev
+	pipewire-dev>=0.3.39
+	"
+makedepends="$depends_dev
+	doxygen
+	graphviz
+	meson
+	"
+checkdepends="
+	dbus
+	pipewire
+	"
+subpackages="
+	$pkgname-dbg
+	$pkgname-libs
+	$pkgname-dev
+	$pkgname-logind
+	$pkgname-lang
+	$pkgname-zsh-completion
+	$pkgname-doc
+	"
+source="https://gitlab.freedesktop.org/PipeWire/wireplumber/-/archive/$_pkgver/wireplumber-$_pkgver.tar.gz
+	0001-monitor-utils-Always-bail-early-from-register_cam_no.patch
+	"
+builddir="$srcdir/$pkgname-$_pkgver"
+
+provides="pipewire-session-manager"
+provider_priority=50
+
+case "$CARCH" in
+s390x)
+	# probably broken here, but we want this just so pipewire is installable
+	options="$options !check"
+	;;
+esac
+
+build() {
+	abuild-meson \
+		-Db_lto=true \
+		-Dsystem-lua=true \
+		-Delogind=enabled \
+		-Dtests="$(want_check && echo true || echo false)" \
+		. output
+	meson compile -C output
+}
+
+check() {
+	meson test --no-rebuild -t 10 --print-errorlogs -C output
+}
+
+package() {
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+}
+
+logind() {
+	# This not only needs libelogind, but also elogind being installed and
+	# running. Otherwise wireplumber fails to launch.
+	depends="$depends elogind"
+	# The purpose of the (e)logind module currently is limited to preventing
+	# GDM from hijacking the Bluetooth HFP/HSP profile. But GDM users cannot
+	# use bluetooth audio without, so install it for them
+	install_if="$pkgname=$pkgver-r$pkgrel gdm"
+	pkgdesc="wireplumbers optional (e)logind integration needed by GDM users"
+
+	amove usr/lib/wireplumber-0.5/libwireplumber-module-logind.so
+}
+
+sha512sums="
+d2aabadc57eb2ddc971f4e93bc8ea2263dec8b1c78009b4719b21c830133d4bb12bf43af9fabb9e7c5a3721f3851e81723b9770b767a9055d2b0a3bf5613c9f0  wireplumber-0.5.5.tar.gz
+6b2cbab895448b2321e5468d7ed85fdd5c0e27d751e7bbcc9b6fc0be61939816731991ab7990f1118f049bb3f49a6d625e855740a2ae921a53a4bdff00200ee0  0001-monitor-utils-Always-bail-early-from-register_cam_no.patch
+"
