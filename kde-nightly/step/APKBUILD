@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=step
-pkgver=9999_git20240822
+pkgver=9999_git20240824
 pkgrel=0
-_commit="6239243e5ff823631cc5a93b4737d181328cd440"
+_commit="cd95fdfa72c665c1ae037ed694dedd8ac88121da"
 # armhf blocked by extra-cmake-modules
 # s390x blocked by 
 # riscv64 disabled due to missing rust in recursive dependency
@@ -31,7 +31,7 @@ makedepends="
 	shared-mime-info
 	"
 _repo_url="https://invent.kde.org/education/step.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-22/step-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-24/step-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-43beb1177623062f0174b29ef18b695a6a762557ed26818f3f31724fdf43e9258b0305c2fd1aa7f95de9d71870aca209dd1c818d4ec9c9200e57c8447b25dae4  step-6239243e5ff823631cc5a93b4737d181328cd440.tar.xz
+0fa1abd85c841a4ce44b613fb3cc09ac55ef356c490dcb362228452cef4a77b7dbfe25ce643f7307d0686f1ed6d5625ef60f3b001a1d834465bb4d9580201d77  step-cd95fdfa72c665c1ae037ed694dedd8ac88121da.tar.xz
 "
