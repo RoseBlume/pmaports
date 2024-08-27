@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kclock
-pkgver=9999_git20240822
+pkgver=9999_git20240826
 pkgrel=0
-_commit="860c6e44b0cb2bd90734f82331c91187d227618d"
+_commit="4ebc68265bb93ebee2b9f41b7f8198fc259ced36"
 pkgdesc="Clock app for Plasma Mobile"
 url="https://invent.kde.org/utilities/kclock"
 # armhf blocked by qt6-qtdeclarative
@@ -35,7 +35,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/utilities/kclock.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-24/kclock-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-26/kclock-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-b565864abd82aadf3c70a8acf49a2920923588e536abefcf3e685ffd935f5d170743ee19748f4e495bbb73536fcef733a81ca07564dba84ff656d7ad62c45282  kclock-860c6e44b0cb2bd90734f82331c91187d227618d.tar.xz
+5ba37655b2d66958e32e76ee4eec928692e74c85f9cfaa21ad227473eaf8fb78e36461a451040cf29475e672b30c71d6cf10739b978b6bdfc8e98a8a3942d094  kclock-4ebc68265bb93ebee2b9f41b7f8198fc259ced36.tar.xz
 "

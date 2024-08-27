@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=angelfish
-pkgver=9999_git20240820
+pkgver=9999_git20240826
 pkgrel=0
-_commit="780bc61161c962e0eaf0f5db21da87fdccb92cc7"
+_commit="09ccf57c421ec665e2771f873e2af30605fb6d37"
 pkgdesc="Small Webbrowser for Plasma Mobile"
 # armhf blocked by extra-cmake-modules
 # ppc64le and s390x blocked by qt6-qtwebengine
@@ -39,7 +39,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/network/angelfish.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-24/angelfish-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-26/angelfish-$_commit.tar.xz"
 options="net" # net required to download Rust dependencies
 
 provides="plasma-angelfish=$pkgver-r$pkgrel" # Backwards compatibility
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-a069f986b8b75978dcac87823238bd3527c24cf89a2afbddedbfb2b4e9b9f45d1a085672fd1834c861698d902d789f31044102fd4a4a2c3a5baa883d40b64923  angelfish-780bc61161c962e0eaf0f5db21da87fdccb92cc7.tar.xz
+be2f5e1d9c60d88b054ddb87c40d793e7ee30b04725f3b8735b275c27b22a453b276abd8f31478a09b68060ee51a991febe7ac8dbd745bd1c7ea016bd98a19c2  angelfish-09ccf57c421ec665e2771f873e2af30605fb6d37.tar.xz
 "

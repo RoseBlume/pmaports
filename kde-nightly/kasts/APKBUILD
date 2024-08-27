@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kasts
-pkgver=9999_git20240823
+pkgver=9999_git20240826
 pkgrel=0
-_commit="b13c83755f90e1b236a1cab482c5e0e3243bf506"
+_commit="16394459054aba5a7a16a23db394b1ac458cd963"
 pkgdesc="Kirigami-based podcast player"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -43,7 +43,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/multimedia/kasts.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-24/kasts-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-26/kasts-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -66,5 +66,5 @@ package() {
 }
 
 sha512sums="
-42d73a29d5a961610a899cf58f86fc7a588ca4a8aae7da20cba17b3330b95e2c1371c75653cc28699fff266017dd7c5c714d136c619abc1bbf279cff8111e834  kasts-b13c83755f90e1b236a1cab482c5e0e3243bf506.tar.xz
+395de4e6ecd958009ff6fdb157c5c87a1323b0eef51dc71140ff155f6ae88b3ca2d754ffd814a41cc5968e61cc35feea702a64e06193bc972891e7fb9702ae21  kasts-16394459054aba5a7a16a23db394b1ac458cd963.tar.xz
 "

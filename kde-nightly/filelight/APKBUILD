@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=filelight
-pkgver=9999_git20240824
+pkgver=9999_git20240826
 pkgrel=0
-_commit="6ecb9cee1a0e1d4bc79953c6ff1786124fcf87b9"
+_commit="53483634069118020506245117efabda8411abb9"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://kde.org/applications/utilities/filelight"
@@ -25,7 +25,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/utilities/filelight.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-24/filelight-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-26/filelight-$_commit.tar.xz"
 subpackages="$pkgname-dbg $pkgname-doc $pkgname-lang"
 options="!check" # No tests
 
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-a258e34a16a777044557c539abde82629025a5eb3e093b03f5fe4e5bd7e8d23efaa7b6014cab9ed14014036d4953218482e208f088545d6faadd7c4078ad13ef  filelight-6ecb9cee1a0e1d4bc79953c6ff1786124fcf87b9.tar.xz
+5b1ed03a2e51acdbae18354ae5b007d2e5a9a346d859225d5378d118fedb727cbd8cfbbef84aa89c6bd9e7f054b969e3c28f568f971f1f118ada812a9ac289ad  filelight-53483634069118020506245117efabda8411abb9.tar.xz
 "

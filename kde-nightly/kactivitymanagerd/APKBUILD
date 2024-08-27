@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=kactivitymanagerd
-pkgver=9999_git20240824
+pkgver=9999_git20240826
 pkgrel=0
-_commit="2601bb2e41272f3b53c82e063cfda870aac9e32e"
+_commit="b6ca2fc45c0af2d1b66d0971222afb9145d1faf5"
 pkgdesc="System service to manage user's activities and track the usage patterns"
 # armhf blocked by qt6-qtdeclarative
 arch="all !armhf"
@@ -33,7 +33,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/kactivitymanagerd.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-24/kactivitymanagerd-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-26/kactivitymanagerd-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -58,5 +58,5 @@ package() {
 	rm -r "$pkgdir"/usr/lib/systemd
 }
 sha512sums="
-ddddd463feb097ab539e509d181ebc6a56e6fc8a88065c10b6282073db2aa98f22a912f1d1c2612cac1bc2042e72258a9cdcb89e3d41d0c9865a430e45159221  kactivitymanagerd-2601bb2e41272f3b53c82e063cfda870aac9e32e.tar.xz
+460c7b25d122ef8105d5f7f711fa0cc9e237b77d84699a22886842405d7a79d220e36a68548ea6b20779046dec8c649d7a9b172ddbba5fe14dffa7106dd96647  kactivitymanagerd-b6ca2fc45c0af2d1b66d0971222afb9145d1faf5.tar.xz
 "
