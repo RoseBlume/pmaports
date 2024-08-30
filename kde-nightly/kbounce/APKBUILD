@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kbounce
-pkgver=9999_git20240826
+pkgver=9999_git20240829
 pkgrel=0
-_commit="c71007985d31199e3cc8eadb005d16a1f8265025"
+_commit="e4e2f8679beee024de5c573831e5e509332e2818"
 pkgdesc="A single player arcade game with the elements of puzzle"
 url="https://kde.org/applications/games/kbounce/"
 # armhf blocked by extra-cmake-modules
@@ -31,7 +31,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/games/kbounce.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-28/kbounce-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-29/kbounce-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -54,5 +54,5 @@ package() {
 }
 
 sha512sums="
-990f116afb6c71c3b01194a3625c49324fa4cac0a7b0b6a761f1480094437b2c1b4acab47bc4456188c30e8dce1e744de13e18ac69355383589cba0c80574f72  kbounce-c71007985d31199e3cc8eadb005d16a1f8265025.tar.xz
+c82fc1d805c98bdd9193d8d0240092497a72b9ac5baa3cbd8955b9ce8eeeac768fb53debb818834922de42939dc886dab22fa6bc0ecaa6c1fed4e7ccb3b5f9eb  kbounce-e4e2f8679beee024de5c573831e5e509332e2818.tar.xz
 "

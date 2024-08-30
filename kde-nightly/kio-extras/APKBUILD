@@ -6,7 +6,7 @@
 pkgname=kio-extras
 pkgver=9999_git20240828
 pkgrel=0
-_commit="fabd1364ab181354d9156fc1446c6edc7d98c39f"
+_commit="0b589bd8744457dd5c427cc6b1626221b5e8d250"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://www.kde.org/applications/internet/"
@@ -55,7 +55,7 @@ checkdepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/network/kio-extras.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-28/kio-extras-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-29/kio-extras-$_commit.tar.xz"
 
 replaces="kio5"
 
@@ -80,5 +80,5 @@ package() {
 }
 
 sha512sums="
-697d4d1d0194086e5c203df5c3b63480f5b82f28986f5b63b13214261d020423a7902dbcf89865f8565eac49fee31aeadfd2b47bb12b06321d9a723944ee2dcd  kio-extras-fabd1364ab181354d9156fc1446c6edc7d98c39f.tar.xz
+3c9e98816bff9080b63a9526be3c243a6ef316b397d65db2c3054dbbc2315038fed9f84a10619f60eca670de8e06cc03f9730faee69278a2f293884b7a987c69  kio-extras-0b589bd8744457dd5c427cc6b1626221b5e8d250.tar.xz
 "
