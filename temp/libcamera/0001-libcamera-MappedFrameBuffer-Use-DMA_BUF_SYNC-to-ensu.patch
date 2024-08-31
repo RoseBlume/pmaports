@@ -1,0 +1,110 @@
+From ca4383c9218e0a944c8d56c803b01ab39755f163 Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@collabora.com>
+Date: Sun, 1 Sep 2024 05:50:02 +0200
+Subject: [PATCH] libcamera: MappedFrameBuffer: Use DMA_BUF_SYNC to ensure
+ cache coherency
+
+---
+ .../libcamera/internal/mapped_framebuffer.h   |  9 ++++
+ src/libcamera/mapped_framebuffer.cpp          | 48 +++++++++++++++++++
+ 2 files changed, 57 insertions(+)
+
+diff --git a/include/libcamera/internal/mapped_framebuffer.h b/include/libcamera/internal/mapped_framebuffer.h
+index 6aaabf50..384bc072 100644
+--- a/include/libcamera/internal/mapped_framebuffer.h
++++ b/include/libcamera/internal/mapped_framebuffer.h
+@@ -55,6 +55,15 @@ public:
+ 	using MapFlags = Flags<MapFlag>;
+ 
+ 	MappedFrameBuffer(const FrameBuffer *buffer, MapFlags flags);
++
++	MappedFrameBuffer(MappedFrameBuffer &&other);
++	MappedFrameBuffer &operator=(MappedFrameBuffer &&other);
++
++	~MappedFrameBuffer();
++
++private:
++	MapFlags flags_;
++	std::vector<int> plane_fds_;
+ };
+ 
+ LIBCAMERA_FLAGS_ENABLE_OPERATORS(MappedFrameBuffer::MapFlag)
+diff --git a/src/libcamera/mapped_framebuffer.cpp b/src/libcamera/mapped_framebuffer.cpp
+index ad82e1f6..266b593f 100644
+--- a/src/libcamera/mapped_framebuffer.cpp
++++ b/src/libcamera/mapped_framebuffer.cpp
+@@ -9,8 +9,10 @@
+ 
+ #include <algorithm>
+ #include <errno.h>
++#include <linux/dma-buf.h>
+ #include <map>
+ #include <sys/mman.h>
++#include <sys/ioctl.h>
+ #include <unistd.h>
+ 
+ #include <libcamera/base/log.h>
+@@ -178,6 +180,7 @@ MappedBuffer::~MappedBuffer()
+  * the MapFlag flags accordingly.
+  */
+ MappedFrameBuffer::MappedFrameBuffer(const FrameBuffer *buffer, MapFlags flags)
++        : flags_(flags)
+ {
+ 	ASSERT(!buffer->planes().empty());
+ 	planes_.reserve(buffer->planes().size());
+@@ -236,7 +239,52 @@ MappedFrameBuffer::MappedFrameBuffer(const FrameBuffer *buffer, MapFlags flags)
+ 			maps_.emplace_back(info.address, info.mapLength);
+ 		}
+ 
++		struct dma_buf_sync sync = { DMA_BUF_SYNC_START };
++		if (flags & MapFlag::Read)
++			sync.flags |= DMA_BUF_SYNC_READ;
++		if (flags & MapFlag::Write)
++			sync.flags |= DMA_BUF_SYNC_WRITE;
++		if (ioctl (fd, DMA_BUF_IOCTL_SYNC, &sync) < 0) {
++			int syncError = errno;
++			LOG(Buffer, Error) << "Failed to sync plane FD " << fd
++					   << ": " << strerror(syncError);
++		}
++
+ 		planes_.emplace_back(info.address + plane.offset, plane.length);
++		plane_fds_.emplace_back(fd);
++	}
++}
++
++MappedFrameBuffer::MappedFrameBuffer(MappedFrameBuffer &&other)
++{
++	*this = std::move(other);
++}
++
++MappedFrameBuffer &MappedFrameBuffer::operator=(MappedFrameBuffer &&other)
++{
++        flags_ = other.flags_;
++        plane_fds_ = std::move(other.plane_fds_);
++        error_ = other.error_;
++        planes_ = std::move(other.planes_);
++        maps_ = std::move(other.maps_);
++        other.error_ = -ENOENT;
++
++        return *this;
++}
++
++MappedFrameBuffer::~MappedFrameBuffer()
++{
++	for (const int fd : plane_fds_) {
++		struct dma_buf_sync sync = { DMA_BUF_SYNC_START };
++		if (flags_ & MapFlag::Read)
++			sync.flags |= DMA_BUF_SYNC_READ;
++		if (flags_ & MapFlag::Write)
++			sync.flags |= DMA_BUF_SYNC_WRITE;
++		if (ioctl (fd, DMA_BUF_IOCTL_SYNC, &sync) < 0) {
++			int syncError = errno;
++			LOG(Buffer, Error) << "Failed to sync plane FD " << fd
++					   << ": " << strerror(syncError);
++		}
+ 	}
+ }
+ 
+-- 
+2.46.0
+
