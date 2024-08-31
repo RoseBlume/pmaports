@@ -5,7 +5,7 @@ _config="config-$_flavor.$CARCH"
 
 pkgname=linux-$_flavor
 pkgver=6.9.1
-pkgrel=2
+pkgrel=3
 _tag="v${pkgver/_/-}-msm8974"
 pkgdesc="Kernel close to mainline with extra patches for Qualcomm MSM8974 devices"
 arch="armv7"
