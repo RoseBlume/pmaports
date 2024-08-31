@@ -1,0 +1,34 @@
+# Reference: <https://postmarketos.org/devicepkg>
+
+pkgname=device-sony-akari
+pkgdesc="Sony Xperia XZ2"
+pkgver=1
+pkgrel=1
+url="https://postmarketos.org"
+license="MIT"
+arch="aarch64"
+options="!check !archcheck"
+depends="
+	linux-postmarketos-qcom-sdm845
+	mkbootimg
+	postmarketos-base
+	soc-qcom-sdm845
+	soc-qcom-sdm845-ucm
+	soc-qcom-sdm845-qbootctl
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+d4202b2239c8612c7dd0b09e878b90b8c325e9f54d95745b4661d74ecf38e40ab6b77bf87938305f0e0cc8104d55332ed7e900598e214539b866eabf81721026  deviceinfo
+"
