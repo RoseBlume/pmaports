@@ -6,7 +6,7 @@
 _flavor="postmarketos-qcom-sdm845"
 pkgname=linux-$_flavor
 pkgver=6.11.0_rc2
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline Kernel fork for SDM845 devices"
 arch="aarch64"
 _carch="arm64"
@@ -23,6 +23,7 @@ _tag="sdm845-6.11.0_rc2"
 # Source
 source="
 	linux-$_tag.tar.gz::https://gitlab.com/sdm845-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
+	0001-ath-regd-Change-fallback-country-code-to-DE-instead-.patch
 	$_config
 "
 builddir="$srcdir/linux-$_tag"
@@ -72,5 +73,6 @@ package() {
 
 sha512sums="
 0e5ed4f6a641a2543f15c627b877ccdec9a9666e8e721fec7ef5fe45e91b70b97e6aeafd35497c38ba8bb88b22f0a6b7e97f8783ecd708c69abfb53f03db284a  linux-sdm845-6.11.0_rc2.tar.gz
+39cf38af19ec5f00a85107c8cc619d8b94358b7bac6675efe636a85ce594541d8bb6a086079e3e4bf1fe5fd9e55d29ced259be783ca138a05e3d2d044fbcf0a8  0001-ath-regd-Change-fallback-country-code-to-DE-instead-.patch
 0faf26d3b780f7b9ec2c06820ab8ad361dd583e81c0f9c507a4300c209524869ff1dc4b083e29f9dc9e945030031ccb437a5283ded4ce31158fb842128f4c165  config-postmarketos-qcom-sdm845.aarch64
 "
