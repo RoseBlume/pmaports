@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-frameworks
 pkgname=bluez-qt
-pkgver=9999_git20240818
+pkgver=9999_git20240830
 pkgrel=0
-_commit="332a21ed2d739a73ba7e4c03fd00eeb36ebb5477"
+_commit="a098804bf7f3582457056cc8e28bd0b22573ac84"
 arch="all !armhf" # armhf blocked by qt6-qtdeclarative
 pkgdesc="Qt wrapper for Bluez 5 DBus API"
 url="https://community.kde.org/Frameworks"
@@ -23,7 +23,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/frameworks/bluez-qt.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-29/bluez-qt-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-31/bluez-qt-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-doc"
 options="!check" # Multiple tests either hang or fail completely
 
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-a1758e7a9d90bd3be5cb872c932e1f1ef93931568dcd5c2a686f962f5df23d1da5a818157254486486254c0b1ae575c806663f559685e629bdc957f4bbbb0016  bluez-qt-332a21ed2d739a73ba7e4c03fd00eeb36ebb5477.tar.xz
+49ca72e419c1b3b8d5c9c2856ebe3818ba1b936378950414f189d73e5b3f2da3bfc91f0fd648f0988f6729ed40fb631d0afdb4ce9f4ed243dc4c11f87c46958f  bluez-qt-a098804bf7f3582457056cc8e28bd0b22573ac84.tar.xz
 "

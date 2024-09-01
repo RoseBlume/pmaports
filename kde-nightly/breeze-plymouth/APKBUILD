@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-plasma
 pkgname=breeze-plymouth
-pkgver=9999_git20240524
+pkgver=9999_git20240830
 pkgrel=0
-_commit="ce52709aa3a3f46fefb63d0a1fdbf3b0b0dfa334"
+_commit="16765077443bec7eb12c0c538bc451072e6341d3"
 arch="all !armhf" # armhf blocked by extra-cmake-modules
 url="https://kde.org/"
 pkgdesc="Breeze theme for Plymouth"
@@ -22,7 +22,7 @@ case "$pkgver" in
 	*) _rel=stable;;
 esac
 _repo_url="https://invent.kde.org/plasma/breeze-plymouth.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-29/breeze-plymouth-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-31/breeze-plymouth-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -42,5 +42,5 @@ package() {
 }
 
 sha512sums="
-8b8518a27a1fa7ae2c0d3654e1f842a4922b867705af2699d7b78567543e5f9fd384a4ae35abb3fbd8cb152bcd39e5e65b3d89b1f8ab16ab948237bc3960f9dc  breeze-plymouth-ce52709aa3a3f46fefb63d0a1fdbf3b0b0dfa334.tar.xz
+5f72cf4e959fee0908f811feb8c544e5c399c0c639d9a5a8271f2ce97614a50b8f1a807313d6a9d62c9c95a70d9b10155171eaa3beafef12b4e8460d4c4c104b  breeze-plymouth-16765077443bec7eb12c0c538bc451072e6341d3.tar.xz
 "
