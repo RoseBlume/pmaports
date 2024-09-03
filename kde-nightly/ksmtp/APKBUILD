@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ksmtp
-pkgver=9999_git20240813
+pkgver=9999_git20240901
 pkgrel=0
-_commit="d7154493988cd1419e0b9b9b9a8035de57554ef6"
+_commit="4206d89806d9766b4c6b680a15330a0479d189bc"
 pkgdesc="Job-based library to send email through an SMTP server"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -24,7 +24,7 @@ makedepends="$depends_dev
 	samurai
 	"
 _repo_url="https://invent.kde.org/pim/ksmtp.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-31/ksmtp-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-01/ksmtp-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 options="!check" # Broken
 
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-71128bf62a726737759112606266fb83ede226f3890a6873d2717647dd11c4a52a2626eefa852bcf089f766143fb09e593f6d6d009181b5056c3b06f3bf170ae  ksmtp-d7154493988cd1419e0b9b9b9a8035de57554ef6.tar.xz
+e76fca99e93b4f19092420c00f541385c3377669709397fb1d14f81ef04ef46ed374a5afefc726a88af4927834aa3d59b9952cb1e6f711b3ece5233dc3406855  ksmtp-4206d89806d9766b4c6b680a15330a0479d189bc.tar.xz
 "

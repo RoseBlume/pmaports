@@ -6,7 +6,7 @@
 pkgname=kweather
 pkgver=9999_git20240831
 pkgrel=0
-_commit="72f0aad0477f963f7c002c750b83c36547fa4ce3"
+_commit="be9587804208dc6f514fb8f7537c901aaa0e65cf"
 pkgdesc="Weather application for Plasma Mobile"
 url="https://invent.kde.org/plasma-mobile/kweather"
 # armhf blocked by qt6-qtdeclarative
@@ -36,7 +36,7 @@ makedepends="
 	"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/utilities/kweather.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-08-31/kweather-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-01/kweather-$_commit.tar.xz"
 options="!check" # No tests
 
 options="!check"
@@ -55,5 +55,5 @@ package() {
 }
 
 sha512sums="
-731dea85d3b2cd7d0996b99f0da5b9bee72d32439ad37be9066409e5828e27a66b8f5f2fc8e4c0e9e11f9bd9a6d0a0fbe208f8f520333b0abc701d357c393404  kweather-72f0aad0477f963f7c002c750b83c36547fa4ce3.tar.xz
+f27296189cbc8f5a4bedc98a4aecca1eaf25ab8f4ea7dbd052d5a2e3ef4788efcf8dd38b35c85c9fc5afe7aa7544eedfeb3b7f3545755d6cc8c1e817742f39d7  kweather-be9587804208dc6f514fb8f7537c901aaa0e65cf.tar.xz
 "
