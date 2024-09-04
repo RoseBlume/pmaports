@@ -3,7 +3,7 @@
 _flavor="lenovo-q706f"
 pkgname=linux-$_flavor
 pkgver=6.10.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Mainline kernel fork for Lenovo SM8250"
 arch="aarch64"
 _carch="arm64"
@@ -61,5 +61,5 @@ package() {
 
 sha512sums="
 13fd93a34bc6c76a8570661aa5aca77e00e348ea790997191d72469da79f64ae9e170ad39095b8b7bd570d57740f636cd4f9e018addc4f26e880b41cd1122d80  linux-lenovo-q706f-sm8250-6.10.0.tar.gz
-15f52cd54a6d835f68deb12684b79445aa5d144a59ae4f394368f0716bc25fb8d47c96cbd5cc9630814503cf42b9db392a473890fc0612ec0d068f8eaa2c03aa  config-lenovo-q706f.aarch64
+d58b6aba0c3f7423c43397e315fbbe142efef4c7be22dd238a6f58b62ec81f17a09ebb9a85c15f127c8aa0f2601c53869ff5f6e4e06f370cb944d10076f02f71  config-lenovo-q706f.aarch64
 "
