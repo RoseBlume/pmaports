@@ -3,9 +3,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=ghostwriter
-pkgver=9999_git20240822
+pkgver=9999_git20240902
 pkgrel=0
-_commit="893dc39b5dd7973f84241ef6569340a3794e927a"
+_commit="58899494c0865fd040e7c36c677b52b92089e867"
 pkgdesc="Distraction-free markdown editor"
 url="https://invent.kde.org/office/ghostwriter/"
 arch="aarch64 x86_64"
@@ -29,7 +29,7 @@ makedepends="
 	"
 subpackages="$pkgname-doc $pkgname-lang"
 _repo_url="https://invent.kde.org/office/ghostwriter.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-01/ghostwriter-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-03/ghostwriter-$_commit.tar.xz"
 options="!check" # no tests
 
 options="!check"
@@ -48,5 +48,5 @@ package() {
 }
 
 sha512sums="
-3de0c2282d2915d06fd2bbe15165b77ab8e9671aac0440dcaf6e70d248efe74f34ba1745b63d9207493793b913d8a37e4933e9c2e76b9b8aec22260dead6d946  ghostwriter-893dc39b5dd7973f84241ef6569340a3794e927a.tar.xz
+907eb77aeb24e44990cadeb32908c7b938e98f3b1ea2ae02577bacce77d06080fb4af79cb16e781cddc99d3254a9555dd702d8550ece54b648fa722cf63e8412  ghostwriter-58899494c0865fd040e7c36c677b52b92089e867.tar.xz
 "

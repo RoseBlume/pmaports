@@ -31,7 +31,7 @@ makedepends="
 checkdepends="appstream"
 subpackages="$pkgname-lang"
 _repo_url="https://invent.kde.org/plasma-mobile/plasma-camera.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-01/plasma-camera-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-03/plasma-camera-$_commit.tar.xz"
 builddir="$srcdir/$pkgname-$_commit"
 
 build() {

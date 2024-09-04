@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=yakuake
-pkgver=9999_git20240825
+pkgver=9999_git20240902
 pkgrel=0
-_commit="059dbb01491fe842aa6abbea0b825e7e96b371b8"
+_commit="6162762a4e2cd4f996bfb36fcf87f3d6a72b0ea6"
 arch="all !armhf"
 url="https://kde.org/applications/system/org.kde.yakuake"
 pkgdesc="A drop-down terminal emulator based on KDE Konsole technology"
@@ -36,7 +36,7 @@ makedepends="
 	samurai
 	"
 _repo_url="https://invent.kde.org/utilities/yakuake.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-01/yakuake-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-03/yakuake-$_commit.tar.xz"
 subpackages="$pkgname-lang"
 
 options="!check"
@@ -59,5 +59,5 @@ package() {
 }
 
 sha512sums="
-844ec54e5af72703485190990b96dc06b28e944966d1296b9c3639024fe3e3ff895b1433cb1ff1afce360fdc1f5ef42497a83efbccd15f69265a20060ac904c6  yakuake-059dbb01491fe842aa6abbea0b825e7e96b371b8.tar.xz
+6e42bb84dd9fe6b1ba0255c13e8233b0ef6e638f4a8eac1e83a431a9045cf5a49014a12e3e0d8331ad5ebbc05ad9e531a2bd0f658ec3b7cb37c3c8a1c673ef1d  yakuake-6162762a4e2cd4f996bfb36fcf87f3d6a72b0ea6.tar.xz
 "

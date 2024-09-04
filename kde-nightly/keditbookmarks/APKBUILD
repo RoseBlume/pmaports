@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=keditbookmarks
-pkgver=9999_git20240826
+pkgver=9999_git20240903
 pkgrel=0
-_commit="963100cc766acff61c0e7d10542e75d45a061e5b"
+_commit="4c6d5ac03cd60af673aeda4409b170e671670254"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
 url="https://www.kde.org/"
@@ -26,7 +26,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/utilities/keditbookmarks.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-01/keditbookmarks-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-03/keditbookmarks-$_commit.tar.xz"
 subpackages="$pkgname-doc $pkgname-lang"
 
 options="!check"
@@ -49,5 +49,5 @@ package() {
 }
 
 sha512sums="
-58ad973c74753fd02e08157a8c9103805b9a9d1bf598e184326ea0a7b572ac131eef7192d4c879dfdf8a80d80dd907a08d92457911fd29b25c8f89a9d1d614f4  keditbookmarks-963100cc766acff61c0e7d10542e75d45a061e5b.tar.xz
+5a48660fffe1b0de8422292d9e546d5ed72615c894ce9ceff342b60fef262533a008eb08258f5345933f8a614f737c5f05354128a4fa0096cd9a03419e18c851  keditbookmarks-4c6d5ac03cd60af673aeda4409b170e671670254.tar.xz
 "
