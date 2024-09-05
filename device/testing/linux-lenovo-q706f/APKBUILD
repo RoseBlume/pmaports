@@ -2,7 +2,7 @@
 # Maintainer: chalkin Deng <chalkin@yeah.net>
 _flavor="lenovo-q706f"
 pkgname=linux-$_flavor
-pkgver=6.10.0
+pkgver=6.11.0
 pkgrel=0
 pkgdesc="Mainline kernel fork for Lenovo SM8250"
 arch="aarch64"
@@ -22,10 +22,11 @@ makedepends="
 	perl
 	postmarketos-installkernel
 	python3
+	zstd
 "
-_tag="sm8250-$pkgver"
+_tag="sm8250-6.11"
 _config="config-$_flavor.$arch"
-_commit="d0ee36285ee039b9e0bfc854761d475bdef1a23b"
+_commit="5640db9fd52d2fa396ebe88c58fea3134a579957"
 
 source="
 	$pkgname-$_tag.tar.gz::https://github.com/silime/linux/archive/refs/tags/$_tag.tar.gz
@@ -60,6 +61,6 @@ package() {
 }
 
 sha512sums="
-13fd93a34bc6c76a8570661aa5aca77e00e348ea790997191d72469da79f64ae9e170ad39095b8b7bd570d57740f636cd4f9e018addc4f26e880b41cd1122d80  linux-lenovo-q706f-sm8250-6.10.0.tar.gz
-15f52cd54a6d835f68deb12684b79445aa5d144a59ae4f394368f0716bc25fb8d47c96cbd5cc9630814503cf42b9db392a473890fc0612ec0d068f8eaa2c03aa  config-lenovo-q706f.aarch64
+9b1cbda916f50926eb2c848e43f1995c2d355f72b8bdfe46fbabefc4652c4f1609c9fa63a3c654ae06231b6192b86ad47bd1980ef5d9af804254bded4bf22300  linux-lenovo-q706f-sm8250-6.11.tar.gz
+26d38e587c7ce0cff3f870e018a6a3ae4a97d4d4c0d3e526ad9666f994ed339e6fa8ffa713b4d78503c4430d6d191694b3765624413744f187ed7a7f34f45a50  config-lenovo-q706f.aarch64
 "
