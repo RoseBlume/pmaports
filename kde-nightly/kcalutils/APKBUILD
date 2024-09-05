@@ -4,9 +4,9 @@
 # The group tag is just to easily find this APKBUILD by some scripts for automation
 # group=kde-applications
 pkgname=kcalutils
-pkgver=9999_git20240901
+pkgver=9999_git20240904
 pkgrel=0
-_commit="f5d8bf5490708537bcf91c433dba31d682bfe597"
+_commit="f2bf19029552c2ce243bf7e3f6742df7a998af53"
 pkgdesc="The KDE calendar utility library"
 # armhf blocked by extra-cmake-modules
 arch="all !armhf"
@@ -32,7 +32,7 @@ makedepends="
 	"
 checkdepends="xvfb-run"
 _repo_url="https://invent.kde.org/pim/kcalutils.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-03/kcalutils-$_commit.tar.xz"
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-05/kcalutils-$_commit.tar.xz"
 subpackages="$pkgname-dev $pkgname-lang"
 
 options="!check"
@@ -58,5 +58,5 @@ package() {
 }
 
 sha512sums="
-d5606447ca9a8559effa7b1ca93248472d9321bb4181a9a0667bc17f01e07f557cc0b899bfa1a16b5a18572ca340c50603766a5dd14e6bbbc5c2ca8755416d68  kcalutils-f5d8bf5490708537bcf91c433dba31d682bfe597.tar.xz
+b64fc7b7d3653891ac9ced8a1ff1bcd3484e88edd0f58492e2e4ef7d1678bb7e4c2040fcb568652cd01e4b8132fd95e9d0a0c289fd2a8bcc1eb090a8eae6cf46  kcalutils-f2bf19029552c2ce243bf7e3f6742df7a998af53.tar.xz
 "

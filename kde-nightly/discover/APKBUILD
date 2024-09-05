@@ -6,7 +6,7 @@
 pkgname=discover
 pkgver=9999_git20240903
 pkgrel=0
-_commit="6015db996998b70ce79c4dbb677fca4245711a18"
+_commit="d5d46a35feb48eb02bff88196cc340e08240b550"
 pkgdesc="KDE Plasma resources management GUI"
 url="https://userbase.kde.org/Discover"
 # armhf blocked by qt5-qtdeclarative
@@ -61,7 +61,7 @@ case "$pkgver" in
 *) _rel=stable ;;
 esac
 _repo_url="https://invent.kde.org/plasma/discover.git"
-source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-03/discover-$_commit.tar.xz
+source="https://nightly.postmarketos.org/plasma-mobile/sources/2024-09-05/discover-$_commit.tar.xz
 	alpine-appstream-data.json
 	alpine-linux-logo-icon.png
 	"
@@ -141,7 +141,7 @@ backend_apk() {
 }
 
 sha512sums="
-7f84f4fb45a7ae0cb9203eae84b77f54a4de63064b8475253d0ad624e87ee20258d21e8a868c306fdfb775cd885ba29f26e1b9f51078a18a426fa48be890bd1d  discover-6015db996998b70ce79c4dbb677fca4245711a18.tar.xz
+fe4b03697189db73d085b1cf6b0c4870fbe666e9f585770465281876370b514ddf6b09b40c215f22df01e78b5240840faee4d1ea5d9659457cbac340e6fb83f6  discover-d5d46a35feb48eb02bff88196cc340e08240b550.tar.xz
 d9cc12a5a92df820d6d133a3698a4fbb08a97f08f00554a11d87c73c6144b42d07cecd6682bf9576d83c8e2556e35ade2fb39e77895afbbe33e2f94630441bb7  alpine-appstream-data.json
 0766668630cb14f58c840ebdda8b76bd1dec98b4dd61469677d4ad6eb4966809a25dbec2a846502cad0391df5b6ca9d692bb857a6fa203b61a52e6ac044cfbf4  alpine-linux-logo-icon.png
 "
