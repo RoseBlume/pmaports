@@ -1,0 +1,104 @@
+# Maintainer: Masanori Ogino <mogino@acm.org>
+pkgname=postmarketos-font
+pkgver=1
+pkgrel=0
+pkgdesc="Meta package for postmarketOS font presets"
+url="https://postmarketos.org"
+arch="noarch"
+license="GPL-3.0-or-later"
+subpackages="
+	$pkgname-emoji-none:_emoji_none
+	$pkgname-emoji-noto:_emoji_noto
+	$pkgname-emoji-twemoji:_emoji_twemoji
+	$pkgname-emoji-all:_emoji_all
+	$pkgname-text-none:_text_none
+	$pkgname-text-droid:_text_droid
+	$pkgname-text-noto-subset:_text_noto_subset
+	$pkgname-text-noto-full:_text_noto_full
+	"
+
+package() {
+	mkdir -p "$pkgdir"
+}
+
+_emoji_none() {
+	pkgdesc="Don't install emoji fonts implicitly. (for experts)"
+	provides="$pkgname-emoji=$pkgver-r$pkgrel"
+	provider_priority=10
+
+	mkdir -p "$subpkgdir"
+}
+
+_emoji_noto() {
+	pkgdesc="Install Noto Emoji font."
+	provides="$pkgname-emoji=$pkgver-r$pkgrel"
+	provider_priority=90
+
+	depends="font-noto-emoji"
+
+	mkdir -p "$subpkgdir"
+}
+
+_emoji_twemoji() {
+	pkgdesc="Install Twemoji font."
+	provides="$pkgname-emoji=$pkgver-r$pkgrel"
+	provider_priority=80
+
+	depends="font-twemoji"
+
+	mkdir -p "$subpkgdir"
+}
+
+_emoji_all() {
+	pkgdesc="Install all available emoji fonts."
+	provides="$pkgname-emoji=$pkgver-r$pkgrel"
+	provider_priority=100
+
+	depends="font-noto-emoji font-twemoji"
+
+	mkdir -p "$subpkgdir"
+}
+
+_text_none() {
+	pkgdesc="Don't install fonts implicitly. (for experts)"
+	provides="$pkgname-text=$pkgver-r$pkgrel"
+	provider_priority=10
+
+	mkdir -p "$subpkgdir"
+}
+
+_text_droid() {
+	pkgdesc="Install Droid fonts. (multilingual and minimal image size)"
+	provides="$pkgname-text=$pkgver-r$pkgrel"
+	provider_priority=100
+
+	depends="font-droid font-droid-nonlatin"
+
+	mkdir -p "$subpkgdir"
+}
+
+_text_noto_subset() {
+	pkgdesc="Install a subset of Noto fonts. (limited language coverage)"
+	provides="$pkgname-text=$pkgver-r$pkgrel"
+	provider_priority=90
+
+	depends="font-noto"
+
+	mkdir -p "$subpkgdir"
+}
+
+_text_noto_full() {
+	pkgdesc="Use the full set of Noto. (around 1 GB)"
+	provides="$pkgname-text=$pkgver-r$pkgrel"
+	provider_priority=80
+
+	depends="
+		font-noto
+		font-noto-extra
+		font-noto-all
+		font-noto-cjk
+		font-noto-cjk-extra
+	"
+
+	mkdir -p "$subpkgdir"
+}
