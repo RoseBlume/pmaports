@@ -9,7 +9,7 @@
 if [ "$(id -u)" = 0 ]; then
 	set -x
 	wget "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
-	sh ./install_pmbootstrap.sh pytest
+	sh ./install_pmbootstrap.sh pytest losetup
 	exec su "${TESTUSER:-pmos}" -c "sh -e $0"
 fi
 
@@ -19,16 +19,11 @@ if [ -z "$(command -v pytest)" ]; then
 	exit 1
 fi
 
-# Wrap pmbootstrap to use this repository for --aports
 pmaports="$(cd "$(dirname "$0")"/..; pwd -P)"
-_pmbootstrap="$(command -v pmbootstrap)"
-pmbootstrap() {
-	"$_pmbootstrap" --aports="$pmaports" "$@"
-}
-
 # Make sure that the work folder format is up to date, and that there are no
 # mounts from aborted test cases (pmbootstrap#1595)
 pmbootstrap work_migrate
+pmbootstrap config aports "$pmaports"
 pmbootstrap -q shutdown
 
 # Make sure we have a valid device (pmbootstrap#1128)
