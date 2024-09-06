@@ -5,11 +5,11 @@
 _flavor="postmarketos-qcom-sdm670"
 pkgname=linux-$_flavor
 pkgver=6.10.2
-pkgrel=1
+pkgrel=3
 pkgdesc="Mainline Kernel fork for SDM670 devices"
 arch="aarch64"
 _carch="arm64"
-url="https://gitlab.com/sdm670-mainline/linux"
+url="https://gitlab.com/panpanpanpan/linux"
 license="GPL-2.0-only"
 options="!strip !check !tracedeps
 	pmb:cross-native
@@ -27,11 +27,12 @@ makedepends="
 "
 
 _config="config-$_flavor.$arch"
-_tag="sdm670-v$pkgver"
+_tag="imx363-sdm670-v$pkgver"
 
 # Source
 source="
-	https://gitlab.com/sdm670-mainline/linux/-/archive/$_tag/linux-$_tag.tar.gz
+	https://gitlab.com/panpanpanpan/linux/-/archive/$_tag/linux-$_tag.tar.gz
+	0001-HACK-media-camss-fix-crash-on-stop-streaming.patch
 	$_config
 "
 builddir="$srcdir/linux-$_tag"
@@ -66,6 +67,7 @@ package() {
 }
 
 sha512sums="
-b992e72c8a8f2186088afb427acb8b79760ddb6350087abe15c0ac6064d10bd77adb2c3e260cf3f2014f93dd4b9fafd3f5a9805e9905cf75907e53a1f672dc36  linux-sdm670-v6.10.2.tar.gz
-359464f0c844f86f5f14e15d86f99e340fec5d0694f26a0706e6c3c0f5afe1da39d159c9e813a96a9dfc38f838a4362533a9c0ace7909ffb818713f507043d63  config-postmarketos-qcom-sdm670.aarch64
+63ea7c151f65b89c9ec9a0eaaa05439f09b070f4e564a2fc2bc9f4b5a900f9196db3f93e18baf6a878c0715e43a587c0c8a14fb8c42090ed35d1a4419c799553  linux-imx363-sdm670-v6.10.2.tar.gz
+72c92776552f85e0bfade63473324af9dcd944e9162fbc05f26e43d192ddbdb9a4c2daaead5f42c54a564a91c68678f4a111cdf802bac7b60c7fc57f8af99f9b  0001-HACK-media-camss-fix-crash-on-stop-streaming.patch
+e906d971117896cffb8d0d99bc1cee62620feada9fbe76501454c6edb0e56660d542904f40ebf2a8fa2ebb6112990b4a7d3e9d1ab0b83809cd2c006523c32ec8  config-postmarketos-qcom-sdm670.aarch64
 "
