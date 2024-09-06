@@ -1,0 +1,172 @@
+# Forked from Alpine to add systemd!
+
+pkgname=plasma-workspace
+pkgver=99996.1.4
+_pkgver=6.1.4
+pkgrel=0
+pkgdesc="KDE Plasma Workspace"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf !armv7"
+url="https://kde.org/plasma-desktop/"
+license="(GPL-2.0-only OR GPL-3.0-only) AND LGPL-2.1-or-later AND GPL-2.0-or-later AND MIT AND LGPL-2.1-only AND LGPL-2.0-or-later AND (LGPL-2.1-only OR LGPL-3.0-only) AND LGPL-2.0-only"
+depends="
+	accountsservice
+	fprintd
+	kactivitymanagerd
+	kde-cli-tools
+	kded
+	kio-extras
+	kirigami
+	kirigami-addons
+	kwin
+	milou
+	pipewire-session-manager
+	plasma-integration
+	qt6-qttools
+	tzdata
+	"
+depends_dev="
+	baloo-dev
+	breeze-dev
+	eudev-dev
+	gpsd-dev
+	icu-dev
+	iso-codes-dev
+	karchive-dev
+	kauth-dev
+	kcmutils-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kdeclarative-dev
+	kded-dev
+	kglobalaccel-dev
+	kglobalacceld-dev
+	kguiaddons-dev
+	kholidays-dev
+	ki18n-dev
+	kiconthemes-dev
+	kidletime-dev
+	kio-dev
+	kitemmodels-dev
+	knewstuff-dev
+	knotifications-dev
+	knotifyconfig-dev
+	kpackage-dev
+	kparts-dev
+	kpipewire-dev
+	kquickcharts-dev
+	krunner-dev
+	kscreenlocker-dev
+	kstatusnotifieritem-dev
+	ksvg-dev
+	ktexteditor-dev
+	ktextwidgets-dev
+	kunitconversion-dev
+	kuserfeedback-dev
+	kwayland-dev
+	kwin-dev
+	layer-shell-qt-dev
+	libcanberra-dev
+	libkexiv2-dev
+	libkscreen-dev
+	libksysguard-dev
+	libplasma-dev
+	libqalculate-dev
+	networkmanager-qt-dev
+	phonon-dev
+	plasma-activities-stats-dev
+	plasma-wayland-protocols
+	plasma5support-dev
+	prison-dev
+	qcoro-dev
+	qt6-qtwayland-dev
+	wayland-dev
+	wayland-protocols
+	zlib-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	kded
+	kdoctools-dev
+	libxtst-dev
+	qt6-qttools-dev
+	samurai
+	xdotool
+	systemd
+	"
+checkdepends="xvfb-run"
+
+case "$_pkgver" in
+	*.90*) _rel=unstable;;
+	*) _rel=stable;;
+esac
+subpackages="
+	$pkgname-dbg
+	$pkgname-dev
+	$pkgname-libs
+	$pkgname-doc
+	$pkgname-lang
+	$pkgname-zsh-completion
+	$pkgname-systemd
+	"
+_repo_url="https://invent.kde.org/plasma/plasma-workspace.git"
+source="https://download.kde.org/$_rel/plasma/$_pkgver/plasma-workspace-$_pkgver.tar.xz"
+builddir="$srcdir/$pkgname-$_pkgver"
+
+# secfixes:
+#   6.0.5.1:
+#     - CVE-2024-36041
+
+
+build() {
+	# reduce size of debug syms
+	CFLAGS="$CFLAGS -O2 -g1" CXXFLAGS="$CXXFLAGS -O2 -g1" \
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DPLASMA_X11_DEFAULT_SESSION=OFF \
+		-DINSTALL_SDDM_WAYLAND_SESSION=OFF # Fails to get permissions to take control over tty
+
+	# workaround for:
+	# https://invent.kde.org/plasma/plasma-workspace/-/issues/132
+	ninja -C build shell/qwayland-plasma-shell.h
+	ninja -C build shell/wayland-plasma-shell-client-protocol.h
+
+	cmake --build build
+}
+
+check() {
+	# nightcolortest requires running dbus
+	# testdesktop, lookandfeel-kcmTest, test_kio_fonts, servicerunnertest systemtraymodeltest are broken
+	# tst_triangleFilter requires plasma-workspace to be installed
+	# locationsrunnertest requires a running Wayland environment
+	local skipped_tests="("
+	local tests="
+		nightcolortest
+		testdesktop
+		lookandfeel-kcmTest
+		test_kio_fonts
+		servicerunnertest
+		systemtraymodeltest
+		tst_triangleFilter
+		locationsrunnertest
+		"
+	case "$CARCH" in
+		arm*|aarch64|ppc64le) tests="$tests calculatorrunnertest" ;;
+	esac
+	for test in $tests; do
+		skipped_tests="$skipped_tests|$test"
+	done
+	skipped_tests="$skipped_tests)"
+	xvfb-run -a ctest --test-dir build --output-on-failure -E "$skipped_tests"
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+c7ac27c60e75998e2cc6abb96004ce2abd84b7a7978de4fc256bf06892fca818595e2a5dd505768bcce9be4103ccecbb34d82761c0f7be45a402ca6173e90f05  plasma-workspace-6.1.4.tar.xz
+"

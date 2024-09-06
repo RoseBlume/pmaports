@@ -1,0 +1,262 @@
+# Forked from Alpine to build with systemd support.
+# integrates with logind for sleepmonitor and sessionmonitor.
+
+pkgname=networkmanager
+pkgver=9991.48.2
+_pkgver=1.48.2
+pkgrel=2
+pkgdesc="Network Management daemon"
+url="https://wiki.gnome.org/Projects/NetworkManager"
+arch="all"
+license="GPL-2.0-or-later"
+depends_dev="$pkgname=$pkgver-r$pkgrel libnm=$pkgver-r$pkgrel"
+makedepends="
+	bash
+	curl-dev
+	dbus-glib-dev
+	eudev-dev
+	gettext-dev
+	gnutls-dev
+	gobject-introspection-dev
+	gtk-doc
+	jansson-dev
+	libgudev-dev
+	libndp-dev
+	libnl3-dev
+	libpsl-dev
+	libxslt
+	linux-headers
+	meson
+	mobile-broadband-provider-info
+	modemmanager-dev
+	newt-dev
+	nss-dev
+	openresolv
+	perl
+	polkit-dev
+	ppp-dev
+	py3-gobject3
+	python3
+	readline-dev
+	systemd-dev
+	util-linux-dev
+	vala
+	"
+checkdepends="
+	bash
+	dbus
+	iproute2-minimal
+	iproute2-tc
+	py3-dbus
+	"
+install="
+	$pkgname.pre-install
+	$pkgname.pre-upgrade
+	"
+subpackages="
+	$pkgname-dbg
+	libnm
+	$pkgname-dev
+	$pkgname-elogind
+	$pkgname-lang
+	$pkgname-systemd
+	$pkgname-adsl
+	$pkgname-bluetooth
+	$pkgname-ovs
+	$pkgname-ppp
+	$pkgname-wwan
+	$pkgname-wifi
+	$pkgname-cli
+	$pkgname-tui
+	$pkgname-initrd-generator:initrd_generator
+	$pkgname-bash-completion
+	$pkgname-dnsmasq
+	"
+source="https://download.gnome.org/sources/NetworkManager/${_pkgver:0:4}/NetworkManager-$_pkgver.tar.xz
+	$pkgname.conf
+	$pkgname.rules
+	"
+builddir="$srcdir/NetworkManager-$_pkgver"
+
+# on the builders:
+# mount("/sys") failed with Operation not permitted (1)
+options="!check"
+
+_plugindir="usr/lib/NetworkManager/$_pkgver"
+
+build() {
+	msg 'Building with systemd'
+	_build output \
+		-Dsession_tracking=systemd \
+		-Dsuspend_resume=systemd \
+		-Dsystemd_journal=true \
+		-Dtests="$(want_check && echo yes || echo no)"
+}
+
+_build() {
+	local outdir=$1; shift
+
+	abuild-meson \
+		-Db_lto=true \
+		-Dconfig_dhcp_default=internal \
+		-Dconfig_plugins_default=ifupdown \
+		-Dcrypto=nss \
+		-Ddbus_conf_dir=/usr/share/dbus-1/system.d \
+		-Ddhcpcd=true \
+		-Ddnsmasq=/usr/sbin/dnsmasq \
+		-Ddocs=false \
+		-Difupdown=true \
+		-Diptables=/sbin/iptables \
+		-Diwd=true \
+		-Dlibaudit=no \
+		-Dmodify_system=true \
+		-Dnft=/usr/sbin/nft \
+		-Dofono=true \
+		-Dpolkit=true \
+		-Dpppd=/usr/sbin/pppd \
+		-Dpppd_plugin_dir=/usr/lib/pppd/2.5.0 \
+		-Dqt=false \
+		-Dselinux=false \
+		-Dsystemdsystemunitdir=/usr/lib/systemd/system \
+		-Dtests=no \
+		-Dudev_dir=/usr/lib/udev \
+		-Dvapi=true \
+		"$@" \
+		. "$outdir"
+
+	meson compile -C "$outdir"
+}
+
+check() {
+	XDG_RUNTIME_DIR="$(mktemp -d -p "$builddir")" \
+	dbus-run-session -- \
+	meson test -t 4 --no-rebuild --print-errorlogs -C output-elogind
+}
+
+package() {
+	depends="
+		libnm=$pkgver-r$pkgrel
+		dbus
+	"
+	provides="networkmanager-common"
+	provider_priority=500
+
+	DESTDIR="$pkgdir" meson install --no-rebuild -C output
+
+	install -m644 -D "$srcdir/$pkgname.conf" "$pkgdir"/etc/NetworkManager/NetworkManager.conf
+
+	# allow plugdev users to modify connections
+	install -m644 -D "$srcdir/$pkgname.rules" \
+		"$pkgdir/usr/share/polkit-1/rules.d/01-org.freedesktop.NetworkManager.settings.modify.system.rules"
+
+	mv "$pkgdir/usr/share/doc/NetworkManager" "$pkgdir/usr/share/doc/$pkgname"
+}
+
+dev() {
+	default_dev
+
+	amove usr/share/dbus-1/interfaces/*.xml
+}
+
+libnm() {
+	pkgdesc="GObject-based client library for NetworkManager"
+	replaces_priority=200
+
+	amove usr/lib/libnm.so*
+}
+
+elogind() {
+	pkgdesc="NetworkManager with logind support"
+	depends="$pkgname"
+
+	mkdir -p "$subpkgdir"
+}
+
+adsl() {
+	_default_plugin
+	pkgdesc="ADSL device plugin for NetworkManager"
+}
+
+bluetooth() {
+	_default_plugin
+	pkgdesc="BlueTooth device plugin for NetworkManager"
+	depends="$depends bluez"
+}
+
+ovs() {
+	_default_plugin
+	pkgdesc="Open vSwitch device plugin for NetworkManager"
+	depends="$depends openvswitch"
+}
+
+ppp() {
+	pkgdesc="PPP plugin for NetworkManager"
+	depends="$pkgname=$pkgver-r$pkgrel"
+
+	amove $_plugindir/libnm-ppp-plugin.so
+	amove usr/lib/pppd/*/nm-pppd-plugin.so
+}
+
+wifi() {
+	_default_plugin
+	pkgdesc="WiFi device plugin for NetworkManager"
+	depends="$depends wireless-regdb"
+}
+
+wwan() {
+	_default_plugin
+	pkgdesc="Mobile broadband device plugin for NetworkManager"
+	depends="$depends mobile-broadband-provider-info"
+}
+
+cli() {
+	pkgdesc="$pkgdesc (command line interface)"
+	depends="$pkgname=$pkgver-r$pkgrel"
+
+	amove usr/bin/nmcli
+}
+
+tui() {
+	pkgdesc="$pkgdesc (textbased user interface)"
+	depends="$pkgname=$pkgver-r$pkgrel"
+
+	amove usr/bin/nmtui*
+}
+
+initrd_generator() {
+	pkgdesc="Early boot NetworkManager configuration generator"
+	depends=""  # Q: should it depend on $pkgname?
+	replaces="$pkgname<1.34.0-r3"
+
+	amove usr/libexec/nm-initrd-generator
+}
+
+gtkdoc() {
+	pkgdesc="$pkgdesc (gtk docs)"
+
+	amove usr/share/gtk-doc
+}
+
+dnsmasq() {
+	pkgdesc="Support for NetworkManager dnsmasq features"
+	depends="$pkgname=$pkgver-r$pkgrel dnsmasq-dnssec-dbus"
+
+	mkdir -p "$subpkgdir"
+}
+
+_default_plugin() {
+	depends="$pkgname=$pkgver-r$pkgrel"
+
+	amove $_plugindir/libnm*-${subpkgname#"$pkgname"-}.so
+}
+
+systemd() {
+	install="$subpkgname.post-install $subpkgname.pre-deinstall"
+	default_systemd
+}
+
+sha512sums="
+81ed641365183a03fe06346569939b164a0f7446694eb6c2790fef0118897987e494e3d75214df3e35f77f9c0f65375d4f867e942503f5a9ef11b46e9ba6b57d  NetworkManager-1.48.2.tar.xz
+0f79016bf717dea43830962f524deae8d1cedc274376e40bd912ebe63208c5b1c3b7a5aa14379da19020c587dbd5588df2f0066ca1540070a226983a43e4159b  networkmanager.conf
+9820ed2ead0af689644842de57657bb10330a1eaff0e85b21ae9913f55e399e47d8b41b0a12956f30de80272b4424c6e55f33acbc88e156879003a260bf576f6  networkmanager.rules
+"
