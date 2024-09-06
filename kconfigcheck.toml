@@ -326,3 +326,7 @@ DMABUF_HEAPS_CMA = true
 DMABUF_HEAPS = true
 DMA_CMA = true
 CMA = true
+
+# librem5: Specific to the Purism Librem 5
+["category:librem5".">=0.0.0"."aarch64"]
+RS9116_FLASH_MODE = false
