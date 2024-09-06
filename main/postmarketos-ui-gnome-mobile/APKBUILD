@@ -33,8 +33,14 @@ depends="
 _pmb_recommends="
 	gnome-extensions-app
 	"
-subpackages="$pkgname-openrc"
-source="firefox-wayland.sh"
+subpackages="
+	$pkgname-openrc
+	$pkgname-qt-wayland:qt_wayland
+	"
+source="
+	firefox-wayland.sh
+	qt-wayland.sh
+	"
 options="!check"
 
 package() {
@@ -51,6 +57,11 @@ openrc() {
 	mkdir -p "$subpkgdir"
 }
 
+qt_wayland() {
+	install -Dm755 "$srcdir"/qt-wayland.sh "$subpkgdir"/etc/profile.d/qt-wayland.sh
+}
+
 sha512sums="
 0d9ec58be7dc354e181989c7f08e7d4dd93fefd06a99e784b87fe898479dd47a40dfa9689c6a63ebdc04bf87883a270686aec27f7cc34cb21ec0f370a4afe2d8  firefox-wayland.sh
+6e193eca3961a78d47b4656892eae34d019d9317a255a201f5ea61e3300caff04c526a27cd98d0edc072b36e3eaf3a1768f4cd27c5e2be8b19c167d535c820a6  qt-wayland.sh
 "

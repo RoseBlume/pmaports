@@ -2,12 +2,16 @@
 # Maintainer: Oliver Smith <ollieparanoid@postmarketos.org>
 pkgname=postmarketos-ui-sway
 pkgver=3.1
-pkgrel=7
+pkgrel=8
 pkgdesc="(Wayland) Tiling WM, drop-in replacement for i3wm (DOES NOT RUN WITHOUT HW ACCELERATION!)"
 url="https://postmarketos.org"
 arch="noarch"
 license="GPL-3.0-or-later"
-subpackages="$pkgname-openrc $pkgname-logo-key-alt:logo_key_alt"
+subpackages="
+	$pkgname-logo-key-alt:logo_key_alt
+	$pkgname-openrc
+	$pkgname-qt-wayland:qt_wayland
+	"
 depends="
 	bluez
 	dnsmasq
@@ -33,6 +37,7 @@ _pmb_groups="
 source="
 	etc-sway-config
 	etc-sway-config.d-00-logo-key.conf
+	qt-wayland.sh
 	"
 options="!check pmb:gpu-accel" # no testsuite
 replaces="sway"
@@ -62,7 +67,12 @@ openrc() {
 		mkdir -p "$subpkgdir"
 }
 
+qt_wayland() {
+		install -Dm755 "$srcdir"/qt-wayland.sh "$subpkgdir"/etc/profile.d/qt-wayland.sh
+}
+
 sha512sums="
 6caaaa313d509a54eaa43e6bc24739f5d8241689dbed268885f6645e79567e3cd9f41d0d8fa43d52fe99587a1d1b6f1669cfecc88220d9ea409feb4f4cd43d3c  etc-sway-config
 889f10fb247396a11375057f7e81eae0f0b21ec90cd47964e02ba24fc0f6db8bb7678545e3272149535cf0bb6a2019456cc59d06a9564ce4a1797bb434013b78  etc-sway-config.d-00-logo-key.conf
+6e193eca3961a78d47b4656892eae34d019d9317a255a201f5ea61e3300caff04c526a27cd98d0edc072b36e3eaf3a1768f4cd27c5e2be8b19c167d535c820a6  qt-wayland.sh
 "
