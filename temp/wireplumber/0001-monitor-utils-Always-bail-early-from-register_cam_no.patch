@@ -1,0 +1,27 @@
+From 0620e967bc7edb0b94bf7fef422bcebe87607e09 Mon Sep 17 00:00:00 2001
+From: Robert Mader <robert.mader@posteo.de>
+Date: Sat, 24 Aug 2024 18:08:01 +0200
+Subject: [PATCH] monitor-utils: Always bail early from register_cam_node()
+
+In order to work around an issue when multiple cameras use the same
+device ids, as is the case on the Pixel 3a.
+---
+ src/scripts/lib/monitor-utils.lua | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/scripts/lib/monitor-utils.lua b/src/scripts/lib/monitor-utils.lua
+index 455469d8..5f8c0e1e 100644
+--- a/src/scripts/lib/monitor-utils.lua
++++ b/src/scripts/lib/monitor-utils.lua
+@@ -144,7 +144,7 @@ function mutils.register_cam_node (self, parent, id, factory, properties)
+ 
+   local cam_data, dev_num = parse_devids_get_cam_data(self, dev_ids)
+ 
+-  if not cam_data then
++  if true or not cam_data then
+     log:notice (string.format ("device numbers invalid for %s device:%s",
+       api, properties["device.name"]))
+     return false
+-- 
+2.46.0
+
