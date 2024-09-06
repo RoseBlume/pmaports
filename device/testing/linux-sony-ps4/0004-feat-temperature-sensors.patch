@@ -1,0 +1,37 @@
+From e9382715a310fc01a375e6e3eff7b185ce4277b4 Mon Sep 17 00:00:00 2001
+From: codedwrench <rick.04.1996@gmail.com>
+Date: Mon, 20 Dec 2021 14:01:45 +0100
+Subject: [PATCH 04/22] feat: temperature sensors
+
+---
+ drivers/hwmon/fam15h_power.c | 1 +
+ drivers/hwmon/k10temp.c      | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
+index 521534d5c1e5..5b84627c7942 100644
+--- a/drivers/hwmon/fam15h_power.c
++++ b/drivers/hwmon/fam15h_power.c
+@@ -486,6 +486,7 @@ static const struct pci_device_id fam15h_power_id_table[] = {
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_M70H_NB_F4) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_NB_F4) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_M30H_NB_F4) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_M41H_F4) },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(pci, fam15h_power_id_table);
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 3618a924e78e..478672b391cb 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -487,6 +487,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_NB_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_M10H_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_M30H_NB_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_M41H_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_M60H_NB_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_15H_M70H_NB_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_16H_NB_F3) },
+-- 
+2.45.1
+

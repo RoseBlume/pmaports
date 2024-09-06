@@ -1,0 +1,53 @@
+From 1b9c84e8afd63df84109a717f6fe3076f2990841 Mon Sep 17 00:00:00 2001
+From: codedwrench <rick.04.1996@gmail.com>
+Date: Tue, 28 Dec 2021 18:49:46 +0100
+Subject: [PATCH 13/22] fix: amdgpu drivers
+
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_encoders.c   | 2 +-
+ drivers/gpu/drm/amd/amdgpu/atombios_dp.c       | 2 +-
+ drivers/gpu/drm/amd/amdgpu/atombios_encoders.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_encoders.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_encoders.c
+index 619d4c771176..dc517dc8ae94 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_encoders.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_encoders.c
+@@ -41,7 +41,7 @@ static void amdgpu_maybe_add_bridge(struct drm_connector *connector,
+ 				    struct drm_encoder *encoder)
+ {
+ 	struct drm_device *dev = connector->dev;
+-	struct amdgpu_device *adev = dev->dev_private;
++	struct amdgpu_device *adev = drm_to_adev(dev);
+ 
+ 	if (adev->asic_type == CHIP_LIVERPOOL || adev->asic_type == CHIP_GLADIUS) {
+ 		ps4_bridge_register(connector, encoder);
+diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_dp.c b/drivers/gpu/drm/amd/amdgpu/atombios_dp.c
+index 33987ecdc517..a41352dbe298 100644
+--- a/drivers/gpu/drm/amd/amdgpu/atombios_dp.c
++++ b/drivers/gpu/drm/amd/amdgpu/atombios_dp.c
+@@ -262,7 +262,7 @@ static int amdgpu_atombios_dp_get_dp_link_config(struct drm_connector *connector
+ 	unsigned lane_num, i, max_pix_clock;
+ 	struct amdgpu_connector *amdgpu_connector = to_amdgpu_connector(connector);
+ 	struct drm_device *dev = amdgpu_connector->base.dev;
+-	struct amdgpu_device *adev = dev->dev_private;
++	struct amdgpu_device *adev = drm_to_adev(dev);
+ 
+ 	/* Liverpool is always connected to an encoder that needs 4 lanes */
+ 	if (adev->asic_type == CHIP_LIVERPOOL)
+diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+index 5bd8a782feb5..801178479719 100644
+--- a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
++++ b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+@@ -446,7 +446,7 @@ int amdgpu_atombios_encoder_get_encoder_mode(struct drm_encoder *encoder)
+ 	struct amdgpu_connector_atom_dig *dig_connector;
+ 
+ 	struct drm_device *dev = encoder->dev;
+-	struct amdgpu_device *adev = dev->dev_private;
++	struct amdgpu_device *adev = drm_to_adev(dev);
+ 
+ 	/* dp bridges are always DP */
+ 	if ((amdgpu_encoder_get_dp_bridge_encoder_id(encoder) != ENCODER_OBJECT_ID_NONE) ||
+-- 
+2.45.1
+

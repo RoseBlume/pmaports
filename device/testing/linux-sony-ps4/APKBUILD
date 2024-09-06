@@ -1,0 +1,112 @@
+pkgname=linux-sony-ps4
+pkgver=5.15.110
+pkgrel=0
+pkgdesc="Sony Playstation 4 kernel fork"
+arch="x86_64"
+_flavor="sony-ps4"
+_carch="x86"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community
+	"
+makedepends="
+	bash
+	bison
+	elfutils-dev
+	findutils
+	flex
+	linux-headers
+	openssl-dev
+	perl
+	postmarketos-installkernel
+	linux-firmware-mrvl
+"
+
+# Source
+_config="config-$_flavor.$arch"
+case $pkgver in
+	*.*.*)	_kernver=${pkgver%.0};;
+	*.*)	_kernver=$pkgver;;
+esac
+
+source="
+	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/snapshot/linux-${_kernver//_/-}.tar.gz
+	$_config
+
+	0001-feat-very-basic-platform-support.patch
+	0002-feat-amdgpu-patches.patch
+	0003-feat-radeon-patches.patch
+	0004-feat-temperature-sensors.patch
+	0005-feat-sdhci-support.patch
+	0006-feat-ethernet-support.patch
+	0007-feat-usb-support.patch
+	0008-feat-configuration.patch
+	0009-feat-trying-to-modernize-ps4-apcie-so-it-works-with-.patch
+	0010-feat-working-state-broken-gpu.patch
+	0011-fix-incorrectly-applied-patches-and-missing-patches.patch
+	0012-fix-radeon-drivers.patch
+	0013-fix-amdgpu-drivers.patch
+	0014-fix-re-add-legacy-bridge-functions.patch
+	0015-feat-potentially-added-belize-ahci-support-in-a-univ.patch
+	0016-fix-this-probably-needs-to-be-the-amount-of-interrup.patch
+	0017-Also-on-liverpool-num_crtc-is-6.patch
+	0018-fix-cherrypick-doubled-CHIP_LIVERPOOL.patch
+	0019-Missing-break.patch
+	0020-fix-needed-for-video-codec-support.patch
+	0021-fix-gcc-newer-than-11.patch
+	0022-fix-use-upstream-values.patch
+"
+builddir="$srcdir/linux-${_kernver//_/-}"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/$_config" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-$_flavor"
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+	make install modules_install \
+		ARCH="$_carch" \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+sha512sums="
+405be3edf5855e45b50fd163542e00f58fab0d80c9e93e9605100107eba79ce4b49b83d5ddda3226665bdbdd1c31ac06b4ef05cf87b31f7cf1ff8adf662f2178  linux-5.15.110.tar.gz
+1632c7eb73a7341b8fa1981a66bb59fe21aa6d04cad11bbbf85823950451240d942c40c8eb0b7a1301beec00f3375ae84cbb50594cca4f5fa9983fca56f09dae  config-sony-ps4.x86_64
+7d4e6ab0d273b4d121bfb485334ea949abc4466a914ac596edfae716f3f1d5dde896d27b2b29efd77115d732a0256db3b395ab7cf8d91a47d4a3c45778dc753e  0001-feat-very-basic-platform-support.patch
+e69400cbc1772bc247868004f874c174289747fc36f5df6002664a6813fd24b7fe2dae3b6f6e0647466f89735454914d49316bbb996dd41863bcca1424c5191c  0002-feat-amdgpu-patches.patch
+cffb257874c4e746c82a06be9b9442df9c2deb897e479c7d75a7d73883a64e0d9f00812e1468d8e3fdd15eda0bcfe92668c96bee2f7e2de57c1088f467b329b4  0003-feat-radeon-patches.patch
+262b0934845d9c8bc92c6cacf8cbb1fb697830ac386380c27de586766b801c52ce0230755b62f4abd44c39fc0559446749a212d666636102c35d34299d8cf6c5  0004-feat-temperature-sensors.patch
+536daa2a900ae214a2a1cde277c1ae1b9c4d5a740ddf4a8d2d23e5a4578eeb2e274d89ce917d9705495814580ceceb9cbf69ccb81e14d88ac932f84f1bb4fcad  0005-feat-sdhci-support.patch
+1f960d7bcb8805f2c86e71125a73e28ba8b6b1dcf230a0994ae140f7874ed3e4d8e6ec867d4bff8fdccbfc94b432ccaf6c01e8774a702984f57bd323bf72c208  0006-feat-ethernet-support.patch
+7856b33b05a090009dde83a03ec74044ae64100469ac004c94913a895ccd91c1b7c4623bcc08217e04110a79ef599018a9925c308d8f7e9e89791704675dfc0b  0007-feat-usb-support.patch
+2b28e8059c6845ab3e7b64bc84469936f9d5620331b8738b335fdf11b2fc03d83a06c68b323ebe79d374b23f0264bd9a51e2fd6a323119c68d8edce0ec8fcf25  0008-feat-configuration.patch
+5ce3347dabc35b419ee71fa1c29ebb1ece570c048439c8cdb43f7503863619c70c2c5af79383bbae23eb7f63e58ac1d4690bd9bced0bb103967392ca19d9f328  0009-feat-trying-to-modernize-ps4-apcie-so-it-works-with-.patch
+a57142aa46e698e147f1527383006f77c2b6f62a52520dbcdc9da19782ff89252be841dfe6e2b5b9566c396ec15693a8b54c1ea98ae85d514b844642e1456d31  0010-feat-working-state-broken-gpu.patch
+f922606e57a194dbde0bbf702f328b2bcc4116b7a6bf34eda6781414f5685dfad9a48e21af4c33af154c680a9093085432ccc71d3e083b1aec1c0fbfb5ef8b43  0011-fix-incorrectly-applied-patches-and-missing-patches.patch
+cb22e3f401178b2801605db766f372a08322248b013f51ede908d0d1ca008c780c98cc53b8252fd473d1def043f44ab8b44530aa9a43d749480517e8e7f33226  0012-fix-radeon-drivers.patch
+c8c6a9af6de9324ca66be658be59063c85e579420832e5394a778b8af0119894cc5ac2483a11d6dd1f714d6ac15f719f50de841b896b1c9f153a982dd28d307d  0013-fix-amdgpu-drivers.patch
+1e8af016a999f18ca64d09a2dcf55d4dc961c9b5c78f45c5c5b09e22e97d2c76d65dcf4742c1da2dd557e8c995c23237161553946a9622adf51c4d99c59d9d2d  0014-fix-re-add-legacy-bridge-functions.patch
+4de5a19976bfcfd6d290256f1ab5eb270d60e037341b8a998d8026751b2d55c911045b6b7034446258a677db668229516995585b8ce8d2ea1a1a49e333ac3164  0015-feat-potentially-added-belize-ahci-support-in-a-univ.patch
+e18c4f277793181625c3769f3b5d5f264a6c7c2f562ab4e1638e7f8b3a57cc547ee5bc71f44ec182f1c9609b9d848267370fa85531ff483c9a0a5cb52db4bdcc  0016-fix-this-probably-needs-to-be-the-amount-of-interrup.patch
+aa2d70a0dd8cef198d60de66446deead4b1b1a408f975bff2e733c3f554f555a99c1aca4b02ed58abbc609dc90e7711789dd396d1129bd6f96c30d569485acba  0017-Also-on-liverpool-num_crtc-is-6.patch
+563b5c3cf8df1f82724b4dd0f21d5231a80c79a7cef5c93de73c6008ff7bd140313b0d7d0f92d4fd95c556ab18087967735c4eade1a98974efa2d3536f2ca01a  0018-fix-cherrypick-doubled-CHIP_LIVERPOOL.patch
+38da37f52b3c1a77d80f70accc12351ee4c5e8d1302294d523741724d17a62e22cdf64c6dcbc1b472e3967b417d37754ea6faa5c8d5b4218bf731deeaef6e5e5  0019-Missing-break.patch
+ada724aa09e1b29525e1c6bda38cf68fd4c72b9d6b8f45b1f9000e06e67e2c7806f81c53efce246396b5e7dc0d745dead599fce8b3c4108189fa77b40accaff0  0020-fix-needed-for-video-codec-support.patch
+70d9dfd868e4da14c0b164f6a3c8450eda733c59b81d19341b54e38ba4faca7943ac3240c5872e08932ffd0b51b0884893d90bec20cd522ce5c0e4c7f37c187a  0021-fix-gcc-newer-than-11.patch
+1c166aba9d18171b0a610ea8ed4798f0bb32a6f2d73f70d2fb32aa98ed93437b7bc1f264e8c50e9668e77dc85bd5b1128ead9810bfbb082f5cae919cd32e772a  0022-fix-use-upstream-values.patch
+"

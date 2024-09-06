@@ -1,0 +1,25 @@
+From f94cfdd446ab433ba0e9a0cb074372025de283eb Mon Sep 17 00:00:00 2001
+From: codedwrench <rick.04.1996@gmail.com>
+Date: Wed, 29 Dec 2021 16:15:26 +0100
+Subject: [PATCH 16/22] fix: this probably needs to be the amount of interrupts
+
+---
+ drivers/ps4/ps4-apcie.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/ps4/ps4-apcie.c b/drivers/ps4/ps4-apcie.c
+index fd27a4f38e61..b0bbc3f9891c 100644
+--- a/drivers/ps4/ps4-apcie.c
++++ b/drivers/ps4/ps4-apcie.c
+@@ -343,7 +343,7 @@ int apcie_assign_irqs(struct pci_dev *dev, int nvec)
+ 	}
+ #endif
+ 
+-	desc = alloc_msi_entry(bare_dev, 1, NULL);
++	desc = alloc_msi_entry(bare_dev, nvec, NULL);
+ 
+ 	info.desc = desc;
+ 	info.data = sc;
+-- 
+2.45.1
+

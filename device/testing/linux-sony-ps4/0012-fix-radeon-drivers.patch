@@ -1,0 +1,188 @@
+From b009aedae1dd07fa3c761e7ddcc92071dd792853 Mon Sep 17 00:00:00 2001
+From: codedwrench <rick.04.1996@gmail.com>
+Date: Tue, 28 Dec 2021 17:53:53 +0100
+Subject: [PATCH 12/22] fix: radeon drivers
+
+---
+ drivers/gpu/drm/radeon/cik.c          | 30 +++++++++++++--------------
+ drivers/gpu/drm/radeon/ps4_bridge.c   | 23 +++++++++++---------
+ drivers/gpu/drm/radeon/radeon.h       |  2 +-
+ drivers/gpu/drm/radeon/radeon_audio.c |  2 +-
+ 4 files changed, 30 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/gpu/drm/radeon/cik.c b/drivers/gpu/drm/radeon/cik.c
+index a0b83b91fdac..ce9799517ff4 100644
+--- a/drivers/gpu/drm/radeon/cik.c
++++ b/drivers/gpu/drm/radeon/cik.c
+@@ -1038,7 +1038,20 @@ static const u32 kalindi_rlc_save_restore_register_list[] =
+ 	(0x0e00 << 16) | (0x9600 >> 2),
+ };
+ 
+-static const u32 liverpool_rlc_save_restore_register_li
++static const u32 bonaire_golden_spm_registers[] =
++{
++	0x30800, 0xe0ffffff, 0xe0000000
++};
++
++static const u32 bonaire_golden_common_registers[] =
++{
++	0xc770, 0xffffffff, 0x00000800,
++	0xc774, 0xffffffff, 0x00000800,
++	0xc798, 0xffffffff, 0x00007fbf,
++	0xc79c, 0xffffffff, 0x00007faf
++};
++
++static const u32 liverpool_rlc_save_restore_register_list[] =
+ {
+ 	(0x0600 << 16) | 0x263d,
+ 	0x00000000,
+@@ -1453,19 +1466,6 @@ static const u32 liverpool_rlc_save_restore_register_li
+ 	(0x0e00 << 16) | 0x230d,
+ };
+ 
+-static const u32 bonaire_golden_spm_registers[] =
+-{
+-	0x30800, 0xe0ffffff, 0xe0000000
+-};
+-
+-static const u32 bonaire_golden_common_registers[] =
+-{
+-	0xc770, 0xffffffff, 0x00000800,
+-	0xc774, 0xffffffff, 0x00000800,
+-	0xc798, 0xffffffff, 0x00007fbf,
+-	0xc79c, 0xffffffff, 0x00007faf
+-};
+-
+ static const u32 bonaire_golden_registers[] =
+ {
+ 	0x3354, 0x00000333, 0x00000333,
+@@ -1616,7 +1616,7 @@ static const u32 liverpool_golden_common_registers[] =
+ 	0x5004, 0x00002000, 0x00002000, /* GARLIC_FLUSH_CNTL */
+ };
+ 
+-onst u32 liverpool_golden_registers[] =
++static const u32 liverpool_golden_registers[] =
+ {
+ 	0xc420, 0xffffffff, 0xfffffffc, /* RLC_CGTT_MGCG_OVERRIDE */
+ 	0x30800, 0xffffffff, 0xe0000000, /* GRBM_GFX_INDEX */
+diff --git a/drivers/gpu/drm/radeon/ps4_bridge.c b/drivers/gpu/drm/radeon/ps4_bridge.c
+index 1c1cb0b4dabb..6f6e354e182d 100644
+--- a/drivers/gpu/drm/radeon/ps4_bridge.c
++++ b/drivers/gpu/drm/radeon/ps4_bridge.c
+@@ -13,11 +13,14 @@
+ 
+ #include <asm/ps4.h>
+ 
++#include <drm/drm_bridge.h>
+ #include <drm/drm_crtc.h>
+ #include <drm/drm_crtc_helper.h>
+ #include <drm/drm_atomic_helper.h>
+ #include <drm/drm_edid.h>
+-#include <drm/drmP.h>
++#include <drm/drm_print.h>
++
++#include <linux/pci.h>
+ 
+ #include "radeon_mode.h"
+ #include "ObjectID.h"
+@@ -95,7 +98,6 @@
+ # define HDCPEN_ENC_EN 0x03
+ # define HDCPEN_ENC_DIS 0x05
+ 
+-#define PCI_VENDOR_ID_AMD 0x1002
+ #define PCI_DEVICE_ID_CUH_11XX 0x9920
+ #define PCI_DEVICE_ID_CUH_12XX 0x9922
+ #define PCI_DEVICE_ID_CUH_2XXX 0x9923
+@@ -269,8 +271,8 @@ static inline struct radeon_ps4_bridge *
+ }
+ 
+ static void radeon_ps4_bridge_mode_set(struct drm_bridge *bridge,
+-			      struct drm_display_mode *mode,
+-			      struct drm_display_mode *adjusted_mode)
++			      const struct drm_display_mode *mode,
++			      const struct drm_display_mode *adjusted_mode)
+ {
+ 	struct radeon_ps4_bridge *mn_bridge = bridge_to_radeon_ps4_bridge(bridge);
+ 
+@@ -357,7 +359,7 @@ static void radeon_ps4_bridge_enable(struct drm_bridge *bridge)
+ 	struct radeon_ps4_bridge *mn_bridge = bridge_to_radeon_ps4_bridge(bridge);
+ 	struct drm_connector *connector = mn_bridge->connector;
+ 	struct drm_device *dev = connector->dev;
+-	struct pci_dev *pdev = dev->pdev;
++	struct pci_dev *pdev = to_pci_dev(dev->dev);
+ 	u8 dp[3];
+ 
+ 	if (!mn_bridge->mode) {
+@@ -638,21 +640,21 @@ static const struct drm_display_mode mode_480p = {
+ 	DRM_MODE("640x480", DRM_MODE_TYPE_DRIVER, 25175, 640, 656,
+ 		 752, 800, 0, 480, 490, 492, 525, 0,
+ 		 DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC),
+-	.vrefresh = 60, .picture_aspect_ratio = HDMI_PICTURE_ASPECT_4_3
++	.picture_aspect_ratio = HDMI_PICTURE_ASPECT_4_3
+ };
+ /* 4 - 1280x720@60Hz */
+ static const struct drm_display_mode mode_720p = {
+ 	DRM_MODE("1280x720", DRM_MODE_TYPE_DRIVER, 74250, 1280, 1390,
+ 		 1430, 1650, 0, 720, 725, 730, 750, 0,
+ 		 DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC),
+-	.vrefresh = 60, .picture_aspect_ratio = HDMI_PICTURE_ASPECT_16_9
++	.picture_aspect_ratio = HDMI_PICTURE_ASPECT_16_9
+ };
+ /* 16 - 1920x1080@60Hz */
+ static const struct drm_display_mode mode_1080p = {
+ 	DRM_MODE("1920x1080", DRM_MODE_TYPE_DRIVER, 148500, 1920, 2008,
+ 		 2052, 2200, 0, 1080, 1084, 1089, 1125, 0,
+ 		 DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC),
+-	.vrefresh = 60, .picture_aspect_ratio = HDMI_PICTURE_ASPECT_16_9
++	.picture_aspect_ratio = HDMI_PICTURE_ASPECT_16_9
+ };
+ 
+ int radeon_ps4_bridge_get_modes(struct drm_connector *connector)
+@@ -669,7 +671,7 @@ int radeon_ps4_bridge_get_modes(struct drm_connector *connector)
+ 	//newmode = drm_mode_duplicate(dev, &mode_480p);
+ 	//drm_mode_probed_add(connector, newmode);
+ 
+-	drm_mode_connector_update_edid_property(connector, NULL);
++	drm_connector_update_edid_property(connector, NULL);
+ 
+ 	return 0;
+ }
+@@ -718,7 +720,8 @@ int radeon_ps4_bridge_mode_valid(struct drm_connector *connector,
+ 	return MODE_OK;
+ }
+ 
+-static int radeon_ps4_bridge_attach(struct drm_bridge *bridge)
++static int radeon_ps4_bridge_attach(struct drm_bridge *bridge,
++				    enum drm_bridge_attach_flags flags)
+ {
+ 	/* struct radeon_ps4_bridge *mn_bridge = bridge_to_radeon_ps4_bridge(bridge); */
+ 
+diff --git a/drivers/gpu/drm/radeon/radeon.h b/drivers/gpu/drm/radeon/radeon.h
+index 314fd436f3c9..05cbdf9e6dfe 100644
+--- a/drivers/gpu/drm/radeon/radeon.h
++++ b/drivers/gpu/drm/radeon/radeon.h
+@@ -2679,7 +2679,7 @@ void r100_pll_errata_after_index(struct radeon_device *rdev);
+ #define ASIC_IS_DCE81(rdev) ((rdev->family == CHIP_KAVERI))
+ #define ASIC_IS_DCE82(rdev) ((rdev->family == CHIP_BONAIRE))
+ #define ASIC_IS_DCE83(rdev) ((rdev->family == CHIP_KABINI) || \
+-			     (rdev->family == CHIP_MULLINS || \
++			     (rdev->family == CHIP_MULLINS) ||            \
+ 			     (rdev->family == CHIP_LIVERPOOL))
+ 
+ #define ASIC_IS_LOMBOK(rdev) ((rdev->pdev->device == 0x6849) || \
+diff --git a/drivers/gpu/drm/radeon/radeon_audio.c b/drivers/gpu/drm/radeon/radeon_audio.c
+index ba877d0b73fd..3bca01e82835 100644
+--- a/drivers/gpu/drm/radeon/radeon_audio.c
++++ b/drivers/gpu/drm/radeon/radeon_audio.c
+@@ -244,7 +244,7 @@ int radeon_audio_init(struct radeon_device *rdev)
+ 
+ 	rdev->audio.enabled = true;
+ 
+-	if (ASIC_IS_DCE83(rdev))		/* KB: 2 streams, 3 endpoints */
++	if (ASIC_IS_DCE83(rdev))	/* KB: 2 streams, 3 endpoints */
+ 		rdev->audio.num_pins = 3;
+ 	else if (ASIC_IS_DCE81(rdev))	/* KV: 4 streams, 7 endpoints */
+ 		rdev->audio.num_pins = 7;
+-- 
+2.45.1
+

@@ -1,0 +1,126 @@
+From ed61a42f4a35bf12c7a78642f7d814f50b936f57 Mon Sep 17 00:00:00 2001
+From: codedwrench <rick.04.1996@gmail.com>
+Date: Sat, 25 Dec 2021 16:13:58 +0100
+Subject: [PATCH 11/22] fix: incorrectly applied patches and missing patches
+
+---
+ drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c              |  3 +++
+ .../gpu/drm/amd/amdkfd/kfd_device_queue_manager.c  |  2 ++
+ drivers/gpu/drm/radeon/cik.c                       | 14 +++++++-------
+ drivers/ps4/ps4-apcie.c                            |  1 +
+ 4 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
+index d81187445ebe..8513dd006ad5 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
+@@ -1400,11 +1400,14 @@ static int gfx_v7_0_init_microcode(struct amdgpu_device *adev)
+ 	    (adev->asic_type == CHIP_GLADIUS)) {
+ 		snprintf(fw_name, sizeof(fw_name), "amdgpu/%s_mec2.bin", chip_name);
+ 		err = request_firmware(&adev->gfx.mec2_fw, fw_name, adev->dev);
++		if (err)
+ 		{
+ 			pr_err("gfx7: Failed to open firmware \"%s\"\n", fw_name);
+ 			goto out;
+ 		}
++
+ 		err = amdgpu_ucode_validate(adev->gfx.mec2_fw);
++		if (err)
+ 		{
+ 			pr_err("gfx7: Failed to validate ucode firmware \"%s\"\n", fw_name);
+ 			goto out;
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
+index d88513d0aca0..0ddcd498a68b 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
+@@ -1860,6 +1860,8 @@ struct device_queue_manager *device_queue_manager_init(struct kfd_dev *dev)
+ 
+ 	switch (dev->device_info->asic_family) {
+ 	/* HWS is not available on Hawaii. */
++	case CHIP_LIVERPOOL:
++	case CHIP_GLADIUS:
+ 	case CHIP_HAWAII:
+ 	/* HWS depends on CWSR for timely dequeue. CWSR is not
+ 	 * available on Tonga.
+diff --git a/drivers/gpu/drm/radeon/cik.c b/drivers/gpu/drm/radeon/cik.c
+index f6ca400c006f..a0b83b91fdac 100644
+--- a/drivers/gpu/drm/radeon/cik.c
++++ b/drivers/gpu/drm/radeon/cik.c
+@@ -8251,7 +8251,7 @@ int cik_irq_process(struct radeon_device *rdev)
+ 		return IRQ_NONE;
+ 
+ 	rptr = rdev->ih.rptr;
+-	DRM_DEBUG("cik_irq_process start: rptr %d, wptr %d\n", rptr, wptr);
++	//DRM_DEBUG("cik_irq_process start: rptr %d, wptr %d\n", rptr, wptr);
+ 
+ 	/* Order reading of wptr vs. reading of IH ring data */
+ 	rmb();
+@@ -8294,7 +8294,7 @@ int cik_irq_process(struct radeon_device *rdev)
+ 
+ 				break;
+ 			default:
+-				DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
++				//DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
+ 				break;
+ 			}
+ 			break;
+@@ -8324,7 +8324,7 @@ int cik_irq_process(struct radeon_device *rdev)
+ 
+ 				break;
+ 			default:
+-				DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
++				//DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
+ 				break;
+ 			}
+ 			break;
+@@ -8354,7 +8354,7 @@ int cik_irq_process(struct radeon_device *rdev)
+ 
+ 				break;
+ 			default:
+-				DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
++				//DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
+ 				break;
+ 			}
+ 			break;
+@@ -8384,7 +8384,7 @@ int cik_irq_process(struct radeon_device *rdev)
+ 
+ 				break;
+ 			default:
+-				DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
++				//DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
+ 				break;
+ 			}
+ 			break;
+@@ -8414,7 +8414,7 @@ int cik_irq_process(struct radeon_device *rdev)
+ 
+ 				break;
+ 			default:
+-				DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
++				//DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
+ 				break;
+ 			}
+ 			break;
+@@ -8444,7 +8444,7 @@ int cik_irq_process(struct radeon_device *rdev)
+ 
+ 				break;
+ 			default:
+-				DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
++				//DRM_DEBUG("Unhandled interrupt: %d %d\n", src_id, src_data);
+ 				break;
+ 			}
+ 			break;
+diff --git a/drivers/ps4/ps4-apcie.c b/drivers/ps4/ps4-apcie.c
+index f4e3a380d591..fd27a4f38e61 100644
+--- a/drivers/ps4/ps4-apcie.c
++++ b/drivers/ps4/ps4-apcie.c
+@@ -527,6 +527,7 @@ static int apcie_probe(struct pci_dev *dev, const struct pci_device_id *id) {
+ 
+ 	if ((ret = apcie_glue_init(sc)) < 0)
+ 		goto free_bars;
++	// TODO (ps4patches): figure out why this dies a horrible and painful death.
+ 	//if ((ret = apcie_uart_init(sc)) < 0)
+ 	//	goto remove_glue;
+ 	if ((ret = apcie_icc_init(sc)) < 0)
+-- 
+2.45.1
+

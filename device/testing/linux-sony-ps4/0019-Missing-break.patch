@@ -1,0 +1,25 @@
+From 4e2075413f8a4232857f9a87905f8afc28e74267 Mon Sep 17 00:00:00 2001
+From: Ps3ita Team <psxitateam@psxita.it>
+Date: Sat, 30 May 2020 12:04:24 +0200
+Subject: [PATCH 19/22] Missing break;
+
+---
+ drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
+index 8513dd006ad5..3c2e63c2d32b 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
+@@ -4956,7 +4956,7 @@ static void gfx_v7_0_gpu_early_init(struct amdgpu_device *adev)
+ 		adev->gfx.config.max_tile_pipes = 8; // Verified
+ 		adev->gfx.config.max_cu_per_sh = 9; // Probably OK
+ 		adev->gfx.config.max_sh_per_se = 1; // Verified
+-		adev->gfx.config.max_backends_per_se = 1; // Probably OK?
++		adev->gfx.config.max_backends_per_se = 2; // Probably OK?
+ 		adev->gfx.config.max_texture_channel_caches = 4; // ??
+ 		adev->gfx.config.max_gprs = 256;
+ 		adev->gfx.config.max_gs_threads = 32; // ??
+-- 
+2.45.1
+

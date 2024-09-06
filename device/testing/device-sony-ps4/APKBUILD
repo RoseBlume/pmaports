@@ -1,0 +1,38 @@
+pkgname=device-sony-ps4
+pkgdesc="Sony Playstation 4 Original"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="x86_64"
+options="!check !archcheck"
+depends="
+	linux-sony-ps4
+	postmarketos-base
+	grub-efi-x86
+	"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+	"
+subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+nonfree_firmware() {
+	pkgdesc="Wi-Fi and bluetooth firmware"
+	depends="linux-firmware-mrvl"
+	mkdir "$subpkgdir"
+}
+
+sha512sums="
+065faa7aed5acc1a8e15e1fe1e06929b57dc11030b7c842e7a46f7d4fae310ce3796a2d760a95222177c0d1d23f1e6cd982c3241a06e50c6d4961e69d3ce4450  deviceinfo
+24ed2457630757df9e69b3216b883c3032848b3cc692fd5cf0252baa6dc0dbea33e95b20767a9cb36e8461a8e79e65d50cc5ecd3a6801dc3e8e90951a34138aa  modules-initfs
+"

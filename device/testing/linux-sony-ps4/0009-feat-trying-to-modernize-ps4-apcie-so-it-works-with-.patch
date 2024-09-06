@@ -1,0 +1,158 @@
+From 0bd681355cbd557d93a6cc62e0b816ed661095c9 Mon Sep 17 00:00:00 2001
+From: codedwrench <rick.04.1996@gmail.com>
+Date: Tue, 21 Dec 2021 19:22:42 +0100
+Subject: [PATCH 09/22] feat: trying to modernize ps4-apcie so it works with
+ kernel 5.15
+
+---
+ arch/x86/include/asm/irqdomain.h |  1 +
+ arch/x86/kernel/apic/vector.c    | 11 ++++++++-
+ drivers/iommu/amd/iommu.c        |  2 ++
+ drivers/pci/probe.c              |  6 +++++
+ drivers/ps4/ps4-apcie.c          | 40 ++++++++++++++++++++++++--------
+ 5 files changed, 49 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/include/asm/irqdomain.h b/arch/x86/include/asm/irqdomain.h
+index 125c23b7bad3..2f8410292efc 100644
+--- a/arch/x86/include/asm/irqdomain.h
++++ b/arch/x86/include/asm/irqdomain.h
+@@ -14,6 +14,7 @@ enum {
+ 
+ extern int x86_fwspec_is_ioapic(struct irq_fwspec *fwspec);
+ extern int x86_fwspec_is_hpet(struct irq_fwspec *fwspec);
++extern int x86_fwspec_is_aeolia(struct irq_fwspec *fwspec);
+ 
+ extern struct irq_domain *x86_vector_domain;
+ 
+diff --git a/arch/x86/kernel/apic/vector.c b/arch/x86/kernel/apic/vector.c
+index c132daabe615..af7339aaa843 100644
+--- a/arch/x86/kernel/apic/vector.c
++++ b/arch/x86/kernel/apic/vector.c
+@@ -676,6 +676,15 @@ int x86_fwspec_is_hpet(struct irq_fwspec *fwspec)
+ 	return 0;
+ }
+ 
++int x86_fwspec_is_aeolia(struct irq_fwspec *fwspec)
++{
++	if (is_fwnode_irqchip(fwspec->fwnode)) {
++		const char *fwname = fwnode_get_name(fwspec->fwnode);
++		return fwname && !strncmp(fwname, "Aeolia-MSI", 10);
++	}
++	return 0;
++}
++
+ static int x86_vector_select(struct irq_domain *d, struct irq_fwspec *fwspec,
+ 			     enum irq_domain_bus_token bus_token)
+ {
+@@ -687,7 +696,7 @@ static int x86_vector_select(struct irq_domain *d, struct irq_fwspec *fwspec,
+ 	if (apic->apic_id_valid(32768))
+ 		return 0;
+ 
+-	return x86_fwspec_is_ioapic(fwspec) || x86_fwspec_is_hpet(fwspec);
++	return x86_fwspec_is_ioapic(fwspec) || x86_fwspec_is_hpet(fwspec) || x86_fwspec_is_aeolia(fwspec);
+ }
+ 
+ static const struct irq_domain_ops x86_vector_domain_ops = {
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index 5ceaaabb4f9d..f20dc0c7b78f 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -3294,6 +3294,8 @@ static int irq_remapping_select(struct irq_domain *d, struct irq_fwspec *fwspec,
+ 		devid = get_ioapic_devid(fwspec->param[0]);
+ 	else if (x86_fwspec_is_hpet(fwspec))
+ 		devid = get_hpet_devid(fwspec->param[0]);
++	else if(x86_fwspec_is_aeolia(fwspec))
++		devid = fwspec->param[0];
+ 
+ 	if (devid < 0)
+ 		return 0;
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 5fe5e84fab40..288b49cc49a5 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -2638,6 +2638,12 @@ int pci_scan_slot(struct pci_bus *bus, int devfn)
+ 		nr++;
+ 
+ 	for (fn = next_fn(bus, dev, 0); fn > 0; fn = next_fn(bus, dev, fn)) {
++		if (PCI_SLOT(devfn) != AEOLIA_SLOT_NUM &&
++		    pci_bus_read_dev_vendor_id(bus, devfn + fn, &l, 60*1000) &&
++		    (l & 0xffff) == PCI_VENDOR_ID_SONY) {
++			continue;
++		}
++
+ 		dev = pci_scan_single_device(bus, devfn + fn);
+ 		if (dev) {
+ 			if (!pci_dev_is_added(dev))
+diff --git a/drivers/ps4/ps4-apcie.c b/drivers/ps4/ps4-apcie.c
+index d5e87d1ee74e..d9c36f7715bb 100644
+--- a/drivers/ps4/ps4-apcie.c
++++ b/drivers/ps4/ps4-apcie.c
+@@ -219,28 +219,47 @@ static struct msi_domain_info apcie_msi_domain_info = {
+ 
+ static struct irq_domain *apcie_create_irq_domain(struct apcie_dev *sc)
+ {
+-	struct irq_domain *domain;
++	struct msi_domain_info *domain_info;
++	struct irq_domain *domain, *parent;
+ 	struct fwnode_handle *fn;
++	struct irq_fwspec fwspec;
+ 
+ 	sc_dbg("apcie_create_irq_domain\n");
+ 	if (x86_vector_domain == NULL)
+ 		return NULL;
+ 
+-	apcie_msi_domain_info.chip_data = (void *)sc;
+-	apcie_msi_domain_info.flags |= MSI_FLAG_MULTI_PCI_MSI;
+-	apcie_msi_controller.name = "IR-Aeolia-MSI";
++	domain_info = kzalloc(sizeof(*domain_info), GFP_KERNEL);
++	if (!domain_info)
++		return NULL;
++
++	*domain_info = apcie_msi_domain_info;
++	domain_info->chip_data = (void *)sc;
+ 
+-	fn = irq_domain_alloc_named_fwnode(apcie_msi_controller.name);
+-	if (!fn)
++	fn = irq_domain_alloc_named_id_fwnode(apcie_msi_controller.name, pci_dev_id(sc->pdev));
++	if (!fn) {
++		kfree(domain_info);
+ 		return NULL;
+-	domain = pci_msi_create_irq_domain(fn, &apcie_msi_domain_info,
+-				      x86_vector_domain);
++	}
++
++	fwspec.fwnode = fn;
++	fwspec.param_count = 1;
++
++	// It should be correct to put the pci device id in here
++	fwspec.param[0] = pci_dev_id(sc->pdev);
+ 
++	parent = irq_find_matching_fwspec(&fwspec, DOMAIN_BUS_ANY);
++	if (!parent) {
++		parent = x86_vector_domain;
++	} else {
++		apcie_msi_domain_info.flags |= MSI_FLAG_MULTI_PCI_MSI;
++		apcie_msi_controller.name = "IR-Aeolia-MSI";
++	}
++
++	domain = msi_create_irq_domain(fn, domain_info, parent);
+ 	if (!domain) {
+ 		irq_domain_free_fwnode(fn);
++		kfree(domain_info);
+ 		pr_warn("Failed to initialize IR-Aeolia-MSI irqdomain.\n");
+-	} else {
+-		domain->flags |= IRQ_DOMAIN_MSI_NOMASK_QUIRK;
+ 	}
+ 
+ 	return domain;
+@@ -283,6 +302,7 @@ int apcie_assign_irqs(struct pci_dev *dev, int nvec)
+ 	info.type = X86_IRQ_ALLOC_TYPE_PCI_MSI;
+ 	/* IRQs "come from" function 4 as far as the IOMMU/system see */
+ 	//info.msi_dev = sc->pdev;
++	info.desc = alloc_msi_entry(&dev->dev, nvec, NULL);
+ 	/* Our hwirq number is function << 8 plus subfunction.
+ 	 * Subfunction is usually 0 and implicitly increments per hwirq,
+ 	 * but can also be 0xff to indicate that this is a shared IRQ. */
+-- 
+2.45.1
+
