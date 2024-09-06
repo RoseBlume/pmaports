@@ -1,0 +1,77 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm/configs/(CHANGEME!)
+
+pkgname=linux-samsung-i9105p
+pkgver=3.0.31
+pkgrel=0
+pkgdesc="Samsung Galaxy S2 Plus kernel fork"
+arch="armv7"
+_carch="arm"
+_flavor="samsung-i9105p"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	findutils
+	flex
+	openssl-dev
+	perl
+	gcc4
+"
+
+# Compiler: GCC 4 (doesn't boot when compiled with newer versions)
+if [ "${CC:0:5}" != "gcc4-" ]; then
+	CC="gcc4-$CC"
+	HOSTCC="gcc4-gcc"
+	CROSS_COMPILE="gcc4-$CROSS_COMPILE"
+fi
+
+
+# Source
+_repository="android_kernel_samsung_i9105p"
+_commit="26a6d7902605f1983afe41c724f22969db21c2fd"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/VaporGame/$_repository/archive/$_commit.tar.gz
+	$_config
+	kernel-use-the-gnu89-standard-explicitly.patch
+	gcc10-extern_YYLOC_global_declaration.patch
+	linux3.4-ARM-8933-1-replace-Sun-Solaris-style-flag-on-section.patch
+	1-5-kbuild-remove-deprecated-use-of-defined-in-timeconst.pl.patch
+	03_fix_paranoid_network_disabled.patch
+	linux3.4-fix-piggy.gzip.S.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	make ARCH="$_carch" mrproper
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" \
+		"$_flavor" "$_outdir"
+}
+
+sha512sums="
+4715b5765261b217e0e5677cde6561ab7a33204e343cb1062a53a03e2c4cd77d52cee571bc04901a344c84ab70ca047f7c162953fec3aa07b1bbd5a5e1db03d5  linux-samsung-i9105p-26a6d7902605f1983afe41c724f22969db21c2fd.tar.gz
+f9dd69d0eb64340c4cc6ab11864ca3c1ec75d3cce76baa38394f05429798b7e993a96962faaa2a028870fcf3a05d8b0f85e286d9ef54f2745c888f209c3afbea  config-samsung-i9105p.armv7
+ad0182a483791fc88e058838bc331b2f04a75ba291e763767babdb815efadfc3b4fda97e69e2e3f00a426cabea088e35297a92bd287592597d1e309be68ee92c  kernel-use-the-gnu89-standard-explicitly.patch
+2b48f1bf0e3f70703d2cdafc47d5e615cc7c56c70bec56b2e3297d3fa4a7a1321d649a8679614553dde8fe52ff1051dae38d5990e3744c9ca986d92187dcdbeb  gcc10-extern_YYLOC_global_declaration.patch
+b14c0033045dd1ec5dd03612d8fb6361c4a0fa3eb54f7e262628d18756456c2e569a437d1b35099a8302577d1e471bbf9222b4b1b30f6578af7e4342a0009815  linux3.4-ARM-8933-1-replace-Sun-Solaris-style-flag-on-section.patch
+191746d2f7338a6afc3fe0f07a6be9164883c8ef78753727a4dcb4374e950243f27318eee17171c1fba2d86c5bcc2293568c9dad2293129ea703292b69389b25  1-5-kbuild-remove-deprecated-use-of-defined-in-timeconst.pl.patch
+df62e03666313bb03d9a455eac875f170a55d378b6e56b847c1c6ff1ce5cfafcfdf1d7605754ca3c684840ea00357f9ec4c6621f6ff77377132a484b9258f6f7  03_fix_paranoid_network_disabled.patch
+080745ca4ecaa804ee1df26ea81975ca93b74372e0c08322a6c481e97807495ae6ceb6cc77653afa24f9f2df45da8ebf8e5de6b06037fbb08e0279877ce42188  linux3.4-fix-piggy.gzip.S.patch
+"

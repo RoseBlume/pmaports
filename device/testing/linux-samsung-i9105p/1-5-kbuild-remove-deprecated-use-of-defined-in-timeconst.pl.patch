@@ -1,0 +1,69 @@
+From patchwork Sun Nov 18 20:05:13 2012
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Peter Foley <pefoley2@verizon.net>
+X-Patchwork-Id: 1761511
+Return-Path: <linux-kbuild-owner@vger.kernel.org>
+X-Original-To: patchwork-linux-kbuild@patchwork.kernel.org
+Delivered-To: patchwork-process-083081@patchwork1.kernel.org
+Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
+	by patchwork1.kernel.org (Postfix) with ESMTP id 78BDF3FCDE
+	for <patchwork-linux-kbuild@patchwork.kernel.org>;
+	Sun, 18 Nov 2012 21:04:50 +0000 (UTC)
+Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
+	id S1752505Ab2KRVEt (ORCPT
+	<rfc822;patchwork-linux-kbuild@patchwork.kernel.org>);
+	Sun, 18 Nov 2012 16:04:49 -0500
+Received: from vms173019pub.verizon.net ([206.46.173.19]:63407 "EHLO
+	vms173019pub.verizon.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+	with ESMTP id S1752411Ab2KRVEt (ORCPT
+	<rfc822;linux-kbuild@vger.kernel.org>);
+	Sun, 18 Nov 2012 16:04:49 -0500
+X-Greylist: delayed 3600 seconds by postgrey-1.27 at vger.kernel.org;
+	Sun, 18 Nov 2012 16:04:49 EST
+Received: from linux.foleyremote.com ([unknown] [96.241.26.26])
+	by vms173019.mailsrvcs.net
+	(Sun Java(tm) System Messaging Server 7u2-7.02 32bit (built Apr 16
+	2009))
+	with ESMTPA id <0MDP00A8H93H2UG1@vms173019.mailsrvcs.net>; Sun,
+	18 Nov 2012 14:04:30 -0600 (CST)
+From: pefoley2@verizon.net
+To: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	mmarek@suse.cz
+Cc: Peter Foley <pefoley2@verizon.net>
+Subject: [PATCH 1/5] kbuild: remove deprecated use of defined in timeconst.pl
+Date: Sun, 18 Nov 2012 15:05:13 -0500
+Message-id: <1353269117-39917-1-git-send-email-pefoley2@verizon.net>
+X-Mailer: git-send-email 1.8.0
+Sender: linux-kbuild-owner@vger.kernel.org
+Precedence: bulk
+List-ID: <linux-kbuild.vger.kernel.org>
+X-Mailing-List: linux-kbuild@vger.kernel.org
+
+From: Peter Foley <pefoley2@verizon.net>
+
+Fix this warning by removing a unneeded use of defined
+
+TIMEC   kernel/timeconst.h
+defined(@array) is deprecated at kernel/timeconst.pl line 373.
+  	(Maybe you should just omit the defined()?)
+
+Signed-off-by: Peter Foley <pefoley2@verizon.net>
+---
+ kernel/timeconst.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/timeconst.pl b/kernel/timeconst.pl
+index eb51d76..0461239 100644
+--- a/kernel/timeconst.pl
++++ b/kernel/timeconst.pl
+@@ -370,7 +370,7 @@ if ($hz eq '--can') {
+ 	}
+ 
+ 	@val = @{$canned_values{$hz}};
+-	if (!defined(@val)) {
++	if (!@val) {
+ 		@val = compute_values($hz);
+ 	}
+ 	output($hz, @val);
