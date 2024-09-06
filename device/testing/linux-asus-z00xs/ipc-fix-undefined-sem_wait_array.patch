@@ -1,0 +1,35 @@
+This patch fixes the undefined reference to `sem_wait_array` error
+Found at: https://groups.google.com/g/linux.kernel/c/Dmm_PEMPsUE/m/G9q0sN2GUUMJ
+
+Error message:
+ld: ipc/built-in.o: in function `sem_lock':
+ipc/sem.c:274:(.text+0x4d5e): undefined reference to `sem_wait_array'
+
+diff --git a/ipc/sem.c b/ipc/sem.c
+index 5983e60d..87fb1fc5 100644
+--- a/ipc/sem.c
++++ b/ipc/sem.c
+@@ -243,6 +243,23 @@ static void merge_queues(struct sem_array *sma)
+     }
+ }
+ 
++/*
++ * Wait until all currently ongoing simple ops have completed.
++ * Caller must own sem_perm.lock.
++ * New simple ops cannot start, because simple ops first check
++ * that sem_perm.lock is free.
++ */
++static void sem_wait_array(struct sem_array *sma)
++{
++  int i;
++  struct sem *sem;
++
++  for (i = 0; i < sma->sem_nsems; i++) {
++    sem = sma->sem_base + i;
++    spin_unlock_wait(&sem->lock);
++  }
++}
++
+ static void sem_rcu_free(struct rcu_head *head)
+ {
+ 	struct ipc_rcu *p = container_of(head, struct ipc_rcu, rcu);

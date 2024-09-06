@@ -1,0 +1,74 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/x86_64/configs/zenfone2_defconfig
+
+pkgname=linux-asus-z00xs
+pkgver=3.10.72
+pkgrel=0
+pkgdesc="Asus ZenFone Zoom (ZX551ML) kernel fork"
+arch="x86_64"
+_carch="x86_64"
+_flavor="asus-z00xs"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	findutils
+	flex
+	openssl-dev
+	perl
+	linux-headers
+"
+
+# Source
+_repository="android_kernel_asus_moorefield"
+_commit="c3eae894ce8092c2a9a51f9a4924c8df714d6b3c"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/LineageOS/$_repository/archive/$_commit.tar.gz
+	$_config
+	gcc7-give-up-on-ilog2-const-optimizations.patch
+	gcc8-fix-put-user.patch
+	gcc10-extern_YYLOC_global_declaration.patch
+	kernel-use-the-gnu89-standard-explicitly.patch
+	fix-recordmcount.patch
+	x86-relocs-Make-per_cpu_load_addr-static.patch
+	01_ipc-shm-fix-redefinition-of-shm_rcu_free.patch
+	03_ipc-fix-undefined-references.patch
+	ipc-fix-undefined-sem_wait_array.patch
+"
+builddir="$srcdir/$_repository-$_commit"
+_outdir="out"
+
+prepare() {
+	default_prepare
+	. downstreamkernel_prepare
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
+}
+
+package() {
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" \
+		"$_flavor" "$_outdir"
+}
+
+sha512sums="
+2cd8e476858bc48ab2ff1cba7fe9232658d1d867feec0af1d860298333e40dd2901b91fc642c595ac133b25e091008de69ba536ecdb2092dac54bcd3b88f4587  linux-asus-z00xs-c3eae894ce8092c2a9a51f9a4924c8df714d6b3c.tar.gz
+cf2e791c23354dae2381ae779c6debeb158b69ab6bf9100ee1098ab12505650dc0284e21669424475917c8ab538b9265e6e484fd64dce18ec59c614620ab825d  config-asus-z00xs.x86_64
+77eba606a71eafb36c32e9c5fe5e77f5e4746caac292440d9fb720763d766074a964db1c12bc76fe583c5d1a5c864219c59941f5e53adad182dbc70bf2bc14a7  gcc7-give-up-on-ilog2-const-optimizations.patch
+197d40a214ada87fcb2dfc0ae4911704b9a93354b75179cd6b4aadbb627a37ec262cf516921c84a8b1806809b70a7b440cdc8310a4a55fca5d2c0baa988e3967  gcc8-fix-put-user.patch
+2b48f1bf0e3f70703d2cdafc47d5e615cc7c56c70bec56b2e3297d3fa4a7a1321d649a8679614553dde8fe52ff1051dae38d5990e3744c9ca986d92187dcdbeb  gcc10-extern_YYLOC_global_declaration.patch
+ad0182a483791fc88e058838bc331b2f04a75ba291e763767babdb815efadfc3b4fda97e69e2e3f00a426cabea088e35297a92bd287592597d1e309be68ee92c  kernel-use-the-gnu89-standard-explicitly.patch
+32911549f0c89972d06af838954978ee90fb2eabacc1393c0bffa12deb9d80ddec5322f859df772d90afea733965bd669e85d5e90657d4f69995ae9fc25dd4f3  fix-recordmcount.patch
+08e13b88b043e6de0ff1e563487e1d0292c1fd54160a6384448934dd83776d1f4f7b3f3a1bf5b4471320336026d59efa55b14f3ca3982d4170df0aca3066e955  x86-relocs-Make-per_cpu_load_addr-static.patch
+0f6a9be41ed61b8407a146e8ccbc5a7abbcffe150cbba01345fcfa8e31a1554274dc2d79015f0ea68f9b394e4af5bd7040e992b3950cf03d2ce1f2454fc0d529  01_ipc-shm-fix-redefinition-of-shm_rcu_free.patch
+7dd36856b2a56216172df1a89a1c7a1cd408141605b1d0bac1a3ecd2d57d0cb1fd58ccf9dea56983597a5432947ca8bdb8789740cb968d9898ba4e36bd6d2d7e  03_ipc-fix-undefined-references.patch
+ef9ae661fab8de05b1e8343e46dd49072a77b1dab05cf29ac386da7e2d10daf47003b5ead291f95e53c1d57c9f0fa78c828b79a4dd50d25a060c7149393301d5  ipc-fix-undefined-sem_wait_array.patch
+"
