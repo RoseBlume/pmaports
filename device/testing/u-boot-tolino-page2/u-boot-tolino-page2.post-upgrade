@@ -1,0 +1,9 @@
+#!/bin/sh
+DEV=`cat /proc/mounts | sed -n -E 's:.*(/dev/mmcblk[0-9])p[0-9] on /boot .*:\1:p'`
+if [ -e "$DEV" ]
+then
+	dd if=/usr/share/u-boot/tolino-shine3/u-boot.imx bs=512 seek=2 of="$DEV"
+else
+    echo Partition not found
+fi
+

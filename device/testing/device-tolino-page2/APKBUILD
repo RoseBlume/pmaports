@@ -1,0 +1,33 @@
+# Reference: <https://postmarketos.org/devicepkg>
+pkgname=device-tolino-page2
+pkgdesc="Tolino Page 2"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="MIT"
+arch="armv7"
+options="!check !archcheck"
+depends="
+	kobo-epdc-extractor
+	linux-postmarketos-imx-ereader
+	postmarketos-base
+	u-boot-tolino-page2
+"
+makedepends="devicepkg-dev"
+source="
+	deviceinfo
+	modules-initfs
+"
+
+build() {
+	devicepkg_build $startdir $pkgname
+}
+
+package() {
+	devicepkg_package $startdir $pkgname
+}
+
+sha512sums="
+3d85ecccfc3a3c3c57191e286b8b0d234e07f293d058ae95cde064d7ad3bfddff014dd5d1df47421208e293165e719bec0c17295aba7058f19870497a983e080  deviceinfo
+5d53ee902538e53c4fe79eaef8e3800b9d3f73ec70d2a9887ddb11a6715ca76ce17128e3c02c2b6f2f575fb86f15c2415c24466d4b1a031f7a346d0db186dcb1  modules-initfs
+"
