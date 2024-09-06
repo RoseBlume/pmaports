@@ -1,0 +1,52 @@
+pkgname=linux-pine64-star64
+pkgver=6.6.20_git20240821
+pkgrel=1
+pkgdesc="Kernel for Pine64 JH7110 devices"
+arch="riscv64"
+_flavor="${pkgname#linux-}"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps
+	pmb:cross-native"
+makedepends="bash bison findutils flex openssl-dev perl postmarketos-installkernel"
+
+# Source
+_commit="a9cffbf5372b2d46ca2f07cae79cb9a2202e0596"
+_carch="riscv"
+_config="config-$_flavor.$arch"
+source="
+	$pkgname-$_commit.tar.gz::https://github.com/Icenowy/linux/archive/$_commit.tar.gz
+	$_config
+	"
+builddir="$srcdir/linux-$_commit"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/$_config" .config
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))"
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+	make install modules_install dtbs_install \
+		ARCH="$_carch" \
+		INSTALL_MOD_PATH="$pkgdir" \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
+	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/$_flavor/kernel.release
+}
+
+
+sha512sums="
+5c59475dfa85551a6216c5601e51c74133af5bb724ccccc4de1d8f6dc65234598c0b6523b368b864c7b16ff976ff7d81d9d0bcda68f3d81c07cfe3a68ebc5b18  linux-pine64-star64-a9cffbf5372b2d46ca2f07cae79cb9a2202e0596.tar.gz
+21a1456300689a18ed518052f61c57f986127633bcdf0f525956f03b4a77576806e23db6aef7f046ccbe780b1d9af3f267d8692ef582fc1d26bae6f03e689a51  config-pine64-star64.riscv64
+"

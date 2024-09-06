@@ -1,0 +1,2 @@
+bootargs=init=/init.sh rw console=tty0 console=ttyS0,115200 loglevel=1 PMOS_FORCE_PARTITION_RESIZE
+distro_bootcmd=load mmc ${bootpart} ${fdt_addr_r} dtbs/starfive/jh7110-pinetab-v.dtb; load mmc ${bootpart} ${kernel_addr_r} vmlinuz;load mmc ${bootpart} ${ramdisk_addr_r} initramfs; booti ${kernel_addr_r} ${ramdisk_addr_r}:${loadsize} ${fdt_addr_r}
