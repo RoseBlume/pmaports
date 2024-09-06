@@ -21,12 +21,13 @@ def args(request):
     args.aports = [pmaports]
     args.config = pmb.config.defaults["config"]
     args.timeout = 900
-    args.details_to_stdout = False
+    args.details_to_stdout = True
     args.quiet = False
     args.verbose = True
     args.offline = False
     args.action = "init"
     args.cross = False
+    args.log = None
 
     init_args(args)
     request.addfinalizer(pmb.helpers.logging.logfd.close)
