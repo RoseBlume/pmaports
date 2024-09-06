@@ -1,90 +1,120 @@
 # Kernel config based on defconfig and exynos7870.config
+
 pkgname=linux-postmarketos-exynos7870
-pkgver=6.8.1
+pkgver=6.8.2
+_pkgver=6.8.1
 pkgrel=2
+# pkgdesc="Samsung Captivate Glide kernel fork"
 pkgdesc="Close-to-mainline kernel for Samsung Exynos 7870 devices"
 arch="aarch64"
 _carch="arm64"
 _flavor="postmarketos-exynos7870"
-url="https://gitlab.com/exynos7870-mainline/linux"
+url="https://kernel.org"
 license="GPL-2.0-only"
-options="!strip !check !tracedeps pmb:cross-native"
+options="!strip !check !tracedeps pmb:cross-native !pmb:crossdirect"
 makedepends="
-	bash
-	bc
-	bison
-	flex
-	openssl-dev
 	perl
-	postmarketos-installkernel
+	sed
+	installkernel
+	bash
+	gmp-dev
+	bc
+	linux-headers
+	elfutils-dev
+	devicepkg-dev
+	findutils
+	flex
+	bison
+	openssl-dev
 "
 
-_owner="exynos7870-mainline"
-_repo="mainline-patches"
-_commit="6608cbe5d3b29c44a177d12c14c7f1b070584363"
-_config="config-$_flavor.aarch64"
+# Source
+_repository="linux"
+_config="config-$_flavor.$arch"
 
 # Source
 source="
 	$_config
-	linux-$pkgver.tar.gz::https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-$pkgver.tar.gz
-	patches-$_commit.tar.gz::https://gitlab.com/$_owner/$_repo/-/archive/$_commit/$_repo-$_commit.tar.gz
+	linux-$_pkgver.tar.gz::https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-$_pkgver.tar.gz
+	exynos7870-j7xelte.dts
+	init
+	initramfs.list
+	clk-exynos7870.patch
+	mmc-fifo-32bit.patch
+	pinctrl-exynos7870.patch
+	regulator-s2mpu05.patch
+	s2mu005.patch
+	zinitix-print-chip-id.patch
+	0001-ennable-bzImage-config.patch
 "
-builddir="$srcdir/linux-$pkgver"
+
+builddir="$srcdir/$_repository-$_pkgver"
+
+prepare_isorec() {
+	# https://wiki.postmarketos.org/wiki/Boot_process#isorec
+	cp -v /usr/$(arch_to_hostspec $arch)/bin/busybox.static \
+		"$builddir"/usr/
+	cp -v "$srcdir"/init "$builddir"/usr/
+	cp -v "$srcdir"/initramfs.list "$builddir"/usr/
+}
 
 prepare() {
 	default_prepare
-	cp "$srcdir/$_config" .config
-
-	# Apply the patches to the mainline kernel.
-	for i in "$srcdir"/$_repo-*/patches/*; do
-		patch -p1 < "$i"
-	done
-
-	# Delete the minimal devicetrees
-	rm -f "$srcdir"/$_repo-*/*-minimal-dts.dts
+	prepare_isorec
 
 	# Move the devicetrees in the kernel tree
-	for i in "$srcdir"/$_repo-*/*dts*; do
-		cp $i "arch/arm64/boot/dts/exynos/"
+	for i in "$srcdir"/*dts; do
+		cp $i "arch/$_carch/boot/dts/exynos/"
 	done
 
 	# Add the devicetrees in the Makefile
-	for i in "$srcdir"/$_repo-*/*.dts; do
+	for i in "$srcdir"/*.dts; do
 		# Get the file name, and change .dts to .dtb
 		i="$(echo $(basename $i) | sed 's/.$/b/')"
 		echo "dtb-\$(CONFIG_ARCH_EXYNOS) += $i" >> \
-			"$builddir/arch/arm64/boot/dts/exynos/Makefile"
-	done
+			"$builddir/arch/$_carch/boot/dts/exynos/Makefile"
+		done
+
+	# Prepare kernel config ('yes ""' for kernels lacking olddefconfig)
+	cp "$srcdir/$_config" "$builddir"/.config
+	yes "" | make -C "$builddir" ARCH="$_carch" oldconfig
+
+	cp -v "$srcdir/$_config" .config
 }
 
 build() {
 	unset LDFLAGS
-	make ARCH="$_carch" CC="${CC:-gcc}" \
-		KBUILD_BUILD_VERSION="$((pkgrel + 1))-postmarketOS"
+	make all ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS"
 }
 
 package() {
-	mkdir -p "$pkgdir/boot" "$pkgdir/lib/modules"
-
-	# The bootloader does not support zipped kernels
-	make install modules_install dtbs_install \
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" "$_flavor"
+	_install_targets="modules_install dtbs_install"
+	make $_install_targets \
 		ARCH="$_carch" \
-		INSTALL_PATH="$pkgdir/boot" \
+		INSTALL_PATH="$pkgdir"/boot \
 		INSTALL_MOD_PATH="$pkgdir" \
 		INSTALL_MOD_STRIP=1 \
 		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
 	rm -f "$pkgdir"/lib/modules/*/build "$pkgdir"/lib/modules/*/source
 
-	install -D "$builddir/include/config/kernel.release" \
-		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
-
-	install -Dm644 "$builddir/arch/$_carch/boot/Image" \
-		"$pkgdir/boot/vmlinuz"
+	cat "$builddir/arch/$_carch/boot/vmlinuz" \
+		"$builddir/arch/$_carch/boot/dts/exynos/exynos7870-j7xelte.dtb" \
+		> "$pkgdir/boot/vmlinuz-dtb"
 }
 
 sha512sums="
-eb4426424d2d8e1b00dd0606f3ad78d0ba3791e92cba0eeff8df925eab254464ca70c63fe08a0fa293cf2bda58f1c440f25296f375f4e76fa9a828b01057be7e  config-postmarketos-exynos7870.aarch64
+aab85409f72d5a76680a41a2413f272dfff88b5a8e8ddb307d8606ab9ce8edba3297d6295a50ee2759366b24c901f9220ccc72994cd09428f9fbf92445b12f24  config-postmarketos-exynos7870.aarch64
 a08c966b4c3cce22fa4963b2b17b42966ceb959ccb0280f83a67fa84abed773ec5e155df7678df121c7825772a9ba82df71fa142734754d3847e73b7e65488f7  linux-6.8.1.tar.gz
-275b3a8be2e089348ed18d12ff07118bf66574be46aeb0004950f8a46e46609e5312a2e792ab85a9a8eef0ace9fec7eb4066f839f76efd688e0ee5e09623cdc6  patches-6608cbe5d3b29c44a177d12c14c7f1b070584363.tar.gz
+230e852c964c75788d54c3e574e3b5ad1edf40fc03433a76b6ac960c2980b8bb41584039304ea5137e8fe7ad2d2aa3fb7b47b2ed4fb711e8c0a38837be267a7b  exynos7870-j7xelte.dts
+09f1f214a24300696809727a7b04378887c06ca6f40803ca51a12bf2176a360b2eb8632139d6a0722094e05cb2038bdb04018a1e3d33fc2697674552ade03bee  init
+aaff0332b90e1f9f62de1128cace934717336e54ab09de46477369fa808302482d97334e43a85ee8597c1bcab64d3484750103559fea2ce8cd51776156bf7591  initramfs.list
+c705e7c0505b03feaa13bf6000e9fb2b131c095b07cfbb54d3eb20f56becbd0cb9a4761cba0dbaaa362fa1e2e1a948b933087199356b08c22e423124a7e559d7  clk-exynos7870.patch
+79c0c57fc528ec297d62da36325d42608fa7c5da6daa71ef7762e0d7e7c9fd56ab0a71eb29eb86f70112c648de224c30db00337d81e98035529ea0c1f1807561  mmc-fifo-32bit.patch
+d3adb0385c3413fb2b4e151495b0adacd900ea2b5f48598b755cb6b9c70e5983b0d158ef2395e530aff1d2ceaac45aafa382477ce5c936394561309d0f4ba279  pinctrl-exynos7870.patch
+c742b1f68c41560565a1918801cf68bba72c9039cc5ebc23d1f8d8bf71d173c63590adf7f9a139013b761a5770847cda78181bd33bdd04e878d90d16bc4a4198  regulator-s2mpu05.patch
+973c63d634ef99250c4d56919762152c9f5a4a6ecdd07870896b121a179d65730f5d320b99381eb0ce9cb8a7a6291656c565c8f866b3d4ad99b183cc23b6b023  s2mu005.patch
+4758a3beda3b3f62385ad2409fbbc0f07e839b20d4204a99887d211e93dff62b9613cc0a58fdaa4669368fa87158539ea11745c37cc82f322fe658e0d8648d3a  zinitix-print-chip-id.patch
+87c2703faacd99fb352f537f265716d4846010b6d83c6ed27666eee2fd83c4e226e3d15d77bc32626a8f1688b3dac17dcb4a14b58b505dd6fe709869492960a2  0001-ennable-bzImage-config.patch
 "

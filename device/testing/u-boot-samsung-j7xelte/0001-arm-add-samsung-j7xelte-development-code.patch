@@ -1,0 +1,284 @@
+From 67db6e7744335622c21e4b7e14e81716ccdeedc1 Mon Sep 17 00:00:00 2001
+From: "armel.guido" <armel.guido@gmx.com>
+Date: Tue, 16 Jul 2024 00:59:32 -0300
+Subject: [PATCH 1/4] arm: add samsung j7xelte development code
+
+---
+ arch/arm/dts/Makefile                   |  1 +
+ arch/arm/dts/exynos78x0-j7xelte.dts     | 29 +++++++++++++
+ arch/arm/mach-exynos/Kconfig            | 11 +++++
+ board/samsung/j7xelte/Kconfig           | 16 +++++++
+ board/samsung/j7xelte/MAINTAINERS       |  5 +++
+ board/samsung/j7xelte/Makefile          |  3 ++
+ board/samsung/j7xelte/j7xelte.c         | 11 +++++
+ configs/j7xelte_defconfig               | 27 ++++++++++++
+ configs/template_j7xelte_defconfig.conf | 21 ++++++++++
+ info.txt                                | 55 +++++++++++++++++++++++++
+ 10 files changed, 179 insertions(+)
+ create mode 100644 arch/arm/dts/exynos78x0-j7xelte.dts
+ create mode 100644 board/samsung/j7xelte/Kconfig
+ create mode 100644 board/samsung/j7xelte/MAINTAINERS
+ create mode 100644 board/samsung/j7xelte/Makefile
+ create mode 100644 board/samsung/j7xelte/j7xelte.c
+ create mode 100644 configs/j7xelte_defconfig
+ create mode 100644 configs/template_j7xelte_defconfig.conf
+ create mode 100644 info.txt
+
+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
+index 9d28a485be..ab0a765e07 100644
+--- a/arch/arm/dts/Makefile
++++ b/arch/arm/dts/Makefile
+@@ -31,6 +31,7 @@ dtb-$(CONFIG_EXYNOS7420) += exynos7420-espresso7420.dtb
+ dtb-$(CONFIG_TARGET_A5Y17LTE) += exynos78x0-axy17lte.dtb
+ dtb-$(CONFIG_TARGET_A3Y17LTE) += exynos78x0-axy17lte.dtb
+ dtb-$(CONFIG_TARGET_A7Y17LTE) += exynos78x0-axy17lte.dtb
++dtb-$(CONFIG_TARGET_J7XELTE) += exynos78x0-j7xelte.dtb
+ 
+ dtb-$(CONFIG_ARCH_APPLE) += \
+ 	t8103-j274.dtb \
+diff --git a/arch/arm/dts/exynos78x0-j7xelte.dts b/arch/arm/dts/exynos78x0-j7xelte.dts
+new file mode 100644
+index 0000000000..7fae8db874
+--- /dev/null
++++ b/arch/arm/dts/exynos78x0-j7xelte.dts
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Samsung Exynos78x0 SoC device tree source
++ *
++ * Copyright (c) 2020 Dzmitry Sankouski (dsankouski@gmail.com)
++ */
++
++/dts-v1/;
++#include "exynos78x0.dtsi"
++/ {
++	compatible = "samsung,exynos78x0", "samsung,exynos7880", "samsung,exynos7870";
++
++	aliases {
++		console = &uart2;
++	};
++
++	chosen {
++		stdout-path = &uart2;
++	};
++};
++
++&gpioi2c0 {
++	status = "okay";
++};
++
++&fin_pll {
++	clock-frequency = <26000000>;
++};
++
+diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
+index 8f3aee052c..ad9f1ce281 100644
+--- a/arch/arm/mach-exynos/Kconfig
++++ b/arch/arm/mach-exynos/Kconfig
+@@ -225,6 +225,16 @@ config  TARGET_A3Y17LTE
+ 	select PINCTRL_EXYNOS78x0
+ 	select SUPPORT_SPL
+ 
++config  TARGET_J7XELTE
++	bool "Samsung SM-J10MN board"
++	select ARM64
++	select CLK_EXYNOS
++	select OF_CONTROL
++	select PINCTRL
++	select PINCTRL_EXYNOS78x0
++	select SUPPORT_SPL
++
++
+ endchoice
+ endif
+ 
+@@ -252,5 +262,6 @@ source "board/samsung/smdk5250/Kconfig"
+ source "board/samsung/smdk5420/Kconfig"
+ source "board/samsung/espresso7420/Kconfig"
+ source "board/samsung/axy17lte/Kconfig"
++source "board/samsung/j7xelte/Kconfig"
+ 
+ endif
+diff --git a/board/samsung/j7xelte/Kconfig b/board/samsung/j7xelte/Kconfig
+new file mode 100644
+index 0000000000..760dfed11f
+--- /dev/null
++++ b/board/samsung/j7xelte/Kconfig
+@@ -0,0 +1,16 @@
++if TARGET_J7XELTE
++config SYS_BOARD
++	default "j7xelte"
++	help
++	  j7xelte is a production board for SM-J710MN phone on Exynos7870 SoC.
++
++config SYS_VENDOR
++	default "samsung"
++
++config SYS_CONFIG_NAME
++	default "exynos78x0-common"
++
++config EXYNOS7870
++    bool "Exynos 7870 SOC support"
++    default y
++endif
+diff --git a/board/samsung/j7xelte/MAINTAINERS b/board/samsung/j7xelte/MAINTAINERS
+new file mode 100644
+index 0000000000..fb56cbbf47
+--- /dev/null
++++ b/board/samsung/j7xelte/MAINTAINERS
+@@ -0,0 +1,5 @@
++Samsung J7 2016 phone Board
++M:	armel.guido <armel.guido@gmx.com>
++S:	Maintained
++F:	board/samsung/j7xelte/
++F:	configs/j7xelte_defconfig
+diff --git a/board/samsung/j7xelte/Makefile b/board/samsung/j7xelte/Makefile
+new file mode 100644
+index 0000000000..4e11f289dc
+--- /dev/null
++++ b/board/samsung/j7xelte/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0+
++#
++obj-y	+= axy17lte.o
+diff --git a/board/samsung/j7xelte/j7xelte.c b/board/samsung/j7xelte/j7xelte.c
+new file mode 100644
+index 0000000000..c38297a05b
+--- /dev/null
++++ b/board/samsung/j7xelte/j7xelte.c
+@@ -0,0 +1,11 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Samsung A5Y17 and A3Y17 LTE boards based on Exynos 7880 and Exynos 7870 SoCs
++ */
++
++#include <common.h>
++
++int exynos_init(void)
++{
++	return 0;
++}
+diff --git a/configs/j7xelte_defconfig b/configs/j7xelte_defconfig
+new file mode 100644
+index 0000000000..ac18ba027f
+--- /dev/null
++++ b/configs/j7xelte_defconfig
+@@ -0,0 +1,27 @@
++CONFIG_ARM=y
++CONFIG_SKIP_LOWLEVEL_INIT=y
++CONFIG_COUNTER_FREQUENCY=26000000
++CONFIG_ARCH_EXYNOS=y
++# CONFIG_TEXT_BASE=0x40001000
++CONFIG_SYS_TEXT_BASE=40080000
++CONFIG_SYS_MALLOC_F_LEN=0x400
++CONFIG_ARCH_EXYNOS7=y
++CONFIG_TARGET_J7XELTE=y
++CONFIG_NR_DRAM_BANKS=8
++CONFIG_HAS_CUSTOM_SYS_INIT_SP_ADDR=y
++CONFIG_CUSTOM_SYS_INIT_SP_ADDR=0x40200e50
++CONFIG_DEFAULT_DEVICE_TREE="exynos78x0-j7xelte"
++CONFIG_SYS_LOAD_ADDR=0x40001000
++CONFIG_FIT=y
++CONFIG_USE_PREBOOT=y
++CONFIG_PREBOOT="echo Read pressed buttons status;KEY_VOLUMEUP=gpa20;KEY_HOME=gpa17;KEY_VOLUMEDOWN=gpa21;KEY_POWER=gpa00;PRESSED=0;RELEASED=1;if gpio input $KEY_VOLUMEUP; then setenv VOLUME_UP $PRESSED; else setenv VOLUME_UP $RELEASED; fi;if gpio input $KEY_VOLUMEDOWN; then setenv VOLUME_DOWN $PRESSED; else setenv VOLUME_DOWN $RELEASED; fi;if gpio input $KEY_HOME; then setenv HOME $PRESSED; else setenv HOME $RELEASED; fi;if gpio input $KEY_POWER; then setenv POWER $PRESSED; else setenv POWER $RELEASED; fi;"
++CONFIG_SAVE_PREV_BL_FDT_ADDR=y
++CONFIG_SAVE_PREV_BL_INITRAMFS_START_ADDR=y
++# CONFIG_DISPLAY_CPUINFO is not set
++CONFIG_HUSH_PARSER=y
++CONFIG_SYS_PBSIZE=1024
++CONFIG_SYS_BOOTM_LEN=0x2000000
++CONFIG_CMD_GPIO=y
++CONFIG_CMD_I2C=y
++CONFIG_DM_I2C_GPIO=y
++CONFIG_LMB_MAX_REGIONS=64
+diff --git a/configs/template_j7xelte_defconfig.conf b/configs/template_j7xelte_defconfig.conf
+new file mode 100644
+index 0000000000..059e0d0aa2
+--- /dev/null
++++ b/configs/template_j7xelte_defconfig.conf
+@@ -0,0 +1,21 @@
++# size of early C runtime environment heap
++CONFIG_SYS_MALLOC_LEN=
++# address of early C runtime environment stack (should be in RAM address space, but NOT at the bottom, because stack is growing DOWN. see u-boot readme memory management section). This option valid, when CONFIG_POSITION_INDEPENDENT=n.
++#CONFIG_SYS_INIT_SP_ADDR=
++# when CONFIG_POSITION_INDEPENDENT=y, defines offset to early c runtime stack from bss section from bss section. Default is 512K.
++# CONFIG_SYS_INIT_SP_BSS_OFFSET=
++# u-boot base address. It's the address in RAM, where u-boot is loaded by stock bootloader. Not obligatory, if you use position independent build with CONFIG_POSITION_INDEPENDENT=y. See instructions below, how to find it.
++CONFIG_SYS_TEXT_BASE=40080000
++# start address of the dynamic RAM. Can be found in memory node in linux device tree.
++CONFIG_SYS_SDRAM_BASE=40000000
++CONFIG_DEBUG_UART=y
++# make sure to comment _debug_uart_init function code in you serial driver with that option
++CONFIG_DEBUG_UART_SKIP_INIT=y
++# your uart address from downstream device tree
++CONFIG_DEBUG_UART_BASE=0x13820000
++# log all
++CONFIG_LOGLEVEL=8
++# Since Galaxy S8, Samsung randomizes kernel load address. You have to enable this option, if Kernel code start address is random, i.e. changes each boot. Find Kernel code address with cat /proc/iomem
++CONFIG_POSITION_INDEPENDENT=y
++# if you want U-boot binary to look as much as Linux kernel image as possible, to pack it inside android boot.img so stock android bootloader can recognize it
++CONFIG_LINUX_KERNEL_IMAGE_HEADER=y
+diff --git a/info.txt b/info.txt
+new file mode 100644
+index 0000000000..1e2f13c519
+--- /dev/null
++++ b/info.txt
+@@ -0,0 +1,55 @@
++commit 3e2095e960b47a3c0211a3a1e52c74b1761cb0be
++Author: Dzmitry Sankouski <dsankouski@gmail.com>
++    board: samsung: add support for Galaxy A series of 2017 (a5y17lte)
++arch/arm/dts/Makefile ################### Done
++arch/arm/dts/exynos78x0-axy17lte.dts #### In Process
++arch/arm/mach-exynos/Kconfig ############ In Process
++board/samsung/axy17lte/Kconfig ########## In Process
++board/samsung/axy17lte/MAINTAINERS ###### In Process
++board/samsung/axy17lte/Makefile ######### In Process
++board/samsung/axy17lte/axy17lte.c ####### In Process
++configs/a3y17lte_defconfig ############## j7xelte_defconfig
++configs/a5y17lte_defconfig ##############  . . . ...
++configs/a7y17lte_defconfig ############## In Process
++doc/board/index.rst
++doc/board/samsung/axy17lte.rst
++doc/board/samsung/index.rst
++
++commit 69bde0410a9ce5749a4cab5ed134527c2cb8b9e4
++Author: Dzmitry Sankouski <dsankouski@gmail.com>
++    SoC: exynos: add support for exynos 78x0
++arch/arm/dts/exynos78x0-gpio.dtsi
++arch/arm/dts/exynos78x0-pinctrl.dtsi
++arch/arm/dts/exynos78x0.dtsi
++arch/arm/mach-exynos/mmu-arm64.c
++drivers/gpio/s5p_gpio.c
++drivers/pinctrl/exynos/Kconfig
++drivers/pinctrl/exynos/Makefile
++drivers/pinctrl/exynos/pinctrl-exynos78x0.c
++include/configs/exynos78x0-common.h
++
++
++
++
++
++
++
++####################################
++arch/arm/dts/exynos7420.dtsi
++arch/arm/mach-exynos/Kconfig
++arch/arm/mach-exynos/Makefile
++arch/arm/mach-exynos/mmu-arm64.c
++arch/arm/mach-exynos/soc.c
++include/configs/espresso7420.h
++include/configs/exynos7420-common.h
++
++arch/arm/dts/Makefile
++arch/arm/dts/exynos7420-espresso7420.dts
++arch/arm/mach-exynos/Kconfig
++board/samsung/common/board.c
++board/samsung/espresso7420/Kconfig
++board/samsung/espresso7420/MAINTAINERS
++board/samsung/espresso7420/Makefile
++board/samsung/espresso7420/espresso7420.c
++configs/espresso7420_defconfig
++
+-- 
+2.39.2
+

@@ -1,0 +1,130 @@
+From 2aae9b1527545630f47cfa1d8250508aefe53df3 Mon Sep 17 00:00:00 2001
+From: "armel.guido" <armel.guido@gmx.com>
+Date: Tue, 16 Jul 2024 01:00:16 -0300
+Subject: [PATCH 2/4] arm: add samsung j7xelte development code
+
+---
+ arch/arm/mach-exynos/Kconfig      |  1 -
+ board/samsung/axy17lte/Kconfig    | 17 +++++++++++++++++
+ board/samsung/j7xelte/Kconfig     | 16 ----------------
+ board/samsung/j7xelte/MAINTAINERS |  5 -----
+ board/samsung/j7xelte/Makefile    |  3 ---
+ board/samsung/j7xelte/j7xelte.c   | 11 -----------
+ configs/j7xelte_defconfig         |  2 +-
+ 7 files changed, 18 insertions(+), 37 deletions(-)
+ delete mode 100644 board/samsung/j7xelte/Kconfig
+ delete mode 100644 board/samsung/j7xelte/MAINTAINERS
+ delete mode 100644 board/samsung/j7xelte/Makefile
+ delete mode 100644 board/samsung/j7xelte/j7xelte.c
+
+diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
+index ad9f1ce281..91840eeabe 100644
+--- a/arch/arm/mach-exynos/Kconfig
++++ b/arch/arm/mach-exynos/Kconfig
+@@ -262,6 +262,5 @@ source "board/samsung/smdk5250/Kconfig"
+ source "board/samsung/smdk5420/Kconfig"
+ source "board/samsung/espresso7420/Kconfig"
+ source "board/samsung/axy17lte/Kconfig"
+-source "board/samsung/j7xelte/Kconfig"
+ 
+ endif
+diff --git a/board/samsung/axy17lte/Kconfig b/board/samsung/axy17lte/Kconfig
+index 64a4ffa7e6..8714fe75da 100644
+--- a/board/samsung/axy17lte/Kconfig
++++ b/board/samsung/axy17lte/Kconfig
+@@ -48,3 +48,20 @@ config EXYNOS7870
+     bool "Exynos 7870 SOC support"
+     default y
+ endif
++
++if TARGET_J7XELTE
++config SYS_BOARD
++	default "axy17lte"
++	help
++	  j7xelte is a production board for SM-J710MN phone on Exynos7870 SoC.
++
++config SYS_VENDOR
++	default "samsung"
++
++config SYS_CONFIG_NAME
++	default "exynos78x0-common"
++
++config EXYNOS7870
++    bool "Exynos 7870 SOC support"
++    default y
++endif
+diff --git a/board/samsung/j7xelte/Kconfig b/board/samsung/j7xelte/Kconfig
+deleted file mode 100644
+index 760dfed11f..0000000000
+--- a/board/samsung/j7xelte/Kconfig
++++ /dev/null
+@@ -1,16 +0,0 @@
+-if TARGET_J7XELTE
+-config SYS_BOARD
+-	default "j7xelte"
+-	help
+-	  j7xelte is a production board for SM-J710MN phone on Exynos7870 SoC.
+-
+-config SYS_VENDOR
+-	default "samsung"
+-
+-config SYS_CONFIG_NAME
+-	default "exynos78x0-common"
+-
+-config EXYNOS7870
+-    bool "Exynos 7870 SOC support"
+-    default y
+-endif
+diff --git a/board/samsung/j7xelte/MAINTAINERS b/board/samsung/j7xelte/MAINTAINERS
+deleted file mode 100644
+index fb56cbbf47..0000000000
+--- a/board/samsung/j7xelte/MAINTAINERS
++++ /dev/null
+@@ -1,5 +0,0 @@
+-Samsung J7 2016 phone Board
+-M:	armel.guido <armel.guido@gmx.com>
+-S:	Maintained
+-F:	board/samsung/j7xelte/
+-F:	configs/j7xelte_defconfig
+diff --git a/board/samsung/j7xelte/Makefile b/board/samsung/j7xelte/Makefile
+deleted file mode 100644
+index 4e11f289dc..0000000000
+--- a/board/samsung/j7xelte/Makefile
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0+
+-#
+-obj-y	+= axy17lte.o
+diff --git a/board/samsung/j7xelte/j7xelte.c b/board/samsung/j7xelte/j7xelte.c
+deleted file mode 100644
+index c38297a05b..0000000000
+--- a/board/samsung/j7xelte/j7xelte.c
++++ /dev/null
+@@ -1,11 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0+
+-/*
+- * Samsung A5Y17 and A3Y17 LTE boards based on Exynos 7880 and Exynos 7870 SoCs
+- */
+-
+-#include <common.h>
+-
+-int exynos_init(void)
+-{
+-	return 0;
+-}
+diff --git a/configs/j7xelte_defconfig b/configs/j7xelte_defconfig
+index ac18ba027f..e2486e08f2 100644
+--- a/configs/j7xelte_defconfig
++++ b/configs/j7xelte_defconfig
+@@ -3,7 +3,7 @@ CONFIG_SKIP_LOWLEVEL_INIT=y
+ CONFIG_COUNTER_FREQUENCY=26000000
+ CONFIG_ARCH_EXYNOS=y
+ # CONFIG_TEXT_BASE=0x40001000
+-CONFIG_SYS_TEXT_BASE=40080000
++CONFIG_TEXT_BASE=0x40080000
+ CONFIG_SYS_MALLOC_F_LEN=0x400
+ CONFIG_ARCH_EXYNOS7=y
+ CONFIG_TARGET_J7XELTE=y
+-- 
+2.39.2
+

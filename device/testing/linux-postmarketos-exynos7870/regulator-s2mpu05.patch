@@ -1,0 +1,345 @@
+diff --git a/drivers/mfd/sec-core.c b/drivers/mfd/sec-core.c
+index 1fb29c4..f3a1f2f 100644
+--- a/drivers/mfd/sec-core.c
++++ b/drivers/mfd/sec-core.c
+@@ -94,6 +94,11 @@ static const struct mfd_cell s2mpu02_devs[] = {
+ 	{ .name = "s2mpu02-regulator", },
+ };
+ 
++static const struct mfd_cell s2mpu05_devs[] = {
++	{ .name = "s2mpu05-regulator", },
++	{ .name = "s2mps15-rtc", },
++};
++
+ static const struct of_device_id sec_dt_match[] = {
+ 	{
+ 		.compatible = "samsung,s5m8767-pmic",
+@@ -116,6 +121,9 @@ static const struct of_device_id sec_dt_match[] = {
+ 	}, {
+ 		.compatible = "samsung,s2mpu02-pmic",
+ 		.data = (void *)S2MPU02,
++	}, {
++		.compatible = "samsung,s2mpu05-pmic",
++		.data = (void *)S2MPU05,
+ 	}, {
+ 		/* Sentinel */
+ 	},
+@@ -412,6 +420,10 @@ static int sec_pmic_probe(struct i2c_client *i2c,
+ 		sec_devs = s2mpu02_devs;
+ 		num_sec_devs = ARRAY_SIZE(s2mpu02_devs);
+ 		break;
++	case S2MPU05:
++		sec_devs = s2mpu05_devs;
++		num_sec_devs = ARRAY_SIZE(s2mpu05_devs);
++		break;
+ 	default:
+ 		dev_err(&i2c->dev, "Unsupported device type (%lu)\n",
+ 			sec_pmic->device_type);
+diff --git a/drivers/regulator/s2mps11.c b/drivers/regulator/s2mps11.c
+index ebc67e3..b2f5c87 100644
+--- a/drivers/regulator/s2mps11.c
++++ b/drivers/regulator/s2mps11.c
+@@ -20,6 +20,7 @@
+ #include <linux/mfd/samsung/s2mps14.h>
+ #include <linux/mfd/samsung/s2mps15.h>
+ #include <linux/mfd/samsung/s2mpu02.h>
++#include <linux/mfd/samsung/s2mpu05.h>
+ 
+ /* The highest number of possible regulators for supported devices. */
+ #define S2MPS_REGULATOR_MAX		S2MPS13_REGULATOR_MAX
+@@ -253,6 +254,9 @@ static int s2mps11_regulator_enable(struct regulator_dev *rdev)
+ 		else
+ 			val = rdev->desc->enable_mask;
+ 		break;
++	case S2MPU05:
++		val = rdev->desc->enable_mask;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -1117,6 +1121,85 @@ static const struct regulator_desc s2mpu02_regulators[] = {
+ 	regulator_desc_s2mpu02_buck7(7),
+ };
+ 
++#define regulator_desc_s2mpu05_ldo_reg(num, min, step, reg) {	\
++	.name		= "LDO"#num,				\
++	.id		= S2MPU05_LDO##num,			\
++	.ops		= &s2mpu02_ldo_ops,			\
++	.type		= REGULATOR_VOLTAGE,			\
++	.owner		= THIS_MODULE,				\
++	.min_uV		= min,					\
++	.uV_step	= step,					\
++	.n_voltages	= S2MPU05_LDO_N_VOLTAGES,		\
++	.vsel_reg	= reg,					\
++	.vsel_mask	= S2MPU05_LDO_VSEL_MASK,		\
++	.enable_reg	= reg,					\
++	.enable_mask	= S2MPU05_ENABLE_MASK,			\
++	.enable_time	= S2MPU05_ENABLE_TIME_LDO		\
++}
++
++#define regulator_desc_s2mpu05_ldo(num, min, step) \
++	regulator_desc_s2mpu05_ldo_reg(num, min, step, S2MPU05_REG_L##num##CTRL)
++
++#define regulator_desc_s2mpu05_ldo1(num) \
++	regulator_desc_s2mpu05_ldo(num, S2MPU05_LDO_MIN1, S2MPU05_LDO_STEP1)
++
++#define regulator_desc_s2mpu05_ldo2(num) \
++	regulator_desc_s2mpu05_ldo(num, S2MPU05_LDO_MIN1, S2MPU05_LDO_STEP2)
++
++#define regulator_desc_s2mpu05_ldo3(num) \
++	regulator_desc_s2mpu05_ldo(num, S2MPU05_LDO_MIN2, S2MPU05_LDO_STEP2)
++
++#define regulator_desc_s2mpu05_ldo4(num) \
++	regulator_desc_s2mpu05_ldo(num, S2MPU05_LDO_MIN3, S2MPU05_LDO_STEP2)
++
++#define regulator_desc_s2mpu05_buck(num, which) {	\
++	.name		= "BUCK"#num,			\
++	.id		= S2MPU05_BUCK##num,		\
++	.ops		= &s2mpu02_buck_ops,		\
++	.type		= REGULATOR_VOLTAGE,		\
++	.owner		= THIS_MODULE,			\
++	.min_uV		= S2MPU05_BUCK_MIN##which,	\
++	.uV_step	= S2MPU05_BUCK_STEP##which,	\
++	.n_voltages	= S2MPU05_BUCK_N_VOLTAGES,	\
++	.vsel_reg	= S2MPU05_REG_B##num##CTRL2,	\
++	.vsel_mask	= S2MPU05_BUCK_VSEL_MASK,	\
++	.enable_reg	= S2MPU05_REG_B##num##CTRL1,	\
++	.enable_mask	= S2MPU05_ENABLE_MASK,		\
++	.enable_time	= S2MPU05_ENABLE_TIME_BUCK##num	\
++}
++
++#define regulator_desc_s2mpu05_buck123(num) regulator_desc_s2mpu05_buck(num, 1)
++#define regulator_desc_s2mpu05_buck45(num) regulator_desc_s2mpu05_buck(num, 2)
++
++static const struct regulator_desc s2mpu05_regulators[] = {
++	regulator_desc_s2mpu05_ldo4(1),
++	regulator_desc_s2mpu05_ldo3(2),
++	regulator_desc_s2mpu05_ldo2(3),
++	regulator_desc_s2mpu05_ldo1(4),
++	regulator_desc_s2mpu05_ldo1(5),
++	regulator_desc_s2mpu05_ldo1(6),
++	regulator_desc_s2mpu05_ldo2(7),
++	regulator_desc_s2mpu05_ldo3(8),
++	regulator_desc_s2mpu05_ldo_reg(9, S2MPU05_LDO_MIN3, S2MPU05_LDO_STEP2, S2MPU05_REG_L9CTRL1),
++	regulator_desc_s2mpu05_ldo4(10),
++	regulator_desc_s2mpu05_ldo2(25),
++	regulator_desc_s2mpu05_ldo3(26),
++	regulator_desc_s2mpu05_ldo2(27),
++	regulator_desc_s2mpu05_ldo3(28),
++	regulator_desc_s2mpu05_ldo3(29),
++	regulator_desc_s2mpu05_ldo2(30),
++	regulator_desc_s2mpu05_ldo3(31),
++	regulator_desc_s2mpu05_ldo3(32),
++	regulator_desc_s2mpu05_ldo3(33),
++	regulator_desc_s2mpu05_ldo3(34),
++	regulator_desc_s2mpu05_ldo3(35),
++	regulator_desc_s2mpu05_buck123(1),
++	regulator_desc_s2mpu05_buck123(2),
++	regulator_desc_s2mpu05_buck123(3),
++	regulator_desc_s2mpu05_buck45(4),
++	regulator_desc_s2mpu05_buck45(5),
++};
++
+ static int s2mps11_pmic_probe(struct platform_device *pdev)
+ {
+ 	struct sec_pmic_dev *iodev = dev_get_drvdata(pdev->dev.parent);
+@@ -1159,6 +1242,11 @@ static int s2mps11_pmic_probe(struct platform_device *pdev)
+ 		regulators = s2mpu02_regulators;
+ 		BUILD_BUG_ON(S2MPS_REGULATOR_MAX < ARRAY_SIZE(s2mpu02_regulators));
+ 		break;
++	case S2MPU05:
++		rdev_num = ARRAY_SIZE(s2mpu05_regulators);
++		regulators = s2mpu05_regulators;
++		BUILD_BUG_ON(S2MPS_REGULATOR_MAX < ARRAY_SIZE(s2mpu05_regulators));
++		break;
+ 	default:
+ 		dev_err(&pdev->dev, "Invalid device type: %u\n",
+ 				    s2mps11->dev_type);
+@@ -1231,6 +1319,7 @@ static const struct platform_device_id s2mps11_pmic_id[] = {
+ 	{ "s2mps14-regulator", S2MPS14X},
+ 	{ "s2mps15-regulator", S2MPS15X},
+ 	{ "s2mpu02-regulator", S2MPU02},
++	{ "s2mpu05-regulator", S2MPU05},
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(platform, s2mps11_pmic_id);
+@@ -1247,5 +1336,5 @@ module_platform_driver(s2mps11_pmic_driver);
+ 
+ /* Module information */
+ MODULE_AUTHOR("Sangbeom Kim <sbkim73@samsung.com>");
+-MODULE_DESCRIPTION("Samsung S2MPS11/S2MPS14/S2MPS15/S2MPU02 Regulator Driver");
++MODULE_DESCRIPTION("Samsung S2MPS11/S2MPS14/S2MPS15/S2MPU02/S2MPU05 Regulator Driver");
+ MODULE_LICENSE("GPL");
+diff --git a/include/linux/mfd/samsung/core.h b/include/linux/mfd/samsung/core.h
+index f92fe09..0e798a8 100644
+--- a/include/linux/mfd/samsung/core.h
++++ b/include/linux/mfd/samsung/core.h
+@@ -45,6 +45,7 @@ enum sec_device_type {
+ 	S2MPS14X,
+ 	S2MPS15X,
+ 	S2MPU02,
++	S2MPU05,
+ };
+ 
+ /**
+diff --git a/include/linux/mfd/samsung/s2mpu05.h b/include/linux/mfd/samsung/s2mpu05.h
+new file mode 100644
+index 000000000..9ef708fd3
+--- /dev/null
++++ b/include/linux/mfd/samsung/s2mpu05.h
+@@ -0,0 +1,155 @@
++/*
++ * s2mpu05.h
++ *
++ * Copyright (c) 2015 Samsung Electronics Co., Ltd
++ *              http://www.samsung.com
++ *
++ *  This program is free software; you can redistribute  it and/or modify it
++ *  under  the terms of  the GNU General  Public License as published by the
++ *  Free Software Foundation;  either version 2 of the  License, or (at your
++ *  option) any later version.
++ *
++ */
++
++#ifndef __LINUX_MFD_S2MPU05_H
++#define __LINUX_MFD_S2MPU05_H
++
++/* S2MPU05 registers */
++enum S2MPU05_reg {
++	S2MPU05_REG_ID,
++	S2MPU05_REG_INT1,
++	S2MPU05_REG_INT2,
++	S2MPU05_REG_INT3,
++	S2MPU05_REG_INT1M,
++	S2MPU05_REG_INT2M,
++	S2MPU05_REG_INT3M,
++	S2MPU05_REG_ST1,
++	S2MPU05_REG_ST2,
++	S2MPU05_REG_PWRONSRC,
++	S2MPU05_REG_OFFSRC,
++	S2MPU05_REG_BU_CHG,
++	S2MPU05_REG_RTC_BUF,
++	S2MPU05_REG_CTRL1,
++	S2MPU05_REG_CTRL2,
++	S2MPU05_REG_ETC_TEST,
++	S2MPU05_REG_OTP_ADRL,
++	S2MPU05_REG_OTP_ADRH,
++	S2MPU05_REG_OTP_DATA,
++	S2MPU05_REG_MON1SEL,
++	S2MPU05_REG_MON2SEL,
++	S2MPU05_REG_CTRL3,
++	S2MPU05_REG_ETC_OTP,
++	S2MPU05_REG_UVLO,
++	S2MPU05_REG_TIME_CTRL1,
++	S2MPU05_REG_TIME_CTRL2,
++	S2MPU05_REG_B1CTRL1,
++	S2MPU05_REG_B1CTRL2,
++	S2MPU05_REG_B2CTRL1,
++	S2MPU05_REG_B2CTRL2,
++	S2MPU05_REG_B2CTRL3,
++	S2MPU05_REG_B2CTRL4,
++	S2MPU05_REG_B3CTRL1,
++	S2MPU05_REG_B3CTRL2,
++	S2MPU05_REG_B3CTRL3,
++	S2MPU05_REG_B4CTRL1,
++	S2MPU05_REG_B4CTRL2,
++	S2MPU05_REG_B5CTRL1,
++	S2MPU05_REG_B5CTRL2,
++	S2MPU05_REG_BUCK_RAMP,
++	S2MPU05_REG_LDO_DVS1,
++	S2MPU05_REG_LDO_DVS9,
++	S2MPU05_REG_LDO_DVS10,
++	S2MPU05_REG_L1CTRL,
++	S2MPU05_REG_L2CTRL,
++	S2MPU05_REG_L3CTRL,
++	S2MPU05_REG_L4CTRL,
++	S2MPU05_REG_L5CTRL,
++	S2MPU05_REG_L6CTRL,
++	S2MPU05_REG_L7CTRL,
++	S2MPU05_REG_L8CTRL,
++	S2MPU05_REG_L9CTRL1,
++	S2MPU05_REG_L9CTRL2,
++	S2MPU05_REG_L10CTRL, /* LDO11~24 for CP */
++	S2MPU05_REG_L25CTRL = 0x47,
++	S2MPU05_REG_L26CTRL,
++	S2MPU05_REG_L27CTRL,
++	S2MPU05_REG_L28CTRL,
++	S2MPU05_REG_L29CTRL,
++	S2MPU05_REG_L30CTRL,
++	S2MPU05_REG_L31CTRL,
++	S2MPU05_REG_L32CTRL,
++	S2MPU05_REG_L33CTRL,
++	S2MPU05_REG_L34CTRL,
++	S2MPU05_REG_L35CTRL,
++	S2MPU05_REG_LDO_DSCH1,
++	S2MPU05_REG_LDO_DSCH2,
++	S2MPU05_REG_LDO_DSCH3,
++	S2MPU05_REG_LDO_DSCH4,
++	S2MPU05_REG_LDO_DSCH5,
++	S2MPU05_REG_LDO_CTRL1,
++	S2MPU05_REG_LDO_CTRL2,
++	S2MPU05_REG_TCXO_CTRL,
++	S2MPU05_REG_SELMIF,
++};
++
++/* S2MPU05 regulator ids */
++enum S2MPU05_regulators {
++	S2MPU05_LDO1,
++	S2MPU05_LDO2,
++	S2MPU05_LDO3,
++	S2MPU05_LDO4,
++	S2MPU05_LDO5,
++	S2MPU05_LDO6,
++	S2MPU05_LDO7,
++	S2MPU05_LDO8,
++	S2MPU05_LDO9,
++	S2MPU05_LDO10, /* LDO11~24 for CP */
++	S2MPU05_LDO25,
++	S2MPU05_LDO26,
++	S2MPU05_LDO27,
++	S2MPU05_LDO28,
++	S2MPU05_LDO29,
++	S2MPU05_LDO30,
++	S2MPU05_LDO31,
++	S2MPU05_LDO32,
++	S2MPU05_LDO33,
++	S2MPU05_LDO34,
++	S2MPU05_LDO35,
++	S2MPU05_BUCK1,
++	S2MPU05_BUCK2,
++	S2MPU05_BUCK3,
++	S2MPU05_BUCK4,
++	S2MPU05_BUCK5,
++	S2MPU05_REG_MAX,
++};
++
++#define S2MPU05_BUCK_MIN1	400000
++#define S2MPU05_BUCK_MIN2	600000
++#define S2MPU05_LDO_MIN1	800000
++#define S2MPU05_LDO_MIN2	1800000
++#define S2MPU05_LDO_MIN3	400000
++#define S2MPU05_BUCK_STEP1	6250
++#define S2MPU05_BUCK_STEP2	12500
++#define S2MPU05_LDO_STEP1	12500
++#define S2MPU05_LDO_STEP2	25000
++#define S2MPU05_LDO_VSEL_MASK	0x3F
++#define S2MPU05_BUCK_VSEL_MASK	0xFF
++#define S2MPU05_ENABLE_MASK	(0x03 << S2MPU05_ENABLE_SHIFT)
++#define S2MPU05_SW_ENABLE_MASK	0x03
++#define S2MPU05_RAMP_DELAY	12000
++
++#define S2MPU05_ENABLE_TIME_LDO		128
++#define S2MPU05_ENABLE_TIME_BUCK1	110
++#define S2MPU05_ENABLE_TIME_BUCK2	110
++#define S2MPU05_ENABLE_TIME_BUCK3	110
++#define S2MPU05_ENABLE_TIME_BUCK4	150
++#define S2MPU05_ENABLE_TIME_BUCK5	150
++
++#define S2MPU05_ENABLE_SHIFT	0x06
++#define S2MPU05_LDO_N_VOLTAGES	(S2MPU05_LDO_VSEL_MASK + 1)
++#define S2MPU05_BUCK_N_VOLTAGES (S2MPU05_BUCK_VSEL_MASK + 1)
++
++#define S2MPU05_PMIC_EN_SHIFT	6
++#define S2MPU05_REGULATOR_MAX (S2MPU05_REG_MAX)
++
++#endif /*  __LINUX_MFD_S2MPU05_H */

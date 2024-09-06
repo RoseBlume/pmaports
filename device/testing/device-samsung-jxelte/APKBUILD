@@ -1,23 +1,52 @@
 # Reference: <https://postmarketos.org/devicepkg>
 pkgname=device-samsung-jxelte
 pkgdesc="Samsung Galaxy J7(2016)"
-pkgver=1
+pkgver=2
 pkgrel=0
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
-options="!check !archcheck"
-depends="postmarketos-base postmarketos-base-downstream linux-samsung-jxelte mkbootimg msm-fb-refresher"
+options="!check !archcheck !tracedeps pmb:cross-native !pmb:crossdirect"
+depends="alsa-utils mkbootimg postmarketos-base util-linux"
 makedepends="devicepkg-dev"
-source="deviceinfo"
-subpackages="$pkgname-nonfree-firmware:nonfree_firmware"
+source="deviceinfo
+	boot.scr
+	uboot-script.cmd
+"
+subpackages="
+	$pkgname-kernel-downstream:kernel_downstream
+	$pkgname-kernel-mainline:kernel_mainline
+	$pkgname-nonfree-firmware:nonfree_firmware
+"
 
-build() {
-	devicepkg_build $startdir $pkgname
-}
+#build() {
+#}
 
 package() {
 	devicepkg_package $startdir $pkgname
+	mkdir -p "$pkgdir/usr/share/u-boot/j7xelte/"
+	install -Dm644 "$startdir/u-boot-shimmed.bin" \
+		"$pkgdir/usr/share/u-boot/j7xelte/"
+	install -Dm644 "$srcdir/boot.cmd" \
+		"$pkgdir/usr/share/u-boot/j7xelte/"
+	install -D -m644 "$srcdir/boot-image.its" \
+		"$pkgdir/usr/share/u-boot/j7xelte/"
+}
+
+kernel_downstream() {
+	pkgdesc="Working: display, touchscreen, wifi, audio, cellular"
+	depends="linux-samsung-jxelte msm-firmware-loader mdss-fb-init-hack msm-fb-refresher postmarketos-base-downstream"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+	devicepkg_build $startdir $pkgname
+}
+
+kernel_mainline() {
+	pkgdesc="Close-to-mainline WIP (display and touchscreen works).
+		Unnable to boot due to invalid kernel length u-boot error."
+	depends="linux-postmarketos-exynos7870 u-boot-samsung-j7xelte u-boot-tools"
+	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+	mkimage -A arm64 -C none -O linux -T script -d "$srcdir/uboot-script.cmd" "$srcdir/boot.scr"
+	devicepkg_build $startdir $pkgname
 }
 
 nonfree_firmware() {
@@ -27,5 +56,7 @@ nonfree_firmware() {
 }
 
 sha512sums="
-d496a683197cec642434f9e588e73dff86d3750d5366dfca0e70fa5e255fd96749649a27e65c01b3d8cf8f09e431ac53a7105e1215a6ae9e4a74596a86a3a537  deviceinfo
+a77ba5c5b61b4f0b63877c35514276087cf0c4d5646cd22e3437fd08e2457e8f4ccb69a26d8839ac80fcc06f4db59c6e04022b0e70a31b82bc37fb2dc07e34e2  deviceinfo
+98c51cc66269d19517c7eff91dce3088bfd1731d7d6bb766c08ddf6f962012712e10fafaa54af4ae5db0608c89f8cc116684a0ba1887dd5a75c645723552b6ee  boot.scr
+976c36b469a5c36e1823c35e4e1bc41d88f12c6710d1d4f8f904349ab06ee58a6c728dc4b705b7578427e322c57ecd4e4c61fc62effc88e25987f6ea3e6ffcc2  uboot-script.cmd
 "
