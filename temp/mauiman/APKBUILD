@@ -1,0 +1,37 @@
+pkgname=mauiman
+pkgver=4.0.0
+pkgrel=0
+pkgdesc="Maui Manager Library, Server and Library"
+# armhf blocked by extra-cmake-modules
+arch="all !armhf"
+url="https://mauikit.org/"
+license="GPL-2.0-or-later"
+depends="kirigami2"
+
+makedepends="extra-cmake-modules
+	samurai
+	qt6-qtbase-dev
+	"
+_repo_url="https://invent.kde.org/maui/mauiman.git"
+source="https://download.kde.org/stable/maui/mauiman/$pkgver/mauiman-$pkgver.tar.xz"
+subpackages="$pkgname-dev"
+
+build() {
+	cmake -B build -G Ninja \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install build
+}
+
+sha512sums="
+94693d024f930a044eeefc894c5acdc8981b1054df6d7c58e96c10d47d886fae8748506ebe6c231647fd6d51525770c0a54afa87a99ad12d049c8f16fcde516a  mauiman-4.0.0.tar.xz
+"

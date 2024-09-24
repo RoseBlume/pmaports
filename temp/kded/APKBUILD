@@ -1,0 +1,46 @@
+pkgname=kded
+pkgver=6.6.0
+pkgrel=0
+pkgdesc="Extensible deamon for providing system level services"
+arch="all !armhf" # armhf blocked by extra-cmake-modules
+url="https://community.kde.org/Frameworks"
+license="LGPL-2.1-only AND LGPL-2.1-or-later"
+depends_dev="
+	kconfig-dev
+	kcoreaddons-dev
+	kcrash-dev
+	kdbusaddons-dev
+	kservice-dev
+	qt6-qtbase-dev
+	"
+makedepends="$depends_dev
+	extra-cmake-modules
+	kdoctools-dev
+	samurai
+	"
+subpackages="$pkgname-dev $pkgname-doc"
+_repo_url="https://invent.kde.org/frameworks/kded.git"
+source="https://download.kde.org/stable/frameworks/6.5/kded-6.5.0.tar.xz"
+
+build() {
+	cd $pkgname-6.5.0
+	cmake -B build -G Ninja \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DBUILD_TESTING=OFF
+	cmake --build build
+}
+
+check() {
+	ctest --test-dir build --output-on-failure
+}
+
+package() {
+	DESTDIR="$pkgdir" cmake --install src/kded-6.5.0/build
+
+	# We don't ship systemd
+	rm -r "$pkgdir"/usr/lib/systemd
+}
+
+sha512sums="
+727926825a085d533e6549dbcc090f0130f4c585810d4f08c95d09d19fd58e618ffb54b6ba0c8bdb40304523c582c4f833bea0ff1b7e9ac1b4ce64d49ca8f510  kded-6.5.0.tar.xz
+"

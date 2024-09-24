@@ -1,0 +1,38 @@
+# Maintainer: James <your-email@example.com>
+pkgname=cask-server
+pkgver=0.6.6
+pkgrel=1
+pkgdesc="Public server and API to interface with Cask features"
+url="https://github.com/Nitrux/cask-server"
+arch="all"
+_commit="a06979fdf0d7d14a13be931d105b620146c7e318"
+license="BSD-2-Clause custom:CC0 LGPL"
+depends="qt6-qtbase"
+makedepends="git 
+             extra-cmake-modules 
+             maui-core"
+groups="maui"
+source="${pkgname}-$_commit.tar.gz::https://github.com/Nitrux/cask-server/archive/$_commit.tar.gz"
+sha512sums="
+9bfc8604bd4e087459f89dc96c0fdd9ec245f46a4daf2a7131124ee7256ef0b173eb60550fc6dcf585ec5513267127686c690b7eca54737c9848e7cea1be1aaa cask-server-a06979fdf0d7d14a13be931d105b620146c7e318.tar.gz
+"
+builddir="$srcdir/${pkgname}-$_commit"
+pkgver() {
+  cd "$srcdir/$pkgname"
+  ( set -o pipefail
+    git describe --long 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
+}
+
+build() {
+    cmake -B build -S . \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=/usr/lib
+    cmake --build build -j4
+}
+
+package() {
+    DESTDIR="$pkgdir" make -C build install
+}

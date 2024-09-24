@@ -1,0 +1,29 @@
+pkgname=postmarketos-ui-maui
+pkgver=1
+pkgrel=0
+pkgdesc="Convergent Qt shell built with Mauikit framework"
+url="https://nxos.org/maui"
+arch="noarch !armhf"
+license="LGPL-3.0"
+options="!check"
+depends="
+	maui-shell
+	dnsmasq
+	elogind
+	tinydm
+	tinydm-openrc
+	postmarketos-base-ui
+	networkmanager
+	modemmanager
+	modemmanager-openrc
+	xorg-server
+	"
+_pmb_recommends="
+	discover
+	"
+install="$pkgname.post-install $pkgname.post-upgrade"
+source=""
+
+package() {
+	mkdir -p $pkgdir
+}

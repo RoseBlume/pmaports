@@ -1,0 +1,48 @@
+# Maintainer: James <your-email@example.com>
+pkgname=maui-core
+pkgver=0.6.6
+pkgrel=1
+pkgdesc="Core libraries to manage the DE to be shared between Maui Settings and Cask."
+url="https://github.com/Nitrux/maui-core"
+_commit="c4b4e7c1e8148cba6b08562e98fb3af79d70bbef"
+arch="all"
+license="GPL3"
+depends="kcoreaddons-dev
+         ki18n-dev 
+         kidletime-dev
+         kservice-dev
+         libcanberra-dev
+         qt6-qtbase-dev
+         qt6-qtdeclarative-dev 
+         solid-dev
+         sound-theme-freedesktop"
+makedepends="git
+             extra-cmake-modules
+             pulseaudio-dev"
+              
+groups="maui"
+source="${pkgname}-$_commit.tar.gz::https://github.com/Nitrux/maui-core/archive/$_commit.tar.gz"
+sha512sums="
+7e74460b2c45f4bf2471226214269b4c05881099df22f798930072f185db390f2d930f7f6996b541b1da4665675172af64eddf700cfcef8d7e4607f6306ca8c4 maui-core-c4b4e7c1e8148cba6b08562e98fb3af79d70bbef.tar.gz
+"
+builddir="$srcdir/${pkgname}-$_commit"
+pkgver() {
+  cd "$srcdir/$pkgname"
+  ( set -o pipefail
+    git describe --long 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
+}
+
+build() {
+  cmake -B build -S . \
+    -DBUILD_WITH_QT6=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib
+  cmake --build build -j4
+}
+
+package() {
+  DESTDIR="$pkgdir" make -C build install
+}

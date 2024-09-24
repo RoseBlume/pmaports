@@ -1,0 +1,163 @@
+pkgname=maui-shell
+pkgver=2.1.2
+_commit="52dff258acf0fb22830d8aa31508ad08bffd01e4"
+pkgrel=0
+pkgdesc="Maui Shell is a convergent shell for desktops, tablets, and phones"
+url="https://nxos.org/maui"
+arch="all"
+license="LGPL-3.0"
+# Probably don't need all of "plasma"
+depends="bluedevil
+         cask-server
+         cmake
+         fontconfig
+         karchive
+         kconfig
+         kcoreaddons
+         kcrash
+         kdbusaddons
+         kdeclarative
+         kded>=6.6.0
+         kdesu
+         kglobalaccel
+         ki18n
+         kiconthemes
+         kidletime
+         klibc-utils
+         kio
+         kitemmodels
+         knotifications
+         knotifyconfig
+         kpackage
+         kpeople
+         krunner
+         plasma-framework5
+         kservice
+         ktexteditor
+         kunitconversion
+         kwallet
+         kwayland
+         maui-core
+         mauikit
+         mauiman
+         phonon-qt6
+         plasma-nm
+         plasma-pa
+         polkit-qt6
+         prison
+         qt6-qtbase
+         qt6-qtdeclarative
+         qt6-qtsvg
+         kdoctools
+         qt6-qtwayland
+         solid
+         ecm"
+# plasma-workspace-dev is temporary, need to figure out what of it we actually need...
+makedepends="bluedevil
+             akonadi-contacts-dev
+             cmake
+             cmake-extras
+             extra-cmake-modules
+             cask-server
+             fontconfig
+             karchive-dev
+             kconfig-dev
+             kcoreaddons-dev
+             kcrash-dev
+             kdbusaddons-dev
+             kdeclarative-dev
+             kded-dev>=6.6.0
+             kdesu-dev
+             kdoctools
+             kglobalaccel-dev
+             ki18n-dev
+             kiconthemes
+             kidletime-dev
+             klibc-utils
+             kio-dev
+             kitemmodels-dev
+             knotifications-dev
+             knotifyconfig-dev
+             kpackage-dev
+             kpeople-dev
+             krunner-dev
+             kservice-dev
+             ktexteditor
+             kunitconversion-dev
+             kwallet-dev
+             kwayland-dev
+             plasma-workspace-dev
+             maui-core
+             mauikit-filebrowsing-dev
+             mauikit-dev>=4.0.0
+             mauiman-dev>=4.0.0
+             plasma-framework5-dev
+             phonon-qt6
+             plasma-nm
+             plasma-pa
+             polkit-qt6
+             prison-dev
+             qt6-qtbase-dev
+             qt6-qtdeclarative-dev
+             qt6-qtsvg-dev
+             qt6-qtwayland-dev
+             solid-dev
+             ecm-dev
+             shadow-login
+             kde-dev-utils
+             kdesdk-kio
+             polkit-kde-agent-1
+             kde-cli-tools-zsh-completion
+             umockdev-dev
+             plasma-welcome
+             libplasma-dev
+             dbus-x11
+             shadow-dev
+             kde-cli-tools
+             kauth-dev
+             kbookmarks-dev
+             kcodecs-dev
+             kcompletion-dev
+             kconfigwidgets-dev
+             kirigami-addons-dev
+             kitemviews-dev
+             kjobwidgets-dev
+             kwidgetsaddons-dev
+             kwin-dev
+             kwindowsystem-dev
+             kxmlgui-dev
+             libphonenumber-dev
+             modemmanager-qt-dev
+             networkmanager-qt-dev
+             plasma-activities-dev
+             qcoro-dev
+             samurai
+             telepathy-qt-dev"
+install=""
+subpackages=""
+source="${pkgname}-$_commit.tar.gz::https://github.com/Nitrux/maui-shell/archive/$_commit.tar.gz
+"
+builddir="$srcdir/${pkgname}-$_commit"
+pkgver() {
+  cd "$srcdir/$pkgname"
+  ( set -o pipefail
+    git describe --long 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  )
+}
+build() {
+    cmake -B build -S . \
+    -DBUILD_WITH_QT6=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=/usr/lib
+  make -C build
+}
+
+package() {
+    DESTDIR="$pkgdir" make -C build install
+}
+
+sha512sums="
+78e4a497cc50837cd7eb869b76d68ffaffb7bd80ba408cefb72eba8b5dcc7d6bb6b8d6c8a6b68852ddad9bda314209a648e9b919615a5497049daa48da00edb5  maui-shell-52dff258acf0fb22830d8aa31508ad08bffd01e4.tar.gz
+"
